@@ -1,7 +1,10 @@
 # Matryoshka Public Demo
 
-[Website](https://jimhcyang.github.io/matryoshka-demo/) |
+[Website (Deployment Pending)](https://jimhcyang.github.io/matryoshka-demo/) |
 [Publication workflow](https://github.com/jimhcyang/matryoshka-demo/actions/workflows/pages.yml)
+
+The repository and pinned datasets are published. The website awaits a
+successful deployment workflow; use the local instructions below meanwhile.
 
 An inspectable, saved analyst workbench for historical Iran cables, Vietnam
 cables and paired-release Central Intelligence Bulletins. Tasks are hypothesis
