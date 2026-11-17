@@ -35,8 +35,8 @@ Iran and Vietnam remain usable legacy graph releases. They have **not** been
 rebuilt or certified under the newer source-only CIB alias workflow. Their
 older exports display unknown identity authority rather than inventing a
 source-specific identity certificate. The portable extraction/alias code and
-three-corpus examples are maintained in
-[matryoshka-extraction-alias](https://github.com/jimhcyang/matryoshka-extraction-alias).
+three-corpus examples are maintained in the separate, currently access-controlled
+[matryoshka-extraction-alias repository](https://github.com/jimhcyang/matryoshka-extraction-alias).
 
 ## What The Demo Shows
 
