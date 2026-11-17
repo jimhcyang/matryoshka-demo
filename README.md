@@ -68,6 +68,12 @@ the static site or add an API proxy to the public transport.
 Full-map data still requires an internet connection to the pinned GitHub files;
 the browser never calls a paid model API.
 
+For a genuinely offline saved viewer, use the
+[offline bundle builder](docs/OFFLINE_BUNDLE.md). It copies the verified datasets
+into a separate directory and localizes graph transport without changing saved
+answers or rankings. The full bundle is about 3.5 GiB; serve that directory over
+HTTP. It does not contain a fresh-query inference backend.
+
 The graph datasets live in `datasets/`, outside the Pages artifact. They
 are independently compressed and fetched from this repository at one immutable
 Git commit, with wire and decoded hashes checked in the browser. This avoids
