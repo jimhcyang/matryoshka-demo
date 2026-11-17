@@ -4,6 +4,8 @@ __pycache__/
 .export-checkpoints/
 .packing-work/
 .route-refresh/
+.graph-refresh/
+.graph-refresh.lock
 .pytest_cache/
 site/**/*.lock
 site/**/.export-*

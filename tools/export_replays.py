@@ -75,7 +75,7 @@ def checked(root, ref):
 _PRIVATE_ARTIFACT_PATH = re.compile(
     r"(?:file://|/Users/|/home/|/private/|/var/folders/|[A-Za-z]:[\\/]Users[\\/])"
     r"|(?:^|[/\\])(?:private|receipts|credentials|manuscripts?|human[_-]?reviews?)[/\\]", re.I)
-_SOURCE_FIELDS = {"text", "body", "quote", "raw_text", "source_text", "source_wording", "original_text"}
+_SOURCE_FIELDS = {"text", "body", "quote", "evidence_quote", "raw_text", "source_text", "source_wording", "original_text"}
 _SOURCE_PROVENANCE = {"canonical_page_id", "document_id", "source_id", "page_sha256", "source_text_sha256", "quote_sha256"}
 
 

@@ -87,6 +87,7 @@ METADATA_CACHE_MAXLEN = 2048
 EXPECTED_BASE_PATH = '/matryoshka-demo/'
 API_INDEX_VERSION = 'matryoshka-public-api-index/1'
 DATASET_VERSION = 'public-graph-datasets/1'
+DATASET_RELEASE_VERSION = 'public-graph-datasets/2'
 DATASET_PROOF_VERSION = 'public-graph-dataset-privacy-pass/1'
 DATASET_PATH = re.compile(r'datasets/(cib|iran|vietnam)/([a-f0-9]{64})\.json\.gz\Z')
 DATASET_LOGICAL = re.compile(r'/graph-assets-v4/(cib|iran|vietnam)/[A-Za-z0-9_.-]+\.json(?:\.gz)?\Z')
@@ -491,7 +492,11 @@ def json_identity(obj):
                 config=obj.get('config', obj.get('selected_arm')),
                 configurations=list(configs) if isinstance(configs, dict) else None,
                 pdf_available=obj.get('pdf_available'), scope=scope if isinstance(scope, str) else None,
-                note=note[:4096] if isinstance(note, str) else None)
+                note=note[:4096] if isinstance(note, str) else None,
+                graph_run_id=obj.get('graph_run_id'), hierarchy_run_id=obj.get('hierarchy_run_id'),
+                source_resource=obj.get('source_resource'), asset_base=obj.get('asset_base'),
+                comparison_asset=obj.get('comparison_asset'), search_asset=obj.get('search_asset'),
+                comparison_sha256=obj.get('comparison_sha256'), search_sha256=obj.get('search_sha256'))
 
 
 class GraphDatasets:
@@ -504,6 +509,8 @@ class GraphDatasets:
                 'dataset root is missing or symlinked')
         self.file_limit, self.decoded_limit = max_file_bytes, max_decoded_bytes
         self.actual, self.total, self.records, self.paths, self.verified = {}, 0, {}, {}, {}
+        self._full_scan_completed = False
+        self._trusted_replay_completed = False
         for directory, dirs, names in os.walk(self.root, followlinks=False):
             for name in dirs + names:
                 path = Path(directory) / name
@@ -533,7 +540,7 @@ class GraphDatasets:
                 raise PublicationError('invalid UTF-8 dataset notice') from None
             self.ancillary['README.md'] = dict(bytes=len(notice), sha256=sha(notice))
         manifest = parse_json(self.manifest_raw)
-        require(isinstance(manifest, dict) and manifest.get('version') == DATASET_VERSION,
+        require(isinstance(manifest, dict) and manifest.get('version') in {DATASET_VERSION, DATASET_RELEASE_VERSION},
                 'unsupported dataset manifest')
         require(manifest.get('source_bodies_modified') is False and manifest.get('original_graph_modified') is False
                 and nonplaceholder(manifest.get('rights_notice')), 'dataset preservation/public-source declarations required')
@@ -544,6 +551,16 @@ class GraphDatasets:
         rows = manifest.get('files')
         require(isinstance(rows, list) and bool(rows), 'explicit dataset file inventory required')
         lineages = {}
+        releases = manifest.get('graph_releases', {})
+        versioned = manifest['version'] == DATASET_RELEASE_VERSION
+        if versioned:
+            require(isinstance(releases, dict) and bool(releases), 'versioned graph releases required')
+            for key, release in releases.items():
+                require(identifier(key) and isinstance(release, dict)
+                        and release.get('corpus') in source_ids
+                        and identifier(release.get('graph_id')) and identifier(release.get('hierarchy_id'))
+                        and release.get('role') in {'saved-study', 'current-exploration', 'current-and-saved-study', 'archived-exploration'}
+                        and nonplaceholder(release.get('alias_review_status')), 'invalid graph release declaration')
         for row in rows:
             require(isinstance(row, dict), 'invalid dataset inventory row')
             relative = row.get('path')
@@ -563,9 +580,15 @@ class GraphDatasets:
                     and row.get('all_graph_objects_preserved') is True
                     and type(row.get('workstation_metadata_removed')) is bool, 'explicit dataset graph lineage required')
             lineage = row['graph_id'], row['hierarchy_id']
-            require(row['corpus'] not in lineages or lineages[row['corpus']] == lineage,
+            lineage_key = row.get('release_key') if versioned else row['corpus']
+            if versioned:
+                require(lineage_key in releases, 'dataset release key is undeclared')
+                declared = releases[lineage_key]
+                require((declared['corpus'], declared['graph_id'], declared['hierarchy_id'])
+                        == (row['corpus'], *lineage), 'dataset differs from its declared graph release')
+            require(lineage_key not in lineages or lineages[lineage_key] == lineage,
                     'dataset graph/hierarchy lineage conflict')
-            lineages[row['corpus']] = lineage
+            lineages[lineage_key] = lineage
             local = relative.removeprefix('datasets/')
             require(local in self.actual, 'declared dataset file missing')
             old = self.paths.get(local)
@@ -577,9 +600,18 @@ class GraphDatasets:
             self.records[logical] = row
         require(set(self.paths) == set(self.actual) - {'manifest.json', 'README.md'},
                 'dataset whitelist differs from actual files')
+        if versioned:
+            require(set(lineages) == set(releases), 'graph release lacks an actual asset inventory')
+            for corpus in source_ids:
+                current = [v for v in releases.values() if v['corpus'] == corpus
+                           and v['role'] in {'current-exploration', 'current-and-saved-study'}]
+                require(len(current) == 1, 'exactly one current graph release per corpus required')
         self.manifest, self.lineages = manifest, lineages
 
     def verify(self, progress=None):
+        self._full_scan_completed = False
+        self._trusted_replay_completed = False
+        self.verified = {}
         for number, (relative, row) in enumerate(self.paths.items(), 1):
             raw = read_file(self.actual[relative], self.file_limit)
             require(len(raw) == row['bytes'], 'dataset stored byte count mismatch')
@@ -587,6 +619,10 @@ class GraphDatasets:
             payload = decoded(raw, True, self.decoded_limit)
             check_hash(payload, row['sha256decoded'], 'dataset decoded SHA256 mismatch')
             obj = parse_json(payload)
+            if isinstance(obj, dict):
+                for field, expected in (('graph_run_id', row['graph_id']), ('hierarchy_run_id', row['hierarchy_id'])):
+                    require(field not in obj or obj[field] == expected,
+                            'decoded graph asset lineage differs from its dataset declaration')
             try:
                 scan_json(obj, None)
             except PublicationError as exc:
@@ -595,7 +631,16 @@ class GraphDatasets:
             del obj, payload, raw
             if progress:
                 progress(number, len(self.paths), relative)
+        # A physical shard may be referenced by several logical releases. Its
+        # decoded identity must satisfy every declaration, not only the first.
+        for row in self.records.values():
+            local = row['path'].removeprefix('datasets/')
+            identity = self.verified[local]['identity']
+            for field, expected in (('graph_run_id', row['graph_id']), ('hierarchy_run_id', row['hierarchy_id'])):
+                require(identity.get(field) is None or identity[field] == expected,
+                        'shared decoded graph asset lineage differs from a logical release')
         self.unchanged()
+        self._full_scan_completed = True
         return self.summary()
 
     def unchanged(self):
@@ -609,6 +654,11 @@ class GraphDatasets:
                        'dataset notice changed during validation')
 
     def summary(self):
+        require(self._full_scan_completed or self._trusted_replay_completed,
+                'a completed full dataset scan or verified receipt replay is required')
+        return self._summary()
+
+    def _summary(self):
         return dict(status='PASS', manifest_sha256=self.manifest_sha256,
             dataset_files=len(self.paths), logical_graph_assets=len(self.records), stored_bytes=self.total,
             max_stored_file_bytes=max(row['bytes'] for row in self.paths.values()),
@@ -657,6 +707,7 @@ def validate_datasets(dataset_root, expected_manifest_sha256, *, source_ids=('ci
 def checker_policy_sha256():
     """The complete pure full-scan policy, distinct from CLI/site integration."""
     functions = (GraphDatasets.__init__, GraphDatasets.verify, GraphDatasets.unchanged,
+        GraphDatasets.summary, GraphDatasets._summary,
         scan_json, metadata_text, _metadata_text_uncached, _metadata_text_cached,
         decoded, parse_json, pairs, public_url, read_file,
         require, identifier, check_hash, sha, nonplaceholder, json_identity)
@@ -666,7 +717,7 @@ def checker_policy_sha256():
              'PRIVATE_REFERENCE', 'LOCAL_URL', 'HEX', 'IDENTIFIER')},
         sets={name: sorted(globals()[name]) for name in
             ('CREDENTIAL_KEYS', 'PRIVATE_KEYS', 'SOURCE_TEXT', 'SOURCE_PROVENANCE')},
-        dataset_version=DATASET_VERSION, limits=[MAX_DATASET_BYTES, MAX_FILE_BYTES, MAX_DECODED_BYTES])
+        dataset_versions=[DATASET_VERSION, DATASET_RELEASE_VERSION], limits=[MAX_DATASET_BYTES, MAX_FILE_BYTES, MAX_DECODED_BYTES])
     return sha(json.dumps(policy, sort_keys=True, separators=(',', ':')).encode())
 
 
@@ -677,7 +728,8 @@ def proof_file_pins(checker):
 
 def dataset_proof(checker, result):
     """Only issue from a completed in-memory full scan, never directory discovery."""
-    require(set(checker.verified) == set(checker.paths) and result == checker.summary(),
+    require(checker._full_scan_completed and set(checker.verified) == set(checker.paths)
+            and result == checker.summary(),
             'a completed full dataset scan is required to issue a pass proof')
     return dict(version=DATASET_PROOF_VERSION, status='PASS', full_privacy_scan=True,
         manifest_sha256=checker.manifest_sha256, validator_sha256=sha(Path(__file__).read_bytes()),
@@ -718,12 +770,13 @@ def reuse_dataset_proof(checker, proof_ref):
             and proof.get('files') == proof_file_pins(checker)
             and proof.get('ancillary_notices') == checker.ancillary,
             'dataset proof source/file membership differs')
-    normalized_summary = json.loads(json.dumps(checker.summary()))
+    normalized_summary = json.loads(json.dumps(checker._summary()))
     require(proof.get('result') == normalized_summary, 'dataset proof full result differs')
     checker.unchanged()
     # External entries are graph-only: no benchmark identity is inferred from
     # graph source case_ids. No decoded roots are needed after receipt replay.
     checker.verified = {relative: dict(identity={}) for relative in checker.paths}
+    checker._trusted_replay_completed = True
     return dict(checker.summary(), validation_mode='pinned-full-privacy-pass-plus-fresh-wire-hashes')
 
 
@@ -1017,6 +1070,7 @@ def validate_publication(site, *, known_case_ids=None, max_total_bytes=MAX_TOTAL
     require(isinstance(index, dict) and index.get('version') == API_INDEX_VERSION
             and isinstance(index.get('entries'), dict) and bool(index['entries']),
             'versioned API entries index required')
+    canonical_entries = {canonical_route(k, case_ids):v for k,v in index['entries'].items()}
     routes = set()
     for supplied_key, row in index['entries'].items():
         require(isinstance(row, dict), 'invalid API route row')
@@ -1059,6 +1113,36 @@ def validate_publication(site, *, known_case_ids=None, max_total_bytes=MAX_TOTAL
                 require(expected in identity['configurations'], 'API response condition absent')
         if key.split('?')[0] == 'api/graph-v4-viewer':
             require(identity.get('pdf_available') is False, 'full graph bulk-PDF availability must be false')
+            require(query.get('revision') in {None, 'study'}, 'unknown graph revision selector')
+            if datasets and datasets.manifest['version'] == DATASET_RELEASE_VERSION:
+                matching = [r for r in datasets.manifest['graph_releases'].values()
+                            if (r['corpus'], r['graph_id'], r['hierarchy_id']) ==
+                            (query.get('corpus'), identity.get('graph_run_id'), identity.get('hierarchy_run_id'))]
+                role = 'saved-study' if query.get('revision') == 'study' else 'current-exploration'
+                require(len(matching) == 1 and matching[0]['role'] in {role, 'current-and-saved-study'},
+                        'viewer binding differs from its current or saved graph release')
+                require(identity.get('source_resource') == matching[0].get('source_resource'),
+                        'viewer source-resource commitment differs from its graph release')
+                corpus = query.get('corpus')
+                asset_base = '/graph-assets-v4/' + str(corpus) + '/'
+                require(identity.get('asset_base') == asset_base, 'viewer asset base differs from its corpus')
+                for kind in ('comparison', 'search'):
+                    name = identity.get(kind + '_asset')
+                    require(isinstance(name, str) and re.fullmatch(r'[A-Za-z0-9_.-]+\.json(?:\.gz)?', name),
+                            'viewer requires a literal comparison/search asset filename')
+                    logical = asset_base + name
+                    asset = datasets.records.get(logical)
+                    require(asset is not None and (asset['corpus'], asset['graph_id'], asset['hierarchy_id']) ==
+                            (corpus, identity['graph_run_id'], identity['hierarchy_run_id']),
+                            'viewer requested asset belongs to another graph release or is missing')
+                    target = canonical_entries.get(logical.removeprefix('/'))
+                    require(isinstance(target, dict) and target.get('sha256') == asset['sha256decoded'],
+                            'viewer requested asset is absent from transport or has another decoded commitment')
+                    required_hash = identity.get(kind + '_sha256')
+                    require((kind == 'search' and required_hash is None
+                             and matching[0]['alias_review_status'] == 'legacy-not-revalidated')
+                            or required_hash == asset['sha256decoded'],
+                            'viewer comparison/search checksum differs from its graph asset')
         if key.split('?')[0] == 'api/node-v6':
             require(identity.get('scope') == 'SAVED_DISPLAY_PROJECTION_ONLY'
                     and nonplaceholder(identity.get('note')), 'saved node scope disclosure required')

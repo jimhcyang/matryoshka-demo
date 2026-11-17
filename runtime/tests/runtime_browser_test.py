@@ -81,6 +81,8 @@ def site(tmp_path):
     entry(native_key, dict(public_native_receipt=True, full_walk_exported=False, rank=3))
     descriptor = dict(asset_base="/graph-assets-v4/cib/", graph_run_id="g1", hierarchy_run_id="h1")
     entry(key("/api/graph-v4-viewer", corpus="cib"), descriptor)
+    entry(key("/api/graph-v4-viewer", corpus="cib", revision="study"),
+          dict(descriptor, graph_run_id="g0", hierarchy_run_id="h0"))
     graph_key = "/graph-assets-v4/cib/part.json.gz"
     graph = dict(schema_version="fixture/1", view_key="current_later", nodes=[dict(id="n1", label="Exact graph label")])
     entry(graph_key, graph, filename="graph-assets-v4/cib/part.json.gz")
@@ -194,6 +196,16 @@ def test_runtime_graph_descriptor_unchanged_and_existing_gzip_parser(page, site)
       return {encoding,data};
     }""")
     assert value == dict(encoding=None, data=site["graph"])
+
+
+def test_current_and_saved_graph_bindings_remain_distinct(page, site):
+    current = fetch_json(page, "/api/graph-v4-viewer")["body"]
+    saved = fetch_json(page, "/api/graph-v4-viewer?revision=study&corpus=cib")["body"]
+    assert current["graph_run_id"] == "g1" and saved["graph_run_id"] == "g0"
+    before = len(site["requests"])
+    bad = fetch_json(page, "/api/graph-v4-viewer?corpus=cib&revision=main")
+    assert bad["status"] >= 400 and bad["body"]["code"] == "INVALID_PARAMETER"
+    assert len(site["requests"]) == before
 
 
 @pytest.mark.parametrize("url", [

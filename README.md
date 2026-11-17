@@ -3,8 +3,9 @@
 [Website (Deployment Pending)](https://jimhcyang.github.io/matryoshka-demo/) |
 [Publication workflow](https://github.com/jimhcyang/matryoshka-demo/actions/workflows/pages.yml)
 
-The repository and pinned datasets are published. The website awaits a
-successful deployment workflow; use the local instructions below meanwhile.
+The repository and pinned datasets are published. GitHub Actions currently
+reports an account billing lock before the Pages build starts. Repository
+updates and local validation are separate from that deployment blocker.
 
 An inspectable, saved analyst workbench for historical Iran cables, Vietnam
 cables and paired-release Central Intelligence Bulletins. Tasks are hypothesis
@@ -14,6 +15,27 @@ This repository is the **public presentation export**, not the private research
 workspace. It contains no API keys, model-call service, collaborator manuscripts,
 human-review notes or complete research execution logs. Opening the website
 cannot spend API credits or submit a new inference request.
+
+## Corpus Versions
+
+The default CIB Corpus Map uses the source-reviewed resource
+`cib_resource_623c60e1e128944377f0`: aliases
+`alias_sense_fa9fe8608add36db785f`, graph `graph_2e1f8d6c2443987c`, and rebuilt
+hierarchy `hierarchy_dcfb5058b0e6e571`. This is the verified engineering release,
+not an independent historical-identity accuracy estimate.
+
+Saved workbench results and their guided paths retain their original graph.
+The explicit `revision=study` binding keeps those native IDs, sources, rankings
+and grades unchanged; the ordinary Corpus Map opens the current graph.
+Manifest version 2 declares both releases rather than silently substituting
+the new map underneath saved inference. See [the release protocol](docs/CORPUS_RELEASES.md).
+
+Iran and Vietnam remain usable legacy graph releases. They have **not** been
+rebuilt or certified under the newer source-only CIB alias workflow. Their
+older exports display unknown identity authority rather than inventing a
+source-specific identity certificate. The portable extraction/alias code and
+three-corpus examples are maintained in
+[matryoshka-extraction-alias](https://github.com/jimhcyang/matryoshka-extraction-alias).
 
 ## What The Demo Shows
 
@@ -45,7 +67,7 @@ the static site or add an API proxy to the public transport.
 Full-map data still requires an internet connection to the pinned GitHub files;
 the browser never calls a paid model API.
 
-The full graph datasets live in `datasets/`, outside the Pages artifact. They
+The graph datasets live in `datasets/`, outside the Pages artifact. They
 are independently compressed and fetched from this repository at one immutable
 Git commit, with wire and decoded hashes checked in the browser. This avoids
 large shared-dictionary downloads during map exploration. No GitHub API token

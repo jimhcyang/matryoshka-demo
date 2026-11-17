@@ -787,6 +787,53 @@ def test_dataset_manifest_requires_independent_byte_pin(datasets):
         guard.validate_datasets(datasets, '0'*64)
 
 
+def versioned_datasets(root):
+    manifest = read(root, 'manifest.json')
+    manifest['version'] = guard.DATASET_RELEASE_VERSION
+    row = manifest['files'][0]
+    row['release_key'] = 'current-release'
+    manifest['graph_releases'] = {'current-release': dict(corpus='cib', graph_id=row['graph_id'],
+        hierarchy_id=row['hierarchy_id'], role='current-exploration', alias_review_status='source-reviewed')}
+    write(root, manifest, 'manifest.json')
+    return manifest
+
+
+def test_versioned_dataset_has_explicit_current_release(datasets):
+    versioned_datasets(datasets)
+    result = guard.validate_datasets(datasets, dataset_pin(datasets), source_ids=('cib',))
+    assert result['graph_lineages'] == {'current-release': ('browser_graph', 'hierarchy-1')}
+
+
+@pytest.mark.parametrize('change,error', [
+    (lambda m: m['files'][0].update(release_key='unknown'), 'release key is undeclared'),
+    (lambda m: m['graph_releases']['current-release'].update(graph_id='different'), 'declared graph release'),
+    (lambda m: m['graph_releases']['current-release'].update(corpus='iran'), 'invalid graph release'),
+    (lambda m: m['graph_releases']['current-release'].update(role='saved-study'), 'exactly one current'),
+    (lambda m: m['graph_releases'].update(unused=dict(m['graph_releases']['current-release'])), 'lacks an actual asset'),
+])
+def test_versioned_dataset_lineage_tampering_is_not_accepted(datasets, change, error):
+    manifest = versioned_datasets(datasets)
+    change(manifest)
+    write(datasets, manifest, 'manifest.json')
+    with pytest.raises(guard.PublicationError, match=error):
+        guard.validate_datasets(datasets, dataset_pin(datasets), source_ids=('cib',))
+
+
+def test_decoded_graph_id_cannot_disagree_with_dataset_declaration(datasets):
+    manifest = versioned_datasets(datasets)
+    old = datasets / manifest['files'][0]['path'].removeprefix('datasets/')
+    payload = wire(dict(graph_run_id='a-different-graph', nodes=[]))
+    compressed = gzip.compress(payload, mtime=0)
+    relative = 'cib/' + sha(compressed) + '.json.gz'
+    (datasets / relative).write_bytes(compressed)
+    old.unlink()
+    manifest['files'][0].update(path='datasets/' + relative, bytes=len(compressed),
+        wire_sha256=sha(compressed), sha256decoded=sha(payload))
+    write(datasets, manifest, 'manifest.json')
+    with pytest.raises(guard.PublicationError, match='decoded graph asset lineage'):
+        guard.validate_datasets(datasets, dataset_pin(datasets), source_ids=('cib',))
+
+
 @pytest.mark.parametrize('field,value', [('source_bodies_modified', True), ('original_graph_modified', True),
     ('rights_notice', 'TODO'), ('source_binding_sha256', 'not-a-hash')])
 def test_dataset_source_and_preservation_declarations(datasets, field, value):

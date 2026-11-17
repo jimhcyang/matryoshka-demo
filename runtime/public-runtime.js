@@ -21,7 +21,7 @@
     "/api/guide-overlay-v63": {defaults: guide, required: ["case_id", "candidate_id"]},
     "/api/guide-view-v6": {defaults: {...guide, phase: "start_community"}, required: ["case_id", "candidate_id"],
       optional: ["source_id", "node_id", "hop_index", "limit", "offset", "page_size"]},
-    "/api/graph-v4-viewer": {defaults: {corpus: "cib"}, required: []},
+    "/api/graph-v4-viewer": {defaults: {corpus: "cib"}, required: [], optional: ["revision"]},
     "/api/cib-pdf": {defaults: {release: "earlier"}, required: ["doc_id"], optional: ["document_id"]}
   };
   const deniedSegments = new Set(["private", ".git", ".env", "manuscripts", "manuscript", "raw_logs", "raw-logs", "requests", "responses", "api_keys", "node_modules"]);
@@ -80,6 +80,7 @@
       }
       if (own(values, "route_index") && Number(values.route_index) > 2) fail("INVALID_PARAMETER", "Only the three supplied route indices are supported");
       if (own(values, "corpus") && !["cib", "iran", "vietnam"].includes(values.corpus)) fail("INVALID_PARAMETER", "Unknown corpus");
+      if (own(values, "revision") && values.revision !== "study") fail("INVALID_PARAMETER", "Unknown saved graph revision");
       if (own(values, "release") && !["earlier", "later"].includes(values.release)) fail("INVALID_PARAMETER", "Unknown release");
       if (own(values, "reveal_focal") && !["0", "1"].includes(values.reveal_focal)) fail("INVALID_PARAMETER", "Unknown focal reveal state");
       if (path === "/api/guide-view-v6") {
