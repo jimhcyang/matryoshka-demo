@@ -1,11 +1,12 @@
 # Matryoshka Public Demo
 
-[Website (Deployment Pending)](https://jimhcyang.github.io/matryoshka-demo/) |
+[Website](https://jimhcyang.github.io/matryoshka-demo/) |
 [Publication workflow](https://github.com/jimhcyang/matryoshka-demo/actions/workflows/pages.yml)
 
-The repository and pinned datasets are published. GitHub Actions currently
-reports an account billing lock before the Pages build starts. Repository
-updates and local validation are separate from that deployment blocker.
+The repository and pinned datasets are published. GitHub Pages deployment
+status is recorded in the linked workflow; a successful repository push or
+local validation does not by itself establish a successful website deployment.
+The live `publication.json` identifies the presentation actually being served.
 
 An inspectable, saved analyst workbench for historical Iran cables, Vietnam
 cables and paired-release Central Intelligence Bulletins. Tasks are hypothesis
