@@ -1,0 +1,37 @@
+/* Shared v6 application chrome. Collection layouts remain in their own sheets. */
+:root {
+  --font-body: 'Avenir Next', 'Gill Sans', sans-serif;
+  --font-display: Georgia, 'Times New Roman', serif;
+  --ink: #283f49; --muted: #536568; --paper: #f6f3ed; --white: #fffefa;
+  --columbia: #e7eef2; --blue: #bad5e7; --teal: #176e70; --teal-light: #e6f1ed;
+  --gold: #a47c2e; --gold-light: #faf0d8; --coral: #b75e48; --coral-light: #f8e8df;
+  --line: #d9ded8; --shadow: 0 3px 15px #2c465207;
+  --app-header-height: 59px;
+  font: 14px var(--font-body); color: var(--ink);
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); font-family: var(--font-body); background: linear-gradient(112deg, #f0f1ec, var(--paper) 38%, #fbf9f3); }
+button, input, select { font: inherit; color: inherit; }
+button, select, a { -webkit-tap-highlight-color: transparent; }
+a { color: var(--teal); text-underline-offset: 3px; }
+h1,h2,h3 { font-family: var(--font-display); font-weight: 400; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid #c5943f; outline-offset: 3px; }
+[hidden] { display: none !important; }
+.topbar { position: sticky; top: 0; z-index: 20; min-height: var(--app-header-height); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 24px; border-bottom: 1px solid #bccfd4; background: #f9fbf8; box-shadow: var(--shadow); }
+.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 22px var(--font-display); }
+.brand b { font-weight: 400; }
+.brand-mark { display: grid; place-items: center; width: 34px; height: 37px; flex: 0 0 auto; border: 1px solid var(--teal); border-radius: 50% 50% 35% 35%; color: var(--teal); font-size: 21px; background: var(--columbia); }
+.brand small { display: block; margin-top: 3px; font: 9px var(--font-body); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+.primary-tabs, .top-links { display: flex; align-items: center; gap: 4px; }
+.primary-tabs a, .top-links a { color: var(--muted); padding: 11px 13px; border-bottom: 2px solid transparent; font-size: 12px; text-decoration: none; }
+.primary-tabs a:hover, .primary-tabs [aria-current=page], .top-links a:hover, .top-links [aria-current=page] { color: var(--teal); background: #e7f0f2; border-bottom-color: var(--teal); }
+body[data-cib-mode] .inspector-action.secondary { color: var(--ink); }
+body[data-cib-mode] .inspector-action.tertiary { background: var(--gold-light); color: var(--ink); border: 1px solid #b79e60; }
+@media (max-width: 760px) {
+  :root { --app-header-height: 90px; }
+  .topbar { flex-wrap: wrap; padding: 9px 12px 0; gap: 5px; }
+  .brand { font-size: 21px; }
+  .brand small { font-size: 8px; }
+  .primary-tabs, .top-links { width: 100%; justify-content: space-between; }
+  .primary-tabs a, .top-links a { font-size: 11px; padding: 10px 6px; }
+}

@@ -1,0 +1,51 @@
+name: Publish Verified Saved Demo
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run Transport And Publication Tests
+        run: |
+          python -m pip install -r requirements-dev.txt
+          python -m pytest -q tests
+      - name: Verify Static Transport In Managed Chromium
+        run: |
+          python -m pip install -r runtime/tests/requirements-ci.txt
+          python -m playwright install --with-deps chromium --only-shell
+          python -m pytest -q runtime/tests/runtime_browser_test.py runtime/tests/runtime_fragment_test.py runtime/tests/runtime_external_test.py
+      - name: Verify Public Allowlist And Hashes
+        run: python tools/validate_publication.py --site site --base-path /matryoshka-demo/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

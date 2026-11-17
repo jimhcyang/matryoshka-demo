@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.export-checkpoints/
+.packing-work/
+.route-refresh/
+.pytest_cache/
+site/**/*.lock
+site/**/.export-*
+tests/artifacts/
+runtime/tests/*.xml
+runtime/HANDOFF.json
+runtime/GRAPH_ASSET_AUDIT.md
+runtime/CONTRACT.md

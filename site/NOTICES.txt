@@ -1,0 +1,21 @@
+MATRYOSHKA PUBLIC PRESENTATION EXPORT
+
+Publication scope: saved historical research examples and source-bound graph
+exploration. It is not a live inference service or a claim of benchmark accuracy.
+
+Original research code remains subject to the author's rights. No additional
+open-source license or warranty is granted by this presentation export. Original
+source quotations, names, dates and classification/handling markings are retained.
+
+Central Intelligence Bulletins: historically released U.S. government documents,
+available through the CIA Reading Room and the paired-release research corpus.
+https://www.cia.gov/readingroom/
+
+Historical Iran and Vietnam diplomatic cables: previously publicly distributed
+U.S. government cable texts used in the existing research corpus. Historical
+classification labels are not altered. Public availability is not a claim that
+this project has made a declassification decision.
+https://wikileaks.org/plusd/
+
+The repository grants no blanket license to third-party source material and
+contains no private collaborator manuscripts or human-review comment exports.

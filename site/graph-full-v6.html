@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Matryoshka | Corpus Map</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="graph-full-v6.css">
+  <link rel="stylesheet" href="app-theme-v6.css">
+<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="f75816689c48bb9a8bf69a1890e5fdab60d842e33e4592ee327a424df9e7b7f4"></script>
+  <link rel="stylesheet" href="public-transport.css">
+</head>
+<body data-cib-mode="current-demo">
+  <header class="topbar">
+    <a class="brand" id="full-home-brand" href="/workbench-v6.html?view=home">
+      <span class="brand-mark" aria-hidden="true">M</span>
+      <span>Matryoshka<small>Source-bound analyst casebook</small></span>
+    </a>
+    <nav class="primary-tabs" aria-label="Primary navigation"><a id="full-graph-link" href="graph-full-v6.html" aria-current="page">Knowledge graph</a><a id="full-workbench-link" href="/workbench-v6.html">Analyst workbench</a><a id="full-home-link" href="/workbench-v6.html?view=home">Corpus home</a></nav>
+  </header>
+
+  <main>
+    <section class="viewer-switches" aria-label="Graph view"><label>Collection<select id="full-corpus"><option value="cib">Central Intelligence Bulletins</option><option value="iran">Iran cables</option><option value="vietnam">Vietnam cables</option></select></label>
+    <div class="projection-switches">
+      <div class="release-switch" role="group" aria-label="Projection layout">
+        <button type="button" data-display-mode="single" class="active">Single</button>
+        <button type="button" data-display-mode="pair">Pair</button>
+      </div>
+      <div class="reveal-control eligibility-control" aria-label="Ineligible evidence display">
+        <span>Ineligible evidence</span>
+        <div class="eligibility-style" role="group" aria-label="Ineligible evidence color">
+          <button type="button" data-eligibility-style="dim" class="active" aria-pressed="true">Dimmed</button>
+          <button type="button" data-eligibility-style="show" aria-pressed="false">Full color</button>
+        </div>
+        <label class="eligibility-presence"><input id="show-ineligible" type="checkbox" checked> Show</label>
+      </div>
+    </div>
+    </section>
+    <section class="hero current-hero">
+      <div>
+        <p class="eyebrow" id="document-count">Current paired Central Intelligence Bulletins</p>
+        <h1>Corpus Map</h1>
+      </div>
+      <p id="purpose" class="hero-note"></p>
+    </section>
+    <section id="exploration-binding" class="refresh-binding-notice" aria-label="Exploration binding"><strong>Independent exploration, not a workbench case view.</strong><p id="exploration-scope">Loading a frozen, separately declared viewer binding. No mutable latest pointer or fallback graph is used.</p><p id="exploration-layout"></p></section>
+
+    <section class="comparison-controls">
+      <div class="section-heading">
+        <div><p class="eyebrow">Interactive corpus map</p><h2 id="pair-title">Earlier-release graph</h2></div>
+        <div class="search-box">
+          <label for="graph-search">Search the complete graph-object index</label>
+          <div class="search-entry">
+            <select id="search-scope" aria-label="Graph object type">
+              <option value="entity">Entities</option>
+              <option value="evidence">All evidence nodes</option>
+              <option value="claim">Claims</option>
+              <option value="event">Events</option>
+              <option value="relationship">Relationships / edges</option>
+              <option value="domain">Domains</option>
+              <option value="theme">Themes</option>
+              <option value="community">Communities</option>
+            </select>
+            <input id="graph-search" type="search" placeholder="Try Chou En-lai, USSR, United States, or Viet Cong">
+          </div>
+          <p class="search-help">Search uses case- and punctuation-insensitive exact, prefix, token, then substring ranking. Relationship search resolves matching endpoints and loads their complete incident edges. It uses no language model or embedding search.</p>
+          <label class="isolate-toggle" for="hide-isolates"><input id="hide-isolates" type="checkbox" checked> Connected-only search (hide true projection isolates)</label>
+          <div id="search-status"></div>
+        </div>
+      </div>
+      <div class="level-row">
+        <div class="level-switch" role="group" aria-label="Graph level">
+          <button type="button" data-level="domain" class="active">Domains</button>
+          <button type="button" data-level="theme">Themes</button>
+          <button type="button" data-level="community">Communities</button>
+          <button type="button" data-level="evidence">Evidence nodes</button>
+        </div>
+        <p id="level-explanation">Domains provide the broadest orientation over the connected analyst core. Search still covers the complete object catalog.</p>
+      </div>
+      <div class="temporal-control" id="temporal-control" hidden>
+        <div class="temporal-date"><label for="as-of-date">Evidence available as of</label><input id="as-of-date" type="text" placeholder="YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" autocomplete="off" spellcheck="false" aria-label="Evidence available as of, YYYY-MM-DD" aria-describedby="as-of-date-error" title="YYYY-MM-DD; press Enter or leave the field to apply"></div>
+        <div class="temporal-range"><input id="as-of-slider" type="range" min="0" max="0" value="0" step="1" aria-label="Evidence cutoff date"><div id="as-of-ticks" class="temporal-ticks" aria-hidden="true"></div></div>
+        <div class="temporal-actions"><button id="as-of-minus" type="button" aria-label="Previous day" title="One day earlier" disabled>-</button><button id="as-of-plus" type="button" aria-label="Next day" title="One day later" disabled>+</button><button id="as-of-reset" type="button">Latest</button></div>
+        <p id="as-of-date-error" class="temporal-error" role="status" aria-live="polite" hidden></p>
+      </div>
+      <div class="graph-legend" aria-label="Graph legend">
+        <span><i class="node entity"></i>Entity</span><span><i class="node event"></i>Event</span><span><i class="node claim"></i>Claim</span>
+        <span><i class="edge solid"></i>Retained connection</span><span><i class="edge dashed"></i>Later-only addition</span><span><i class="node selected"></i>Selected node</span>
+        <small>Node size reflects retained mass. Line thickness reflects relative support within the drawing, not confidence or truth.</small>
+      </div>
+      <p class="visibility-note"><b>Eligibility control:</b> The fixed earlier-release hierarchy remains in place. Later-only, post-cutoff, undated, and excluded-source evidence is marked ineligible according to the active policy. Keep it dimmed for context, show it in full color, or hide it without changing the hierarchy level. Release visibility is not a source classification label.</p>
+      <div id="search-results" class="search-results" hidden></div>
+    </section>
+
+    <section class="graph-grid current-only-grid single-panel">
+      <article class="graph-card earlier-card" data-panel="legacy" hidden>
+        <header>
+          <div><p class="eyebrow">Earlier-release projection</p><h2 id="legacy-title">Earlier release</h2></div>
+          <div class="graph-actions">
+            <button type="button" data-back="legacy" disabled>Back</button>
+            <label>Nodes <select data-node-cap="legacy" aria-label="Maximum earlier nodes shown"><option value="32">32</option><option value="256" selected>256</option><option value="2048">2,048 (max)</option></select></label>
+            <button type="button" data-fit="legacy">Fit</button>
+          </div>
+        </header>
+        <div id="legacy-breadcrumb" class="graph-breadcrumb">Corpus overview</div>
+        <div class="graph-workspace">
+          <div class="graph-stage"><canvas id="legacy-canvas"></canvas><div id="legacy-tooltip" class="tooltip" hidden></div><div id="legacy-caption" class="preview-caption"></div></div>
+          <aside id="legacy-inspector" class="inspector"></aside>
+        </div>
+      </article>
+
+      <article class="graph-card later-card" data-panel="current">
+        <header>
+          <div><p class="eyebrow">Fixed-hierarchy graph</p><h2 id="current-title">CIB graph</h2></div>
+          <div class="graph-actions">
+            <button type="button" data-back="current" disabled>Back</button>
+            <label>Nodes <select data-node-cap="current" aria-label="Maximum later nodes shown"><option value="32">32</option><option value="256" selected>256</option><option value="2048">2,048 (max)</option></select></label>
+            <button type="button" data-fit="current">Fit</button>
+          </div>
+        </header>
+        <div id="current-breadcrumb" class="graph-breadcrumb">Corpus overview</div>
+        <div class="graph-workspace">
+          <div class="graph-stage"><canvas id="current-canvas" tabindex="0" aria-label="Interactive corpus map"></canvas><div id="current-tooltip" class="tooltip" hidden></div><div id="current-caption" class="preview-caption"></div></div>
+          <aside id="current-inspector" class="inspector"></aside>
+        </div>
+      </article>
+    </section>
+
+    <section class="interpretation">
+      <div class="section-heading"><div><p class="eyebrow">Reading the map</p><h2>Hierarchy, topology, and provenance</h2></div></div>
+      <div class="conclusion-grid">
+        <article><span>01</span><h3>Nested navigation</h3><p>Domain, Theme, and Community are strict parent-child navigation partitions over the largest connected analyst projection. They are not a substitute for evidence edges.</p></article>
+        <article><span>02</span><h3>Evidence topology</h3><p>Entity, Event, and Claim are semantic nodes. Relations are edges supported by explicit extraction, audited associations, or tightly overlapping grounded evidence. The earlier-release hierarchy remains fixed when later-only evidence is added.</p></article>
+        <article><span>03</span><h3>Visibility</h3><p>Later-only evidence is derived by exact node and edge presence in the earlier projection. Dashed links encode that status; red emphasis is reserved for the object being inspected. Added evidence can enter the fixed earlier-release taxonomy but never refit it. This visibility distinction does not assert a classification level.</p></article>
+        <article><span>04</span><h3>Source audit</h3><p>Click a supporting document to open its aligned transcript page with terms highlighted. The local server can also embed the corresponding release PDF at that page.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <div id="cib-drawer-scrim" class="cib-drawer-scrim" hidden></div>
+  <aside id="cib-source-drawer" class="cib-source-drawer" aria-hidden="true">
+    <header><div><p id="cib-source-kicker" class="eyebrow">CIB source</p><h2 id="cib-source-title">Source document</h2></div><button id="cib-source-close" type="button" aria-label="Close source">Close</button></header>
+    <div id="cib-source-meta" class="cib-source-meta"></div>
+    <div id="cib-source-release-actions" class="cib-source-release-actions"></div>
+    <div id="cib-source-body" class="cib-source-body"></div>
+    <iframe id="cib-pdf-frame" class="cib-pdf-frame" title="CIB source PDF" hidden></iframe>
+  </aside>
+
+  <footer><span id="build-label"></span><span>Click to inspect / double-click or hold to enter / drag nodes / pan / wheel to zoom</span></footer>
+  <script src="graph-full-v6.js"></script>
+</body>
+</html>

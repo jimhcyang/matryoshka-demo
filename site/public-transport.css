@@ -1,0 +1,15 @@
+#public-replay-notice {
+  position: relative;
+  margin: 1.2rem auto;
+  max-width: 84rem;
+  border-top: 1px solid #bfd4df;
+  padding: .8rem 1.2rem;
+  color: #3d5868;
+  font: 400 .86rem/1.45 Georgia, serif;
+  background: #edf5f8;
+}
+.public-pdf-local-archive {
+  color: #687c86;
+  opacity: .7;
+  cursor: default;
+}
