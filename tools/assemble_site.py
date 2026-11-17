@@ -18,6 +18,16 @@ ASSETS = ("workbench-v6.html", "workbench-v6.js", "workbench-v6.css", "app-theme
           "graph-full-v6.js", "graph-full-v6.css")
 
 
+def project_relative_html(text):
+    """Top-level pages must not rely on runtime repair of root-host links."""
+    def relative(match):
+        value = match[3][1:]
+        if not value or value.startswith(("?", "#")):
+            value = "index.html" + value
+        return match[1] + "=" + match[2] + value + match[2]
+    return re.sub(r'\b(href|src|action|poster)=(["\'])(/(?!/)[^"\']*)\2', relative, text)
+
+
 def assemble(root, package, selection_path, *, finalize=False):
     selection = read(selection_path)
     selected = {item["case_id"]: (group, item) for group in ("presentation", "bench") for item in selection[group]}
@@ -31,6 +41,7 @@ def assemble(root, package, selection_path, *, finalize=False):
         raw = (root / "web" / name).read_bytes()
         text = raw.decode()
         if name.endswith(".html"):
+            text = project_relative_html(text)
             text = re.sub(r'<script\b(?=[^>]*\bid=[\"\']showcase-selection-v66[\"\'])[^>]*>.*?</script>', "", text, flags=re.S)
             hook = '<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="' + sha((site / "data/api-index.json").read_bytes()) + '"></script>\n  <link rel="stylesheet" href="public-transport.css">\n'
             text = text.replace("</head>", hook + "</head>")
