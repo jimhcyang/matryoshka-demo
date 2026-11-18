@@ -144,7 +144,9 @@ def test_explicit_transport_resume_keeps_original_seals_and_does_not_recall_api(
 def test_imported_transport_object_tampering_is_rejected(tmp_path):
     f=fixture(tmp_path);first=f.exporter.run(execute=True);stage=Path(first['stage'])
     before=(stage/'before-index.json').read_bytes();(f.site/'data/api-index.json').write_bytes(before)
-    next((stage/'objects').glob('*.gz')).write_bytes(b'changed')
+    checkpoint=module.read_sealed(next((stage/'cases').glob('*.json')))
+    entry=next(v for k,v in checkpoint['entries'].items()if k.startswith('/api/current/condition-v6?'))
+    (stage/'objects'/Path(entry['path']).name).write_bytes(b'changed')
     second=module.Export(f.root,f.exporter.reference,f.site,module.sha(before),
         viewer_factory=f.exporter.viewer_factory,resume_export=first['export_id'])
     with pytest.raises(ValueError,match='Resumed response object'):
