@@ -29,6 +29,39 @@ def sha(value):
     return hashlib.sha256(value).hexdigest()
 
 
+def test_current_requests_keep_resource_pins_and_never_fallback(site, browser):
+    binding = dict(resource_id="cib_resource_fixture", registry_sha256="a"*64, index_sha256="b"*64)
+    params = dict(case_id="c1", config="llm_readings", **binding)
+    value = dict(resource_binding=binding, available=True, grades_revealed=False)
+    raw = encoded(value)
+    wire = gzip.compress(raw, mtime=0)
+    relative = "packets/current.json.gz"
+    (site["root"]/relative).write_bytes(wire)
+    index_path = site["root"] / "data/api-index.json"
+    index = json.loads(index_path.read_bytes())
+    current_key = key("/api/current/postrun-review", **params, reveal="0")
+    index["entries"][current_key] = dict(path=relative, encoding="gzip", mime="application/json",
+        sha256=sha(raw), wire_sha256=sha(wire))
+    index_path.write_bytes(encoded(index))
+    context = browser.new_context()
+    try:
+        page = context.new_page()
+        page.goto(site["base"])
+        page.wait_for_function("window.PublicReplay && window.earlyShimWorked")
+        supplied = "/api/current/postrun-review?"+urlencode(dict(params, config="A"))
+        result = page.evaluate("async path=>{const r=await fetch(path);return {status:r.status,value:await r.json()}}", supplied)
+        assert result == dict(status=200, value=value)
+        wrong = supplied.replace("cib_resource_fixture", "cib_resource_other")
+        assert page.evaluate("async path=>(await fetch(path)).status", wrong) == 404
+        for field in ("registry_sha256", "index_sha256"):
+            invalid = "/api/current/postrun-review?"+urlencode({k:v for k,v in params.items() if k != field})
+            assert page.evaluate("async path=>(await fetch(path)).status", invalid) == 404
+        assert page.evaluate("PublicReplay.hasSaved('/api/postrun-review?case_id=c1')") is False
+        assert not any("/api/" in row["path"] for row in site["requests"])
+    finally:
+        context.close()
+
+
 def key(path, **params):
     return path + ("?" + urlencode(sorted(params.items())) if params else "")
 

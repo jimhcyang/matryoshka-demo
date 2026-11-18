@@ -1,4 +1,18 @@
 /* Layout is a view of recorded states, never an additional diffusion kernel. */
+export function formatNumber(value,missing="Not supplied") {
+  if(!Number.isFinite(value))return missing;
+  if(value===0)return "0";
+  const rounded=value.toLocaleString("en-US",{maximumFractionDigits:2});
+  return Math.abs(value)<.001||Number(rounded.replaceAll(",",""))===0?value.toExponential(2):rounded;
+}
+export function formatTargetText(item={},task){
+  const text=String(item.fill||item.label||item.id||'');
+  if(!['hypothesis','reconstruction'].includes(task))return text;
+  const labels={FOR:'SUPPORT',SUPPORT:'SUPPORT',SUPPORTED:'SUPPORT',AGAINST:'OPPOSE',COUNTER:'OPPOSE',OPPOSED:'OPPOSE',SOME:'PARTIAL',PARTIAL:'PARTIAL'};
+  const direction=labels[String(item.direction||'').toUpperCase()];
+  return text.replace(/^(FOR|SUPPORT|SUPPORTED|AGAINST|COUNTER|OPPOSED|SOME|PARTIAL)(\s*\/\s*)/,(all,raw,separator)=>labels[raw]===direction?labels[raw]+separator:all);
+}
+
 export function percentChange(current, previous) {
   if (!Number.isFinite(current) || !Number.isFinite(previous)) return null;
   if (previous === 0) return current === 0 ? 0 : "new";

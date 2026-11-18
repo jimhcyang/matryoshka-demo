@@ -14,22 +14,22 @@ not labeled as having completed the newer source-only identity review. The
 generic code can accept their extracted source records, but offline fixture
 coverage is not a full-corpus validation or an effectiveness result.
 
-The older CIB map is retained because saved workbench paths were computed on
-it. Those paths, native candidates, ranks, grades, quotations and eligibility
-rules are not recomputed by a presentation export. A new inference run would
-need a new bound release and matched evaluation.
+The active current-workbench CIB examples were separately executed on this
+new resource. Export preserves their native candidates, ranks, decisions and
+quotations. The older CIB map remains an archival compatibility binding for
+older saved runs; it is not substituted underneath the active examples.
 
 ## Explicit Selection
 
 | Selection | Binding | Meaning |
 | --- | --- | --- |
 | Ordinary Corpus Map | `/api/graph-v4-viewer?corpus=cib` | Current source-reviewed CIB graph and rebuilt hierarchy |
-| Saved guide | `/api/graph-v4-viewer?corpus=cib&revision=study` | Original immutable browser graph required by the saved route |
+| Archived study guide | `/api/graph-v4-viewer?corpus=cib&revision=study` | Original immutable browser graph required by an archived route |
 | Legacy cable map | Corresponding Iran/Vietnam default binding | Retained graph, not newly certified source-only aliases |
 
-Guide selectors choose the study revision automatically. Its banner provides
-a link to the current map without the guide. Unknown graph revisions fail
-closed. Nodes are never remapped by names to make a saved route appear valid.
+Current guides carry current resource/registry/index pins and use the current
+map. Only archived guides select the study revision. Unknown graph revisions
+fail closed. Nodes are never remapped by names to make a saved route appear valid.
 
 Dataset manifest version 2 inventories each logical asset under a declared
 graph release. It allows current, saved-study, and archived exploration

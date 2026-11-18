@@ -25,11 +25,10 @@ The default CIB Corpus Map uses the source-reviewed resource
 hierarchy `hierarchy_dcfb5058b0e6e571`. This is the verified engineering release,
 not an independent historical-identity accuracy estimate.
 
-Saved workbench results and their guided paths retain their original graph.
-The explicit `revision=study` binding keeps those native IDs, sources, rankings
-and grades unchanged; the ordinary Corpus Map opens the current graph.
-Manifest version 2 declares both releases rather than silently substituting
-the new map underneath saved inference. See [the release protocol](docs/CORPUS_RELEASES.md).
+The active current workbench's CIB examples bind this same source-only resource.
+Older results remain historical records, not relabeled current executions.
+The explicit `revision=study` map is retained for archival compatibility, not
+as the active CIB workbench's default. See [the release protocol](docs/CORPUS_RELEASES.md).
 
 Iran and Vietnam remain usable legacy graph releases. They have **not** been
 rebuilt or certified under the newer source-only CIB alias workflow. Their
@@ -40,8 +39,9 @@ three-corpus examples are maintained in the separate, currently access-controlle
 
 ## What The Demo Shows
 
-- Eighteen curated questions representing eighteen distinct fact families.
-- Three saved planning conditions per question, with their original results.
+- Fifteen temporary presentation questions: five per task, with distinct episodes.
+- Only genuinely completed planning conditions are supplied; a missing arm is
+  not filled using another arm's result.
 - Source quotations, explicit evidence judgments, candidate rankings and saved
   graph-relevance flow. A route or a grammatical fit does not establish a fact.
 - Separate hypothesis and reconstruction examples: neither a polarity-flipped
@@ -49,9 +49,21 @@ three-corpus examples are maintained in the separate, currently access-controlle
 - Partial, unsupported and contradictory outcomes remain visible. These are
   outcome-informed development examples, **not a benchmark accuracy estimate**.
 
-The single retained Haeri hypothesis is an analyst-authored negative proposition
-that the eligible evidence can oppose. Its affirmative and reconstruction
-companions remain in the local research archive, not this public casebook.
+Six questions are explicitly marked temporary diagnostics and retain unresolved
+outcomes. Reaching fifteen examples is not a claim of fifteen successful
+recoveries or of meeting the final evidence-quality targets. The displayed
+local support decisions and separate post-run opinions remain different axes.
+No absolute-never hypothesis is needed to complete this temporary selection.
+
+The landing page separates Corpus Map exploration from the Analyst Workbench.
+Read the [eight-page methods guide](https://jimhcyang.github.io/matryoshka-demo/docs/matryoshka-guide.pdf)
+for local grammar, query controls, retrieval, hierarchy diffusion and decisions.
+
+This is saved replay, not an interactive inference service. In one measured
+Iran redaction, offline construction took 17.1 minutes for A and about 69.5
+minutes for B/C. C abstained and used B's broader operations in that case.
+These are latency limitations, not webpage loading times or general arm-speed
+estimates. No runtime improvement is claimed by this presentation update.
 
 ## Run Locally
 
@@ -118,6 +130,11 @@ independent historical identity audit or proof of model generalization.
 
 Managed-browser fixture checks are documented in `runtime/tests/README.md`.
 Use the managed Chromium headless shell, never a personal Chrome profile.
+
+CI explicitly pins a completed full privacy scan of the unchanged graph
+datasets and freshly checks every dataset file hash. A dataset or validator
+change invalidates that receipt; the default command above always does the
+full scan. New workbench payloads still undergo full publication checking.
 
 ## Rights
 

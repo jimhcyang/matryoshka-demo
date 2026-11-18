@@ -14,3 +14,5 @@ runtime/tests/*.xml
 runtime/HANDOFF.json
 runtime/GRAPH_ASSET_AUDIT.md
 runtime/CONTRACT.md
+.current-replay-export/
+.current-export/

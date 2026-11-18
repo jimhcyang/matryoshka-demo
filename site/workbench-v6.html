@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="A source-bound analyst casebook for inspecting one saved research condition at a time.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com; frame-src 'self' blob:; object-src 'none'; base-uri 'self'">
-  <title>Matryoshka | V6.6 Presentation</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://raw.githubusercontent.com; object-src 'none'; base-uri 'self'">
+  <title>Matryoshka | Analyst Workbench</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="app-theme-v6.css">
   <link rel="stylesheet" href="workbench-v6.css">
@@ -13,8 +13,8 @@
   <!-- showcase-selection-v66 -->
   
   <script type="module" src="workbench-v6.js"></script>
-<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="3ea6109fc8bf1a9321317d8f98cc8bf8adb21c41480cfcfac583022d52681514"></script>
-  <link rel="stylesheet" href="public-transport.css">
+<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="37554272d5a2987248dc8c3fd9df2566bcea6ef8c076dbbbbafe8fba12354a27"></script>
+<link rel="stylesheet" href="public-transport.css">
 </head>
 <body>
   <a class="skip-link" href="#case-view">Skip to selected question</a>
@@ -39,16 +39,16 @@
         </div>
         <div id="case-list" class="case-list"></div>
       </details>
-      <p class="rail-footnote">Saved records only. This page cannot call a model, change a plan or rerank a result.</p>
+      <p class="rail-footnote">Saved evidence only. Changing the view does not change the results.</p>
       <p id="showcase-curation-note" class="rail-footnote" data-testid="showcase-curation-note" hidden></p>
     </aside>
     <section class="case-workspace" aria-label="Analyst workflow">
       <div class="workspace-toolbar">
         <span class="saved-label">Published casebook</span>
-        <label class="arm-control">Research condition<select id="arm-select" aria-label="Research condition">
-          <option value="A">A / Model extraction + atoms + slot readings + direct questions</option>
-          <option value="B">B / Same extraction + atoms / no readings or questions</option>
-          <option value="C">C / Same extraction + atoms + local slot readings</option>
+        <label class="arm-control">Search method<select id="arm-select" aria-label="Research condition">
+          <option value="A">A / Expanded search</option>
+          <option value="B">B / Direct clues</option>
+          <option value="C">C / Alternative readings</option>
         </select></label>
       </div>
       <p id="page-state" class="status-strip" role="status">Opening the published casebook...</p>

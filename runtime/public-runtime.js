@@ -10,6 +10,7 @@
   const pages = new Set(["/", "/index.html", "/workbench-v6.html", "/graph-full-v6.html"]);
   const guide = {config: "llm_readings", reading: "", route_index: "0"};
   const routes = {
+    "/api/health": {defaults: {}, required: []},
     "/api/condition-v6": {defaults: {config: "llm_readings"}, required: ["case_id"]},
     "/api/flow-v6": {defaults: {config: "llm_readings", reading: "", limit: "1024"}, required: ["case_id"]},
     "/api/node-v6": {defaults: {}, required: ["case_id", "node_id"]},
@@ -24,6 +25,14 @@
     "/api/graph-v4-viewer": {defaults: {corpus: "cib"}, required: [], optional: ["revision"]},
     "/api/cib-pdf": {defaults: {release: "earlier"}, required: ["doc_id"], optional: ["document_id"]}
   };
+  const currentPins = ["case_id", "resource_id", "registry_sha256", "index_sha256"];
+  for (const endpoint of ["condition-v6", "flow-v6", "node-v6", "source-v6", "native-v6", "origin-v63",
+    "guide-v6", "guide-overlay-v64", "guide-overlay-v63", "guide-view-v6", "postrun-review", "cib-pdf"]) {
+    const old = routes["/api/" + endpoint] || {defaults: {reveal: "0"}, required: []};
+    routes["/api/current/" + endpoint] = {defaults: {...old.defaults, config: "llm_readings"},
+      required: [...new Set([...currentPins, ...old.required])], optional: old.optional || []};
+  }
+  const isPDF = path => /^\/api\/(?:current\/)?cib-pdf$/.test(path);
   const deniedSegments = new Set(["private", ".git", ".env", "manuscripts", "manuscript", "raw_logs", "raw-logs", "requests", "responses", "api_keys", "node_modules"]);
   const limits = Object.freeze({manifestBytes: 32 * 1024 ** 2, chunkBytes: 16 * 1024 ** 2,
     rootBytes: 512 * 1024 ** 2, cachedChunks: 8, cachedChunkBytes: 32 * 1024 ** 2,
@@ -64,12 +73,16 @@
       if (!own(routes, path)) fail("API_NOT_ALLOWLISTED", "No public replay exists for this API");
       const spec = routes[path], allowed = new Set([...Object.keys(spec.defaults), ...spec.required, ...(spec.optional || [])]);
       if (Object.keys(values).some(k => !allowed.has(k))) fail("UNKNOWN_PARAMETER", "Unknown public replay parameter");
-      if (path === "/api/cib-pdf" && own(values, "document_id")) {
+      if (isPDF(path) && own(values, "document_id")) {
         if (own(values, "doc_id")) fail("DUPLICATE_PARAMETER", "Use one PDF document identifier");
         values.doc_id = values.document_id; delete values.document_id;
       }
       for (const [key, value] of Object.entries(spec.defaults)) if (!own(values, key)) values[key] = value;
       if (spec.required.some(k => !values[k])) fail("MISSING_PARAMETER", "A required saved-packet selector is missing");
+      if (path.startsWith("/api/current/")) {
+        for (const pin of ["registry_sha256", "index_sha256"]) if (!/^[a-f0-9]{64}$/.test(values[pin])) fail("INVALID_PARAMETER", "Current-resource SHA256 pins are required");
+        if (!/^[A-Za-z0-9_.:-]{1,240}$/.test(values.resource_id)) fail("INVALID_PARAMETER", "Invalid current-resource identifier");
+      }
       if (own(values, "config")) {
         values.config = ({A: "llm_readings", B: "llm_atoms", C: "llm_local"})[values.config] || values.config;
         if (!["llm_readings", "llm_atoms", "llm_local"].includes(values.config)) fail("INVALID_PARAMETER", "Unknown research condition");
@@ -83,7 +96,8 @@
       if (own(values, "revision") && values.revision !== "study") fail("INVALID_PARAMETER", "Unknown saved graph revision");
       if (own(values, "release") && !["earlier", "later"].includes(values.release)) fail("INVALID_PARAMETER", "Unknown release");
       if (own(values, "reveal_focal") && !["0", "1"].includes(values.reveal_focal)) fail("INVALID_PARAMETER", "Unknown focal reveal state");
-      if (path === "/api/guide-view-v6") {
+      if (own(values, "reveal") && !["0", "1"].includes(values.reveal)) fail("INVALID_PARAMETER", "Unknown assessment reveal state");
+      if (path === "/api/guide-view-v6" || path === "/api/current/guide-view-v6") {
         const phase = values.phase;
         if (phase === "source" || phase === "inspect") {
           if (!values[phase === "source" ? "source_id" : "node_id"]) fail("MISSING_PARAMETER", "Missing source or node selector");
@@ -404,7 +418,7 @@
     }
     try {
       let value = logical(raw), target;
-      if (node.id === "full-workbench-link" || node.id === "full-home-link" || node.id === "full-home-brand") {
+      if (node.id === "full-workbench-link" || value.path !== "/index.html" && (node.id === "full-home-link" || node.id === "full-home-brand")) {
         const intended = new URL(location.href).searchParams.get("return_to") || new URL(location.href).searchParams.get("return");
         if (intended) try {
           const back = logical(intended);
@@ -414,7 +428,7 @@
           }
         } catch (_) { /* An invalid return target cannot replace a safe local link. */ }
       }
-      if (node.tagName === "A" && value.path === "/api/cib-pdf") {
+      if (node.tagName === "A" && isPDF(value.path)) {
         node.dataset.publicPdfRequest = raw;
         if (savedIndex && !hasSaved(raw)) { archiveOnlyPDF(node, raw); return; }
         if (node.dataset.publicPdfLocalArchive) {
@@ -428,7 +442,7 @@
       else if (/^\/workbench-v[345]\.html$/.test(value.path)) {
         const missing = new URL("runtime/replay.html", base); missing.searchParams.set("unavailable", "This historical archive is not included in the finite public export"); target = missing.href;
       } else target = siteURL(raw);
-      if (value.path === "/api/cib-pdf" && node.tagName === "A") node.dataset.publicPdfHref = target;
+      if (isPDF(value.path) && node.tagName === "A") node.dataset.publicPdfHref = target;
       delete node.dataset.publicReplayBlocked;
       if (node.getAttribute(name) !== target) node.setAttribute(name, target);
     } catch (_) { node.dataset.publicReplayBlocked = "true"; }
@@ -437,7 +451,7 @@
     if (String(value) === "about:blank" || String(value) === "") return String(value);
     if (String(value).startsWith("blob:") && new URL(value).origin === base.origin) return String(value);
     const target = logical(value);
-    if (target.path === "/api/cib-pdf") return replayURL(value);
+    if (isPDF(target.path)) return replayURL(value);
     if (target.path === "/runtime/replay.html") return siteURL(value);
     fail("FRAME_NOT_ALLOWLISTED", "Only a verified saved PDF frame is available in this public demo");
   }
@@ -490,7 +504,7 @@
       if (value.path.startsWith("/api/")) {
         event.preventDefault();
         for (const [key, v] of new FormData(form)) { if (typeof v !== "string") fail("GET_ONLY", "File submissions are not supported"); value.query.append(key, v); }
-        if (value.path === "/api/cib-pdf" && savedIndex && !hasSaved(siteURL(value.path + "?" + value.query))) { notice("PDF available in local archive. Original transcript remains inspectable; this PDF is outside public cited-document subset."); return; }
+        if (isPDF(value.path) && savedIndex && !hasSaved(siteURL(value.path + "?" + value.query))) { notice("PDF available in local archive. Original transcript remains inspectable; this PDF is outside public cited-document subset."); return; }
         const anchor = document.createElement("a"); anchor.href = replayURL(siteURL(value.path + "?" + value.query)); anchor.target = form.target || "_self"; anchor.click();
       } else rewrite(form);
     } catch (error) { event.preventDefault(); notice(error.message); }
@@ -498,7 +512,7 @@
   window.open = function (url, target, features) {
     try {
       const value = logical(url);
-      if (value.path === "/api/cib-pdf" && savedIndex && !hasSaved(url)) { notice("PDF available in local archive. Original transcript remains inspectable; this PDF is outside public cited-document subset."); return null; }
+      if (isPDF(value.path) && savedIndex && !hasSaved(url)) { notice("PDF available in local archive. Original transcript remains inspectable; this PDF is outside public cited-document subset."); return null; }
       return originalOpen(value.path.startsWith("/api/") ? replayURL(url) : siteURL(url), target, features);
     } catch (error) { notice(error.message); return null; }
   };

@@ -33,7 +33,7 @@ jobs:
           python -m playwright install --with-deps chromium --only-shell
           python -m pytest -q runtime/tests/runtime_browser_test.py runtime/tests/runtime_fragment_test.py runtime/tests/runtime_external_test.py
       - name: Verify Public Allowlist And Hashes
-        run: python tools/validate_publication.py --site site --base-path /matryoshka-demo/
+        run: python tools/validate_publication.py --site site --base-path /matryoshka-demo/ --dataset-proof tests/fixtures/current-dataset-privacy-pass.json --dataset-proof-sha256 257e8b3139ab10f89dfc0c0c5f1e5a0e775c38d6cdc1a539fccd506686dee5cf
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

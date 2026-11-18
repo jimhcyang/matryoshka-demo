@@ -131,7 +131,7 @@ def test_legacy_cable_maps_still_load_without_false_identity_authority(actual_pa
     page.goto(actual_site["base"] + "graph-full-v6.html?corpus=" + corpus, wait_until="networkidle")
     page.wait_for_function("state.data && state.panels.current && state.panels.current.nodes.length > 0")
     assert page.evaluate("state.data._identity_authority_mode") == "legacy"
-    assert "identity authority unavailable" in page.locator("#legacy-identity-authority-notice").inner_text()
+    assert "identity authority unavailable" in page.locator("#legacy-identity-authority-notice").inner_text().lower()
     artifact(page, corpus + "-legacy", width)
 
 

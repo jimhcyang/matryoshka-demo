@@ -3,8 +3,8 @@
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[char]);
-const fmt = (value) => new Intl.NumberFormat("en-US").format(Number(value || 0));
-const graphWeight=value=>{const n=Number(value);return Number.isFinite(n)?n!==0&&Math.abs(n)<1e-4?n.toExponential(2):String(Number(n.toPrecision(5))):"not supplied";};
+const graphWeight=value=>{const n=Number(value);if(!Number.isFinite(n))return 'not supplied';if(n===0)return '0';const rounded=n.toLocaleString('en-US',{maximumFractionDigits:2});return Math.abs(n)<.001||Number(rounded.replaceAll(',',''))===0?n.toExponential(2):rounded;};
+const fmt=value=>graphWeight(Number(value||0));
 // Canvas-only bounds: raw node masses, source weights and memberships are unchanged.
 const displayRadius=(value,minimum=0,maximum=Number.MAX_VALUE)=>Math.min(maximum,Math.max(minimum,Number.isFinite(value)?value:minimum));
 const displayScale=value=>Number.isFinite(value)&&value>0?Math.min(3.2,value):1;
@@ -18,6 +18,51 @@ const redactionOnlyMode = false;
 const singleCorpusMode = new URLSearchParams(window.location.search).get("corpus") !== "cib" && ["iran","vietnam"].includes(new URLSearchParams(window.location.search).get("corpus"));
 const currentOnlyMode = true;
 const pageParams = new URLSearchParams(window.location.search);
+// BEGIN CURRENT_RESOURCE_GRAPH_BRIDGE
+const priorViewerBindingV70=typeof viewerBindingURL==='function'?viewerBindingURL:null;
+const priorExplorationBindingV70=typeof renderExplorationBinding==='function'?renderExplorationBinding:null;
+function currentGraphResource(params=pageParams){
+  const keys=['resource_id','registry_sha256','index_sha256'];
+  if(!keys.some(key=>params.has(key)))return null;
+  if(keys.some(key=>params.getAll(key).length!==1)||!params.get('resource_id')||
+      !/^[a-f0-9]{64}$/.test(params.get('registry_sha256')||'')||!/^[a-f0-9]{64}$/.test(params.get('index_sha256')||''))throw Error('Incomplete or mixed current graph resource pins.');
+  if(['graph_revision','revision'].some(key=>params.getAll(key).some(value=>value!=='study')))throw Error('Unsupported graph revision');
+  if(params.get('graph_revision')==='study'||params.get('revision')==='study')throw Error('A current resource guide cannot select the archived study graph.');
+  return Object.fromEntries(keys.map(key=>[key,params.get(key)]));
+}
+function currentAwareViewerBindingURL(params=pageParams){
+  if(currentGraphResource(params))return '/api/graph-v4-viewer?'+new URLSearchParams({corpus:corpusId});
+  return priorViewerBindingV70?priorViewerBindingV70(params):'/api/graph-v4-viewer?'+new URLSearchParams({corpus:corpusId});
+}
+function currentAwareExplorationBinding(params=pageParams){
+  if(!currentGraphResource(params)){priorExplorationBindingV70?.(params);return;}
+  const heading=document.querySelector('#exploration-binding strong');if(heading)heading.textContent='Current corpus graph';
+  const scope=document.querySelector('#exploration-scope');if(scope)scope.textContent='Explicit current resource. This is not the archived study graph; case source eligibility remains narrower than ordinary map navigation.';
+  const layout=document.querySelector('#exploration-layout');if(layout)layout.textContent=`Current graph ${refreshBinding.graph_run_id} / hierarchy ${refreshBinding.hierarchy_run_id}. Guide source pins are checked independently; no label-based identity substitution is allowed.`;
+}
+function verifyCurrentMapBinding(resource,viewer=refreshBinding){
+  if(!currentGraphResource())return;
+  if(!resource?.graph_id||!resource.hierarchy_id||resource.graph_id!==viewer?.graph_run_id||resource.hierarchy_id!==viewer?.hierarchy_run_id)
+    throw Error('The current guide and Corpus Map graph/hierarchy bindings differ. No archived study graph is substituted.');
+}
+// Export derivations may retain these legacy function declarations. Capture
+// them once, then prevent their guide selector from silently choosing study.
+if(priorViewerBindingV70)viewerBindingURL=currentAwareViewerBindingURL;
+if(priorExplorationBindingV70)renderExplorationBinding=currentAwareExplorationBinding;
+async function currentGraphJSON(path,options={}){
+  const binding=currentGraphResource(),helpers=binding?await import('./local-decisions-v65.js'):null;
+  const url=helpers?helpers.currentResourceURL(path,binding,location.href):path;
+  const response=await fetch(url,{cache:'no-store',...options});
+  if(!response.ok)throw Error('The explicitly selected saved guide or source is unavailable. No archived study resource is substituted.');
+  const value=await response.json();return helpers?helpers.verifyCurrentResourceResponse(url,value):value;
+}
+async function currentGraphPDFURL(path){
+  const binding=currentGraphResource(),selection=guideSelection(pageParams);
+  if(!binding||!selection)return new URL(path,location.href);
+  const {currentPDFURL}=await import('./local-decisions-v65.js');
+  return currentPDFURL(path,{binding,caseId:selection.case_id,config:selection.config},location.href);
+}
+// END CURRENT_RESOURCE_GRAPH_BRIDGE
 const redirectCibRoute = false;
 const corpusId = ["iran","vietnam"].includes(pageParams.get("corpus")) ? pageParams.get("corpus") : "cib";
 let comparisonAsset, searchAsset;
@@ -60,112 +105,81 @@ const DEFAULT_NODE_LIMIT = 256;
 const NODE_CAPS = new Set([32,256,2048]);
 const MAX_RENDERED_NODES = 2048;
 const MAX_ALL_RENDERED_EDGES = 16384;
-const identityAuthoritySchemas = {
-  comparison:{legacy:"cib-legacy-current-comparison/4.8",native:"cib-legacy-current-comparison/4.9"},
-  search:{legacy:"cib-graph-search/3.4",native:"cib-graph-search/3.5"},
-  neighborhood:{legacy:"cib-node-neighborhood/1.0",native:"cib-node-neighborhood/1.1"},
-  community:{legacy:"cib-community-detail/1.1",native:"cib-community-detail/1.2"},
+// BEGIN IDENTITY_AUTHORITY_ADAPTER
+const identityAuthoritySchemas={
+  comparison:{legacy:'cib-legacy-current-comparison/4.8',native:'cib-legacy-current-comparison/4.9'},
+  search:{legacy:'cib-graph-search/3.4',native:'cib-graph-search/3.5'},
+  neighborhood:{legacy:'cib-node-neighborhood/1.0',native:'cib-node-neighborhood/1.1'},
+  community:{legacy:'cib-community-detail/1.1',native:'cib-community-detail/1.2'}
 };
-const legacyAuthoritySchemas = new Set();
-
-function identityAuthorityMode(schema,kind,expectedMode=null) {
+const legacyAuthoritySchemas=new Set();
+function identityAuthorityMode(schema,kind,expectedMode=null){
   const mode=Object.entries(identityAuthoritySchemas[kind]).find(([,version])=>version===schema)?.[0];
-  if (!mode) throw new Error(`Unsupported ${kind} schema ${schema}`);
-  if (expectedMode && mode!==expectedMode) throw new Error(`Mixed identity-authority schema revisions for ${kind}: ${schema}`);
+  if(!mode)throw Error(`Unsupported ${kind} schema ${schema}`);
+  if(expectedMode&&mode!==expectedMode)throw Error(`Mixed identity-authority schema revisions for ${kind}: ${schema}`);
   return mode;
 }
-
-function adaptIdentityRecord(row,mode) {
-  if (!row || typeof row!=="object" || Array.isArray(row)) throw new Error("Invalid identity record");
-  if ((row.type || row.node_type)!=="Entity") return row;
-  if (mode==="native") {
-    const owns=(key)=>Object.prototype.hasOwnProperty.call(row,key);
-    if (!owns("reference_scope") || !owns("instance_identity_asserted") ||
-        !(row.reference_scope===null || typeof row.reference_scope==="string") ||
-        !(row.instance_identity_asserted===null || typeof row.instance_identity_asserted==="boolean")) {
-      throw new Error(`Missing or invalid native identity authority for ${row.id || row.node_id}`);
-    }
-  } else if (mode==="legacy") {
-    // Old schemas certify neither these fields nor their precomputed labels.
-    // Explicit nulls also prevent authority leaking in from a richer cache merge.
-    row.reference_scope=null;
-    row.instance_identity_asserted=null;
-  } else throw new Error("Unsupported identity-authority adapter");
-  delete row.identity_scope;
-  row._identity_authority_mode=mode;
-  return row;
+function adaptIdentityRecord(row,mode){
+  if(!row||typeof row!=='object'||Array.isArray(row))throw Error('Invalid identity record');
+  if((row.type||row.node_type)!=='Entity')return row;
+  if(mode==='native'){
+    const owns=key=>Object.prototype.hasOwnProperty.call(row,key);
+    if(!owns('reference_scope')||!owns('instance_identity_asserted')||
+        !(row.reference_scope===null||typeof row.reference_scope==='string')||
+        !(row.instance_identity_asserted===null||typeof row.instance_identity_asserted==='boolean'))throw Error(`Missing or invalid native identity authority for ${row.id||row.node_id}`);
+  }else if(mode==='legacy'){
+    row.reference_scope=null;row.instance_identity_asserted=null;
+  }else throw Error('Unsupported identity-authority adapter');
+  delete row.identity_scope;row._identity_authority_mode=mode;return row;
 }
-
-function adaptIdentityRecords(rows,mode) {
-  if (!Array.isArray(rows)) throw new Error("Identity records must be an array");
-  rows.forEach((row)=>adaptIdentityRecord(row,mode));
-  return rows;
+function adaptIdentityRecords(rows,mode){
+  if(!Array.isArray(rows))throw Error('Identity records must be an array');
+  rows.forEach(row=>adaptIdentityRecord(row,mode));return rows;
 }
-
-function renderLegacyAuthorityNotice() {
-  if (!legacyAuthoritySchemas.size) return;
-  const hero=$(".hero");
-  if (!hero) return;
-  let notice=$("#legacy-identity-authority-notice");
-  if (!notice) {
-    notice=document.createElement("section");
-    notice.id="legacy-identity-authority-notice";notice.className="refresh-binding-notice";
-    notice.setAttribute("role","status");hero.after(notice);
-  }
-  notice.innerHTML=`<strong>Legacy data quality: identity authority unavailable (legacy)</strong><p>These published exports omit reliable native identity authority. Entity nodes remain navigable, but their identity is unknown here, not resolved or source-specific. Old cached identity labels are ignored.</p><small>Explicit legacy adapters: ${[...legacyAuthoritySchemas].sort().map(esc).join(", ")}. New-schema exports require native reference scope and identity assertion fields.</small>`;
-}
-
-function recordLegacyAuthoritySchema(schema,mode) {
-  if (mode!=="legacy") return;
+function recordLegacyAuthoritySchema(schema,mode){
+  if(mode!=='legacy')return;
   legacyAuthoritySchemas.add(schema);
-  renderLegacyAuthorityNotice();
+  const hero=$('.hero');if(!hero)return;
+  let notice=$('#legacy-identity-authority-notice');
+  if(!notice){notice=document.createElement('section');notice.id='legacy-identity-authority-notice';notice.className='refresh-binding-notice';notice.setAttribute('role','status');hero.after(notice);}
+  notice.innerHTML=`<strong>Identity authority unavailable in this legacy export</strong><p>Entity nodes remain navigable, but their identity is unknown here, not resolved or source-specific. Old cached identity labels are ignored.</p><small>Explicit legacy adapters: ${[...legacyAuthoritySchemas].sort().map(esc).join(', ')}.</small>`;
 }
-
-function adaptComparisonAuthority(payload,isSingleCorpus=singleCorpusMode) {
+function adaptComparisonAuthority(payload,isSingleCorpus=singleCorpusMode){
   let mode;
-  if (isSingleCorpus) {
-    if (payload.schema_version!=="matryoshka-single-corpus-browser/1.0") throw new Error(`Unsupported comparison schema ${payload.schema_version}`);
-    // This wrapper did not change versions; its explicit node catalog contract
-    // distinguishes old and authority-preserving exports.
-    mode=identityAuthorityMode(payload.neighborhood_catalogs?.schema_version,"neighborhood");
-  } else mode=identityAuthorityMode(payload.schema_version,"comparison");
-  if (!payload.views || typeof payload.views!=="object" || Array.isArray(payload.views)) throw new Error("Comparison views are missing");
-  if (payload.neighborhood_catalogs) identityAuthorityMode(payload.neighborhood_catalogs.schema_version,"neighborhood",mode);
-  if (payload.community_detail_catalogs) identityAuthorityMode(payload.community_detail_catalogs.schema_version,"community",mode);
-  Object.values(payload.views).forEach((view)=>{
-    Object.values(view.levels || {}).forEach((level)=>{
-      if (level.neighborhood_catalog) identityAuthorityMode(level.neighborhood_catalog.schema_version,"neighborhood",mode);
-      if (level.community_detail_schema_version) identityAuthorityMode(level.community_detail_schema_version,"community",mode);
-      for (const key of ["nodes","catalog_nodes","overview_nodes","member_nodes"]) {
-        if (level[key]) adaptIdentityRecords(level[key],mode);
-      }
-    });
+  if(isSingleCorpus){
+    if(payload.schema_version!=='matryoshka-single-corpus-browser/1.0')throw Error(`Unsupported comparison schema ${payload.schema_version}`);
+    mode=identityAuthorityMode(payload.neighborhood_catalogs?.schema_version,'neighborhood');
+  }else mode=identityAuthorityMode(payload.schema_version,'comparison');
+  if(!payload.views||typeof payload.views!=='object'||Array.isArray(payload.views))throw Error('Comparison views are missing');
+  if(payload.neighborhood_catalogs)identityAuthorityMode(payload.neighborhood_catalogs.schema_version,'neighborhood',mode);
+  if(payload.community_detail_catalogs)identityAuthorityMode(payload.community_detail_catalogs.schema_version,'community',mode);
+  for(const view of Object.values(payload.views)){
+    for(const level of Object.values(view.levels||{})){
+      if(level.neighborhood_catalog)identityAuthorityMode(level.neighborhood_catalog.schema_version,'neighborhood',mode);
+      if(level.community_detail_schema_version)identityAuthorityMode(level.community_detail_schema_version,'community',mode);
+      for(const key of ['nodes','catalog_nodes','overview_nodes','member_nodes'])if(level[key])adaptIdentityRecords(level[key],mode);
+    }
     view._identity_authority_mode=mode;
-  });
-  payload._identity_authority_mode=mode;
-  recordLegacyAuthoritySchema(payload.schema_version,mode);
-  return payload;
+  }
+  payload._identity_authority_mode=mode;recordLegacyAuthoritySchema(payload.schema_version,mode);return payload;
 }
-
-function identityScopeLabel(item) {
-  if ((item.type || item.node_type) !== "Entity") return "";
-  if (item._identity_authority_mode==="legacy") return "identity authority unavailable (legacy)";
+function identityScopeLabel(item){
+  if((item.type||item.node_type)!=='Entity')return '';
+  if(item._identity_authority_mode==='legacy')return 'identity authority unavailable (legacy)';
   const scope=item.reference_scope,asserted=item.instance_identity_asserted;
-  if (["unresolved_reference","unresolved_contextual_reference","ambiguous_lexical_hub"].includes(scope)) return "unresolved reference; instance identity not established";
-  if (["lexical_reference","concept"].includes(scope)) return "reference-only vocabulary; instance identity not asserted";
-  if (asserted===false) return "reference-only; instance identity not asserted";
-  if (asserted===true && ["model_source_context","human_source_occurrence_scope"].includes(scope)) return "source-specific identity; not a global alias";
-  if (asserted===true && ["source_referent","named_entity"].includes(scope)) return "source-supported identity cluster";
-  return "identity authority not recorded; inspect source provenance";
+  if(['unresolved_reference','unresolved_contextual_reference','ambiguous_lexical_hub'].includes(scope))return 'unresolved reference; instance identity not established';
+  if(['lexical_reference','concept'].includes(scope))return 'reference-only vocabulary; instance identity not asserted';
+  if(asserted===false)return 'reference-only; instance identity not asserted';
+  if(asserted===true&&['model_source_context','human_source_occurrence_scope'].includes(scope))return 'source-specific identity; not a global alias';
+  if(asserted===true&&['source_referent','named_entity'].includes(scope))return 'source-supported identity cluster';
+  return 'identity authority not recorded; inspect source provenance';
 }
-
-function identityAuditHtml(item) {
-  const label=identityScopeLabel(item);
-  if (!label) return "";
-  const legacy=item._identity_authority_mode==="legacy";
-  const assertion=legacy?"unavailable (legacy)":typeof item.instance_identity_asserted==="boolean"?String(item.instance_identity_asserted):"not recorded";
-  return `<p><b>Identity state:</b> ${esc(label)}<br><b>Native reference scope:</b> ${esc(legacy?"unavailable (legacy)":item.reference_scope ?? "not recorded")}<br><b>Instance identity asserted:</b> ${esc(assertion)}</p>`;
+function identityAuditHtml(item){
+  const label=identityScopeLabel(item);if(!label)return '';
+  const legacy=item._identity_authority_mode==='legacy',assertion=legacy?'unavailable (legacy)':typeof item.instance_identity_asserted==='boolean'?String(item.instance_identity_asserted):'not recorded';
+  return `<p><b>Identity state:</b> ${esc(label)}<br><b>Native reference scope:</b> ${esc(legacy?'unavailable (legacy)':item.reference_scope??'not recorded')}<br><b>Instance identity asserted:</b> ${esc(assertion)}</p>`;
 }
+// END IDENTITY_AUTHORITY_ADAPTER
 
 function sourceDocumentId(value) {
   const id=String(value??"").trim();
@@ -1447,7 +1461,8 @@ async function openCibSource(panel,documentId,{canonicalPageId="",highlights=[],
       const pdfPage=pages.find(item=>item.canonical_page_id===canonicalPage);
       const actualPage=Number(pdfPage?.source_page||0);
       if(!Number.isInteger(actualPage)||actualPage<1){status.textContent="No PDF page was recorded in the frozen transcript.";return;}
-      const pdfUrl=new URL("/api/cib-pdf",location.origin);pdfUrl.search=new URLSearchParams({doc_id:documentId,release}).toString();
+      let pdfUrl=new URL("/api/cib-pdf",location.origin);pdfUrl.search=new URLSearchParams({doc_id:documentId,release}).toString();
+      try{pdfUrl=await currentGraphPDFURL(pdfUrl);}catch(error){status.textContent=error.message;return;}
       status.textContent=`Original ${release} PDF${actualPage>0?` / page ${actualPage}`:" / page not recorded"}`;
       if(!pdfUrl.hash&&actualPage>0)pdfUrl.hash=`page=${actualPage}&zoom=page-width`;
       frame.src=pdfUrl.href;
@@ -1473,11 +1488,11 @@ async function ensureCommunityDetail(view,node) {
     state.communityDetailPromises[key]=fetch(assetURL(filename),{cache:"no-store"}).then(async(response)=>{
       if (!response.ok) throw new Error(`${view.key} community detail HTTP ${response.status}`);
       const payload=await parseJsonAsset(response,filename);
-      const mode=identityAuthorityMode(payload.schema_version,"community",view._identity_authority_mode || state.data?._identity_authority_mode);
+      const mode=identityAuthorityMode(payload.schema_version,'community',view._identity_authority_mode||state.data?._identity_authority_mode);
       if (!assetViewMatches(payload,view.key)) throw new Error(`Unexpected ${view.key} community detail shard`);
-      Object.values(payload.communities||{}).forEach((detail)=>adaptIdentityRecords(detail.nodes,mode));
-      state.communityDetailShards[key]=payload.communities||{};
+      Object.values(payload.communities||{}).forEach(detail=>adaptIdentityRecords(detail.nodes,mode));
       recordLegacyAuthoritySchema(payload.schema_version,mode);
+      state.communityDetailShards[key]=payload.communities||{};
     });
   }
   await state.communityDetailPromises[key];
@@ -1502,18 +1517,16 @@ async function ensureNodeNeighborhood(view,nodeId) {
     state.neighborhoodPromises[key]=fetch(assetURL(filename),{cache:"no-store"}).then(async(response)=>{
       if(!response.ok)throw new Error(`${view.key} neighborhood HTTP ${response.status}`);
       const payload=await parseJsonAsset(response,filename);
-      const mode=identityAuthorityMode(payload.schema_version,"neighborhood",view._identity_authority_mode || state.data?._identity_authority_mode);
+      const mode=identityAuthorityMode(payload.schema_version,'neighborhood',view._identity_authority_mode||state.data?._identity_authority_mode);
       if(!assetViewMatches(payload,view.key))throw new Error(`Unexpected ${view.key} neighborhood shard`);
-      Object.values(payload.neighborhoods||{}).forEach((detail)=>{
-        adaptIdentityRecord(detail.node,mode);adaptIdentityRecords(detail.neighbors,mode);
-      });
-      state.neighborhoodShards[key]=payload.neighborhoods||{};
+      Object.values(payload.neighborhoods||{}).forEach(detail=>{adaptIdentityRecord(detail.node,mode);adaptIdentityRecords(detail.neighbors,mode);});
       recordLegacyAuthoritySchema(payload.schema_version,mode);
+      state.neighborhoodShards[key]=payload.neighborhoods||{};
     });
   }
   await state.neighborhoodPromises[key];
   const detail=state.neighborhoodShards[key]?.[nodeId];
-  if(!detail)throw new Error(`Node ${nodeId} is absent from ${filename}`);
+  if(!detail){const error=new Error(`Node ${nodeId} is absent from ${filename}`);error.missingExactNode=true;throw error;}
   return detail;
 }
 
@@ -2120,10 +2133,9 @@ function validateGuideOverlay(value,g) {
 async function guideFetch(extra={},signal) {
   const g=state.guidePath;
   if(extra.phase!=="source")throw Error("Guide overlays do not request replacement study graphs.");
-  const response=await fetch("/api/guide-view-v6?"+new URLSearchParams({...g.selection,...extra}),{cache:"no-store",signal});
-  if(!response.ok)throw Error("Saved source is unavailable; no replacement was used.");
-  const data=await response.json();
-  if(data.lens!=="study_case"||data.binding?.graph_id!==g.packet.graph_binding.graph_id||data.binding?.hierarchy_id!==g.packet.graph_binding.hierarchy_id||data.scope?.strictly_before!==g.packet.scope.strictly_before||data.scope?.whole_origin_excluded!==g.packet.scope.whole_origin_excluded)throw Error("Study source binding changed.");
+  const data=await currentGraphJSON("/api/guide-view-v6?"+new URLSearchParams({...g.selection,...extra}),{signal});
+  const current=currentGraphResource();
+  if((current?data.version!=='current-context-inspection/1':data.lens!=="study_case")||data.binding?.graph_id!==g.packet.graph_binding.graph_id||data.binding?.hierarchy_id!==g.packet.graph_binding.hierarchy_id||data.scope?.strictly_before!==g.packet.scope.strictly_before||data.scope?.whole_origin_excluded!==g.packet.scope.whole_origin_excluded)throw Error("Selected source binding changed.");
   return data;
 }
 
@@ -2149,15 +2161,16 @@ function renderPathGuide() {
   const host=guideHost(),g=state.guidePath;
   if(state.guideError){host.innerHTML='<h2>Guide unavailable</h2><p role="alert">'+esc(state.guideError)+'</p><a href="'+esc(guideReturnUrl())+'">Return to result</a>';return;}
   if(!g)return;
+  const current=g.overlay?.version==='current-context-inspection/1';
   host.innerHTML='<header><div><p class="eyebrow">Saved source context</p><h2>KG Navigator</h2></div><button data-guide-close aria-label="Close guide">Close</button></header>'+
     '<p id="guide-level-v64" class="kg-level-v64" aria-label="Current guide KG level"></p>'+
     '<p id="guide-case-bound" class="guide-case-bound" role="note">Case sources: strictly before <time datetime="'+esc(g.packet.scope.strictly_before)+'">'+esc(g.packet.scope.strictly_before)+'</time> (exclusive). Origin excluded.</p>'+
-    '<p class="guide-scope">Same full KG. Red spokes: selected context, not a source assessment. Gold/red trace: an exact source-proven connection.</p>'+
+    '<p class="guide-scope">'+(current?'Same current KG. Exact source-bound nodes guide navigation; browser edges remain gray and uncertified.':'Same full KG. Red spokes: selected context, not a source assessment. Gold/red trace: an exact source-proven connection.')+'</p>'+
     '<label class="guide-step-line"><span id="guide-count"></span><select id="guide-step" aria-label="Saved guide step">'+g.steps.map((s,i)=>'<option value="'+i+'">'+(i+1)+'. '+esc(s.label)+'</option>').join("")+'</select></label>'+
     '<div id="guide-current" class="guide-current" role="status" aria-live="polite"></div><div class="guide-actions"></div>'+
     '<div class="guide-context-actions"><button data-guide-neighborhood>32 connections</button><button data-guide-community>256 community</button></div>'+
     '<details><summary>Sources and binding</summary>'+(g.citations.length?'<label class="guide-source-picker">Original source <select id="guide-source" aria-label="Original study source">'+g.citations.map((c,i)=>'<option value="'+i+'">'+(i+1)+'. '+esc(c.document_id)+'</option>').join('')+'</select></label><button data-guide-source>Open source</button>':'')+
-    '<p>Before '+esc(g.packet.scope.strictly_before)+'; origin '+esc(g.packet.scope.whole_origin_excluded)+' excluded. Browser memberships remain unchanged'+(g.overlay?.layout_matches_study?'.':'; the study hierarchy differs.')+'</p><p id="guide-mapping-status"></p></details>'+
+    '<p>Before '+esc(g.packet.scope.strictly_before)+'; origin '+esc(g.packet.scope.whole_origin_excluded)+' excluded. Browser memberships remain unchanged'+(current?'; exact current graph and hierarchy IDs are bound. No browser-edge correspondence is certified.':g.overlay?.layout_matches_study?'.':'; the study hierarchy differs.')+'</p><p id="guide-mapping-status"></p></details>'+
     '<a class="guide-return" href="'+esc(guideReturnUrl())+'">Return to this result</a>';
   $('#guide-step').onchange=e=>activateGuideStep(Number(e.target.value));
   $('[data-guide-close]',host).onclick=closeSavedGuide;
@@ -2198,6 +2211,12 @@ async function guideCrossfade(change) {
 async function guideRecord(nodeIndex) {
   const g=state.guidePath,m=g.overlay.endpoint_mappings[nodeIndex],panel=state.panels.current;
   if(m.browser_id===null)return null;
+  if(m.current_mapping){
+    if(m.level){const record=await panel.hierarchyNode(m.level,m.browser_id);if(!record||record.id!==m.browser_id||String(record.type).toLowerCase()!==m.level)throw Error('Exact current hierarchy ID is no longer available');return record;}
+    const {node:record}=await ensureNodeNeighborhood(panel.view,m.browser_id);
+    if(record.id!==m.browser_id||['domain_id','theme_id','community_id'].some(k=>(record[k]||null)!==(m.browser_membership[k]||null)))throw Error('Exact current node or membership changed');
+    return record;
+  }
   if(m.status==='SAME_PINNED_HIERARCHY')return panel.hierarchyNode(m.level,m.browser_id);
   const detail=await ensureNodeNeighborhood(panel.view,m.browser_id),record=detail.node;
   if(record.id!==m.browser_id||record.type!==m.source_identity.type||['domain_id','theme_id','community_id'].some(k=>(record[k]||null)!==(m.browser_membership[k]||null)))throw Error('Canonical ID or browser membership differs from the verified crosswalk.');
@@ -2267,8 +2286,9 @@ async function guideShowEndpoint(step) {
 async function openStudySource(citation,{manual=true}={}) {
   if(manual)pauseGuide();guideCloseSource();const epoch=++guideSourceEpoch;
   const scrim=document.createElement('div');scrim.id='study-guide-scrim';scrim.onclick=()=>{pauseGuide();guideCloseSource();};document.body.append(scrim);
-  const drawer=document.createElement('aside');drawer.id='study-guide-drawer';drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');drawer.setAttribute('aria-label','Verified eligible study source');
-  drawer.innerHTML='<header><h2>Original study source</h2><button data-study-close>Close source</button></header><div class="study-source-content" role="status">Verifying the exact saved page and quotation...</div><footer>'+guideControls()+'</footer>';
+  const current=Boolean(currentGraphResource());
+  const drawer=document.createElement('aside');drawer.id='study-guide-drawer';drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');drawer.setAttribute('aria-label',current?'Verified eligible current-resource source':'Verified eligible study source');
+  drawer.innerHTML='<header><h2>'+(current?'Original eligible source':'Original study source')+'</h2><button data-study-close>Close source</button></header><div class="study-source-content" role="status">Verifying the exact saved page and quotation...</div><footer>'+guideControls()+'</footer>';
   document.body.append(drawer);$('[data-study-close]',drawer).onclick=()=>{pauseGuide();guideCloseSource();};bindGuideControls($('footer',drawer));$('[data-study-close]',drawer).focus({preventScroll:true});
   const pageId=citation.canonical_page_id||citation.page_id;
   try{
@@ -2280,7 +2300,7 @@ async function openStudySource(citation,{manual=true}={}) {
     const chars=Array.from(page.text),start=citation.start,end=citation.end;
     if(page.id!==pageId||page.document_id!==citation.document_id||page.date!==citation.date||hash!==citation.page_sha256||page.document_id===state.guidePath.packet.scope.whole_origin_excluded||!(page.date<state.guidePath.packet.scope.strictly_before)||!Number.isInteger(start)||!Number.isInteger(end)||start<0||end<=start||end>chars.length||chars.slice(start,end).join('')!==citation.text)throw Error('Exact saved source proof did not replay. No alternate quote or transcript was substituted.');
     if(epoch!==guideSourceEpoch)return;
-    $('.study-source-content',drawer).innerHTML='<p class="study-proof-status">Verified original study page and exact quotation. Source handoff, not a browser-edge transition.</p><p>'+esc(page.document_id)+' / '+esc(page.date)+'</p><pre>'+esc(chars.slice(0,start).join(''))+'<mark>'+esc(citation.text)+'</mark>'+esc(chars.slice(end).join(''))+'</pre>';
+    $('.study-source-content',drawer).innerHTML='<p class="study-proof-status">Verified original '+(current?'eligible source':'study')+' page and exact quotation. Source handoff, not a browser-edge transition.</p><p>'+esc(page.document_id)+' / '+esc(page.date)+'</p><pre>'+esc(chars.slice(0,start).join(''))+'<mark>'+esc(citation.text)+'</mark>'+esc(chars.slice(end).join(''))+'</pre>';
   }catch(e){if(epoch===guideSourceEpoch){$('.study-source-content',drawer).textContent=e.message;$('.study-source-content',drawer).setAttribute('role','alert');}throw e;}
 }
 
@@ -2314,12 +2334,16 @@ async function activateGuideStep(index,{automatic=false}={}) {
 async function loadSavedGuide(params) {
   try{
     const selection=guideSelection(params);if(!selection)return;
-    const response=await fetch('/api/guide-v6?'+new URLSearchParams(selection),{cache:'no-store'});
-    if(!response.ok)throw Error('Saved guide unavailable. URL route payloads are not used.');
-    const g=normalizeSavedGuide(await response.json(),selection);
-    const overlayResponse=await fetch('/api/guide-overlay-v64?'+new URLSearchParams(selection),{cache:'no-store'});
-    if(!overlayResponse.ok)throw Error('Full-KG source-ID crosswalk unavailable. No study graph was substituted.');
-    g.overlay=validateGuideOverlay(await overlayResponse.json(),g);
+    const g=normalizeSavedGuide(await currentGraphJSON('/api/guide-v6?'+new URLSearchParams(selection)),selection);
+    verifyCurrentMapBinding(g.packet.resource_binding);
+    const overlay=await currentGraphJSON('/api/guide-overlay-v64?'+new URLSearchParams(selection));
+    if(overlay.version==='current-context-inspection/1'){
+      const resource=currentGraphResource();if(!resource)throw Error('A current overlay requires explicit URL resource pins');
+      const {adaptCurrentGuideOverlay}=await import('./local-decisions-v65.js');
+      const panel=state.panels.current;
+      g.overlay=await adaptCurrentGuideOverlay(overlay,g,{resourceBinding:resource,viewer:refreshBinding,
+        resolveHierarchy:(level,id)=>panel.hierarchyNode(level,id),resolveNode:async id=>{try{return (await ensureNodeNeighborhood(panel.view,id)).node;}catch(error){if(error.missingExactNode)return null;throw error;}}});
+    }else{if(currentGraphResource())throw Error('A current guide cannot use a legacy study overlay');g.overlay=validateGuideOverlay(overlay,g);}
     state.guidePath=g;state.guideOverlay=g.overlay;
     g.exploration=state.panels.current.rememberLocation();
     enterGuideControls(g);
@@ -2373,6 +2397,7 @@ window.guideExportV64=guideExportV64;
 
 function guideEdgeVisualV64(panel,edge,selectedId) {
   if(!state.guideOverlay)return null;
+  if(state.guideOverlay.version==='current-context-inspection/1')return {color:'rgba(120,130,133,.42)',width:1,kind:'current_browser_edge_unassessed'};
   const traversal=panel.v64Traversal;
   if(traversal?.verified&&traversal.edge_ids.includes(edge.id)&&state.guideOverlay.edges.has(edge.id))return {color:'#9f3325',width:3.2,kind:'source_proven_traversal'};
   // Selection is a full-KG UI affordance, not a positive source assessment.
@@ -2573,7 +2598,7 @@ function guideSetTraversalV64(panel,sourceId,targetId,connection) {
   const proofs=connection?.browser_edge_proofs||[];
   const ids=connection?.browser_edge_verified?connection.browser_edge_ids.filter(id=>panel.edges.some(e=>e.id===id&&
     guidePairV64(e,sourceId,targetId)&&proofs.some(p=>p.id===id&&String(e.edge_type||'').split(',').map(s=>s.trim()).includes(p.relation)))):[];
-  const contextIds=panel.edges.filter(e=>guidePairV64(e,sourceId,targetId)&&!ids.includes(e.id)).map(e=>e.id);
+  const contextIds=state.guideOverlay?.version==='current-context-inspection/1'?[]:panel.edges.filter(e=>guidePairV64(e,sourceId,targetId)&&!ids.includes(e.id)).map(e=>e.id);
   panel.v64Traversal={source_id:sourceId,target_id:targetId,native_kind:connection?.kind||null,verified:ids.length>0,edge_ids:ids,
     context_edge_ids:contextIds,source_proof_available:Boolean(connection?.browser_edge_verified),proof_status:ids.length?'exact_displayed_edge_id':contextIds.length?'view_edge_id_unmatched':'source_handoff'};
   panel.matches=new Set([sourceId,targetId].filter(id=>panel.nodeMap.has(id)));panel.draw();
@@ -2818,8 +2843,7 @@ async function init() {
 
 $("#full-corpus").value=corpusId;
 $("#full-workbench-link").href=returnWorkbench;
-const homeURL=new URL(returnWorkbench,location.origin);homeURL.searchParams.set("view","home");homeURL.hash="";
-$("#full-home-link").href=$("#full-home-brand").href=homeURL.pathname+homeURL.search;
+$("#full-home-link").href=$("#full-home-brand").href="index.html";
 $("#full-graph-link").href=location.pathname+location.search;
 $("#full-corpus").addEventListener("change",event=>{
   const url=new URL(location.href);url.searchParams.set("corpus",event.target.value);

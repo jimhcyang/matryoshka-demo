@@ -1,12 +1,12 @@
-import {nestedLayout, percentChange, massRadius, changeColor} from "./flow-layout-v4.js";
+import {nestedLayout, percentChange, changeColor, formatNumber, formatTargetText} from "./flow-layout-v4.js";
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const short = (s,n=7) => {const words=String(s||"").split(/\s+/);return words.slice(0,n).join(" ")+(words.length>n?"...":"");};
 export const compactNodeLabel = text => short(String(text??"").trim().replace(/\s+/g," "),12);
-const fmt = x => !Number.isFinite(x)?"not stored":x===0?"0":Math.abs(x)<1e-4?x.toExponential(2):x.toLocaleString(undefined,{maximumFractionDigits:5});
+const fmt = x => formatNumber(x,"not stored");
 const kindColor = n => ({domain:"#9c7532",theme:"#bd7b59",community:"#368b80",entity:"#477eae",claim:"#a76b40",event:"#8d708c"}[n.type.toLowerCase()]||"#708a91");
 
-const taskTone = node => {const roles=node.task_roles||[];return roles.some(r=>r.direction==="AGAINST")?"#b44032":roles.some(r=>r.direction==="FOR")?"#17745c":"#bd8a15";};
+const taskTone = node => {const roles=(node.task_roles||[]).map(r=>String(r.direction||'').toUpperCase());return roles.some(r=>['AGAINST','COUNTER','OPPOSED'].includes(r))?"#b44032":roles.some(r=>['FOR','SUPPORT','SUPPORTED'].includes(r))?"#17745c":"#bd8a15";};
 const directionLabel = (raw,options) => {
   if(typeof options.formatDirection==="function")return options.formatDirection(raw);
   return ({SUPPORT:"Support",SUPPORTED:"Support",FOR:"Support",COUNTER:"Counterevidence",CONTRADICTED:"Counterevidence",AGAINST:"Counterevidence",
@@ -15,6 +15,14 @@ const directionLabel = (raw,options) => {
     INFERRED:"Unresolved","CONTEXTUAL INFERENCE":"Unresolved",RELATED:"Context only",BACKGROUND:"Context only",CONTEXT:"Context only"})[String(raw??"").trim().toUpperCase()]||"Not recorded";
 };
 export const localizedProof = proof => typeof proof?.text==="string"&&proof.text.length>0&&Number.isInteger(proof.start)&&Number.isInteger(proof.end)&&proof.start>=0&&proof.end>proof.start&&!!proof.canonical_page_id;
+
+function inspectPresentation(container,options,title,body){
+  if(typeof options.onInspect==="function"){options.onInspect({title,body});return;}
+  const dialog=document.createElement("dialog");dialog.className="flow-inspection-v70";dialog.dataset.testid="flow-inspection";
+  const heading=document.createElement("h2");heading.textContent=title;
+  const close=document.createElement("button");close.type="button";close.textContent="Close";close.onclick=()=>dialog.close();
+  dialog.append(heading,close,body);container.append(dialog);dialog.addEventListener("close",()=>dialog.remove(),{once:true});dialog.showModal();
+}
 
 export function edgeStyle(edge, proofs=[]) {
   if(edge.kind==="NAVIGATION")return {color:"#b88a23",dash:[7,4],label:"Membership navigation / not a source assertion"};
@@ -36,6 +44,86 @@ export function changeDescription(current, previous, initial=false) {
 
 const pairKey=edge=>JSON.stringify([edge.source,edge.target]);
 const finiteMass=value=>Number.isFinite(value)&&value>=0;
+export const scientificMass=fmt;
+export function massCategory(node) {
+  if(node.layout_only)return null;
+  const identity=String(node.id||"").toLowerCase();
+  if(identity.startsWith("hierarchy:")){const level=identity.split(":")[1];return ["community","theme","domain"].includes(level)?level:"other";}
+  if(/^(document|doc|source|page)(:|_)/.test(identity))return "other";
+  const type=String(node.type||"unknown").toLowerCase();
+  return ["entity","claim","event"].includes(type)?"semantic":type;
+}
+export function categoryMassStats(projection, frame) {
+  const groups=new Map();
+  for(const node of projection.nodes){
+    const category=massCategory(node),mass=Number.isInteger(node.mass_index)&&node.mass_index>=0?frame.weights[node.mass_index]:null;
+    if(category===null||!finiteMass(mass))continue;
+    if(!groups.has(category))groups.set(category,[]);
+    groups.get(category).push(mass);
+  }
+  const stats=new Map();
+  for(const [category,values]of groups){
+    const maximum=Math.max(...values),fraction=maximum>0?values.reduce((sum,value)=>sum+value/maximum,0)/values.length:0;
+    stats.set(category,{count:values.length,mean:maximum*fraction,logMean:maximum>0?Math.log2(maximum)+Math.log2(fraction):null,basis:"saved-projection"});
+  }
+  return stats;
+}
+export function categorySizeReference(projection, frame) {
+  const reference=frame.category_reference,keys=["semantic","community","theme","domain","other"];
+  const valid=reference?.version==="active-eligible-category-moments/1"&&reference.scope==="active eligible diffusion states"&&
+    reference.zero_mass_members_included===true&&reference.std_definition==="population (ddof=0)"&&
+    Number.isInteger(reference.cohort_count)&&reference.cohort_count>=0&&
+    Number.isInteger(reference.excluded_inactive_count)&&reference.excluded_inactive_count>=0&&
+    keys.every(key=>{const s=reference.categories?.[key];return s&&Number.isSafeInteger(s.count)&&s.count>=0&&finiteMass(s.mean)&&finiteMass(s.std)&&(s.mean_log2==null||Number.isFinite(s.mean_log2))&&(s.count>0||s.mean===0&&s.std===0&&s.mean_log2==null);})&&
+    keys.reduce((sum,key)=>sum+reference.categories[key].count,0)===reference.cohort_count;
+  if(valid)return new Map(keys.map(key=>{const group=reference.categories[key];return [key,{...group,
+    logMean:group.mean>0?Math.log2(group.mean):group.mean_log2??null,basis:"active eligible diffusion states"}];}));
+  const fallback=categoryMassStats(projection,frame);
+  for(const value of fallback.values())value.referenceStatus=reference?"invalid":"absent";
+  return fallback;
+}
+export function categoryFitScale(projection,nodes=projection.nodes,references=null){
+  const fit=new Map(),groups=references||projection.frames.map(frame=>categorySizeReference(projection,frame));
+  for(const [i,frame]of projection.frames.entries())for(const node of nodes){
+    const category=massCategory(node),mass=Number.isInteger(node.mass_index)&&node.mass_index>=0?frame.weights[node.mass_index]:null,group=groups[i].get(category);
+    if(category===null||!finiteMass(mass)||mass===0||!group?.count||!Number.isFinite(group.logMean))continue;
+    const peakLogRatio=Math.log2(mass)-group.logMean;
+    if(!fit.has(category)||peakLogRatio>fit.get(category).peakLogRatio){
+      const logMultiplier=Math.min(0,2-.5*peakLogRatio);
+      fit.set(category,{logMultiplier,multiplier:2**logMultiplier,peakLogRatio,peakIteration:frame.iteration,
+        basis:'displayed category peak relative mass across all saved frames'});
+    }
+  }
+  return fit;
+}
+export function relativeNodeSize(node, frame, stats, fit=null) {
+  const category=massCategory(node),mass=Number.isInteger(node.mass_index)&&node.mass_index>=0?frame.weights[node.mass_index]:null,group=stats.get(category);
+  const result={category,mass,mean:group?.mean??null,meanLog:group?.logMean??null,count:group?.count??0,basis:group?.basis||"saved-projection",ratio:null,logRatio:null,radius:.35,status:"unavailable"};
+  if(category===null)return {...result,status:"layout-only"};
+  if(!finiteMass(mass))return result;
+  if(!group)return {...result,status:"reference-unavailable"};
+  if(group.count===0)return {...result,mean:null,status:"empty-category"};
+  if(mass===0)return {...result,ratio:group.logMean===null?null:0,status:group.logMean===null?"all-zero":"zero"};
+  if(!Number.isFinite(group.logMean))return {...result,status:"reference-unavailable"};
+  const logRatio=Math.log2(mass)-group.logMean;
+  const scale=fit?.get(category),logMultiplier=scale?.logMultiplier??0;
+  // One category scalar covers the whole playback; never clip individual leaders.
+  return {...result,logRatio,ratio:2**logRatio,radius:6*2**(.5*logRatio+logMultiplier),status:"positive",
+    scaleMultiplier:scale?.multiplier??1,meanRadius:6*2**logMultiplier,scalePeakIteration:scale?.peakIteration??null};
+}
+function sizeDescription(size) {
+  if(size.status==="layout-only")return "Layout only, no solver mass or category mean";
+  if(size.status==="unavailable")return "Saved numerical mass unavailable; excluded from the category mean";
+  if(size.status==="reference-unavailable")return `Mass ${fmt(size.mass)}\nNo same-category reference supplied; this marker is not a zero-mass claim.`;
+  const category=size.category==="semantic"?"semantic (entity / claim / event)":size.category;
+  const basis=size.basis==="saved-projection"?"saved-projection":"active eligible diffusion states";
+  const log10=size.meanLog*Math.LOG10E*Math.LN2,exponent=Math.floor(log10);
+  const meanText=size.mean===0&&Number.isFinite(size.meanLog)?"~"+(10**(log10-exponent)).toFixed(2)+"\u00d710^"+exponent+" (below scalar range)":scientificMass(size.mean);
+  return `Mass ${scientificMass(size.mass)}\nSame-level ${basis} mean (${category}, n=${size.count} including zeros): ${meanText}\n`+
+    (size.status==="empty-category"?"No active reference states in this category; mean and ratio unavailable.":
+    (size.status==="all-zero"?"All category masses are zero; ratio undefined. Hollow position marker only.":size.status==="zero"?"Zero mass / positive category mean: ratio 0. Hollow position marker only.":`Mass / category mean: ${Number.isFinite(size.ratio)?fmt(size.ratio):"above numeric ratio range"}x. Radius: ${fmt(size.radius)} px (area-proportional, fixed category fit).\nCategory multiplier ${fmt(size.scaleMultiplier)}; mean radius ${fmt(size.meanRadius)} px. Fixed across playback; peak relative mass at saved iteration ${size.scalePeakIteration??'not supplied'}.`)+
+    (size.basis==="saved-projection"?"\nProjection-only reference, not entire KG statistics.":"\nActive eligible-state reference, including zeros; not the entire KG."));
+}
 const representative=candidate=>candidate?.source_identity_representative||candidate?.source_semantic_representative;
 const identityProofs=candidate=>{const seen=new Set();return (candidate?.source_identity_representative?.identity_proofs||[]).filter(p=>{const key=JSON.stringify([p.canonical_page_id,p.start,p.end]);if(seen.has(key))return false;seen.add(key);return true;});};
 const endpointIds=candidate=>candidate?.endpoint_ids?.length?[...new Set(candidate.endpoint_ids)]
@@ -211,10 +299,13 @@ export function edgeProofs(projection,edge) {
 
 export function mountFlow(container, options) {
   const projection=options.projection||options.flow;
+  const resultText=item=>formatTargetText(item,projection?.task||options.task);
   container.replaceChildren();
   container.classList.add("flow-v6");
   if(!projection?.frames?.length){container.innerHTML='<p class="flow-empty-v6">This method has no saved diffusion. Its actual source results remain available below; no graph journey is invented.</p>';return{destroy(){container.replaceChildren();},selectCandidate(){},selectDocument(){}};}
-  let frame=0,selected=projection.candidates[0]?.id||null,documentId=null,timer=null,disposed=false,focusedNode=null,focusedStarter=null,linksHidden=false,linkMode="union",fullHistory=false,flashNodes=new Set(),flashTimer=null,lastPingId=null;
+  let frame=0,selected=projection.candidates[0]?.id||null,documentId=null,timer=null,disposed=false,focusedNode=null,focusedStarter=null,linksHidden=true,linkMode="union",fullHistory=false,flashNodes=new Set(),flashTimer=null,lastPingId=null;
+  const frameSizeStats=projection.frames.map(saved=>categorySizeReference(projection,saved));
+  let sizeStats=frameSizeStats[0];
   const labelOverrides=new Map(),overviewLimit=[128,256].includes(options.overviewLimit)?options.overviewLimit:projection.overview_limit===128?128:256;
   let selectedGraph=candidateGraph(projection,projection.candidates[0]);
   const history=historyView(projection),certificate=options.solverStopping||projection.solver_stopping;
@@ -222,24 +313,31 @@ export function mountFlow(container, options) {
   const action=(label,fn,attrs="")=>{const id="flow-action-"+(++serial);actions.set(id,fn);return `<button type="button" data-flow-action="${id}" ${attrs}>${esc(label)}</button>`;};
   function onClick(event){const button=event.target.closest("[data-flow-action]");if(button)actions.get(button.dataset.flowAction)?.();}
   container.addEventListener("click",onClick);
-  container.innerHTML=`<div class="flow-toolbar-v6"><strong>Saved relevance flow</strong>${action("Play",togglePlay,'data-testid="play-flow-v6"')}${action("Fit",()=>graphs.forEach(g=>g.fit()))}${action("Open larger hierarchy",openExpanded,'data-testid="expand-flow-v6"')}<label>Links <select data-links aria-label="Displayed flow link kinds"><option value="union">Trace backbone / all results</option><option value="candidate">Selected result cone</option><option value="hierarchy">Hierarchy only</option><option value="source">Source connections</option><option value="all">All links (dense)</option></select></label><label>Labels <select data-labels><option value="key">Essentials</option><option value="all">All visible nodes</option><option value="none">None</option></select></label>${action("Hide all labels",toggleLabels,'data-global-label-toggle aria-pressed="true" data-label-state="key" title="Global label default; individual node boxes toggle independently"')}</div>
+  container.innerHTML=`<div class="flow-toolbar-v6"><strong>Source relevance</strong>${action("Fit",()=>graphs.forEach(g=>g.fit()))}${action("Open larger hierarchy",openExpanded,'data-testid="expand-flow-v6"')}<label>Links <select data-links aria-label="Displayed flow link kinds"><option value="union">All result routes</option><option value="candidate">Selected result</option><option value="hierarchy">Hierarchy only</option><option value="source">Source connections</option><option value="all">All supplied links</option></select></label><label>Labels <select data-labels><option value="key">Essentials</option><option value="all">All visible nodes</option><option value="none">None</option></select></label>${action("Hide all labels",toggleLabels,'data-global-label-toggle aria-pressed="true" data-label-state="key" title="Global label default; individual node boxes toggle independently"')}</div>
     <div class="flow-starters-v6" data-testid="flow-starters-v6">${projection.starters.map((s,i)=>action(starterCode(s,i)+" / "+short(s.label),()=>focusStarter(s),`title="${esc(s.label)}"`)).join("")}</div>
     <div class="flow-map-grid-v6"><div class="flow-map-column-v6"><div class="flow-scroll-v6"><canvas class="flow-canvas-v6" data-testid="hierarchy-flow-v6" tabindex="0" aria-label="Saved hierarchical diffusion. Click a node to toggle its own real-name box; drag to pan and scroll to zoom."></canvas><div class="flow-tooltip-v6" hidden></div></div>
-      <div class="flow-focus-v6"><span data-focus-note>This result's saved contributor cone and query matches.</span>${action("Inspect selected node",()=>{if(focusedNode)options.onNode?.(projection.nodes.find(n=>n.id===focusedNode));},'data-inspect-focused disabled')}${action("Show all five results",()=>chooseLinks("union"))}${action("Toggle result links",()=>{linksHidden=!linksHidden;graphs.forEach(g=>g.draw());focusNote();},'data-toggle-result aria-pressed="true"')}</div></div>
+      <div class="flow-focus-v6"><span data-focus-note>This result's saved contributor cone and query matches.</span>${action("Inspect selected node",()=>{if(focusedNode)options.onNode?.(projection.nodes.find(n=>n.id===focusedNode));},'data-inspect-focused disabled')}${action("Show all results",()=>chooseLinks("union"))}${action("Show result links",toggleEdges,'data-toggle-result aria-pressed="false"')}</div></div>
       <aside class="flow-documents-v6"><h4>Sources behind this result</h4><p data-document-result></p><p>Source provenance, not numerical document states or independent corroboration.</p><details><summary>How these sources and counts are chosen</summary><p>The selected result's saved citations and linked documents are first. Other direct lexical sources and global projection readouts are separate, not additional support for this result.</p><p>Lexical rank is a document's order in direct text retrieval: BM25 page searches fused by reciprocal rank (RRF, k=60), within and then across search families. It is not a diffusion rank or evidence score.</p><p>Source-owned nodes are distinct semantic IDs on eligible pages, not snippets or hierarchy containers. Counts distinguish this compact drawing, the saved larger projection, and the scoped source index. Membership can overlap across documents and must not be summed as conserved relevance or independent evidence.</p></details><p data-document-selection role="status"></p><section data-node-reader aria-label="Full node text"></section><div data-documents></div></aside></div>
     <div class="flow-legend-v6"><span><i class="change gain"></i>Green: +% gain</span><span><i class="change loss"></i>Red: -% loss</span><span><i style="--tone:#c6d9e8"></i>Blue: stable / initial</span><span><i style="--tone:#ddb33e"></i>Gold: new from zero</span><span><i class="line" style="--tone:#087b70"></i>Solid teal: SOURCE with quote</span><span><i class="line" style="--tone:#59616b"></i>Solid gray: SOURCE, no quote attached</span><span><i class="line navigation" style="--tone:#b88a23"></i>Dashed gold: NAVIGATION</span><span><i class="line aggregate" style="--tone:#697780"></i>Dotted gray: SOURCE_AGGREGATE</span><span><i class="line restart" style="--tone:#7797b5"></i>Dashed blue: query restart</span><span><i style="--tone:#fff0b1"></i>Outline: endpoint / source contributor</span></div>
-    <div class="flow-timeline-v6"><div class="flow-history-v63"><label>Playback <select data-history aria-label="Saved iteration playback"><option value="compact">Compact, then saved final</option><option value="full">Full saved history</option></select></label>${action("Saved final",()=>{pause();setFrame(projection.frames.length-1);},'data-final-frame')}</div><div class="flow-timeline-row-v6">${action("-1",()=>stepFrame(-1),'aria-label="Previous diffusion iteration"')}<input data-frame-slider type="range" min="0" max="${projection.frames.length-1}" value="0" step="1" aria-label="Diffusion iteration">${action("+1",()=>stepFrame(1),'aria-label="Next diffusion iteration"')}<input data-frame-number type="number" min="0" max="${projection.frames.length-1}" value="0" aria-label="Exact diffusion iteration"></div><p class="flow-live-v6 flow-note-v6" data-live aria-live="polite"></p><p class="flow-note-v6" data-history-note></p><details class="flow-stopping-v63"><summary>What determines the saved iteration count?</summary><p data-stopping></p></details></div>
-    <div class="flow-explanation-v6"><p><b>Saved query inputs seed matched states directly.</b> Communities, themes and domains are navigation memberships, not a mandatory domain-first walk. Node size follows saved relevance; document highlighting shows provenance, not a collective activation.</p><aside><p>${Number.isFinite(projection.alpha)?`Each iteration restarts ${(100*(1-projection.alpha)).toFixed(0)}% at the saved matches and transports ${(100*projection.alpha).toFixed(0)}% through the eligible graph.`:"A restart/transport fraction was not supplied."} This is relevance, not confidence. Task-colored outlines identify saved evidence endpoints; missing evidence has no invented endpoint.</p></aside></div>`;
-  const reading=projection.reading_id||"current shared reading";
+    <div class="flow-timeline-v6"><div class="flow-timeline-row-v6"><input data-frame-slider type="range" min="0" max="${projection.frames.length-1}" value="0" step="1" aria-label="Diffusion iteration"></div><div class="flow-history-v63">${action("Play",togglePlay,'data-testid="play-flow-v6"')}<label>Iteration <input data-frame-number type="number" min="0" max="${projection.frames.length-1}" value="0" step="1" aria-label="Exact diffusion iteration"></label><label>Playback <select data-history aria-label="Saved iteration playback"><option value="compact">Compact</option><option value="full">Every saved step</option></select></label>${action("Saved final",()=>{pause();setFrame(projection.frames.length-1);},'data-final-frame')}</div><p class="flow-live-v6 flow-note-v6" data-live aria-live="polite"></p><p class="flow-note-v6" data-history-note></p><details class="flow-stopping-v63"><summary>What determines the saved iteration count?</summary><p data-stopping></p></details></div>
+    <div class="flow-explanation-v6"><p><b>Saved query inputs seed matched states directly.</b> Communities, themes and domains are navigation memberships, not a mandatory domain-first walk. Ball size compares each mass with its own category mean at this iteration, not a global maximum. Document highlighting shows provenance, not a collective activation.</p><aside><p>${Number.isFinite(projection.alpha)?`Each iteration restarts ${(100*(1-projection.alpha)).toFixed(0)}% at the saved matches and transports ${(100*projection.alpha).toFixed(0)}% through the eligible graph.`:"A restart/transport fraction was not supplied."} This is relevance, not confidence. Task-colored outlines identify saved evidence endpoints; missing evidence has no invented endpoint.</p></aside></div>`;
+  container.querySelector(".flow-toolbar-v6 strong").insertAdjacentHTML("afterend",action("Show edges",toggleEdges,'data-toggle-edges aria-pressed="false"'));
+  const sizing=document.createElement("details");sizing.className="flow-size-basis-v6";sizing.dataset.sizeBasis="saved-projection-category-mean";
+  const sizeTitle=document.createElement("summary");sizeTitle.textContent="Node area and category reference";
+  const sizeScope=document.createElement("p");sizeScope.dataset.sizeScope="";
+  const sizeHelp=document.createElement("p");sizeHelp.textContent="Node area is proportional to mass / same-category mean. Radius = 6 x category multiplier x sqrt(ratio). One multiplier per category is chosen from the maximum relative mass across every saved frame in this drawing, keeping the playback-wide maximum at most 24 layout px. It stays fixed during playback; no per-node hard cap or positive-radius floor flattens mass ratios. Category means still follow the actual saved frame; the fit does not track each frame's leader. Compact and larger drawings can use different fixed multipliers. Zero mass has only a hollow 0.35 px position marker, not a mass-filled circle. The legend illustrates within-category area ratios, not absolute pixel sizes. Hover shows actual mass, category mean, fixed multiplier and resulting mean radius. Candidate/source outlines are separate and never boost the mass radius. Prefer the supplied active eligible diffusion cohort, including zero masses. Older packets use category means from the supplied projection, not the entire KG. Entity/claim/event share one semantic category; community, theme and domain remain separate. Inputs and layout-only nodes do not contribute to these means. Container area is layout only. Zoom scales markers equally. This scale changes no saved mass, rank or evidence decision.";sizing.append(sizeTitle,sizeScope,sizeHelp);
+  container.querySelector(".flow-toolbar-v6").after(sizing);
+  const reading=projection.reading_id||"shared search";
   const policy=document.createElement("p");policy.className="flow-drawing-policy-v65";policy.dataset.drawingPolicy="";container.querySelector(".flow-toolbar-v6").after(policy);
-  function pingLabel(c){return `${c.rank}. ${c.fill||c.label||c.atom_id||"Saved result"}`;}
-  function pingDescription(c){return `Locate result rank ${c.rank} within reading ${reading}: ${c.fill||c.label||c.atom_id||"Saved result"}. ${endpointIds(c).length?"Highlight its exact saved graph endpoint(s) and contributor connections.":c.source_identity_representative?"Highlight full-name identity context from another eligible page, not a native answer endpoint, original-page owned mention or proof of the queried action. The quote-to-identity handoff is not a numerical edge.":"Highlight actual source-semantic representatives if supplied; they are not answer identities. No unrelated entity is substituted."} Click again to toggle result lines.`;}
-  const pings=document.createElement("div");pings.className="flow-pings-v6";pings.innerHTML=`<span>Locate results / reading ${esc(reading)}:</span>${projection.candidates.slice(0,5).map((c,i)=>action(short(pingLabel(c),6),()=>pingCandidate(c.id),`title="${esc(pingDescription(c))}" aria-label="${esc(pingDescription(c))}" aria-pressed="false" data-ping="${i+1}" data-candidate-id="${esc(c.id)}"`)).join("")}<span data-ping-note role="status"></span>`;
+  function pingLabel(c){return `${c.rank}. ${resultText(c)}`;}
+  function pingDescription(c){return `Locate result rank ${c.rank}: ${resultText(c)}. ${endpointIds(c).length?"Highlight its exact saved graph endpoint(s) and contributor connections.":c.source_identity_representative?"Highlight full-name identity context from another eligible page, not a native answer endpoint, original-page owned mention or proof of the queried action. The quote-to-identity handoff is not a numerical edge.":"Highlight actual source-semantic representatives if supplied; they are not answer identities. No unrelated entity is substituted."} Click again to toggle result lines.`;}
+  const pings=document.createElement("div");pings.className="flow-pings-v6";pings.innerHTML=`<span>Locate results${projection.reading_id?" / reading "+esc(reading):""}:</span>${projection.candidates.slice(0,5).map((c,i)=>action(short(pingLabel(c),6),()=>pingCandidate(c.id),`title="${esc(pingDescription(c))}" aria-label="${esc(pingDescription(c))}" aria-pressed="false" data-ping="${i+1}" data-candidate-id="${esc(c.id)}"`)).join("")}<span data-ping-note role="status"></span>`;
   container.querySelector(".flow-starters-v6").after(pings);
   const resultPanel=document.createElement("section");resultPanel.className="flow-result-v64";resultPanel.setAttribute("aria-label","Selected result and exact incoming relevance");resultPanel.innerHTML=`<div class="flow-result-heading-v64"><strong data-result-title></strong><span data-result-mass></span></div><p class="flow-result-scope-v64">Default: bounded reverse contributor cones for all five results and all A/Q inputs. Real source-semantic representatives are not answer identities. Restored links are bound-native replay, not new inference.</p><p data-representative-note></p><details data-contributor-details><summary data-contributor-summary>Contributor scope and drawing limits</summary><p data-contributor-counts></p><p data-recovery-note></p></details><details data-incoming-details><summary>Incoming relevance at this saved iteration</summary><div data-incoming-balance></div></details>`;pings.after(resultPanel);
+  const qualifiedResult=document.createElement('p');qualifiedResult.dataset.resultQualification='';qualifiedResult.hidden=true;resultPanel.querySelector('.flow-result-heading-v64').after(qualifiedResult);
   const mainGraph=makeGraph(container.querySelector("canvas"),overviewLimit);graphs.push(mainGraph);
   const caption=document.createElement("p");caption.className="flow-caption-v6";
-  caption.textContent=`Overview: up to ${overviewLimit} graph items including true ancestor containers, plus all saved A/Q inputs. Reverse BFS starts from all five results' real endpoints or source-semantic representatives, protecting query matches and supplied paths. Larger view shows the supplied hierarchy up to 1,024 items, never the full kernel. Node-name boxes are front-layer labels: click any node to toggle its own box; One global button toggles Hide all labels / Show essentials; individual boxes remain independently toggleable. No permanent answer callout or invented fill node is drawn. At iteration 0 links are topology only. Container backgrounds and areas are layout, not aggregate mass. Counts overlap; drawing limits never change native relevance, rank or stopping.`;
+  caption.textContent=`Overview: up to ${overviewLimit} supplied graph items including true ancestor containers, plus saved query inputs. Reverse search starts from supplied results' real endpoints or source-semantic representatives, protecting query matches and supplied paths. Larger view admits up to 2,048 real supplied items; a smaller packet is never padded. This is not necessarily the entire graph. Node-name boxes are front-layer labels: click any node to toggle its own box; one global button toggles Hide all labels / Show essentials. No answer node or graph edge is invented. At iteration 0 links are topology only. Container backgrounds and areas are layout, not aggregate mass. Counts overlap; drawing limits never change native relevance, rank or stopping.`;
   caption.textContent+=" The static trace backbone uses final saved positive amounts: all visible incoming links of real result targets, supplied numerical route hops, one strongest incoming transition per other node, and a deterministic shortest visible A/Q-to-target connectivity skeleton. It is a drawing aid, not a new solve or an independent explanation. Only selected actual restart matches are shown by default; selecting an input or All links (dense) exposes its full visible fanout. No links are bundled and no edge amounts are summed or renormalized. All links also exposes supplied numerical self-loops, not source assertions. Name boxes use at most 12 words and three lines; full extracted labels remain in the sidebar and original fills/quotations are unchanged.";
   container.querySelector(".flow-legend-v6").after(caption);
   const definitions=document.createElement("p");definitions.className="flow-definitions-v6";
@@ -247,8 +345,18 @@ export function mountFlow(container, options) {
   caption.before(definitions);
   const colors=document.createElement("p");colors.className="flow-definitions-v6";colors.textContent="Node fill: green means positive change, red negative change, not good/bad or support/opposition. Intensity follows |100 x (current - previous) / previous| for that node's own immediately previous native iteration: pale for small changes, deeper for larger changes (smooth, saturating scale). Blue means exactly unchanged, including 0 to 0, or the initial frame with no previous comparison. Gold means 0 to positive: the percentage is undefined, not infinite or 100%. Layout-only containers are white and have no solver mass. Hover a node for its signed percentage. Outlines mark result roles or source provenance, independently of fill.";definitions.after(colors);
   const readingHelp=document.createElement("details");readingHelp.className="flow-reading-v63";readingHelp.innerHTML="<summary>How to read links, colors and the all-result overview</summary>";definitions.before(readingHelp);readingHelp.append(definitions,colors,caption);
+  const mechanics=document.createElement("div");mechanics.hidden=true;mechanics.dataset.flowMechanics="";
+  const historyDetail=document.createElement("p");historyDetail.dataset.historyExplanation="";
+  mechanics.append(sizing,readingHelp,container.querySelector(".flow-explanation-v6"),container.querySelector(".flow-stopping-v63"),historyDetail);container.append(mechanics);
+  container.querySelector(".flow-result-scope-v64").textContent="Source-linked states are not claim-level support decisions.";
+  const finalMetrics=document.createElement("p");finalMetrics.dataset.finalMetrics="";container.querySelector("[data-incoming-details]").append(finalMetrics);
+  const inspect=()=>{const body=mechanics.cloneNode(true);body.hidden=false;body.querySelectorAll("details").forEach(node=>{node.open=true;});inspectPresentation(container,options,"Graph display and relevance",body);};
+  container.querySelector(".flow-toolbar-v6").insertAdjacentHTML("beforeend",action("How to read this graph",inspect,'data-inspect-flow'));
+  const concise=document.createElement("p");concise.className="flow-caption-v6";concise.dataset.flowCaption="";concise.textContent="Area tracks relevance / category mean; category fit stays fixed during playback. Hover for actual mass and mean. Paths locate sources, not proof.";container.querySelector(".flow-toolbar-v6").after(concise);
+  const areaLegend=document.createElement("span");areaLegend.className="flow-area-legend-v70";areaLegend.title='Illustrated within-category area ratios, not absolute pixel sizes.';areaLegend.innerHTML='Within one category: <i style="width:4px;height:4px"></i>1x mass <i style="width:8px;height:8px"></i>4x mass <i style="width:16px;height:16px"></i>16x mass';container.querySelector(".flow-legend-v6").prepend(areaLegend);
   container.querySelector("[data-stopping]").textContent=stoppingExplanation(projection,certificate);
   function chooseLinks(value){linkMode=value;focusedNode=null;focusedStarter=null;linksHidden=false;container.querySelectorAll("[data-links]").forEach(s=>{s.value=value;});graphs.forEach(g=>g.rebuild());focusNote();renderDocuments();setFrame(frame);}
+  function toggleEdges(){linksHidden=!linksHidden;graphs.forEach(g=>g.draw());focusNote();}
   container.querySelector("[data-links]").onchange=event=>chooseLinks(event.target.value);
   container.querySelector("[data-history]").onchange=event=>chooseHistory(event.target.value);
   function syncLabelControls(){const mode=container.querySelector("[data-labels]").value;for(const button of container.querySelectorAll("[data-global-label-toggle]")){button.textContent=mode==="none"?"Show essentials":"Hide all labels";button.setAttribute("aria-pressed",String(mode!=="none"));button.dataset.labelState=mode;}}
@@ -256,11 +364,11 @@ export function mountFlow(container, options) {
   function labelMode(mode){container.querySelector("[data-labels]").value=mode;labelOverrides.clear();syncLabelControls();graphs.forEach(g=>g.draw());}
   container.querySelector("[data-labels]").onchange=event=>labelMode(event.target.value);
   container.querySelector("[data-frame-slider]").oninput=event=>{pause();setFrame(+event.target.value);};
-  container.querySelector("[data-frame-number]").onchange=event=>{pause();setFrame(+event.target.value);};
+  container.querySelector("[data-frame-number]").oninput=container.querySelector("[data-frame-number]").onchange=event=>{pause();setFrame(event.target.valueAsNumber);};
   function starterCode(s,i){return (s.kind==="atom"?"A":"Q")+(projection.starters.slice(0,i+1).filter(t=>t.kind===s.kind).length);}
-  function focusNote(){const node=projection.nodes.find(n=>n.id===focusedNode);container.querySelector("[data-focus-note]").textContent=linksHidden?"Links hidden / toggle to restore":node?node.label+" / click again to toggle this name box; other results remain in the drawing":focusedStarter?"Query input selected / direct matches highlighted; all results retained":linkMode==="union"?"All five results and A/Q inputs / bounded reverse cones":linkMode==="candidate"?"Selected result's supplied contributor links; all result nodes remain available":"Showing "+linkMode+" links / node clicks toggle name boxes.";container.querySelector("[data-inspect-focused]").disabled=!node;container.querySelectorAll("[data-toggle-result]").forEach(b=>b.setAttribute("aria-pressed",String(!linksHidden)));container.querySelectorAll(".flow-starters-v6 button").forEach((b,i)=>b.setAttribute("aria-pressed",String(projection.starters[i]?.id===focusedStarter)));}
+  function focusNote(){const node=projection.nodes.find(n=>n.id===focusedNode);container.querySelector("[data-focus-note]").textContent=linksHidden?"Edges off. Click a node to inspect its label.":node?short(node.label,12):focusedStarter?"Input matches highlighted":linkMode==="union"?"All supplied results":linkMode==="candidate"?"Selected result links":"Showing "+linkMode+" links";container.querySelector("[data-inspect-focused]").disabled=!node;container.querySelectorAll("[data-toggle-result],[data-toggle-edges]").forEach(b=>{b.setAttribute("aria-pressed",String(!linksHidden));b.textContent=b.hasAttribute("data-toggle-edges")?(linksHidden?"Show edges":"Hide edges"):(linksHidden?"Show result links":"Hide result links");});container.querySelectorAll(".flow-starters-v6 button").forEach((b,i)=>b.setAttribute("aria-pressed",String(projection.starters[i]?.id===focusedStarter)));}
   function focusStarter(s){focusedStarter=focusedStarter===s.id?null:s.id;linksHidden=false;focusedNode=null;graphs.forEach(g=>g.draw());focusNote();renderDocuments();setFrame(frame);}
-  function focusNode(id){if(!projection.nodes.some(n=>n.id===id))return false;const mode=container.querySelector("[data-labels]").value,essential=projection.candidates.slice(0,5).some(c=>candidateGraph(projection,c).targets.includes(id)),shown=labelOverrides.has(id)?labelOverrides.get(id):mode==="all"||mode==="key"&&essential;labelOverrides.set(id,!shown);focusedNode=id;focusedStarter=null;graphs.forEach(g=>g.draw());renderNodeReader();focusNote();return true;}
+  function focusNode(id){if(!projection.nodes.some(n=>n.id===id))return false;const mode=container.querySelector("[data-labels]").value,essential=projection.candidates.slice(0,5).some(c=>candidateGraph(projection,c).targets.includes(id)),shown=labelOverrides.has(id)?labelOverrides.get(id):mode==="all"||mode==="key"&&essential;labelOverrides.set(id,!shown);focusedNode=id;focusedStarter=null;graphs.forEach(g=>g.draw());renderNodeReader();focusNote();syncExpandedInfo();return true;}
   function playLabel(){container.querySelectorAll('[data-testid="play-flow-v6"],[data-expanded-play]').forEach(button=>{button.textContent=timer?"Pause":"Play";});}
   function pause(){clearInterval(timer);timer=null;playLabel();}
   function nextFrame(direction){const indices=fullHistory?projection.frames.map((_,i)=>i):history.indices;return direction>0?indices.find(i=>i>frame)??frame:[...indices].reverse().find(i=>i<frame)??frame;}
@@ -269,11 +377,27 @@ export function mountFlow(container, options) {
   function historyNote(){
     const note=fullHistory?`Full saved history: all ${projection.frames.length} frames, including the unchanged native final. `:history.omitted?`Compact playback: iterations 0-${history.cutoff}, then saved final ${projection.frames.at(-1).iteration}; ${history.omitted} intermediate frames skipped in playback only. `:"Compact shortcut unavailable: no negligible saved tail established. All saved frames remain in playback. ";
     const basis=history.omitted?`At iteration ${history.cutoff}, every remaining saved frame differs by at most ${fmt(history.maxTailL1)} L1 over all saved projected node weights plus the Other bucket (threshold ${100*history.relativeTolerance}% of total mass). This is projected visual stability, NOT early native convergence. `:"";
-    container.querySelectorAll("[data-history-note]").forEach(n=>{n.textContent=note+basis+"The slider and exact iteration field always access every saved frame. Final ranking, masses and native stopping are unchanged.";});
+    historyDetail.textContent=note+basis+"The slider and exact iteration field always access every saved frame. Final ranking, masses and native stopping are unchanged.";
+    container.querySelectorAll("[data-history-note]").forEach(n=>{n.textContent=history.omitted&&!fullHistory?"Compact playback skips a visually stable tail; every saved step remains selectable. Saved final unchanged.":"Every saved step is selectable. Playback does not change the saved result.";});
   }
   function togglePlay(){if(timer){pause();return;}if(frame===projection.frames.length-1)setFrame(0);timer=setInterval(()=>{if(frame>=projection.frames.length-1){pause();return;}setFrame(nextFrame(1));},300);playLabel();}
-  function setFrame(value){if(disposed||!Number.isFinite(value))return;frame=Math.max(0,Math.min(projection.frames.length-1,Math.round(value)));container.querySelectorAll("[data-frame-slider],[data-frame-number],[data-expanded-slider],[data-expanded-number]").forEach(input=>{input.value=frame;});graphs.forEach(g=>g.draw());const current=projection.frames[frame];const shown=mainGraph.visible().reduce((s,n)=>s+(current.weights[n.mass_index]||0),0);container.querySelector("[data-live]").innerHTML=`Iteration <b>${current.iteration}</b> / ${projection.iterations} &nbsp; Shown mass ${fmt(shown)} &nbsp; <span data-testid="other-mass">Other ${fmt(Math.max(0,current.total_mass-shown))}</span> &nbsp; Total ${fmt(current.total_mass)}. Saved larger projection: ${projection.drawing_count} items including query inputs and containers.`;container.querySelectorAll("[data-expanded-live]").forEach(live=>{live.textContent=`Iteration ${current.iteration} / ${projection.iterations}. Outside this saved projection: ${fmt(current.other_mass)} mass. Total ${fmt(current.total_mass)}.`;});historyNote();renderCandidate();}
-  function selectCandidate(id,intent=false){const candidate=projection.candidates.find(c=>c.id===id);if(!candidate)return;const changed=id!==selected;selected=id;documentId=null;if(changed)lastPingId=null;selectedGraph=candidateGraph(projection,candidate);focusedNode=null;focusedStarter=null;linksHidden=false;if(intent?.focus===true)linkMode="candidate";container.querySelectorAll("[data-links]").forEach(s=>{s.value=linkMode;});graphs.forEach(g=>g.rebuild());renderDocuments();focusNote();setFrame(frame);container.querySelectorAll("[data-candidate-id]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.candidateId===id)));if(intent===true)options.onSelectCandidate?.(candidate);}
+  function setFrame(value){
+    if(disposed||!Number.isFinite(value))return;
+    frame=Math.max(0,Math.min(projection.frames.length-1,Math.round(value)));
+    const current=projection.frames[frame];sizeStats=frameSizeStats[frame];
+    const nativeReference=[...sizeStats.values()].some(s=>s.basis==="active eligible diffusion states");
+    for(const note of container.querySelectorAll("[data-size-scope]"))note.textContent=nativeReference?
+      "Reference: active eligible diffusion states in the bound native kernel, including zero current masses; not the entire KG.":
+      (current.category_reference?"Supplied category reference invalid; ":"Older packet; ")+"using saved-projection category means, including nodes outside this drawing. No full-kernel or entire-KG statistics are claimed.";
+    for(const note of container.querySelectorAll(".flow-size-basis-v6"))note.dataset.sizeBasis=nativeReference?"active-eligible-diffusion-states":"saved-projection-category-mean";
+    container.querySelectorAll("[data-frame-slider],[data-frame-number],[data-expanded-slider],[data-expanded-number]").forEach(input=>{input.value=frame;});
+    graphs.forEach(g=>g.draw());
+    const shown=mainGraph.visible().reduce((s,n)=>s+(current.weights[n.mass_index]||0),0);
+    container.querySelector("[data-live]").innerHTML=`Iteration <b>${current.iteration}</b> / ${projection.iterations} &nbsp; Shown mass ${fmt(shown)} &nbsp; <span data-testid="other-mass">Other ${fmt(Math.max(0,current.total_mass-shown))}</span> &nbsp; Total ${fmt(current.total_mass)}. Saved larger projection: ${projection.drawing_count} items including query inputs and containers.`;
+    container.querySelectorAll("[data-expanded-live]").forEach(live=>{live.textContent=`Iteration ${current.iteration} / ${projection.iterations}. Outside this saved projection: ${fmt(current.other_mass)} mass. Total ${fmt(current.total_mass)}.`;});
+    historyNote();renderCandidate();syncExpandedInfo();
+  }
+  function selectCandidate(id,intent=false){const candidate=projection.candidates.find(c=>c.id===id);if(!candidate)return;const changed=id!==selected;selected=id;documentId=null;if(changed)lastPingId=null;selectedGraph=candidateGraph(projection,candidate);focusedNode=null;focusedStarter=null;if(intent?.focus===true){linkMode="candidate";linksHidden=false;}container.querySelectorAll("[data-links]").forEach(s=>{s.value=linkMode;});graphs.forEach(g=>g.rebuild());renderDocuments();focusNote();setFrame(frame);container.querySelectorAll("[data-candidate-id]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.candidateId===id)));if(intent===true)options.onSelectCandidate?.(candidate);}
   function pingCandidate(id){
     const repeat=lastPingId===id,wasHidden=linksHidden;
     selectCandidate(id,true);const c=projection.candidates.find(c=>c.id===id);if(!c)return;
@@ -281,7 +405,7 @@ export function mountFlow(container, options) {
     const endpoints=endpointIds(c),bound=endpoints.length,ids=(c.presentation_target_ids??(bound?endpoints:c.source_contributor_ids||[])).filter(id=>projection.nodes.some(n=>n.id===id&&!n.layout_only));
     flashNodes=new Set(ids);let shown=false;for(const graph of graphs)shown=graph.ping(ids)||shown;
     const shownCount=ids.filter(id=>mainGraph.visible().some(n=>n.id===id)).length;
-    container.querySelectorAll("[data-ping-note]").forEach(node=>{node.textContent=`Result rank ${c.rank} / reading ${reading}: ${c.fill||c.label||c.atom_id||c.id}. `+(shown?(bound?`Exact saved endpoint(s) highlighted: ${shownCount} of ${ids.length} in compact view.`:c.source_identity_representative?`Identity-context states highlighted: ${shownCount} of ${ids.length}; not native answer endpoints or proof of the queried action. The quote-to-identity handoff is non-numerical.`:`Source-semantic representatives highlighted: ${shownCount} of ${ids.length}; these are not answer identities.`):bound?"The saved endpoint is outside this supplied drawing; no missing-identity claim is inferred.":"No graph target is supplied in this drawing; inspect the result's saved source citations.")+(linksHidden?" Result lines hidden; click again to restore.":" Saved result links visible.");});
+    container.querySelectorAll("[data-ping-note]").forEach(node=>{node.textContent=`Result rank ${c.rank} / reading ${reading}: ${resultText(c)}. `+(shown?(bound?`Exact saved endpoint(s) highlighted: ${shownCount} of ${ids.length} in compact view.`:c.source_identity_representative?`Identity-context states highlighted: ${shownCount} of ${ids.length}; not native answer endpoints or proof of the queried action. The quote-to-identity handoff is non-numerical.`:`Source-semantic representatives highlighted: ${shownCount} of ${ids.length}; these are not answer identities.`):bound?"The saved endpoint is outside this supplied drawing; no missing-identity claim is inferred.":"No graph target is supplied in this drawing; inspect the result's saved source citations.")+(linksHidden?" Result lines hidden; click again to restore.":" Saved result links visible.");});
     clearTimeout(flashTimer);flashTimer=setTimeout(()=>{flashNodes.clear();graphs.forEach(g=>g.draw());},1800);
   }
   function renderCandidate(){
@@ -290,9 +414,13 @@ export function mountFlow(container, options) {
     const known=projection.nodes.filter(n=>graph.targets.includes(n.id));
     const targetMass=weights=>graph.targets.length&&known.length===graph.targets.length&&known.every(n=>finiteMass(weights[n.mass_index]))?known.reduce((sum,n)=>sum+weights[n.mass_index],0):null;
     const finalMass=targetMass(projection.frames.at(-1).weights);
-    container.querySelector("[data-result-title]").textContent=candidate?`Result rank ${candidate.rank} in reading ${reading} / ${candidate.fill||candidate.label||candidate.id}`:"No selected saved result";
-    container.querySelector("[data-result-mass]").textContent=`${graph.endpoints.length?"Native endpoint":candidate?.source_identity_representative?"Identity-context state (not answer)":candidate?.source_semantic_representative?"Source-semantic representative":"Source-contributor readout"} relevance at iteration ${current.iteration}: ${fmt(targetMass(current.weights))}. Observed final: ${Number.isFinite(finalMass)?String(finalMass):"no numerical representative"}. Saved native readout final: ${Number.isFinite(candidate?.native_readout?.endpoint_mass)?String(candidate.native_readout.endpoint_mass):"see saved record"}. Relevance is not correctness or confidence.`;
-    container.querySelector("[data-representative-note]").textContent=representative(candidate)?.note||"An exact saved endpoint identifies a graph state, not claim-level factual support. All five results remain in the encompassing drawing.";
+    container.querySelector("[data-result-title]").textContent=candidate?`${candidate.rank}. ${resultText(candidate)}`:"No selected saved result";
+    const qualified=options.qualifiedAccountSummaryFor?.(candidate),qualification=container.querySelector('[data-result-qualification]');
+    qualification.hidden=!qualified;qualification.replaceChildren();
+    if(qualified){const label=document.createElement('strong');label.textContent=qualified.label+': ';qualification.append(label,document.createTextNode(qualified.text));}
+    container.querySelector("[data-result-mass]").textContent=`${graph.endpoints.length?"Endpoint":candidate?.source_identity_representative?"Identity context, not answer":"Source contributor"} relevance: ${fmt(targetMass(current.weights))}. Not confidence.`;
+    container.querySelector("[data-final-metrics]").textContent=`Observed final: ${fmt(finalMass)}. Saved native readout final: ${fmt(candidate?.native_readout?.endpoint_mass)}. These are relevance values, not correctness probabilities.`;
+    container.querySelector("[data-representative-note]").textContent=representative(candidate)?.note||"A graph endpoint is not claim-level factual support. All supplied results remain available.";
     const ids=new Set(schema?.graph_node_ids||graph.related),shown=[...ids].filter(id=>visible.has(id)).length;
     const declared=Number.isInteger(schema?.projected_contributor_count)?schema.projected_contributor_count:ids.size;
     const counts=`${mainGraph.visible().length} compact items including true parent containers; ${shown} of ${declared} supplied cone states are explicit here. ${Math.max(0,declared-shown)} are outside the compact drawing, not removed from diffusion. `;
@@ -305,7 +433,7 @@ export function mountFlow(container, options) {
     const host=container.querySelector("[data-incoming-balance]");for(const b of host.querySelectorAll("[data-flow-action]"))actions.delete(b.dataset.flowAction);
     const balance=incomingFrame(candidate,current.iteration);host.dataset.status=balance.status;
     if(balance.status!=="supplied"){host.textContent=balance.status==="invalid"?"The supplied incoming balance is inconsistent; no incoming totals or shares are asserted. Inspect the saved record.":"No exact per-iteration incoming balance was supplied. Saved route overlap or cumulative influence is not substituted for incoming mass.";return;}
-    const f=balance.frame,number=x=>`<span title="${esc(String(x))}">${esc(fmt(x))}</span>`;
+    const f=balance.frame,number=x=>`<span title="${esc(fmt(x))}">${esc(fmt(x))}</span>`;
     host.innerHTML=`<p>${candidate?.source_identity_representative?"Existing identity-context state balance, not native answer or source-readout mass:":current.iteration===0?"Initial endpoint relevance (prior), with no transported flow into iteration 0:":"Supplied endpoint balance for this iteration:"} ${number(f.endpoint_mass)} = restart ${number(f.restart_mass)} + incoming ${number(f.incoming_mass)}.</p><p>Listed incoming ${number(f.shown_incoming_mass)}; other native incoming ${number(f.remainder_incoming_mass)}. These are one-step amounts, not cumulative or independent path shares.</p><ul class="flow-incoming-list-v64">${[...f.contributions].sort((a,b)=>b.mass-a.mass||a.source.localeCompare(b.source)).map(part=>{
       const node=projection.nodes.find(n=>n.id===part.source),shownHere=visible.has(part.source)&&visible.has(part.target);
       const text=node?.label||part.source,share=f.incoming_mass>0?(100*part.mass/f.incoming_mass).toFixed(1)+"% of incoming":"share undefined (zero incoming)";
@@ -331,12 +459,13 @@ export function mountFlow(container, options) {
     host.innerHTML=`<section data-selected-sources><h5>Selected result citations (${grouped.selected.length})</h5>${grouped.selected.length?grouped.selected.map(card).join(""):"<p>No source citation was supplied for this result.</p>"}</section>`+section("lexical","Other lexical sources",grouped.lexical)+section("global","Other global projection readouts",grouped.other);
     const identity=identityProofs(candidate);
     if(identity.length){const context=document.createElement("section");context.dataset.identitySources="";context.innerHTML=`<h5>Identity-only context sources (${identity.length})</h5><p>Other-page full-name provenance, not native inspected construction evidence, an original-page owned mention or support for the queried action.</p>${identity.map(p=>`<article>${action(p.document_id+" / "+p.date,()=>options.onSource?.(p))}<p>${esc(p.text)}</p></article>`).join("")}`;host.querySelector("[data-selected-sources]").after(context);}
-    container.querySelector("[data-document-result]").textContent=candidate?`Saved rank ${candidate.rank} / reading ${reading}: ${candidate.fill||candidate.label||candidate.id}`:"No selected result";
+    container.querySelector("[data-document-result]").textContent=candidate?`Saved rank ${candidate.rank}${projection.reading_id?" / reading "+reading:""}: ${resultText(candidate)}`:"No selected result";
     const doc=documentRecord(documentId),counts=doc&&documentMembership(doc,mainGraph.visible());
     container.querySelector("[data-document-selection]").textContent=doc?doc.membership_unavailable?`${doc.title||doc.id}: source citation only; no saved node-membership count is supplied.`:`${doc.title||doc.id}: ${counts.shown} of ${counts.projected} source-owned projected nodes highlighted here. ${counts.shown?"Provenance, not support or document mass.":"No mapped source nodes are in the current compact view; inspect the source or larger hierarchy."}`:"";
+    syncExpandedInfo();
   }
   function makeGraph(canvas,limit){
-    let width=0,height=0,layout=null,backbone=null,nodes=[],idMap=new Map(),scale=1,offset={x:0,y:0},drag=null,keyboard=0,starterPositions=new Map(),drawnEdges=[],labelSpacing=new Map(),nestedCounts=new Map();
+    let width=0,height=0,layout=null,backbone=null,nodes=[],idMap=new Map(),scale=1,offset={x:0,y:0},drag=null,keyboard=0,starterPositions=new Map(),drawnEdges=[],labelSpacing=new Map(),nestedCounts=new Map(),nodeSizes=new Map(),sizeFit=null;
     const isLeaf=n=>!["domain","theme","community"].includes(n.type.toLowerCase());
     const context=canvas.getContext("2d"),host=canvas.parentElement,tooltip=host.querySelector(".flow-tooltip-v6");
     const callouts=document.createElement("div");callouts.className="flow-node-labels-v65";host.append(callouts);
@@ -351,7 +480,7 @@ export function mountFlow(container, options) {
       if(background){context.fillStyle="#fffef1ed";context.fillRect(-measured/2,-12,measured,17);}
       context.fillStyle="#214552";context.fillText(clipped,-context.measureText(clipped).width/2,0);context.restore();
     }
-    function rebuild(){nodes=overviewNodes(projection,limit,selected,selectedGraph);idMap=new Map(nodes.map(n=>[n.id,n]));backbone=traceBackbone(projection,nodes);resize();}
+    function rebuild(){const next=overviewNodes(projection,limit,selected,selectedGraph);if(sizeFit===null||next.length!==nodes.length||next.some((node,i)=>node.id!==nodes[i].id))sizeFit=categoryFitScale(projection,next,frameSizeStats);nodes=next;idMap=new Map(nodes.map(n=>[n.id,n]));backbone=traceBackbone(projection,nodes);resize();}
     function resize(){
       const rect=canvas.getBoundingClientRect();width=Math.max(260,rect.width);height=Math.max(280,rect.height);
       const ratio=window.devicePixelRatio||1;canvas.width=Math.round(width*ratio);canvas.height=Math.round(height*ratio);context.setTransform(ratio,0,0,ratio,0,0);
@@ -368,7 +497,8 @@ export function mountFlow(container, options) {
       if(disposed||!layout)return;
       context.clearRect(0,0,width,height);context.save();context.beginPath();context.rect(0,0,width,height);context.clip();
       context.translate(offset.x,offset.y);context.scale(scale,scale);
-      const current=projection.frames[frame],prior=projection.frames[Math.max(0,frame-1)],masses=current.weights,max=Math.max(0,...masses.filter(Number.isFinite));
+      const current=projection.frames[frame],prior=projection.frames[Math.max(0,frame-1)],masses=current.weights;
+      nodeSizes=new Map(nodes.map(node=>[node.id,relativeNodeSize(node,current,sizeStats,sizeFit)]));
       const candidate=projection.candidates.find(c=>c.id===selected),highlighted=selectedGraph.pairs,resultGraphs=projection.candidates.slice(0,5).map(c=>candidateGraph(projection,c)),endpoints=new Set(resultGraphs.flatMap(g=>g.endpoints)),coMentioned=new Set(resultGraphs.flatMap(g=>g.targets.filter(id=>!g.endpoints.includes(id))));
       const docNodes=new Set(documentRecord(documentId)?.visible_node_ids||[]),mode=container.querySelector("[data-labels]").value;
       let labels=new Set([...endpoints,...coMentioned]);
@@ -411,9 +541,9 @@ export function mountFlow(container, options) {
         label(starterCode(starter,projection.starters.indexOf(starter)),p.x,p.y+20/scale,{maxWidth:p.w-6,background:false});
       }
       for(const node of nodes){
-        const p=point(node.id);if(!p)continue;const mass=masses[node.mass_index],previous=prior.weights[node.mass_index],r=massRadius(mass,max),change=frame?percentChange(mass,previous):null;
+        const p=point(node.id);if(!p)continue;const mass=masses[node.mass_index],previous=prior.weights[node.mass_index],r=nodeSizes.get(node.id).radius,change=frame?percentChange(mass,previous):null;
         const labelWidth=Math.max(22,Math.min(148,(labelSpacing.get(node.id)??Infinity)*scale-8));
-        context.beginPath();context.arc(p.x,p.y,Math.max(2.5,r),0,Math.PI*2);context.fillStyle=node.layout_only?"#ffffff":changeColor(change);context.fill();context.strokeStyle=kindColor(node);context.lineWidth=1.3/scale;context.stroke();
+        context.beginPath();context.arc(p.x,p.y,r,0,Math.PI*2);context.fillStyle=node.layout_only||mass===0?"#ffffff":changeColor(change);context.fill();context.strokeStyle=kindColor(node);context.lineWidth=(mass===0?.5:1.3)/scale;context.stroke();
         if(endpoints.has(node.id)||coMentioned.has(node.id)||docNodes.has(node.id)||flashNodes.has(node.id)){
           context.beginPath();context.arc(p.x,p.y,r+5/scale,0,Math.PI*2);context.setLineDash(coMentioned.has(node.id)&&!endpoints.has(node.id)?[3/scale,3/scale]:[]);context.strokeStyle=flashNodes.has(node.id)?"#dd702e":docNodes.has(node.id)?"#1c6dae":taskTone(node);context.lineWidth=(flashNodes.has(node.id)?4:2.3)/scale;context.stroke();context.setLineDash([]);
         }
@@ -427,18 +557,23 @@ export function mountFlow(container, options) {
         const name=document.createElement("span");name.textContent=compactNodeLabel(node.label);bubble.setAttribute("aria-label",node.label);bubble.append(name);callouts.append(bubble);
         const w=Math.min(184,width-20);bubble.style.width=w+"px";const h=bubble.getBoundingClientRect().height;
         const clamp=(x,y)=>({x:Math.max(8,Math.min(width-w-8,x)),y:Math.max(8,Math.min(height-h-8,y))});
-        const positions=[clamp(p.x-w/2,p.y+12),clamp(p.x-w/2,p.y-h-12),clamp(p.x+12,p.y-h/2),clamp(p.x-w-12,p.y-h/2),clamp(p.x-w/2,p.y-h-60),clamp(p.x-w/2,p.y+60)];
+        const gap=nodeSizes.get(node.id).radius*scale+6;
+        const positions=[clamp(p.x-w/2,p.y+gap),clamp(p.x-w/2,p.y-h-gap),clamp(p.x+gap,p.y-h/2),clamp(p.x-w-gap,p.y-h/2),clamp(p.x-w/2,p.y-h-gap-48),clamp(p.x-w/2,p.y+gap+48)];
         const overlap=pos=>labelRects.reduce((sum,r)=>sum+Math.max(0,Math.min(pos.x+w+4,r.x+r.w)-Math.max(pos.x-4,r.x))*Math.max(0,Math.min(pos.y+h+4,r.y+r.h)-Math.max(pos.y-4,r.y)),0);
         const pos=positions.sort((a,b)=>overlap(a)-overlap(b))[0];labelRects.push({...pos,w,h});bubble.style.left=pos.x+"px";bubble.style.top=pos.y+"px";
       }
       Object.assign(canvas.dataset,{visibleEdgeCount:String(drawnEdges.length),edgePairs:JSON.stringify(drawnEdges.map(r=>[r.edge.source,r.edge.target])),edgeMasses:JSON.stringify(drawnEdges.map(r=>r.mass)),denseEdgeCount:String(eligibleRows.length),recoveredEdgeCount:String(drawnEdges.filter(r=>r.edge.recovered_from_native_kernel).length),restartEdgeCount:String(restartEdgeCount),restartAvailableCount:String(restartAvailable),restartPairs:JSON.stringify(restartPairs),restartMasses:JSON.stringify(restartMasses),edgeKinds:drawnEdges.map(r=>r.edge.kind).join(","),visibleNodeIds:nodes.map(n=>n.id).join(","),nodePositions:JSON.stringify(Object.fromEntries(nodes.map(n=>[n.id,screen(point(n.id))]))),labelNodeIds:[...labels].filter(id=>idMap.has(id)).join(","),endpointLabels:JSON.stringify(nodes.filter(n=>endpoints.has(n.id)).map(n=>[n.id,n.label])),coMentionedNodes:nodes.filter(n=>coMentioned.has(n.id)&&!endpoints.has(n.id)).map(n=>n.id).join(","),highlightedNodes:[...docNodes].filter(id=>idMap.has(id)).join(","),starterRows:projection.starters.length?"1":"0",focusNode:focusedNode||"",focusStarter:focusedStarter||"",selectedCandidate:selected||"",linkMode,linksHidden:String(linksHidden),iteration:String(current.iteration),nodeCount:String(nodes.length),nested:"true",zoom:String(scale),offsetX:String(offset.x),offsetY:String(offset.y),maxLabelWidth:"148",labelFontPx:"11",pingTargets:[...flashNodes].filter(id=>idMap.has(id)).join(",")});
+      Object.assign(canvas.dataset,{sizeBasis:[...sizeStats.values()].some(s=>s.basis==="active eligible diffusion states")?"active-eligible-diffusion-states":"saved-projection-category-mean",categoryStats:JSON.stringify(Object.fromEntries(sizeStats)),nodeRadii:JSON.stringify(Object.fromEntries([...nodeSizes].map(([id,size])=>[id,size.radius])))});
+      Object.assign(canvas.dataset,{sizeScale:'fixed-category-fit/all-saved-frames',categoryFit:JSON.stringify(Object.fromEntries(sizeFit))});
+      canvas.dataset.nativeSnapshotSha256=projection.native_snapshot_sha256||"";
+      canvas.dataset.sourceCaseSha256=projection.source_case_sha256||"";
       const summary=limit===overviewLimit?container.querySelector("[data-drawing-policy]"):canvas.closest("dialog")?.querySelector("[data-expanded-policy]");
-      if(summary)summary.textContent=`${unionMode?"Trace backbone":linkMode==="all"?"All links (dense)":"Filtered links"}: ${drawnEdges.length} of ${eligibleRows.length} supplied links between these ${nodes.length} nodes; ${restartEdgeCount} of ${restartAvailable} actual visible A/Q matches. Drawing-only selection: all node masses, edge amounts and full data are retained, never renormalized. Select an input for its full visible fanout; All links (dense) reveals omitted links. Iteration 0 is saved topology with zero transport.`;
+      if(summary)summary.textContent=`${fmt(nodes.length)} supplied nodes. ${linksHidden?"Edges off":fmt(drawnEdges.length)+" visible links"}.${frame===0?" Initial topology; no transported mass yet.":""}`;
     }
     function hit(event){
       const rect=canvas.getBoundingClientRect(),x=(event.clientX-rect.left-offset.x)/scale,y=(event.clientY-rect.top-offset.y)/scale;
-      for(const starter of projection.starters){const p=starterPositions.get(starter.id);if(p&&Math.abs(x-p.x)<p.w/2/scale&&y>=p.y&&y<=p.y+p.h/scale)return{...starter,type:"query"};}
-      let nearest=null,best=Infinity;for(const node of nodes){const p=point(node.id);if(!p)continue;const d=Math.hypot(x-p.x,y-p.y);if(d<Math.max(12/scale,massRadius(projection.frames[frame].weights[node.mass_index],1))&&d<best){nearest=node;best=d;}}
+      for(const starter of projection.starters){const p=starterPositions.get(starter.id);if(p&&Math.abs(x-p.x)<p.w/2/scale&&y>=p.y&&y<=p.y+p.h/scale)return{...starter,type:"query",restart_input:true};}
+      let nearest=null,best=Infinity;for(const node of nodes){const p=point(node.id);if(!p)continue;const d=Math.hypot(x-p.x,y-p.y);if(d<Math.max(12/scale,nodeSizes.get(node.id).radius)&&d<best){nearest=node;best=d;}}
       if(nearest)return nearest;
       for(const row of drawnEdges){if(row.loop){if(Math.abs(Math.hypot(x-row.loop.x,y-row.loop.y)-row.loop.r)<7/scale)return{type:"edge",...row};continue;}for(let i=2;i<19;i++){const t=i/20,px=(1-t)**2*row.a.x+2*(1-t)*t*row.mid.x+t*t*row.b.x,py=(1-t)**2*row.a.y+2*(1-t)*t*row.mid.y+t*t*row.b.y;if(Math.hypot(x-px,y-py)<7/scale)return{type:"edge",...row};}}
       return null;
@@ -447,17 +582,17 @@ export function mountFlow(container, options) {
       if(!tooltip)return;if(!item){tooltip.hidden=true;return;}
       const value=projection.frames[frame].weights[item.mass_index];
       const role=selectedGraph.endpoints.includes(item.id)?"\nExact saved endpoint / result rank "+projection.candidates.find(c=>c.id===selected)?.rank+" in this reading":projection.candidates.find(c=>c.id===selected)?.source_contributor_ids?.includes(item.id)?"\nSource readout contributor, not an answer identity":"";
-      tooltip.textContent=item.type==="edge"?edgeStyle(item.edge,item.edge.citations).label+"\nSaved transported mass at this iteration: "+fmt(item.mass)+(item.mass===0?" / topology only; no transported flow":"")+(item.edge.recovered_from_native_kernel?"\nRestored from the bound native kernel, not new inference":"")+"\nClick for saved provenance":item.type==="query"?item.label+"\nQuery restart input, not a historical state.":item.label+"\n"+item.type+role+(item.layout_only?" / layout only, no mass":"\nRelevance "+String(value)+"\n"+changeDescription(value,projection.frames[Math.max(0,frame-1)].weights[item.mass_index],frame===0));
-      tooltip.hidden=false;tooltip.style.left=Math.max(8,Math.min(width-220,event.clientX-canvas.getBoundingClientRect().left+12))+"px";tooltip.style.top=Math.max(8,Math.min(height-100,event.clientY-canvas.getBoundingClientRect().top+10))+"px";
+      tooltip.textContent=item.type==="edge"?edgeStyle(item.edge,item.edge.citations).label+"\nSaved transported mass at this iteration: "+scientificMass(item.mass)+(item.mass===0?" / topology only; no transported flow":"")+(item.edge.recovered_from_native_kernel?"\nRestored from the bound native kernel, not new inference":"")+"\nClick for saved provenance":item.restart_input?item.label+"\nQuery restart input, not a historical state. No solver mass; excluded from numerical category means.":item.label+"\n"+item.type+role+"\n"+sizeDescription(nodeSizes.get(item.id))+(item.layout_only?"":"\n"+changeDescription(value,projection.frames[Math.max(0,frame-1)].weights[item.mass_index],frame===0));
+      tooltip.hidden=false;tooltip.style.left=Math.max(8,Math.min(width-tooltip.offsetWidth-8,event.clientX-canvas.getBoundingClientRect().left+12))+"px";tooltip.style.top=Math.max(8,Math.min(height-tooltip.offsetHeight-8,event.clientY-canvas.getBoundingClientRect().top+10))+"px";
     }
     canvas.onpointerdown=event=>{pause();drag={x:event.clientX,y:event.clientY,startX:offset.x,startY:offset.y,moved:false};canvas.setPointerCapture(event.pointerId);};
     canvas.onpointermove=event=>{if(drag){const dx=event.clientX-drag.x,dy=event.clientY-drag.y;if(Math.hypot(dx,dy)>4)drag.moved=true;offset={x:drag.startX+dx,y:drag.startY+dy};draw();}else showTip(hit(event),event);};
-    canvas.onpointerup=event=>{const clicked=drag&&!drag.moved;drag=null;if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);if(!clicked)return;const item=hit(event);if(item?.type==="query")focusStarter(item);else if(item?.type==="edge")options.onEdge?.(item.edge);else if(item)focusNode(item.id);};
+    canvas.onpointerup=event=>{const clicked=drag&&!drag.moved;drag=null;if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);if(!clicked)return;const item=hit(event);if(item?.restart_input)focusStarter(item);else if(item?.type==="edge")options.onEdge?.(item.edge);else if(item)focusNode(item.id);};
     canvas.onpointercancel=()=>{drag=null;};canvas.onpointerleave=()=>{if(tooltip)tooltip.hidden=true;};
     function zoom(next,x=width/2,y=height/2){next=Math.max(.5,Math.min(7,next));offset={x:x-(x-offset.x)*next/scale,y:y-(y-offset.y)*next/scale};scale=next;draw();}
     canvas.onwheel=event=>{event.preventDefault();const rect=canvas.getBoundingClientRect();zoom(scale*Math.exp(-event.deltaY*.001),event.clientX-rect.left,event.clientY-rect.top);};
     canvas.onkeydown=event=>{
-      if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(event.key)&&nodes.length){event.preventDefault();keyboard=(keyboard+nodes.length+(event.key==="ArrowLeft"||event.key==="ArrowUp"?-1:1))%nodes.length;const node=nodes[keyboard];canvas.setAttribute("aria-label",node.label+". "+(node.layout_only?"Layout only, no solver mass.":changeDescription(projection.frames[frame].weights[node.mass_index],projection.frames[Math.max(0,frame-1)].weights[node.mass_index],frame===0))+". Space toggles its name box; Enter inspects.");}
+      if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown"].includes(event.key)&&nodes.length){event.preventDefault();keyboard=(keyboard+nodes.length+(event.key==="ArrowLeft"||event.key==="ArrowUp"?-1:1))%nodes.length;const node=nodes[keyboard];canvas.setAttribute("aria-label",node.label+". "+sizeDescription(nodeSizes.get(node.id))+". "+(node.layout_only?"":changeDescription(projection.frames[frame].weights[node.mass_index],projection.frames[Math.max(0,frame-1)].weights[node.mass_index],frame===0))+". Space toggles its name box; Enter inspects.");}
       else if(event.key===" "&&nodes[keyboard]){event.preventDefault();focusNode(nodes[keyboard].id);}
       else if(event.key==="Enter"&&nodes[keyboard]){event.preventDefault();options.onNode?.(nodes[keyboard]);}
       else if(["+","=","-","_"].includes(event.key)){event.preventDefault();zoom(scale*(["+","="].includes(event.key)?1.2:1/1.2));}
@@ -470,19 +605,28 @@ export function mountFlow(container, options) {
       destroy(){observer.disconnect();callouts.remove();canvas.onwheel=null;canvas.onpointerdown=null;canvas.onpointermove=null;canvas.onpointerup=null;canvas.onpointercancel=null;canvas.onpointerleave=null;canvas.onkeydown=null;}};
   }
   function openExpanded(){
+    if(options.onExpand){pause();options.onExpand();return;}
     pause();const dialog=document.createElement("dialog");dialog.className="flow-expanded-v6 flow-v6";
-    dialog.innerHTML=`<header><strong>Larger supplied hierarchy / up to ${projection.drawing_limit} items</strong>${action("Play",togglePlay,'data-expanded-play')}${action("Fit",()=>graphs.forEach(g=>g.fit()))}<button type="button" data-close>Close</button></header><p class="flow-note-v6" data-expanded-result></p><p class="flow-drawing-policy-v65" data-expanded-policy></p><div class="flow-scroll-v6"><canvas class="flow-canvas-v6" tabindex="0" aria-label="Expanded hierarchical diffusion" data-testid="expanded-hierarchy-flow-v6"></canvas><div class="flow-tooltip-v6" hidden></div></div><div class="flow-timeline-v6"><div class="flow-history-v63"><label>Playback <select data-history aria-label="Expanded saved iteration playback"><option value="compact">Compact, then saved final</option><option value="full">Full saved history</option></select></label>${action("Saved final",()=>{pause();setFrame(projection.frames.length-1);})}</div><div class="flow-timeline-row-v6">${action("-1",()=>stepFrame(-1),'aria-label="Previous expanded iteration"')}<input data-expanded-slider type="range" min="0" max="${projection.frames.length-1}" value="${frame}" step="1" aria-label="Expanded diffusion iteration">${action("+1",()=>stepFrame(1),'aria-label="Next expanded iteration"')}<input data-expanded-number type="number" min="0" max="${projection.frames.length-1}" value="${frame}" aria-label="Exact expanded diffusion iteration"></div><p class="flow-note-v6" data-expanded-live aria-live="polite"></p><p class="flow-note-v6" data-history-note></p></div><p class="flow-note-v6">Same saved iterations and true parent memberships. This is the larger supplied drawing, not the entire native kernel. All five result node cones are retained; the backbone is only a link subset; supplied restored edges are native-kernel replay, not new inference. Selecting a node toggles only its real-name box, not the surrounding cone. The trace backbone shows a small set of actual A/Q matches; All links (dense) or selecting an input exposes its full visible fanout. Node sets and exact saved weights never change. Dashed blue restart links are not source assertions. Drawing limits do not remove native transport.</p>`;
-    dialog.querySelector("header").after(pings.cloneNode(true));
+    const expandedLimit=Math.min(2048,projection.nodes.length);
+    dialog.innerHTML=`<header><strong>Larger source graph / up to ${fmt(expandedLimit)} supplied items</strong>${action("Fit",()=>graphs.forEach(g=>g.fit()))}${action("How to read this graph",inspect)}<button type="button" data-close>Close</button></header><div class="flow-expanded-grid-v70"><section class="flow-expanded-main-v70"><p class="flow-drawing-policy-v65" data-expanded-policy></p><div class="flow-scroll-v6"><canvas class="flow-canvas-v6" tabindex="0" aria-label="Expanded hierarchical diffusion" data-testid="expanded-hierarchy-flow-v6"></canvas><div class="flow-tooltip-v6" hidden></div></div><div class="flow-timeline-v6"><div class="flow-timeline-row-v6"><input data-expanded-slider type="range" min="0" max="${projection.frames.length-1}" value="${frame}" step="1" aria-label="Expanded diffusion iteration"></div><div class="flow-history-v63">${action("Play",togglePlay,'data-expanded-play')}<label>Iteration <input data-expanded-number type="number" min="0" max="${projection.frames.length-1}" value="${frame}" step="1" aria-label="Exact expanded diffusion iteration"></label><label>Playback <select data-history aria-label="Expanded saved iteration playback"><option value="compact">Compact</option><option value="full">Every saved step</option></select></label>${action("Saved final",()=>{pause();setFrame(projection.frames.length-1);})}</div><p class="flow-note-v6" data-expanded-live aria-live="polite"></p><p class="flow-note-v6" data-history-note></p></div></section><aside class="flow-expanded-info-v70" data-expanded-info aria-label="Selected result and sources"></aside></div>`;
     const linkControl=container.querySelector("[data-links]").parentElement.cloneNode(true);linkControl.querySelector("select").setAttribute("aria-label","Expanded displayed flow link kinds");linkControl.querySelector("select").value=linkMode;linkControl.querySelector("select").onchange=event=>chooseLinks(event.target.value);dialog.querySelector("header [data-close]").before(linkControl);
     dialog.querySelector("header [data-close]").before(container.querySelector("[data-global-label-toggle]").cloneNode(true));
-    dialog.querySelector(".flow-scroll-v6").before(container.querySelector(".flow-legend-v6").cloneNode(true));
-    container.append(dialog);dialog.showModal();syncLabelControls();const graph=makeGraph(dialog.querySelector("canvas"),1024);graphs.push(graph);
+    dialog.querySelector("header [data-close]").before(container.querySelector("[data-toggle-edges]").cloneNode(true));
+    const legend=document.createElement("div");legend.className="flow-legend-v6";legend.append(areaLegend.cloneNode(true));const legendNote=document.createElement("span");legendNote.textContent="Category fit is fixed across saved frames. Hover for actual mass and mean.";legend.append(legendNote);dialog.querySelector("[data-expanded-policy]").after(legend);
+    container.append(dialog);dialog.showModal();syncLabelControls();const graph=makeGraph(dialog.querySelector("canvas"),2048);graphs.push(graph);
     dialog.querySelector("[data-history]").value=fullHistory?"full":"compact";dialog.querySelector("[data-history]").onchange=event=>chooseHistory(event.target.value);
-    for(const input of dialog.querySelectorAll("[data-expanded-slider],[data-expanded-number]"))input.addEventListener("input",event=>{pause();setFrame(+event.target.value);});
+    for(const input of dialog.querySelectorAll("[data-expanded-slider],[data-expanded-number]"))input.addEventListener("input",event=>{pause();setFrame(event.target.valueAsNumber);});
     dialog.querySelector("[data-close]").onclick=()=>dialog.close();dialog.addEventListener("close",()=>{pause();graph.destroy();const i=graphs.indexOf(graph);if(i>=0)graphs.splice(i,1);dialog.remove();},{once:true});setFrame(frame);
   }
+  function syncExpandedInfo(){
+    for(const host of container.querySelectorAll("[data-expanded-info]")){
+      const scroll=host.scrollTop;
+      host.replaceChildren(pings.cloneNode(true),resultPanel.cloneNode(true),container.querySelector(".flow-documents-v6").cloneNode(true),container.querySelector(".flow-legend-v6").cloneNode(true));
+      host.scrollTop=scroll;
+    }
+  }
   renderDocuments();focusNote();setFrame(0);
-  return{selectCandidate,selectDocument,focusNode,pingCandidate,destroy(){disposed=true;pause();clearTimeout(flashTimer);graphs.forEach(g=>g.destroy());for(const dialog of container.querySelectorAll("dialog")){dialog.close();dialog.remove();}container.removeEventListener("click",onClick);container.replaceChildren();}};
+  return{selectCandidate,selectDocument,focusNode,pingCandidate,openExpanded,destroy(){disposed=true;pause();clearTimeout(flashTimer);graphs.forEach(g=>g.destroy());for(const dialog of container.querySelectorAll("dialog")){dialog.close();dialog.remove();}container.removeEventListener("click",onClick);container.replaceChildren();}};
 }
 
 export function routesFor(candidate) {
@@ -512,9 +656,10 @@ export function routeInputs(projection,route) {
 
 export function mountPaths(container, options) {
   const projection=options.projection;let selected=projection?.candidates?.[0]?.id||null;
+  const resultText=item=>formatTargetText(item,projection?.task||options.task);
   container.replaceChildren();container.classList.add("flow-paths-v6");
   const select=document.createElement("select");select.setAttribute("aria-label","Trace a saved proposal or evidence target");
-  for(const candidate of projection?.candidates||[]){const option=document.createElement("option");option.value=candidate.id;option.textContent=candidate.rank+". "+candidate.fill;select.append(option);}
+  for(const candidate of projection?.candidates||[]){const option=document.createElement("option");option.value=candidate.id;option.textContent=candidate.rank+". "+resultText(candidate);select.append(option);}
   const bar=document.createElement("div");bar.className="flow-path-toolbar-v6";
   const label=document.createElement("label");label.textContent="Trace a result ";label.append(select);bar.append(label);
   const host=document.createElement("div");host.className="flow-path-list-v6";container.append(bar,host);
@@ -525,15 +670,16 @@ export function mountPaths(container, options) {
     host.replaceChildren();const candidate=projection?.candidates?.find(c=>c.id===selected);
     if(!candidate){host.append(paragraph("No source-bound result target was recorded. No path is invented."));return;}
     const routes=routesFor(candidate);
-    host.append(paragraph(candidate.fill,"flow-path-heading-v6"));
+    host.append(paragraph(resultText(candidate),"flow-path-heading-v6"));
     if(candidate.source_identity_representative){host.append(paragraph(candidate.source_identity_representative.note));const context=column("Identity-only context / not native construction evidence");for(const proof of identityProofs(candidate))context.append(button(proof.document_id+" / "+proof.date,()=>options.onSource?.(proof)),paragraph(proof.text));host.append(context);}
     host.append(paragraph(candidate.binding==="source_page_readout"?"The final step is a source readout, not an invented answer node or transported edge.":"Routes end at the actual saved graph state for the proposal or evidence."));
-    host.append(paragraph(walkLabel(candidate.selected_walk_metrics),"flow-route-metrics-v6"));
+    const pathAudit=document.createElement("div");pathAudit.append(paragraph(walkLabel(candidate.selected_walk_metrics),"flow-route-metrics-v6"));
     const diversity=candidate.diversity;
     if(diversity){
-      host.append(paragraph(`Saved route selection: ${diversity.selected_count??routes.length} representatives. Bounded search, not exhaustive; shared edges or communities do not imply independent explanations.`));
-      for(const overlap of diversity.pairwise_overlap||[])host.append(paragraph(`Routes ${overlap.left+1} and ${overlap.right+1}: ${overlap.shared_edge_count??overlap.shared_edges?.length??"unreported"} shared edges. No independent-explanation credit is assigned.`));
+      pathAudit.append(paragraph(`Saved route selection: ${diversity.selected_count??routes.length} representatives. Bounded search, not exhaustive; shared edges or communities do not imply independent explanations.`));
+      for(const overlap of diversity.pairwise_overlap||[])pathAudit.append(paragraph(`Routes ${overlap.left+1} and ${overlap.right+1}: ${overlap.shared_edge_count??overlap.shared_edges?.length??"unreported"} shared edges. No independent-explanation credit is assigned.`));
     }
+    host.append(button("How these paths are shown",()=>inspectPresentation(container,options,"Path scope and independence",pathAudit.cloneNode(true))));
     if(!routes.length){host.append(paragraph("No representative route was saved for this result. Its quotations may still be inspected below. Missing evidence is not opposition."));}
     for(const[routeIndex,route]of routes.entries()){
       const card=document.createElement("article");card.className="flow-path-card-v6";
@@ -554,18 +700,25 @@ export function mountPaths(container, options) {
         if(source.text)sources.append(paragraph(source.text.length>240?source.text.slice(0,240)+"... [open full quotation]":source.text,"flow-path-quote-v6"));
       }
       if(!citations.length)sources.append(paragraph("No factual quotation attaches to this navigation-only route."));
-      const output=column(candidate.atom_id?"Task evidence target":"Constructed proposal");output.append(paragraph(candidate.fill,"flow-path-output-v6"));
+      const output=column(candidate.atom_id?"Task evidence target":"Constructed proposal");output.append(paragraph(resultText(candidate),"flow-path-output-v6"));
       output.append(paragraph(directionLabel(candidate.direction||candidate.support,options),"flow-path-direction-v64"));
       row.append(input,path,sources,output);card.append(row);
-      const foot=document.createElement("footer");foot.append(paragraph(route.meaning||"A numerical discovery witness, not a factual entailment chain."));
+      const foot=document.createElement("footer"),audit=document.createElement("div");
+      foot.append(paragraph(lexical?"Source readout, not a graph edge.":"Source route, not a factual proof chain."));
+      audit.append(paragraph(route.meaning||"A numerical discovery witness, not a factual entailment chain."));
       if(!lexical&&route.route_selection?.version?.endsWith("/6.6")){
         const count=route.hops?.length||0,sourceCount=(route.hops||[]).filter(h=>h.kind==="SOURCE").length;
-        const summary=paragraph(`${count} graph edges: ${sourceCount} source connections and ${count-sourceCount} hierarchy/navigation moves. Displayed witnesses are not a factual proof chain.`,"flow-route-metrics-v6");
+        const summary=paragraph(`${count} links: ${sourceCount} source / ${count-sourceCount} navigation`,"flow-route-metrics-v6");
         summary.dataset.routeEdgeCount=String(count);summary.dataset.routeSourceEdges=String(sourceCount);foot.append(summary);
-        if(count<3)foot.append(paragraph(route.route_selection.short_reason==="RECORDED_PRIOR_ALREADY_AT_READOUT_ENDPOINT"?"This source state was already a query starting point; no extra graph hop is invented.":"The bounded display search did not select a comparable longer, forward route in a distinct family. This is not proof that no longer route exists."));
-        foot.append(paragraph("The Corpus Map guide inspects the route through existing communities and direct connections. Those inspection views do not add graph edges."));
+        if(count<3)audit.append(paragraph(route.route_selection.short_reason==="RECORDED_PRIOR_ALREADY_AT_READOUT_ENDPOINT"?"This source state was already a query starting point; no extra graph hop is invented.":"The bounded display search did not select a comparable longer, forward route in a distinct family. This is not proof that no longer route exists."));
+        audit.append(paragraph("The Corpus Map guide inspects the route through existing communities and direct connections. Those inspection views do not add graph edges."));
       }
-      foot.append(paragraph(walkLabel(route.walk_metrics),"flow-route-metrics-v6"));
+      audit.append(paragraph(walkLabel(route.walk_metrics),"flow-route-metrics-v6"));
+      foot.append(button("Inspect route details",()=>{
+        const body=audit.cloneNode(true);
+        for(const proof of citations){body.append(button(proof.document_id||proof.canonical_page_id,()=>options.onSource?.(proof)),paragraph(proof.text||"No localized quotation supplied."));}
+        inspectPresentation(container,options,"Route meaning and source anchors",body);
+      }));
       foot.append(button("Guide path in corpus map",()=>{
         if(options.onGuidePath){options.onGuidePath({candidate,route,route_index:routeIndex});return;}
         const query=new URLSearchParams({corpus:projection.scope?.corpus||"cib",guide_case:projection.case_id,guide_arm:projection.config,guide_candidate:candidate.id,guide_route:String(routeIndex),return_to:location.pathname+location.search});
