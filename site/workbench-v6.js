@@ -919,7 +919,7 @@ async function hydrateNarrativeTrace(epoch){
       if(value.is_graph_node===true)nodeDrawer(value,{modeless:true});
       else {const body=box(note("Saved query or source-readout display object, not a semantic graph state or a numerical diffusion state.","notice"),note(value.label||value.name||"Saved display object"));if(value.citation)body.append(sourceButton(value.citation));openDrawer(value.type==='query'?"Full saved query text":"Saved source/readout text","Planning / source readout",body,undefined,{modeless:true});}
     }),onEdge:safe(narrativeEdgeDrawer)});
-    state.paths=mountEvidencePaths(pathsHost,{trace,selectedId:state.candidate,preserveViewport:fn=>viewportAnchor.run(fn),
+    state.paths=mountEvidencePaths(pathsHost,{trace,corpus:state.row.case.corpus,selectedId:state.candidate,preserveViewport:fn=>viewportAnchor.run(fn),
       onSource:safe(sourceDrawer),onSelect:safe(id=>selectCandidate(id)),onStep:id=>{state.flow?.selectStep?.(id);stagePosition('03');},
       independentMapURL:graphURL(),endpointForPath:path=>verifiedNarrativeEndpoint(path,epoch),
       onGuide:({path,route_index})=>guidePath({candidate:{id:path.candidate_or_atom_id},route:{...path,nodes:[]},route_index})});
