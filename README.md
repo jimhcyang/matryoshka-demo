@@ -2,15 +2,16 @@
 
 [Website](https://jimhcyang.github.io/matryoshka-demo/) | [Publication workflow](https://github.com/jimhcyang/matryoshka-demo/actions/workflows/pages.yml)
 
-A saved analyst workbench for historical Central Intelligence Bulletins, Iran cables and Vietnam cables. The current release contains the first independently reviewed three-task CIB bench narrative, **Salvadoran political vulnerability**. The existing corpus maps remain available for all three collections.
+A saved analyst workbench for historical Central Intelligence Bulletins, Iran cables and Vietnam cables. The current release contains the first independently reviewed three-task CIB bench narrative, **Salvadoran political vulnerability**, plus one additional authentic CIB redaction. The existing corpus maps remain available for all three collections.
 
-The 23-case target is partially complete: **3 released, 20 pending** (starter 0/9, bench 3/9, additional authentic CIB redactions 0/5). This curated development release is not a benchmark accuracy estimate or completion of the collection-wide quality quotas.
+The 23-case target is partially complete: **4 released, 19 pending** (starter 0/9, bench 3/9, additional authentic CIB redactions 1/5). This curated development release is not a benchmark accuracy estimate or completion of the collection-wide quality quotas.
 
 | Task | Saved result | Scope |
 | --- | --- | --- |
 | Mosaic | Evidence-backed reconstruction, 2/2 components | Two complementary earlier documents establish announced organizing plans and a reported journey; no causal join is asserted. |
 | Hypothesis | Supported, 1/1 component | A source reports Colonel Alberto Escamilla's appointment as minister of interior. The question preserves “reportedly”; it does not establish actual implementation or continuing tenure. This earlier October report is a disclosed source-aware addition to the January story. |
 | Redaction | Rank-one equivalent recovery; contextual, not evidence-backed | The selected adjective reading proposes “easily politically manipulated”. Three readings remain selectable; the general determiner reading is not modeled and generated no fills. Rank is not correctness. |
+| Additional CIB Redaction | Rank-three equivalent recovery; contextual, not evidence-backed | In a separate Burmese agreement question, “Brigadier Aung Gyi’s” recovers the full possessive name. The eligible name/title source does not establish his initiative behind the agreement; 0/1 focal support and incomplete/unmodeled counters remain explicit. |
 
 Opening a saved result reveals its recorded local verdict, candidate order, source-bound trace and saved model interpretation. Full story sources and the comparison reveal require completing the story attempts or explicitly revealing all story answers. Introduction text appears before source bindings are opened. Source quotations, historical cutoffs, whole-origin exclusion and exact masked/revealed coordinates remain inspectable.
 
