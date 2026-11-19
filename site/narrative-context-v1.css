@@ -1,0 +1,13 @@
+.narrative-context{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:1rem;margin:1rem 0 1.25rem;font-size:1rem;line-height:1.6}
+.narrative-context-card{min-width:0;padding:1.1rem 1.25rem;border:1px solid #c9d8dd;border-radius:14px;background:#f5fafb;color:#243e48}
+.narrative-context-card:last-child{background:#f7f7fc;border-color:#d5d5e7}
+.narrative-context-card h2{font-size:1.1rem;margin:0 0 .5rem;line-height:1.3}
+.narrative-context-text{margin:0;max-width:82ch}
+.narrative-context-sources{font-size:.875rem;margin-top:.7rem;overflow-wrap:anywhere}
+.narrative-context-sources summary{cursor:pointer;font-weight:600}
+.narrative-context-sources ul{padding-left:1.2rem;margin:.5rem 0 0}
+.narrative-context-sources li p{font-size:.875rem;margin:.4rem 0}
+.narrative-context-sources blockquote{margin:.3rem 0 .8rem;padding-left:.7rem;border-left:3px solid #8aa8b5;font-size:.9375rem}
+.story-card .narrative-context{display:block;margin:.7rem 0}.story-card .narrative-context-card{margin:.6rem 0;padding:.8rem}.story-card .narrative-context-card h2{font-size:1rem}
+@media(max-width:700px){.narrative-context{grid-template-columns:1fr;gap:.65rem}.narrative-context-card{padding:.9rem 1rem}}
+.narrative-guide-access{max-width:36rem;border:1px solid #9bb8c2;border-radius:16px;padding:1.5rem;color:#203c48;background:#f5fafb;font:1rem/1.6 "Avenir Next","Trebuchet MS",sans-serif}.narrative-guide-access::backdrop{background:#15324088}.narrative-guide-access h2{font-size:1.3rem;margin-top:0}.narrative-guide-access>div{display:flex;gap:.7rem;flex-wrap:wrap}.narrative-guide-access button{font:inherit;font-size:.9375rem;border:1px solid #9ab8bf;background:white;color:#203c48;border-radius:8px;padding:.7rem 1rem;cursor:pointer}.narrative-guide-access button:first-child{background:#237e78;color:white;border-color:#237e78}

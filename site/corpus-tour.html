@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A source-first introduction to a saved Matryoshka investigation.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://raw.githubusercontent.com; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
+  <title>Matryoshka | Story Introduction</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="corpus-home.css">
+  <link rel="stylesheet" href="corpus-tour.css">
+  <link rel="stylesheet" href="narrative-context-v1.css">
+  <script type="module" src="corpus-tour.js"></script>
+<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="a365518facc36f6a27074d78b5787f7422f4e0690df50cca784205d975592884"></script>
+<link rel="stylesheet" href="public-transport.css">
+</head>
+<body>
+  <header class="home-nav">
+    <a class="wordmark" href="index.html" aria-label="Matryoshka home"><span class="monogram" aria-hidden="true">M</span>Matryoshka</a>
+    <nav aria-label="Primary navigation"><a id="tour-map" href="graph-full-v6.html">Knowledge graph</a><a id="tour-workbench" href="workbench-v6.html">Analyst workbench</a><a href="index.html">Corpus home</a></nav>
+  </header>
+  <main class="tour-main">
+    <nav id="tour-corpora" class="tour-corpora" aria-label="Choose a collection"></nav>
+    <section aria-labelledby="tour-title">
+      <p id="tour-collection" class="eyebrow">Source first</p>
+      <h1 id="tour-title">Start with a story.</h1>
+      <p id="tour-status" class="story-note" role="status">Opening the saved investigation...</p>
+    </section>
+    <section id="tour-orientation" class="tour-orientation" aria-labelledby="orientation-title" hidden>
+      <p class="eyebrow">01 / Orient in the corpus</p>
+      <h2 id="orientation-title">Read the map, then check the record.</h2>
+      <p>Domains, themes and communities organize the saved graph. They are navigation containers, not assertions or evidence of agreement.</p>
+      <div id="tour-map-levels" class="tour-map-levels"></div>
+      <p class="story-note">These links open the existing corpus map, not a new map or a certified evidence route. No particular hierarchy stops are supplied for this story. The corpus overview does not inherit a question's date cutoff or excluded origin.</p>
+    </section>
+    <section id="tour-questions" aria-labelledby="questions-title" hidden>
+      <p class="eyebrow">02 / Follow the saved questions</p>
+      <h2 id="questions-title">Mosaic, Hypothesis, Redaction.</h2>
+      <p class="story-note">Only available saved starters appear, in that order. Each question links to its original document and the separate evidence inspection. No answer is revealed here.</p>
+      <ol id="tour-steps" class="tour-steps"></ol>
+    </section>
+    <p id="tour-limit" class="story-note" hidden>Saved demonstrations show both strengths and limits. They are not an accuracy estimate or a complete showcase.</p>
+    <p class="tour-back"><a href="index.html#narrative-stories">Back to the casebook stories</a></p>
+  </main>
+  <footer><p>Source first. Evidence and inference stay distinct.</p><a href="workbench-v6.html">Open the analyst workbench</a></footer>
+</body>
+</html>

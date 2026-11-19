@@ -655,6 +655,7 @@ class GraphPanel {
     this.transition(()=>this.refreshGraph(exited.id));
   }
   setNodeCap(rawValue) {
+    if(state.guidePath?.caseContext)return guideContextView(this.studyContext?.view_kind==='incident'?'neighborhood':'community',{limit:NODE_CAPS.has(Number(rawValue))?Number(rawValue):DEFAULT_NODE_LIMIT});
     if(state.guidePath){pauseGuide();state.guidePath.limit=NODE_CAPS.has(Number(rawValue))?Number(rawValue):DEFAULT_NODE_LIMIT;}
     const value=Number(rawValue);this.nodeLimit=NODE_CAPS.has(value)?value:DEFAULT_NODE_LIMIT;
     this.refreshGraph(!this.selected?.source?this.selected?.id:null);
@@ -935,7 +936,7 @@ class GraphPanel {
   updateChrome() {
     if(this.studyContext){
       const c=this.studyContext;
-      $(`#${this.name}-breadcrumb`).textContent="Study / "+(c.community?.label||"Ungrouped state")+" / "+(c.view_kind==="community"?"Community members":"Connections centered on "+guideNodeLabel(c.nodes.find(n=>n.id===c.focus_id)));
+      $(`#${this.name}-breadcrumb`).textContent="Case source graph / "+(c.community?.label||"Ungrouped state")+" / "+(c.view_kind==="community"?"Community members":"Connections centered on "+guideNodeLabel(c.nodes.find(n=>n.id===c.focus_id)));
       $(`[data-back="${this.name}"]`).disabled=state.guidePath.busy||state.guidePath.index===0;
       const cap=$(`[data-node-cap="${this.name}"]`);cap.value=String(state.guidePath.limit);cap.disabled=state.guidePath.busy;
       $(`#${this.name}-caption`).textContent=fmt(c.displayed_nodes)+" drawn / "+fmt(c.available_nodes)+" eligible states. Solid: source; dashed: membership; dotted: source aggregate. Drawing cap only.";
@@ -2044,15 +2045,24 @@ function normalizeSavedGuide(packet,selection) {
   const route=packet.route,nodes=route?.nodes,hops=route?.hops;
   if(!Array.isArray(nodes)||!nodes.length||!Array.isArray(hops)||hops.length!==nodes.length-1||nodes.some(n=>typeof n.id!=="string"||!n.id||n.id.length>600))throw Error("Invalid ordered saved route.");
   const lexical=route.route_kind==="LEXICAL_SOURCE_READOUT";
+  const sourceEndpointInspection=route.route_kind==='SOURCE_ENDPOINT_INSPECTION'||packet.source_endpoint_inspection_only===true||packet.status==='SOURCE_ENDPOINT_INSPECTION';
+  if(sourceEndpointInspection&&(packet.version!=='narrative-current-guide-adapter/2'||packet.status!=='SOURCE_ENDPOINT_INSPECTION'||
+      !['iran','vietnam'].includes(corpusId)||route.route_kind!=='SOURCE_ENDPOINT_INSPECTION'||
+      packet.source_endpoint_inspection_only!==true||packet.retrieval_route_certified!==false||
+      packet.original_traversal_claimed!==false||packet.factual_support_from_guide!==false||
+      packet.graph_hops!==0||nodes.length!==1||hops.length!==0||nodes[0].is_graph_node!==true||nodes[0].id.startsWith('hierarchy:')))
+    throw Error('Invalid zero-hop source-endpoint inspection. No retrieval route or support hop is inferred.');
   hops.forEach((h,i)=>{if(h.source!==nodes[i].id||h.target!==nodes[i+1].id||!(lexical?["SEARCH_RECEIPT_READOUT","EXACT_QUOTATION_READOUT","CONSTRUCTION_READOUT"]:["SOURCE","NAVIGATION","SOURCE_AGGREGATE"]).includes(h.kind))throw Error("Saved connection order or kind differs.");});
   if(lexical&&(nodes.some(n=>n.solver_state!==false||n.readout_only!==true)||hops.map(h=>h.kind).join()!=="SEARCH_RECEIPT_READOUT,EXACT_QUOTATION_READOUT,CONSTRUCTION_READOUT"))throw Error("Malformed lexical source readout.");
   const inventories=[route.citations,route.sources,route.source_quotes,packet.citations,...hops.map(h=>h.citations)].filter(v=>v!=null);
   if(inventories.some(v=>!Array.isArray(v)))throw Error("Invalid source inventory.");
   const seen=new Set(),citations=inventories.flat().filter(c=>{if(!c||typeof c!=="object")throw Error("Invalid source proof.");const key=JSON.stringify([c.document_id,c.canonical_page_id,c.start,c.end,c.text]);if(seen.has(key))return false;seen.add(key);return true;});
-  const steps=lexical?[{type:"receipt",label:"Search to source"}]:[{type:"context",node_index:0,label:"Starting community"},...hops.map((h,i)=>({type:"connection",hop_index:i,node_index:i+1,label:h.kind==="NAVIGATION"?"Hierarchy navigation":"Source context"}))];
+  if(sourceEndpointInspection&&!citations.length)throw Error('A source-endpoint inspection needs its selected original quotation.');
+  const steps=sourceEndpointInspection?[{type:'context',node_index:0,label:'Source endpoint community'},
+    {type:'endpoint_connections',node_index:0,label:'Inspect endpoint connections'}]:lexical?[{type:"receipt",label:"Search to source"}]:[{type:"context",node_index:0,label:"Starting community"},...hops.map((h,i)=>({type:"connection",hop_index:i,node_index:i+1,label:h.kind==="NAVIGATION"?"Hierarchy navigation":"Source context"}))];
   if(citations.length)steps.push({type:"source",label:"Original sources"});
-  if(lexical||packet.candidate.binding==="source_page_readout")steps.push({type:"readout",label:"Proposed wording"});
-  return {packet,selection,nodes,hops,citations,steps,lexical,index:0,busy:false,playing:false,timer:null,error:null,limit:256,settledAt:null,sourceIndex:0};
+  if(!sourceEndpointInspection&&(lexical||packet.candidate.binding==="source_page_readout"))steps.push({type:"readout",label:"Proposed wording"});
+  return {packet,selection,nodes,hops,citations,steps,lexical,sourceEndpointInspection,index:0,busy:false,playing:false,timer:null,error:null,limit:256,settledAt:null,sourceIndex:0};
 }
 
 function guideReturnUrl() {
@@ -2092,13 +2102,15 @@ function restoreGuideControls(g) {
   for(const [node,disabled] of g.savedControls||[])node.disabled=disabled;
   if(g.visibilityNoteNode&&g.visibilityNote!=null)g.visibilityNoteNode.innerHTML=g.visibilityNote;
   if(g.savedTemporalControl)g.savedTemporalControl.node.hidden=g.savedTemporalControl.hidden;
+  for(const [node,text] of g.savedCaseLabels||[])node.textContent=text;
 }
 
 function closeSavedGuide() {
   const g=state.guidePath;if(!g)return;
   pauseGuide();guideEpoch++;g.abort?.abort();guideCloseSource();
   const panel=state.panels.current;
-  guideCancelMotionV64(panel);panel.v64Traversal=null;
+  guideCancelMotionV64(panel);panel.v64Traversal=null;panel.studyContext=null;
+  for(const name of ['data-guide-context','data-native-graph-id','data-native-hierarchy-id'])panel.canvas.removeAttribute(name);
   state.guidePath=null;state.guideOverlay=null;document.body.classList.remove("guide-active","guide-v63-active","guide-v64-active");
   restoreGuideControls(g);
   panel.canvas.hidden=false;panel.canvas.removeAttribute("aria-busy");panel.canvas.removeAttribute("data-guide-settled-at");
@@ -2132,10 +2144,11 @@ function validateGuideOverlay(value,g) {
 
 async function guideFetch(extra={},signal) {
   const g=state.guidePath;
-  if(extra.phase!=="source")throw Error("Guide overlays do not request replacement study graphs.");
+  if(extra.phase!=="source"&&!g?.caseContext)throw Error("Guide overlays do not request replacement study graphs.");
   const data=await currentGraphJSON("/api/guide-view-v6?"+new URLSearchParams({...g.selection,...extra}),{signal});
   const current=currentGraphResource();
   if((current?data.version!=='current-context-inspection/1':data.lens!=="study_case")||data.binding?.graph_id!==g.packet.graph_binding.graph_id||data.binding?.hierarchy_id!==g.packet.graph_binding.hierarchy_id||data.scope?.strictly_before!==g.packet.scope.strictly_before||data.scope?.whole_origin_excluded!==g.packet.scope.whole_origin_excluded)throw Error("Selected source binding changed.");
+  if(g.caseContext&&!['source','inspect'].includes(extra.phase)&&data.phase!==extra.phase)throw Error('The source view belongs to another guide phase.');
   return data;
 }
 
@@ -2165,12 +2178,12 @@ function renderPathGuide() {
   host.innerHTML='<header><div><p class="eyebrow">Saved source context</p><h2>KG Navigator</h2></div><button data-guide-close aria-label="Close guide">Close</button></header>'+
     '<p id="guide-level-v64" class="kg-level-v64" aria-label="Current guide KG level"></p>'+
     '<p id="guide-case-bound" class="guide-case-bound" role="note">Case sources: strictly before <time datetime="'+esc(g.packet.scope.strictly_before)+'">'+esc(g.packet.scope.strictly_before)+'</time> (exclusive). Origin excluded.</p>'+
-    '<p class="guide-scope">'+(current?'Same current KG. Exact source-bound nodes guide navigation; browser edges remain gray and uncertified.':'Same full KG. Red spokes: selected context, not a source assessment. Gold/red trace: an exact source-proven connection.')+'</p>'+
+    '<p class="guide-scope">'+(g.sourceEndpointInspection?'Source-endpoint inspection only: one verified extracted state, zero route hops. Community and incident connections are case-eligible context, not a recorded retrieval traversal, identity certificate or factual support. The standalone overview is separate.':g.caseContext?'Case source graph. The saved route uses its exact graph and hierarchy, not the separate overview map. Source links locate quotations; memberships and paths are not proof of the query.':current?'Same current KG. Exact source-bound nodes guide navigation; browser edges remain gray and uncertified.':'Same full KG. Red spokes: selected context, not a source assessment. Gold/red trace: an exact source-proven connection.')+'</p>'+
     '<label class="guide-step-line"><span id="guide-count"></span><select id="guide-step" aria-label="Saved guide step">'+g.steps.map((s,i)=>'<option value="'+i+'">'+(i+1)+'. '+esc(s.label)+'</option>').join("")+'</select></label>'+
     '<div id="guide-current" class="guide-current" role="status" aria-live="polite"></div><div class="guide-actions"></div>'+
     '<div class="guide-context-actions"><button data-guide-neighborhood>32 connections</button><button data-guide-community>256 community</button></div>'+
     '<details><summary>Sources and binding</summary>'+(g.citations.length?'<label class="guide-source-picker">Original source <select id="guide-source" aria-label="Original study source">'+g.citations.map((c,i)=>'<option value="'+i+'">'+(i+1)+'. '+esc(c.document_id)+'</option>').join('')+'</select></label><button data-guide-source>Open source</button>':'')+
-    '<p>Before '+esc(g.packet.scope.strictly_before)+'; origin '+esc(g.packet.scope.whole_origin_excluded)+' excluded. Browser memberships remain unchanged'+(current?'; exact current graph and hierarchy IDs are bound. No browser-edge correspondence is certified.':g.overlay?.layout_matches_study?'.':'; the study hierarchy differs.')+'</p><p id="guide-mapping-status"></p></details>'+
+    '<p>Before '+esc(g.packet.scope.strictly_before)+'; origin '+esc(g.packet.scope.whole_origin_excluded)+' excluded. '+(g.caseContext?'Source graph '+esc(g.packet.resource_binding.graph_id)+' / hierarchy '+esc(g.packet.resource_binding.hierarchy_id)+'. The standalone Corpus Map is unchanged.':'Browser memberships remain unchanged'+(current?'; exact current graph and hierarchy IDs are bound. No browser-edge correspondence is certified.':g.overlay?.layout_matches_study?'.':'; the study hierarchy differs.'))+'</p><p id="guide-mapping-status"></p></details>'+
     '<a class="guide-return" href="'+esc(guideReturnUrl())+'">Return to this result</a>';
   $('#guide-step').onchange=e=>activateGuideStep(Number(e.target.value));
   $('[data-guide-close]',host).onclick=closeSavedGuide;
@@ -2194,9 +2207,10 @@ function renderGuideStatus() {
   const actions=$('.guide-actions',guideHost());actions.innerHTML=guideControls()+'<small>3 seconds after loading and animation settle.</small>';bindGuideControls(actions);
   $$('[data-guide-neighborhood],[data-guide-community]').forEach(b=>b.disabled=g.busy||g.lexical||!g.currentRecord||Boolean(nodeLevel[g.currentRecord.type]));
   $('[data-guide-source]')?.toggleAttribute('disabled',g.busy);
-  $('#guide-mapping-status').textContent=g.overlay?.endpoint_mappings.filter(m=>m.browser_id===null).map(m=>m.native_id+': '+m.reason).join('\n')||'Exact canonical/source-ID mapping. '+(g.overlay?.verified_browser_edges.length||0)+' source-proven existing edge correspondences. All other edges remain gray and unassessed.';
+  $('#guide-mapping-status').textContent=g.caseContext?'Exact saved-source node IDs and recorded memberships. No spelling-based join to the standalone overview and no new answer or inference.':g.overlay?.endpoint_mappings.filter(m=>m.browser_id===null).map(m=>m.native_id+': '+m.reason).join('\n')||'Exact canonical/source-ID mapping. '+(g.overlay?.verified_browser_edges.length||0)+' source-proven existing edge correspondences. All other edges remain gray and unassessed.';
   const footer=$('#study-guide-drawer footer');if(footer){footer.innerHTML=guideControls();bindGuideControls(footer);}
   guideHost().setAttribute('aria-busy',String(g.busy));
+  if(g.caseContext&&state.panels.current.studyContext)state.panels.current.updateChrome();
   guideUpdateLevelV64(state.panels.current);
   window.dispatchEvent(new CustomEvent('kg-guide-state-v64',{detail:guideExportV64()}));
 }
@@ -2228,11 +2242,16 @@ async function guideCommunity(record) {
   return guideRunV64(panel,token=>guideMoveRecordV64(panel,record,token));
 }
 
-async function guideContextView(kind) {
+async function guideContextView(kind,{limit}={}) {
   const g=state.guidePath;if(!g||g.busy||!g.currentRecord)return;
   pauseGuide();g.busy=true;renderGuideStatus();
   try{
     const panel=state.panels.current;
+    if(g.caseContext){
+      const step=g.steps[g.index],target=!g.sourceEndpointInspection&&(step.type==='connection'||!['context','connection'].includes(step.type)&&panel.studyContext?.phase.startsWith('target_'));
+      await guideCaseView((target?'target_':'start_')+(kind==='neighborhood'?'connections':'community'),{limit:limit??(kind==='neighborhood'?32:256)});
+      return;
+    }
     await guideRunV64(panel,async token=>{
       panel.v64Traversal=null;
       if(kind==='neighborhood'){await guideOpenNeighborhoodV64(panel,g.currentRecord,token,{limit:32});g.limit=32;}
@@ -2248,7 +2267,13 @@ async function guideContextView(kind) {
 }
 
 async function guideShowEndpoint(step) {
-  const g=state.guidePath,panel=state.panels.current,record=await guideRecord(step.node_index);
+  const g=state.guidePath,panel=state.panels.current;
+  if(g.caseContext){
+    await guideCaseView(step.type==='context'?'start_community':g.sourceEndpointInspection?'start_connections':'target_connections',{limit:step.type==='context'?256:32});
+    g.message=g.sourceEndpointInspection?(step.type==='context'?'Inspecting the verified endpoint in its recorded source community. Membership is navigation, not assertion proof.':'Inspecting eligible incident connections of that same endpoint. No edge is claimed as an original retrieval hop or proof of the query.'):step.type==='context'?'Starting in the recorded source community. Only case-eligible source states are shown.':'Following an existing source connection or recorded membership. The highlighted path is not proof of the missing answer.';
+    return;
+  }
+  const record=await guideRecord(step.node_index);
   if(g!==state.guidePath)return;
   if(!record){g.currentRecord=null;g.message='Unmapped native state. '+g.overlay.endpoint_mappings[step.node_index].reason+' The full KG is retained, not substituted.';return;}
   g.currentRecord=record;
@@ -2283,6 +2308,54 @@ async function guideShowEndpoint(step) {
   g.activeCitations=connection.citations;
 }
 
+async function guideCaseView(phase,{limit=256}={}) {
+  const g=state.guidePath,panel=state.panels.current,step=g.steps[g.index],epoch=guideEpoch;
+  const hopIndex=step.hop_index??panel.studyContext?.hop_index??0;
+  const supplied=await guideFetch({phase,hop_index:String(hopIndex),limit:String(limit)});
+  const shown=new Set(supplied.nodes.map(n=>n.id));
+  const edges=[...supplied.edges,...(supplied.incident?.edges||[]).filter(e=>shown.has(e.source)&&shown.has(e.target))];
+  const data={...supplied,edges:[...new Map(edges.map(e=>[e.id,e])).values()]};
+  const {verifyCurrentCaseGuideView}=await import('./local-decisions-v65.js');
+  verifyCurrentCaseGuideView(data,g);
+  if(g!==state.guidePath||epoch!==guideEpoch)return;
+  await guideCrossfade(()=>{
+    panel.studyContext=data;panel.level='evidence';panel.trail=[];panel.neighborhood=null;panel.localIncidentNeighborhood=null;
+    panel.v64Traversal=null;panel.pinnedFocusIds=new Set(data.highlighted_node_ids);panel.nodeLimit=limit;
+    g.limit=limit;g.currentRecord=data.nodes.find(n=>n.id===data.focus_id);g.inspectedCaseNode=null;
+    panel.refreshGraph(data.focus_id);
+    if(step.type==='connection'){
+      const hop=g.hops[hopIndex],ids=data.relation_edges.filter(e=>data.edges.some(row=>row.id===e.id)).map(e=>e.id);
+      panel.v64Traversal={source_id:hop.source,target_id:hop.target,native_kind:hop.kind,verified:false,
+        edge_ids:[],context_edge_ids:ids,source_context_verified:true,proof_status:'exact_case_source_relation'};
+      panel.draw();
+    }
+    panel.canvas.dataset.guideContext='case-source';panel.canvas.dataset.nativeGraphId=g.packet.resource_binding.graph_id;
+    panel.canvas.dataset.nativeHierarchyId=g.packet.resource_binding.hierarchy_id;
+  });
+}
+
+function renderStudyInspector(){
+  const g=state.guidePath,panel=state.panels.current,c=panel.studyContext;if(!g?.caseContext||!c)return;
+  const selected=panel.selected||c.nodes.find(n=>n.id===c.focus_id),edge=selected?.source?selected:null;
+  const node=edge?null:g.inspectedCaseNode?.id===selected?.id?g.inspectedCaseNode:selected;
+  const proofs=edge?.citations||node?.citations||[];
+  panel.inspector.innerHTML='<div class="inspector-section"><p class="eyebrow">'+(edge?'Source connection':'Case source node')+'</p><h3>'+esc(edge?.relation||node?.label||'Selected source')+'</h3><p>'+esc(edge?'An eligible source connection, not entailment of the analyst query.':node?.type||'Saved state')+'</p><p>Exact source graph; no identity join to the separate overview.</p>'+proofs.map((p,i)=>'<button type="button" data-case-source-proof="'+i+'">'+esc(p.document_id)+' / '+esc(p.date)+'</button><p>'+esc(p.text)+'</p>').join('')+(!proofs.length?'<p>Recorded membership is navigation, not a historical assertion.</p>':'')+'</div>';
+  $$('[data-case-source-proof]',panel.inspector).forEach(b=>b.onclick=()=>openStudySource(proofs[Number(b.dataset.caseSourceProof)]).catch(error=>{g.error=error.message;renderGuideStatus();}));
+}
+async function inspectStudyNode(id){
+  const g=state.guidePath,panel=state.panels.current,epoch=guideEpoch;if(!g?.caseContext)return;
+  pauseGuide();
+  try{
+    const value=await guideFetch({phase:'inspect',node_id:id});
+    if(g!==state.guidePath||epoch!==guideEpoch)return;
+    if(value.node?.id!==id)throw Error('The inspected source node differs.');
+    g.inspectedCaseNode=value.node;panel.selected=panel.nodeMap.get(id)||null;panel.renderInspector();panel.draw();
+  }catch(error){if(g===state.guidePath){g.error=error.message;renderGuideStatus();}}
+}
+function inspectStudyEdge(edge){
+  const panel=state.panels.current;panel.selected=edge;panel.renderInspector();panel.draw();
+}
+
 async function openStudySource(citation,{manual=true}={}) {
   if(manual)pauseGuide();guideCloseSource();const epoch=++guideSourceEpoch;
   const scrim=document.createElement('div');scrim.id='study-guide-scrim';scrim.onclick=()=>{pauseGuide();guideCloseSource();};document.body.append(scrim);
@@ -2311,9 +2384,9 @@ async function activateGuideStep(index,{automatic=false}={}) {
   const panel=state.panels.current;panel.canvas.setAttribute('aria-busy','true');
   const step=g.steps[index];
   try{
-    if(['context','connection'].includes(step.type))await guideShowEndpoint(step);
+    if(['context','connection','endpoint_connections'].includes(step.type))await guideShowEndpoint(step);
     else if(step.type==='source'){
-      g.message='Original source context. The full KG stays in place.';
+      g.message=g.caseContext?'Original eligible source context. The case-source graph stays in place.':'Original source context. The full KG stays in place.';
       await openStudySource(g.citations[g.sourceIndex]||g.citations[0],{manual:false});
     }else if(step.type==='receipt'){
       g.message='Saved lexical search and document receipts, not KG nodes or edges.';
@@ -2335,18 +2408,45 @@ async function loadSavedGuide(params) {
   try{
     const selection=guideSelection(params);if(!selection)return;
     const g=normalizeSavedGuide(await currentGraphJSON('/api/guide-v6?'+new URLSearchParams(selection)),selection);
-    verifyCurrentMapBinding(g.packet.resource_binding);
+    // Cable overview exports have a different hierarchy. Select a separate,
+    // exact source-context lens instead of weakening the full-map ID check.
+    g.caseContext=Boolean(currentGraphResource(params)&&['iran','vietnam'].includes(corpusId));
+    if(g.sourceEndpointInspection&&!g.caseContext)throw Error('A source-endpoint inspection requires the exact cable case-source lens.');
+    if(!g.caseContext)verifyCurrentMapBinding(g.packet.resource_binding);
     const overlay=await currentGraphJSON('/api/guide-overlay-v64?'+new URLSearchParams(selection));
     if(overlay.version==='current-context-inspection/1'){
       const resource=currentGraphResource();if(!resource)throw Error('A current overlay requires explicit URL resource pins');
-      const {adaptCurrentGuideOverlay}=await import('./local-decisions-v65.js');
+      const {adaptCurrentGuideOverlay,adaptCurrentCaseGuideOverlay}=await import('./local-decisions-v65.js');
       const panel=state.panels.current;
-      g.overlay=await adaptCurrentGuideOverlay(overlay,g,{resourceBinding:resource,viewer:refreshBinding,
+      g.overlay=g.caseContext?adaptCurrentCaseGuideOverlay(overlay,g,{resourceBinding:resource}):await adaptCurrentGuideOverlay(overlay,g,{resourceBinding:resource,viewer:refreshBinding,
         resolveHierarchy:(level,id)=>panel.hierarchyNode(level,id),resolveNode:async id=>{try{return (await ensureNodeNeighborhood(panel.view,id)).node;}catch(error){if(error.missingExactNode)return null;throw error;}}});
     }else{if(currentGraphResource())throw Error('A current guide cannot use a legacy study overlay');g.overlay=validateGuideOverlay(overlay,g);}
     state.guidePath=g;state.guideOverlay=g.overlay;
     g.exploration=state.panels.current.rememberLocation();
     enterGuideControls(g);
+    if(g.caseContext){
+      for(const node of $$('[data-level],[data-display-mode],#full-corpus,#graph-search,#search-scope,#hide-isolates')){g.savedControls.push([node,node.disabled]);node.disabled=true;}
+      if(g.visibilityNoteNode)g.visibilityNoteNode.textContent='Case source graph: exact saved nodes and hierarchy, strictly before '+g.packet.scope.strictly_before+'; the entire origin is excluded. The standalone overview map is separate.';
+      g.savedCaseLabels=[];
+      for(const [selector,text] of [
+        ['.hero h1','Case source graph'],['#document-count','Saved source-path context'],
+        ['#purpose','Inspect the saved route using its exact source graph. Only case-eligible evidence is shown; the separate Corpus Map returns when this guide is closed.'],
+        ['#current-title','Case-bound source graph'],['#pair-title','Eligible source connections'],
+        ['.graph-legend small','Size reflects eligible source-document counts for orientation, not correctness. Source connections and memberships are not proof of the query.'],
+        ['#exploration-binding strong','Saved case graph, not the standalone overview'],
+        ['#exploration-scope','Exact saved nodes, source quotations and recorded memberships. No label-based substitution or new inference.'],
+        ['#exploration-layout','Source graph '+g.packet.resource_binding.graph_id+' / hierarchy '+g.packet.resource_binding.hierarchy_id+'.'],
+        ['#level-explanation','Use the navigator to switch between the selected state\'s community and direct connections. Membership is navigation; a path is not proof of the query.']
+      ]){const node=$(selector);if(node){g.savedCaseLabels.push([node,node.textContent]);node.textContent=text;}}
+      if(g.sourceEndpointInspection){
+        $('#document-count').textContent='Saved source-endpoint context';
+        $('#purpose').textContent='Inspect one source-owned extracted endpoint and its eligible context. Zero retrieval hops are claimed; the independent overview returns when this inspector closes.';
+      }
+      for(const [selector,text] of [['.graph-legend .edge.solid',' Source connection'],['.graph-legend .edge.dashed',' Recorded membership']]){
+        const node=$(selector)?.parentElement?.lastChild;
+        if(node?.nodeType===Node.TEXT_NODE){g.savedCaseLabels.push([node,node.textContent]);node.textContent=text;}
+      }
+    }
     renderPanelCaption(state.panels.current);
     document.body.classList.add('guide-active','guide-v63-active','guide-v64-active');
     renderPathGuide();
@@ -2367,6 +2467,7 @@ const guideNativeV64={};
 const guidePairV64=(edge,a,b)=>a!==b&&((edge.source===a&&edge.target===b)||(edge.source===b&&edge.target===a));
 
 function guideLevelV64(panel=state.panels.current) {
+  if(panel?.studyContext)return {key:'evidence',mode:panel.studyContext.view_kind==='incident'?'direct_neighborhood':'community_members',label:'Evidence / '+(panel.studyContext.view_kind==='incident'?'direct connections':'community members'),trail_ids:(panel.studyContext.breadcrumbs||[]).map(n=>n.id)};
   const mode=panel?.neighborhood?'direct_neighborhood':panel?.level==='evidence'&&panel.trail.at(-1)?.type==='Community'?'community_members':'hierarchy';
   const key=panel?.level||'domain';
   return {key,mode,label:key[0].toUpperCase()+key.slice(1)+(mode==='direct_neighborhood'?' / direct neighborhood':mode==='community_members'?' / community members':''),trail_ids:(panel?.trail||[]).map(n=>n.id)};
@@ -2391,12 +2492,15 @@ function guideExportV64() {
     native_node_ids:g.nodes.map(n=>n.id),native_hops:g.hops.map(h=>({source:h.source,target:h.target,kind:h.kind})),
     index:g.index,steps:g.steps.map(s=>({type:s.type,node_index:s.node_index??null,hop_index:s.hop_index??null})),
     current_level:guideLevelV64(p),movement:g.movement||null,traversal:p.v64Traversal||null,busy:g.busy,playing:g.playing,
-    settled_at:g.settledAt,layout_only:true,native_route_changed:false}));
+    settled_at:g.settledAt,layout_only:true,native_route_changed:false,case_source_context:g.caseContext===true,
+    source_resource_binding:g.caseContext?g.packet.resource_binding:null,
+    source_endpoint_inspection_only:g.sourceEndpointInspection===true,retrieval_route_certified:g.sourceEndpointInspection?false:null}));
 }
 window.guideExportV64=guideExportV64;
 
 function guideEdgeVisualV64(panel,edge,selectedId) {
   if(!state.guideOverlay)return null;
+  if(state.guidePath?.caseContext&&panel.studyContext)return {color:edge.kind==='NAVIGATION'?'#b08a39':'#347d78',width:1.2,kind:'case_source_context'};
   if(state.guideOverlay.version==='current-context-inspection/1')return {color:'rgba(120,130,133,.42)',width:1,kind:'current_browser_edge_unassessed'};
   const traversal=panel.v64Traversal;
   if(traversal?.verified&&traversal.edge_ids.includes(edge.id)&&state.guideOverlay.edges.has(edge.id))return {color:'#9f3325',width:3.2,kind:'source_proven_traversal'};
@@ -2622,6 +2726,7 @@ function guideInstallV64() {
   };
   p.back=function(){
     if(this.v64Busy)return;
+    if(state.guidePath?.caseContext)return activateGuideStep(state.guidePath.index-1);
     return guideRunV64(this,async token=>{
       this.v64Traversal=null;
       if(this.nodeHistory.length){const saved=this.nodeHistory.pop();await guideTransitionV64(this,{direction:'up',anchor_id:saved.selectedId},()=>this.restoreLocation(saved),token);}
@@ -2825,10 +2930,15 @@ async function init() {
     $("#cib-source-close")?.addEventListener("click",closeCibSource);$("#cib-drawer-scrim")?.addEventListener("click",closeCibSource);window.addEventListener("keydown",(event)=>{if(event.key==="Escape")closeCibSource();});
     const focusId=params.get("node_id")||params.get("node");
     if(focusId&&!state.guidePath&&!state.guideError){
+      if(params.has('focus_graph_id')||params.has('focus_hierarchy_id')){
+        if(!currentGraphResource(params)||params.getAll('focus_graph_id').length!==1||params.getAll('focus_hierarchy_id').length!==1||
+            params.get('focus_graph_id')!==refreshBinding.graph_run_id||params.get('focus_hierarchy_id')!==refreshBinding.hierarchy_run_id)
+          throw Error('The exact endpoint and current map graph/hierarchy pins differ. No archived graph or label substitute is selected.');
+      }
       const view=currentViews().current;
       await ensureEvidenceSearchCatalog([view.key]);
       const record=state.searchEvidenceIndexes[view.key]?.get(focusId);
-      if(record)await state.panels.current.navigateToNode(record);
+      if(record){await state.panels.current.navigateToNode(record);document.body.dataset.exactFocusNodeId=record.id;document.body.dataset.exactFocusCommunityId=record.community_id||'';}
       else $("#search-status").textContent="The requested semantic ID is not in this separately bound exploration catalog. No substitute identity or route was invented.";
     }
     document.body.dataset.graphReady="true";
@@ -2854,6 +2964,7 @@ $("#full-corpus").addEventListener("change",event=>{
 // Presentation-only provenance. Append before the existing graph init call.
 function guideRouteBadgeV65(packet) {
   const route=packet?.route||{};
+  if(route.route_kind==='SOURCE_ENDPOINT_INSPECTION')return {kind:'source_endpoint_inspection',label:'Source-endpoint inspection',note:'One verified extracted endpoint and its eligible context; zero retrieval hops. Not a saved positive walk, identity certificate or query-support proof.'};
   if(route.route_kind==='LEXICAL_SOURCE_READOUT')return {kind:'readout',label:'Source readout',note:'Document and quote readout, not a numerical KG walk.'};
   const derived=route.derived_witness===true||route.route_kind==='DERIVED_BOUNDED_PROJECTION_WITNESS';
   if(derived)return {kind:'derived',label:'Derived projection witness',note:'Selected from actual bounded projection edges and the bound native kernel. Not a native-saved witness or a correctness probability.'};
@@ -2869,7 +2980,7 @@ function guideRenderRouteBadgeV65() {
   if(!node){node=document.createElement('p');node.id='guide-route-provenance-v65';node.className='guide-case-bound';node.setAttribute('role','note');host.querySelector('header').after(node);}
   node.dataset.routeProvenance=badge.kind;
   node.textContent=badge.label;node.title=badge.note;node.setAttribute('aria-label',badge.label+'. '+badge.note);
-  host.querySelector('.eyebrow').textContent='Source path context';
+  host.querySelector('.eyebrow').textContent=g.sourceEndpointInspection?'Source endpoint context':'Source path context';
 }
 
 const guideOriginalRenderV65=renderPathGuide;

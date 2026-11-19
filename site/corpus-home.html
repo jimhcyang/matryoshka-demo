@@ -4,11 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Explore historical records and source-grounded analysis with Matryoshka.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://raw.githubusercontent.com; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
   <title>Matryoshka | Corpus Home</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="corpus-home.css">
-  <script defer src="corpus-home.js"></script>
+  <link rel="stylesheet" href="narrative-context-v1.css">
+  <script type="module" src="corpus-home.js"></script>
+<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="a365518facc36f6a27074d78b5787f7422f4e0690df50cca784205d975592884"></script>
+<link rel="stylesheet" href="public-transport.css">
 </head>
 <body>
   <header class="home-nav">
@@ -24,11 +27,27 @@
       </div>
       <div class="destinations">
         <a class="destination graph" href="graph-full-v6.html?corpus=cib"><span class="destination-top">01 / Explore <span aria-hidden="true">&#8599;</span></span><h2>Knowledge<br>graph</h2><p>Move through people, events and the communities connecting them.</p><span class="destination-action">Open the corpus map <span aria-hidden="true">&#8594;</span></span></a>
-        <a class="destination workbench" href="workbench-v6.html"><span class="destination-top">02 / Investigate <span aria-hidden="true">&#8599;</span></span><h2>Analyst<br>workbench</h2><p>Inspect redactions, test hypotheses and reconstruct source-backed accounts.</p><span class="destination-action">Open the casebook <span aria-hidden="true">&#8594;</span></span></a>
+        <a class="destination workbench" href="workbench-v6.html"><span class="destination-top">02 / Investigate <span aria-hidden="true">&#8599;</span></span><h2>Analyst<br>workbench</h2><p>Build source-backed Mosaics, test hypotheses and inspect redactions.</p><span class="destination-action">Open the casebook <span aria-hidden="true">&#8594;</span></span></a>
       </div>
+    </section>
+    <section class="story-section" aria-labelledby="story-heading">
+      <p class="eyebrow">Follow a story</p><h2 id="story-heading">From the map to the evidence.</h2>
+      <p id="story-status" class="story-note" role="status">Opening the saved story selection...</p>
+      <p id="core-saved-counts" class="story-note" data-testid="core-saved-counts"></p>
+      <div id="narrative-stories" class="story-grid" data-status="loading"></div>
+    </section>
+    <section id="narrative-bench" class="story-section bench-section" aria-labelledby="bench-heading" hidden>
+      <p class="eyebrow">Separate questions</p><h2 id="bench-heading">Bench</h2>
+      <div id="narrative-bench-cells" class="story-grid"></div>
+    </section>
+    <section id="narrative-additional" class="story-section bench-section" aria-labelledby="additional-heading">
+      <p class="eyebrow">Separate collection</p><h2 id="additional-heading">Additional CIB redactions</h2>
+      <p id="additional-redaction-status" class="story-note" role="status">Opening the saved additional collection...</p>
+      <p class="story-note">SUPPORT, PARTIAL and CONTEXT describe local evidence states. Context is an investigative lead; a supported fill does not by itself establish exact recovery.</p>
+      <div id="additional-redaction-cases" class="story-grid"></div>
     </section>
     <section class="collections" aria-label="Browse a collection"><p class="eyebrow">Start with a collection</p><div class="collection-links"><a href="graph-full-v6.html?corpus=cib"><span>01</span>Central Intelligence Bulletins<b aria-hidden="true">&#8599;</b></a><a href="graph-full-v6.html?corpus=iran"><span>02</span>Iran cables<b aria-hidden="true">&#8599;</b></a><a href="graph-full-v6.html?corpus=vietnam"><span>03</span>Vietnam cables<b aria-hidden="true">&#8599;</b></a></div></section>
   </main>
-  <footer><p>Source first. Evidence and inference stay distinct.</p><a href="docs/matryoshka-guide.pdf">Read the illustrated methods guide <span aria-hidden="true">&#8599;</span></a></footer>
+  <footer id="walkthrough-loading"><p>Source first. Evidence and inference stay distinct.</p><a href="#walkthrough-loading" data-walkthrough-href="docs/matryoshka-guide.pdf" title="Available after the saved casebook is verified">Read the illustrated methods guide <span aria-hidden="true">&#8599;</span></a></footer>
 </body>
 </html>

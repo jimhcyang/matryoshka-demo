@@ -10,10 +10,11 @@
   <link rel="stylesheet" href="app-theme-v6.css">
   <link rel="stylesheet" href="workbench-v6.css">
   <link rel="stylesheet" href="flow-view-v6.css">
-  <!-- showcase-selection-v66 -->
-  
+  <link rel="stylesheet" href="narrative-trace-v1.css">
+  <link rel="stylesheet" href="narrative-context-v1.css">
+  <meta name="narrative-demo" content="narrative-workbench-publication/1">
   <script type="module" src="workbench-v6.js"></script>
-<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="37554272d5a2987248dc8c3fd9df2566bcea6ef8c076dbbbbafe8fba12354a27"></script>
+<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="a365518facc36f6a27074d78b5787f7422f4e0690df50cca784205d975592884"></script>
 <link rel="stylesheet" href="public-transport.css">
 </head>
 <body>
@@ -32,9 +33,9 @@
       <details id="catalog-browser" open>
         <summary>Saved questions <span id="case-count" role="status">Loading...</span></summary>
         <div class="case-filters">
-          <label>Show<select id="case-show"><option value="presentation">Presentation</option><option value="bench">Bench</option><option value="all">All current cases</option></select></label>
+          <label>Show<select id="case-show"><option value="presentation">Starters</option><option value="bench">Bench</option><option value="additional_real_redaction">Additional CIB redactions</option><option value="all">All current cases</option></select></label>
           <label>Collection<select id="case-corpus"><option value="">All collections</option><option value="cib">CIB</option><option value="iran">Iran</option><option value="vietnam">Vietnam</option></select></label>
-          <label>Task<select id="case-task"><option value="">All tasks</option><option value="redaction">Redaction</option><option value="hypothesis">Hypothesis</option><option value="reconstruction">Reconstruction</option></select></label>
+          <label>Task<select id="case-task"><option value="">All tasks</option><option value="redaction">Redaction</option><option value="hypothesis">Hypothesis</option><option value="mosaic">Mosaic</option></select></label>
           <label>Find a question<input id="case-search" type="search" placeholder="Query or source document" autocomplete="off"></label>
         </div>
         <div id="case-list" class="case-list"></div>

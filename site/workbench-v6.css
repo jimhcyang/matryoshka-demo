@@ -51,6 +51,12 @@ select, input { width: 100%; min-width: 0; border: 1px solid #ccd8d6; border-rad
 .local-verdict-heading h2 { margin: 6px 0 10px; color: var(--verdict-accent); font: 700 clamp(26px,3vw,39px)/1.1 Georgia,serif; }
 .local-verdict-heading .eyebrow { letter-spacing: .16em; font-size: 11px; color: var(--verdict-accent); }
 .local-verdict-heading .note { font-size: 13px; color: var(--ink); }
+.local-verdict-hero { padding:18px 20px;gap:12px 22px; }
+.local-verdict-heading h2 { font-size:clamp(25px,2.7vw,34px); }
+.verdict-category-bar { height:25px; }
+.verdict-inspect { display:block;margin:7px 0 2px;font-size:10px;padding:4px 7px; }
+.detail-drawer[data-mode=scene] { position:fixed;top:72px;bottom:18px;height:calc(100dvh - 90px);width:min(410px,42vw);z-index:45;border:1px solid #adc6d0;border-radius:6px 0 0 6px; }
+@media(max-width:760px){.detail-drawer[data-mode=scene]{top:auto;bottom:0;width:100vw;height:43dvh;border-radius:9px 9px 0 0;}.detail-drawer[data-mode=scene]>header{padding:9px 12px}.detail-drawer[data-mode=scene] h2{font-size:18px}.detail-drawer[data-mode=scene] .detail-body{padding:12px;}}
 .presentation-caveats { margin-top: 14px; padding: 12px 14px; border: 1px solid #d4af65; border-left: 5px solid #ad761f; border-radius: 3px; background: #fff3d1; color: #644512; font-size: 13px; line-height: 1.55; overflow-wrap: anywhere; }
 .presentation-caveats h3 { margin: 0 0 9px; font-size: 15px; }
 .presentation-caveats h4 { margin: 0 0 4px; font-size: 13px; }

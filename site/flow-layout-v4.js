@@ -7,7 +7,7 @@ export function formatNumber(value,missing="Not supplied") {
 }
 export function formatTargetText(item={},task){
   const text=String(item.fill||item.label||item.id||'');
-  if(!['hypothesis','reconstruction'].includes(task))return text;
+  if(!['hypothesis','mosaic'].includes(task))return text;
   const labels={FOR:'SUPPORT',SUPPORT:'SUPPORT',SUPPORTED:'SUPPORT',AGAINST:'OPPOSE',COUNTER:'OPPOSE',OPPOSED:'OPPOSE',SOME:'PARTIAL',PARTIAL:'PARTIAL'};
   const direction=labels[String(item.direction||'').toUpperCase()];
   return text.replace(/^(FOR|SUPPORT|SUPPORTED|AGAINST|COUNTER|OPPOSED|SOME|PARTIAL)(\s*\/\s*)/,(all,raw,separator)=>labels[raw]===direction?labels[raw]+separator:all);

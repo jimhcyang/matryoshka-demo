@@ -17,8 +17,8 @@ export function coverage(value) {
 }
 export function localTaskVerdict(task,result={}) {
   const raw=result.native_verdict??result.status;
-  if(task!=="reconstruction")return direction(raw);
-  return ({COMPLETE:"Complete reconstruction",PARTIAL:"Partial reconstruction",INSUFFICIENT:"Unresolved reconstruction",MISSING:"Unresolved reconstruction"})[String(raw||"").toUpperCase()]||displayText(raw);
+  if(task!=="mosaic")return direction(raw);
+  return ({COMPLETE:"Complete Mosaic",PARTIAL:"Partial Mosaic",INSUFFICIENT:"Unresolved Mosaic",MISSING:"Unresolved Mosaic"})[String(raw||"").toUpperCase()]||displayText(raw);
 }
 export function factual(candidate={}) {
   const support=candidate.support_assessment||{},dims=candidate.support_dimensions||{};

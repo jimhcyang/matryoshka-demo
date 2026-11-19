@@ -7,7 +7,7 @@
   if (!/^https?:$/.test(base.protocol) || base.origin !== location.origin || !base.pathname.endsWith("/") || base.search || base.hash) throw new Error("The public site base must be a same-origin HTTP(S) directory");
   const originalFetch = window.fetch.bind(window), originalOpen = window.open.bind(window);
   const own = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
-  const pages = new Set(["/", "/index.html", "/workbench-v6.html", "/graph-full-v6.html"]);
+  const pages = new Set(["/", "/index.html", "/corpus-home.html", "/corpus-tour.html", "/workbench-v6.html", "/graph-full-v6.html"]);
   const guide = {config: "llm_readings", reading: "", route_index: "0"};
   const routes = {
     "/api/health": {defaults: {}, required: []},
@@ -32,6 +32,9 @@
     routes["/api/current/" + endpoint] = {defaults: {...old.defaults, config: "llm_readings"},
       required: [...new Set([...currentPins, ...old.required])], optional: old.optional || []};
   }
+  routes["/api/narrative-v1/manifest"] = {defaults: {}, required: []};
+  routes["/api/narrative-v1/trace"] = {defaults: {config: "llm_readings", reading: ""}, required: currentPins};
+  routes["/api/narrative-v1/presentation-context-sources"] = {defaults: {narrative_id: ""}, required: ["corpus"]};
   const isPDF = path => /^\/api\/(?:current\/)?cib-pdf$/.test(path);
   const deniedSegments = new Set(["private", ".git", ".env", "manuscripts", "manuscript", "raw_logs", "raw-logs", "requests", "responses", "api_keys", "node_modules"]);
   const limits = Object.freeze({manifestBytes: 32 * 1024 ** 2, chunkBytes: 16 * 1024 ** 2,
@@ -79,7 +82,7 @@
       }
       for (const [key, value] of Object.entries(spec.defaults)) if (!own(values, key)) values[key] = value;
       if (spec.required.some(k => !values[k])) fail("MISSING_PARAMETER", "A required saved-packet selector is missing");
-      if (path.startsWith("/api/current/")) {
+      if (path.startsWith("/api/current/") || path === "/api/narrative-v1/trace") {
         for (const pin of ["registry_sha256", "index_sha256"]) if (!/^[a-f0-9]{64}$/.test(values[pin])) fail("INVALID_PARAMETER", "Current-resource SHA256 pins are required");
         if (!/^[A-Za-z0-9_.:-]{1,240}$/.test(values.resource_id)) fail("INVALID_PARAMETER", "Invalid current-resource identifier");
       }
@@ -91,7 +94,7 @@
         if (!/^\d+$/.test(values[name]) || !Number.isSafeInteger(Number(values[name]))) fail("INVALID_PARAMETER", "Expected an unsigned integer");
         values[name] = String(Number(values[name]));
       }
-      if (own(values, "route_index") && Number(values.route_index) > 2) fail("INVALID_PARAMETER", "Only the three supplied route indices are supported");
+      if (own(values, "route_index") && Number(values.route_index) > 1000) fail("INVALID_PARAMETER", "Only finite exported route indices are supported");
       if (own(values, "corpus") && !["cib", "iran", "vietnam"].includes(values.corpus)) fail("INVALID_PARAMETER", "Unknown corpus");
       if (own(values, "revision") && values.revision !== "study") fail("INVALID_PARAMETER", "Unknown saved graph revision");
       if (own(values, "release") && !["earlier", "later"].includes(values.release)) fail("INVALID_PARAMETER", "Unknown release");

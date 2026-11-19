@@ -3,7 +3,7 @@ export const labels={evidence_backed_suggestion:"Evidence-backed suggestion",par
   exploratory_contextual:"Exploratory / contextual",incompatible_not_viable:"Incompatible / not viable"};
 export function decisionLabel(value,task=value?.task){
   if(task==="hypothesis")return assertionDecision(value,task).label;
-  if(task==="reconstruction")return assertionDecision(value,task).label;
+  if(task==="mosaic")return assertionDecision(value,task).label;
   return labels[value?.status]||"New local decision not published";
 }
 
@@ -41,8 +41,8 @@ export function currentPDFURL(input,{caseId,config,binding}={},base=globalThis.l
 }
 export function currentReportStatusBadge(row,config,verifiedVersion){
   const item=row?.configurations?.[config],task=row?.case?.task;
-  if(verifiedVersion!=='current-workbench-publication/1'||row?.current_resource_execution!==true||
-      !validResourceBinding(row.resource_binding)||!['hypothesis','reconstruction','redaction'].includes(task)||
+  if(!['current-workbench-publication/1','narrative-workbench-publication/1'].includes(verifiedVersion)||row?.current_resource_execution!==true||
+      !validResourceBinding(row.resource_binding)||!['hypothesis','mosaic','redaction'].includes(task)||
       !item||item.config!==config||!/^[a-f0-9]{64}$/.test(item.gate_sha256||'')||
       item.resource_binding&&canonicalGateJSON(item.resource_binding)!==canonicalGateJSON(row.resource_binding))return null;
   const status=item.local_decision_status;
@@ -51,6 +51,26 @@ export function currentReportStatusBadge(row,config,verifiedVersion){
   if(task==='hypothesis'&&status==='incompatible_not_viable')value={badge:'OPPOSE',tone:'opposed'};
   if(task==='hypothesis'&&status==='mixed_evidence')value={badge:'MIXED',tone:'mixed'};
   return value?{...value,basis:'pinned-overall-status',detail:'Published overall local decision from the verified report. Counts and per-reading details require loading this method; no confidence or correctness is inferred.'}:null;
+}
+export function publishedConditionStatus(row,config,verifiedVersion){
+  const item=row?.configurations?.[config];
+  const reference=ref=>typeof ref?.path==='string'&&!ref.path.startsWith('/')&&!/[\\?#:\u0000-\u001f]/.test(ref.path)&&
+    ref.path.split('/').every(part=>part&&part!=='.'&&part!=='..')&&/^[a-f0-9]{64}$/.test(ref.sha256||'');
+  if(verifiedVersion!=='narrative-workbench-publication/1'||row?.current_resource_execution!==true||
+      !validResourceBinding(row.resource_binding)||item?.config!==config||
+      !reference(item.native_checkpoint)||!reference(item.condition_ref)||
+      item.resource_binding&&canonicalGateJSON(item.resource_binding)!==canonicalGateJSON(row.resource_binding))return null;
+  return {badge:'SAVED RESULT',tone:'unresolved',basis:'pinned-saved-condition',
+    detail:'A saved condition and native checkpoint are published for this method. Open to load its verified local verdict; no support outcome is inferred.'};
+}
+export function readingLabel(reading={},ordinal=0,{branch=false}={}){
+  const form=({nominal:'noun phrase',noun_phrase:'noun phrase',possessive:'possessive phrase',adjectival:'adjective phrase',
+    verbal:'verb phrase',finite_clause:'finite clause',nonfinite_clause:'nonfinite clause',clausal:'clause',
+    adverbial:'adverb phrase',prepositional:'prepositional phrase'})[reading.form||reading.outer_family]||'form open';
+  const role=({possessor:'possessor',subject:'subject',object:'object',direct_object:'direct object',indirect_object:'indirect object',
+    modifier:'modifier',compound_modifier:'compound modifier',complement:'complement',predicate:'predicate',
+    predicate_complement:'predicate complement',adjunct:'adjunct'})[reading.function||reading.role]||'function open';
+  return `${branch?'Branch':'Reading'}${Number.isInteger(ordinal)&&ordinal>0?' '+ordinal:''}: ${role} / ${form}`;
 }
 export function verifyCurrentResourceResponse(url,value){
   const parsed=new URL(url,globalThis.location?.href||'https://matryoshka.invalid/');
@@ -61,7 +81,7 @@ export function verifyCurrentResourceResponse(url,value){
   for(const record of Object.values(value.configurations||{}))if(record&&typeof record==='object')verifiedCurrentRecords.set(record,binding);
   return value;
 }
-export async function adaptCurrentGuideOverlay(value,guide,{resourceBinding,viewer,resolveNode,resolveHierarchy}={}){
+function currentGuideEnvelope(value,guide,resourceBinding){
   const packet=guide.packet,scope=packet?.scope;
   const fail=message=>{throw Error('Current guide overlay rejected: '+message);};
   const equal=(a,b)=>a!=null&&b!=null&&canonicalGateJSON(a)===canonicalGateJSON(b);
@@ -71,8 +91,6 @@ export async function adaptCurrentGuideOverlay(value,guide,{resourceBinding,view
       !equal(value.resource_binding,packet?.resource_binding)||!equal(value.browser_binding,value.resource_binding)||
       !equal(value.study_binding,packet?.graph_binding)||!equal(value.binding,value.study_binding)||
       !equal(value.scope?.binding,value.study_binding))fail('resource pins or selected context differ');
-  if(value.browser_binding.graph_id!==viewer?.graph_run_id||value.browser_binding.hierarchy_id!==viewer?.hierarchy_run_id||
-      value.study_binding?.graph_id!==viewer?.graph_run_id||value.study_binding?.hierarchy_id!==viewer?.hierarchy_run_id)fail('loaded current graph/hierarchy differs');
   if(value.case_id!==packet.case_id||value.corpus!==packet.corpus||value.scope?.strictly_before!==scope?.strictly_before||
       value.scope?.whole_origin_excluded!==scope?.whole_origin_excluded||!scope?.strictly_before||!scope?.whole_origin_excluded)fail('case or strict source boundary differs');
   if(value.topology_replaced!==false||value.browser_export_verified!==false||value.layout_coordinates_reused!==false||
@@ -88,6 +106,20 @@ export async function adaptCurrentGuideOverlay(value,guide,{resourceBinding,view
         !/^[a-f0-9]{64}$/.test(p.page_sha256||'')||!Number.isInteger(p.start)||!Number.isInteger(p.end)||p.start<0||p.end<=p.start||
         typeof p.text!=='string'||Array.from(p.text).length!==p.end-p.start)fail('source quotation lacks exact eligible bounds');
   }
+  value.connections.forEach((connection,i)=>{
+    const hop=guide.hops[i];
+    if(connection.native_source!==hop.source||connection.native_target!==hop.target||connection.kind!==hop.kind||
+        connection.native_source_verified!==true||connection.browser_edge_verified!==false||
+        !Array.isArray(connection.browser_edge_ids)||connection.browser_edge_ids.length||
+        connection.browser_edge_proofs!=null&&(!Array.isArray(connection.browser_edge_proofs)||connection.browser_edge_proofs.length))fail('uncertified browser-edge correspondence claimed');
+    for(const p of connection.citations||[])proof(p);
+  });
+  return {fail,proof,eligible,groups,documents};
+}
+export async function adaptCurrentGuideOverlay(value,guide,{resourceBinding,viewer,resolveNode,resolveHierarchy}={}){
+  const {fail,proof,eligible,groups,documents}=currentGuideEnvelope(value,guide,resourceBinding);
+  if(value.browser_binding.graph_id!==viewer?.graph_run_id||value.browser_binding.hierarchy_id!==viewer?.hierarchy_run_id||
+      value.study_binding?.graph_id!==viewer?.graph_run_id||value.study_binding?.hierarchy_id!==viewer?.hierarchy_run_id)fail('loaded current graph/hierarchy differs');
   const mappings=[];
   for(const [i,m] of value.endpoint_mappings.entries()){
     if(m.native_id!==guide.nodes[i].id||m.label_join_used!==false)fail('native ID changed or a label join was attempted');
@@ -111,15 +143,60 @@ export async function adaptCurrentGuideOverlay(value,guide,{resourceBinding,view
       reason:record?'Exact known current ID; not a label remap':'Exact source ID absent from the loaded current map; no substitute inserted',
       browser_membership:record?Object.fromEntries(['domain_id','theme_id','community_id'].map(k=>[k,record[k]||null])):null});
   }
-  value.connections.forEach((connection,i)=>{
-    const hop=guide.hops[i];
-    if(connection.native_source!==hop.source||connection.native_target!==hop.target||connection.kind!==hop.kind||
-        connection.native_source_verified!==true||connection.browser_edge_verified!==false||
-        !Array.isArray(connection.browser_edge_ids)||connection.browser_edge_ids.length||
-        connection.browser_edge_proofs!=null&&(!Array.isArray(connection.browser_edge_proofs)||connection.browser_edge_proofs.length))fail('uncertified browser-edge correspondence claimed');
-    for(const p of connection.citations||[])proof(p);
-  });
   return {...value,endpoint_mappings:mappings,eligible,groups,documents,edges:new Map()};
+}
+export function adaptCurrentCaseGuideOverlay(value,guide,{resourceBinding}={}){
+  const {fail,proof,eligible,groups,documents}=currentGuideEnvelope(value,guide,resourceBinding);
+  if(!['iran','vietnam'].includes(guide.packet.corpus))fail('case-source navigator requires a cable corpus');
+  if(value.resource_binding.corpus!==guide.packet.corpus||
+      value.study_binding.graph_id!==value.resource_binding.graph_id||
+      value.study_binding.hierarchy_id!==value.resource_binding.hierarchy_id)fail('source resource and native hierarchy differ');
+  const mappings=value.endpoint_mappings.map((m,i)=>{
+    const id=guide.nodes[i].id,prefix=/^hierarchy:(domain|theme|community):(.+)$/.exec(id);
+    if(m.native_id!==id||m.label_join_used!==false)fail('native ID changed or a label join was attempted');
+    if(guide.lexical){
+      if(m.browser_id!==null||m.status!=='READOUT_NOT_A_GRAPH_STATE')fail('readout cannot become a graph identity');
+    }else if(prefix){
+      if(m.status!=='EXACT_CURRENT_HIERARCHY_ID'||m.browser_id!==prefix[2]||!groups.has(prefix[2]))fail('case hierarchy membership differs');
+    }else{
+      if(m.status!=='EXACT_BOUND_NODE_ID_WITH_ELIGIBLE_SOURCE'||m.browser_id!==id||!eligible.has(id)||
+          !Array.isArray(m.source_citations)||!m.source_citations.length)fail('case node is not exact and source-bound');
+      m.source_citations.forEach(proof);
+    }
+    return {...m,browser_id:null,case_context_id:guide.lexical?null:id,
+      reason:guide.lexical?'Source readout, not a graph state':'Exact case-source state; no standalone-map identity join'};
+  });
+  return {...value,endpoint_mappings:mappings,eligible,groups,documents,edges:new Map(),case_context:true};
+}
+export function verifyCurrentCaseGuideView(value,guide){
+  const fail=message=>{throw Error('Case-source view rejected: '+message);};
+  if(!guide.caseContext||value?.version!=='current-context-inspection/1'||value.lens!=='current_resource_case'||
+      canonicalGateJSON(value.resource_binding)!==canonicalGateJSON(guide.packet.resource_binding)||
+      canonicalGateJSON(value.binding)!==canonicalGateJSON(guide.packet.graph_binding)||
+      value.scope?.strictly_before!==guide.packet.scope.strictly_before||
+      value.scope?.whole_origin_excluded!==guide.packet.scope.whole_origin_excluded||
+      value.membership_is_factual!==false||value.saved_kernel_walk_reverified!==false)fail('source graph or case scope differs');
+  if(!Array.isArray(value.nodes)||!Array.isArray(value.edges)||!Number.isInteger(value.drawing_limit)||
+      value.drawing_limit<2||value.drawing_limit>2048||value.nodes.length>value.drawing_limit||
+      value.displayed_nodes!==value.nodes.length||value.available_nodes<value.nodes.length)fail('invalid displayed inventory');
+  const ids=new Set();
+  for(const node of value.nodes){
+    const prefix=/^hierarchy:(domain|theme|community):(.+)$/.exec(node.id||'');
+    if(ids.has(node.id)||!(prefix?guide.overlay.groups.has(prefix[2])&&String(node.type).toLowerCase()===prefix[1]:guide.overlay.eligible.has(node.id)))fail('node is outside the exact case resource');
+    ids.add(node.id);
+  }
+  if(!ids.has(value.focus_id))fail('focus is absent from the supplied view');
+  for(const edge of value.edges){
+    if(!ids.has(edge.source)||!ids.has(edge.target)||!['SOURCE','NAVIGATION','SOURCE_AGGREGATE'].includes(edge.kind))fail('edge escaped the displayed source view');
+    if(edge.kind==='SOURCE'&&(!Array.isArray(edge.citations)||!edge.citations.length))fail('source edge has no original quotation');
+    for(const p of edge.citations||[]){
+      if(!p.canonical_page_id||!guide.overlay.documents.has(p.document_id)||p.document_id===guide.packet.scope.whole_origin_excluded||
+          !(p.date<guide.packet.scope.strictly_before)||!/^[a-f0-9]{64}$/.test(p.page_sha256||'')||
+          !Number.isInteger(p.start)||!Number.isInteger(p.end)||p.start<0||p.end<=p.start||
+          typeof p.text!=='string'||Array.from(p.text).length!==p.end-p.start)fail('edge quotation lacks exact eligible bounds');
+    }
+  }
+  return value;
 }
 export function presentationTitle(row={}){
   const supplied=[row.presentation_title,row.display_title,row.case?.title,row.case?.query]
@@ -156,9 +233,9 @@ export function isCounterhypothesis(task,kind){
 }
 export function assertionDecision(unit,task){
   if(!unit)return {kind:"unresolved",label:"Unresolved"};
-  if(task==="reconstruction"){
+  if(task==="mosaic"){
     if(unit.counterevidence)return {kind:"conflict",label:"Conflicting evidence"};
-    if(unit.status===BACKED&&unit.coverage==="Established")return {kind:"supported",label:"Evidence-backed reconstruction"};
+    if(unit.status===BACKED&&unit.coverage==="Established")return {kind:"supported",label:"Evidence-backed Mosaic"};
     if(unit.coverage==="Partial"||unit.coverage==="Established")return {kind:"partial",label:"Partial"};
     return {kind:"unresolved",label:"Insufficient"};
   }
@@ -227,9 +304,9 @@ export function verdictSummary(record={},caseInfo={},reading=""){
   const total=units.length,complete=overall?.status===BACKED&&counts.supported===total;
   const opposed=counts.opposed||0,mixed=counts.mixed||0,crossMixed=overall?.status==='mixed_evidence'&&counts.supported>0&&opposed>0;
   let title,detail,tone;
-  if(task==="reconstruction"){
-    title=complete?"Evidence-backed reconstruction":counts.conflict?"Conflicting reconstruction":counts.supported||counts.partial?"Partial reconstruction":"Insufficient evidence";
-    detail=complete?"All recorded required assertions pass the scoped evidence checks. Additional chronology or causal claims are not implied.":`${counts.supported||0} of ${total} required assertions are evidence-backed. Reconstruct only those components; do not join unresolved details into a complete account.`;
+  if(task==="mosaic"){
+    title=complete?"Evidence-backed Mosaic":counts.conflict?"Conflicting Mosaic":counts.supported||counts.partial?"Partial Mosaic":"Insufficient evidence";
+    detail=complete?"All recorded required assertions pass the scoped evidence checks. Additional chronology or causal claims are not implied.":`${counts.supported||0} of ${total} required assertions are evidence-backed. Include only those source-backed components; do not join unresolved details into a complete account.`;
     tone=complete?"supported":counts.conflict?"opposed":"partial";
   }else{
     title=crossMixed?"Mixed across assertions":opposed?(opposed===total?"Opposed by eligible evidence":"Partial opposition"):
@@ -244,7 +321,7 @@ export function verdictSummary(record={},caseInfo={},reading=""){
 }
 
 function assertionSidebar(task,counts,total,overallStatus){
-  if(task==="reconstruction")return {badge:`R ${counts.supported||0}/${total}`,tone:counts.conflict?"opposed":counts.supported===total?"supported":"partial"};
+  if(task==="mosaic")return {badge:`M ${counts.supported||0}/${total}`,tone:counts.conflict?"opposed":counts.supported===total?"supported":"partial"};
   if(overallStatus==='mixed_evidence'&&counts.supported>0&&counts.opposed>0)return {badge:`MIXED ${counts.supported}S/${counts.opposed}O/${total-counts.supported-counts.opposed}U`,tone:'mixed'};
   const kind=counts.opposed?"opposed":counts.mixed?"mixed":counts.supported?"supported":counts.partial?"partial":counts.context?"context":"unresolved";
   const label={opposed:"OPPOSE",mixed:"CONFLICT",supported:"SUPPORT",partial:"PARTIAL",context:"CONTEXT",unresolved:"UNRESOLVED"}[kind];
@@ -278,13 +355,13 @@ export function sidebarDecisionSummary(value,caseInfo={},config,reading=""){
     typeof value.native_run_id!=="string"||!value.native_run_id||value.native_checksum==null||
     value.overall_status!==null&&typeof value.overall_status!=="string")throw Error("Sidebar decision has another case, method or provenance binding.");
   if(value.task!=="redaction"){
-    if(!["hypothesis","reconstruction"].includes(value.task))throw Error("Unsupported sidebar task.");
+    if(!["hypothesis","mosaic"].includes(value.task))throw Error("Unsupported sidebar task.");
     checkedCounts(value.counts,ASSERTION_COUNTS,"required");
     if(value.counts.required===0)throw Error("No required assertions are declared.");
-    if(value.task==="reconstruction"&&["opposed","mixed","context"].some(k=>value.counts[k]!==0)||value.task==="hypothesis"&&value.counts.conflict!==0)throw Error("Sidebar categories belong to another task.");
+    if(value.task==="mosaic"&&["opposed","mixed","context"].some(k=>value.counts[k]!==0)||value.task==="hypothesis"&&value.counts.conflict!==0)throw Error("Sidebar categories belong to another task.");
     const result=assertionSidebar(value.task,value.counts,value.counts.required,value.overall_status);
     const complete=value.overall_status===BACKED&&value.counts.supported===value.counts.required;
-    result.tone=value.task==="reconstruction"?(value.counts.conflict?"opposed":complete?"supported":"partial"):
+    result.tone=value.task==="mosaic"?(value.counts.conflict?"opposed":complete?"supported":"partial"):
       value.overall_status==='mixed_evidence'&&value.counts.supported>0&&value.counts.opposed>0?"mixed":value.counts.opposed?"opposed":value.counts.mixed?"mixed":complete?"supported":value.counts.supported||value.counts.partial?"partial":"unresolved";
     return {...result,available:true,detail:"Required assertions only; derived from the exact saved evidence checks."};
   }
