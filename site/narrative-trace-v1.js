@@ -355,7 +355,7 @@ export function mountEvidencePaths(host,{trace,selectedId,onSelect,onSource,onGu
       card.append(preview);
       const walkParams=new URLSearchParams({corpus:corpus||trace.corpus||trace.case?.corpus||new URLSearchParams(location.search).get('corpus')||'',walk_case:trace.case_id,walk_config:trace.config,walk_reading:trace.reading_id||'',walk_path:path.id});
       for(const key of ['resource_id','registry_sha256','index_sha256'])if(trace.resource_binding?.[key])walkParams.set(key,trace.resource_binding[key]);
-      card.append(node('a','Show path walkthrough in KG',{href:'graph-full-v6.html?'+walkParams,'data-testid':'kg-walk-link',class:'button'}));
+      card.append(node('a','Show path walkthrough in KG',{href:'graph-full-v6.html?'+walkParams+'#saved-kg-walk','data-testid':'kg-walk-link',class:'button'}));
       for(const proof of sourceRefs(trace,path.decision_source_refs||path.source_refs))card.append(sourceControl(proof,onSource));
       if(path.route_mode!=="DIRECT_SOURCE_HANDOFF"&&path.graph_hops!==0)
         card.append(action("Guide Path in Corpus Map",()=>onGuide?.({path,route_index:path.guide_route_index??path.route_index??i}),{"data-testid":"narrative-guide-path"}));

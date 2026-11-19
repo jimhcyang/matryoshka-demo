@@ -4,7 +4,7 @@ import {direction as humanDirection,displayText,coverage as recordedCoverage,loc
 import {decisionLabel,packetFor,unitFor,overviewFor,reviewDisclosure,guideDisclosure,routeProvenance,exactGateReview,verdictSummary,exactOriginAnchors,sidebarDecisionSummary,decisionSummaryFor,preferredReading,canonicalGateJSON,isCounterhypothesis,presentationDecisionReview,presentationTitle,hasRequestedAnalystDigest,hypothesisReadout,assertionDecision,currentResourceURL,verifyCurrentResourceResponse,readingExplanation,currentPDFURL,currentReportStatusBadge,publishedConditionStatus,readingLabel} from "./local-decisions-v65.js";
 import {preparePostrunReview,verifyPostrunReview} from "./postrun-review-v74.js";
 import {savedEndpointForPath,verifyEndpointPacket,verifyEndpointSource,endpointInspectionURL} from "./narrative-endpoint-v1.js";
-import {validateManifest,validateTrace,narrativeTraceURL,originTranscriptSegments,mountTrace,mountEvidencePaths,renderScorecards,renderDigest,decisionTerms} from "./narrative-trace-v1.js";
+import {validateManifest,validateTrace,narrativeTraceURL,originTranscriptSegments,mountTrace,mountEvidencePaths,renderScorecards,renderDigest,decisionTerms} from "./narrative-trace-v1.js?v=kg-walk-access2";
 import {contextSections} from "./narrative-context-v1.js";
 import {validatePrivacyContract,hasOpenedResult,markOpenedResult,storyAccess,acknowledgeStoryReveal} from "./narrative-attempts-v1.js";
 import {ADDITIONAL_COLLECTION,questionCollection} from './narrative-collections-v1.js';
@@ -390,6 +390,25 @@ for(const id of ["#case-show","#case-corpus","#case-task"])$(id).addEventListene
 $("#case-search").addEventListener("input",renderRail);
 $("#arm-select").addEventListener("change",()=>viewportAnchor.run(async()=>{state.arm=$("#arm-select").value;state.reading="";state.candidate="";if(state.row)await chooseCase(list(state.report.cases).find(r=>r.case.case_id===state.row.case.case_id));}));
 
+function activeKGWalkthroughPath(){
+  const trace=state.trace;
+  if(!trace||trace.case_id!==state.row?.case.case_id||trace.reading_id!==state.reading)return null;
+  return state.candidate?trace.paths.find(path=>path.candidate_or_atom_id===state.candidate||path.candidate_or_atom_id===state.reading+'/'+state.candidate):trace.paths[0];
+}
+function updateKGWalkthroughButtons(){
+  const path=activeKGWalkthroughPath();
+  document.querySelectorAll('[data-kg-walk-shortcut]').forEach(control=>{control.disabled=!path;control.title=path?'Open the saved step table on the KG page':'No saved source path is available for the selected target and reading.';});
+}
+function kgWalkthroughButton(place){
+  const control=button('Open KG step walkthrough',()=>{
+    const path=activeKGWalkthroughPath();if(!path)return;
+    const params=new URLSearchParams({corpus:state.row.case.corpus,walk_case:state.row.case.case_id,walk_config:ARMS[state.arm].key,walk_reading:state.reading||'',walk_path:path.id});
+    for(const key of ['resource_id','registry_sha256','index_sha256'])params.set(key,state.row.resource_binding[key]);
+    location.assign('graph-full-v6.html?'+params+'#saved-kg-walk');
+  },'primary',{'data-kg-walk-shortcut':place,'data-testid':'kg-walk-'+place});
+  control.disabled=true;return control;
+}
+
 function renderWorkspace() {
   destroyVisuals();
   const host=$("#case-view");host.replaceChildren();host.setAttribute("aria-busy",String(state.loading));
@@ -399,6 +418,7 @@ function renderWorkspace() {
   const c=state.row.case;
   const hero=el("header",null,{class:"case-hero"});hero.append(el("p",`${CORPORA[c.corpus]} / ${TASKS[c.task]}`,{class:"eyebrow"}),el("h1",title(state.row)));
   const meta=el("div",null,{class:"case-meta"});meta.append(el("span",c.document_id),el("span",c.date),el("span",ARMS[state.arm].name));hero.append(meta);host.append(hero);
+  if(state.saved&&hasOpenedResult(state.report,state.row)){const actions=el('div',null,{class:'actions'});actions.append(kgWalkthroughButton('top'));hero.append(actions);}
   const introduction=contextSections(state.report,state.row);if(introduction)host.append(introduction);
   if(!hasOpenedResult(state.report,state.row)){
     const preview=el("section",null,{class:"stage-card saved-result-entry","data-testid":"saved-result-entry"});
@@ -913,7 +933,7 @@ async function hydrateNarrativeTrace(epoch){
       query_sha256:decisionPacket()?.query_sha256,native_checkpoint:state.saved.native_checkpoint,resource_binding:state.saved.resource_binding||state.row.resource_binding};
     expected.task=state.row.case.task;expected.strictly_before=state.row.case.date;expected.whole_origin_excluded=state.row.case.document_id;
     expected.allowed_endpoint_ids=state.row.case.task==='redaction'?candidates().flatMap(item=>[item.id,state.reading+'/'+item.id]):list(state.saved.result.atoms).map(atom=>atom.id);
-    const trace=validateTrace(envelope,expected);state.trace=trace;host.dataset.readingId=state.reading;
+    const trace=validateTrace(envelope,expected);state.trace=trace;host.dataset.readingId=state.reading;updateKGWalkthroughButtons();
     const safe=fn=>(...args)=>{if(epoch===state.epoch)fn(...args);};
     state.flow=mountTrace(host,{trace,preserveViewport:fn=>viewportAnchor.run(fn),onDismiss:closeDrawer,onSource:safe(sourceDrawer),onNode:safe(value=>{
       if(value.is_graph_node===true)nodeDrawer(value,{modeless:true});
@@ -1038,6 +1058,7 @@ async function hydrateFlow(epoch,{expanded=false}={}) {
 function renderPathsStage() {
   const s=stage("04","Follow the sources","Paths are not proof");s.outer.setAttribute("data-testid","paths-stage");
   if(isNarrativePublication()){
+    s.body.append(kgWalkthroughButton('stage'));
     s.body.append(note("Selected final-evidence routes, not arbitrary search branches. Direct source readouts do not acquire fictional graph hops."),el("div",null,{id:"retrieval-paths-v6"}));
     return s.outer;
   }
@@ -1105,7 +1126,7 @@ function selectCandidate(id,{fromFlow=false}={}) {
     if(row.reading.id!==state.reading){openDrawer("A different reading is required","Only Stage 02 changes the active reading",box(note(`This target belongs to ${row.reading.id}; the active reading is ${state.reading}. Choose its reading explicitly in Stage 02.`),button("Go to Stage 02",()=>{closeDrawer();stagePosition("02");$("[data-testid=plan-reading-select]")?.focus({preventScroll:true});})));return;}
   }else if(!flowItems().some(a=>a.id===id))return;
   state.candidate=id;savePosition();renderResultBody();renderPaths();if(!isNarrativePublication())renderDecisionGuide();
-  state.flow?.selectCandidate?.(id);state.paths?.selectCandidate?.(id);
+  state.flow?.selectCandidate?.(id);state.paths?.selectCandidate?.(id);updateKGWalkthroughButtons();
 }
 async function changeReading() {
   clearIndependentReview();state.epoch++;state.projection=null;state.trace=null;
