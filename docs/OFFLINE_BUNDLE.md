@@ -1,5 +1,10 @@
 # Explicit OFFLINE Static Demo Bundle
 
+**Archived workflow.** The source pin below belongs to an earlier presentation.
+Do not run it against the current site. For current saved local viewing, use
+the repository-root README and `release-tools/serve_static.py`; see
+[Current Release](CURRENT_RELEASE.md).
+
 The **full native query engine is NOT included**. This is a separately
 versioned, derived viewer for the **saved workbench only**, plus current CIB
 and retained Iran/Vietnam corpus exploration. It is a literal hash-and-file-copy

@@ -77,6 +77,10 @@ def main():
                 params = {k:v[0] for k,v in parse_qs(urlsplit(key).query, keep_blank_values=True).items()}
                 trace = json.loads(reader.read(entry))
                 saved = next(r for r in report['cases'] if r['case']['case_id'] == params['case_id'])
+                if trace['reading_id'] != params['reading']:
+                    # Default aliases resolve to a named reading; UI links use its explicit ID.
+                    assert params['reading'] == '' and saved['case']['task'] == 'redaction'
+                    continue
                 for path in trace['paths']:
                     steps = [next(s for s in trace['steps'] if s['id']==identity) for identity in path['steps']]
                     true = [(i,n) for i,s in enumerate(steps) for n in s['nodes'] if n.get('is_graph_node') is True]

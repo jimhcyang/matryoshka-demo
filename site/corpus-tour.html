@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script src="runtime/public-runtime.js" data-dataset-mirror="same-repository" data-index="data/api-index.json" data-index-sha256="5a284ed4383118ed5bf1ad7d6bc7ebdf0b0c9b278c1fbb7f16ec16294bee5c8a"></script>
+<script src="runtime/public-runtime.js" data-dataset-mirror="same-repository" data-index="data/api-index.json" data-index-sha256="55010cf870bd4ce46cae48011fb0a39aa94a6108b9172167947ac33c17be4b59"></script>
 <link rel="stylesheet" href="public-transport.css">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -12,13 +12,12 @@
   <link rel="stylesheet" href="corpus-home.css">
   <link rel="stylesheet" href="corpus-tour.css">
   <link rel="stylesheet" href="narrative-context-v1.css">
+  <link rel="stylesheet" href="app-navigation.css">
   <script type="module" src="corpus-tour.js"></script>
 </head>
 <body>
-  <header class="home-nav">
-    <a class="wordmark" href="index.html" aria-label="Matryoshka home"><span class="monogram" aria-hidden="true">M</span>Matryoshka</a>
-    <nav aria-label="Primary navigation"><a id="tour-map" href="graph-full-v6.html">Knowledge graph</a><a id="tour-workbench" href="workbench-v6.html">Analyst workbench</a><a href="index.html">Corpus home</a></nav>
-  </header>
+  <header id="app-navigation" data-view="home"></header>
+  <script src="app-navigation.js"></script>
   <main class="tour-main">
     <nav id="tour-corpora" class="tour-corpora" aria-label="Choose a collection"></nav>
     <section aria-labelledby="tour-title">

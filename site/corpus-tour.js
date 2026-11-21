@@ -1,4 +1,4 @@
-import {CORPORA,TASKS,loadSavedCatalog,savedStoryQuestion,savedQuestionURL} from './narrative-catalog-v1.js';
+import {CORPORA,TASKS,loadSavedCatalog,savedInvestigation,savedStoryQuestion,savedQuestionURL} from './narrative-catalog-v1.js';
 import {contextSections} from './narrative-context-v1.js';
 
 const descriptions={
@@ -51,9 +51,9 @@ async function start(){
   for(const [id,label] of CORPORA){const link=node('a',label);link.href='corpus-tour.html?'+new URLSearchParams({corpus:id});if(id===corpus)link.setAttribute('aria-current','page');document.querySelector('#tour-corpora').append(link);}
   if(!entry||params.getAll('corpus').length!==1){status.textContent='Choose a collection above. No story or graph is substituted.';status.dataset.status='unavailable';return;}
   const graph='graph-full-v6.html?'+new URLSearchParams({corpus});
-  document.querySelector('#tour-map').href=graph;
+  document.querySelector('#nav-graph').href=graph;
   try{
-    const {manifest,report}=await loadSavedCatalog(),story=(report.investigations||manifest.investigations)?.[corpus];
+    const {report}=await loadSavedCatalog(),story=savedInvestigation(report,corpus);
     document.querySelector('#tour-collection').textContent=entry[1];
     document.querySelector('#tour-title').textContent=story?.title||'Explore this collection';
     const introduction=contextSections(report,{case:{corpus},narrative_id:story?.id});if(introduction)status.before(introduction);
@@ -70,7 +70,7 @@ async function start(){
     for(const {task,label,match} of matches)document.querySelector('#tour-steps').append(questionStep(match,task,label));
     document.querySelector('#tour-questions').hidden=!matches.length;
     document.querySelector('#tour-limit').hidden=false;
-    if(matches.length)document.querySelector('#tour-workbench').href=savedQuestionURL(matches[0].match);
+    if(matches.length)document.querySelector('#nav-workbench').href=savedQuestionURL(matches[0].match);
     status.textContent=matches.length?`${matches.length} saved ${story?.collection==='bench'?'bench':'starter'} tasks in this investigation. Start with the map, then open the available questions below.`:
       'No source-bound saved starter is published for this story. The existing corpus map remains available for general exploration.';
     status.dataset.status='ready';

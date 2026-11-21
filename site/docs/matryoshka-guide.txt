@@ -39,11 +39,15 @@ Redaction readings
 
 The saved reading describes final inserted form, sentence function, possible target kind and number, with exact visible cues. An actor, possessor, example, or noun modifier is not interchangeable with the others. Unsupported or ambiguous readings can remain empty; the system need not try every form.
 
+The local reading control uses the same fixed reading menu as the model control. spaCy token, dependency and noun-phrase analyses describe the visible slot boundaries; they do not discover a hidden answer. A saved model reading is not replaced by a local reading during execution. The selected cases show the model-reading condition, not a completed comparison of all planning controls.
+
 Source wording first; complete sentence next
 
 Proposals come from source-bound spans. A literal proper-name prefix before an ordinary noun can nominate a compound modifier when the complete owned structure is retained. This does not license clipping a person's name, moving words across sentences, removing uncertainty or borrowing another owner's relation. A proposal still needs the unchanged final-form, head-kind, joint-slot and factual checks. A noun match can help context ordering without certifying the missing fact.
 
 Nomination is not acceptance. A grammatical completion may remain contextual, partly grounded, withheld by a source-layout policy, or unsupported. New grammar does not create historical evidence or override a saved hold.
+
+A narrow optional role control handles uppercase source parses: an exact visible person's complete name must be directly apposed to the complete source role and the inserted role. All exact ordinary-noun senses of its head must denote a person. A leading noun title needs a whole-name PERSON span. The original missing type is retained; this permits context only, never a signed factual decision. Fresh source and completed-sentence revalidation precede its contextual preference; factual support tiers remain first.
 
 Mosaic and Hypothesis use independently checkable declarative requirements, not redaction readings. Conjunction does not by itself establish a causal link, same event or shared open identity across two different sources.
 
@@ -52,9 +56,11 @@ Search scores are not historical proof
 Text ranking finds pages. Graphs organize and connect them. Quotations support claims.
 
 Mechanism: BM25 | What it does: Ranks eligible text by word matches, with term-frequency and document-length adjustment. | What it does not establish: That the matched passage says the required fact.
-Mechanism: RRF | What it does: Combines ranked lists. Each list contributes 1 / (60 + rank) in the inspected implementation. | What it does not establish: A correctness probability or a universal score across runs.
+Mechanism: RRF | What it does: Combines ranked lists using weight / (60 + rank). Explicit weighted controls retain their saved weights. | What it does not establish: A correctness probability or a universal score across runs.
 Mechanism: Hierarchy + diffusion | What it does: Spreads query influence over eligible nodes and hierarchy memberships, then helps rank source pages. | What it does not establish: A new historical relation between members of a group.
 Mechanism: Direct source edge | What it does: A typed relation with bound endpoints, direction and an eligible quotation. | What it does not establish: An answer without actor, time, attribution and scope checks.
+
+BM25 uses k1 = 1.2 and b = 0.75. Query-conditioned diffusion restarts 15% at the public search prior and transports 85% through eligible connections. A graph-share control changes lexical/graph rank fusion, not the diffusion restart. The default and explicitly weighted discovery controls are separate configurations.
 
 Which path am I seeing?
 
@@ -75,6 +81,8 @@ Literal proposals -> Source families -> Check allocation -> Insertion + evidence
 
 Finite checks per reading balance primary sources and supplemental visible cues. Source-family diversity reduces repeated checks. The saved run records allocation, inspected pages and unassessed remainder; budgets and optional profiles can differ.
 
+The bounded release controls admit up to 40 documents and retain 80 top passage readouts. Other eligible pages of those admitted documents can remain in the construction pool. A cheap scan considers up to 512 such pages; redaction parses up to 32 pages and checks up to 64 proposals per reading. Half the page and check capacity can target literal focal clues, with the primary lane preserved. These are computational budgets, not statistically calibrated thresholds.
+
 Redaction label: Evidence-backed suggestion | What can be concluded: Recorded focal source checks pass in the stated scope. Not proof of the hidden original word.
 Redaction label: Partial grounding | What can be concluded: Some evidence is present; the complete missing assertion is not established.
 Redaction label: Contextual suggestion | What can be concluded: A source-attested compatible lead, without focal factual support.
@@ -91,6 +99,8 @@ Saved outcome: Unresolved | Meaning: No sufficient signed result in the checked 
 Coverage is not confidence. Even all clauses supported can leave an unbound shared actor/event or incomplete counter-scope check. Support, checked-pool coverage and recommendation stay separate.
 
 Optional context fit describes saved overlap, relation, role, type and rank. Its authored weights are not probabilities and cannot override gates. Missing is not a mismatch. Case pages print saved values only; absent scores say 'Not recorded'.
+
+Where a complete saved order is available, its final-order index is 100 times (D - r) / (D - 1), with D distinct complete ordering keys and r the key's rank. A singleton uses the full display scale. This is pool-relative ordinal placement, not evidence strength or comparable confidence across cases. Historical results retain their original engines, source gates and recorded ordering.
 
 Time and origins: what was allowed?
 -----------------------------------
@@ -166,13 +176,13 @@ form=prepositional; function=example_member; target_kind=any; grammatical_number
 
 Proposal 1: like former President Harmodio Arias
 
-Saved features: retrieval page rank = 36; retrieval page score = 0.01639344262295082; focal context coverage = 2; focal term count = 8; source owned relation match = False; source type match = True
+Saved features: retrieval page rank = 36; retrieval page score = 0.02; focal context coverage = 2; focal term count = 8; source owned relation match = False; source type match = True
 
-Saved context-fit index: 0.35277777777777775
+Saved context-fit index: 0.35
 
 Saved rubric: sum(weight*effective_value)/sum(non_NA_weight)
 
-Recorded rubric terms: focal_overlap [RECORDED, weight 0.4, contribution 0.1]; own_relation [RECORDED, weight 0.25, contribution 0.0]; own_role [RECORDED, weight 0.15, contribution 0.15]; own_type [RECORDED, weight 0.1, contribution 0.1]; retrieval_rank [RECORDED, weight 0.1, contribution 0.002777777777777778]
+Recorded rubric terms: focal_overlap [RECORDED, weight 0.40, contribution 0.10]; own_relation [RECORDED, weight 0.25, contribution 0.00]; own_role [RECORDED, weight 0.15, contribution 0.15]; own_type [RECORDED, weight 0.10, contribution 0.10]; retrieval_rank [RECORDED, weight 0.10, contribution 2.78e-03]
 
 Descriptive ordering/context only. The saved support decision remains exploratory_contextual.
 
@@ -232,13 +242,13 @@ form=nominal; function=argument; target_kind=any; grammatical_number=unknown
 
 Proposal 1: the air force commander
 
-Saved features: retrieval page rank = 1; retrieval page score = 0.022722330941509022; focal context coverage = 1; focal term count = 20; source owned relation match = False; source type match = False
+Saved features: retrieval page rank = 1; retrieval page score = 0.02; focal context coverage = 1; focal term count = 20; source owned relation match = False; source type match = False
 
-Saved context-fit index: 0.03333333333333334
+Saved context-fit index: 0.03
 
 Saved rubric: sum(weight*effective_value)/sum(non_NA_weight)
 
-Recorded rubric terms: focal_overlap [RECORDED, weight 0.4, contribution 0.020000000000000004]; own_relation [RECORDED, weight 0.25, contribution 0.0]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.0]; own_type [NOT_APPLICABLE, weight 0.1, contribution 0.0]; retrieval_rank [RECORDED, weight 0.1, contribution 0.005000000000000001]
+Recorded rubric terms: focal_overlap [RECORDED, weight 0.40, contribution 0.02]; own_relation [RECORDED, weight 0.25, contribution 0.00]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.00]; own_type [NOT_APPLICABLE, weight 0.10, contribution 0.00]; retrieval_rank [RECORDED, weight 0.10, contribution 0.01]
 
 Descriptive ordering/context only. The saved support decision remains exploratory_contextual.
 
@@ -290,13 +300,13 @@ form=nominal; function=coordinate_member; target_kind=any; grammatical_number=un
 
 Proposal 1: and Betancourt
 
-Saved features: retrieval page rank = 9; retrieval page score = 0.02442002442002442; focal context coverage = 5; focal term count = 22; source owned relation match = False; source type match = False
+Saved features: retrieval page rank = 9; retrieval page score = 0.02; focal context coverage = 5; focal term count = 22; source owned relation match = False; source type match = False
 
-Saved context-fit index: 0.12457912457912458
+Saved context-fit index: 0.12
 
 Saved rubric: sum(weight*effective_value)/sum(non_NA_weight)
 
-Recorded rubric terms: focal_overlap [RECORDED, weight 0.4, contribution 0.09090909090909091]; own_relation [RECORDED, weight 0.25, contribution 0.0]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.0]; own_type [NOT_APPLICABLE, weight 0.1, contribution 0.0]; retrieval_rank [RECORDED, weight 0.1, contribution 0.002525252525252525]
+Recorded rubric terms: focal_overlap [RECORDED, weight 0.40, contribution 0.09]; own_relation [RECORDED, weight 0.25, contribution 0.00]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.00]; own_type [NOT_APPLICABLE, weight 0.10, contribution 0.00]; retrieval_rank [RECORDED, weight 0.10, contribution 2.53e-03]
 
 Descriptive ordering/context only. The saved support decision remains exploratory_contextual.
 
@@ -358,13 +368,13 @@ form=adjectival; function=modifier; target_kind=any; grammatical_number=unknown
 
 Proposal 1: corrupt
 
-Saved features: retrieval page rank = 18; retrieval page score = 0.022209165687426556; focal context coverage = 2; focal term count = 21; source owned relation match = False; source type match = False
+Saved features: retrieval page rank = 18; retrieval page score = 0.02; focal context coverage = 2; focal term count = 21; source owned relation match = False; source type match = False
 
-Saved context-fit index: 0.05149911816578484
+Saved context-fit index: 0.05
 
 Saved rubric: sum(weight*effective_value)/sum(non_NA_weight)
 
-Recorded rubric terms: focal_overlap [RECORDED, weight 0.4, contribution 0.0380952380952381]; own_relation [RECORDED, weight 0.25, contribution 0.0]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.0]; own_type [NOT_APPLICABLE, weight 0.1, contribution 0.0]; retrieval_rank [RECORDED, weight 0.1, contribution 0.0005291005291005291]
+Recorded rubric terms: focal_overlap [RECORDED, weight 0.40, contribution 0.04]; own_relation [RECORDED, weight 0.25, contribution 0.00]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.00]; own_type [NOT_APPLICABLE, weight 0.10, contribution 0.00]; retrieval_rank [RECORDED, weight 0.10, contribution 5.29e-04]
 
 Descriptive ordering/context only. The saved support decision remains exploratory_contextual.
 
@@ -420,7 +430,7 @@ form=nominal; function=possessor; target_kind=any; grammatical_number=unknown
 
 Proposal 1: the American military attache's
 
-Saved features: retrieval page rank = 13; retrieval page score = 0.021083133493205435; focal context coverage = 1; source owned relation match = False; source type match = True
+Saved features: retrieval page rank = 13; retrieval page score = 0.02; focal context coverage = 1; source owned relation match = False; source type match = True
 
 Descriptive ordering/context only. The saved support decision remains exploratory_contextual.
 
@@ -529,13 +539,13 @@ form=adjectival; function=modifier; target_kind=any; grammatical_number=unknown
 
 Proposal 1: easily politically manipulated
 
-Saved features: retrieval page rank = 3; retrieval page score = 0.026919758412424506; focal context coverage = 3; focal term count = 16; source owned relation match = True; source type match = True
+Saved features: retrieval page rank = 3; retrieval page score = 0.03; focal context coverage = 3; focal term count = 16; source owned relation match = True; source type match = True
 
-Saved context-fit index: 0.5392156862745099
+Saved context-fit index: 0.54
 
 Saved rubric: sum(weight*effective_value)/sum(non_NA_weight)
 
-Recorded rubric terms: focal_overlap [RECORDED, weight 0.4, contribution 0.07500000000000001]; own_relation [RECORDED, weight 0.25, contribution 0.25]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.0]; own_type [RECORDED, weight 0.1, contribution 0.1]; retrieval_rank [RECORDED, weight 0.1, contribution 0.03333333333333333]
+Recorded rubric terms: focal_overlap [RECORDED, weight 0.40, contribution 0.08]; own_relation [RECORDED, weight 0.25, contribution 0.25]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.00]; own_type [RECORDED, weight 0.10, contribution 0.10]; retrieval_rank [RECORDED, weight 0.10, contribution 0.03]
 
 Descriptive ordering/context only. The saved support decision remains evidence_backed_suggestion.
 
@@ -553,13 +563,13 @@ form=nominal_specifier; function=specifier; target_kind=any; grammatical_number=
 
 Proposal 1: 6
 
-Saved features: retrieval page rank = 3; retrieval page score = 0.026919758412424506; focal context coverage = 5; focal term count = 16; source owned relation match = False; source type match = False
+Saved features: retrieval page rank = 3; retrieval page score = 0.03; focal context coverage = 5; focal term count = 16; source owned relation match = False; source type match = False
 
-Saved context-fit index: 0.18055555555555555
+Saved context-fit index: 0.18
 
 Saved rubric: sum(weight*effective_value)/sum(non_NA_weight)
 
-Recorded rubric terms: focal_overlap [RECORDED, weight 0.4, contribution 0.125]; own_relation [RECORDED, weight 0.25, contribution 0.0]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.0]; own_type [NOT_APPLICABLE, weight 0.1, contribution 0.0]; retrieval_rank [RECORDED, weight 0.1, contribution 0.010416666666666666]
+Recorded rubric terms: focal_overlap [RECORDED, weight 0.40, contribution 0.12]; own_relation [RECORDED, weight 0.25, contribution 0.00]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.00]; own_type [NOT_APPLICABLE, weight 0.10, contribution 0.00]; retrieval_rank [RECORDED, weight 0.10, contribution 0.01]
 
 Descriptive ordering/context only. The saved support decision remains exploratory_contextual.
 
@@ -593,24 +603,25 @@ The CGTS, which has operated virtually without government restrictions since the
 
 Quotations are copied from the pinned public condition, not independently replayed against raw source pages by this generator. A source citation is not automatically a support citation. No original retrieval walk is inferred. Mask markers are displayed without transport IDs. PDF punctuation may be typographically normalized; the UTF-8 text retains source punctuation.
 
-Religious teaching relationships
---------------------------------
+Haeri's father and Khomeini: a source-ascribed teaching relationship
+--------------------------------------------------------------------
 Saved case snapshot | IRAN | Hypothesis
 
 Question
 
-Haeri's father taught Khomeini. Haeri was a student of Khomeini.
+Haeri's father taught Khomeini.
 
 Saved task outcome: SUPPORTED. Display decision: evidence_backed_suggestion. Method: llm_readings.
 
 Cutoff: 1979-06-01; focal origin: 1979STATE139731. All contributing origins must be excluded by the saved source policy. This guide does not infer additional origins or re-audit eligibility.
 
-Source review unresolved. The saved local verdict is unchanged. Independent review has not cleared its source scope; inspect the complete quotation context before relying on this result.
+Source-Ascribed Support
 
-Saved supported/required clauses: 2/2; joint scope complete: True. Counts are not confidence.
+The January 15 CONF cable forwards Armin Meyer's unhedged statement that Haeri's father taught Khomeini at Qum; this is source-ascribed support, not independently verified world truth.
+
+Saved supported/required clauses: 1/1; joint scope complete: True. Counts are not confidence.
 
 Requirement: Haeri's father taught Khomeini. | Status: SUPPORT | Evidence state: SUPPORTED | Required: Yes
-Requirement: Haeri was a student of Khomeini. | Status: SUPPORT | Evidence state: SUPPORTED | Required: Yes
 
 Score explanation: requirement states and whole-query binding checks decide support; retrieval scores do not vote on truth. No confidence percentage is inferred.
 
@@ -621,26 +632,6 @@ Saved source quotations
 Saved use: Requirement 1 / saved status SUPPORT; Requirement 1 / recorded direction SUPPORT
 
 HAERI'S FATHER TAUGHT KHOMEINI AT QUM.
-
-2. 1979STATE093115 | 1979-04-13 | segment_e9dd21de11a4ce32a4cc | original span [4, 301)
-
-Saved use: Requirement 2 / saved status SUPPORT; Requirement 2 / recorded direction PARTIAL
-
-ON APRIL 12, DEPTOFF (PRECHT) MET WITH MEHDI HAERI-YAZDI
-WHO HAS BEEN APPOINTED AS PERSONAL REPRESENTATIVE OF
-KHOMEINI AND SANJABI IN THE U.S.  HAERI, A VISITING SCHOLAR
-OF ISLAMIC PHILOSOPHY AT GEORGETOWN UNIVERSITY, WAS A LONG-
-TIME STUDENT OF KHOMEINI AND HAERI'S FATHER WAS KHOMEINI'S
-TEACHER.
-
-3. 1979STATE093115 | 1979-04-13 | segment_e9dd21de11a4ce32a4cc | original span [148, 301)
-
-Saved use: Requirement 2 / saved status SUPPORT; Requirement 2 / recorded direction SUPPORT
-
-HAERI, A VISITING SCHOLAR
-OF ISLAMIC PHILOSOPHY AT GEORGETOWN UNIVERSITY, WAS A LONG-
-TIME STUDENT OF KHOMEINI AND HAERI'S FATHER WAS KHOMEINI'S
-TEACHER.
 
 Quotations are copied from the pinned public condition, not independently replayed against raw source pages by this generator. A source citation is not automatically a support citation. No original retrieval walk is inferred. Mask markers are displayed without transport IDs. PDF punctuation may be typographically normalized; the UTF-8 text retains source punctuation.
 
@@ -726,13 +717,13 @@ form=nominal; function=argument; target_kind=person; grammatical_number=singular
 
 Proposal 1: YAZDI
 
-Saved features: retrieval page rank = 10; retrieval page score = 0.024497309544038517; focal context coverage = 1; focal term count = 13; source owned relation match = False; source type match = True
+Saved features: retrieval page rank = 10; retrieval page score = 0.02; focal context coverage = 1; focal term count = 13; source owned relation match = False; source type match = True
 
-Saved context-fit index: 0.039230769230769236
+Saved context-fit index: 0.04
 
 Saved rubric: sum(weight*effective_value)/sum(non_NA_weight)
 
-Recorded rubric terms: focal_overlap [RECORDED, weight 0.4, contribution 0.03076923076923077]; own_relation [RECORDED, weight 0.25, contribution 0.0]; own_role [RECORDED, weight 0.15, contribution 0.0]; own_type [RECORDED, weight 0.1, contribution 0.007692307692307693]; retrieval_rank [RECORDED, weight 0.1, contribution 0.0007692307692307693]
+Recorded rubric terms: focal_overlap [RECORDED, weight 0.40, contribution 0.03]; own_relation [RECORDED, weight 0.25, contribution 0.00]; own_role [RECORDED, weight 0.15, contribution 0.00]; own_type [RECORDED, weight 0.10, contribution 0.01]; retrieval_rank [RECORDED, weight 0.10, contribution 7.69e-04]
 
 Descriptive ordering/context only. The saved support decision remains exploratory_contextual.
 
@@ -917,27 +908,37 @@ THE ISLAMIC MOVEMENT, A ROLE HE APPARENTLY STILL PLAYS.
 
 Quotations are copied from the pinned public condition, not independently replayed against raw source pages by this generator. A source citation is not automatically a support citation. No original retrieval walk is inferred. Mask markers are displayed without transport IDs. PDF punctuation may be typographically normalized; the UTF-8 text retains source punctuation.
 
-An infantry regiment's parent division
---------------------------------------
+Ninh's 44 TH Special Tactical Zone command role
+-----------------------------------------------
 Saved case snapshot | VIETNAM | Hypothesis
 
 Question
 
-The E-1 Regiment was part of the 5th Division.
+COL HOANG DUC NINH was the 44 TH Special Tactical Zone commander.
 
-Saved task outcome: UNRESOLVED. Display decision: exploratory_contextual. Method: llm_readings.
+Saved task outcome: SUPPORTED. Display decision: evidence_backed_suggestion. Method: llm_readings.
 
-Cutoff: 1973-04-26; focal origin: 1973SAIGON07264. All contributing origins must be excluded by the saved source policy. This guide does not infer additional origins or re-audit eligibility.
+Cutoff: 1973-06-28; focal origin: 1973SAIGON11664. All contributing origins must be excluded by the saved source policy. This guide does not infer additional origins or re-audit eligibility.
 
-Saved supported/required clauses: 0/1; joint scope complete: True. Counts are not confidence.
+Historical Role
 
-Requirement: The E-1 Regiment was part of the 5th Division. | Status: UNRESOLVED | Evidence state: NO_INFO | Required: Yes
+Source-qualified historical role ascription only; not a claim of tenure on June 28 or of any action.
+
+Saved supported/required clauses: 1/1; joint scope complete: True. Counts are not confidence.
+
+Requirement: COL HOANG DUC NINH was the 44 TH Special Tactical Zone commander. | Status: SUPPORT | Evidence state: SUPPORTED | Required: Yes
 
 Score explanation: requirement states and whole-query binding checks decide support; retrieval scores do not vote on truth. No confidence percentage is inferred.
 
 Saved source quotations
 
-No exact source quotation recorded in the selected public fields. No source link or proof is invented.
+1. 1973CANTH00346 | 1973-05-23 | segment_5a3d5f73a388fa29f332 | original span [5, 158)
+
+Saved use: Requirement 1 / saved status SUPPORT; Requirement 1 / recorded direction SUPPORT
+
+THE 44 TH SPECIAL TACTICAL ZONE COMMANDER,  COL HOANG DUC NINH,
+HAS DENIED A KHMER GENERAL STAFF REQUEST FOR FIFTY THOUSAND
+LITERS OF JP4  AVIATION FUEL.
 
 Quotations are copied from the pinned public condition, not independently replayed against raw source pages by this generator. A source citation is not automatically a support citation. No original retrieval walk is inferred. Mask markers are displayed without transport IDs. PDF punctuation may be typographically normalized; the UTF-8 text retains source punctuation.
 
@@ -980,61 +981,65 @@ BE NAMED DEPUTY MR IV COMMANDER IN THE NEXT SEVEKL WEEKS.
 
 Quotations are copied from the pinned public condition, not independently replayed against raw source pages by this generator. A source citation is not automatically a support citation. No original retrieval walk is inferred. Mask markers are displayed without transport IDs. PDF punctuation may be typographically normalized; the UTF-8 text retains source punctuation.
 
-An alleged attempt to remove a commander
-----------------------------------------
+A concealed command role
+------------------------
 Saved case snapshot | VIETNAM | Redaction
 
 Question
 
-SHEEHAN SAID HE WAS INTERVIEWING MGEN DI FOR HIS BOOK ON JOHN PAUL VANN WHEN DI TOLD HIM [REDACTION] WAS TRYING TO REMOVE HIM FROM THE 9TH AND BRING HIM TO MRIV HEADQUARTERS AS DEPUTY CG.
+THE [REDACTION], BGEN HUYNH VAN LAC, CONFIRMED JUNE 25 THAT ON A NUMBER OF OCCASIONS SINCE CF II VC/ NVA HAVE ATTEMPTED VERY LOW LEVEL CONTACTS BETWEEN GUERILLA FORCES AND RF / PF UNITS.
 
 Saved task outcome: CANDIDATE_SUGGESTIONS. Display decision: exploratory_contextual. Method: llm_readings.
 
-Cutoff: 1973-07-12; focal origin: 1973SAIGON12585. All contributing origins must be excluded by the saved source policy. This guide does not infer additional origins or re-audit eligibility.
+Cutoff: 1973-06-28; focal origin: 1973SAIGON11664. All contributing origins must be excluded by the saved source policy. This guide does not infer additional origins or re-audit eligibility.
+
+Contextual Role Evidence
+
+The May 23 source identifies a role; it does not establish the June 25 action or continued tenure.
+
+Showcase criteria not met. The saved local result retains its contextual or unresolved decision. A reference match alone does not establish corpus support.
 
 Reading 1: argument
 
-Saved rank: 1 | Proposal: COMMANDER | Local decision: exploratory_contextual | Coverage: Missing
-Saved rank: 2 | Proposal: COMMANDER OF THE ARVN
-9 TH DIVISION | Local decision: exploratory_contextual | Coverage: Missing
-Saved rank: 3 | Proposal: THE ARVN
-9 TH DIVISION | Local decision: exploratory_contextual | Coverage: Missing
-Saved rank: 4 | Proposal: 9 TH DIVISION | Local decision: exploratory_contextual | Coverage: Missing
-Saved rank: 5 | Proposal: THE CHAU DOC | Local decision: exploratory_contextual | Coverage: Missing
+Saved rank: 1 | Proposal: MR IV CHIEF OF STAFF | Local decision: exploratory_contextual | Coverage: Missing
+Saved rank: 2 | Proposal: ARVN 5 TH DIV CG BG LICH | Local decision: exploratory_contextual | Coverage: Missing
+Saved rank: 3 | Proposal: BGEN LE VAN HUNG | Local decision: exploratory_contextual | Coverage: Missing
+Saved rank: 4 | Proposal: BGEN LE VAN HUNG | Local decision: exploratory_contextual | Coverage: Missing
+Saved rank: 5 | Proposal: 7 TH ARVN DIVISION
+COMMANDER MGEN NGUYEN KHOA NAM | Local decision: exploratory_contextual | Coverage: Missing
 
-form=nominal; function=argument; target_kind=any; grammatical_number=singular
+form=nominal; function=argument; target_kind=person; grammatical_number=singular
 
-Proposal 1: COMMANDER
+Proposal 1: MR IV CHIEF OF STAFF
 
-Saved features: retrieval page rank = 9; retrieval page score = 0.024606872451951076; focal context coverage = 4; focal term count = 18; source owned relation match = False; source type match = False
+Saved final-order index: 100.00 / 100 (exact pool fraction 34/34). This is ordinal placement in the assessed pool, not confidence or evidence strength.
 
-Saved context-fit index: 0.12181069958847736
+Saved features: retrieval page rank = 32; retrieval page score = 0.01; focal context coverage = 4; focal term count = 22; source owned relation match = False; source type match = False
+
+Saved context-fit index: 0.07
 
 Saved rubric: sum(weight*effective_value)/sum(non_NA_weight)
 
-Recorded rubric terms: focal_overlap [RECORDED, weight 0.4, contribution 0.08888888888888889]; own_relation [RECORDED, weight 0.25, contribution 0.0]; own_role [NOT_APPLICABLE, weight 0.15, contribution 0.0]; own_type [NOT_APPLICABLE, weight 0.1, contribution 0.0]; retrieval_rank [RECORDED, weight 0.1, contribution 0.0024691358024691358]
+Recorded rubric terms: focal_overlap [RECORDED, weight 0.40, contribution 0.07]; own_relation [RECORDED, weight 0.25, contribution 0.00]; own_role [RECORDED, weight 0.15, contribution 0.00]; own_type [RECORDED, weight 0.10, contribution 0.00]; retrieval_rank [RECORDED, weight 0.10, contribution 5.68e-04]
 
 Descriptive ordering/context only. The saved support decision remains exploratory_contextual.
 
-Saved check: Bound query requirements / missing / NO_FOCAL_FRAME
-
 Saved check: All required facts grounded / missing / At least one required owner, predicate, argument or scope remains unestablished.
 
-Saved check: No same-scoped counterevidence / missing / Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.
+Saved check: No same-scoped counterevidence / missing / Counter comparison or positive-source validation failed; no bounded positive-support recommendation is licensed.
 
 Compact guide: all saved shortlist rows appear above; detailed scores and quotations show only the first saved proposal in this reading. This is display order, not a new recommendation. Open the viewer for other proposals.
 
-source pages inspected: 16
+source pages inspected: 32
 
 Saved source quotations
 
-1. 1973SAIGON07059 | 1973-04-24 | segment_158f7624c59a98d689ab | original span [4095, 4258)
+1. 1973SAIGON09044 | 1973-05-23 | segment_b005f2918ed5da7f8467 | original span [30, 185)
 
 Saved use: Reading 1, first saved proposal / source wording, not automatic support
 
-MGEN TRAN BA DI,  COMMANDER OF THE ARVN
-9 TH DIVISION,  TOLD THE CHAU DOC VICE CONSUL APRIL 22  HE WOULD
-BE NAMED DEPUTY MR IV COMMANDER IN THE NEXT SEVEKL WEEKS.
-
+BGEN HUYNH VAN LAC,  MR IV CHIEF OF STAFF,  ASSURED MAY 22
+A CONSULATE GENERAL OFFICER THAT NO VNAF HELICOPTER IN MR IV
+PRESENTLY CARRIES ICCS MARKINGS.   
 
 Quotations are copied from the pinned public condition, not independently replayed against raw source pages by this generator. A source citation is not automatically a support citation. No original retrieval walk is inferred. Mask markers are displayed without transport IDs. PDF punctuation may be typographically normalized; the UTF-8 text retains source punctuation.

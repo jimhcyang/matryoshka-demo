@@ -1,0 +1,19 @@
+{
+  "version": "source-bound-data-qa/2",
+  "date": "2026-11-21",
+  "status": "PASS_DIAGNOSTIC_DATA",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "independent_data_audit_sha256": "d418b7aae8d588d2afb1a4c36770c3ef5a62bc029805f62255726468c34f8121",
+  "independent_checks_passed": 845,
+  "final_site_bytes_equal_reviewed_mirror": true,
+  "native_public_condition_seals_replayed": 14,
+  "primary_cases": 9,
+  "additional_authentic_cib_redactions": 5,
+  "primary_case_level_qualified": 7,
+  "primary_contextual_redactions": 2,
+  "additional_historical_recovery_reviews_passed": 5,
+  "global_nine_qualified": false,
+  "benchmark_accuracy_claimed": false,
+  "native_results_or_ranks_modified": false,
+  "publication_authorization": false
+}

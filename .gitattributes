@@ -1,3 +1,5 @@
 *.pdf binary
 *.gz binary
 *.zip binary
+# Verbatim quotations retain their original end-of-line spacing.
+site/docs/matryoshka-guide.txt whitespace=-blank-at-eol

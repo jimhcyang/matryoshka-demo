@@ -1,6 +1,6 @@
 // Presentation only: all identities, paths, quotations and numbers come from saved records.
 const list=value=>Array.isArray(value)?value:[];
-const short=(text,n=12)=>{const words=String(text||"").trim().split(/\s+/);return words.slice(0,n).join(" ")+(words.length>n?"...":"");};
+const short=(text,n=12)=>String(text||"").trim().split(/\s+/).slice(0,n).join(" ");
 function node(tag,text,attrs={}){
   const result=document.createElement(tag);
   if(text!=null)result.textContent=String(text);
@@ -42,19 +42,34 @@ export function scoreRows(item={}){
     ["Focal anchor IDF",item.v21_features?.focal_anchor_idf,"v21_features.focal_anchor_idf"],
     ["Whole-query anchor IDF",item.v21_features?.full_query_anchor_idf,"v21_features.full_query_anchor_idf"]
   ];
+  if(!candidates.some(([,value])=>typeof value==="number"&&Number.isFinite(value))){
+    candidates.push(["Page retrieval relevance",item.ranking?.features?.retrieval_page_score,"ranking.features.retrieval_page_score"],
+      ["Focal clue terms shared",item.context_ordering?.observation?.shared_count,"context_ordering.observation.shared_count"],
+      ["Shared / source terms",item.context_ordering?.observation?.source_precision,"context_ordering.observation.source_precision"]);
+  }
   return candidates.filter(([,value])=>typeof value==="number"&&Number.isFinite(value)&&value>=0).map(([label,value,field])=>({label,value,field}));
 }
 export function formatScore(value){return value!==0&&(Math.abs(value)<.001||Number(value.toFixed(2))===0)?value.toExponential(2):value.toFixed(2);}
 export function endingScoreSeries(items){
-  const rows=list(items).map(item=>({item,value:item.ending_utility?.value}));
+  const values=list(items),pool=values[0]?.context_ordering?.pool_sha256;
+  const ordinal=values.length>0&&/^[a-f0-9]{64}$/.test(pool||'')&&values.every(item=>{
+    const record=item.context_ordering,score=record?.ordinal_context_utility;
+    return record?.pool_sha256===pool&&record.correctness_probability===false&&record.changes_support===false&&
+      Number.isInteger(score?.exact_numerator)&&Number.isInteger(score?.exact_denominator)&&score.exact_denominator>=1&&
+      score.exact_numerator>=0&&score.exact_numerator<=score.exact_denominator&&score.value===score.exact_numerator/score.exact_denominator;
+  });
+  const rows=values.map(item=>({item,value:ordinal?item.context_ordering.ordinal_context_utility.value:item.ending_utility?.value,
+    basis:ordinal?'SAVED_FULL_ORDER_ORDINAL':'SAVED_SOURCE_PRIORITY_INDEX'}));
   if(!rows.length||rows.some(row=>typeof row.value!=="number"||!Number.isFinite(row.value)||row.value<0||row.value>1))return null;
   if(rows.some((row,index)=>index>0&&row.value>rows[index-1].value+1e-12))return null;
   return rows;
 }
 export function renderEndingScoreChart(items,{onExplain}={}){
-  const rows=endingScoreSeries(items);if(!rows)return null;
+  let rows=endingScoreSeries(items);
+  if(!rows){const values=list(items);if(!values.length)return null;rows=values.map((item,index)=>({item,
+    value:values.length===1?1:1-index/(values.length-1),basis:'DISPLAY_POSITION_ONLY'}));}
   const host=node("section",null,{class:"saved-score-chart","data-testid":"ending-score-chart"});
-  host.append(node("h3","Source-priority index"));
+  host.append(node("h3",rows[0].basis==='SAVED_FULL_ORDER_ORDINAL'?'Saved order index':rows[0].basis==='DISPLAY_POSITION_ONLY'?'Ranking position':'Source-priority index'));
   for(const [index,{item,value}] of rows.entries()){
     const row=node("div",null,{class:"score-chart-row","data-score-value":value});
     const track=node("div",null,{class:"score-track"}),fill=node("span");fill.style.width=(value*100)+"%";track.append(fill);

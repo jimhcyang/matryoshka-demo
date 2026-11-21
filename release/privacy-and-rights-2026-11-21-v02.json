@@ -1,0 +1,27 @@
+{
+  "version": "source-bound-publication-scope-review/2",
+  "date": "2026-11-21",
+  "reviewer": "release_lead",
+  "candidate_manifest_sha256": "e38161d15e82227997f3d8b2dcd60a5ef3627600ce5712e3c49fc2b025ca86d9",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "independent_privacy_receipt_sha256": "ab88223433f160ff1c4e04763f7cca8702c6802bfdcc414ec4ef7579aadebe67",
+  "independent_public_text_files_scanned": 52,
+  "independent_known_private_body_signatures_checked": 21,
+  "finite_public_text_indicator_scan": {
+    "files": 60,
+    "findings": 0
+  },
+  "zip_entries_checked": 309,
+  "zip_sha256": "cad2dafcfbebda98922ee85773f2a9319cbfc2a5edd2f39800b0a7c700010657",
+  "zip_paths_relative_without_traversal": true,
+  "private_review_bodies_or_manuscripts_authorized_for_publication": false,
+  "source_quotations_and_original_handling_markings_retained": true,
+  "user_authorized_public_presentation_of_existing_historical_corpora": true,
+  "notices_sha256": "da409a570ec31341aef02f093e18b06f59851aa135c336bb7a439c336d808acb",
+  "new_blanket_third_party_license_granted": false,
+  "project_claims_a_new_declassification_decision": false,
+  "scope": "Finite indicator/review checks and the author-controlled historical presentation; not universal DLP or an independent legal opinion.",
+  "publication_authorization": false
+}

@@ -2,7 +2,7 @@
   "version": "evidence-field-guide/1",
   "implementation_under_review": true,
   "mode": "saved_report_snapshot",
-  "report_byte_sha256": "0444fc3704868b557b26f0a539357cc5edc3813c8f67e2a804f67c57dca0d3bf",
+  "report_byte_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
   "saved_report_status": "PARTIAL",
   "release_qualification_inferred": false,
   "cases": [
@@ -79,13 +79,13 @@
       "citation_count": 2
     },
     {
-      "case_id": "curation_v65_overlap_haeri_teacher_student_h01",
+      "case_id": "iran_factual_h_9b61144cb419baafa343",
       "task": "hypothesis",
       "corpus": "iran",
-      "query_utf8_sha256": "2edf329f7ecaf93b44c3fccf2b813c129251b7f66b426bf4364543199331bcc1",
+      "query_utf8_sha256": "285a5b49220a1c5985894006cecbc3ba32616c8d533590628856ae68b6a08ddf",
       "arm": "llm_readings",
       "saved_status": "SUPPORTED",
-      "citation_count": 3
+      "citation_count": 1
     },
     {
       "case_id": "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
@@ -106,13 +106,13 @@
       "citation_count": 18
     },
     {
-      "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
+      "case_id": "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
       "task": "hypothesis",
       "corpus": "vietnam",
-      "query_utf8_sha256": "b8e345cc56d6c8a914df820ad8736b9bf2656b3ffa965636682be1e9caecdc92",
+      "query_utf8_sha256": "1631e37342c362ac109be47b50d61e4035993feab71c6517793388d50d592084",
       "arm": "llm_readings",
-      "saved_status": "UNRESOLVED",
-      "citation_count": 0
+      "saved_status": "SUPPORTED",
+      "citation_count": 1
     },
     {
       "case_id": "fullresume_vietnam_command_m_a7a37cb69a0f4505",
@@ -124,10 +124,10 @@
       "citation_count": 2
     },
     {
-      "case_id": "fullresume_vietnam_nghi_r_c77afffc57790227",
+      "case_id": "narrative_vietnam_a111c4d6f8af8b100825ae07",
       "task": "redaction",
       "corpus": "vietnam",
-      "query_utf8_sha256": "4c60406e48f0f72118974abdd2c340c81ba722000651ebf5b1546bbbc9dd7b8d",
+      "query_utf8_sha256": "264aff1401fbf7377a887b4ea7593e9d098596ac607c41822446d3f2a6e850eb",
       "arm": "llm_readings",
       "saved_status": "CANDIDATE_SUGGESTIONS",
       "citation_count": 1
@@ -139,7 +139,7 @@
   "case_inputs": "PINNED_PUBLIC_CONDITIONS_ONLY",
   "pdf_pages": 36,
   "files": {
-    "field-guide.pdf": "2be344edcbee3da90d14fa1d160502b30046f8514ef561d67fc6bdb004319c5e",
-    "field-guide.txt": "8dcfafcbdcb95555e3a8b976e05ad5c0c5f0d73b26bfc62b89f7d64e485f5df6"
+    "field-guide.pdf": "9af581ad77e4b446016b5b6e52fe6d0b755f59ed874c0444b79ed9c9ce0b8457",
+    "field-guide.txt": "685ec11688c78fac749891230aa96f29692704ef9cffffa08db7a04509eba0c1"
   }
 }

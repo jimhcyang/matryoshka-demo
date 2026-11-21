@@ -6,6 +6,14 @@ export {savedCondition,ADDITIONAL_COLLECTION,questionCollection};
 
 export const CORPORA=[['iran','Iran cables'],['vietnam','Vietnam cables'],['cib','Central Intelligence Bulletins']];
 export const TASKS=[['mosaic','Mosaic'],['hypothesis','Hypothesis'],['redaction','Redaction']];
+export function savedInvestigation(report,corpus){
+  const source=report.investigations;
+  const matches=Array.isArray(source)?source.filter(row=>row?.corpus===corpus):source?.[corpus]?[source[corpus]]:[];
+  if(matches.length!==1)return null;
+  const story=matches[0],id=story.id||story.narrative_id;
+  if(typeof id!=='string'||!id||story.id&&story.narrative_id&&story.id!==story.narrative_id)return null;
+  return {...story,id};
+}
 export function savedStoryQuestion(report,corpus,task,{bench=false,story}={}){
   const asBench=bench||story?.collection==='bench';
   const matches=report.cases.filter(row=>row.case.corpus===corpus&&row.case.task===task&&
@@ -47,8 +55,7 @@ export async function loadSavedCatalog(){
   const sha=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(value=>value.toString(16).padStart(2,'0')).join('');
   validateManifest(manifest,health,report,sha);
   validatePrivacyContract(report);
-  if(report.investigations&&CORPORA.some(([corpus])=>['id','title'].some(key=>
-    report.investigations[corpus]?.[key]!==manifest.investigations?.[corpus]?.[key])))
+  if(canonicalGateJSON(report.investigations||{})!==canonicalGateJSON(manifest.investigations||{}))
     throw Error('Story metadata differs from the pinned report');
   return {manifest,report};
 }

@@ -1,0 +1,39 @@
+{
+  "version": "source-bound-release-authorization/1",
+  "date": "2026-11-21",
+  "reviewer": "release_lead",
+  "candidate_manifest_sha256": "e38161d15e82227997f3d8b2dcd60a5ef3627600ce5712e3c49fc2b025ca86d9",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "backend_code_sha256": "b6938f8ae8f6e1036c1f0bff774457f99ef7336978e60400f3f71f68092a0a0a",
+  "publish_authorized": true,
+  "new_data_qa_accepted": true,
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "qualified_data_qa_ref": {
+    "path": "data-qa-2026-11-21-v02.json",
+    "sha256": "b34f02be08422a26cdd4546cfe574dd9eac44e092f575b9bc1d9b91bd99a8bb2"
+  },
+  "review_refs": [
+    {
+      "path": "reviews/static-qa-2026-11-21-v02.json",
+      "sha256": "5ba79e1d39715c5aab2fd94e960ba2c7f4bd553d8c2f25e07786080657e71885"
+    },
+    {
+      "path": "privacy-and-rights-2026-11-21-v02.json",
+      "sha256": "79bb8635bbcc67d1b6e8e93ae6c1e728c004a2103c8c1de42e28776985d2650d"
+    }
+  ],
+  "primary_cases": 9,
+  "additional_historical_cib_redactions": 5,
+  "primary_cases_qualified": 7,
+  "primary_quality_gaps_declared": 2,
+  "all_nine_primary_cases_qualified": false,
+  "benchmark_accuracy_claimed": false,
+  "native_results_or_rankings_modified_by_publication": false,
+  "historical_native_versions_preserved": true,
+  "swedish_origin_exception_separate": true,
+  "swedish_ground_truth_known": false,
+  "inference_api_calls_in_browser": 0,
+  "inherited_approval_used": false
+}

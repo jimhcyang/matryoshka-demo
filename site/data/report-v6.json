@@ -16,7 +16,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/condition.json.gz",
             "sha256": "813a8a0319ca06a013cd50d567811033f992ac8bf559429444ba85f3542882b5"
           },
           "config": "llm_readings",
@@ -28,16 +28,16 @@
           "run_id": "narrative_0373746ee01b5a63f16bfdfb",
           "trace_refs": {
             "next_reading_1a005fb20ea90c8bede96ba7": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/trace_next_reading_1a005fb20ea90c8bede96ba7.json.gz",
-              "sha256": "e7e20bb934d0dcbe7fdf5143c7db1ce1505a8db150eabc69456b6926bf5f8531"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/trace_next_reading_1a005fb20ea90c8bede96ba7.json.gz",
+              "sha256": "e48a1d346d56ab222e250cafa146eeea78ce5465df666735c579c1de1d6a2d2e"
             },
             "next_reading_d05a2b3d020d8f566482c1e9": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/trace_next_reading_d05a2b3d020d8f566482c1e9.json.gz",
-              "sha256": "0c35f1f3fcc85ad2381e7faeb64783d25dc645f54d2e6e7b97863a055d9e9d9e"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/trace_next_reading_d05a2b3d020d8f566482c1e9.json.gz",
+              "sha256": "a79a94eae17744b26817d7839deac5dc38a7a3af5a341dc9f1138d891e6b6ba5"
             },
             "next_reading_fa2b9f6ac0c608a3525d0515": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/trace_next_reading_fa2b9f6ac0c608a3525d0515.json.gz",
-              "sha256": "dd9f7afc6b3a6d80d8f6754630ea6104262613309e72d4ddf9a2c58d1786fc13"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/trace_next_reading_fa2b9f6ac0c608a3525d0515.json.gz",
+              "sha256": "6ef9ab9abd220daf947204209a54b09eafbdcab59019d567ad0c7f446390f992"
             }
           }
         }
@@ -200,7 +200,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_3eea5176c0eab4abfb6452a4/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_3eea5176c0eab4abfb6452a4/condition.json.gz",
             "sha256": "179c5c9316c73fb140e5c205a303d1c8ec881726775c357f580f6886d942186d"
           },
           "config": "llm_readings",
@@ -212,8 +212,8 @@
           "run_id": "narrative_d0d5e72625f4502a3b558ec6",
           "trace_refs": {
             "next_reading_31ff17e95b0c05ea69654db3": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_3eea5176c0eab4abfb6452a4/trace_next_reading_31ff17e95b0c05ea69654db3.json.gz",
-              "sha256": "b6f25793decc917f8a5ca6b38f72963985d9917e0d9eb98215d4210c9926db8c"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_3eea5176c0eab4abfb6452a4/trace_next_reading_31ff17e95b0c05ea69654db3.json.gz",
+              "sha256": "f1a7138e8e2209700f97cd62c03fed4bea65717f96a93178e10d5110b4966586"
             }
           }
         }
@@ -354,7 +354,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/condition.json.gz",
             "sha256": "4aac5f55dd9c0393ec9bc06f37c38bf9ade178307bda2517dce0b728d025f623"
           },
           "config": "llm_readings",
@@ -366,16 +366,16 @@
           "run_id": "narrative_a758ad9fab04a05c53ce17cc",
           "trace_refs": {
             "next_reading_36678042d2f4e8631eedd462": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/trace_next_reading_36678042d2f4e8631eedd462.json.gz",
-              "sha256": "3476c4d0e1aaf8e9455aa3fbb3bc1bec197e1bb8cf7bc9f9696095652f038960"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/trace_next_reading_36678042d2f4e8631eedd462.json.gz",
+              "sha256": "def4b2d823da8656a027665535e04c997ba45850a2d80013fb710dec9a2795c2"
             },
             "next_reading_81479663ec4b40f19fa30fdf": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/trace_next_reading_81479663ec4b40f19fa30fdf.json.gz",
-              "sha256": "155283c7931e0a793bd05c3fd7d44ccc292640f13fd13263ed69bddc91eedb76"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/trace_next_reading_81479663ec4b40f19fa30fdf.json.gz",
+              "sha256": "473661f06953f57c49d7144690e35ddee767de56a58fef571fbe0191eb3fb604"
             },
             "next_reading_b65ff678cbd646fa5e2147ef": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/trace_next_reading_b65ff678cbd646fa5e2147ef.json.gz",
-              "sha256": "2592e54867603322f4d3d274dc550620fd8c57982b6286e955de559e025de934"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/trace_next_reading_b65ff678cbd646fa5e2147ef.json.gz",
+              "sha256": "9d238ca6f7561e92b4e27b941912f6887e0d7533c2f110f1575796b2a18182f5"
             }
           }
         }
@@ -538,7 +538,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_225a750400eb38718fa5bb9b/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/cloze_225a750400eb38718fa5bb9b/condition.json.gz",
             "sha256": "87f01973bca4eb6d395e3f928230bc6f31c7e6132bc5bdebb0fc3471fa8ec7e0"
           },
           "config": "llm_readings",
@@ -550,16 +550,16 @@
           "run_id": "narrative_7b1536b9bcccd2492f273274",
           "trace_refs": {
             "next_reading_0a6efaba6c01d35e92165159": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_225a750400eb38718fa5bb9b/trace_next_reading_0a6efaba6c01d35e92165159.json.gz",
-              "sha256": "6b4622cc73ae6fa233c2ca2774e8b982aaa02601d556e18cdaccb220658586b4"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/cloze_225a750400eb38718fa5bb9b/trace_next_reading_0a6efaba6c01d35e92165159.json.gz",
+              "sha256": "760505f899a70f58dd15d0517181062b76db4ba8eb2aa6e3e6e72c06918171d8"
             },
             "next_reading_509c4499ef4d1596e833f8a2": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_225a750400eb38718fa5bb9b/trace_next_reading_509c4499ef4d1596e833f8a2.json.gz",
-              "sha256": "a6be402ddbd5e0e7c92612f5fd29a0231cfa6758be2dcf971a1dea1389ca1ce1"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/cloze_225a750400eb38718fa5bb9b/trace_next_reading_509c4499ef4d1596e833f8a2.json.gz",
+              "sha256": "7055541bb9175c8586c5653ff3bfb92e9a905ad0bf64db1f8331245311b13760"
             },
             "next_reading_aa7f5df05a5d114dfab067e6": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_225a750400eb38718fa5bb9b/trace_next_reading_aa7f5df05a5d114dfab067e6.json.gz",
-              "sha256": "51ca31236967805d6c639d1cec428065d8c46a6714984925cfdec21771343584"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/cloze_225a750400eb38718fa5bb9b/trace_next_reading_aa7f5df05a5d114dfab067e6.json.gz",
+              "sha256": "5dae2c8a4cb2af4d268ba7ce3919ef4752a44fe4e891bebc528f2899510a8c9d"
             }
           }
         }
@@ -722,7 +722,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac4fb499beb4b345b5384ae6/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ac4fb499beb4b345b5384ae6/condition.json.gz",
             "sha256": "63fd1dcb83052f1851ed2e9cfe31996231c8fefb87544aa8cfa4fba678e8514d"
           },
           "config": "llm_readings",
@@ -734,8 +734,8 @@
           "run_id": "narrative_17a676c7b04bc24e1e194553",
           "trace_refs": {
             "next_reading_fdb35a08c26c96dc605d8d97": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac4fb499beb4b345b5384ae6/trace_next_reading_fdb35a08c26c96dc605d8d97.json.gz",
-              "sha256": "bbca2ce63d27ebc166d7422b19f4d71ca90aab8924f1cea60c9155b03dc8c4b6"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ac4fb499beb4b345b5384ae6/trace_next_reading_fdb35a08c26c96dc605d8d97.json.gz",
+              "sha256": "f72b2da00768ac7e850d9acdc038acae3331614150caa6a6e7b2f2650eb0bd96"
             }
           }
         }
@@ -870,7 +870,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/condition.json.gz",
             "sha256": "78c00c535f413bbcf7a5b697f0e67fef6d54e10146e26f41012fdaa0a3a2ee43"
           },
           "config": "llm_readings",
@@ -882,8 +882,8 @@
           "run_id": "narrative_8da7188fd446e55e7e459cbc",
           "trace_refs": {
             "": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/trace_assertions.json.gz",
-              "sha256": "3e06bec04ebceeb7e69f2bff4ccfdf4f26aebd848c35850d784e2075c8008976"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/trace_assertions.json.gz",
+              "sha256": "eead2607128de28ceeb9deb769789ac119a5b3737ebb5a604965c546efdc803e"
             }
           }
         }
@@ -941,7 +941,7 @@
       },
       "origin_refs": {
         "masked": {
-          "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/origin_masked.json.gz",
+          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/origin_masked.json.gz",
           "sha256": "7436222febd13cdecf9b72b0c267946402c8eb6e5c6ad7342445986fe77cd847"
         }
       },
@@ -1011,7 +1011,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/condition.json.gz",
             "sha256": "cbef2c30bf02b4ec4cb706a4ee88d66c957bde9e71c68d66024db01e2dc9aebf"
           },
           "config": "llm_readings",
@@ -1023,8 +1023,8 @@
           "run_id": "narrative_2e732d5c06ac5a9014c29fe7",
           "trace_refs": {
             "": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/trace_assertions.json.gz",
-              "sha256": "a5f991845dd47c2153ca0de16311b3dbef6277ac0284613b8e0a981bce522a3a"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/trace_assertions.json.gz",
+              "sha256": "56a94c1a116916647b6b8ad0bbc227a55c6443383902b2c721253455ffa3e7f5"
             }
           }
         }
@@ -1082,7 +1082,7 @@
       },
       "origin_refs": {
         "masked": {
-          "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/origin_masked.json.gz",
+          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/origin_masked.json.gz",
           "sha256": "9840f9369bee83a0e54bb4dbc2ec50f946231cc4b7b931a483a9042b937f3672"
         }
       },
@@ -1152,7 +1152,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/condition.json.gz",
             "sha256": "f4d80533a9d8aec482e1f0b9476fab00af232eb5b69617b1fadf3798c1743b05"
           },
           "config": "llm_readings",
@@ -1164,16 +1164,16 @@
           "run_id": "narrative_83516740d8e8999400619aad",
           "trace_refs": {
             "next_reading_21af61fd862e9bf524fcb8e4": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/trace_next_reading_21af61fd862e9bf524fcb8e4.json.gz",
-              "sha256": "8dff118e769ef9b2602171eaa65727a7550b0cd4cdfa0c106741099de825919d"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/trace_next_reading_21af61fd862e9bf524fcb8e4.json.gz",
+              "sha256": "71f577a8e5c42922a6bcd931fc5c187e944504bb138a8c481d07d453e6a2d44c"
             },
             "next_reading_5143cdac9ef38f3e18911c42": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/trace_next_reading_5143cdac9ef38f3e18911c42.json.gz",
-              "sha256": "264073acb8d39c34db4ad37f663a09ef40565414cc023830ef2c3cac306a771a"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/trace_next_reading_5143cdac9ef38f3e18911c42.json.gz",
+              "sha256": "170159faf5045acaea4ebf189cabd2f423b6d5d4841c72409f971395a0cba786"
             },
             "next_reading_9844017f8398a69db9667dbe": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/trace_next_reading_9844017f8398a69db9667dbe.json.gz",
-              "sha256": "da3524170868ea3b0dc866ce6710af0adea06a9e973860e83ebb93ea091d6001"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/trace_next_reading_9844017f8398a69db9667dbe.json.gz",
+              "sha256": "8f2f23576b0998b69909c13bb729aeabc370dce282b5ba7c3a1433f40a88b787"
             }
           }
         }
@@ -1327,12 +1327,12 @@
     },
     {
       "case": {
-        "case_id": "curation_v65_overlap_haeri_teacher_student_h01",
+        "case_id": "iran_factual_h_9b61144cb419baafa343",
         "corpus": "iran",
         "date": "1979-06-01",
         "document_id": "1979STATE139731",
         "focal_marker": "",
-        "query": "Haeri's father taught Khomeini. Haeri was a student of Khomeini.",
+        "query": "Haeri's father taught Khomeini.",
         "task": "hypothesis"
       },
       "collection": "starter",
@@ -1340,20 +1340,20 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/curation_v65_overlap_haeri_teacher_student_h01/condition.json.gz",
-            "sha256": "507944e6bae34366b4f81714178cc1e54685540a642d62cfae56f9b314e33e85"
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/iran_factual_h_9b61144cb419baafa343/condition.json.gz",
+            "sha256": "b878c38c37dfd1c06933070a5c42f351ab1fe66c494e9d4a3df2de6cbae1e98a"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "experiments/narrative_demo/runs/40d04eddd52b4fd856ba6df2fe58669f5c35289bc590d6ff0143364c42d12059/native.json.gz",
-            "sha256": "d67f5e4258a4cc628d24e0550ab2c78b36f0337505cbb3c34dc70a7621ff5ea5"
+            "path": "experiments/narrative_demo/runs/54c9b69fa8e7267016b0805f6979651f53f73217d19f85509bff534879e41e8e/native.json.gz",
+            "sha256": "2c5ab9caada81b59c52ea7ef92bcd6eba2ee3f73a3876ea2a241d70002bf7824"
           },
-          "run_id": "narrative_3fc7647fd5f766b4bdfbb8fc",
+          "run_id": "narrative_6f2defd49baf52718f403849",
           "trace_refs": {
             "": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/curation_v65_overlap_haeri_teacher_student_h01/trace_assertions.json.gz",
-              "sha256": "a14f6371c7d3fb3d2f3101e405167ba005939424dadcf6b4767975e7414a6000"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/iran_factual_h_9b61144cb419baafa343/trace_assertions.json.gz",
+              "sha256": "f9efd9127ec7e3dce7879e1d39941c655a5d9183ac03f271252afb3ae0d96aa6"
             }
           }
         }
@@ -1361,7 +1361,7 @@
       "current_resource_execution": true,
       "decision_summary_by_arm": {
         "llm_readings": {
-          "case_id": "curation_v65_overlap_haeri_teacher_student_h01",
+          "case_id": "iran_factual_h_9b61144cb419baafa343",
           "config": "llm_readings",
           "counts": {
             "conflict": 0,
@@ -1369,15 +1369,15 @@
             "mixed": 0,
             "opposed": 0,
             "partial": 0,
-            "required": 2,
-            "supported": 2,
+            "required": 1,
+            "supported": 1,
             "unresolved": 0
           },
-          "gate_sha256": "6405857163bcffeb11f5be5c87fd2379951313e5a1fd0be0ebab61ecfbcdc208",
-          "native_checksum": "908c8f193ab8edbf972a336738117f639a1932ed74271ed4ef8f81a6946d804f",
-          "native_run_id": "narrative_3fc7647fd5f766b4bdfbb8fc",
+          "gate_sha256": "4b31e34596ce731a53e549167f5c3e93833c5b2521fc2ce92d43749015e3b0cc",
+          "native_checksum": "d8e56c4bc6dfd8837effe97589792467229536b945ed1a8ef31d27cd82f07365",
+          "native_run_id": "narrative_6f2defd49baf52718f403849",
           "overall_status": "evidence_backed_suggestion",
-          "query_sha256": "999eacc999a512f9046989ffb70308291e017fd3265019835488c18b14dffdfd",
+          "query_sha256": "fc46a927f3f090d3178700473cac3403b078e047910826a026822ca9816e88a2",
           "task": "hypothesis",
           "version": "workbench-decision-summary/1"
         }
@@ -1394,16 +1394,16 @@
           "focal_marker"
         ],
         "issues": [],
-        "native_case_sha256": "cc9df26fc35ca1da027da54952e006d34c0548f4cd9dee633ef04ba6ad085126",
+        "native_case_sha256": "a681c662fea3d36a945866faaeb4cf6ee0390bea9822afbd01981006f0a44f6d",
         "native_checkpoint": {
-          "path": "experiments/narrative_demo/runs/40d04eddd52b4fd856ba6df2fe58669f5c35289bc590d6ff0143364c42d12059/native.json.gz",
-          "sha256": "d67f5e4258a4cc628d24e0550ab2c78b36f0337505cbb3c34dc70a7621ff5ea5"
+          "path": "experiments/narrative_demo/runs/54c9b69fa8e7267016b0805f6979651f53f73217d19f85509bff534879e41e8e/native.json.gz",
+          "sha256": "2c5ab9caada81b59c52ea7ef92bcd6eba2ee3f73a3876ea2a241d70002bf7824"
         },
         "native_packet_modified": false,
-        "native_public_case_sha256": "cc9df26fc35ca1da027da54952e006d34c0548f4cd9dee633ef04ba6ad085126",
-        "native_result_checksum": "908c8f193ab8edbf972a336738117f639a1932ed74271ed4ef8f81a6946d804f",
-        "public_case_sha256": "cc9df26fc35ca1da027da54952e006d34c0548f4cd9dee633ef04ba6ad085126",
-        "query_sha256": "999eacc999a512f9046989ffb70308291e017fd3265019835488c18b14dffdfd",
+        "native_public_case_sha256": "a681c662fea3d36a945866faaeb4cf6ee0390bea9822afbd01981006f0a44f6d",
+        "native_result_checksum": "d8e56c4bc6dfd8837effe97589792467229536b945ed1a8ef31d27cd82f07365",
+        "public_case_sha256": "a681c662fea3d36a945866faaeb4cf6ee0390bea9822afbd01981006f0a44f6d",
+        "query_sha256": "fc46a927f3f090d3178700473cac3403b078e047910826a026822ca9816e88a2",
         "source_admission_scope_bound_not_recomputed": true,
         "state": "PASS",
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
@@ -1411,24 +1411,42 @@
       },
       "origin_refs": {
         "masked": {
-          "path": "phase/iran_showcase_hunt_v02/fresh_followup/haeri_masked_origin_PRIVATE_v01.json",
-          "sha256": "c412b8bb49e26ce9aee42338fa70a4e94838ff7919c1b5e2e62f6c933a08ce51"
+          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/iran_factual_h_9b61144cb419baafa343/origin_masked.json.gz",
+          "sha256": "9a9775ae8fe727147ad0f524f329b37b42d7bf247e09532e89393d83c6c56ce6"
         }
       },
-      "presentation_caveats": [],
-      "presentation_title": "Religious teaching relationships",
+      "presentation_caveats": [
+        {
+          "text": "The January 15 CONF cable forwards Armin Meyer's unhedged statement that Haeri's father taught Khomeini at Qum; this is source-ascribed support, not independently verified world truth.",
+          "title": "Source-Ascribed Support"
+        }
+      ],
+      "presentation_title": "Haeri's father and Khomeini: a source-ascribed teaching relationship",
       "query_kind": "source_derived",
       "query_version": null,
       "reference_answer_kind": null,
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "83e3ad2dca3d5794f6361b8647b9818f9c95a9daba5dcb999a37087e6d672b4e",
+        "native_code_epoch_sha256": "e06ab9e9a43dfa1d0ed31a20639d1f8f0e5d41af4077c24a1842d181598a37c0",
         "native_configuration": {
-          "completed_drafts_per_reading": 24,
-          "construction_pages": 16,
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
           "method": "current_hierarchy",
           "retrieval_document_budget": 40,
           "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "context_kind_mode": "same_page_reference",
+            "context_ordering_mode": "focal_visible_owner",
+            "coordinate_boundary_mode": "visible_boundary",
+            "counter_policy": "positive_support",
+            "cue_order_mode": "focal_sentence",
+            "identity_first": true,
+            "nominal_boundary_mode": "literal_visible_prefix",
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512,
+            "supplemental_mode": "source_head_opportunities"
+          },
           "top_k": 5
         },
         "native_version": "narrative-local-execution/3",
@@ -1449,11 +1467,11 @@
       "selected_demo": true,
       "showcase_review": {
         "assessment_ref": {
-          "path": "phase/release_finish_20261121/companion_reviews/assessment_curation_v65_overlap_haeri_teacher_student_h01_v01.json",
-          "sha256": "1aaca9cb13448802697cfd88e9bed20abfcc42e062f5db246156c32b4cc12932"
+          "path": "phase/post_public_case_qualification_20261121/release/iran_h_mapping_v01/assessment_wrapper_PRIVATE.json",
+          "sha256": "55f965143845ffdea3542c3c1f2921181b9fc42e9e9a02f89118754dc40b9750"
         },
-        "native_checksum": "908c8f193ab8edbf972a336738117f639a1932ed74271ed4ef8f81a6946d804f",
-        "qualified": false
+        "native_checksum": "d8e56c4bc6dfd8837effe97589792467229536b945ed1a8ef31d27cd82f07365",
+        "qualified": true
       }
     },
     {
@@ -1471,7 +1489,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_iran_two_roles_m_v03_e51b40d8265237f1/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/fullresume_iran_two_roles_m_v03_e51b40d8265237f1/condition.json.gz",
             "sha256": "3a94a310869c6984355b4705aa51bb3891bf19693a491c6b04c84e1a868365a2"
           },
           "config": "llm_readings",
@@ -1483,8 +1501,8 @@
           "run_id": "narrative_39b47620d5fe098dc5d55b99",
           "trace_refs": {
             "": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_iran_two_roles_m_v03_e51b40d8265237f1/trace_assertions.json.gz",
-              "sha256": "02127f40c4f9956f2c5a2980f5c8ae35922b1c90c31b27a40954df9a1f9d8476"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/fullresume_iran_two_roles_m_v03_e51b40d8265237f1/trace_assertions.json.gz",
+              "sha256": "9d4e3c8a07cd872d4c0201d2a42857219ec00a5f6c7925ae5b7a063ec045bca4"
             }
           }
         }
@@ -1602,7 +1620,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/source_window_9c77b0239a74f169bcf84785/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/source_window_9c77b0239a74f169bcf84785/condition.json.gz",
             "sha256": "72245cd2932bc74e3721015c2fdcbe4b4456acab12230430a2364853855f3007"
           },
           "config": "llm_readings",
@@ -1614,8 +1632,8 @@
           "run_id": "narrative_e2c117926c97f621d1e96642",
           "trace_refs": {
             "next_reading_97598a5d5d37d881ce6f4c78": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/source_window_9c77b0239a74f169bcf84785/trace_next_reading_97598a5d5d37d881ce6f4c78.json.gz",
-              "sha256": "a362865fb2d33fa78b88e3498834a48fa9f06129a4849e2aad25ca64da978668"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/source_window_9c77b0239a74f169bcf84785/trace_next_reading_97598a5d5d37d881ce6f4c78.json.gz",
+              "sha256": "42272a4a9b0bd86c20d571ee716dea22dd102103e60d3d10f3600afc58d3a8c7"
             }
           }
         }
@@ -1679,11 +1697,11 @@
       },
       "origin_refs": {
         "masked": {
-          "path": "phase/release_finish_20261121/publication_review_update_v02/cases/source_window_9c77b0239a74f169bcf84785/origin_masked.json.gz",
+          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/source_window_9c77b0239a74f169bcf84785/origin_masked.json.gz",
           "sha256": "ba4a2ad2df6b38c22ace54910ed8ed0480ed7ed91b85fcbae8eb1ad6df37b70e"
         },
         "revealed": {
-          "path": "phase/release_finish_20261121/publication_review_update_v02/cases/source_window_9c77b0239a74f169bcf84785/origin_revealed.json.gz",
+          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/source_window_9c77b0239a74f169bcf84785/origin_revealed.json.gz",
           "sha256": "04bc99336447b5de9a3b7dadcd3d5ba51ab197e41926412c72520a920cdf5930"
         }
       },
@@ -1736,12 +1754,12 @@
     },
     {
       "case": {
-        "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
+        "case_id": "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
         "corpus": "vietnam",
-        "date": "1973-04-26",
-        "document_id": "1973SAIGON07264",
+        "date": "1973-06-28",
+        "document_id": "1973SAIGON11664",
         "focal_marker": "",
-        "query": "The E-1 Regiment was part of the 5th Division.",
+        "query": "COL HOANG DUC NINH was the 44 TH Special Tactical Zone commander.",
         "task": "hypothesis"
       },
       "collection": "starter",
@@ -1749,20 +1767,20 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/vietnam_hunt_h_632b274b01c56feb2484/condition.json.gz",
-            "sha256": "636ddcab8cfa6652bce105f98a14bb1feb2144523e441e21cf2a19e324e30d28"
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/releasefinish_vn_command_h_v02_6ad030fa5a105fa2/condition.json.gz",
+            "sha256": "fca237e0b3efa514c9a6bf4af36ee45ddfdbcc25de27dc3efef873e3fb085861"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "experiments/narrative_demo/runs/37e3e35410ac8bae7aaf70e0017858a5fb31c2a5a61b006ed39831294d41ac80/native.json.gz",
-            "sha256": "7abbe19e6f52e90be947cabd69c500653799345913447f383aa70909f1c7d043"
+            "path": "experiments/narrative_demo/runs/4ff834f151961bf5daa45f37294bccba78b2df1798ae4dd8fe088e1ddb342517/native.json.gz",
+            "sha256": "90f457e61a82e0afec61bd37ff6b6d0df69985553f50a6f2185af7dbd08547da"
           },
-          "run_id": "narrative_d97c27000e94156879064cbe",
+          "run_id": "narrative_89ce85390eb065dc8d3415ef",
           "trace_refs": {
             "": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/vietnam_hunt_h_632b274b01c56feb2484/trace_assertions.json.gz",
-              "sha256": "c0d059a4bb30fa02ee2949b8dc19776945845ba01ee4e3222af41caab3526ec1"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/releasefinish_vn_command_h_v02_6ad030fa5a105fa2/trace_assertions.json.gz",
+              "sha256": "e51a1dde49ca7e1ef3b25d261181fac4b33a64959979e8cf5fa51c0fa8907522"
             }
           }
         }
@@ -1770,7 +1788,7 @@
       "current_resource_execution": true,
       "decision_summary_by_arm": {
         "llm_readings": {
-          "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
+          "case_id": "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
           "config": "llm_readings",
           "counts": {
             "conflict": 0,
@@ -1779,14 +1797,14 @@
             "opposed": 0,
             "partial": 0,
             "required": 1,
-            "supported": 0,
-            "unresolved": 1
+            "supported": 1,
+            "unresolved": 0
           },
-          "gate_sha256": "6cf63096e297d4bbe3053bafb3a599042e83713c77e56be8ac5d11d52f219774",
-          "native_checksum": "2d9c331c0dad6755a71b74249a02b260b1dd7b80cf013e6f7fa833a612908837",
-          "native_run_id": "narrative_d97c27000e94156879064cbe",
-          "overall_status": "exploratory_contextual",
-          "query_sha256": "b75e08de102b91fc21835d31a5c27ae8afc9ec1601b7b9eff75466befb067460",
+          "gate_sha256": "5d7c3bedb09043749d993a57c1ecd6ef737757cfd9626ebbbb494eee65fcd51e",
+          "native_checksum": "41546576df663691dc3a9e6d949185ad72eb030569fa3c8ea352a12dffa393cc",
+          "native_run_id": "narrative_89ce85390eb065dc8d3415ef",
+          "overall_status": "evidence_backed_suggestion",
+          "query_sha256": "e5ab2f5602f75839b8fb641eada51e540865e5a7750a795c50b82886058e7a35",
           "task": "hypothesis",
           "version": "workbench-decision-summary/1"
         }
@@ -1803,16 +1821,16 @@
           "focal_marker"
         ],
         "issues": [],
-        "native_case_sha256": "3ca223202dae49743e46e3a9c37ba4eeb6b7e3c1870b8b26752bbdea943a6449",
+        "native_case_sha256": "26ffcbf168197ab202dbf1798d887ef9b0980987b18d968b886b89c5a118df23",
         "native_checkpoint": {
-          "path": "experiments/narrative_demo/runs/37e3e35410ac8bae7aaf70e0017858a5fb31c2a5a61b006ed39831294d41ac80/native.json.gz",
-          "sha256": "7abbe19e6f52e90be947cabd69c500653799345913447f383aa70909f1c7d043"
+          "path": "experiments/narrative_demo/runs/4ff834f151961bf5daa45f37294bccba78b2df1798ae4dd8fe088e1ddb342517/native.json.gz",
+          "sha256": "90f457e61a82e0afec61bd37ff6b6d0df69985553f50a6f2185af7dbd08547da"
         },
         "native_packet_modified": false,
-        "native_public_case_sha256": "3ca223202dae49743e46e3a9c37ba4eeb6b7e3c1870b8b26752bbdea943a6449",
-        "native_result_checksum": "2d9c331c0dad6755a71b74249a02b260b1dd7b80cf013e6f7fa833a612908837",
-        "public_case_sha256": "3ca223202dae49743e46e3a9c37ba4eeb6b7e3c1870b8b26752bbdea943a6449",
-        "query_sha256": "b75e08de102b91fc21835d31a5c27ae8afc9ec1601b7b9eff75466befb067460",
+        "native_public_case_sha256": "26ffcbf168197ab202dbf1798d887ef9b0980987b18d968b886b89c5a118df23",
+        "native_result_checksum": "41546576df663691dc3a9e6d949185ad72eb030569fa3c8ea352a12dffa393cc",
+        "public_case_sha256": "26ffcbf168197ab202dbf1798d887ef9b0980987b18d968b886b89c5a118df23",
+        "query_sha256": "e5ab2f5602f75839b8fb641eada51e540865e5a7750a795c50b82886058e7a35",
         "source_admission_scope_bound_not_recomputed": true,
         "state": "PASS",
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
@@ -1820,29 +1838,47 @@
       },
       "origin_refs": {
         "masked": {
-          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/vietnam_hunt_h_632b274b01c56feb2484/origin_masked.json.gz",
-          "sha256": "d620a1e300817be7d6ee4b143d131f9425b2b4bfcaa925f0802bbdd80f294048"
+          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/releasefinish_vn_command_h_v02_6ad030fa5a105fa2/origin_masked.json.gz",
+          "sha256": "c866b59665863cf4704d5ae2d616db237dd44e65b95b98cce3bfd1bb8dea6f2a"
         }
       },
-      "presentation_caveats": [],
-      "presentation_title": "An infantry regiment's parent division",
+      "presentation_caveats": [
+        {
+          "text": "Source-qualified historical role ascription only; not a claim of tenure on June 28 or of any action.",
+          "title": "Historical Role"
+        }
+      ],
+      "presentation_title": "Ninh's 44 TH Special Tactical Zone command role",
       "query_kind": "source_derived",
       "query_version": null,
       "reference_answer_kind": null,
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "fce2bfd8f053d77984ccb64b69e201fd6f229bba5e5cbd73f4b3a528f07546a3",
+        "native_code_epoch_sha256": "46c763c81f9f91eb2aca7c60a7c9e92a995d94483c65291fd84962c564ff1b1a",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
+          "discovery_profile": {
+            "alpha": 0.85,
+            "focal_share": 0.5,
+            "graph_share": 0.25,
+            "hierarchy": true
+          },
           "method": "current_hierarchy",
           "retrieval_document_budget": 40,
           "retrieval_passage_budget": 80,
           "selection_profile": {
             "candidate_focal_fraction": 0.5,
+            "context_kind_mode": "same_page_reference",
+            "context_ordering_mode": "focal_role_affinity",
+            "coordinate_boundary_mode": "visible_boundary",
+            "counter_policy": "positive_support",
+            "cue_order_mode": "focal_sentence",
             "identity_first": true,
+            "nominal_boundary_mode": "literal_visible_prefix",
             "page_focal_fraction": 0.5,
-            "scan_pages": 512
+            "scan_pages": 512,
+            "supplemental_mode": "source_head_opportunities"
           },
           "top_k": 5
         },
@@ -1863,8 +1899,12 @@
       "selected_bench": false,
       "selected_demo": true,
       "showcase_review": {
-        "native_checksum": "2d9c331c0dad6755a71b74249a02b260b1dd7b80cf013e6f7fa833a612908837",
-        "qualified": false
+        "assessment_ref": {
+          "path": "phase/post_public_case_qualification_20261121/release/vn_h_mapping_v01/assessment_wrapper_PRIVATE.json",
+          "sha256": "1a2dba2c37eb4513f479e047819dca9026c645bc9e01f36884e3813a448ea468"
+        },
+        "native_checksum": "41546576df663691dc3a9e6d949185ad72eb030569fa3c8ea352a12dffa393cc",
+        "qualified": true
       }
     },
     {
@@ -1882,7 +1922,7 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_vietnam_command_m_a7a37cb69a0f4505/condition.json.gz",
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/fullresume_vietnam_command_m_a7a37cb69a0f4505/condition.json.gz",
             "sha256": "32563ab91c5dcbc1865e3cb968503577b757da25bf4b36c3e8da69c455484102"
           },
           "config": "llm_readings",
@@ -1894,8 +1934,8 @@
           "run_id": "narrative_4f33b8a9fa0f602795ca1a72",
           "trace_refs": {
             "": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_vietnam_command_m_a7a37cb69a0f4505/trace_assertions.json.gz",
-              "sha256": "fa154ce6f67e85864fd7c1a77d3a99ba133fcacc78f97224a3f74a480168f425"
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/fullresume_vietnam_command_m_a7a37cb69a0f4505/trace_assertions.json.gz",
+              "sha256": "50849e5acea2362cb8a4131fe7461f571a7086f7d7d8adc0725a8b8df185cfff"
             }
           }
         }
@@ -2010,12 +2050,12 @@
     },
     {
       "case": {
-        "case_id": "fullresume_vietnam_nghi_r_c77afffc57790227",
+        "case_id": "narrative_vietnam_a111c4d6f8af8b100825ae07",
         "corpus": "vietnam",
-        "date": "1973-07-12",
-        "document_id": "1973SAIGON12585",
+        "date": "1973-06-28",
+        "document_id": "1973SAIGON11664",
         "focal_marker": "[REDACTION]",
-        "query": "SHEEHAN SAID HE WAS INTERVIEWING MGEN DI FOR HIS BOOK ON JOHN PAUL VANN WHEN DI TOLD HIM [REDACTION] WAS TRYING TO REMOVE HIM FROM THE 9TH AND BRING HIM TO MRIV HEADQUARTERS AS DEPUTY CG.",
+        "query": "THE [REDACTION], BGEN HUYNH VAN LAC, CONFIRMED JUNE 25 THAT ON A NUMBER OF OCCASIONS SINCE CF II VC/ NVA HAVE ATTEMPTED VERY LOW LEVEL CONTACTS BETWEEN GUERILLA FORCES AND RF / PF UNITS.",
         "task": "redaction"
       },
       "collection": "starter",
@@ -2023,20 +2063,20 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_vietnam_nghi_r_c77afffc57790227/condition.json.gz",
-            "sha256": "f127d7b75a95c391790def526d909494c4d5abb899cf79c959688f3650dc5c0d"
+            "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_vietnam_a111c4d6f8af8b100825ae07/condition.json.gz",
+            "sha256": "c4932da62ea8f2382e8d86501eb00c75cf933eac5d10f75248014be662b92645"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "experiments/narrative_demo/runs/46c9cd54905bf430bfb00bd85b1657c6a97dd04dcc640ea3245a59a6fa58c7e8/native.json.gz",
-            "sha256": "27cbd9913952df094db4d451399d5bec3548611e9b04ffccdc4793f445ba61ac"
+            "path": "experiments/narrative_demo/runs/3f0c4c3c33bdbf7a06c7e35b595f5e4ed73e079044c23169066b893e5c4f2043/native.json.gz",
+            "sha256": "1e48d04a52df024229185c1c22cdaba59382fa84bd6c353b5394caa6c061a0e9"
           },
-          "run_id": "narrative_c8b88b7d0eea6f7ed8002047",
+          "run_id": "narrative_688803a11a63737771063fce",
           "trace_refs": {
-            "next_reading_1a091200287dbc18aedc8611": {
-              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_vietnam_nghi_r_c77afffc57790227/trace_next_reading_1a091200287dbc18aedc8611.json.gz",
-              "sha256": "27e6a9d8ab167456b9851ddb4414016d8ff6c4ed281f1c056d80839c9aa94d5f"
+            "next_reading_8bf7d163a376fc320bf42bd0": {
+              "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_vietnam_a111c4d6f8af8b100825ae07/trace_next_reading_8bf7d163a376fc320bf42bd0.json.gz",
+              "sha256": "60cbedfd00a5e09bb4be99e99c1e3c8a251143bdfc2dba030a577ebb2221465d"
             }
           }
         }
@@ -2044,19 +2084,19 @@
       "current_resource_execution": true,
       "decision_summary_by_arm": {
         "llm_readings": {
-          "case_id": "fullresume_vietnam_nghi_r_c77afffc57790227",
+          "case_id": "narrative_vietnam_a111c4d6f8af8b100825ae07",
           "config": "llm_readings",
-          "default_reading_id": "next_reading_1a091200287dbc18aedc8611",
-          "gate_sha256": "b82a90c0263678a6460b664b306ed4f02230ee4433dcbe593bc55553a37e2a87",
-          "native_checksum": "42e0585d097630eb34d5caad158b1ca1eee7050b0821d1931d90b6a09d9f950e",
-          "native_run_id": "narrative_c8b88b7d0eea6f7ed8002047",
+          "default_reading_id": "next_reading_8bf7d163a376fc320bf42bd0",
+          "gate_sha256": "fbe9f92d2d805e1aa1107edfab365fbd55a95edb1788a4f50728a3409b4abbf1",
+          "native_checksum": "41345560e0aff1dbcd474553006a8ca03ea72412bc21f11045e7d5812734a469",
+          "native_run_id": "narrative_688803a11a63737771063fce",
           "overall_status": "exploratory_contextual",
-          "query_sha256": "89ee66039da05eb13afc6ececae9f0d2bf3926c346624a134eb5e9de45593eea",
+          "query_sha256": "c77b52274609cee2d86419b486bbb1c1021fa041a0499371aca774de04d3f0d7",
           "reading_order": [
-            "next_reading_1a091200287dbc18aedc8611"
+            "next_reading_8bf7d163a376fc320bf42bd0"
           ],
           "readings": {
-            "next_reading_1a091200287dbc18aedc8611": {
+            "next_reading_8bf7d163a376fc320bf42bd0": {
               "backed": 0,
               "candidate_count": 5,
               "context": 5,
@@ -2083,16 +2123,16 @@
           "focal_marker"
         ],
         "issues": [],
-        "native_case_sha256": "80c98cfbba17bdf44a2d724cb3465fed66cd91ad56e622bc6f3102361d6f5747",
+        "native_case_sha256": "242e94ebbf14f6044ab40bded2f0974a87093265a20a024142ddad3f012da769",
         "native_checkpoint": {
-          "path": "experiments/narrative_demo/runs/46c9cd54905bf430bfb00bd85b1657c6a97dd04dcc640ea3245a59a6fa58c7e8/native.json.gz",
-          "sha256": "27cbd9913952df094db4d451399d5bec3548611e9b04ffccdc4793f445ba61ac"
+          "path": "experiments/narrative_demo/runs/3f0c4c3c33bdbf7a06c7e35b595f5e4ed73e079044c23169066b893e5c4f2043/native.json.gz",
+          "sha256": "1e48d04a52df024229185c1c22cdaba59382fa84bd6c353b5394caa6c061a0e9"
         },
         "native_packet_modified": false,
-        "native_public_case_sha256": "80c98cfbba17bdf44a2d724cb3465fed66cd91ad56e622bc6f3102361d6f5747",
-        "native_result_checksum": "42e0585d097630eb34d5caad158b1ca1eee7050b0821d1931d90b6a09d9f950e",
-        "public_case_sha256": "80c98cfbba17bdf44a2d724cb3465fed66cd91ad56e622bc6f3102361d6f5747",
-        "query_sha256": "89ee66039da05eb13afc6ececae9f0d2bf3926c346624a134eb5e9de45593eea",
+        "native_public_case_sha256": "242e94ebbf14f6044ab40bded2f0974a87093265a20a024142ddad3f012da769",
+        "native_result_checksum": "41345560e0aff1dbcd474553006a8ca03ea72412bc21f11045e7d5812734a469",
+        "public_case_sha256": "242e94ebbf14f6044ab40bded2f0974a87093265a20a024142ddad3f012da769",
+        "query_sha256": "c77b52274609cee2d86419b486bbb1c1021fa041a0499371aca774de04d3f0d7",
         "source_admission_scope_bound_not_recomputed": true,
         "state": "PASS",
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
@@ -2100,28 +2140,52 @@
       },
       "origin_refs": {
         "masked": {
-          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/fullresume_vietnam_nghi_r_c77afffc57790227/origin_masked.json.gz",
-          "sha256": "2d631d0692aa5d6d718ed04425f7912b8add17e336e020f2cc101f1c8dce7f1f"
+          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_vietnam_a111c4d6f8af8b100825ae07/origin_masked.json.gz",
+          "sha256": "eb99d7b6cdae6428f4cb63cb8664190e65ca9949dc31d898f228ed4894b21b77"
         },
         "revealed": {
-          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/fullresume_vietnam_nghi_r_c77afffc57790227/origin_revealed.json.gz",
-          "sha256": "3fbc75bccce97b32e086c5303dc9266249d0a409a3c9ddca5b509aed07e50d7e"
+          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_vietnam_a111c4d6f8af8b100825ae07/origin_revealed.json.gz",
+          "sha256": "d57b6f5db561c3f60a976beee23b40405b8539d55a98b0d5d322298db1cf636b"
         }
       },
-      "presentation_caveats": [],
-      "presentation_title": "An alleged attempt to remove a commander",
-      "query_kind": "synthetic_redaction",
+      "presentation_caveats": [
+        {
+          "text": "The May 23 source identifies a role; it does not establish the June 25 action or continued tenure.",
+          "title": "Contextual Role Evidence"
+        }
+      ],
+      "presentation_title": "A concealed command role",
+      "query_kind": "source_derived",
       "query_version": null,
       "reference_answer_kind": null,
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "299c291717fe4ebe8ec23677dfaac7c50b95b72bed84c7e912477ab1f6fa11e6",
+        "native_code_epoch_sha256": "209bb4c2e26f1efca3d62dbb3d6093189a324108c505107fb0cbb711cccaca8d",
         "native_configuration": {
-          "completed_drafts_per_reading": 24,
-          "construction_pages": 16,
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "discovery_profile": {
+            "alpha": 0.85,
+            "focal_share": 0.5,
+            "graph_share": 0.25,
+            "hierarchy": true
+          },
           "method": "current_hierarchy",
           "retrieval_document_budget": 40,
           "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "context_kind_mode": "visible_role_context",
+            "context_ordering_mode": "focal_visible_attachment",
+            "coordinate_boundary_mode": "visible_boundary",
+            "counter_policy": "positive_support",
+            "cue_order_mode": "focal_sentence",
+            "identity_first": true,
+            "nominal_boundary_mode": "literal_visible_prefix",
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512,
+            "supplemental_mode": "source_head_opportunities"
+          },
           "top_k": 5
         },
         "native_version": "narrative-local-execution/3",
@@ -2141,8 +2205,16 @@
       "selected_bench": false,
       "selected_demo": true,
       "showcase_review": {
-        "native_checksum": "42e0585d097630eb34d5caad158b1ca1eee7050b0821d1931d90b6a09d9f950e",
-        "qualified": false
+        "assessment_ref": {
+          "path": "phase/post_public_case_qualification_20261121/release/vn_r_mapping_v01/assessment_wrapper_PRIVATE.json",
+          "sha256": "11d77c7dd7cc081d0d4ae04e17ce69a500583d875732f49f98eb3181259c8d22"
+        },
+        "candidate_id": "narrative_fill_b16b598a6aed7639d2e3a987786a",
+        "correctness": "CORRECT",
+        "native_checksum": "41345560e0aff1dbcd474553006a8ca03ea72412bc21f11045e7d5812734a469",
+        "qualified": false,
+        "rank": 1,
+        "reading_id": "next_reading_8bf7d163a376fc320bf42bd0"
       }
     }
   ],
@@ -2164,24 +2236,33 @@
   "full_benchmark_launched": false,
   "investigations": [
     {
+      "collection": "starter",
       "corpus": "cib",
+      "id": "cib_salvador_authority",
       "narrative_id": "cib_salvador_authority",
       "qualified_case_count": 3,
-      "status": "PRIMARY_CASE_REVIEWS_COMPLETE_NOT_GLOBAL_RELEASE",
+      "status": "EXACT_CASE_REVIEWS_NOT_GLOBAL_PUBLICATION_CLEARANCE",
+      "title": "Political Organization and Military Concern",
       "trio_qualified": true
     },
     {
+      "collection": "starter",
       "corpus": "iran",
+      "id": "iran_transition_authority",
       "narrative_id": "iran_transition_authority",
-      "qualified_case_count": 1,
-      "status": "PARTIAL_CASE_REVIEWS_WITH_EXPLICIT_HOLDS_NOT_QUALIFIED_TRIO",
+      "qualified_case_count": 2,
+      "status": "EXACT_CASE_REVIEWS_NOT_GLOBAL_PUBLICATION_CLEARANCE",
+      "title": "Political Networks and Competing Authority",
       "trio_qualified": false
     },
     {
+      "collection": "starter",
       "corpus": "vietnam",
+      "id": "vietnam_delta_command",
       "narrative_id": "vietnam_delta_command",
-      "qualified_case_count": 1,
-      "status": "PARTIAL_CASE_REVIEWS_WITH_EXPLICIT_HOLDS_NOT_QUALIFIED_TRIO",
+      "qualified_case_count": 2,
+      "status": "EXACT_CASE_REVIEWS_NOT_GLOBAL_PUBLICATION_CLEARANCE",
+      "title": "Command Relationships and Reported Personnel Disputes",
       "trio_qualified": false
     }
   ],
@@ -2231,20 +2312,28 @@
       "iran_transition_authority": {
         "no_new_historical_assertions": true,
         "presentation_only": true,
+        "source_synopsis_ref": {
+          "path": "phase/post_public_case_qualification_20261121/release/story_backgrounds.json",
+          "sha256": "26d9956aabed6df5685f45a8692fcef3cc84d952fd6e725bb1c0c115afb9748e"
+        },
         "sources_ref": {
           "path": "experiments/narrative_demo/publication/context_sources_f7886b41f92af3803dc67c88.json.gz",
           "sha256": "6b8e03eaf2405a4e5e0ca9cb1e47b6392685808ba540a727603b453021acc7b8"
         },
-        "text": "Iran's political transition brought formal offices, opposition organizations and personal networks into the same intelligence picture. Reports identified leaders of political and professional organizations, described connections around religious figures, and recorded sensitive embassy contacts with opposition movements. These questions examine different parts of that network: organizational leadership, a teaching relationship, and a concealed name in a description of links between government and committees. The reports come from different moments; they should not be read as one meeting or one shared event. For a new reader, the useful starting point is to separate an office from a personal relationship, and both from a report's assessment of political influence. A familiar name can be a plausible clue without establishing the particular relationship a question asks about. Compare the wording, source dates and qualifications before joining the accounts. The saved results distinguish established components from contextual suggestions; this introduction supplies no missing identity or independent correctness judgment."
+        "text": "Iran's political transition brought formal offices, opposition organizations and personal networks into the same intelligence picture. Reports identified leaders of political and professional organizations, described connections around religious figures, and recorded sensitive embassy contacts with opposition movements. These questions examine different parts of that network: organizational leadership, a teaching relationship, and a concealed name in a description of links between government and committees. The reports come from different moments; they should not be read as one meeting or one shared event. For a new reader, the useful starting point is to separate an office from a personal relationship, and both from a report's assessment of political influence. A familiar name can be a useful clue without establishing the particular action a question asks about. The investigation follows these connections while keeping each report's wording, date and attribution visible."
       },
       "vietnam_delta_command": {
         "no_new_historical_assertions": true,
         "presentation_only": true,
+        "source_synopsis_ref": {
+          "path": "phase/post_public_case_qualification_20261121/release/story_backgrounds.json",
+          "sha256": "26d9956aabed6df5685f45a8692fcef3cc84d952fd6e725bb1c0c115afb9748e"
+        },
         "sources_ref": {
           "path": "experiments/narrative_demo/publication/context_sources_f7886b41f92af3803dc67c88.json.gz",
           "sha256": "6b8e03eaf2405a4e5e0ca9cb1e47b6392685808ba540a727603b453021acc7b8"
         },
-        "text": "The Vietnam cables report on command relationships and military developments after the 1973 cease-fire. In the Mekong Delta, understanding who commanded a region or division mattered when interpreting disputes over officers and their assignments. The Mosaic assembles command descriptions from separate earlier reports. The Hypothesis tests a narrower unit relationship, and the Redaction asks who allegedly sought to remove a commander. Earlier evidence about someone's office can make a candidate plausible, but it does not by itself prove participation in a later personnel dispute. For a new reader, regional commands, divisions and regiments are different organizational levels, so a title or unit name must be read with its particular relationship intact. Keep reported conversations separate from independently established actions. These questions form a broad command story, not a claim that every cable describes one operation. The retained Hypothesis and Redaction are older, unqualified saved controls while more suitable source-curated command prospects remain pending."
+        "text": "The Vietnam cables describe military command relationships after the 1973 cease-fire. In the Mekong Delta, regional commands, divisions and special tactical zones formed different parts of the military organization. Knowing which officer held which position helped an analyst interpret reports about local contacts, requests and personnel disputes. A familiar name was not enough: the office, unit and reporting date mattered too. This investigation begins by assembling command descriptions from separate earlier reports. It then examines a specific officer's recorded position and a concealed description in another military report. The accounts illuminate the same command environment without necessarily describing one operation. For a new reader, the central distinction is between identifying someone's position and establishing what that person subsequently said or did. Following the names back to their original passages makes that difference visible and keeps a plausible connection separate from a demonstrated action."
       }
     },
     "presentation_only": true
@@ -2277,14 +2366,14 @@
         "narrative_cib_revision_50e63144067940b5debe3fea"
       ],
       "iran_transition_authority": [
-        "curation_v65_overlap_haeri_teacher_student_h01",
+        "iran_factual_h_9b61144cb419baafa343",
         "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
         "source_window_9c77b0239a74f169bcf84785"
       ],
       "vietnam_delta_command": [
-        "vietnam_hunt_h_632b274b01c56feb2484",
+        "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
         "fullresume_vietnam_command_m_a7a37cb69a0f4505",
-        "fullresume_vietnam_nghi_r_c77afffc57790227"
+        "narrative_vietnam_a111c4d6f8af8b100825ae07"
       ]
     },
     "version": "narrative-story-attempts/1"
@@ -2304,31 +2393,19 @@
   "qualified_release_ready": false,
   "quality_blockers": [
     {
-      "case_id": "curation_v65_overlap_haeri_teacher_student_h01",
-      "reason": "HOLD_A1_FORWARDED_MESSAGE_ATTRIBUTION_REQUIRES_SCOPE_ADJUDICATION"
-    },
-    {
       "case_id": "source_window_9c77b0239a74f169bcf84785",
       "reason": "SOURCE_AND_OUTCOME_ASSESSMENT_GAPS_NOT_QUALIFIED"
     },
     {
-      "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
-      "reason": "NO_SIGNED_COMPONENT_OR_SOURCE_GROUNDED_FILL"
-    },
-    {
-      "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
-      "reason": "SOURCE_AND_OUTCOME_ASSESSMENT_GAPS_NOT_QUALIFIED"
-    },
-    {
-      "case_id": "fullresume_vietnam_nghi_r_c77afffc57790227",
-      "reason": "SOURCE_AND_OUTCOME_ASSESSMENT_GAPS_NOT_QUALIFIED"
+      "case_id": "narrative_vietnam_a111c4d6f8af8b100825ae07",
+      "reason": "PASS_BOUNDED_R_SOURCE_NATIVE_AUDIT_QUALIFIED_FALSE"
     }
   ],
   "release_profile": "primary_nine",
   "release_scope": "diagnostic",
-  "run_id": "narrative_publication_6246bd1d92ef3179ac454a5b",
+  "run_id": "narrative_publication_656d652b622a0a065dcd18ce",
   "selection_rule": "One executed starter per corpus/task and five distinct authentic CIB redaction extras; no bench scope",
-  "sha256": "b76dbe750c1291308c8226cb1a8dd96ff5c2d66f6c3302b49462000d74902916",
+  "sha256": "f3524027238901e87dfbd78ccf7927cdf19c91ddab9303cee354ad2adb8736cb",
   "showcase_ready": false,
   "status": "PARTIAL",
   "version": "narrative-workbench-publication/1"

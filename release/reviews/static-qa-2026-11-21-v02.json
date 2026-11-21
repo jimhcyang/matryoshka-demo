@@ -1,0 +1,29 @@
+{
+  "version": "static-release-qa-summary/2",
+  "status": "PASS_BOUNDED_STATIC_CHECKS",
+  "candidate_manifest_sha256": "e38161d15e82227997f3d8b2dcd60a5ef3627600ce5712e3c49fc2b025ca86d9",
+  "integrity_receipt_sha256": "af14ee73f6d98985d166ad14632fe0221a0e764364f1a6bd8058b2d3ce945cc4",
+  "static_browser_receipt_sha256": "68dc66b3bad9c54dd210c205b6fb97b5fc4b842c935952464cc7b85e5c51a821",
+  "ci_browser_receipt_sha256": "ae981e1505f6af0fcc184b8fd7fc08a7a8645f5f89a0031e6884754db2e41f4a",
+  "independent_ui_receipt_sha256": "53707c7058539685dac954f3b53a045e653907cce7df11162e94b5a41c51c04f",
+  "independent_reader_receipt_sha256": "151d61370b32c4d0e68a5850d10031562f1a371164e689795c34829930413eb1",
+  "ui_data_reader_bytes_unchanged_from_browser_review": true,
+  "packaging_delta_files": [
+    "downloads/matryoshka-code-manifest.json",
+    "downloads/matryoshka-code.zip",
+    "export-lineage.json",
+    "publication.json",
+    "release-manifest.json"
+  ],
+  "files_checked": 18546,
+  "logical_roots_reconstructed": 10263,
+  "original_graph_files_checked": 1576,
+  "static_browser_cells": 24,
+  "static_distinct_payloads": 755,
+  "ci_browser_cells": 8,
+  "compatible_transport_tests_passed": 108,
+  "installed_authorization_tests_passed": 6,
+  "paid_browser_calls": 0,
+  "native_executions_during_publication": 0,
+  "scope": "Finite saved presentation checks; not complete inference capability or blind effectiveness evaluation."
+}

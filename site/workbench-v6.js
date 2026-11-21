@@ -1066,8 +1066,10 @@ function renderResultBody(){
   const recordedCounts=localVerdictPanel().querySelector('.verdict-counts');if(recordedCounts)host.append(recordedCounts);
   if(isNarrativePublication()){
     if(task==='redaction'){
-      const chart=renderEndingScoreChart(items,{onExplain:()=>{
-        const body=box(note('The saved index encodes the local ranking criteria: evidence tier, source-owned role and attachment checks, context overlap, and retrieval relevance. It is multiplied by 100 for display. It is not a probability; small differences may round to the same value. Stable source order resolves exact ties.'));
+      const chart=renderEndingScoreChart(items,{onExplain:(rows)=>{
+        const basis=rows[0]?.basis;
+        const explanation=basis==='SAVED_FULL_ORDER_ORDINAL'?'The saved final ordering key includes the evidence tier and its declared source/context priorities. For R distinct keys, the index is (R - key rank) / max(1, R - 1), multiplied by 100; a single distinct key occupies the full scale. It describes position within that assessed pool, not confidence or evidence strength.':basis==='DISPLAY_POSITION_ONLY'?'These bars show only the displayed positions: (1 - index / max(1, count - 1)) multiplied by 100. No native aggregate score is invented.':'The saved source-priority index encodes the recorded ranking criteria. It is multiplied by 100 for display. It is not a probability; small differences may round to the same value. Stable source order resolves exact ties.';
+        const body=box(note(explanation));
         const context=el('div');body.append(context);openDrawer('Score breakdown','Saved arithmetic, not confidence',body);renderNarrativeScores(context);
       }});if(chart)host.append(chart);
     }
@@ -1092,11 +1094,14 @@ async function loadAnalystDigest(host,epoch,reading){
     const params=caseQuery(),key=params.toString();
     let data=digestCache.get(key);if(!data){data=await getJSON("/api/current/analyst-digest?"+params);if(data.available===true)digestCache.set(key,data);}
     if(epoch!==state.epoch||reading!==state.reading||!host.isConnected)return;
-    if(isNarrativePublication()&&(data.version!=='narrative-saved-digest/1'||data.case_id!==state.row.case.case_id||data.config!==ARMS[state.arm].key||canonicalGateJSON(data.native_checkpoint)!==canonicalGateJSON(state.saved.native_checkpoint)||!['narrative-local-execution/2','narrative-local-execution/3'].includes(data.native_version)||data.current_native_execution!==false))throw Error('No matching saved narrative digest is attached.');
+    if(isNarrativePublication()&&(!['narrative-saved-digest/1','narrative-saved-digest/2'].includes(data.version)||data.case_id!==state.row.case.case_id||data.config!==ARMS[state.arm].key||canonicalGateJSON(data.native_checkpoint)!==canonicalGateJSON(state.saved.native_checkpoint)||!['narrative-local-execution/2','narrative-local-execution/3'].includes(data.native_version)||data.current_native_execution!==false))throw Error('No matching saved narrative digest is attached.');
     if(data.available!==true){if(isNarrativePublication()){host.dataset.status='unavailable';host.replaceChildren(el('p','No saved analyst digest is attached.'),note('No current-engine digest or generated commentary is substituted.'));}return;}
     const words=typeof data.text==='string'?data.text.trim().split(/\s+/):[];
     if(data.postrun!==true||data.used_for_inference!==false||words.length<50||words.length>100)throw Error("No matching 50-100 word post-run digest is available.");
+    const expectedScope=list(state.row.presentation_caveats).map(({title,text})=>({title,text}));
+    if(data.source_scope_notes&&(data.source_scope_notes.postrun_only!==true||data.source_scope_notes.used_for_local_inference!==false||data.source_scope_notes.changes_native_verdict!==false||canonicalGateJSON(data.source_scope_notes.notes)!==canonicalGateJSON(expectedScope)))throw Error("Digest source scope differs from the selected question.");
     host.dataset.status="available";host.replaceChildren(el("p",data.text),note("LLM review of the saved query and source decision only. Not an answer-key judgment; not used for inference."));
+    const scope=presentationCaveats(state.row);if(scope)host.append(scope);
     const sources=digestProofs(data.sources);
     if(sources.length)host.append(button("Sources",()=>{const body=box();for(const proof of sources)body.append(quoteCard(proof));openDrawer("Digest sources","Verified saved review quotations",body);},"",{"data-testid":"digest-sources"}));
   }catch{if(host.isConnected&&epoch===state.epoch){host.dataset.status=isNarrativePublication()?'unavailable':'pending';host.replaceChildren(el("p",isNarrativePublication()?'Saved analyst digest unavailable.':"Source-bound analyst digest pending.",{role:"status"}),note("No generated text or historical commentary is substituted."));}}
@@ -1463,7 +1468,7 @@ function presentationCaveatEntries(row){
   const entries=list(row.presentation_caveats).filter(value=>value&&typeof value.title==="string"&&value.title.trim()&&typeof value.text==="string"&&value.text.trim());
   const review=row.showcase_review;
   if(review?.qualified===false&&review.assessment_ref?.sha256&&review.native_checksum){
-    entries.push({title:"Source review unresolved",text:"The saved local verdict is unchanged. Independent review has not cleared its source scope; inspect the complete quotation context before relying on this result."});
+    entries.push({title:"Showcase criteria not met",text:"The saved local result is retained with its contextual or unresolved decision. A reference match alone does not establish corpus support."});
   }
   return entries;
 }
@@ -2127,15 +2132,20 @@ function modifierCarrierPanel(candidate){
 function candidateDetail(candidate) {
   const support=candidate.support_assessment||{},d=disposition(candidate),body=box(el("blockquote",candidate.fill,{class:"cue"}),dispositionPanel(candidate),
     note(support.scope||"Focal contribution only, not a whole-event guarantee.","notice"));
-  body.append(localDecisionPanel(candidate),note(displayText(d.explanation||support.explanation)||"No local explanation supplied."),fields([["Recorded insertion fit",feasibility(candidate).label],["Source identity binding / saved value",candidate.support_dimensions?.identity],["Support scope",supportDimensions(candidate).scope]]));
-  body.append(rawInspector({candidate_feasibility:candidate.candidate_feasibility,disposition:candidate.disposition,grammar_admission:candidate.grammar_admission,v21_joint_fit:candidate.v21_joint_fit,
-    support_dimensions:candidate.support_dimensions,support_assessment:{...support,evidence:undefined},local_fields:Object.fromEntries(
-      ["accepted","rejected","recommended","local_acceptance","local_recommendation","local_decision"].filter(key=>Object.hasOwn(candidate,key)).map(key=>[key,candidate[key]]))}));
+  body.append(localDecisionPanel(candidate));
+  const explanation=displayText(d.explanation||support.explanation);if(explanation)body.append(note(explanation));
+  body.append(fields([["Recorded insertion fit",feasibility(candidate).label],["Source identity binding",candidate.support_dimensions?.identity],["Support scope",supportDimensions(candidate).scope]].filter(([,value])=>value!=null)));
   body.append(heading("Original source wording"),el("div",candidate.source_wording||"Not supplied",{class:"raw-text"}));
   const needed=d.needed??support.needed;
   if(needed&&(Array.isArray(needed)?needed.length:true)){body.append(heading("What is still needed"));for(const text of Array.isArray(needed)?needed:[needed])body.append(note(text));}
   const modifier=modifierCarrierPanel(candidate);if(modifier)body.append(modifier);
-  if(candidate.ranking_explanation)body.append(heading("Why this position"),note(rankingText(candidate.ranking_explanation)));
+  const attachment=candidate.focal_visible_attachment_priority;
+  if(candidate.context_ordering?.mode==='focal_visible_attachment'&&candidate.local_decision?.status==='exploratory_contextual'&&attachment?.matched===true&&attachment.producer_replayed===true&&attachment.saved_observation_equal===true){
+    body.append(heading('Why this position'),note('The saved check associates the complete source role with the exact name visible beside the gap. This rechecked grammatical association comes first within contextual ordering, but does not establish the later action. Evidence-backed and established partial results remain ahead of context.'));
+  }else{
+    const order=candidate.ranking_explanation||candidate.ranking?.canonical_order;
+    if(typeof order==='string'&&order.trim())body.append(heading('Why this position'),note(rankingText(order)));
+  }
   const rank=candidate.ranking_comparison;
   if(rank?.criterion_label||rank?.criterion===MODIFIER_CARRIER_TIER)body.append(note(`${rank.criterion===MODIFIER_CARRIER_TIER?MODIFIER_CARRIER_LABEL:rankingText(rank.criterion_label)}: ${primitive(rank.candidate_value)} versus ${primitive(rank.other_value)} for ${rank.other_fill||"the adjacent proposal"}. Ordered relevance, not correctness probability.`));
   if(list(candidate.insertion_edits).length){body.append(heading("Saved insertion edits"));for(const edit of candidate.insertion_edits)body.append(note(edit.explanation||edit.reason||primitive(edit.kind)));}

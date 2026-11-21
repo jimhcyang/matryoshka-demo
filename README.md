@@ -7,12 +7,14 @@ A source-linked analyst workbench for historical Central Intelligence Bulletins,
 | Collection | What to inspect |
 | --- | --- |
 | CIB / El Salvador | A complementary two-document Mosaic, a reported appointment Hypothesis and the rank-one evidence-backed property "easily politically manipulated". |
-| Iran / opposition and authority | Two source-identified organizational roles, teaching relationships and a contextual Yazdi proposal. The Hypothesis has a separately recorded attribution-scope review hold. |
-| Vietnam / military command | Two earlier command identifications, a regiment/division Hypothesis and a concealed participant. Unresolved evidence and missed targets remain visible. |
+| Iran / opposition and authority | Two source-identified organizational roles, a source-ascribed teaching relationship and a contextual rank-one Yazdi proposal. The teaching evidence is a forwarded statement, not independently verified world truth. |
+| Vietnam / military command | Two earlier command identifications, a supported historical-role Hypothesis and the rank-one contextual fill "MR IV CHIEF OF STAFF". Earlier role evidence does not establish the later action or continued tenure. |
 | Additional CIB recoveries | Arias, air-force commander, Betancourt, corrupt and Aung Gyi: complete reviewed recoveries within five in their preserved historical runs, not five new evidence-backed results. |
 | Swedish comparison | Strict-prior earlier release, strict-prior later release, and later release plus the exact origin. The final view is a disclosed exception; hidden nationality ground truth is unknown. |
 
 The workbench presents the question, atoms, saved routes, matched quotations and local verdict. Candidate proposals appear at the results stage. The redaction reference can be revealed and hidden again. Origin documents remain excluded from eligible evidence. Ranking-position bars are ordinal display aids, not confidence or evidence-strength scores.
+
+Seven of the nine primaries meet their source-qualified showcase checks. The Iran and Vietnam redactions recover their reference fills first but remain contextual, with explicit abstention from an evidence-backed recommendation. All fourteen saved executions are complete; these are curated arm-A results, not a matched comparison of planning methods.
 
 Read the [illustrated methods and case guide](https://jimhcyang.github.io/matryoshka-demo/docs/matryoshka-guide.pdf) for retrieval, local grammar, scoring, hierarchy navigation and source requirements. Routes, graph relevance, grammatical fit and saved model summaries do not independently establish facts. Hierarchy and identity assignments are retrospective.
 
