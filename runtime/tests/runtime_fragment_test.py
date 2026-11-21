@@ -162,6 +162,10 @@ def test_fragment_rejects_bad_pins_cycles_bounds_and_paths(browser, site, defect
 def test_fragment_chunk_cache_has_global_count_and_byte_bounds(browser, site):
     manifest = install_pack(site, many=10)
     context, page = open_page(browser, site)
+    # Count our fragment LRU reads, not Chromium's separate HTTP-cache reuse.
+    network = context.new_cdp_session(page)
+    network.send("Network.enable")
+    network.send("Network.setCacheDisabled", {"cacheDisabled": True})
     try:
         for i in range(10):
             assert page.evaluate("async url=>(await fetch(url)).json()", f"/graph-assets-v4/cib/asset-{i}.json.gz") == i
@@ -169,6 +173,8 @@ def test_fragment_chunk_cache_has_global_count_and_byte_bounds(browser, site):
         assert stats["chunks"] == 8 and stats["chunkBytes"] <= 32 * 1024 ** 2
         first = PREFIX + "data/packed/" + manifest["chunks"][0]["path"]
         before = sum(r["path"] == first for r in site["requests"])
+        assert page.evaluate("async()=> (await fetch('/graph-assets-v4/cib/asset-0.json.gz')).json()") == 0
+        assert sum(r["path"] == first for r in site["requests"]) == before + 1
         assert page.evaluate("async()=> (await fetch('/graph-assets-v4/cib/asset-0.json.gz')).json()") == 0
         assert sum(r["path"] == first for r in site["requests"]) == before + 1
         assert sum(r["path"] == PREFIX + "data/packed/manifest.json" for r in site["requests"]) == 1
