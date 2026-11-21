@@ -1,0 +1,31 @@
+{
+  "version": "source-bound-data-qa/1",
+  "date": "2026-11-21",
+  "status": "PASS_DIAGNOSTIC_DATA",
+  "source_report_sha256": "0444fc3704868b557b26f0a539357cc5edc3813c8f67e2a804f67c57dca0d3bf",
+  "review_receipt": {
+    "path": "reviews/data-review.json",
+    "sha256": "d1b80e38019dfe3d91a947b0b06a7056e57f8954c23110bff90e96ef365f720b"
+  },
+  "independent_checks_passed": 793,
+  "native_public_condition_seals_replayed": 14,
+  "primary_cases": 9,
+  "additional_authentic_cib_redactions": 5,
+  "primary_case_level_qualified": 5,
+  "additional_recovery_reviews_passed": 5,
+  "primary_cases_not_showcase_qualified": 4,
+  "swedish_gold_known": false,
+  "swedish_origin_exception_separately_scoped": true,
+  "native_results_or_ranks_modified": false,
+  "global_nine_qualified": false,
+  "benchmark_accuracy_claimed": false,
+  "publication_authorization": false,
+  "scope": "Acceptance of the pinned saved-data review, not new semantic grading, complete static-browser clearance or nine successful primary outcomes.",
+  "retained_limits": [
+    "The Iran teaching Hypothesis has an independent attribution-scope hold despite its saved positive local verdict.",
+    "The Iran redaction remains contextual; the Vietnam Hypothesis and Redaction do not meet the strict showcase criteria.",
+    "The five historical additional cases retain their actual saved versions and contextual support labels.",
+    "Identity and hierarchy are retrospective resources. Ordinary evidence retains strict earlier-source and whole-origin rules.",
+    "Historical public source material retains its original rights and handling notices; this project makes no new declassification decision."
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "version": "source-bound-release-authorization/1",
+  "date": "2026-11-21",
+  "reviewer": "release_lead",
+  "candidate_manifest_sha256": "53b5fd298b506a4756b09de9c99cb8fc2e2d680612b369344d1de048f9836452",
+  "source_report_sha256": "0444fc3704868b557b26f0a539357cc5edc3813c8f67e2a804f67c57dca0d3bf",
+  "backend_code_sha256": "680099140564e27227f4904046541176d2bf48742f06531038fc4dd6d286e13a",
+  "publish_authorized": true,
+  "new_data_qa_accepted": true,
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "qualified_data_qa_ref": {
+    "path": "data-qa.json",
+    "sha256": "f216ee2d25ec51b2c0bdc2186b614cf60bbdb0e833e45826b675ff5e21d88263"
+  },
+  "review_refs": [
+    {
+      "path": "reviews/ui-review.json",
+      "sha256": "f96379255ffc7b7d014f57317597c2cf5f08337779a2e96488fc5742cb81f990"
+    },
+    {
+      "path": "reviews/transport-review.json",
+      "sha256": "5e43e75ea02fa9a6e89bed42b693e2649b9e19b5c2b68f8e0d6f4291450fe1a8"
+    },
+    {
+      "path": "reviews/browser-smoke.json",
+      "sha256": "ea87962e82e2356f14ba5207764206119d7012d334ba4006314387d6462d0990"
+    },
+    {
+      "path": "privacy-and-rights.json",
+      "sha256": "aaeb03fa45a794fc9b6f67e1792e496a5b9922166b92d7f8b68b377bea126714"
+    }
+  ],
+  "accepted_static_browser_cells": 7,
+  "additional_owner_static_browser_cells": 24,
+  "compatible_runtime_tests_passed": 108,
+  "primary_cases": 9,
+  "additional_historical_cib_redactions": 5,
+  "primary_cases_qualified": 5,
+  "primary_quality_gaps_declared": 4,
+  "all_nine_primary_cases_qualified": false,
+  "benchmark_accuracy_claimed": false,
+  "native_results_or_rankings_modified_by_publication": false,
+  "historical_native_versions_preserved": true,
+  "swedish_origin_exception_separate": true,
+  "swedish_ground_truth_known": false,
+  "inference_api_calls_in_browser": 0,
+  "inherited_approval_used": false
+}

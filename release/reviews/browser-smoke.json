@@ -1,0 +1,56 @@
+{
+  "success": true,
+  "cells": [
+    {
+      "name": "graph-iran",
+      "node_count": 13,
+      "slots": 0,
+      "pass": true
+    },
+    {
+      "name": "graph-cib",
+      "node_count": 5,
+      "slots": 28201,
+      "pass": true
+    },
+    {
+      "name": "graph-vietnam",
+      "node_count": 10,
+      "slots": 0,
+      "pass": true
+    },
+    {
+      "name": "walk-iran-graph",
+      "actual_selected_id": "claim_f41a8fa02a5c4ae16d2a",
+      "source_only": false,
+      "pass": true
+    },
+    {
+      "name": "walk-cib-graph",
+      "actual_selected_id": "claim_2dcff77e8c771da1192d",
+      "source_only": false,
+      "pass": true
+    },
+    {
+      "name": "walk-cib-source",
+      "source_only": true,
+      "pass": true
+    },
+    {
+      "name": "walk-vietnam-source",
+      "source_only": true,
+      "pass": true
+    },
+    {
+      "name": "swedish-S2",
+      "explicit_acknowledgment": true,
+      "pass": true
+    }
+  ],
+  "leaked_api_requests": [],
+  "external_requests": [],
+  "managed_chromium_headless_shell": true,
+  "model_api_calls": 0,
+  "native_executions": 0,
+  "browser_closed": true
+}

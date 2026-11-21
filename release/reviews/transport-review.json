@@ -1,0 +1,150 @@
+{
+  "status": "PASS",
+  "kind": "TRANSPORT_AND_REFERENCE_INTEGRITY_ONLY",
+  "files": 18733,
+  "stored_bytes": 438122194,
+  "largest_file": 36280138,
+  "logical_roots": 11117,
+  "all_logical_roots_reconstructed": true,
+  "native": [
+    {
+      "case_id": "narrative_cib_revision_ac39b62cbc7070a340c5d62d",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/focal_recovery_20261120/final13/runs/c016b9f93666f505c1b5518dfc0761e0d0edb93329769f27d0cab6a22def5cd8/native.json.gz",
+        "sha256": "bae3d8a5b3e445de3bf43e15f412708b9ba7c3362bc2fa22f3b1ff78c4355f5f"
+      },
+      "core_checksum": "7fccf9b021d99bef342b55458beab2943dc6f8c044d9309d18c96c34cd4cd959"
+    },
+    {
+      "case_id": "narrative_cib_revision_3eea5176c0eab4abfb6452a4",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/focal_recovery_20261120/final13/runs/be1a1ee6bc8534bdb1f606f54a47a951a01493d006e4a20439ae6dd7e9a71a0a/native.json.gz",
+        "sha256": "57e45c5cdf315d622f5ddbfed0a9debdf0170efbdcc8c7b3cb9a1b20dff06eac"
+      },
+      "core_checksum": "8923ec559315bb3844ad640cbe6749af97d5f0bc0f1d656cd3dbeedc3720913b"
+    },
+    {
+      "case_id": "cloze_132dbc991d56c1c3ff66331a",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/focal_recovery_20261120/final13/runs/63256e96cd34b18e8b2d1c933995f1ee96721966e8353526e39ab47c523b9277/native.json.gz",
+        "sha256": "d528af647cd544e6bcb0318d75173863c06f9d2756119bd301b509b7388472a2"
+      },
+      "core_checksum": "d1968183a155b70a11dfd7837111c8b8f49e46dd115d36deca2caf654e58ef29"
+    },
+    {
+      "case_id": "cloze_225a750400eb38718fa5bb9b",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/focal_recovery_20261120/final13_planfix/runs/4b390919a369f44243174404f21d1d8c090f3536f90ad023573eae6365514aaa/native.json.gz",
+        "sha256": "b3aa4af7b0c90dba5f841b29e403a7d89f4a412f696881b498bf2b8c341067b3"
+      },
+      "core_checksum": "8a990866a95477db3ec316430ff3d636823c243b2a31a5ae73a7f2b26cfb4d1a"
+    },
+    {
+      "case_id": "narrative_cib_revision_ac4fb499beb4b345b5384ae6",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/9c4fcc94115e422e0e2add18b6c8b4e4baff83d3ddd0dc8a889eb9a451116645/native.json.gz",
+        "sha256": "acf0ff558216196ced3df3782b56b3744a4d36e4154ddd4110de2178996bfa51"
+      },
+      "core_checksum": "e045f9d804c92c475805430d01eb1ad4a7d11c95fec7d6e22f76e689f8e60e5f"
+    },
+    {
+      "case_id": "narrative_cib_alt_h_3af565c9ad6e532e16c9264b",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/95217ef1086f82797734b1782c7de19aabd630d9d1334185eb5bbdc2056f0a4e/native.json.gz",
+        "sha256": "7dfb99834a1ca90a221118e670e409face60bb6bc15be7938746b6072e3ae34f"
+      },
+      "core_checksum": "221cb3445684eb9fe67bbd3925929caf71359a0d9886c3074dbae3d522a6006a"
+    },
+    {
+      "case_id": "narrative_cib_revision_ab8506d47badd3718e892a7e",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/a42a47d5259e54fed24b7b4a9fa484513cc9a5f648a0966094f17f57af8f26df/native.json.gz",
+        "sha256": "f2719509df046ddc0ae3d9fa073abbd277fe0c7f28565918f821b1bb52d862aa"
+      },
+      "core_checksum": "c0a933f1cbb44907d391f8708c590d1cc5f75e823de0bd06b634313392dd19e9"
+    },
+    {
+      "case_id": "narrative_cib_revision_50e63144067940b5debe3fea",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/4e62f4e2f5dfa1501de0ee03b684461880b975099931be66515592a465acd8db/native.json.gz",
+        "sha256": "5b2749b6604ddff04027289e7c6b6cd2e5615d8212fb185e1802cfc182524ceb"
+      },
+      "core_checksum": "e57c4bf6313346627f2e532c469bb40cc32703f62d663085eaa9a46558207976"
+    },
+    {
+      "case_id": "curation_v65_overlap_haeri_teacher_student_h01",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/40d04eddd52b4fd856ba6df2fe58669f5c35289bc590d6ff0143364c42d12059/native.json.gz",
+        "sha256": "d67f5e4258a4cc628d24e0550ab2c78b36f0337505cbb3c34dc70a7621ff5ea5"
+      },
+      "core_checksum": "908c8f193ab8edbf972a336738117f639a1932ed74271ed4ef8f81a6946d804f"
+    },
+    {
+      "case_id": "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/2ecf4c500b79de5cde208860bea9d04a7fc2055b7e64b67d53add08155d17e6b/native.json.gz",
+        "sha256": "e764c8ada25dba914e05c741446ce9213eb38a8fa5acce3d578f0092828c1246"
+      },
+      "core_checksum": "f75f81f9062eac8956464e77cbb73a1c47cc41677aa08cfe1d21903367a7d8fb"
+    },
+    {
+      "case_id": "source_window_9c77b0239a74f169bcf84785",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/823693d69176df68475db0bfd8d10de55a2298a142754836446307b7c0829597/native.json.gz",
+        "sha256": "23895c3e77077a42dc57f0a9f8970dc03e7782d36022b82cf4e5920a90a368dd"
+      },
+      "core_checksum": "0af7f8e903ca833f6284c37614e3afa0f8be98a9e45bcd054e888eb892f318b5"
+    },
+    {
+      "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/37e3e35410ac8bae7aaf70e0017858a5fb31c2a5a61b006ed39831294d41ac80/native.json.gz",
+        "sha256": "7abbe19e6f52e90be947cabd69c500653799345913447f383aa70909f1c7d043"
+      },
+      "core_checksum": "2d9c331c0dad6755a71b74249a02b260b1dd7b80cf013e6f7fa833a612908837"
+    },
+    {
+      "case_id": "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/73795c53166fe3bd214856cf4d825eb573852e484cfc42d2f88c6997e0d1fdd0/native.json.gz",
+        "sha256": "4513bdf78eca90b7154f002e41159faedc7e0d4203a85695dd0b0c8b63d0eea7"
+      },
+      "core_checksum": "195fc6e7f418a295636b90ea82c31f753e51751148c202c722db257e019ca0fc"
+    },
+    {
+      "case_id": "fullresume_vietnam_nghi_r_c77afffc57790227",
+      "config": "llm_readings",
+      "native_checkpoint": {
+        "path": "experiments/narrative_demo/runs/46c9cd54905bf430bfb00bd85b1657c6a97dd04dcc640ea3245a59a6fa58c7e8/native.json.gz",
+        "sha256": "27cbd9913952df094db4d451399d5bec3548611e9b04ffccdc4793f445ba61ac"
+      },
+      "core_checksum": "42e0585d097630eb34d5caad158b1ca1eee7050b0821d1931d90b6a09d9f950e"
+    }
+  ],
+  "source_report_ref": {
+    "path": "experiments/narrative_demo/publication/narrative_publication_6246bd1d92ef3179ac454a5b/report.json",
+    "sha256": "0444fc3704868b557b26f0a539357cc5edc3813c8f67e2a804f67c57dca0d3bf"
+  },
+  "manifest_sha256": "53b5fd298b506a4756b09de9c99cb8fc2e2d680612b369344d1de048f9836452",
+  "same_repository_datasets": {
+    "files": 1576,
+    "routes": 1576,
+    "bytes": 2918125927,
+    "all_original_wire_and_decoded_hashes_checked": true
+  },
+  "publish_authorized": false,
+  "privacy_or_research_approval_created": false
+}

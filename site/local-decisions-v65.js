@@ -1,9 +1,10 @@
 // The V6.5 reporting supplement never substitutes for the frozen native record.
 export const labels={evidence_backed_suggestion:"Evidence-backed suggestion",partial_grounding:"Partial grounding",
   exploratory_contextual:"Exploratory / contextual",incompatible_not_viable:"Incompatible / not viable"};
+const mosaicTask=task=>task==='mosaic'||task==='reconstruction';
 export function decisionLabel(value,task=value?.task){
   if(task==="hypothesis")return assertionDecision(value,task).label;
-  if(task==="mosaic")return assertionDecision(value,task).label;
+  if(mosaicTask(task))return assertionDecision(value,task).label;
   return labels[value?.status]||"New local decision not published";
 }
 
@@ -42,7 +43,7 @@ export function currentPDFURL(input,{caseId,config,binding}={},base=globalThis.l
 export function currentReportStatusBadge(row,config,verifiedVersion){
   const item=row?.configurations?.[config],task=row?.case?.task;
   if(!['current-workbench-publication/1','narrative-workbench-publication/1'].includes(verifiedVersion)||row?.current_resource_execution!==true||
-      !validResourceBinding(row.resource_binding)||!['hypothesis','mosaic','redaction'].includes(task)||
+      !validResourceBinding(row.resource_binding)||!['hypothesis','mosaic','reconstruction','redaction'].includes(task)||
       !item||item.config!==config||!/^[a-f0-9]{64}$/.test(item.gate_sha256||'')||
       item.resource_binding&&canonicalGateJSON(item.resource_binding)!==canonicalGateJSON(row.resource_binding))return null;
   const status=item.local_decision_status;
@@ -61,7 +62,7 @@ export function publishedConditionStatus(row,config,verifiedVersion){
       !reference(item.native_checkpoint)||!reference(item.condition_ref)||
       item.resource_binding&&canonicalGateJSON(item.resource_binding)!==canonicalGateJSON(row.resource_binding))return null;
   return {badge:'SAVED RESULT',tone:'unresolved',basis:'pinned-saved-condition',
-    detail:'A saved condition and native checkpoint are published for this method. Open to load its verified local verdict; no support outcome is inferred.'};
+    detail:'Open the saved result to inspect its local verdict; availability alone does not establish support.'};
 }
 export function readingLabel(reading={},ordinal=0,{branch=false}={}){
   const form=({nominal:'noun phrase',noun_phrase:'noun phrase',possessive:'possessive phrase',adjectival:'adjective phrase',
@@ -233,7 +234,7 @@ export function isCounterhypothesis(task,kind){
 }
 export function assertionDecision(unit,task){
   if(!unit)return {kind:"unresolved",label:"Unresolved"};
-  if(task==="mosaic"){
+  if(mosaicTask(task)){
     if(unit.counterevidence)return {kind:"conflict",label:"Conflicting evidence"};
     if(unit.status===BACKED&&unit.coverage==="Established")return {kind:"supported",label:"Evidence-backed Mosaic"};
     if(unit.coverage==="Partial"||unit.coverage==="Established")return {kind:"partial",label:"Partial"};
@@ -304,9 +305,9 @@ export function verdictSummary(record={},caseInfo={},reading=""){
   const total=units.length,complete=overall?.status===BACKED&&counts.supported===total;
   const opposed=counts.opposed||0,mixed=counts.mixed||0,crossMixed=overall?.status==='mixed_evidence'&&counts.supported>0&&opposed>0;
   let title,detail,tone;
-  if(task==="mosaic"){
+  if(mosaicTask(task)){
     title=complete?"Evidence-backed Mosaic":counts.conflict?"Conflicting Mosaic":counts.supported||counts.partial?"Partial Mosaic":"Insufficient evidence";
-    detail=complete?"All recorded required assertions pass the scoped evidence checks. Additional chronology or causal claims are not implied.":`${counts.supported||0} of ${total} required assertions are evidence-backed. Include only those source-backed components; do not join unresolved details into a complete account.`;
+    detail=complete?"All recorded required assertions pass the scoped evidence checks. Additional chronology or causal claims are not implied.":`${counts.supported||0} of ${total} required assertions are evidence-backed. Include only those components; do not join unresolved details into a complete account.`;
     tone=complete?"supported":counts.conflict?"opposed":"partial";
   }else{
     title=crossMixed?"Mixed across assertions":opposed?(opposed===total?"Opposed by eligible evidence":"Partial opposition"):
@@ -321,7 +322,7 @@ export function verdictSummary(record={},caseInfo={},reading=""){
 }
 
 function assertionSidebar(task,counts,total,overallStatus){
-  if(task==="mosaic")return {badge:`M ${counts.supported||0}/${total}`,tone:counts.conflict?"opposed":counts.supported===total?"supported":"partial"};
+  if(mosaicTask(task))return {badge:`M ${counts.supported||0}/${total}`,tone:counts.conflict?"opposed":counts.supported===total?"supported":"partial"};
   if(overallStatus==='mixed_evidence'&&counts.supported>0&&counts.opposed>0)return {badge:`MIXED ${counts.supported}S/${counts.opposed}O/${total-counts.supported-counts.opposed}U`,tone:'mixed'};
   const kind=counts.opposed?"opposed":counts.mixed?"mixed":counts.supported?"supported":counts.partial?"partial":counts.context?"context":"unresolved";
   const label={opposed:"OPPOSE",mixed:"CONFLICT",supported:"SUPPORT",partial:"PARTIAL",context:"CONTEXT",unresolved:"UNRESOLVED"}[kind];
@@ -355,13 +356,13 @@ export function sidebarDecisionSummary(value,caseInfo={},config,reading=""){
     typeof value.native_run_id!=="string"||!value.native_run_id||value.native_checksum==null||
     value.overall_status!==null&&typeof value.overall_status!=="string")throw Error("Sidebar decision has another case, method or provenance binding.");
   if(value.task!=="redaction"){
-    if(!["hypothesis","mosaic"].includes(value.task))throw Error("Unsupported sidebar task.");
+    if(!["hypothesis","mosaic","reconstruction"].includes(value.task))throw Error("Unsupported sidebar task.");
     checkedCounts(value.counts,ASSERTION_COUNTS,"required");
     if(value.counts.required===0)throw Error("No required assertions are declared.");
-    if(value.task==="mosaic"&&["opposed","mixed","context"].some(k=>value.counts[k]!==0)||value.task==="hypothesis"&&value.counts.conflict!==0)throw Error("Sidebar categories belong to another task.");
+    if(mosaicTask(value.task)&&["opposed","mixed","context"].some(k=>value.counts[k]!==0)||value.task==="hypothesis"&&value.counts.conflict!==0)throw Error("Sidebar categories belong to another task.");
     const result=assertionSidebar(value.task,value.counts,value.counts.required,value.overall_status);
     const complete=value.overall_status===BACKED&&value.counts.supported===value.counts.required;
-    result.tone=value.task==="mosaic"?(value.counts.conflict?"opposed":complete?"supported":"partial"):
+    result.tone=mosaicTask(value.task)?(value.counts.conflict?"opposed":complete?"supported":"partial"):
       value.overall_status==='mixed_evidence'&&value.counts.supported>0&&value.counts.opposed>0?"mixed":value.counts.opposed?"opposed":value.counts.mixed?"mixed":complete?"supported":value.counts.supported||value.counts.partial?"partial":"unresolved";
     return {...result,available:true,detail:"Required assertions only; derived from the exact saved evidence checks."};
   }

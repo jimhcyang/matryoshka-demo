@@ -1,1 +1,2335 @@
-{"benchmark_accuracy":false,"cases":[{"case":{"case_id":"narrative_cib_revision_ab8506d47badd3718e892a7e","corpus":"cib","date":"1961-01-17","document_id":"CIA-RDP79T00975A005500140001-5","focal_marker":null,"query":"El Salvador's Communist-dominated labor federation had announced plans to organize peasant committees, and fourteen PRAM leaders were reported to have left or to be about to leave for Cuba.","task":"mosaic"},"collection":"bench","configurations":{"llm_readings":{"compact_flow_refs":{},"condition_ref":{"path":"experiments/narrative_demo/publication/case_dea36c501cc99a2e43f91f92__condition.json.gz","sha256":"01bf0f417f2be10059bd57d4d2c7512a096bbdb2363fa9bf9332d92de99c9d36"},"config":"llm_readings","flow_refs":{},"native_checkpoint":{"path":"experiments/narrative_demo/runs/2dabc70f52f391931680867439440c31464260466407e71a78850ef136e51b79/native.json.gz","sha256":"da214ac56420df85eb0b58f429a2f2291b67b6951874d50901339d64ec676379"},"run_id":"narrative_08bab81f2274572164ae6b8c","trace_refs":{"":{"path":"experiments/narrative_demo/publication/case_dea36c501cc99a2e43f91f92__trace_assertions.json.gz","sha256":"06850472ed5f25ec718ad908af305e57d06a5cd4fc94b6e66e75b84683bbd8fd"}}}},"current_resource_execution":true,"narrative_id":"cib_salvador_bench","origin_refs":{"masked":{"path":"experiments/narrative_demo/publication/case_dea36c501cc99a2e43f91f92__origin_masked.json.gz","sha256":"9840f9369bee83a0e54bb4dbc2ec50f946231cc4b7b931a483a9042b937f3672"}},"presentation_caveats":[],"presentation_title":"Rural organization and reported journeys","query_kind":"source_derived","query_version":"cib-six-query-revision/1","reference_answer_kind":null,"reporting_profile":{"files":{"matryoshka_narrative/origins.py":"785eddb55dffa5555a2c0bed83962f0c04f6ae7365692a4baf0bb023ba9ffa9e","matryoshka_narrative/pdfs.py":"ae9f35de3a84c1a38a4e1713f90ad3a22a61641e0ff6129538a676146d11af98","matryoshka_narrative/postrun.py":"a22780be210fa5c96ccec48dc2502933ad5abe757c0623933d4f66ce437a5a47","matryoshka_narrative/presentation.py":"baffb36910a149de059cabe7bd1dd62c2e9d90b1aa6f7833fae5c03e53bdc985","matryoshka_narrative/scores.py":"e00fa3abf637d5693ba6d60c3149bdf66aa5e7bf2a0fd131fb43b9be88e9ad1b","matryoshka_narrative/sidebar.py":"7ef0df3a8bf7230045000d98a4e9c62871c0e715fffbafcfe992c17642b93ad8","matryoshka_narrative/traces.py":"72fe683f1bcbde5d44fba2cfd2a2945464384dbd9f12a2c100019998327303f2","narrative_demo/web/local-decisions-v65.js":"5bcadb9731280e5179aca6a179a562c35b115e4ca9ab40b58722be05886d6ebf","scripts/build_narrative_preview.py":"65f948bfebf716b3d58b30e2ad557de1241d2474d039ff57473cea5b5cdc81fb"},"inspect_graph":false,"max_paths":4,"source_digest":true,"version":"narrative-reporting-profile/1"},"resource_binding":{"corpus":"cib","graph_id":"graph_2e1f8d6c2443987c","hierarchy_id":"hierarchy_dcfb5058b0e6e571","index_sha256":"b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980","registry_sha256":"d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7","resource_id":"cib_resource_623c60e1e128944377f0","source_status":"CURRENT_NATIVE_RESOURCE_EXPLICIT"},"selected_additional":false,"selected_bench":true,"selected_demo":false},{"case":{"case_id":"narrative_cib_alt_h_3af565c9ad6e532e16c9264b","corpus":"cib","date":"1961-01-17","document_id":"CIA-RDP79T00975A005500140001-5","focal_marker":null,"query":"Colonel Alberto Escamilla was reportedly appointed minister of interior.","task":"hypothesis"},"collection":"bench","configurations":{"llm_readings":{"compact_flow_refs":{},"condition_ref":{"path":"experiments/narrative_demo/publication/case_d3c7216fa2f3bbed595144e6__condition.json.gz","sha256":"a44df60ea97237cbbe2ac8b457812ad16bade6afd2de0e6b4f243e2d551c9690"},"config":"llm_readings","flow_refs":{},"native_checkpoint":{"path":"experiments/narrative_demo/runs/0cb681db9bd20ce3c050f5ea26fd4c91ba3332f26e9ae9419dab49fd20acea71/native.json.gz","sha256":"3e8479f5258ef36ddcca983ed7c43596b902f12021cadc2ee1fb785234da02fa"},"run_id":"narrative_d6a48029153a6bb28e239ad9","trace_refs":{"":{"path":"experiments/narrative_demo/publication/case_d3c7216fa2f3bbed595144e6__trace_assertions.json.gz","sha256":"7086b153097f685c3a873c188a4177f4292a93d809d005736a285b33344856fc"}}}},"current_resource_execution":true,"narrative_id":"cib_salvador_bench","origin_refs":{"masked":{"path":"experiments/narrative_demo/publication/case_d3c7216fa2f3bbed595144e6__origin_masked.json.gz","sha256":"7436222febd13cdecf9b72b0c267946402c8eb6e5c6ad7342445986fe77cd847"}},"presentation_caveats":[{"text":"The January 1961 bulletin motivates this investigation; the appointment question draws on an earlier October 1960 report.","title":"Where this question comes from"}],"presentation_title":"A reported interior-minister appointment","query_kind":"source_aware_older_fact_addition","query_version":"source-aware-salvador-appointment/1","reference_answer_kind":null,"reporting_profile":{"files":{"matryoshka_narrative/origins.py":"785eddb55dffa5555a2c0bed83962f0c04f6ae7365692a4baf0bb023ba9ffa9e","matryoshka_narrative/pdfs.py":"ae9f35de3a84c1a38a4e1713f90ad3a22a61641e0ff6129538a676146d11af98","matryoshka_narrative/postrun.py":"a22780be210fa5c96ccec48dc2502933ad5abe757c0623933d4f66ce437a5a47","matryoshka_narrative/presentation.py":"baffb36910a149de059cabe7bd1dd62c2e9d90b1aa6f7833fae5c03e53bdc985","matryoshka_narrative/scores.py":"e00fa3abf637d5693ba6d60c3149bdf66aa5e7bf2a0fd131fb43b9be88e9ad1b","matryoshka_narrative/sidebar.py":"7ef0df3a8bf7230045000d98a4e9c62871c0e715fffbafcfe992c17642b93ad8","matryoshka_narrative/traces.py":"72fe683f1bcbde5d44fba2cfd2a2945464384dbd9f12a2c100019998327303f2","narrative_demo/web/local-decisions-v65.js":"5bcadb9731280e5179aca6a179a562c35b115e4ca9ab40b58722be05886d6ebf","scripts/build_narrative_preview.py":"65f948bfebf716b3d58b30e2ad557de1241d2474d039ff57473cea5b5cdc81fb"},"inspect_graph":false,"max_paths":4,"source_digest":true,"version":"narrative-reporting-profile/1"},"resource_binding":{"corpus":"cib","graph_id":"graph_2e1f8d6c2443987c","hierarchy_id":"hierarchy_dcfb5058b0e6e571","index_sha256":"b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980","registry_sha256":"d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7","resource_id":"cib_resource_623c60e1e128944377f0","source_status":"CURRENT_NATIVE_RESOURCE_EXPLICIT"},"selected_additional":false,"selected_bench":true,"selected_demo":false},{"case":{"case_id":"narrative_cib_revision_50e63144067940b5debe3fea","corpus":"cib","date":"1961-01-17","document_id":"CIA-RDP79T00975A005500140001-5","focal_marker":"[REDACTION]","query":"The armed forces, which had been virtually paralyzed by disunity, appear to have been spurred to cooperation by increasingly bold Communist activity in recent weeks. Unrestricted Communist organizational activity among the [REDACTION] Salvadoran peasants and the visit to Cuba earlier this month of a group of Salvadoran extremists have particularly heightened the concern of the military.","task":"redaction"},"collection":"bench","configurations":{"llm_readings":{"compact_flow_refs":{},"condition_ref":{"path":"experiments/narrative_demo/publication/case_a17ccade9b53215a35f8e460__condition.json.gz","sha256":"3520cbdf5506eaaf0a593f3a56a7089d6662a517a271ff261c808353ad584fce"},"config":"llm_readings","flow_refs":{},"native_checkpoint":{"path":"experiments/narrative_demo/runs/1d80c81b3e542387dcdd3d8afd8f180fd8553d99a7bc013647d926afa7777013/native.json.gz","sha256":"3a171956004c76a9073fabd12417c86ca3a9753b5c97825f6400ef4438e80bfb"},"run_id":"narrative_7f7ac24e57191f85b176ebbc","trace_refs":{"next_reading_21af61fd862e9bf524fcb8e4":{"path":"experiments/narrative_demo/publication/case_a17ccade9b53215a35f8e460__trace_next_reading_21af61fd862e9bf524fcb8e4.json.gz","sha256":"3ab2c98e5aba77a2d0c6323f1b48e9daf675cdeae923312e5b1b4752f61b7c85"},"next_reading_5143cdac9ef38f3e18911c42":{"path":"experiments/narrative_demo/publication/case_a17ccade9b53215a35f8e460__trace_next_reading_5143cdac9ef38f3e18911c42.json.gz","sha256":"df328ca7bfb112dd16c71689cc16d8d4d5bcc7436b90e7c5d4b93feea478722e"},"next_reading_9844017f8398a69db9667dbe":{"path":"experiments/narrative_demo/publication/case_a17ccade9b53215a35f8e460__trace_next_reading_9844017f8398a69db9667dbe.json.gz","sha256":"7e972d628139bb3b8e76b81bc84c777daaa3bd4562a57d01ee6f6d3f41bc98da"}}}},"current_resource_execution":true,"family_id":"cib_salvador_peasant_characterization","narrative_id":"cib_salvador_bench","origin_refs":{"masked":{"path":"experiments/narrative_demo/publication/case_a17ccade9b53215a35f8e460__origin_masked.json.gz","sha256":"4633e83582330a568bf233b19691cf1e7c18759e08a546d28794c4596bca2e4b"},"revealed":{"path":"experiments/narrative_demo/publication/case_a17ccade9b53215a35f8e460__origin_revealed.json.gz","sha256":"f58f8e2ebf4e7e1286d25e84733586af967aafbd1133df07a9f8c3bdae7e78a1"}},"presentation_caveats":[],"presentation_title":"The concealed description of peasants","query_kind":"authentic_paired_redaction","query_version":"cib-six-query-revision/1","reference_answer_kind":"authentic_cib_paired_release","reporting_profile":{"files":{"matryoshka_narrative/origins.py":"785eddb55dffa5555a2c0bed83962f0c04f6ae7365692a4baf0bb023ba9ffa9e","matryoshka_narrative/pdfs.py":"ae9f35de3a84c1a38a4e1713f90ad3a22a61641e0ff6129538a676146d11af98","matryoshka_narrative/postrun.py":"a22780be210fa5c96ccec48dc2502933ad5abe757c0623933d4f66ce437a5a47","matryoshka_narrative/presentation.py":"baffb36910a149de059cabe7bd1dd62c2e9d90b1aa6f7833fae5c03e53bdc985","matryoshka_narrative/scores.py":"e00fa3abf637d5693ba6d60c3149bdf66aa5e7bf2a0fd131fb43b9be88e9ad1b","matryoshka_narrative/sidebar.py":"7ef0df3a8bf7230045000d98a4e9c62871c0e715fffbafcfe992c17642b93ad8","matryoshka_narrative/traces.py":"72fe683f1bcbde5d44fba2cfd2a2945464384dbd9f12a2c100019998327303f2","narrative_demo/web/local-decisions-v65.js":"5bcadb9731280e5179aca6a179a562c35b115e4ca9ab40b58722be05886d6ebf","scripts/build_narrative_preview.py":"65f948bfebf716b3d58b30e2ad557de1241d2474d039ff57473cea5b5cdc81fb"},"inspect_graph":false,"max_paths":4,"source_digest":true,"version":"narrative-reporting-profile/1"},"resource_binding":{"corpus":"cib","graph_id":"graph_2e1f8d6c2443987c","hierarchy_id":"hierarchy_dcfb5058b0e6e571","index_sha256":"b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980","registry_sha256":"d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7","resource_id":"cib_resource_623c60e1e128944377f0","source_status":"CURRENT_NATIVE_RESOURCE_EXPLICIT"},"selected_additional":false,"selected_bench":true,"selected_demo":false,"source_target_id":"cloze_bf6b67a66a3956b2d8fde879"},{"case":{"case_id":"narrative_cib_revision_ac4fb499beb4b345b5384ae6","corpus":"cib","date":"1960-12-28","document_id":"CIA-RDP79T00975A005400500001-6","focal_marker":"[REDACTION]","query":"The agreement is said to have been drafted at [REDACTION] initiative; he reportedly guaranteed to the Chinese that their military actions would receive no publicity in Burma. Only a handful of Burmese officials know of the agreement, and even Prime Minister Nu professes not to have been officially informed. Nu stated flatly in a press conference on 20 December that there was no agreement, and that if there were Chinese Communist troops in Burma who refused to leave, \"they would be driven out.\" Official acknowledgment of this military cooperation would arouse widespread apprehension in Burma.","task":"redaction"},"collection":"additional_real_redaction","configurations":{"llm_readings":{"compact_flow_refs":{},"condition_ref":{"path":"experiments/narrative_demo/publication/case_0224a077af8abe8af7ac2b61__condition.json.gz","sha256":"63fd1dcb83052f1851ed2e9cfe31996231c8fefb87544aa8cfa4fba678e8514d"},"config":"llm_readings","flow_refs":{},"native_checkpoint":{"path":"experiments/narrative_demo/runs/9c4fcc94115e422e0e2add18b6c8b4e4baff83d3ddd0dc8a889eb9a451116645/native.json.gz","sha256":"acf0ff558216196ced3df3782b56b3744a4d36e4154ddd4110de2178996bfa51"},"run_id":"narrative_17a676c7b04bc24e1e194553","trace_refs":{"next_reading_fdb35a08c26c96dc605d8d97":{"path":"experiments/narrative_demo/publication/case_0224a077af8abe8af7ac2b61__trace_next_reading_fdb35a08c26c96dc605d8d97.json.gz","sha256":"a1a67180793ccf6420e12322f0a4a31e79815b6a4a44a64f7c66157b6616c682"}}}},"current_resource_execution":true,"family_id":"cib_burma_china_secret_military_agreement_initiative","narrative_id":"cib_burma_extra","origin_refs":{"masked":{"path":"experiments/narrative_demo/publication/case_0224a077af8abe8af7ac2b61__origin_masked.json.gz","sha256":"6cbede35fbbc48c8013dfe70eeadcfa97cf2731744dc6e9fe96590d93e0c1674"},"revealed":{"path":"experiments/narrative_demo/publication/case_0224a077af8abe8af7ac2b61__origin_revealed.json.gz","sha256":"58ac50177c1d6f5083c4d6600764bdf0d3538b434ab745e09d7438a0b961af42"}},"presentation_caveats":[],"presentation_title":"A Burmese military agreement","query_kind":"authentic_paired_redaction","query_version":"cib-redaction-query-revision/1","reference_answer_kind":"authentic_cib_paired_release","reporting_profile":{"files":{"matryoshka_narrative/origins.py":"785eddb55dffa5555a2c0bed83962f0c04f6ae7365692a4baf0bb023ba9ffa9e","matryoshka_narrative/pdfs.py":"ae9f35de3a84c1a38a4e1713f90ad3a22a61641e0ff6129538a676146d11af98","matryoshka_narrative/postrun.py":"a22780be210fa5c96ccec48dc2502933ad5abe757c0623933d4f66ce437a5a47","matryoshka_narrative/presentation.py":"baffb36910a149de059cabe7bd1dd62c2e9d90b1aa6f7833fae5c03e53bdc985","matryoshka_narrative/scores.py":"e00fa3abf637d5693ba6d60c3149bdf66aa5e7bf2a0fd131fb43b9be88e9ad1b","matryoshka_narrative/sidebar.py":"7ef0df3a8bf7230045000d98a4e9c62871c0e715fffbafcfe992c17642b93ad8","matryoshka_narrative/traces.py":"72fe683f1bcbde5d44fba2cfd2a2945464384dbd9f12a2c100019998327303f2","narrative_demo/web/local-decisions-v65.js":"5bcadb9731280e5179aca6a179a562c35b115e4ca9ab40b58722be05886d6ebf","scripts/build_narrative_preview.py":"65f948bfebf716b3d58b30e2ad557de1241d2474d039ff57473cea5b5cdc81fb"},"inspect_graph":false,"max_paths":4,"source_digest":true,"version":"narrative-reporting-profile/1"},"resource_binding":{"corpus":"cib","graph_id":"graph_2e1f8d6c2443987c","hierarchy_id":"hierarchy_dcfb5058b0e6e571","index_sha256":"b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980","registry_sha256":"d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7","resource_id":"cib_resource_623c60e1e128944377f0","source_status":"CURRENT_NATIVE_RESOURCE_EXPLICIT"},"selected_additional":true,"selected_bench":false,"selected_demo":false,"source_target_id":"cloze_58e8550212498c5d863f8883"}],"collection_counts":{"additional_real_redaction":1,"bench":3,"starter":0},"collection_wide_pending_gates":["EXACT_NINE_STARTERS_NINE_BENCH_FIVE_EXTRAS_PENDING","ELEVEN_DISTINCT_SOURCE_BOUND_REDACTION_TARGETS_PENDING","TWO_DISTINCT_BENCH_REDACTIONS_AT_RANK_ONE_PENDING","EVIDENCE_BACKED_RANK_ONE_BENCH_REDACTION_PENDING","FIVE_COMPLETE_CORE_MOSAICS_PENDING","EXACTLY_ONE_DECLARED_CORE_COUNTERHYPOTHESIS_PENDING","SIGNED_MIXED_COMPONENT_HYPOTHESIS_PENDING"],"collection_wide_requirements_pending":true,"complete_execution_grid":false,"completed_cases":4,"diagnostic_build":false,"distinctness_screen":{"identical_required_atom_sets":true,"normalized_public_text":true,"semantic_distinctness_requires_source_review":true,"version":"narrative-question-duplicate-screen/1"},"full_benchmark_launched":false,"investigations":{"cib":{"collection":"bench","id":"cib_salvador_bench","title":"Salvadoran political vulnerability"}},"local_execution_after_planning":true,"native_outputs_modified":false,"no_live_api":true,"outcome_informed_demo":true,"pdf_catalog_ref":{"path":"experiments/narrative_demo/publication/pdf_catalog_a72ccc26399bf6e3a0f0145a7839c6c614a3da286616495d07e98ab3c7519dc4.json","sha256":"f09ca64e678832145e8f0e490986c23d6bc13fca61b585fcd7b27dfac79655c7"},"pending_cases":19,"presentation_context":{"corpora":{"cib":{"sources_ref":{"path":"experiments/narrative_demo/publication/context_sources_da7c52f85774421b234f5ca0.json.gz","sha256":"7934807adf42137871f47f93e3ed8370250a8877c8781aec9f718a2e49d704c4"},"text":"Central Intelligence Bulletins were Central Intelligence Agency summaries of international developments. This collection spans 28 February 1951 to 13 June 1961. Paired declassified releases let readers compare passages visible earlier with material revealed later. The reports record what intelligence analysts were saying at the time, including uncertainty and disagreement about people, governments and events."},"iran":{"sources_ref":{"path":"experiments/narrative_demo/publication/context_sources_da7c52f85774421b234f5ca0.json.gz","sha256":"7934807adf42137871f47f93e3ed8370250a8877c8781aec9f718a2e49d704c4"},"text":"These diplomatic cables follow Iran's political and economic crisis through reports dated 8 June 1977 to 22 November 1979. They describe government institutions, opposition figures, military leaders and problems affecting everyday operations. Individual reports offer particular observations and perspectives. The demonstration's missing cable passages are synthetic exercises, with the original wording retained for comparison."},"vietnam":{"sources_ref":{"path":"experiments/narrative_demo/publication/context_sources_da7c52f85774421b234f5ca0.json.gz","sha256":"7934807adf42137871f47f93e3ed8370250a8877c8781aec9f718a2e49d704c4"},"text":"This diplomatic cable collection contains reports dated 9 January 1973 to 26 July 1978 about Vietnam and related regional developments. The selected investigation concerns South Vietnam's government, economy, military and political opposition in the 1970s. Its missing passages are synthetic exercises. This is a separate collection from the earlier South Vietnam episode in the intelligence bulletins."}},"narratives":{"cib_burma_extra":{"no_new_tour_asserted":true,"presentation_only":true,"provenance_mode":"QUERY_ONLY_SYNOPSIS_NO_ADDITIONAL_HISTORICAL_ASSERTIONS","source_proof_acceptance_ref":{"path":"experiments/narrative_parallel/independent_review/takeover_20261119/aung_extra_source_preparation_review.json","sha256":"7d2ee71c39b4b2d9e25edd17fbd51a9533b67ea3691fecc75a9442edfd3e953e"},"sources_ref":{"path":"experiments/narrative_demo/publication/context_sources_da7c52f85774421b234f5ca0.json.gz","sha256":"7934807adf42137871f47f93e3ed8370250a8877c8781aec9f718a2e49d704c4"},"text":"The bulletin describes alleged military cooperation between Burma and China while preserving an official denial. It raises questions about how the agreement was arranged and what senior officials knew about it."},"cib_salvador_bench":{"sources_ref":{"path":"experiments/narrative_demo/publication/context_sources_da7c52f85774421b234f5ca0.json.gz","sha256":"7934807adf42137871f47f93e3ed8370250a8877c8781aec9f718a2e49d704c4"},"text":"El Salvador's provisional government emerged from the ouster of President Lemus in October 1960 and combined military and civilian members. Subsequent accounts describe competing political groups seeking influence over the new order, with labor organizations, students, and military figures taking different positions. Questions about rural political activity and links with Cuba sit beside arguments over government appointments and the institutions responsible for internal security. Reports sometimes describe an intention or a claim, rather than a completed action, and assessments of political influence do not necessarily agree. This investigation examines how those different kinds of statement fit together without assuming that every group shared one plan or that every reported journey was completed. Reading separate accounts can clarify the order of developments and the scope of particular claims. It can also preserve disagreement and uncertainty that disappear when a complicated political episode is reduced to a single explanation."}},"presentation_only":true},"presentation_context_sources_ref":{"path":"experiments/narrative_demo/publication/context_sources_da7c52f85774421b234f5ca0.json.gz","sha256":"7934807adf42137871f47f93e3ed8370250a8877c8781aec9f718a2e49d704c4"},"presentation_tours":{"cib_salvador_bench":{"anchor_searches":["El Salvador","PRAM","Mario Castrillo Zeledon"],"approved_spoiler_safe":true,"collection":"bench","corpus":"cib","cutoff_exclusive":"1961-01-17","duration_seconds":75,"map_transport_and_live_clicks_verified":false,"narrative":"Salvadoran political vulnerability","native_index":{"path":"experiments/current_refresh/resource_handoff/indexes/current_index_0c8587c8fa8e78ddad1c24cc/graph.sqlite3","sha256":"b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980"},"presentation_only_never_inference_input":true,"release_clearance":false,"resource_id":"cib_resource_623c60e1e128944377f0","sequence":["Select CIB, earlier-access view and 17 January 1961 exclusive cutoff.","Search El Salvador; inspect country provenance and center on all direct connections.","Use a clearly labelled new search for Preparation of countercoup. Inspect its source-backed officers edge and the November quotation.","Use a clearly labelled new search for the military-dissension claim. Inspect its own edge and December quotation; do not claim a path between the two searches.","Show date/access filters. Hierarchy is retrospective navigation, not contemporaneous evidence.","Open the Salvador bench workbench: compare the announced rural organizing plan with the reported journey, then test the reported appointment, then inspect the concealed description."],"source_tour_reference":{"path":"experiments/narrative_parallel/cib_anchors/spoiler_free_tour.json","sha256":"9ddf326459e56fce6949de00fec22e547541c94d47f41bd08de0c37d07084e29"},"stops":[{"actual_edge_id":"semantic_edge_4af3f27090273d3b76af:relation_evidence_bc29a981d686d137223a","cross_stop_traversal_claimed":false,"nodes":[{"hierarchy":{"community_id":"community_d80d8eeed7de4da41c94","domain_id":"domain_cff029d44c164d1553fb","theme_id":"theme_8f579cc248725a4fcfa5","view":"earlier"},"kind":"Event","label":"Preparation of countercoup","node_id":"event_cbb2f04da74ae7836110"},{"hierarchy":{"community_id":"community_d80d8eeed7de4da41c94","domain_id":"domain_cff029d44c164d1553fb","theme_id":"theme_8f579cc248725a4fcfa5","view":"earlier"},"kind":"Entity","label":"A group of officers","node_id":"entity_source_reference_a27387e70fada893edb9"}],"pre_attempt_policy":"Approved exact quote/edge only; no automatic full-page or PDF expansion","quotation":{"coordinate_space":"index earlier page text","document_id":"CIA-RDP79T00975A005400060001-5","end":707,"page_id":"page_7c1ef4df5c29fd36cd62","page_text_utf8_sha256":"7fea191a0e0747e63333b4238096e75a28dff5a35edda91ba57dd1cb9ab899f9","publication_date":"1960-11-07","start":580,"text":"A group of officers claiming widespread support from army units is preparing a countercoup, which may be attempted immediately."}},{"actual_edge_id":"semantic_edge_fd146850707f674be6b7:relation_evidence_1564e1fc1f421f772179","cross_stop_traversal_claimed":false,"nodes":[{"hierarchy":{"community_id":"community_0ec0ead86969641b31b4","domain_id":"domain_e5b266ef92394e4fbf83","theme_id":"theme_50d1d11e7984fd14a72e","view":"earlier"},"kind":"Claim","label":"The military is split by dissension and has given no recent indication that it is about to unite to stem the Communist bid for power.","node_id":"claim_9e5de6884ffafd2c225c"},{"hierarchy":{"community_id":"community_0ec0ead86969641b31b4","domain_id":"domain_e5b266ef92394e4fbf83","theme_id":"theme_50d1d11e7984fd14a72e","view":"earlier"},"kind":"Entity","label":"military","node_id":"entity_source_reference_da0b0806a9aacdd3c983"}],"pre_attempt_policy":"Approved exact quote/edge only; no automatic full-page or PDF expansion","quotation":{"coordinate_space":"index earlier page text","document_id":"CIA-RDP79T00975A005400510001-5","end":1592,"page_id":"page_675ce38a44c9706dbbee","page_text_utf8_sha256":"f4a3a092cb2bf98ba920e30ce5db3c5e731fc32e79c045b6a44d938f5b7f8d50","publication_date":"1960-12-29","start":1449,"text":"The military is split by dissension, however, and has given no recent indication that it is about to unite to stem the Communist bid for power."}}],"view":"earlier"}},"privacy_contract":{"require_story_attempts_before_privileged_sources":true,"story_case_ids":{"cib_burma_extra":["narrative_cib_revision_ac4fb499beb4b345b5384ae6"],"cib_salvador_bench":["narrative_cib_revision_ab8506d47badd3718e892a7e","narrative_cib_alt_h_3af565c9ad6e532e16c9264b","narrative_cib_revision_50e63144067940b5debe3fea"]},"version":"narrative-story-attempts/1"},"public_display_projection":{"native_outputs_modified":false,"omitted_initial_fields":["decision_summary_by_arm","reference_answer","showcase_review"],"reason":"Source judgments and fills are loaded with the explicitly opened saved result; release reviews remain in the private exact-source publication."},"public_transport":"public-narrative-replays/1","qualified_narratives":[{"case_ids":["narrative_cib_revision_ab8506d47badd3718e892a7e","narrative_cib_alt_h_3af565c9ad6e532e16c9264b","narrative_cib_revision_50e63144067940b5debe3fea"],"collection":"bench","corpus":"cib","narrative_id":"cib_salvador_bench"}],"qualified_release_ready":true,"quality_blockers":[],"release_scope":"qualified","run_id":"narrative_publication_23096e5d82521cab0ce33877","seal_scope":"PUBLIC_PRESENTATION_EXPORT_ONLY","selection_rule":"One executed starter and distinct bench per corpus/task; outcome-informed showcase","sha256":"2c987e16e241586834190bd65a626cca28291def50fc689d73a29ac668a67e66","showcase_ready":false,"source_report_ref":{"path":"experiments/narrative_demo/publication/narrative_publication_23096e5d82521cab0ce33877/report.json","sha256":"6fa944dc415f546556861bb891d4a29f61527a73597bcbdbb6c45d6784a8d49f"},"source_report_sha256":"d0642b7dc55925a0f891d70cb4beabc3fc214760c801b4777b99a998741ddcbe","static_replay":true,"status":"PARTIAL","version":"narrative-workbench-publication/1"}
+{
+  "benchmark_accuracy": false,
+  "cases": [
+    {
+      "case": {
+        "case_id": "narrative_cib_revision_ac39b62cbc7070a340c5d62d",
+        "corpus": "cib",
+        "date": "1958-05-23",
+        "document_id": "CIA-RDP79T00975A003700200001-8",
+        "focal_marker": "[REDACTION]",
+        "query": "The 22 May riots in Panama against President de la Guardia's administration have led him to declare a state of siege and may erupt into full-scale revolution. The strong national guard, whose repression of student demonstrations earlier this week resulted in one death and widespread and violent resentment, has announced that it is slowly re-gaining control of Panama City. The guard has orders to kill. The students have been joined in a general strike against the government by labor unions and other groups, but appear to have lost control of the disturbance to hoodlums. The latter are probably incited by powerful opposition politicians [REDACTION] who are trying to oust the President. Similar riots are occurring in Colon, the northern terminus of the canal.",
+        "task": "redaction"
+      },
+      "collection": "additional_real_redaction",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/condition.json.gz",
+            "sha256": "813a8a0319ca06a013cd50d567811033f992ac8bf559429444ba85f3542882b5"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/focal_recovery_20261120/final13/runs/c016b9f93666f505c1b5518dfc0761e0d0edb93329769f27d0cab6a22def5cd8/native.json.gz",
+            "sha256": "bae3d8a5b3e445de3bf43e15f412708b9ba7c3362bc2fa22f3b1ff78c4355f5f"
+          },
+          "run_id": "narrative_0373746ee01b5a63f16bfdfb",
+          "trace_refs": {
+            "next_reading_1a005fb20ea90c8bede96ba7": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/trace_next_reading_1a005fb20ea90c8bede96ba7.json.gz",
+              "sha256": "e7e20bb934d0dcbe7fdf5143c7db1ce1505a8db150eabc69456b6926bf5f8531"
+            },
+            "next_reading_d05a2b3d020d8f566482c1e9": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/trace_next_reading_d05a2b3d020d8f566482c1e9.json.gz",
+              "sha256": "0c35f1f3fcc85ad2381e7faeb64783d25dc645f54d2e6e7b97863a055d9e9d9e"
+            },
+            "next_reading_fa2b9f6ac0c608a3525d0515": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/trace_next_reading_fa2b9f6ac0c608a3525d0515.json.gz",
+              "sha256": "dd9f7afc6b3a6d80d8f6754630ea6104262613309e72d4ddf9a2c58d1786fc13"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "narrative_cib_revision_ac39b62cbc7070a340c5d62d",
+          "config": "llm_readings",
+          "default_reading_id": "next_reading_d05a2b3d020d8f566482c1e9",
+          "gate_sha256": "9f1b62812aacb9aee885c3e3952f41b00d4f3a4f341b4bf120aab7abbfdf4526",
+          "native_checksum": "7fccf9b021d99bef342b55458beab2943dc6f8c044d9309d18c96c34cd4cd959",
+          "native_run_id": "narrative_0373746ee01b5a63f16bfdfb",
+          "overall_status": "exploratory_contextual",
+          "query_sha256": "bf3ecbec61d49c453808787b28ec9af15e1769ecc3c7beb90c2a918d6af93217",
+          "reading_order": [
+            "next_reading_d05a2b3d020d8f566482c1e9",
+            "next_reading_1a005fb20ea90c8bede96ba7",
+            "next_reading_fa2b9f6ac0c608a3525d0515"
+          ],
+          "readings": {
+            "next_reading_1a005fb20ea90c8bede96ba7": {
+              "backed": 0,
+              "candidate_count": 5,
+              "context": 5,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            },
+            "next_reading_d05a2b3d020d8f566482c1e9": {
+              "backed": 0,
+              "candidate_count": 0,
+              "context": 0,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            },
+            "next_reading_fa2b9f6ac0c608a3525d0515": {
+              "backed": 0,
+              "candidate_count": 0,
+              "context": 0,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            }
+          },
+          "task": "redaction",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "family_id": "pa_1958_may_opposition_role_in_unrest",
+      "narrative_id": "cib_additional_narrative_cib_revision_ac39b62cbc7070a340c5d62d",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "076cc4ce6dfb1849e2c010eda41122db764b977c603475e3aae0768f9e20efec",
+        "native_checkpoint": {
+          "path": "experiments/focal_recovery_20261120/final13/runs/c016b9f93666f505c1b5518dfc0761e0d0edb93329769f27d0cab6a22def5cd8/native.json.gz",
+          "sha256": "bae3d8a5b3e445de3bf43e15f412708b9ba7c3362bc2fa22f3b1ff78c4355f5f"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "076cc4ce6dfb1849e2c010eda41122db764b977c603475e3aae0768f9e20efec",
+        "native_result_checksum": "7fccf9b021d99bef342b55458beab2943dc6f8c044d9309d18c96c34cd4cd959",
+        "public_case_sha256": "076cc4ce6dfb1849e2c010eda41122db764b977c603475e3aae0768f9e20efec",
+        "query_sha256": "bf3ecbec61d49c453808787b28ec9af15e1769ecc3c7beb90c2a918d6af93217",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/origin_masked.json.gz",
+          "sha256": "2530a02b01f08ea34a2d66691d1a376ddeca4fc7657977c25c541194aa169786"
+        },
+        "revealed": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/origin_revealed.json.gz",
+          "sha256": "1593dceecf2db81a80b1af8db7834aaba022c3a8251612c5cb1f018164751a15"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Arias and the Panama unrest",
+      "query_kind": "authentic_paired_redaction",
+      "query_version": null,
+      "reference_answer_kind": "paired_release_reveal",
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "2fb91e9933e870d57fac2571f7e4f46936ee4e75ee51d7d07612c62cb2b37a54",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "identity_first": true,
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "cib",
+        "graph_id": "graph_2e1f8d6c2443987c",
+        "hierarchy_id": "hierarchy_dcfb5058b0e6e571",
+        "index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "cib_resource_623c60e1e128944377f0",
+        "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+      },
+      "selected_additional": true,
+      "selected_bench": false,
+      "selected_demo": false,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/companion_reviews/assessment_narrative_cib_revision_ac39b62cbc7070a340c5d62d_v01.json",
+          "sha256": "47cb274abcdbc73f10d9b05f847df125f00e342b43bb44c56cd15db8510ba235"
+        },
+        "candidate_id": "narrative_fill_331d7fb7a0397bf1e7ce02cc8609",
+        "correctness": "EQUIVALENT",
+        "native_checksum": "7fccf9b021d99bef342b55458beab2943dc6f8c044d9309d18c96c34cd4cd959",
+        "qualified": true,
+        "rank": 1,
+        "reading_id": "next_reading_1a005fb20ea90c8bede96ba7",
+        "target_identity": "cloze_58515686f17296d84522d1ca"
+      },
+      "source_target_id": "cloze_58515686f17296d84522d1ca"
+    },
+    {
+      "case": {
+        "case_id": "narrative_cib_revision_3eea5176c0eab4abfb6452a4",
+        "corpus": "cib",
+        "date": "1961-03-29",
+        "document_id": "CIA-RDP79T00975A005600250001-2",
+        "focal_marker": "[REDACTION]",
+        "query": "The government's subsequent mistrust of officers who did not give all-out support to Diem has also had an unsettling effect. Diem's foot-dragging in carrying out a promised government reorganization prompted [REDACTION] to express doubt that Diem intended to do more than replace one group of \"yes men\" with another; a similar complaint was made recently by [MASKED].",
+        "task": "redaction"
+      },
+      "collection": "additional_real_redaction",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_3eea5176c0eab4abfb6452a4/condition.json.gz",
+            "sha256": "179c5c9316c73fb140e5c205a303d1c8ec881726775c357f580f6886d942186d"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/focal_recovery_20261120/final13/runs/be1a1ee6bc8534bdb1f606f54a47a951a01493d006e4a20439ae6dd7e9a71a0a/native.json.gz",
+            "sha256": "57e45c5cdf315d622f5ddbfed0a9debdf0170efbdcc8c7b3cb9a1b20dff06eac"
+          },
+          "run_id": "narrative_d0d5e72625f4502a3b558ec6",
+          "trace_refs": {
+            "next_reading_31ff17e95b0c05ea69654db3": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_3eea5176c0eab4abfb6452a4/trace_next_reading_31ff17e95b0c05ea69654db3.json.gz",
+              "sha256": "b6f25793decc917f8a5ca6b38f72963985d9917e0d9eb98215d4210c9926db8c"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "narrative_cib_revision_3eea5176c0eab4abfb6452a4",
+          "config": "llm_readings",
+          "default_reading_id": "next_reading_31ff17e95b0c05ea69654db3",
+          "gate_sha256": "850e94a04552918977d6c294bf394fd3422c9406bad55f289a9f33668cf13b57",
+          "native_checksum": "8923ec559315bb3844ad640cbe6749af97d5f0bc0f1d656cd3dbeedc3720913b",
+          "native_run_id": "narrative_d0d5e72625f4502a3b558ec6",
+          "overall_status": "exploratory_contextual",
+          "query_sha256": "ca509fdffa2be636338327f8b0c604be95cc5a92e4a82f75ac3adc6771227de1",
+          "reading_order": [
+            "next_reading_31ff17e95b0c05ea69654db3"
+          ],
+          "readings": {
+            "next_reading_31ff17e95b0c05ea69654db3": {
+              "backed": 0,
+              "candidate_count": 5,
+              "context": 5,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            }
+          },
+          "task": "redaction",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "family_id": "vn_1961_military_reorganization_dissent",
+      "narrative_id": "cib_additional_narrative_cib_revision_3eea5176c0eab4abfb6452a4",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "7fbc67a60c033fe04f1cd58f209da145719709ce04abfce7ad3fbcbc489f64e3",
+        "native_checkpoint": {
+          "path": "experiments/focal_recovery_20261120/final13/runs/be1a1ee6bc8534bdb1f606f54a47a951a01493d006e4a20439ae6dd7e9a71a0a/native.json.gz",
+          "sha256": "57e45c5cdf315d622f5ddbfed0a9debdf0170efbdcc8c7b3cb9a1b20dff06eac"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "7fbc67a60c033fe04f1cd58f209da145719709ce04abfce7ad3fbcbc489f64e3",
+        "native_result_checksum": "8923ec559315bb3844ad640cbe6749af97d5f0bc0f1d656cd3dbeedc3720913b",
+        "public_case_sha256": "7fbc67a60c033fe04f1cd58f209da145719709ce04abfce7ad3fbcbc489f64e3",
+        "query_sha256": "ca509fdffa2be636338327f8b0c604be95cc5a92e4a82f75ac3adc6771227de1",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_3eea5176c0eab4abfb6452a4/origin_masked.json.gz",
+          "sha256": "3c2b344521ab302e974e84e2358b3750734a31145a724f2072e9b4ea03890ac5"
+        },
+        "revealed": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_3eea5176c0eab4abfb6452a4/origin_revealed.json.gz",
+          "sha256": "8c44f6c5d3497d4cec938d3c0baf399b7118fee37f516921f172f948871f3eac"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "The air force commander's doubts",
+      "query_kind": "authentic_paired_redaction",
+      "query_version": null,
+      "reference_answer_kind": "paired_release_reveal",
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "2fb91e9933e870d57fac2571f7e4f46936ee4e75ee51d7d07612c62cb2b37a54",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "identity_first": true,
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "cib",
+        "graph_id": "graph_2e1f8d6c2443987c",
+        "hierarchy_id": "hierarchy_dcfb5058b0e6e571",
+        "index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "cib_resource_623c60e1e128944377f0",
+        "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+      },
+      "selected_additional": true,
+      "selected_bench": false,
+      "selected_demo": false,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/companion_reviews/assessment_narrative_cib_revision_3eea5176c0eab4abfb6452a4_v01.json",
+          "sha256": "619d0f03b9e4ca1bf419d4baf5f642bc8d88e1489b2dc654122787269e3b24bb"
+        },
+        "candidate_id": "narrative_fill_51d53a84b9107ce939d5c4424efa",
+        "correctness": "CORRECT",
+        "native_checksum": "8923ec559315bb3844ad640cbe6749af97d5f0bc0f1d656cd3dbeedc3720913b",
+        "qualified": true,
+        "rank": 1,
+        "reading_id": "next_reading_31ff17e95b0c05ea69654db3",
+        "target_identity": "cloze_d449e4d9702bb2a764dad895"
+      },
+      "source_target_id": "cloze_d449e4d9702bb2a764dad895"
+    },
+    {
+      "case": {
+        "case_id": "cloze_132dbc991d56c1c3ff66331a",
+        "corpus": "cib",
+        "date": "1959-06-27",
+        "document_id": "CIA-RDP79T00975A004500410001-6",
+        "focal_marker": "[REDACTION 1]",
+        "query": "The Caribbean Crisis\n\nThe determination of leftists and liberals led by the Fidel Castro government of Cuba [REDACTION 1] to overthrow the Trujillo dictatorship in the Dominican Republic and the Somoza regime in Nicaragua has brought the contenders close to war. The situation also seriously threatens other governments, particularly the weak unpopular regime in Haiti. Military action has thus far been confined to rebel incursions into Nicaragua and the Dominican Republic, but may extend to counteraction by the beleaguered regimes against governments supporting the insurgents. Generalissimo Trujillo told the American ambassador on 20 June that \"defensive military action\" against Cuba will become \"imperative\" in the event of further insurgent landings. The armed forces chief of Nicaragua has also considered action against the hostile governments.\n\nLatin American Communists, who are particularly influential among the Cuban-backed rebel groups, would probably win influence in any postrevolutionary governments.",
+        "task": "redaction"
+      },
+      "collection": "additional_real_redaction",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/condition.json.gz",
+            "sha256": "4aac5f55dd9c0393ec9bc06f37c38bf9ade178307bda2517dce0b728d025f623"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/focal_recovery_20261120/final13/runs/63256e96cd34b18e8b2d1c933995f1ee96721966e8353526e39ab47c523b9277/native.json.gz",
+            "sha256": "d528af647cd544e6bcb0318d75173863c06f9d2756119bd301b509b7388472a2"
+          },
+          "run_id": "narrative_a758ad9fab04a05c53ce17cc",
+          "trace_refs": {
+            "next_reading_36678042d2f4e8631eedd462": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/trace_next_reading_36678042d2f4e8631eedd462.json.gz",
+              "sha256": "3476c4d0e1aaf8e9455aa3fbb3bc1bec197e1bb8cf7bc9f9696095652f038960"
+            },
+            "next_reading_81479663ec4b40f19fa30fdf": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/trace_next_reading_81479663ec4b40f19fa30fdf.json.gz",
+              "sha256": "155283c7931e0a793bd05c3fd7d44ccc292640f13fd13263ed69bddc91eedb76"
+            },
+            "next_reading_b65ff678cbd646fa5e2147ef": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_132dbc991d56c1c3ff66331a/trace_next_reading_b65ff678cbd646fa5e2147ef.json.gz",
+              "sha256": "2592e54867603322f4d3d274dc550620fd8c57982b6286e955de559e025de934"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "cloze_132dbc991d56c1c3ff66331a",
+          "config": "llm_readings",
+          "default_reading_id": "next_reading_81479663ec4b40f19fa30fdf",
+          "gate_sha256": "3993df8690029a7c13ddc7a21527db3680b09eb5ed0eb8e1ac41333764106590",
+          "native_checksum": "d1968183a155b70a11dfd7837111c8b8f49e46dd115d36deca2caf654e58ef29",
+          "native_run_id": "narrative_a758ad9fab04a05c53ce17cc",
+          "overall_status": "exploratory_contextual",
+          "query_sha256": "78aa2df2c56dcf8d651e0c8b931047a801aeba41eb9e671a124e8a465b1d8e36",
+          "reading_order": [
+            "next_reading_81479663ec4b40f19fa30fdf",
+            "next_reading_b65ff678cbd646fa5e2147ef",
+            "next_reading_36678042d2f4e8631eedd462"
+          ],
+          "readings": {
+            "next_reading_36678042d2f4e8631eedd462": {
+              "backed": 0,
+              "candidate_count": 0,
+              "context": 0,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            },
+            "next_reading_81479663ec4b40f19fa30fdf": {
+              "backed": 0,
+              "candidate_count": 5,
+              "context": 5,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            },
+            "next_reading_b65ff678cbd646fa5e2147ef": {
+              "backed": 0,
+              "candidate_count": 0,
+              "context": 0,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            }
+          },
+          "task": "redaction",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "family_id": "caribbean_1959_crossborder_insurgent_backing",
+      "narrative_id": "cib_additional_cloze_132dbc991d56c1c3ff66331a",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "a2147e311ec43e0a3e99646aa85f461ff7caa7e024b960d31f837ba890b2ced2",
+        "native_checkpoint": {
+          "path": "experiments/focal_recovery_20261120/final13/runs/63256e96cd34b18e8b2d1c933995f1ee96721966e8353526e39ab47c523b9277/native.json.gz",
+          "sha256": "d528af647cd544e6bcb0318d75173863c06f9d2756119bd301b509b7388472a2"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "a2147e311ec43e0a3e99646aa85f461ff7caa7e024b960d31f837ba890b2ced2",
+        "native_result_checksum": "d1968183a155b70a11dfd7837111c8b8f49e46dd115d36deca2caf654e58ef29",
+        "public_case_sha256": "a2147e311ec43e0a3e99646aa85f461ff7caa7e024b960d31f837ba890b2ced2",
+        "query_sha256": "78aa2df2c56dcf8d651e0c8b931047a801aeba41eb9e671a124e8a465b1d8e36",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/cloze_132dbc991d56c1c3ff66331a/origin_masked.json.gz",
+          "sha256": "c983003a5062c830059fb8dbce080e66f29052476d6ba7227613a8feb9035f28"
+        },
+        "revealed": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/cloze_132dbc991d56c1c3ff66331a/origin_revealed.json.gz",
+          "sha256": "a4fc112a77b0ceadb5fa7601825b0376f729a2c5b9bb1229fae20a73ef8401cb"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Betancourt and the Caribbean crisis",
+      "query_kind": "authentic_paired_redaction",
+      "query_version": null,
+      "reference_answer_kind": "paired_release_reveal",
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "2fb91e9933e870d57fac2571f7e4f46936ee4e75ee51d7d07612c62cb2b37a54",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "identity_first": true,
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "cib",
+        "graph_id": "graph_2e1f8d6c2443987c",
+        "hierarchy_id": "hierarchy_dcfb5058b0e6e571",
+        "index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "cib_resource_623c60e1e128944377f0",
+        "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+      },
+      "selected_additional": true,
+      "selected_bench": false,
+      "selected_demo": false,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/companion_reviews/assessment_cloze_132dbc991d56c1c3ff66331a_v01.json",
+          "sha256": "8ebc54ca857869c81a405b3dd6eb85163dc83d5c62dbc27fb5f2a4bc365ede79"
+        },
+        "candidate_id": "narrative_fill_a6fa3da302397e1d991e2b2b8f44",
+        "correctness": "EQUIVALENT",
+        "native_checksum": "d1968183a155b70a11dfd7837111c8b8f49e46dd115d36deca2caf654e58ef29",
+        "qualified": true,
+        "rank": 1,
+        "reading_id": "next_reading_81479663ec4b40f19fa30fdf",
+        "target_identity": "cloze_132dbc991d56c1c3ff66331a"
+      },
+      "source_target_id": "cloze_132dbc991d56c1c3ff66331a"
+    },
+    {
+      "case": {
+        "case_id": "cloze_225a750400eb38718fa5bb9b",
+        "corpus": "cib",
+        "date": "1959-11-04",
+        "document_id": "CIA-RDP79T00975A004800030001-5",
+        "focal_marker": "[REDACTION 1]",
+        "query": "LATE ITEM\n\n*Panama: Further anti-American rioting and attempted incursions into the Canal Zone may follow yesterday's outbreaks. The wounding of several Panamanians by US troops, who defended Canal Zone entrances when the Panamanian National Guard failed to do so, may serve as a pretext for extremists to provoke additional disorder during the next few days. Panamanian grievances against the American administration of the Canal Zone are being exploited by nationalist politicians maneuvering in anticipation of next May's presidential election. The [REDACTION 1] ruling oligarchy in Panama appears willing to use anti-American sentiment regarding the Canal Zone in order to divert attention from the underlying social discontent of the lower income groups.[REDACTION]",
+        "task": "redaction"
+      },
+      "collection": "additional_real_redaction",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_225a750400eb38718fa5bb9b/condition.json.gz",
+            "sha256": "87f01973bca4eb6d395e3f928230bc6f31c7e6132bc5bdebb0fc3471fa8ec7e0"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/focal_recovery_20261120/final13_planfix/runs/4b390919a369f44243174404f21d1d8c090f3536f90ad023573eae6365514aaa/native.json.gz",
+            "sha256": "b3aa4af7b0c90dba5f841b29e403a7d89f4a412f696881b498bf2b8c341067b3"
+          },
+          "run_id": "narrative_7b1536b9bcccd2492f273274",
+          "trace_refs": {
+            "next_reading_0a6efaba6c01d35e92165159": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_225a750400eb38718fa5bb9b/trace_next_reading_0a6efaba6c01d35e92165159.json.gz",
+              "sha256": "6b4622cc73ae6fa233c2ca2774e8b982aaa02601d556e18cdaccb220658586b4"
+            },
+            "next_reading_509c4499ef4d1596e833f8a2": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_225a750400eb38718fa5bb9b/trace_next_reading_509c4499ef4d1596e833f8a2.json.gz",
+              "sha256": "a6be402ddbd5e0e7c92612f5fd29a0231cfa6758be2dcf971a1dea1389ca1ce1"
+            },
+            "next_reading_aa7f5df05a5d114dfab067e6": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/cloze_225a750400eb38718fa5bb9b/trace_next_reading_aa7f5df05a5d114dfab067e6.json.gz",
+              "sha256": "51ca31236967805d6c639d1cec428065d8c46a6714984925cfdec21771343584"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "cloze_225a750400eb38718fa5bb9b",
+          "config": "llm_readings",
+          "default_reading_id": "next_reading_aa7f5df05a5d114dfab067e6",
+          "gate_sha256": "ef3853bb7cb59f4432a26a05fd20d52ff5854363bc37698cbaf54dfb1ddc1351",
+          "native_checksum": "8a990866a95477db3ec316430ff3d636823c243b2a31a5ae73a7f2b26cfb4d1a",
+          "native_run_id": "narrative_7b1536b9bcccd2492f273274",
+          "overall_status": "exploratory_contextual",
+          "query_sha256": "474e68892f436fd3a9d3ddd5a705ad4a816d72fadd86f84d6723dade89503017",
+          "reading_order": [
+            "next_reading_aa7f5df05a5d114dfab067e6",
+            "next_reading_0a6efaba6c01d35e92165159",
+            "next_reading_509c4499ef4d1596e833f8a2"
+          ],
+          "readings": {
+            "next_reading_0a6efaba6c01d35e92165159": {
+              "backed": 0,
+              "candidate_count": 1,
+              "context": 1,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            },
+            "next_reading_509c4499ef4d1596e833f8a2": {
+              "backed": 0,
+              "candidate_count": 0,
+              "context": 0,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            },
+            "next_reading_aa7f5df05a5d114dfab067e6": {
+              "backed": 0,
+              "candidate_count": 0,
+              "context": 0,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            }
+          },
+          "task": "redaction",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "family_id": "pa_1959_november_canal_zone_agitation_assessment",
+      "narrative_id": "cib_additional_cloze_225a750400eb38718fa5bb9b",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "6edbddf3e2307820e3f7e45d4bfa13358d4849f489d2ca97018d8780834f4f42",
+        "native_checkpoint": {
+          "path": "experiments/focal_recovery_20261120/final13_planfix/runs/4b390919a369f44243174404f21d1d8c090f3536f90ad023573eae6365514aaa/native.json.gz",
+          "sha256": "b3aa4af7b0c90dba5f841b29e403a7d89f4a412f696881b498bf2b8c341067b3"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "6edbddf3e2307820e3f7e45d4bfa13358d4849f489d2ca97018d8780834f4f42",
+        "native_result_checksum": "8a990866a95477db3ec316430ff3d636823c243b2a31a5ae73a7f2b26cfb4d1a",
+        "public_case_sha256": "6edbddf3e2307820e3f7e45d4bfa13358d4849f489d2ca97018d8780834f4f42",
+        "query_sha256": "474e68892f436fd3a9d3ddd5a705ad4a816d72fadd86f84d6723dade89503017",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/cloze_225a750400eb38718fa5bb9b/origin_masked.json.gz",
+          "sha256": "2ab8ea5a42e9ffb8d571cb2134e8b0c2b20fdd9bf349e60cd47216d48dd18350"
+        },
+        "revealed": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/cloze_225a750400eb38718fa5bb9b/origin_revealed.json.gz",
+          "sha256": "a56b5ed7231aeab3b2f40eeeccb517014e6ebbefff1afedba7fde50afeeb9233"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "An assessment of Panama's ruling oligarchy",
+      "query_kind": "authentic_paired_redaction",
+      "query_version": null,
+      "reference_answer_kind": "paired_release_reveal",
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "c2ebeebc6d8466f604752a0383d5611896e1e147b812f0e8a901b36bc2fcdb11",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "identity_first": true,
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "cib",
+        "graph_id": "graph_2e1f8d6c2443987c",
+        "hierarchy_id": "hierarchy_dcfb5058b0e6e571",
+        "index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "cib_resource_623c60e1e128944377f0",
+        "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+      },
+      "selected_additional": true,
+      "selected_bench": false,
+      "selected_demo": false,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/companion_reviews/assessment_cloze_225a750400eb38718fa5bb9b_v01.json",
+          "sha256": "ba887690f0d4798d52105ac369217364e02283a14f80f912a26f4a620bacb6a5"
+        },
+        "candidate_id": "narrative_fill_0ea0e772dd56625b0b09bc111314",
+        "correctness": "CORRECT",
+        "native_checksum": "8a990866a95477db3ec316430ff3d636823c243b2a31a5ae73a7f2b26cfb4d1a",
+        "qualified": true,
+        "rank": 1,
+        "reading_id": "next_reading_0a6efaba6c01d35e92165159",
+        "target_identity": "cloze_225a750400eb38718fa5bb9b"
+      },
+      "source_target_id": "cloze_225a750400eb38718fa5bb9b"
+    },
+    {
+      "case": {
+        "case_id": "narrative_cib_revision_ac4fb499beb4b345b5384ae6",
+        "corpus": "cib",
+        "date": "1960-12-28",
+        "document_id": "CIA-RDP79T00975A005400500001-6",
+        "focal_marker": "[REDACTION]",
+        "query": "The agreement is said to have been drafted at [REDACTION] initiative; he reportedly guaranteed to the Chinese that their military actions would receive no publicity in Burma. Only a handful of Burmese officials know of the agreement, and even Prime Minister Nu professes not to have been officially informed. Nu stated flatly in a press conference on 20 December that there was no agreement, and that if there were Chinese Communist troops in Burma who refused to leave, \"they would be driven out.\" Official acknowledgment of this military cooperation would arouse widespread apprehension in Burma.",
+        "task": "redaction"
+      },
+      "collection": "additional_real_redaction",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac4fb499beb4b345b5384ae6/condition.json.gz",
+            "sha256": "63fd1dcb83052f1851ed2e9cfe31996231c8fefb87544aa8cfa4fba678e8514d"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/9c4fcc94115e422e0e2add18b6c8b4e4baff83d3ddd0dc8a889eb9a451116645/native.json.gz",
+            "sha256": "acf0ff558216196ced3df3782b56b3744a4d36e4154ddd4110de2178996bfa51"
+          },
+          "run_id": "narrative_17a676c7b04bc24e1e194553",
+          "trace_refs": {
+            "next_reading_fdb35a08c26c96dc605d8d97": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ac4fb499beb4b345b5384ae6/trace_next_reading_fdb35a08c26c96dc605d8d97.json.gz",
+              "sha256": "bbca2ce63d27ebc166d7422b19f4d71ca90aab8924f1cea60c9155b03dc8c4b6"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "narrative_cib_revision_ac4fb499beb4b345b5384ae6",
+          "config": "llm_readings",
+          "default_reading_id": "next_reading_fdb35a08c26c96dc605d8d97",
+          "gate_sha256": "518d84e5590b688d208a45d83e83575524bdf787faad115bad971f5a763dbc27",
+          "native_checksum": "e045f9d804c92c475805430d01eb1ad4a7d11c95fec7d6e22f76e689f8e60e5f",
+          "native_run_id": "narrative_17a676c7b04bc24e1e194553",
+          "overall_status": "exploratory_contextual",
+          "query_sha256": "a6988bbd921880dbdb499f0b5a12447fc0b37b27a9531ae675a6e8314318837e",
+          "reading_order": [
+            "next_reading_fdb35a08c26c96dc605d8d97"
+          ],
+          "readings": {
+            "next_reading_fdb35a08c26c96dc605d8d97": {
+              "backed": 0,
+              "candidate_count": 5,
+              "context": 5,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            }
+          },
+          "task": "redaction",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "family_id": "mm_cn_1960_border_military_cooperation_initiative",
+      "narrative_id": "cib_additional_narrative_cib_revision_ac4fb499beb4b345b5384ae6",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "e6621bce6b27be062c210399ae9fd2bab5f2a179f2b814938b0f5fa5a95b89be",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/9c4fcc94115e422e0e2add18b6c8b4e4baff83d3ddd0dc8a889eb9a451116645/native.json.gz",
+          "sha256": "acf0ff558216196ced3df3782b56b3744a4d36e4154ddd4110de2178996bfa51"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "e6621bce6b27be062c210399ae9fd2bab5f2a179f2b814938b0f5fa5a95b89be",
+        "native_result_checksum": "e045f9d804c92c475805430d01eb1ad4a7d11c95fec7d6e22f76e689f8e60e5f",
+        "public_case_sha256": "e6621bce6b27be062c210399ae9fd2bab5f2a179f2b814938b0f5fa5a95b89be",
+        "query_sha256": "a6988bbd921880dbdb499f0b5a12447fc0b37b27a9531ae675a6e8314318837e",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_ac4fb499beb4b345b5384ae6/origin_masked.json.gz",
+          "sha256": "6cbede35fbbc48c8013dfe70eeadcfa97cf2731744dc6e9fe96590d93e0c1674"
+        },
+        "revealed": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_ac4fb499beb4b345b5384ae6/origin_revealed.json.gz",
+          "sha256": "58ac50177c1d6f5083c4d6600764bdf0d3538b434ab745e09d7438a0b961af42"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Aung Gyi and the Burma-China agreement",
+      "query_kind": "authentic_paired_redaction",
+      "query_version": null,
+      "reference_answer_kind": "paired_release_reveal",
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "d5e2415a5a9d6a0fcc6eaeb079d27c19dc355d1a1666e908b945189ef3915878",
+        "native_configuration": {
+          "completed_drafts_per_reading": 24,
+          "construction_pages": 16,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 30,
+          "retrieval_passage_budget": 60,
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/2",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "cib",
+        "graph_id": "graph_2e1f8d6c2443987c",
+        "hierarchy_id": "hierarchy_dcfb5058b0e6e571",
+        "index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "cib_resource_623c60e1e128944377f0",
+        "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+      },
+      "selected_additional": true,
+      "selected_bench": false,
+      "selected_demo": false,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/companion_reviews/assessment_narrative_cib_revision_ac4fb499beb4b345b5384ae6_v01.json",
+          "sha256": "11c255e95ef98d2c76b9c79a1590a5aa2a9a45f9c1d24de486223ef02f74c56e"
+        },
+        "candidate_id": "narrative_fill_ef7baefbe9e82f3760f1e939cc42",
+        "correctness": "EQUIVALENT",
+        "native_checksum": "e045f9d804c92c475805430d01eb1ad4a7d11c95fec7d6e22f76e689f8e60e5f",
+        "qualified": true,
+        "rank": 3,
+        "reading_id": "next_reading_fdb35a08c26c96dc605d8d97",
+        "target_identity": "cloze_58e8550212498c5d863f8883"
+      },
+      "source_target_id": "cloze_58e8550212498c5d863f8883"
+    },
+    {
+      "case": {
+        "case_id": "narrative_cib_alt_h_3af565c9ad6e532e16c9264b",
+        "corpus": "cib",
+        "date": "1961-01-17",
+        "document_id": "CIA-RDP79T00975A005500140001-5",
+        "focal_marker": null,
+        "query": "Colonel Alberto Escamilla was reportedly appointed minister of interior.",
+        "task": "hypothesis"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/condition.json.gz",
+            "sha256": "78c00c535f413bbcf7a5b697f0e67fef6d54e10146e26f41012fdaa0a3a2ee43"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/95217ef1086f82797734b1782c7de19aabd630d9d1334185eb5bbdc2056f0a4e/native.json.gz",
+            "sha256": "7dfb99834a1ca90a221118e670e409face60bb6bc15be7938746b6072e3ae34f"
+          },
+          "run_id": "narrative_8da7188fd446e55e7e459cbc",
+          "trace_refs": {
+            "": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/trace_assertions.json.gz",
+              "sha256": "3e06bec04ebceeb7e69f2bff4ccfdf4f26aebd848c35850d784e2075c8008976"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "narrative_cib_alt_h_3af565c9ad6e532e16c9264b",
+          "config": "llm_readings",
+          "counts": {
+            "conflict": 0,
+            "context": 0,
+            "mixed": 0,
+            "opposed": 0,
+            "partial": 0,
+            "required": 1,
+            "supported": 1,
+            "unresolved": 0
+          },
+          "gate_sha256": "0a9a1c610e261d17801d22392120ee4ef885fa8a5f8e8b890d87de077e8c0362",
+          "native_checksum": "221cb3445684eb9fe67bbd3925929caf71359a0d9886c3074dbae3d522a6006a",
+          "native_run_id": "narrative_8da7188fd446e55e7e459cbc",
+          "overall_status": "evidence_backed_suggestion",
+          "query_sha256": "995c2c0eea3a1dd0a2d2d66fbb00eebaf144f9d31c40592372391ea96453ee16",
+          "task": "hypothesis",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "narrative_id": "cib_salvador_authority",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "369e05a070a391a7d185f1aa9f1aefce9d7c157514fd56350f5cdf99674be0ff",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/95217ef1086f82797734b1782c7de19aabd630d9d1334185eb5bbdc2056f0a4e/native.json.gz",
+          "sha256": "7dfb99834a1ca90a221118e670e409face60bb6bc15be7938746b6072e3ae34f"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "369e05a070a391a7d185f1aa9f1aefce9d7c157514fd56350f5cdf99674be0ff",
+        "native_result_checksum": "221cb3445684eb9fe67bbd3925929caf71359a0d9886c3074dbae3d522a6006a",
+        "public_case_sha256": "369e05a070a391a7d185f1aa9f1aefce9d7c157514fd56350f5cdf99674be0ff",
+        "query_sha256": "995c2c0eea3a1dd0a2d2d66fbb00eebaf144f9d31c40592372391ea96453ee16",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/origin_masked.json.gz",
+          "sha256": "7436222febd13cdecf9b72b0c267946402c8eb6e5c6ad7342445986fe77cd847"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "A reported interior-ministry appointment",
+      "query_kind": "source_derived",
+      "query_version": null,
+      "reference_answer_kind": null,
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "1b97f9d67e0e15e0df171cb0530d310ecc9b93f74868359651287ef50de14f3c",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "context_kind_mode": "same_page_reference",
+            "counter_policy": "positive_support",
+            "cue_order_mode": "focal_sentence",
+            "identity_first": true,
+            "nominal_boundary_mode": "literal_visible_prefix",
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "cib",
+        "graph_id": "graph_2e1f8d6c2443987c",
+        "hierarchy_id": "hierarchy_dcfb5058b0e6e571",
+        "index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "cib_resource_623c60e1e128944377f0",
+        "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/review/cib_trio/hypothesis_case_review_v01.json",
+          "sha256": "d110afdbeba7a253a483cde50f78b15dd8778f228523f3431f10bf77a29b9d69"
+        },
+        "native_checksum": "221cb3445684eb9fe67bbd3925929caf71359a0d9886c3074dbae3d522a6006a",
+        "qualified": true
+      }
+    },
+    {
+      "case": {
+        "case_id": "narrative_cib_revision_ab8506d47badd3718e892a7e",
+        "corpus": "cib",
+        "date": "1961-01-17",
+        "document_id": "CIA-RDP79T00975A005500140001-5",
+        "focal_marker": null,
+        "query": "El Salvador's Communist-dominated labor federation had announced plans to organize peasant committees, and fourteen PRAM leaders were reported to have left or to be about to leave for Cuba.",
+        "task": "mosaic"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/condition.json.gz",
+            "sha256": "cbef2c30bf02b4ec4cb706a4ee88d66c957bde9e71c68d66024db01e2dc9aebf"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/a42a47d5259e54fed24b7b4a9fa484513cc9a5f648a0966094f17f57af8f26df/native.json.gz",
+            "sha256": "f2719509df046ddc0ae3d9fa073abbd277fe0c7f28565918f821b1bb52d862aa"
+          },
+          "run_id": "narrative_2e732d5c06ac5a9014c29fe7",
+          "trace_refs": {
+            "": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/trace_assertions.json.gz",
+              "sha256": "a5f991845dd47c2153ca0de16311b3dbef6277ac0284613b8e0a981bce522a3a"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "narrative_cib_revision_ab8506d47badd3718e892a7e",
+          "config": "llm_readings",
+          "counts": {
+            "conflict": 0,
+            "context": 0,
+            "mixed": 0,
+            "opposed": 0,
+            "partial": 0,
+            "required": 2,
+            "supported": 2,
+            "unresolved": 0
+          },
+          "gate_sha256": "48e22e95f173a04ddbd93e11b05c31afed496a98ba945484d7b89bc6ec437b07",
+          "native_checksum": "c0a933f1cbb44907d391f8708c590d1cc5f75e823de0bd06b634313392dd19e9",
+          "native_run_id": "narrative_2e732d5c06ac5a9014c29fe7",
+          "overall_status": "evidence_backed_suggestion",
+          "query_sha256": "b32a4e54e16379cd42726aa2b919848cc4595c2fbec9b08c9e862e2d8a2c45ff",
+          "task": "mosaic",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "narrative_id": "cib_salvador_authority",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "6b91bb93e8dffd294486eb356088f06bc3b4147eaeb236f7e986beeb2d02c107",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/a42a47d5259e54fed24b7b4a9fa484513cc9a5f648a0966094f17f57af8f26df/native.json.gz",
+          "sha256": "f2719509df046ddc0ae3d9fa073abbd277fe0c7f28565918f821b1bb52d862aa"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "2428ed1f73d3dc1f72aca171f257249deebd9f406edb57a6d1be0fb01c8d2634",
+        "native_result_checksum": "c0a933f1cbb44907d391f8708c590d1cc5f75e823de0bd06b634313392dd19e9",
+        "public_case_sha256": "2428ed1f73d3dc1f72aca171f257249deebd9f406edb57a6d1be0fb01c8d2634",
+        "query_sha256": "b32a4e54e16379cd42726aa2b919848cc4595c2fbec9b08c9e862e2d8a2c45ff",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXPLICIT_PUBLIC_MOSAIC_LEGACY_ENGINE_BRIDGE",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/origin_masked.json.gz",
+          "sha256": "9840f9369bee83a0e54bb4dbc2ec50f946231cc4b7b931a483a9042b937f3672"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Rural organization and reported journeys",
+      "query_kind": "source_derived",
+      "query_version": null,
+      "reference_answer_kind": null,
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "1b97f9d67e0e15e0df171cb0530d310ecc9b93f74868359651287ef50de14f3c",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "context_kind_mode": "same_page_reference",
+            "counter_policy": "positive_support",
+            "cue_order_mode": "focal_sentence",
+            "identity_first": true,
+            "nominal_boundary_mode": "literal_visible_prefix",
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "cib",
+        "graph_id": "graph_2e1f8d6c2443987c",
+        "hierarchy_id": "hierarchy_dcfb5058b0e6e571",
+        "index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "cib_resource_623c60e1e128944377f0",
+        "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/review/cib_trio/mosaic_case_review_v01.json",
+          "sha256": "b00207bfa4c88d89e50dbb40f4116dbfae635c420c218f47d28dc4633980ded1"
+        },
+        "native_checksum": "c0a933f1cbb44907d391f8708c590d1cc5f75e823de0bd06b634313392dd19e9",
+        "qualified": true
+      }
+    },
+    {
+      "case": {
+        "case_id": "narrative_cib_revision_50e63144067940b5debe3fea",
+        "corpus": "cib",
+        "date": "1961-01-17",
+        "document_id": "CIA-RDP79T00975A005500140001-5",
+        "focal_marker": "[REDACTION]",
+        "query": "The armed forces, which had been virtually paralyzed by disunity, appear to have been spurred to cooperation by increasingly bold Communist activity in recent weeks. Unrestricted Communist organizational activity among the [REDACTION] Salvadoran peasants and the visit to Cuba earlier this month of a group of Salvadoran extremists have particularly heightened the concern of the military.",
+        "task": "redaction"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/condition.json.gz",
+            "sha256": "f4d80533a9d8aec482e1f0b9476fab00af232eb5b69617b1fadf3798c1743b05"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/4e62f4e2f5dfa1501de0ee03b684461880b975099931be66515592a465acd8db/native.json.gz",
+            "sha256": "5b2749b6604ddff04027289e7c6b6cd2e5615d8212fb185e1802cfc182524ceb"
+          },
+          "run_id": "narrative_83516740d8e8999400619aad",
+          "trace_refs": {
+            "next_reading_21af61fd862e9bf524fcb8e4": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/trace_next_reading_21af61fd862e9bf524fcb8e4.json.gz",
+              "sha256": "8dff118e769ef9b2602171eaa65727a7550b0cd4cdfa0c106741099de825919d"
+            },
+            "next_reading_5143cdac9ef38f3e18911c42": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/trace_next_reading_5143cdac9ef38f3e18911c42.json.gz",
+              "sha256": "264073acb8d39c34db4ad37f663a09ef40565414cc023830ef2c3cac306a771a"
+            },
+            "next_reading_9844017f8398a69db9667dbe": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/narrative_cib_revision_50e63144067940b5debe3fea/trace_next_reading_9844017f8398a69db9667dbe.json.gz",
+              "sha256": "da3524170868ea3b0dc866ce6710af0adea06a9e973860e83ebb93ea091d6001"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "narrative_cib_revision_50e63144067940b5debe3fea",
+          "config": "llm_readings",
+          "default_reading_id": "next_reading_5143cdac9ef38f3e18911c42",
+          "gate_sha256": "59087fc6f30f71e1e44300889cc88bd9544e184499a8c6b2e7d5f1eda55db932",
+          "native_checksum": "e57c4bf6313346627f2e532c469bb40cc32703f62d663085eaa9a46558207976",
+          "native_run_id": "narrative_83516740d8e8999400619aad",
+          "overall_status": "evidence_backed_suggestion",
+          "query_sha256": "165fe99e4cce9dd7ba8d4826f1aea8627dd42f2dba12b3df3f3de8f5c74c5d23",
+          "reading_order": [
+            "next_reading_5143cdac9ef38f3e18911c42",
+            "next_reading_21af61fd862e9bf524fcb8e4",
+            "next_reading_9844017f8398a69db9667dbe"
+          ],
+          "readings": {
+            "next_reading_21af61fd862e9bf524fcb8e4": {
+              "backed": 0,
+              "candidate_count": 5,
+              "context": 5,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            },
+            "next_reading_5143cdac9ef38f3e18911c42": {
+              "backed": 2,
+              "candidate_count": 3,
+              "context": 1,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": "narrative_fill_4db3fdd1827c6c389cfd88be33e7",
+              "recommendation_rank": 1,
+              "unresolved": 0
+            },
+            "next_reading_9844017f8398a69db9667dbe": {
+              "backed": 0,
+              "candidate_count": 0,
+              "context": 0,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            }
+          },
+          "task": "redaction",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "family_id": "sv_1961_peasant_vulnerability_characterization",
+      "narrative_id": "cib_salvador_authority",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "641979e5e398412ed53389a6cfbfe91ec5ba5383d969a917164c73dc68f500b2",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/4e62f4e2f5dfa1501de0ee03b684461880b975099931be66515592a465acd8db/native.json.gz",
+          "sha256": "5b2749b6604ddff04027289e7c6b6cd2e5615d8212fb185e1802cfc182524ceb"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "641979e5e398412ed53389a6cfbfe91ec5ba5383d969a917164c73dc68f500b2",
+        "native_result_checksum": "e57c4bf6313346627f2e532c469bb40cc32703f62d663085eaa9a46558207976",
+        "public_case_sha256": "641979e5e398412ed53389a6cfbfe91ec5ba5383d969a917164c73dc68f500b2",
+        "query_sha256": "165fe99e4cce9dd7ba8d4826f1aea8627dd42f2dba12b3df3f3de8f5c74c5d23",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_50e63144067940b5debe3fea/origin_masked.json.gz",
+          "sha256": "4633e83582330a568bf233b19691cf1e7c18759e08a546d28794c4596bca2e4b"
+        },
+        "revealed": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_50e63144067940b5debe3fea/origin_revealed.json.gz",
+          "sha256": "f58f8e2ebf4e7e1286d25e84733586af967aafbd1133df07a9f8c3bdae7e78a1"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Why the Salvadoran military became concerned",
+      "query_kind": "authentic_paired_redaction",
+      "query_version": null,
+      "reference_answer_kind": null,
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "1b97f9d67e0e15e0df171cb0530d310ecc9b93f74868359651287ef50de14f3c",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "context_kind_mode": "same_page_reference",
+            "counter_policy": "positive_support",
+            "cue_order_mode": "focal_sentence",
+            "identity_first": true,
+            "nominal_boundary_mode": "literal_visible_prefix",
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "cib",
+        "graph_id": "graph_2e1f8d6c2443987c",
+        "hierarchy_id": "hierarchy_dcfb5058b0e6e571",
+        "index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "cib_resource_623c60e1e128944377f0",
+        "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/review/cib_trio/redaction_case_review_v01.json",
+          "sha256": "d04d3dbb413c618ce48c72e489ad521bae0e78f1c26c7f306a9f21e090367d3a"
+        },
+        "candidate_id": "narrative_fill_4db3fdd1827c6c389cfd88be33e7",
+        "correctness": "EQUIVALENT",
+        "native_checksum": "e57c4bf6313346627f2e532c469bb40cc32703f62d663085eaa9a46558207976",
+        "qualified": true,
+        "rank": 1,
+        "reading_id": "next_reading_5143cdac9ef38f3e18911c42",
+        "target_identity": "cloze_bf6b67a66a3956b2d8fde879"
+      },
+      "source_target_id": "cloze_bf6b67a66a3956b2d8fde879"
+    },
+    {
+      "case": {
+        "case_id": "curation_v65_overlap_haeri_teacher_student_h01",
+        "corpus": "iran",
+        "date": "1979-06-01",
+        "document_id": "1979STATE139731",
+        "focal_marker": "",
+        "query": "Haeri's father taught Khomeini. Haeri was a student of Khomeini.",
+        "task": "hypothesis"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/curation_v65_overlap_haeri_teacher_student_h01/condition.json.gz",
+            "sha256": "507944e6bae34366b4f81714178cc1e54685540a642d62cfae56f9b314e33e85"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/40d04eddd52b4fd856ba6df2fe58669f5c35289bc590d6ff0143364c42d12059/native.json.gz",
+            "sha256": "d67f5e4258a4cc628d24e0550ab2c78b36f0337505cbb3c34dc70a7621ff5ea5"
+          },
+          "run_id": "narrative_3fc7647fd5f766b4bdfbb8fc",
+          "trace_refs": {
+            "": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/curation_v65_overlap_haeri_teacher_student_h01/trace_assertions.json.gz",
+              "sha256": "a14f6371c7d3fb3d2f3101e405167ba005939424dadcf6b4767975e7414a6000"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "curation_v65_overlap_haeri_teacher_student_h01",
+          "config": "llm_readings",
+          "counts": {
+            "conflict": 0,
+            "context": 0,
+            "mixed": 0,
+            "opposed": 0,
+            "partial": 0,
+            "required": 2,
+            "supported": 2,
+            "unresolved": 0
+          },
+          "gate_sha256": "6405857163bcffeb11f5be5c87fd2379951313e5a1fd0be0ebab61ecfbcdc208",
+          "native_checksum": "908c8f193ab8edbf972a336738117f639a1932ed74271ed4ef8f81a6946d804f",
+          "native_run_id": "narrative_3fc7647fd5f766b4bdfbb8fc",
+          "overall_status": "evidence_backed_suggestion",
+          "query_sha256": "999eacc999a512f9046989ffb70308291e017fd3265019835488c18b14dffdfd",
+          "task": "hypothesis",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "narrative_id": "iran_transition_authority",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "cc9df26fc35ca1da027da54952e006d34c0548f4cd9dee633ef04ba6ad085126",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/40d04eddd52b4fd856ba6df2fe58669f5c35289bc590d6ff0143364c42d12059/native.json.gz",
+          "sha256": "d67f5e4258a4cc628d24e0550ab2c78b36f0337505cbb3c34dc70a7621ff5ea5"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "cc9df26fc35ca1da027da54952e006d34c0548f4cd9dee633ef04ba6ad085126",
+        "native_result_checksum": "908c8f193ab8edbf972a336738117f639a1932ed74271ed4ef8f81a6946d804f",
+        "public_case_sha256": "cc9df26fc35ca1da027da54952e006d34c0548f4cd9dee633ef04ba6ad085126",
+        "query_sha256": "999eacc999a512f9046989ffb70308291e017fd3265019835488c18b14dffdfd",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "phase/iran_showcase_hunt_v02/fresh_followup/haeri_masked_origin_PRIVATE_v01.json",
+          "sha256": "c412b8bb49e26ce9aee42338fa70a4e94838ff7919c1b5e2e62f6c933a08ce51"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Religious teaching relationships",
+      "query_kind": "source_derived",
+      "query_version": null,
+      "reference_answer_kind": null,
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "83e3ad2dca3d5794f6361b8647b9818f9c95a9daba5dcb999a37087e6d672b4e",
+        "native_configuration": {
+          "completed_drafts_per_reading": 24,
+          "construction_pages": 16,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "iran",
+        "graph_id": "graph_d56668bc40bce616",
+        "hierarchy_id": "hierarchy_abd502047c8824ae",
+        "index_sha256": "2c32af1c71e5b33a6da1648794e6bc1a65f449a918758f8a025c8b2d8ea47c45",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "graph_d56668bc40bce616",
+        "source_status": "INCUMBENT_NOT_MIGRATED"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/companion_reviews/assessment_curation_v65_overlap_haeri_teacher_student_h01_v01.json",
+          "sha256": "1aaca9cb13448802697cfd88e9bed20abfcc42e062f5db246156c32b4cc12932"
+        },
+        "native_checksum": "908c8f193ab8edbf972a336738117f639a1932ed74271ed4ef8f81a6946d804f",
+        "qualified": false
+      }
+    },
+    {
+      "case": {
+        "case_id": "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
+        "corpus": "iran",
+        "date": "1979-01-19",
+        "document_id": "1979TEHRAN00936",
+        "focal_marker": "",
+        "query": "Karim Sanjabi led the National Front, and Mohamad Derakhshesh was head of the Teachers Union.",
+        "task": "mosaic"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_iran_two_roles_m_v03_e51b40d8265237f1/condition.json.gz",
+            "sha256": "3a94a310869c6984355b4705aa51bb3891bf19693a491c6b04c84e1a868365a2"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/2ecf4c500b79de5cde208860bea9d04a7fc2055b7e64b67d53add08155d17e6b/native.json.gz",
+            "sha256": "e764c8ada25dba914e05c741446ce9213eb38a8fa5acce3d578f0092828c1246"
+          },
+          "run_id": "narrative_39b47620d5fe098dc5d55b99",
+          "trace_refs": {
+            "": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_iran_two_roles_m_v03_e51b40d8265237f1/trace_assertions.json.gz",
+              "sha256": "02127f40c4f9956f2c5a2980f5c8ae35922b1c90c31b27a40954df9a1f9d8476"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
+          "config": "llm_readings",
+          "counts": {
+            "conflict": 0,
+            "context": 0,
+            "mixed": 0,
+            "opposed": 0,
+            "partial": 0,
+            "required": 2,
+            "supported": 2,
+            "unresolved": 0
+          },
+          "gate_sha256": "f0f334097a94e99b3e4d68905f19f91c59a30516f7a17a634d4284f4fef5e107",
+          "native_checksum": "f75f81f9062eac8956464e77cbb73a1c47cc41677aa08cfe1d21903367a7d8fb",
+          "native_run_id": "narrative_39b47620d5fe098dc5d55b99",
+          "overall_status": "evidence_backed_suggestion",
+          "query_sha256": "e51b40d8265237f1024749ece72a10d9a5445ce47b6ab54643d94198d2421721",
+          "task": "mosaic",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "narrative_id": "iran_transition_authority",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "8ac3d9f59912a492e45b40f8449d1962bba431e1ccbab1748531dea1cec469e4",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/2ecf4c500b79de5cde208860bea9d04a7fc2055b7e64b67d53add08155d17e6b/native.json.gz",
+          "sha256": "e764c8ada25dba914e05c741446ce9213eb38a8fa5acce3d578f0092828c1246"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "92f28fce9057ff9c6bfd3f72921e08fac29dbf8b18b7f3a9b779e3902dc4dcfd",
+        "native_result_checksum": "f75f81f9062eac8956464e77cbb73a1c47cc41677aa08cfe1d21903367a7d8fb",
+        "public_case_sha256": "92f28fce9057ff9c6bfd3f72921e08fac29dbf8b18b7f3a9b779e3902dc4dcfd",
+        "query_sha256": "e51b40d8265237f1024749ece72a10d9a5445ce47b6ab54643d94198d2421721",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXPLICIT_PUBLIC_MOSAIC_LEGACY_ENGINE_BRIDGE",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/fullresume_iran_two_roles_m_v03_e51b40d8265237f1/origin_masked.json.gz",
+          "sha256": "96ff1dbd94a867975a9084e867a6aa9d5773f10a9f3c0897f99711fd4dbd0429"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Opposition leaders and their organizations",
+      "query_kind": "source_derived",
+      "query_version": null,
+      "reference_answer_kind": null,
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "83e3ad2dca3d5794f6361b8647b9818f9c95a9daba5dcb999a37087e6d672b4e",
+        "native_configuration": {
+          "completed_drafts_per_reading": 24,
+          "construction_pages": 16,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "iran",
+        "graph_id": "graph_d56668bc40bce616",
+        "hierarchy_id": "hierarchy_abd502047c8824ae",
+        "index_sha256": "2c32af1c71e5b33a6da1648794e6bc1a65f449a918758f8a025c8b2d8ea47c45",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "graph_d56668bc40bce616",
+        "source_status": "INCUMBENT_NOT_MIGRATED"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/companion_reviews/assessment_fullresume_iran_two_roles_m_v03_e51b40d8265237f1_v01.json",
+          "sha256": "219df5f83de414935d7e1228f311a0bc3c818585f5b6090e78a2eb855a07f18f"
+        },
+        "native_checksum": "f75f81f9062eac8956464e77cbb73a1c47cc41677aa08cfe1d21903367a7d8fb",
+        "qualified": true
+      }
+    },
+    {
+      "case": {
+        "case_id": "source_window_9c77b0239a74f169bcf84785",
+        "corpus": "iran",
+        "date": "1979-04-13",
+        "document_id": "1979TEHRAN03881",
+        "focal_marker": "[REDACTION]",
+        "query": "AS REVOLUTIONARIES, BAZARGAN AND HIS PEOPLE ARE BASICALLY CONSERVATIVES. AMONG BAZARGAN'S CLOSEST COWORKERS, [REDACTION] APPEARS THE MOST RADICAL, BUT THAT PROBABLY STEMS FROM THE ROLE HE IS PLAYING AS A BRIDGE BETWEEN THE GOVERNMENT AND THE COMMITTEES.",
+        "task": "redaction"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/source_window_9c77b0239a74f169bcf84785/condition.json.gz",
+            "sha256": "72245cd2932bc74e3721015c2fdcbe4b4456acab12230430a2364853855f3007"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/823693d69176df68475db0bfd8d10de55a2298a142754836446307b7c0829597/native.json.gz",
+            "sha256": "23895c3e77077a42dc57f0a9f8970dc03e7782d36022b82cf4e5920a90a368dd"
+          },
+          "run_id": "narrative_e2c117926c97f621d1e96642",
+          "trace_refs": {
+            "next_reading_97598a5d5d37d881ce6f4c78": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/source_window_9c77b0239a74f169bcf84785/trace_next_reading_97598a5d5d37d881ce6f4c78.json.gz",
+              "sha256": "a362865fb2d33fa78b88e3498834a48fa9f06129a4849e2aad25ca64da978668"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "source_window_9c77b0239a74f169bcf84785",
+          "config": "llm_readings",
+          "default_reading_id": "next_reading_97598a5d5d37d881ce6f4c78",
+          "gate_sha256": "04861f5765dc43662040be5ca4d4dd19e2abf6325c6894220e6619dc44e10c3b",
+          "native_checksum": "0af7f8e903ca833f6284c37614e3afa0f8be98a9e45bcd054e888eb892f318b5",
+          "native_run_id": "narrative_e2c117926c97f621d1e96642",
+          "overall_status": "exploratory_contextual",
+          "query_sha256": "9c77b0239a74f169bcf847859cb4095a6f890f3ccf0f6a44f9cdca54cb6eb042",
+          "reading_order": [
+            "next_reading_97598a5d5d37d881ce6f4c78"
+          ],
+          "readings": {
+            "next_reading_97598a5d5d37d881ce6f4c78": {
+              "backed": 0,
+              "candidate_count": 5,
+              "context": 5,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            }
+          },
+          "task": "redaction",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "narrative_id": "iran_transition_authority",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "18996d7e7ab56f1099ecbe8375fd4fe171ee55af1646220ce5703b99682ecec9",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/823693d69176df68475db0bfd8d10de55a2298a142754836446307b7c0829597/native.json.gz",
+          "sha256": "23895c3e77077a42dc57f0a9f8970dc03e7782d36022b82cf4e5920a90a368dd"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "18996d7e7ab56f1099ecbe8375fd4fe171ee55af1646220ce5703b99682ecec9",
+        "native_result_checksum": "0af7f8e903ca833f6284c37614e3afa0f8be98a9e45bcd054e888eb892f318b5",
+        "public_case_sha256": "18996d7e7ab56f1099ecbe8375fd4fe171ee55af1646220ce5703b99682ecec9",
+        "query_sha256": "9c77b0239a74f169bcf847859cb4095a6f890f3ccf0f6a44f9cdca54cb6eb042",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "phase/release_finish_20261121/publication_review_update_v02/cases/source_window_9c77b0239a74f169bcf84785/origin_masked.json.gz",
+          "sha256": "ba4a2ad2df6b38c22ace54910ed8ed0480ed7ed91b85fcbae8eb1ad6df37b70e"
+        },
+        "revealed": {
+          "path": "phase/release_finish_20261121/publication_review_update_v02/cases/source_window_9c77b0239a74f169bcf84785/origin_revealed.json.gz",
+          "sha256": "04bc99336447b5de9a3b7dadcd3d5ba51ab197e41926412c72520a920cdf5930"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Government, committees and political influence",
+      "query_kind": "synthetic_source_deletion",
+      "query_version": null,
+      "reference_answer_kind": null,
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "1b97f9d67e0e15e0df171cb0530d310ecc9b93f74868359651287ef50de14f3c",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "context_kind_mode": "same_page_reference",
+            "counter_policy": "positive_support",
+            "cue_order_mode": "focal_sentence",
+            "identity_first": true,
+            "nominal_boundary_mode": "literal_visible_prefix",
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "iran",
+        "graph_id": "graph_d56668bc40bce616",
+        "hierarchy_id": "hierarchy_abd502047c8824ae",
+        "index_sha256": "2c32af1c71e5b33a6da1648794e6bc1a65f449a918758f8a025c8b2d8ea47c45",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "graph_d56668bc40bce616",
+        "source_status": "INCUMBENT_NOT_MIGRATED"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true,
+      "showcase_review": {
+        "native_checksum": "0af7f8e903ca833f6284c37614e3afa0f8be98a9e45bcd054e888eb892f318b5",
+        "qualified": false
+      }
+    },
+    {
+      "case": {
+        "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
+        "corpus": "vietnam",
+        "date": "1973-04-26",
+        "document_id": "1973SAIGON07264",
+        "focal_marker": "",
+        "query": "The E-1 Regiment was part of the 5th Division.",
+        "task": "hypothesis"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/vietnam_hunt_h_632b274b01c56feb2484/condition.json.gz",
+            "sha256": "636ddcab8cfa6652bce105f98a14bb1feb2144523e441e21cf2a19e324e30d28"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/37e3e35410ac8bae7aaf70e0017858a5fb31c2a5a61b006ed39831294d41ac80/native.json.gz",
+            "sha256": "7abbe19e6f52e90be947cabd69c500653799345913447f383aa70909f1c7d043"
+          },
+          "run_id": "narrative_d97c27000e94156879064cbe",
+          "trace_refs": {
+            "": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/vietnam_hunt_h_632b274b01c56feb2484/trace_assertions.json.gz",
+              "sha256": "c0d059a4bb30fa02ee2949b8dc19776945845ba01ee4e3222af41caab3526ec1"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
+          "config": "llm_readings",
+          "counts": {
+            "conflict": 0,
+            "context": 0,
+            "mixed": 0,
+            "opposed": 0,
+            "partial": 0,
+            "required": 1,
+            "supported": 0,
+            "unresolved": 1
+          },
+          "gate_sha256": "6cf63096e297d4bbe3053bafb3a599042e83713c77e56be8ac5d11d52f219774",
+          "native_checksum": "2d9c331c0dad6755a71b74249a02b260b1dd7b80cf013e6f7fa833a612908837",
+          "native_run_id": "narrative_d97c27000e94156879064cbe",
+          "overall_status": "exploratory_contextual",
+          "query_sha256": "b75e08de102b91fc21835d31a5c27ae8afc9ec1601b7b9eff75466befb067460",
+          "task": "hypothesis",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "narrative_id": "vietnam_delta_command",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "3ca223202dae49743e46e3a9c37ba4eeb6b7e3c1870b8b26752bbdea943a6449",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/37e3e35410ac8bae7aaf70e0017858a5fb31c2a5a61b006ed39831294d41ac80/native.json.gz",
+          "sha256": "7abbe19e6f52e90be947cabd69c500653799345913447f383aa70909f1c7d043"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "3ca223202dae49743e46e3a9c37ba4eeb6b7e3c1870b8b26752bbdea943a6449",
+        "native_result_checksum": "2d9c331c0dad6755a71b74249a02b260b1dd7b80cf013e6f7fa833a612908837",
+        "public_case_sha256": "3ca223202dae49743e46e3a9c37ba4eeb6b7e3c1870b8b26752bbdea943a6449",
+        "query_sha256": "b75e08de102b91fc21835d31a5c27ae8afc9ec1601b7b9eff75466befb067460",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/vietnam_hunt_h_632b274b01c56feb2484/origin_masked.json.gz",
+          "sha256": "d620a1e300817be7d6ee4b143d131f9425b2b4bfcaa925f0802bbdd80f294048"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "An infantry regiment's parent division",
+      "query_kind": "source_derived",
+      "query_version": null,
+      "reference_answer_kind": null,
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "fce2bfd8f053d77984ccb64b69e201fd6f229bba5e5cbd73f4b3a528f07546a3",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "identity_first": true,
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "vietnam",
+        "graph_id": "graph_bd607c32ec72d106",
+        "hierarchy_id": "hierarchy_e6a24847b24e7cb1",
+        "index_sha256": "f7804524bb0a12ca3a858ba74fd8a731f052da808c8ffdd521056c7cbffa5050",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "graph_bd607c32ec72d106",
+        "source_status": "INCUMBENT_NOT_MIGRATED"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true,
+      "showcase_review": {
+        "native_checksum": "2d9c331c0dad6755a71b74249a02b260b1dd7b80cf013e6f7fa833a612908837",
+        "qualified": false
+      }
+    },
+    {
+      "case": {
+        "case_id": "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+        "corpus": "vietnam",
+        "date": "1973-05-17",
+        "document_id": "1973CANTH00325",
+        "focal_marker": "",
+        "query": "MGEN NGUYEN VINH NGHI is identified as MR IV commander. MGEN TRAN BA DI is identified as 9 TH Division commander.",
+        "task": "mosaic"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_vietnam_command_m_a7a37cb69a0f4505/condition.json.gz",
+            "sha256": "32563ab91c5dcbc1865e3cb968503577b757da25bf4b36c3e8da69c455484102"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/73795c53166fe3bd214856cf4d825eb573852e484cfc42d2f88c6997e0d1fdd0/native.json.gz",
+            "sha256": "4513bdf78eca90b7154f002e41159faedc7e0d4203a85695dd0b0c8b63d0eea7"
+          },
+          "run_id": "narrative_4f33b8a9fa0f602795ca1a72",
+          "trace_refs": {
+            "": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_vietnam_command_m_a7a37cb69a0f4505/trace_assertions.json.gz",
+              "sha256": "fa154ce6f67e85864fd7c1a77d3a99ba133fcacc78f97224a3f74a480168f425"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+          "config": "llm_readings",
+          "counts": {
+            "conflict": 0,
+            "context": 0,
+            "mixed": 0,
+            "opposed": 0,
+            "partial": 0,
+            "required": 2,
+            "supported": 2,
+            "unresolved": 0
+          },
+          "gate_sha256": "49169f3e0c66fc1c17b41709241398718e9fd1fb1246b54a085236c68b30d059",
+          "native_checksum": "195fc6e7f418a295636b90ea82c31f753e51751148c202c722db257e019ca0fc",
+          "native_run_id": "narrative_4f33b8a9fa0f602795ca1a72",
+          "overall_status": "evidence_backed_suggestion",
+          "query_sha256": "a7a37cb69a0f450535d3e750dcb77111155419c5f3fe8e2e870e74a0cc774488",
+          "task": "mosaic",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "narrative_id": "vietnam_delta_command",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "e7c3a418f84bee79535590a6c7f7d3aaab5a93dd2e51c9c51c03b403bbfea9d6",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/73795c53166fe3bd214856cf4d825eb573852e484cfc42d2f88c6997e0d1fdd0/native.json.gz",
+          "sha256": "4513bdf78eca90b7154f002e41159faedc7e0d4203a85695dd0b0c8b63d0eea7"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "1076614984adf3c3c6b12a4ab29947e005811d405fa12d37435570fd47abce72",
+        "native_result_checksum": "195fc6e7f418a295636b90ea82c31f753e51751148c202c722db257e019ca0fc",
+        "public_case_sha256": "1076614984adf3c3c6b12a4ab29947e005811d405fa12d37435570fd47abce72",
+        "query_sha256": "a7a37cb69a0f450535d3e750dcb77111155419c5f3fe8e2e870e74a0cc774488",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXPLICIT_PUBLIC_MOSAIC_LEGACY_ENGINE_BRIDGE",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/fullresume_vietnam_command_m_a7a37cb69a0f4505/origin_masked.json.gz",
+          "sha256": "f7d1b9cd0995eaf4991e9b59501d8345bd852cc828f8e7bce79ccfd757dc952c"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Command appointments in the Mekong Delta",
+      "query_kind": "source_derived",
+      "query_version": null,
+      "reference_answer_kind": null,
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "1b97f9d67e0e15e0df171cb0530d310ecc9b93f74868359651287ef50de14f3c",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "selection_profile": {
+            "candidate_focal_fraction": 0.5,
+            "context_kind_mode": "same_page_reference",
+            "counter_policy": "positive_support",
+            "cue_order_mode": "focal_sentence",
+            "identity_first": true,
+            "nominal_boundary_mode": "literal_visible_prefix",
+            "page_focal_fraction": 0.5,
+            "scan_pages": 512
+          },
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "vietnam",
+        "graph_id": "graph_bd607c32ec72d106",
+        "hierarchy_id": "hierarchy_e6a24847b24e7cb1",
+        "index_sha256": "f7804524bb0a12ca3a858ba74fd8a731f052da808c8ffdd521056c7cbffa5050",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "graph_bd607c32ec72d106",
+        "source_status": "INCUMBENT_NOT_MIGRATED"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true,
+      "showcase_review": {
+        "assessment_ref": {
+          "path": "phase/release_finish_20261121/companion_reviews/assessment_fullresume_vietnam_command_m_a7a37cb69a0f4505_v01.json",
+          "sha256": "c0bc047c1ed1c091c1a4ecdae2b377d49ad8a725da7f1b55d2eb44d4920c0733"
+        },
+        "native_checksum": "195fc6e7f418a295636b90ea82c31f753e51751148c202c722db257e019ca0fc",
+        "qualified": true
+      }
+    },
+    {
+      "case": {
+        "case_id": "fullresume_vietnam_nghi_r_c77afffc57790227",
+        "corpus": "vietnam",
+        "date": "1973-07-12",
+        "document_id": "1973SAIGON12585",
+        "focal_marker": "[REDACTION]",
+        "query": "SHEEHAN SAID HE WAS INTERVIEWING MGEN DI FOR HIS BOOK ON JOHN PAUL VANN WHEN DI TOLD HIM [REDACTION] WAS TRYING TO REMOVE HIM FROM THE 9TH AND BRING HIM TO MRIV HEADQUARTERS AS DEPUTY CG.",
+        "task": "redaction"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_vietnam_nghi_r_c77afffc57790227/condition.json.gz",
+            "sha256": "f127d7b75a95c391790def526d909494c4d5abb899cf79c959688f3650dc5c0d"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "experiments/narrative_demo/runs/46c9cd54905bf430bfb00bd85b1657c6a97dd04dcc640ea3245a59a6fa58c7e8/native.json.gz",
+            "sha256": "27cbd9913952df094db4d451399d5bec3548611e9b04ffccdc4793f445ba61ac"
+          },
+          "run_id": "narrative_c8b88b7d0eea6f7ed8002047",
+          "trace_refs": {
+            "next_reading_1a091200287dbc18aedc8611": {
+              "path": "phase/release_finish_20261121/publication_review_update_v02/cases/fullresume_vietnam_nghi_r_c77afffc57790227/trace_next_reading_1a091200287dbc18aedc8611.json.gz",
+              "sha256": "27e6a9d8ab167456b9851ddb4414016d8ff6c4ed281f1c056d80839c9aa94d5f"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "fullresume_vietnam_nghi_r_c77afffc57790227",
+          "config": "llm_readings",
+          "default_reading_id": "next_reading_1a091200287dbc18aedc8611",
+          "gate_sha256": "b82a90c0263678a6460b664b306ed4f02230ee4433dcbe593bc55553a37e2a87",
+          "native_checksum": "42e0585d097630eb34d5caad158b1ca1eee7050b0821d1931d90b6a09d9f950e",
+          "native_run_id": "narrative_c8b88b7d0eea6f7ed8002047",
+          "overall_status": "exploratory_contextual",
+          "query_sha256": "89ee66039da05eb13afc6ececae9f0d2bf3926c346624a134eb5e9de45593eea",
+          "reading_order": [
+            "next_reading_1a091200287dbc18aedc8611"
+          ],
+          "readings": {
+            "next_reading_1a091200287dbc18aedc8611": {
+              "backed": 0,
+              "candidate_count": 5,
+              "context": 5,
+              "incompatible": 0,
+              "partial": 0,
+              "recommendation_candidate_id": null,
+              "recommendation_rank": null,
+              "unresolved": 0
+            }
+          },
+          "task": "redaction",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "narrative_id": "vietnam_delta_command",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "80c98cfbba17bdf44a2d724cb3465fed66cd91ad56e622bc6f3102361d6f5747",
+        "native_checkpoint": {
+          "path": "experiments/narrative_demo/runs/46c9cd54905bf430bfb00bd85b1657c6a97dd04dcc640ea3245a59a6fa58c7e8/native.json.gz",
+          "sha256": "27cbd9913952df094db4d451399d5bec3548611e9b04ffccdc4793f445ba61ac"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "80c98cfbba17bdf44a2d724cb3465fed66cd91ad56e622bc6f3102361d6f5747",
+        "native_result_checksum": "42e0585d097630eb34d5caad158b1ca1eee7050b0821d1931d90b6a09d9f950e",
+        "public_case_sha256": "80c98cfbba17bdf44a2d724cb3465fed66cd91ad56e622bc6f3102361d6f5747",
+        "query_sha256": "89ee66039da05eb13afc6ececae9f0d2bf3926c346624a134eb5e9de45593eea",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXACT_SAME_PUBLIC_TASK",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "origin_refs": {
+        "masked": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/fullresume_vietnam_nghi_r_c77afffc57790227/origin_masked.json.gz",
+          "sha256": "2d631d0692aa5d6d718ed04425f7912b8add17e336e020f2cc101f1c8dce7f1f"
+        },
+        "revealed": {
+          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/fullresume_vietnam_nghi_r_c77afffc57790227/origin_revealed.json.gz",
+          "sha256": "3fbc75bccce97b32e086c5303dc9266249d0a409a3c9ddca5b509aed07e50d7e"
+        }
+      },
+      "presentation_caveats": [],
+      "presentation_title": "An alleged attempt to remove a commander",
+      "query_kind": "synthetic_redaction",
+      "query_version": null,
+      "reference_answer_kind": null,
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "299c291717fe4ebe8ec23677dfaac7c50b95b72bed84c7e912477ab1f6fa11e6",
+        "native_configuration": {
+          "completed_drafts_per_reading": 24,
+          "construction_pages": 16,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "full-resume-display-profile/1"
+      },
+      "resource_binding": {
+        "corpus": "vietnam",
+        "graph_id": "graph_bd607c32ec72d106",
+        "hierarchy_id": "hierarchy_e6a24847b24e7cb1",
+        "index_sha256": "f7804524bb0a12ca3a858ba74fd8a731f052da808c8ffdd521056c7cbffa5050",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "graph_bd607c32ec72d106",
+        "source_status": "INCUMBENT_NOT_MIGRATED"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true,
+      "showcase_review": {
+        "native_checksum": "42e0585d097630eb34d5caad158b1ca1eee7050b0821d1931d90b6a09d9f950e",
+        "qualified": false
+      }
+    }
+  ],
+  "collection_counts": {
+    "additional_real_redaction": 5,
+    "bench": 0,
+    "starter": 9
+  },
+  "collection_wide_pending_gates": [],
+  "collection_wide_requirements_pending": true,
+  "complete_execution_grid": true,
+  "completed_cases": 14,
+  "distinctness_screen": {
+    "identical_required_atom_sets": true,
+    "normalized_public_text": true,
+    "semantic_distinctness_requires_source_review": true,
+    "version": "narrative-question-duplicate-screen/1"
+  },
+  "full_benchmark_launched": false,
+  "investigations": [
+    {
+      "corpus": "cib",
+      "narrative_id": "cib_salvador_authority",
+      "qualified_case_count": 3,
+      "status": "PRIMARY_CASE_REVIEWS_COMPLETE_NOT_GLOBAL_RELEASE",
+      "trio_qualified": true
+    },
+    {
+      "corpus": "iran",
+      "narrative_id": "iran_transition_authority",
+      "qualified_case_count": 1,
+      "status": "PARTIAL_CASE_REVIEWS_WITH_EXPLICIT_HOLDS_NOT_QUALIFIED_TRIO",
+      "trio_qualified": false
+    },
+    {
+      "corpus": "vietnam",
+      "narrative_id": "vietnam_delta_command",
+      "qualified_case_count": 1,
+      "status": "PARTIAL_CASE_REVIEWS_WITH_EXPLICIT_HOLDS_NOT_QUALIFIED_TRIO",
+      "trio_qualified": false
+    }
+  ],
+  "local_execution_after_planning": true,
+  "native_outputs_modified": false,
+  "no_live_api": true,
+  "outcome_informed_demo": true,
+  "pdf_catalog_ref": {
+    "path": "experiments/visual_refinement_20261120/pdfs/catalog-resource-bound.json",
+    "sha256": "9cff25abf01546029a3fc6060bb0490b07f79424c684f8182770c72afbc9c0ef"
+  },
+  "pending_cases": 0,
+  "presentation_context": {
+    "corpora": {
+      "cib": {
+        "sources_ref": {
+          "path": "experiments/narrative_demo/publication/context_sources_f7886b41f92af3803dc67c88.json.gz",
+          "sha256": "6b8e03eaf2405a4e5e0ca9cb1e47b6392685808ba540a727603b453021acc7b8"
+        },
+        "text": "Central Intelligence Bulletins were Central Intelligence Agency summaries of international developments. This collection spans 28 February 1951 to 13 June 1961. Paired declassified releases let readers compare passages visible earlier with material revealed later. The reports record what intelligence analysts were saying at the time, including uncertainty and disagreement about people, governments and events."
+      },
+      "iran": {
+        "sources_ref": {
+          "path": "experiments/narrative_demo/publication/context_sources_f7886b41f92af3803dc67c88.json.gz",
+          "sha256": "6b8e03eaf2405a4e5e0ca9cb1e47b6392685808ba540a727603b453021acc7b8"
+        },
+        "text": "These diplomatic cables follow Iran's political and economic crisis through reports dated 8 June 1977 to 22 November 1979. They describe government institutions, opposition figures, military leaders and problems affecting everyday operations. Individual reports offer particular observations and perspectives. The demonstration's missing cable passages are synthetic exercises, with the original wording retained for comparison."
+      },
+      "vietnam": {
+        "sources_ref": {
+          "path": "experiments/narrative_demo/publication/context_sources_f7886b41f92af3803dc67c88.json.gz",
+          "sha256": "6b8e03eaf2405a4e5e0ca9cb1e47b6392685808ba540a727603b453021acc7b8"
+        },
+        "text": "This diplomatic cable collection contains reports dated 9 January 1973 to 26 July 1978 about Vietnam and related regional developments. The selected investigation concerns South Vietnam's government, economy, military and political opposition in the 1970s. Its missing passages are synthetic exercises. This is a separate collection from the earlier South Vietnam episode in the intelligence bulletins."
+      }
+    },
+    "narratives": {
+      "cib_salvador_authority": {
+        "no_new_historical_assertions": true,
+        "presentation_only": true,
+        "sources_ref": {
+          "path": "experiments/narrative_demo/publication/context_sources_f7886b41f92af3803dc67c88.json.gz",
+          "sha256": "6b8e03eaf2405a4e5e0ca9cb1e47b6392685808ba540a727603b453021acc7b8"
+        },
+        "text": "El Salvador's provisional government emerged from the ouster of President Lemus in October 1960 and combined military and civilian members. Subsequent accounts describe competing political groups seeking influence over the new order, with labor organizations, students, and military figures taking different positions. Questions about rural political activity and links with Cuba sit beside arguments over government appointments and the institutions responsible for internal security. Reports sometimes describe an intention or a claim, rather than a completed action, and assessments of political influence do not necessarily agree. This investigation examines how those different kinds of statement fit together without assuming that every group shared one plan or that every reported journey was completed. Reading separate accounts can clarify the order of developments and the scope of particular claims. It can also preserve disagreement and uncertainty that disappear when a complicated political episode is reduced to a single explanation."
+      },
+      "iran_transition_authority": {
+        "no_new_historical_assertions": true,
+        "presentation_only": true,
+        "sources_ref": {
+          "path": "experiments/narrative_demo/publication/context_sources_f7886b41f92af3803dc67c88.json.gz",
+          "sha256": "6b8e03eaf2405a4e5e0ca9cb1e47b6392685808ba540a727603b453021acc7b8"
+        },
+        "text": "Iran's political transition brought formal offices, opposition organizations and personal networks into the same intelligence picture. Reports identified leaders of political and professional organizations, described connections around religious figures, and recorded sensitive embassy contacts with opposition movements. These questions examine different parts of that network: organizational leadership, a teaching relationship, and a concealed name in a description of links between government and committees. The reports come from different moments; they should not be read as one meeting or one shared event. For a new reader, the useful starting point is to separate an office from a personal relationship, and both from a report's assessment of political influence. A familiar name can be a plausible clue without establishing the particular relationship a question asks about. Compare the wording, source dates and qualifications before joining the accounts. The saved results distinguish established components from contextual suggestions; this introduction supplies no missing identity or independent correctness judgment."
+      },
+      "vietnam_delta_command": {
+        "no_new_historical_assertions": true,
+        "presentation_only": true,
+        "sources_ref": {
+          "path": "experiments/narrative_demo/publication/context_sources_f7886b41f92af3803dc67c88.json.gz",
+          "sha256": "6b8e03eaf2405a4e5e0ca9cb1e47b6392685808ba540a727603b453021acc7b8"
+        },
+        "text": "The Vietnam cables report on command relationships and military developments after the 1973 cease-fire. In the Mekong Delta, understanding who commanded a region or division mattered when interpreting disputes over officers and their assignments. The Mosaic assembles command descriptions from separate earlier reports. The Hypothesis tests a narrower unit relationship, and the Redaction asks who allegedly sought to remove a commander. Earlier evidence about someone's office can make a candidate plausible, but it does not by itself prove participation in a later personnel dispute. For a new reader, regional commands, divisions and regiments are different organizational levels, so a title or unit name must be read with its particular relationship intact. Keep reported conversations separate from independently established actions. These questions form a broad command story, not a claim that every cable describes one operation. The retained Hypothesis and Redaction are older, unqualified saved controls while more suitable source-curated command prospects remain pending."
+      }
+    },
+    "presentation_only": true
+  },
+  "presentation_context_sources_ref": {
+    "path": "experiments/narrative_demo/publication/context_sources_f7886b41f92af3803dc67c88.json.gz",
+    "sha256": "6b8e03eaf2405a4e5e0ca9cb1e47b6392685808ba540a727603b453021acc7b8"
+  },
+  "privacy_contract": {
+    "require_story_attempts_before_privileged_sources": true,
+    "story_case_ids": {
+      "cib_additional_cloze_132dbc991d56c1c3ff66331a": [
+        "cloze_132dbc991d56c1c3ff66331a"
+      ],
+      "cib_additional_cloze_225a750400eb38718fa5bb9b": [
+        "cloze_225a750400eb38718fa5bb9b"
+      ],
+      "cib_additional_narrative_cib_revision_3eea5176c0eab4abfb6452a4": [
+        "narrative_cib_revision_3eea5176c0eab4abfb6452a4"
+      ],
+      "cib_additional_narrative_cib_revision_ac39b62cbc7070a340c5d62d": [
+        "narrative_cib_revision_ac39b62cbc7070a340c5d62d"
+      ],
+      "cib_additional_narrative_cib_revision_ac4fb499beb4b345b5384ae6": [
+        "narrative_cib_revision_ac4fb499beb4b345b5384ae6"
+      ],
+      "cib_salvador_authority": [
+        "narrative_cib_alt_h_3af565c9ad6e532e16c9264b",
+        "narrative_cib_revision_ab8506d47badd3718e892a7e",
+        "narrative_cib_revision_50e63144067940b5debe3fea"
+      ],
+      "iran_transition_authority": [
+        "curation_v65_overlap_haeri_teacher_student_h01",
+        "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
+        "source_window_9c77b0239a74f169bcf84785"
+      ],
+      "vietnam_delta_command": [
+        "vietnam_hunt_h_632b274b01c56feb2484",
+        "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+        "fullresume_vietnam_nghi_r_c77afffc57790227"
+      ]
+    },
+    "version": "narrative-story-attempts/1"
+  },
+  "qualified_narratives": [
+    {
+      "case_ids": [
+        "narrative_cib_alt_h_3af565c9ad6e532e16c9264b",
+        "narrative_cib_revision_ab8506d47badd3718e892a7e",
+        "narrative_cib_revision_50e63144067940b5debe3fea"
+      ],
+      "collection": "starter",
+      "corpus": "cib",
+      "narrative_id": "cib_salvador_authority"
+    }
+  ],
+  "qualified_release_ready": false,
+  "quality_blockers": [
+    {
+      "case_id": "curation_v65_overlap_haeri_teacher_student_h01",
+      "reason": "HOLD_A1_FORWARDED_MESSAGE_ATTRIBUTION_REQUIRES_SCOPE_ADJUDICATION"
+    },
+    {
+      "case_id": "source_window_9c77b0239a74f169bcf84785",
+      "reason": "SOURCE_AND_OUTCOME_ASSESSMENT_GAPS_NOT_QUALIFIED"
+    },
+    {
+      "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
+      "reason": "NO_SIGNED_COMPONENT_OR_SOURCE_GROUNDED_FILL"
+    },
+    {
+      "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
+      "reason": "SOURCE_AND_OUTCOME_ASSESSMENT_GAPS_NOT_QUALIFIED"
+    },
+    {
+      "case_id": "fullresume_vietnam_nghi_r_c77afffc57790227",
+      "reason": "SOURCE_AND_OUTCOME_ASSESSMENT_GAPS_NOT_QUALIFIED"
+    }
+  ],
+  "release_profile": "primary_nine",
+  "release_scope": "diagnostic",
+  "run_id": "narrative_publication_6246bd1d92ef3179ac454a5b",
+  "selection_rule": "One executed starter per corpus/task and five distinct authentic CIB redaction extras; no bench scope",
+  "sha256": "b76dbe750c1291308c8226cb1a8dd96ff5c2d66f6c3302b49462000d74902916",
+  "showcase_ready": false,
+  "status": "PARTIAL",
+  "version": "narrative-workbench-publication/1"
+}

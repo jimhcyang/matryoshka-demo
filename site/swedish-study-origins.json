@@ -1,0 +1,31 @@
+{
+  "gold": null,
+  "not_ordinary_evidence": true,
+  "post_attempt_display_only": true,
+  "source": {
+    "earlier": {
+      "canonical_page_id": "page_d884726ce3791d6d8092",
+      "date": "1959-02-17",
+      "document_id": "CIA-RDP79T00975A004300220001-9",
+      "end": 1502,
+      "page_sha256": "7b8f7fdd22560705d594206f9ad991d9e0a3e5cf444224965958b4726a32ff6a",
+      "release": "earlier",
+      "source_page": 7,
+      "start": 0,
+      "text": "I. THE COMMUNIST BLOC[[REDACTION_SLOT:001:slot_53adb17685e6fe219948]]Malinovsky Comments on Soviet Strategy\n\n[[REDACTION_SLOT:002:slot_990a2d5414a9c150d9de]] the USSR intends to retain a modern conventional capability while building up its nuclear strength. The defense minister implied that some military leaders had favored preparing a nuclear capability at the expense of conventional forces, but that the government Presidium had decided in favor of simultaneous development, which he personally approved. NATO, Malinovsky noted, had adopted the other course, and he considered this an error.\n\nSignificant improvement of the ground forces in the past several years bears out Malinovsky's statement. Probably related to this decision is Malinovsky's comment that limited wars, including a limited nuclear war, were quite possible and would require a large army trained with nuclear weapons. Soviet propaganda, however, consistently has played down the possibility of limited warfare, while Soviet military literature has indicated that the USSR sees future warfare in the form of large-scale campaigns on land extending over a long period, accompanied by powerful nuclear air and missile strikes.\n\n[[REDACTION_SLOT:003:slot_538f3a0fe4b243009e72]] all agreed that nuclear weapons would be decisive in a general war but that other arms and weapons would continue to play a major role--a line both he and former Defense Minister Zhukov have expounded.\n\n[[REDACTION_SLOT:004:slot_620d7113da80962d030b]]."
+    },
+    "later": {
+      "canonical_page_id": "page_d884726ce3791d6d8092",
+      "date": "1959-02-17",
+      "document_id": "CIA-RDP79T00975A004300220001-9",
+      "end": 1910,
+      "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+      "release": "later",
+      "source_page": 8,
+      "start": 0,
+      "text": "I. THE COMMUNIST BLOC\n\n[[REDACTION_SLOT:001:slot_53adb17685e6fe219948]]Malinovsky Comments on Soviet Strategy\n\nSoviet Marshal Malinovsky told a visiting [REDACTED] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength. The defense minister implied that some military leaders had favored preparing a nuclear capability at the expense of conventional forces, but that the government Presidium had decided in favor of simultaneous development, which he personally approved. NATO, Malinovsky noted, had adopted the other course, and he considered this an error.\n\nSignificant improvement of the ground forces in the past several years bears out Malinovsky's statement. Probably related to this decision is Malinovsky's comment that limited wars, including a limited nuclear war, were quite possible and would require a large army trained with nuclear weapons. Soviet propaganda, however, consistently has played down the possibility of limited warfare, while Soviet military literature has indicated that the USSR sees future warfare in the form of large-scale campaigns on land extending over a long period, accompanied by powerful nuclear air and missile strikes.\n\nMalinovsky told the delegation that all agreed that nuclear weapons would be decisive in a general war but that other arms and weapons would continue to play a major role--a line both he and former Defense Minister Zhukov have expounded.\n\nThe [REDACTED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense. It was stated that intermediate-range ballistic missiles now cover Western bases in Europe.\n\nA tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare, including the assignment of nuclear weapons to ground division commanders."
+    }
+  },
+  "still_masked": true,
+  "version": "withheld-nationality-origin-public/1"
+}

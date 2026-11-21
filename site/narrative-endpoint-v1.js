@@ -20,7 +20,39 @@ function quoteWithin(proof,start,end,text){
   if(typeof text==='string'&&text!==literal)return null;
   return {...proof,start,end,text:literal};
 }
+function sourceContributorEndpoint(value,item,caseInfo,selected){
+  const proof=value.source_label_proof,quote=value.citation,final=proof?.selected_final_citation,edge=proof?.source_edge_citation;
+  const kind=value.type,sourceType={Claim:'claims',Event:'events'}[kind];
+  if(!sourceType||value.endpoint_selection!=='SELECTED_CITATION_OWNED_TYPED_SOURCE_CONTRIBUTOR'||
+      value.label_kind!=='VERBATIM_SOURCE_CONTRIBUTOR_QUOTE_PREVIEW'||value.is_graph_node!==true||
+      typeof value.id!=='string'||!value.id||value.node_id!=null&&value.node_id!==value.id||
+      value.postrun_provenance_inspection!==true||value.original_traversal_claimed!==false||
+      value.answer_entity_certified!==false||value.identity_or_event_certified!==false||
+      value.factual_support_implied!==false||value.hierarchy_membership_is_evidence!==false||
+      proof?.analysis!=='EXACT_OWNED_OCCURRENCE_AND_INCIDENT_SOURCE_EDGE_WITHIN_SELECTED_CITATION'||
+      proof.native_name_span_claimed!==false||proof.bound_node_kind!==kind||proof.source_type!==sourceType||
+      !hash(proof.occurrence_sha256)||!['source_row_id','source_edge_id','source_edge_row_id'].every(k=>typeof proof[k]==='string'&&proof[k])||
+      !quoteWithin(quote,quote?.start,quote?.end,quote?.text)||!quote.document_id||!quote.date||
+      !(quote.date<caseInfo.date)||quote.document_id===caseInfo.document_id||value.originating_document_id!==quote.document_id)
+    return null;
+  const contains=(parent,child)=>Boolean(parent&&child&&samePage(parent,child)&&parent.document_id===child.document_id&&parent.date===child.date&&
+    quoteWithin(parent,child.start,child.end,child.text));
+  if(!contains(proof.native_quote,quote)||proof.native_quote.start!==quote.start||proof.native_quote.end!==quote.end||
+      !contains(final,edge)||!contains(edge,quote)||!selected.some(p=>contains(p,final)&&p.start===final.start&&p.end===final.end)||
+      value.label!==Array.from(quote.text.trim().replace(/\s+/gu,' ')).slice(0,120).join(''))return null;
+  const native=[...rows(item.sources)];
+  for(const name of ['evidence','positive_evidence','partial_evidence','counterevidence'])for(const row of rows(item[name])){
+    if(row.citation)native.push(row.citation);native.push(...rows(row.citations));
+  }
+  if(!native.some(p=>contains(p,final)))return null;
+  const mother=value.mother_community;
+  if(mother!=null&&(typeof mother.community_id!=='string'||!mother.community_id||mother.id!=='hierarchy:community:'+mother.community_id||
+      mother.navigation_only!==true||mother.is_evidence!==false||value.parent_id!==mother.id))return null;
+  return {node_id:value.id,quote,item_id:item.id,label:value.label,explicit_source_endpoint:true,
+    source_contributor_inspection:true,source_kind:kind,source_label_proof:proof,expected_community_id:mother?.community_id||null};
+}
 function explicitEndpoint(value,item,caseInfo,selected){
+  if(value?.endpoint_role==='SOURCE_CONTRIBUTOR')return sourceContributorEndpoint(value,item,caseInfo,selected);
   if(!value||typeof value!=='object'||Array.isArray(value)||typeof value.id!=='string'||!value.id.trim()||
       value.node_id!=null&&value.node_id!==value.id||value.is_graph_node!==true||
       typeof value.type!=='string'||!value.type.trim()||typeof value.label!=='string'||!value.label.trim()||
@@ -97,12 +129,16 @@ export function verifyEndpointPacket(packet,saved,caseInfo,binding){
   if(packet.node.node_id!=null&&packet.node.node_id!==saved.node_id)fail();
   const quote=saved.requires_api_owned_quote?rows(packet.node.citations).find(p=>samePage(p,saved.quote)&&p.start>=saved.quote.start&&p.end<=saved.quote.end):saved.quote;
   if(!quote)fail();
+  if(saved.source_contributor_inspection&&((packet.node.kind||packet.node.type)!==saved.source_kind||
+      !rows(packet.node.citations).some(p=>samePage(p,quote)&&p.document_id===quote.document_id&&p.date===quote.date&&
+        quoteWithin(p,quote.start,quote.end,quote.text))))fail();
   const community=packet.node.community_id||packet.hierarchy?.community_id||null;
   if(packet.node.community_id&&packet.hierarchy?.community_id&&packet.node.community_id!==packet.hierarchy.community_id)fail();
   if(saved.expected_community_id&&saved.expected_community_id!==community)fail();
   return {node_id:saved.node_id,label:saved.explicit_source_endpoint?saved.label:packet.node.label||saved.label||quote.text,quote,community_id:community,
     graph_id:binding.graph_id,hierarchy_id:binding.hierarchy_id,authority:packet.node.authority||null,
-    ...(saved.source_label_proof?{source_label_proof:saved.source_label_proof}:{})};
+    ...(saved.source_label_proof?{source_label_proof:saved.source_label_proof}:{}),
+    ...(saved.source_contributor_inspection?{source_contributor_inspection:true,answer_entity_certified:false}:{})};
 }
 export function verifyEndpointSource(page,quote,caseInfo,actualHash){
   if(!Number.isInteger(quote.start)||!Number.isInteger(quote.end)||quote.start<0||quote.end<=quote.start||

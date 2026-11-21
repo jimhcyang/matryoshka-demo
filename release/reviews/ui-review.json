@@ -1,0 +1,751 @@
+{
+  "status": "PASS_DIAGNOSTIC_STATIC_V03",
+  "utc": "2026-11-21T10:08:43.912071+00:00",
+  "stage": "phase/release_finish_20261121/deploy/release_final_v03/site",
+  "manifest_sha256": "53b5fd298b506a4756b09de9c99cb8fc2e2d680612b369344d1de048f9836452",
+  "verified_inventory": {
+    "files": 18733,
+    "bytes": 438122194,
+    "inventory_sha256": "159f66a2fddcb927b3dd278abeb4a9bd19facd1552cc28230e05bc6da22f95bb",
+    "all_file_hashes_match": true
+  },
+  "accepted_cells": [
+    {
+      "receipt": "static-02/result.json",
+      "size": "desktop",
+      "flow": "haeri",
+      "native_outcome": "SUPPORTED 2/2, unqualified source-review hold visible",
+      "exact_indexed_condition": true,
+      "exact_indexed_source": true,
+      "source_acknowledgement": true,
+      "pre_ack_source_UI_blocked": true,
+      "network_preload_secrecy_claimed": false,
+      "source": {
+        "canonical_page_id": "segment_a0bd6c8bd944bd50db5d",
+        "document_id": "1979STATE011036",
+        "date": "1979-01-15",
+        "page_sha256": "a98c1501436751672789c96d48af4cfee649f3ced318448ef7a6ca007911465e",
+        "start": 464,
+        "end": 502
+      },
+      "passed": true,
+      "pageerrors": [],
+      "no_forced_clicks": true
+    },
+    {
+      "receipt": "static-02/result.json",
+      "size": "mobile",
+      "flow": "haeri",
+      "native_outcome": "SUPPORTED 2/2, unqualified source-review hold visible",
+      "exact_indexed_condition": true,
+      "exact_indexed_source": true,
+      "source_acknowledgement": true,
+      "pre_ack_source_UI_blocked": true,
+      "network_preload_secrecy_claimed": false,
+      "source": {
+        "canonical_page_id": "segment_a0bd6c8bd944bd50db5d",
+        "document_id": "1979STATE011036",
+        "date": "1979-01-15",
+        "page_sha256": "a98c1501436751672789c96d48af4cfee649f3ced318448ef7a6ca007911465e",
+        "start": 464,
+        "end": 502
+      },
+      "passed": true,
+      "pageerrors": [],
+      "no_forced_clicks": true
+    },
+    {
+      "receipt": "static-02/result.json",
+      "size": "mobile",
+      "flow": "swedish-S2",
+      "explicit_S2_acknowledgement": true,
+      "reversible_remask": true,
+      "gold_unknown": true,
+      "exact_origin": {
+        "canonical_page_id": "page_d884726ce3791d6d8092",
+        "date": "1959-02-17",
+        "document_id": "CIA-RDP79T00975A004300220001-9"
+      },
+      "ordinary_policy_exception_not_transferred": true,
+      "passed": true,
+      "pageerrors": [],
+      "no_forced_clicks": true
+    },
+    {
+      "receipt": "static-02/result.json",
+      "size": "desktop",
+      "flow": "guide-path-repair",
+      "exact_path_selector_preserves_native_ID": true,
+      "source_proof": {
+        "canonical_page_id": "segment_e9dd21de11a4ce32a4cc",
+        "date": "1979-04-13",
+        "document_id": "1979STATE093115",
+        "end": 301,
+        "page_sha256": "8c908f8571ef8a9eeec7a5e0c86e40cb387a6fed943abf41acc5791d057a6548",
+        "start": 148,
+        "text": "HAERI, A VISITING SCHOLAR\nOF ISLAMIC PHILOSOPHY AT GEORGETOWN UNIVERSITY, WAS A LONG-\nTIME STUDENT OF KHOMEINI AND HAERI'S FATHER WAS KHOMEINI'S\nTEACHER."
+      },
+      "initial_context": {
+        "error": null,
+        "nativeID": "a2",
+        "pathID": "path_243365fc5a19b6a9dd2c3100",
+        "api": 0,
+        "factual": false,
+        "original": false,
+        "postrun": true,
+        "refs": [
+          {
+            "canonical_page_id": "segment_e9dd21de11a4ce32a4cc",
+            "date": "1979-04-13",
+            "document_id": "1979STATE093115",
+            "end": 301,
+            "page_sha256": "8c908f8571ef8a9eeec7a5e0c86e40cb387a6fed943abf41acc5791d057a6548",
+            "start": 148,
+            "text": "HAERI, A VISITING SCHOLAR\nOF ISLAMIC PHILOSOPHY AT GEORGETOWN UNIVERSITY, WAS A LONG-\nTIME STUDENT OF KHOMEINI AND HAERI'S FATHER WAS KHOMEINI'S\nTEACHER."
+          }
+        ],
+        "sources": [
+          {
+            "canonical_page_id": "segment_e9dd21de11a4ce32a4cc",
+            "date": "1979-04-13",
+            "document_id": "1979STATE093115",
+            "end": 301,
+            "page_sha256": "8c908f8571ef8a9eeec7a5e0c86e40cb387a6fed943abf41acc5791d057a6548",
+            "start": 148,
+            "text": "HAERI, A VISITING SCHOLAR\nOF ISLAMIC PHILOSOPHY AT GEORGETOWN UNIVERSITY, WAS A LONG-\nTIME STUDENT OF KHOMEINI AND HAERI'S FATHER WAS KHOMEINI'S\nTEACHER."
+          }
+        ],
+        "selection": "path_243365fc5a19b6a9dd2c3100",
+        "selected": "event_38b7b51d229e0292d281",
+        "rendered": true
+      },
+      "exact_final_source_step": true,
+      "story_acknowledgement": true,
+      "passed": true,
+      "pageerrors": [],
+      "no_forced_clicks": true
+    },
+    {
+      "receipt": "static-03/result.json",
+      "size": "desktop",
+      "flow": "french-pdfs",
+      "pdfs": [
+        {
+          "document_id": "CIA-RDP79T00975A003400210001-0",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003400210001-0&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 310246,
+          "header": "%PDF-",
+          "sha256": "95b0cd90dac91184bf6647a4f271de77e5268801bb3515707de259a40df09c92"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003400210001-0",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003400210001-0&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 311809,
+          "header": "%PDF-",
+          "sha256": "206c4b42b4d8b0d3626f6a9763e1cd2c94263b4575056f45fb12e397cada826d"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003400270001-4",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003400270001-4&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 214405,
+          "header": "%PDF-",
+          "sha256": "68a0928073c62b18c0fbdb2fc79d78c49dd393d1f290d23b4f24ee0d389818cf"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003400270001-4",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003400270001-4&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 267466,
+          "header": "%PDF-",
+          "sha256": "d204b7a86c2e0bf3568cdf7166af7a6a2f0836d5f57ff4282df88b416dd8f833"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003400280001-3",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003400280001-3&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 408406,
+          "header": "%PDF-",
+          "sha256": "2f3a336ffc765b744ecaa37b072575605f75d5ae6e277141524a11adf0b7ee23"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003400280001-3",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003400280001-3&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 500781,
+          "header": "%PDF-",
+          "sha256": "15a1d48861078915bf31b24bf4f2a41288c6f67294cc00af7886a7a4bdfe741e"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003500170001-4",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003500170001-4&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 702735,
+          "header": "%PDF-",
+          "sha256": "7b7b698924f10326268d7da45290c1daedbffe4b9b4814167d5a00e9f90a8e0f"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003500170001-4",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003500170001-4&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 603701,
+          "header": "%PDF-",
+          "sha256": "aa5a1ddd80b590453b3429ae35d15e35d1549035210d2a5125a94307e20c76c3"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003600330001-5",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003600330001-5&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 470137,
+          "header": "%PDF-",
+          "sha256": "459f645e90f9defc4fe7169d851a159e1b5f2ae5cc09f030a8e2599aed62583d"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003600330001-5",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003600330001-5&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 595294,
+          "header": "%PDF-",
+          "sha256": "0c697ed3029041c7caa4b3c18eaa6225555c250bffed50c1f572d00494620184"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003800010001-8",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003800010001-8&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 986396,
+          "header": "%PDF-",
+          "sha256": "b35319a1dd2c31b9265abec92607b034706f1cb533b442f4f7787d095653f089"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A003800010001-8",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A003800010001-8&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 994735,
+          "header": "%PDF-",
+          "sha256": "f8430c337aa0b737bf207841f12a50a2951043aa12e5bea2f540fb918100948b"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A004300260001-5",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A004300260001-5&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 557795,
+          "header": "%PDF-",
+          "sha256": "725a420a56e67f18d0380fd123693f89f4a827522d34d149d5886aeb63ed24ab"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A004300260001-5",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A004300260001-5&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 706655,
+          "header": "%PDF-",
+          "sha256": "0d605b1f29b716fe7b9bbb031bf1d8159a43be5667274ab20795cec6f4e34618"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A004800430001-1",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A004800430001-1&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 411662,
+          "header": "%PDF-",
+          "sha256": "6441f6fd675a55e4d4f5b96f03e5de71b35536856130a31403837245d54059b3"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A004800430001-1",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A004800430001-1&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 496147,
+          "header": "%PDF-",
+          "sha256": "956231ea3c522fb5cb5a8e5e084e948468afd77f4f1523816857ede78f93b934"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A004900180001-8",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A004900180001-8&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 618940,
+          "header": "%PDF-",
+          "sha256": "e8546021b1bae2616ce64b5567fa75ea580a43b1d68ca9e9e0fc23ed521313a1"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A004900180001-8",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A004900180001-8&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 648830,
+          "header": "%PDF-",
+          "sha256": "4021ed18798b5e8c7b98d6a52e141fc8726d3a4b79c00223b9209533fa4df755"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A004900320001-2",
+          "release": "earlier",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A004900320001-2&release=earlier",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 291831,
+          "header": "%PDF-",
+          "sha256": "59250e8a0ae8865a99ffd18c7481d86b5fb69c937cd39e045da1d845fa1a60c9"
+        },
+        {
+          "document_id": "CIA-RDP79T00975A004900320001-2",
+          "release": "later",
+          "ordinary_route": "/api/cib-pdf?doc_id=CIA-RDP79T00975A004900320001-2&release=later",
+          "status": 200,
+          "mime": "application/pdf",
+          "bytes": 416103,
+          "header": "%PDF-",
+          "sha256": "a2e3d7fb6ea5bbf4dfa42585489f2730d45426a0d886f43d35592d40541df586"
+        }
+      ],
+      "actual_node": {
+        "node_id": "identity_7c054ac6826e71ca5669143344bf24e64224e9fec2e937cad5b2fa5e403cf6cc",
+        "label": "French Atomic Energy Commission",
+        "graph": "graph_2e1f8d6c2443987c",
+        "hierarchy": "hierarchy_dcfb5058b0e6e571",
+        "documents": [
+          "CIA-RDP79T00975A003400210001-0",
+          "CIA-RDP79T00975A003400270001-4",
+          "CIA-RDP79T00975A003400280001-3",
+          "CIA-RDP79T00975A003500170001-4",
+          "CIA-RDP79T00975A003600330001-5",
+          "CIA-RDP79T00975A003800010001-8",
+          "CIA-RDP79T00975A004300260001-5",
+          "CIA-RDP79T00975A004800430001-1",
+          "CIA-RDP79T00975A004900180001-8",
+          "CIA-RDP79T00975A004900320001-2"
+        ]
+      },
+      "ordinary_routes_verified": 20,
+      "pair_controls": true,
+      "pdf_plugin_rendering_verified": false,
+      "passed": true,
+      "pageerrors": [],
+      "no_forced_clicks": true
+    },
+    {
+      "receipt": "static-04/result.json",
+      "size": "desktop",
+      "flow": "cib-r",
+      "native_outcome": "accepted epoch22 rank1 property-only; EQUIVALENT not literal-exact",
+      "physical_pdf": {
+        "logical_route": "/api/current/cib-pdf?case_id=narrative_cib_revision_50e63144067940b5debe3fea&config=llm_readings&doc_id=CIA-RDP79T00975A005400250001-4&index_sha256=b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980&registry_sha256=d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7&release=earlier&resource_id=cib_resource_623c60e1e128944377f0",
+        "indexed_asset": "data/replays/d58292fab0d62b2ab2ef9e1c085b9b32a009fa9a00847a36dc55ae7c5ee9e7c5.pdf",
+        "viewer_request": "/api/current/cib-pdf?case_id=narrative_cib_revision_50e63144067940b5debe3fea&config=llm_readings&doc_id=CIA-RDP79T00975A005400250001-4&index_sha256=b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980&registry_sha256=d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7&release=earlier&resource_id=cib_resource_623c60e1e128944377f0",
+        "bytes": 715579,
+        "sha256": "d58292fab0d62b2ab2ef9e1c085b9b32a009fa9a00847a36dc55ae7c5ee9e7c5",
+        "actual_human_link_and_download": true,
+        "output": "phase/release_finish_20261121/review/final_ui_v01/static-04/desktop-cib-original-source.pdf",
+        "pdf_plugin_rendering_verified": false
+      },
+      "exact_indexed_condition": true,
+      "exact_indexed_source": true,
+      "source_acknowledgement": true,
+      "pre_ack_source_UI_blocked": true,
+      "network_preload_secrecy_claimed": false,
+      "source": {
+        "canonical_page_id": "page_28ac90c60600d0e35b26",
+        "document_id": "CIA-RDP79T00975A005400250001-4",
+        "date": "1960-11-29",
+        "page_sha256": "2ab72caac849acdfeee8e72c3f8efe5680ef59f4bc8afd9bd770b97a80a14049",
+        "start": 389,
+        "end": 513
+      },
+      "passed": true,
+      "pageerrors": [],
+      "no_forced_clicks": true
+    },
+    {
+      "receipt": "static-04/result.json",
+      "size": "mobile",
+      "flow": "cib-r",
+      "native_outcome": "accepted epoch22 rank1 property-only; EQUIVALENT not literal-exact",
+      "physical_pdf": {
+        "logical_route": "/api/current/cib-pdf?case_id=narrative_cib_revision_50e63144067940b5debe3fea&config=llm_readings&doc_id=CIA-RDP79T00975A005400250001-4&index_sha256=b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980&registry_sha256=d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7&release=earlier&resource_id=cib_resource_623c60e1e128944377f0",
+        "indexed_asset": "data/replays/d58292fab0d62b2ab2ef9e1c085b9b32a009fa9a00847a36dc55ae7c5ee9e7c5.pdf",
+        "viewer_request": "/api/current/cib-pdf?case_id=narrative_cib_revision_50e63144067940b5debe3fea&config=llm_readings&doc_id=CIA-RDP79T00975A005400250001-4&index_sha256=b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980&registry_sha256=d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7&release=earlier&resource_id=cib_resource_623c60e1e128944377f0",
+        "bytes": 715579,
+        "sha256": "d58292fab0d62b2ab2ef9e1c085b9b32a009fa9a00847a36dc55ae7c5ee9e7c5",
+        "actual_human_link_and_download": true,
+        "output": "phase/release_finish_20261121/review/final_ui_v01/static-04/mobile-cib-original-source.pdf",
+        "pdf_plugin_rendering_verified": false
+      },
+      "exact_indexed_condition": true,
+      "exact_indexed_source": true,
+      "source_acknowledgement": true,
+      "pre_ack_source_UI_blocked": true,
+      "network_preload_secrecy_claimed": false,
+      "source": {
+        "canonical_page_id": "page_28ac90c60600d0e35b26",
+        "document_id": "CIA-RDP79T00975A005400250001-4",
+        "date": "1960-11-29",
+        "page_sha256": "2ab72caac849acdfeee8e72c3f8efe5680ef59f4bc8afd9bd770b97a80a14049",
+        "start": 389,
+        "end": 513
+      },
+      "passed": true,
+      "pageerrors": [],
+      "no_forced_clicks": true
+    }
+  ],
+  "consumer_guard_receipts": {
+    "guide-guard-01.json": {
+      "status": "SCOPED_GUIDE_GUARD_PASS",
+      "sha256": "208b3f27a9729e46bb78a3276ee0c65349043941d2f9ee50ff6b2cf469bb4cc5"
+    },
+    "consumer-guards-01.json": {
+      "status": "SCOPED_GUARD_PASS",
+      "sha256": "4bd23e6853a0c6fe7fb688c2f5bba8932720dc9dc0db85cb62b505fc7e133769"
+    },
+    "trace-epoch4-02.json": {
+      "status": "PASS",
+      "sha256": "175871634b47d277999e84d65f45c078fa7472f742dc5b6bc83ef00cd55637dc"
+    }
+  },
+  "final_asset_sha256": {
+    "graph-full-v6.js": "9e8a82f65b88269e4c81b1c3e51bfc2de513c1427dc06698d0904e948ff6dff5",
+    "narrative-assets/narrative-trace-v1.js": "a4e016b7a41fea5517be102d5be05215882d354d60829be95dca8ba9c1cd7a99",
+    "narrative-endpoint-v1.js": "dd5905e7838536044a800a27d9870ac265106a62094a0dc88a94b508aab19a13",
+    "workbench-v6.js": "675d8e0512c9abe9d1237dd53c04d044b191f1d4029f543cc7a9e34c6ffbd456",
+    "data/api-index.json": "5a284ed4383118ed5bf1ad7d6bc7ebdf0b0c9b278c1fbb7f16ec16294bee5c8a"
+  },
+  "workbench_export_delta": "Only four root-absolute module/stylesheet URLs made relative; exact comparison passed",
+  "diagnostic_functional_clearance": true,
+  "publication_authorization": false,
+  "global_nine_qualified": false,
+  "final_data_review_owner": "Kuhn/final_data_k",
+  "browser_free": true,
+  "own_server_stopped": true,
+  "paid_api_calls": 0,
+  "native_runs": 0,
+  "production_or_stage_edits": false,
+  "remote_publication_verified": false,
+  "original_failed_receipts_preserved": true,
+  "limits": [
+    "Not all-nine A+ qualification",
+    "Haeri source-review hold remains",
+    "Swedish gold unknown",
+    "PDF plugin rendering unverified",
+    "Source acknowledgement is not network secrecy",
+    "No remote deployment or publication authorization"
+  ],
+  "evidence": {
+    "phase/release_finish_20261121/review/final_ui_v01/FINAL_HANDOFF.md": {
+      "bytes": 3761,
+      "sha256": "4fdd234f722942a46d77bfe18e34ac54034747e54531101cbbcb3daee78b62f1"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/LIVE_01_ORACLE_DISPOSITION.md": {
+      "bytes": 991,
+      "sha256": "6d9c9c4705f782acdd6302348d0b1b6d5d3c3a4f56efcb62cb7a9770a1b738f3"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/MAP_PDF_ADDON_HANDOFF.md": {
+      "bytes": 2500,
+      "sha256": "c078ddfeb1d0b4dcc150d50a00492f7a3e205db85b53fa66cba3e75857ecf520"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/STATIC_01_ORACLE_DISPOSITION.md": {
+      "bytes": 902,
+      "sha256": "4b460b2535977e38cd869888edcdfbd54cf771d28792df33925a2fe37de3ec04"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/STATIC_02_ORACLE_DISPOSITION.md": {
+      "bytes": 1045,
+      "sha256": "c7c53eeea01c628f6fae8e6d8fc0b6e4a083858d4fd0e8ca8e20977dc741d596"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/STATIC_03_ORACLE_DISPOSITION.md": {
+      "bytes": 1074,
+      "sha256": "057ee8e0843099e11009b2b624107fa1e2be3738e133e71133aa484b995a45c3"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/close_static_review.py": {
+      "bytes": 7500,
+      "sha256": "5afd3db4750b46d03a4da741edf24d84e9484a556884b970cfc867c3713d088f"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/consumer-guards-01.json": {
+      "bytes": 2885,
+      "sha256": "4bd23e6853a0c6fe7fb688c2f5bba8932720dc9dc0db85cb62b505fc7e133769"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/consumer-guards-01.log": {
+      "bytes": 1530,
+      "sha256": "a26e299ac366004cf97bf35e4d9492ce9fba56beed628ae39290b476d89dbdfe"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/guide-guard-01.json": {
+      "bytes": 1706,
+      "sha256": "208b3f27a9729e46bb78a3276ee0c65349043941d2f9ee50ff6b2cf469bb4cc5"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/guide-guard-01.log": {
+      "bytes": 1217,
+      "sha256": "20e0a4364a7c61ec387d15407489beab1a884ab8525faa13e069e6d452b1dd6c"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/live_impacted.py": {
+      "bytes": 12393,
+      "sha256": "e424dafa8657a08b9dade763798dd179d4751282011c3da9f919dba544f3495f"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/map-pdf-addon-01.json": {
+      "bytes": 8489,
+      "sha256": "3c8bb8afeeb9378cc276753b410979d109d36da846833ddc95cb67760e80f670"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/map-pdf-addon-01.log": {
+      "bytes": 99,
+      "sha256": "173b03bd1c8318efad7bcda2efbdaee692827c32c24c915fedad4d67e3c414bb"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/map-pdf-addon-01.xml": {
+      "bytes": 2598,
+      "sha256": "b5bc8853c04aa1782593f0f9fde8b6f638f9a59f6fc4e19ecf55b388f202a5ea"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/run_consumer_guards.py": {
+      "bytes": 2013,
+      "sha256": "ed07f424415747eb1dc61ae059518a3b88fc4845fcd5420fa3fad2ff20195c28"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/run_guide_repair.py": {
+      "bytes": 1433,
+      "sha256": "5bbf7dcf418f8870e93334a3e61ddc1317813805e381fba6375d6d886251f7a1"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/run_trace_epoch4.py": {
+      "bytes": 1539,
+      "sha256": "2bcdd2f5e6297c53b8c57e8373da30fea38fd0eb3adf527a49c609259d669926"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-cib-r-FAIL.png": {
+      "bytes": 319947,
+      "sha256": "4608cabb2bac7bd0617feef8427e431ac2c0d4ab9db8bee97d7d8f36d2287148"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-cib-r-acknowledgement.png": {
+      "bytes": 134403,
+      "sha256": "4c7fec4ed96292c9af0a140be0dfb82c51be1ba1685890e19dc863603aa216b9"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-cib-r-outcome.png": {
+      "bytes": 169369,
+      "sha256": "80025f8d6ef1ac9126fdde6c8932a897d6ad33fabda3d08656cb70c49f6a3748"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-cib-r-source.png": {
+      "bytes": 319947,
+      "sha256": "4608cabb2bac7bd0617feef8427e431ac2c0d4ab9db8bee97d7d8f36d2287148"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-french-pdfs-FAIL.png": {
+      "bytes": 505260,
+      "sha256": "bb19717bd6a2c66bfa24f6087b52b096a75fd62cabd625692294c0d25973bca3"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-french-pdfs-node.png": {
+      "bytes": 505260,
+      "sha256": "bb19717bd6a2c66bfa24f6087b52b096a75fd62cabd625692294c0d25973bca3"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-guide-path-repair-exact-source.png": {
+      "bytes": 323089,
+      "sha256": "85baad270d3114e3f9591f9c1569f02b40304b81041b0552ce702391b401f7a7"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-guide-path-repair-initial-context.png": {
+      "bytes": 486067,
+      "sha256": "3e9e8ae8b0f6964a7b9d8bd09314831cdd452e1e2fc81d2b39936c84af481f41"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-haeri-acknowledgement.png": {
+      "bytes": 125884,
+      "sha256": "7fec199661ae2f51297c236ecd93274d0f8801af1fde40e742916eba0f18c17d"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-haeri-outcome.png": {
+      "bytes": 131880,
+      "sha256": "f410675ccaaba0922d0aeeb0637a97026d3b6c7358d94d1a3d31d6f4f096dd4e"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/desktop-haeri-source.png": {
+      "bytes": 357287,
+      "sha256": "2099528a92ea9446c6380a4dd6054c1dc9fa4e442af2874f5a28e52e00f9f638"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/mobile-cib-r-FAIL.png": {
+      "bytes": 114120,
+      "sha256": "83f5837352d5bf48fc952a0ae65ea0b9575baae6e6f5f2934a28e79345162e37"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/mobile-cib-r-acknowledgement.png": {
+      "bytes": 38267,
+      "sha256": "ddefca6944e3c1b9f8780098990353e94ad4e0d426f74b5cc6129dd73b552ec9"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/mobile-cib-r-outcome.png": {
+      "bytes": 101873,
+      "sha256": "1a74bd4c91658d0d78056b2eeb72d863c4e2d9e7a64d4af2166391181603abc2"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/mobile-cib-r-source.png": {
+      "bytes": 114120,
+      "sha256": "83f5837352d5bf48fc952a0ae65ea0b9575baae6e6f5f2934a28e79345162e37"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/mobile-haeri-acknowledgement.png": {
+      "bytes": 33869,
+      "sha256": "6a90dfa220aeb932c7adddc90ebaaffbb26e5c3d6f002ad61d4321f9945e13e9"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/mobile-haeri-outcome.png": {
+      "bytes": 99108,
+      "sha256": "b92836eb3897b32efab04d4e6b5f37ba3298caf04f828fbfd22597f941681c3c"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/mobile-haeri-source.png": {
+      "bytes": 107523,
+      "sha256": "075cfb7df916ce69976d9783891e8cf52f84e14df8dea505683e187b7f833013"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/mobile-swedish-S2-acknowledged-source.png": {
+      "bytes": 80210,
+      "sha256": "acf5dbde79a119388cfcfab255b912814b403ca3a2994a85db76008d0b03cd02"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/progress.json": {
+      "bytes": 12656,
+      "sha256": "58ba5ad482d2fa564cf9cfde0a2d685d1a1ebc4105ca75599f6cebe83527ee17"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-02/result.json": {
+      "bytes": 13172,
+      "sha256": "0f1e64b76b629499e7425c0f3e9dffc1137cbdee7320742300159db2f466c7aa"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/desktop-cib-r-FAIL.png": {
+      "bytes": 319947,
+      "sha256": "4608cabb2bac7bd0617feef8427e431ac2c0d4ab9db8bee97d7d8f36d2287148"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/desktop-cib-r-acknowledgement.png": {
+      "bytes": 134403,
+      "sha256": "4c7fec4ed96292c9af0a140be0dfb82c51be1ba1685890e19dc863603aa216b9"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/desktop-cib-r-outcome.png": {
+      "bytes": 169369,
+      "sha256": "80025f8d6ef1ac9126fdde6c8932a897d6ad33fabda3d08656cb70c49f6a3748"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/desktop-cib-r-source.png": {
+      "bytes": 319947,
+      "sha256": "4608cabb2bac7bd0617feef8427e431ac2c0d4ab9db8bee97d7d8f36d2287148"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/desktop-french-pdfs-node.png": {
+      "bytes": 505260,
+      "sha256": "bb19717bd6a2c66bfa24f6087b52b096a75fd62cabd625692294c0d25973bca3"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/desktop-french-pdfs-pair-controls.png": {
+      "bytes": 113591,
+      "sha256": "b3237ff8ef9e850e9d492eb5bc67eea0de642d79cf8e6c9cea46d32a1006f8a1"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/mobile-cib-r-FAIL.png": {
+      "bytes": 114120,
+      "sha256": "83f5837352d5bf48fc952a0ae65ea0b9575baae6e6f5f2934a28e79345162e37"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/mobile-cib-r-acknowledgement.png": {
+      "bytes": 38267,
+      "sha256": "ddefca6944e3c1b9f8780098990353e94ad4e0d426f74b5cc6129dd73b552ec9"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/mobile-cib-r-outcome.png": {
+      "bytes": 101873,
+      "sha256": "1a74bd4c91658d0d78056b2eeb72d863c4e2d9e7a64d4af2166391181603abc2"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/mobile-cib-r-source.png": {
+      "bytes": 114120,
+      "sha256": "83f5837352d5bf48fc952a0ae65ea0b9575baae6e6f5f2934a28e79345162e37"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/progress.json": {
+      "bytes": 11732,
+      "sha256": "9b2a99f9e4b1fa24e2825f3e013ebd599052ec2c058e86e9238d3c6ff2ee0cc4"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-03/result.json": {
+      "bytes": 12248,
+      "sha256": "73f681d3abf0873e0c2e6db5946422a7516b3ab48013bfbd9e123e5b5cd4aeeb"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/desktop-cib-original-source.pdf": {
+      "bytes": 715579,
+      "sha256": "d58292fab0d62b2ab2ef9e1c085b9b32a009fa9a00847a36dc55ae7c5ee9e7c5"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/desktop-cib-r-acknowledgement.png": {
+      "bytes": 134403,
+      "sha256": "4c7fec4ed96292c9af0a140be0dfb82c51be1ba1685890e19dc863603aa216b9"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/desktop-cib-r-outcome.png": {
+      "bytes": 164569,
+      "sha256": "1430d4a74a66b331cedb019e7dac5737954d1c74a2a33c43e1bd9e4f904bfd39"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/desktop-cib-r-source.png": {
+      "bytes": 319947,
+      "sha256": "4608cabb2bac7bd0617feef8427e431ac2c0d4ab9db8bee97d7d8f36d2287148"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/mobile-cib-original-source.pdf": {
+      "bytes": 715579,
+      "sha256": "d58292fab0d62b2ab2ef9e1c085b9b32a009fa9a00847a36dc55ae7c5ee9e7c5"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/mobile-cib-r-acknowledgement.png": {
+      "bytes": 38267,
+      "sha256": "ddefca6944e3c1b9f8780098990353e94ad4e0d426f74b5cc6129dd73b552ec9"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/mobile-cib-r-outcome.png": {
+      "bytes": 101873,
+      "sha256": "1a74bd4c91658d0d78056b2eeb72d863c4e2d9e7a64d4af2166391181603abc2"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/mobile-cib-r-source.png": {
+      "bytes": 114120,
+      "sha256": "83f5837352d5bf48fc952a0ae65ea0b9575baae6e6f5f2934a28e79345162e37"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/progress.json": {
+      "bytes": 4799,
+      "sha256": "8f8c81979730ff08f733798ed7c7c2788730a9362abb9d01d97d225de344b845"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static-04/result.json": {
+      "bytes": 5329,
+      "sha256": "53691cf2113a0f8fce7e436a8baea508e331e1fa7d962e5dbedbfe84221ef3c3"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static_impacted.py": {
+      "bytes": 17256,
+      "sha256": "f00598cc0920933f8c90de274906507e5f302ae4c502e7a6afc96c93970213c7"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static_impacted_v02.py": {
+      "bytes": 9513,
+      "sha256": "64dc6bccf154843194883a2be37d2e29496a435aed70b31b73c4accae6d2ef17"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static_impacted_v03.py": {
+      "bytes": 3592,
+      "sha256": "73bad8a78185e3690cbb2ae19c75e7f7d58eaab5bb1d97adb9d8f8cd04ef2ef0"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/static_impacted_v04.py": {
+      "bytes": 2642,
+      "sha256": "b7643debdba19caa1f30fcc8352a971d880c488d8a57b71638918fc2ca10d6d1"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/test_contributor_guards.cjs": {
+      "bytes": 7626,
+      "sha256": "0467f6e8808697ce84529ac12280939ca3f010263450e713c476d0af26c915a0"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/test_guide_path_repair.cjs": {
+      "bytes": 5396,
+      "sha256": "38703f0da4cc3bb9f711d7d7ad1e6b39bab60ca102d2184d547a4bc4e5b65a23"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/test_trace_epoch4.cjs": {
+      "bytes": 2007,
+      "sha256": "46f74e235964af2acb0c1324addeb43ec40e104f05f6996e0d7a3b8f86f84c7c"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/trace-epoch4-02.json": {
+      "bytes": 1512,
+      "sha256": "175871634b47d277999e84d65f45c078fa7472f742dc5b6bc83ef00cd55637dc"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/trace-epoch4-02.log": {
+      "bytes": 1094,
+      "sha256": "69cee636d3a60980d816ec8667eadf39bccc0325218afdf89f244a1def77f671"
+    },
+    "phase/release_finish_20261121/review/final_ui_v01/trace-epoch4-fixtures.json": {
+      "bytes": 284023,
+      "sha256": "b61d48502d546f22ce4caf686d5d55e34528478b5780c2464c4be2b8f3027ea4"
+    }
+  }
+}

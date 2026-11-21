@@ -1,0 +1,16 @@
+:root{--app-nav-height:64px;--font-body:"Avenir Next",Avenir,"Trebuchet MS",sans-serif;--font-display:"Iowan Old Style","Palatino Linotype",Palatino,serif;--app-ink:#173f43;--app-teal:#137c7b;--app-line:#c8d9d8}
+body{padding-top:var(--app-nav-height);font-family:var(--font-body)}
+#app-navigation{position:fixed;inset:0 0 auto;height:var(--app-nav-height);z-index:120;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 28px;margin:0;width:100%;max-width:none;box-sizing:border-box;background:#f8fbfaed;backdrop-filter:blur(16px);border:0;border-bottom:1px solid var(--app-line);color:var(--app-ink);font-family:var(--font-body);box-shadow:0 2px 14px #173f4305}
+#app-navigation *{box-sizing:border-box}
+#app-navigation .app-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--app-ink);white-space:nowrap}
+#app-navigation .app-brand span{display:grid;place-items:center;width:34px;height:36px;border:1px solid var(--app-teal);border-radius:50%;color:var(--app-teal);font:600 26px/1 var(--font-display)}
+#app-navigation .app-brand b{font:500 24px/1 var(--font-display);letter-spacing:-.025em}
+#app-navigation .app-view-tabs{display:flex;align-items:stretch;gap:2px;height:100%;margin:0;padding:0;overflow:visible;font:500 16px/1.2 var(--font-body)}
+#app-navigation .app-view-tabs a{display:flex;align-items:center;justify-content:center;padding:0 20px;margin:0;border:0;border-bottom:3px solid transparent;text-decoration:none;white-space:nowrap;color:#466366;transition:background .18s,color .18s}
+#app-navigation .app-view-tabs a:hover{background:#eaf3f1;color:var(--app-teal)}
+#app-navigation .app-view-tabs a[aria-current=page]{border-bottom-color:var(--app-teal);background:#e8f2ef;color:#0c696a}
+#app-navigation a:focus-visible{outline:3px solid #c49335;outline-offset:-5px}
+.intro h1,.destination h2{font-family:var(--font-display)}
+@media(max-width:760px){:root{--app-nav-height:58px}#app-navigation{padding:0 10px;gap:10px}#app-navigation .app-brand b{display:none}#app-navigation .app-brand span{width:29px;height:32px;font-size:23px}#app-navigation .app-view-tabs{flex:1;justify-content:flex-end;font-size:14px}#app-navigation .app-view-tabs a{padding:0 10px}}
+@media(max-width:520px){#app-navigation{padding-inline:7px;gap:0}#app-navigation .app-brand{display:none}#app-navigation .app-view-tabs{justify-content:space-between;font-size:14px}#app-navigation .app-view-tabs a{padding-inline:5px;font-size:14px}}
+@media(prefers-reduced-motion:reduce){#app-navigation .app-view-tabs a{transition:none}}

@@ -151,7 +151,7 @@ export function decisionTerms(){
 export function validateTrace(envelope,expected) {
   const trace=envelope?.trace||envelope;
   const binding={...envelope,...trace};
-  if(!["narrative-selected-evidence-trace/1","narrative-selected-evidence-trace/2"].includes(trace?.version)||binding.case_id!==expected.case_id||
+  if(!["narrative-selected-evidence-trace/1","narrative-selected-evidence-trace/2","narrative-selected-evidence-trace/3","narrative-selected-evidence-trace/4"].includes(trace?.version)||binding.case_id!==expected.case_id||
       binding.config!==expected.config||binding.reading_id!==expected.reading_id||!hash(binding.query_sha256)||
       binding.query_sha256!==expected.query_sha256||!same(binding.native_checkpoint,expected.native_checkpoint)||
       !hash(binding.native_checkpoint?.sha256)||!same(binding.resource_binding,expected.resource_binding))
@@ -181,10 +181,34 @@ export function validateTrace(envelope,expected) {
   for(const path of trace.paths)if(typeof path.candidate_or_atom_id!=="string"||!Array.isArray(path.steps)||
       path.steps.some(id=>!stepIds.has(id))||!Array.isArray(path.source_refs)||!path.endpoint_kind)
     throw Error("A selected evidence path is not bound to saved steps and its actual endpoint.");
+  if(["narrative-selected-evidence-trace/3","narrative-selected-evidence-trace/4"].includes(trace.version)){
+    const maximum=trace.selection?.max_hops,byId=new Map(trace.steps.map(step=>[step.id,step]));
+    if(!Number.isInteger(maximum)||maximum<0||maximum>6||typeof trace.postrun_graph_enabled!=="boolean"||
+        trace.community_membership_is_evidence!==false||trace.new_evidence_fetched!==false)
+      throw Error("The selected-source trace has invalid navigation authority.");
+    for(const path of trace.paths){
+      const mode=path.route_mode,hops=path.graph_hops,original=mode==="RECORDED_SOURCE_ROUTE";
+      if(!["DIRECT_SOURCE_HANDOFF","POSTRUN_GRAPH_VIEW","RECORDED_SOURCE_ROUTE","RECORDED_RELATION_NOMINATION"].includes(mode)||
+          !Number.isInteger(hops)||hops<0||hops>maximum||path.original_traversal_claimed!==original||
+          (hops===0)!==(mode==="DIRECT_SOURCE_HANDOFF")||mode==="POSTRUN_GRAPH_VIEW"&&(!trace.postrun_graph_enabled||hops>3)||
+          !path.steps.length||new Set(path.steps).size!==path.steps.length)
+        throw Error("A selected-source path changes its saved traversal provenance.");
+      let counted=0;
+      for(const id of path.steps){
+        const step=byId.get(id),navigation=step.kind==="SOURCE_GRAPH_NAVIGATION";
+        if(Boolean(step.edges.length)!==navigation||step.route_mode!=null&&step.route_mode!==mode||
+            step.original_traversal_claimed!=null&&step.original_traversal_claimed!==original||
+            navigation&&(step.route_mode!==mode||step.original_traversal_claimed!==original||step.factual_support_implied!==false))
+          throw Error("A saved navigation step changes its source or history scope.");
+        counted+=step.edges.length;
+      }
+      if(counted!==hops)throw Error("The saved route and navigation-edge counts disagree.");
+    }
+  }
   if(expected.task&&trace.task!==expected.task||expected.allowed_endpoint_ids&&trace.paths.some(path=>!expected.allowed_endpoint_ids.includes(path.candidate_or_atom_id)))
     throw Error("The trace includes a target outside this task or active reading.");
   const lookup=trace.sources||trace.source_refs_by_id||{};
-  const refs=[...trace.steps.flatMap(s=>s.source_refs),...trace.steps.flatMap(s=>rows(s.display_edges).flatMap(e=>rows(e.source_refs))),...trace.paths.flatMap(p=>p.source_refs),...rows(trace.evidence_inventory).flatMap(e=>rows(e.source_refs)),...rows(trace.digest?.citations)];
+  const refs=[...trace.steps.flatMap(s=>s.source_refs),...trace.steps.flatMap(s=>rows(s.display_edges).flatMap(e=>rows(e.source_refs))),...trace.paths.flatMap(p=>p.source_refs),...trace.paths.flatMap(p=>rows(p.decision_source_refs)),...trace.paths.flatMap(p=>p.source_endpoint?[p.source_endpoint.citation,...["native_quote","source_edge_citation","selected_final_citation"].filter(k=>p.source_endpoint.source_label_proof?.[k]).map(k=>p.source_endpoint.source_label_proof[k])]:[]),...rows(trace.evidence_inventory).flatMap(e=>rows(e.source_refs)),...rows(trace.digest?.citations)];
   for(const value of refs){const proof=typeof value==="string"?lookup[value]:value;
     if(!proof?.canonical_page_id||!proof.document_id||!proof.date||!hash(proof.page_sha256)||!Number.isInteger(proof.start)||!Number.isInteger(proof.end)||
         proof.start<0||proof.end<=proof.start||typeof proof.text!=="string"||Array.from(proof.text).length!==proof.end-proof.start)

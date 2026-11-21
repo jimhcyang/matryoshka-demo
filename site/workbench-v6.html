@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script src="runtime/public-runtime.js" data-dataset-mirror="same-repository" data-index="data/api-index.json" data-index-sha256="5a284ed4383118ed5bf1ad7d6bc7ebdf0b0c9b278c1fbb7f16ec16294bee5c8a"></script>
+<link rel="stylesheet" href="public-transport.css">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="A source-bound analyst casebook for inspecting one saved research condition at a time.">
@@ -8,44 +10,139 @@
   <title>Matryoshka | Analyst Workbench</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="app-theme-v6.css">
-  <link rel="stylesheet" href="workbench-v6.css">
   <link rel="stylesheet" href="flow-view-v6.css">
-  <link rel="stylesheet" href="narrative-trace-v1.css">
-  <link rel="stylesheet" href="narrative-context-v1.css">
-  <meta name="narrative-demo" content="narrative-workbench-publication/1">
-  <script type="module" src="workbench-v6.js?v=kg-walk-access2"></script>
-<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="a4f08ac865bb21faed97e1792fc2c84baba0e8483f5fb92c7604fec96f5e30f0"></script>
-<link rel="stylesheet" href="public-transport.css">
+  <link rel="stylesheet" href="workbench-v6.css">
+  <link rel="stylesheet" href="app-navigation.css">
+  <!-- showcase-selection-v66 -->
+  <script id="showcase-selection-v66" type="application/json">
+{
+  "bench": [
+    {
+      "case_id": "palette_v6_redaction_window_ae5f7330c98519149883",
+      "family_id": "iran_yazdi_bridge"
+    },
+    {
+      "case_id": "palette_v5_redaction_window_d46f10a3636e0e3f16a5",
+      "family_id": "cib_aung_china_agreement"
+    },
+    {
+      "case_id": "curation_v65_expanded_iran_osco_identity_synthetic_red01",
+      "family_id": "iran_osco_assassination_identity"
+    },
+    {
+      "case_id": "curation_v65_expanded_vietnam_spratly_property_nucleus_synthetic_red02",
+      "family_id": "vietnam_spratly_unoccupied"
+    },
+    {
+      "case_id": "curation_v65_iran_02_redaction_r01",
+      "family_id": "iran_igat_gas_cutoff"
+    },
+    {
+      "case_id": "curation_v65_cib_sf_supp_02_r02",
+      "family_id": "cib_rhee_patrols_returnees"
+    },
+    {
+      "case_id": "curation_v65_cib_sf_supp_03_r02",
+      "family_id": "cib_cuban_labor_congress"
+    },
+    {
+      "case_id": "curation_v64_vietnam_phuoc_assessment_r02",
+      "family_id": "vietnam_phuoc_defense"
+    },
+    {
+      "case_id": "curation_v65_vietnam_03_reconstruction_p01",
+      "family_id": "vietnam_prisoner_releases"
+    }
+  ],
+  "benchmark": false,
+  "curation_note": "A smaller, diverse, outcome-informed demonstration subset: one case per fact family across presentation and bench. Not benchmark accuracy. Other saved records remain archived locally.",
+  "outcome_informed": true,
+  "presentation": [
+    {
+      "case_id": "curation_v63_vietnam_mapping_claims_h01",
+      "family_id": "vietnam_praphat_mapping"
+    },
+    {
+      "case_id": "curation_v63_cib_berlin_warning_r01",
+      "family_id": "cib_berlin_access_forecast"
+    },
+    {
+      "case_id": "palette_v61_origin_reconstruction_e98db68e46f9a50c02f4",
+      "family_id": "iran_tehrani_regency"
+    },
+    {
+      "case_id": "curation_v63_iran_haeri_never_h01",
+      "family_id": "iran_haeri_teacher_student"
+    },
+    {
+      "case_id": "palette_v5_redaction_window_0b5e3502802305444d56",
+      "family_id": "cib_salvador_peasants"
+    },
+    {
+      "case_id": "curation_v64_cib_panama_oligarchy_red02",
+      "family_id": "cib_panama_oligarchy"
+    },
+    {
+      "case_id": "curation_v64_iran_siilasvuo_synthetic_red01",
+      "family_id": "iran_siilasvuo_un"
+    },
+    {
+      "case_id": "palette_v5_redaction_window_5cf22a8cf2b91a304dd7",
+      "family_id": "cib_arias_panama_riots"
+    },
+    {
+      "case_id": "curation_v65_overlap_iccs_belief_effort_h01",
+      "family_id": "vietnam_iccs_canada"
+    }
+  ],
+  "selection_ref": {
+    "path": "experiments/presentation_v66/proposed_quality_first_selection_v02.json",
+    "sha256": "c015782d7b77bbdde06e3ac12b1309f6f86e8f3a73843cb40de0a31c0f7af17f"
+  },
+  "sha256": "07c8c69aa41ed5c4eda0e9c5d12cd66b3c2b3947944e81f63d395928a3691f95",
+  "source_report_digest": "775bbbd331b7b1c718aa0f30f76d744b85a962b8df84a56f38bbc91247735c72",
+  "source_report_run": "casebook_v65_3c77d6f9c11a1ac448df",
+  "source_report_sha256": "2585878df0589e5f0b5f671f87f517c48b1a33272b673387dbb703720d4b8fba",
+  "status": "APPROVED",
+  "version": "presentation-selection/6.6"
+}
+  </script>
+  <script type="module" src="workbench-v6.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#case-view">Skip to selected question</a>
-  <header class="topbar">
-    <a class="brand" href="workbench-v6.html"><span class="brand-mark" aria-hidden="true">M</span><span>Matryoshka<small>Source-bound analyst casebook</small></span></a>
-    <nav class="primary-tabs" aria-label="Primary navigation">
-      <a id="graph-tab" href="graph-full-v6.html?corpus=cib">Knowledge graph</a>
-      <a id="workbench-tab" href="workbench-v6.html" aria-current="page">Analyst workbench</a>
-      <a id="home-tab" href="workbench-v6.html?view=home">Corpus home</a>
-    </nav>
-  </header>
+  <header id="app-navigation" data-view="workbench"></header>
+  <script src="app-navigation.js"></script>
+  <button id="examples-toggle" class="rail-chevron" type="button" aria-label="Open examples" aria-expanded="false" aria-controls="examples-rail"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
   <main class="workbench-shell">
-    <aside class="case-rail" aria-label="Question catalog">
-      <div class="rail-intro"><p class="eyebrow">Three collections / three tasks</p><h1>Casebook</h1></div>
-      <details id="catalog-browser" open>
-        <summary>Saved questions <span id="case-count" role="status">Loading...</span></summary>
-        <div class="case-filters">
-          <label>Show<select id="case-show"><option value="presentation">Starters</option><option value="bench">Bench</option><option value="additional_real_redaction">Additional CIB redactions</option><option value="all">All current cases</option></select></label>
-          <label>Collection<select id="case-corpus"><option value="">All collections</option><option value="cib">CIB</option><option value="iran">Iran</option><option value="vietnam">Vietnam</option></select></label>
-          <label>Task<select id="case-task"><option value="">All tasks</option><option value="redaction">Redaction</option><option value="hypothesis">Hypothesis</option><option value="mosaic">Mosaic</option></select></label>
-          <label>Find a question<input id="case-search" type="search" placeholder="Query or source document" autocomplete="off"></label>
-        </div>
-        <div id="case-list" class="case-list"></div>
-      </details>
+    <aside id="examples-rail" class="case-rail" aria-label="Question catalog" inert>
+      <div class="rail-content">
+      <div class="rail-intro"><h1>Examples</h1><button id="examples-close" class="rail-chevron" type="button" aria-label="Close examples"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5-7 7 7 7"/></svg></button></div>
+      <div class="case-filters">
+        <fieldset class="filter-group"><legend>Corpus</legend><div class="filter-buttons" role="group" aria-label="Filter by corpus">
+          <button type="button" data-corpus="" aria-label="All corpora" aria-pressed="true" title="All corpora">A</button>
+          <button type="button" data-corpus="vietnam" aria-label="Vietnam" aria-pressed="false" title="Vietnam; double-click for background" aria-describedby="corpus-background-help" aria-keyshortcuts="Shift+Enter Shift+Space">V</button>
+          <button type="button" data-corpus="iran" aria-label="Iran" aria-pressed="false" title="Iran; double-click for background" aria-describedby="corpus-background-help" aria-keyshortcuts="Shift+Enter Shift+Space">I</button>
+          <button type="button" data-corpus="cib" aria-label="Central Intelligence Bulletins" aria-pressed="false" title="CIB; double-click for background" aria-describedby="corpus-background-help" aria-keyshortcuts="Shift+Enter Shift+Space">C</button>
+        </div></fieldset>
+        <fieldset class="filter-group"><legend>Task</legend><div class="filter-buttons" role="group" aria-label="Filter by task">
+          <button type="button" data-task="" aria-label="All tasks" aria-pressed="true" title="All tasks">A</button>
+          <button type="button" data-task="mosaic" aria-label="Mosaic" aria-pressed="false" title="Mosaic">M</button>
+          <button type="button" data-task="hypothesis" aria-label="Hypothesis" aria-pressed="false" title="Hypothesis">H</button>
+          <button type="button" data-task="redaction" aria-label="Redaction" aria-pressed="false" title="Redaction">R</button>
+        </div></fieldset>
+      </div>
+      <p id="corpus-background-help" class="filter-help">Corpus background: double-click, or Shift+Enter.</p>
+      <p id="case-count" role="status" aria-live="polite">Loading examples...</p>
+      <p id="casebook-notice" class="rail-footnote" role="status" hidden></p>
+      <div id="case-list" class="case-list"></div>
+      <a class="rail-study" href="swedish-study.html">Withheld delegation study</a>
       <p class="rail-footnote">Saved evidence only. Changing the view does not change the results.</p>
       <p id="showcase-curation-note" class="rail-footnote" data-testid="showcase-curation-note" hidden></p>
+      </div>
     </aside>
     <section class="case-workspace" aria-label="Analyst workflow">
       <div class="workspace-toolbar">
-        <span class="saved-label">Published casebook</span>
         <label class="arm-control">Search method<select id="arm-select" aria-label="Research condition">
           <option value="A">A / Expanded search</option>
           <option value="B">B / Direct clues</option>

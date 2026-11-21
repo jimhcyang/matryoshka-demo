@@ -7,7 +7,7 @@
   if (!/^https?:$/.test(base.protocol) || base.origin !== location.origin || !base.pathname.endsWith("/") || base.search || base.hash) throw new Error("The public site base must be a same-origin HTTP(S) directory");
   const originalFetch = window.fetch.bind(window), originalOpen = window.open.bind(window);
   const own = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
-  const pages = new Set(["/", "/index.html", "/corpus-home.html", "/corpus-tour.html", "/workbench-v6.html", "/graph-full-v6.html"]);
+  const pages = new Set(["/", "/index.html", "/workbench-v6.html", "/graph-full-v6.html"]);
   const guide = {config: "llm_readings", reading: "", route_index: "0"};
   const routes = {
     "/api/health": {defaults: {}, required: []},
@@ -32,9 +32,24 @@
     routes["/api/current/" + endpoint] = {defaults: {...old.defaults, config: "llm_readings"},
       required: [...new Set([...currentPins, ...old.required])], optional: old.optional || []};
   }
+  /* narrative-static-transport/1 */
+  pages.add("/swedish-study.html");
+  pages.add("/swedish-study.js");
+  pages.add("/swedish-study.css");
+  pages.add("/app-navigation.js");
+  pages.add("/app-navigation.css");
+  pages.add("/swedish-study-data-v02.json");
+  pages.add("/swedish-study-history.json");
+  pages.add("/swedish-study-origins.json");
+  for (const page of ["/corpus-home.html", "/corpus-tour.html", "/docs/matryoshka-guide.pdf"]) pages.add(page);
+  routes["/api/current/casebook"] = {defaults: {}, required: []};
+  routes["/api/current/report-v6"] = {defaults: {}, required: []};
   routes["/api/narrative-v1/manifest"] = {defaults: {}, required: []};
-  routes["/api/narrative-v1/trace"] = {defaults: {config: "llm_readings", reading: ""}, required: currentPins};
   routes["/api/narrative-v1/presentation-context-sources"] = {defaults: {narrative_id: ""}, required: ["corpus"]};
+  routes["/api/narrative-v1/trace"] = {defaults: {config: "llm_readings", reading: ""}, required: currentPins};
+  routes["/api/current/analyst-digest"] = {defaults: {config: "llm_readings"}, required: currentPins};
+  routes["/api/current/slots-v1"] = {defaults: {offset: "0", limit: "32", scan: "0", q: ""}, required: ["corpus", "graph_id", "hierarchy_id"], optional: ["slot_id", "anchor_id", "domain_id", "theme_id", "community_id"]};
+  const narrativeGlobalRoutes = new Set(["/api/current/casebook", "/api/current/report-v6", "/api/current/slots-v1"]);
   const isPDF = path => /^\/api\/(?:current\/)?cib-pdf$/.test(path);
   const deniedSegments = new Set(["private", ".git", ".env", "manuscripts", "manuscript", "raw_logs", "raw-logs", "requests", "responses", "api_keys", "node_modules"]);
   const limits = Object.freeze({manifestBytes: 32 * 1024 ** 2, chunkBytes: 16 * 1024 ** 2,
@@ -82,7 +97,7 @@
       }
       for (const [key, value] of Object.entries(spec.defaults)) if (!own(values, key)) values[key] = value;
       if (spec.required.some(k => !values[k])) fail("MISSING_PARAMETER", "A required saved-packet selector is missing");
-      if (path.startsWith("/api/current/") || path === "/api/narrative-v1/trace") {
+      if ((path.startsWith("/api/current/") && !narrativeGlobalRoutes.has(path)) || path === "/api/narrative-v1/trace") {
         for (const pin of ["registry_sha256", "index_sha256"]) if (!/^[a-f0-9]{64}$/.test(values[pin])) fail("INVALID_PARAMETER", "Current-resource SHA256 pins are required");
         if (!/^[A-Za-z0-9_.:-]{1,240}$/.test(values.resource_id)) fail("INVALID_PARAMETER", "Invalid current-resource identifier");
       }
@@ -94,7 +109,7 @@
         if (!/^\d+$/.test(values[name]) || !Number.isSafeInteger(Number(values[name]))) fail("INVALID_PARAMETER", "Expected an unsigned integer");
         values[name] = String(Number(values[name]));
       }
-      if (own(values, "route_index") && Number(values.route_index) > 1000) fail("INVALID_PARAMETER", "Only finite exported route indices are supported");
+      if (own(values, "route_index") && Number(values.route_index) > 99999) fail("INVALID_PARAMETER", "Only the three supplied route indices are supported");
       if (own(values, "corpus") && !["cib", "iran", "vietnam"].includes(values.corpus)) fail("INVALID_PARAMETER", "Unknown corpus");
       if (own(values, "revision") && values.revision !== "study") fail("INVALID_PARAMETER", "Unknown saved graph revision");
       if (own(values, "release") && !["earlier", "later"].includes(values.release)) fail("INVALID_PARAMETER", "Unknown release");
@@ -273,6 +288,7 @@
       if (frame.index === frame.pieces.length) { stack.pop(); continue; }
       const piece = frame.pieces[frame.index++];
       if (typeof piece === "string") {
+        if(pack.manifest.literal_encoding==="base64"){const bytes=Uint8Array.from(atob(piece),c=>c.charCodeAt(0));check(bytes.length<=result.length-length,"Fragment bytes exceed declared root");result.set(bytes,length);length+=bytes.length;continue;}
         check(piece.length <= result.length - length, "Root expansion exceeds its declared size");
         const written = encoder.encodeInto(piece, result.subarray(length));
         check(written.read === piece.length && written.written === piece.length, "Fragment text is not exact ASCII");
@@ -327,11 +343,66 @@
   const ready = loadIndex();
   ready.catch(error => notice("Saved public replay unavailable: " + error.message));
   function hasSaved(input) {
-    try { return savedIndex !== null && own(savedIndex.entries, canonicalKey(input)); }
+    try { const key=canonicalKey(input);return savedIndex !== null && (own(savedIndex.entries,key)||key.startsWith("/api/current/slots-v1?")&&own(savedIndex.entries,"/data/slots/"+new URL(input,document.baseURI).searchParams.get("corpus")+".json")); }
     catch (_) { return false; }
   }
+  // Query only the byte-verified complete base-visible slot snapshot.
+  const slotCatalogs = new Map();
+  const slotNormalized = text => text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  function selectStaticSlots(catalog, p) {
+    const status = catalog.status;
+    if (p.corpus !== status.corpus || p.graph_id !== status.graph_run_id || p.hierarchy_id !== status.hierarchy_run_id)
+      fail("INVALID_PARAMETER", "Opaque slots require the exact saved corpus graph and hierarchy");
+    const offset=Number(p.offset),limit=Number(p.limit);
+    if (!Number.isSafeInteger(offset)||offset<0||!Number.isSafeInteger(limit)||limit<1||limit>64||p.q.length>200||!["0","1"].includes(p.scan))
+      fail("INVALID_PARAMETER", "Opaque-slot pagination/search bounds exceeded");
+    if (Object.prototype.hasOwnProperty.call(p,"slot_id")) {
+      const slot=catalog.slots.find(s=>s.id===p.slot_id);
+      if (!slot) fail("PUBLIC_PACKET_NOT_EXPORTED", "Unknown opaque slot; no identity substitute");
+      return {...status,slot};
+    }
+    const terms=slotNormalized(p.q).split(" ").filter(Boolean);
+    const matches=catalog.slots.filter(s=>{
+      const surface=slotNormalized([s.id,s.slot_id||"","opaque slot",s.document_id,s.date,s.context_preview].join(" ")).split(" ");
+      if (!terms.every(t=>surface.includes(t))) return false;
+      if (Object.prototype.hasOwnProperty.call(p,"anchor_id")&&!s.anchors.some(a=>a.id===p.anchor_id)) return false;
+      return ["domain_id","theme_id","community_id"].every(k=>!Object.prototype.hasOwnProperty.call(p,k)||s[k]===p[k]);
+    });
+    return {...status,slots:matches.slice(offset,offset+limit),offset,limit,matched_count:matches.length,next_offset:offset+limit<matches.length?offset+limit:null};
+  }
+  async function verifiedSlots(key, signal) {
+    const p=Object.fromEntries(new URL(key,base).searchParams),path="/data/slots/"+p.corpus+".json";
+    if (!slotCatalogs.has(path)) slotCatalogs.set(path,(async()=>{
+      const packet=await verified(new URL(path.slice(1),base));
+      return JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(packet.decoded));
+    })());
+    let catalog;
+    try { catalog=await slotCatalogs.get(path); } catch(error) { slotCatalogs.delete(path);throw error; }
+    if(signal?.aborted)throw new DOMException("Aborted","AbortError");
+    const value=selectStaticSlots(catalog,p);
+    const records=new Map();
+    async function hydrate(thin){
+      if(!records.has(thin.record_path))records.set(thin.record_path,(async()=>{
+        const packet=await verified(new URL(thin.record_path.slice(1),base),signal);
+        return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(packet.decoded));
+      })());
+      const record=(await records.get(thin.record_path)).find(s=>s.id===thin.id);
+      if(!record)fail('INTEGRITY_FAILURE','Exact opaque record is absent from its declared shard');
+      return record;
+    }
+    if(value.slot){
+      value.slot=await hydrate(value.slot);
+      const page=await verified(new URL(catalog.details[value.slot.id].slice(1),base),signal);
+      value.page=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(page.decoded));
+      if(value.page.text_sha256!==value.slot.page_provenance.text_sha256)fail("INTEGRITY_FAILURE","Opaque page differs from its exact slot provenance");
+    }else value.slots=await Promise.all(value.slots.map(hydrate));
+    const decoded=new TextEncoder().encode(JSON.stringify(value));
+    return {key,entry:{mime:"application/json"},wire:decoded,decoded,gzip:false,httpDecoded:false};
+  }
+
   async function verified(input, signal) {
     const key = canonicalKey(input), index = await ready;
+    if (key.startsWith("/api/current/slots-v1?") && !own(index.entries,key)) return verifiedSlots(key, signal);
     if (!own(index.entries, key)) fail("PUBLIC_PACKET_NOT_EXPORTED", "This saved packet is not in the public export; no other method or archive is substituted");
     const entry = index.entries[key];
     if (entry.encoding === "fragment-dag") {
@@ -339,7 +410,11 @@
       return {key, entry, decoded, wire: decoded, gzip: false, httpDecoded: false, fragmentDag: true};
     }
     const external = own(entry, "external_url");
-    const response = await originalFetch(entryURL(entry, key), {method: "GET", credentials: "omit", redirect: "error", mode: external ? "cors" : "same-origin", signal});
+    const approvedURL = entryURL(entry, key);
+    const mirrored = external && script.dataset.datasetMirror === "same-repository" &&
+      ["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname);
+    const packetURL = mirrored ? new URL("/datasets/" + approvedURL.pathname.split("/datasets/")[1], base) : approvedURL;
+    const response = await originalFetch(packetURL, {method: "GET", credentials: "omit", redirect: "error", mode: external && !mirrored ? "cors" : "same-origin", signal});
     if (!response.ok) fail("PUBLIC_FILE_UNAVAILABLE", "The indexed public file is unavailable");
     const wire = new Uint8Array(await response.arrayBuffer());
     let decoded = wire;

@@ -13,6 +13,22 @@ const compact = (value, limit = 220) => {
   return text.length <= limit ? text : `${text.slice(0, limit - 3).trim()}...`;
 };
 const normalize = (value) => String(value ?? "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+function mapDisplayLabel(node){
+  const label=String(node.label||'').replace(/\s+/g,' ').trim();
+  const short=text=>text.length<=68&&text.split(/\s+/).length<=10&&!/[;|]|\.{3}|\u2026/.test(text);
+  const readable=text=>/[a-z]/.test(text)?text:text.replace(/[A-Z]+/g,word=>/^(US|USA|UK|UN|USSR|NATO|CIA|PRAM|INF|LMI)$/.test(word)?word:word[0]+word.slice(1).toLowerCase()).replace(/\b(And|Of|The|In|For|To)\b/g,(word,offset)=>offset?word.toLowerCase():word);
+  if(['Domain','Theme','Community'].includes(node.type)){
+    const terms=label.replace(/^(?:(?:Graph\s+)?(?:domain|theme|community)|Connected evidence):\s*/i,'').split(/\s*\/\s*/).filter(Boolean);
+    const first=terms[0]||'';
+    // Complete native topic terms, never a generated account of their relationship.
+    const pair=terms.length>1?first+' and '+terms[1]:first;
+    return pair.length<=44&&pair.split(/\s+/).length<=6&&short(pair)?terms.slice(0,2).map(readable).join(' and '):short(first)?readable(first):'Reporting group';
+  }
+  if(short(label))return readable(label);
+  const sentence=typeof Intl.Segmenter==='function'?[...new Intl.Segmenter('en',{granularity:'sentence'}).segment(label)][0]?.segment.trim():'';
+  if(['Claim','Event'].includes(node.type)&&sentence&&sentence.split(/\s+/).length>=4&&/[.!?]$/.test(sentence)&&short(sentence))return readable(sentence);
+  return node.overlay_slot?'Opaque slot':({Entity:'Source entity',Claim:'Source claim',Event:'Source event',Document:'Source document',Segment:'Source passage',RelationEvidence:'Source relation',EvidenceGroup:'Evidence group'}[node.type]||'Graph object');
+}
 const pause = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
 const redactionOnlyMode = false;
 const singleCorpusMode = new URLSearchParams(window.location.search).get("corpus") !== "cib" && ["iran","vietnam"].includes(new URLSearchParams(window.location.search).get("corpus"));
@@ -79,7 +95,7 @@ function safeWorkbench(value) {
 }
 const returnWorkbench=safeWorkbench(pageParams.get("return_to")||pageParams.get("return"));
 // Dense-view accounting can be long; it must never intercept canvas input.
-$$('.preview-caption').forEach(caption=>caption.closest('.graph-card').append(caption));
+$$('.preview-caption').forEach(caption=>$('#map-accounting').append(caption));
 const releaseFilterApplies = (view) => currentOnlyMode && state.displayMode !== "pair" && ["current_reveal","current_later"].includes(view?.key);
 const colors = {Domain:"#176e70",Theme:"#a47c2e",Community:"#315e78",EvidenceGroup:"#68787b",Entity:"#176e70",Event:"#a47c2e",Claim:"#b75e48",RedactionSlot:"#b75e48",RelationEvidence:"#176e70",Segment:"#68787b",Document:"#283f49",Unknown:"#68787b"};
 const visibilityLabel = (value) => (singleCorpusMode?{both:"present in Confidential and expanded classification views",later_only:"added by the Secret projection",redacted_placeholder:"opaque redaction placeholder"}:{both:"visible in earlier + later releases",later_only:"present in later release only",redacted_placeholder:"opaque redaction placeholder"})[value] || String(value || "");
@@ -105,6 +121,208 @@ const DEFAULT_NODE_LIMIT = 256;
 const NODE_CAPS = new Set([32,256,2048]);
 const MAX_RENDERED_NODES = 2048;
 const MAX_ALL_RENDERED_EDGES = 16384;
+const slotOverlayState={enabled:true,payload:null,promise:null,scanPromise:null,rows:new Map(),pages:new Map(),requests:new Map(),searchOffset:0,searchPage:null};
+
+function cacheSlotRows(rows) {
+  for(const row of rows){
+    if(row.type!=="RedactionSlot"||row.semantic!==false||row.eligible_evidence!==false||row.context_links.some(edge=>edge.semantic!==false||edge.eligible_evidence!==false||edge.slot_navigation!==true||edge.weight!==0||edge.layout_weight!==0))throw Error('Malformed opaque-source navigation boundary.');
+    row.node_subtype="OpaqueRedactionSlot";
+    row._surfaces=[row.id,row.slot_id,row.label,row.document_id].filter(Boolean).map(normalize);
+    row._search=normalize([row.id,row.slot_id,row.label,row.document_id,row.context_preview].join(' '));
+    slotOverlayState.rows.delete(row.id);slotOverlayState.rows.set(row.id,row);
+  }
+  const protectedIds=new Set(Object.values(state.panels).flatMap(p=>[p.slotFocusId,p.selected?.id,p.external?.id,p.neighborhood?.node?.id]));
+  for(const id of slotOverlayState.rows.keys()){
+    if(slotOverlayState.rows.size<=512)break;
+    if(!protectedIds.has(id))slotOverlayState.rows.delete(id);
+  }
+}
+
+async function slotPacket(selectors={},cacheRows=true) {
+  const params=new URLSearchParams({corpus:corpusId,graph_id:refreshBinding.graph_run_id,hierarchy_id:refreshBinding.hierarchy_run_id,...selectors});
+  const key=params.toString();
+  if(slotOverlayState.requests.has(key))return slotOverlayState.requests.get(key);
+  const request=(async()=>{
+    const response=await fetch('/api/current/slots-v1?'+params,{cache:'no-store'});
+    if(!response.ok)throw Error(`Opaque-source slots HTTP ${response.status}; no substitute source is used.`);
+    const value=await response.json();
+    if(value.version!=="current-opaque-source-slots/2"||value.corpus!==corpusId||value.graph_run_id!==refreshBinding.graph_run_id||value.hierarchy_run_id!==refreshBinding.hierarchy_run_id||value.semantic_graph_modified!==false||value.hidden_values_read!==false)throw Error('Opaque-source slot binding differs from this graph.');
+    slotOverlayState.payload=value;
+    if(cacheRows)cacheSlotRows(value.slot?[value.slot]:(value.slots||[]));
+    updateSlotStatus(value.coverage);
+    return value;
+  })();
+  slotOverlayState.requests.set(key,request);
+  try{return await request;}finally{slotOverlayState.requests.delete(key);}
+}
+
+function updateSlotStatus(coverage) {
+  if(!coverage)return;
+  $('#slot-overlay-status').textContent=coverage.complete
+    ? `${fmt(coverage.total_slots)} observed opaque markers / ${fmt(coverage.scanned_documents)} base-visible documents / ${fmt(coverage.scanned_pages)} pages or segments. Complete bound-catalog scan.`
+    : `Not a complete count: ${coverage.scanned_shards}/${coverage.total_shards} source shards scanned; ${fmt(coverage.observed_slots)} markers observed so far. Browse or search to scan.`;
+}
+
+async function ensureSlotOverlay() {
+  if(!slotOverlayState.promise){
+    slotOverlayState.promise=slotPacket({limit:1},false).catch(error=>{slotOverlayState.promise=null;throw error;});
+  }
+  return slotOverlayState.promise;
+}
+
+async function ensureSlotCensus() {
+  await ensureSlotOverlay();
+  if(!slotOverlayState.scanPromise){
+    slotOverlayState.scanPromise=(async()=>{
+      while(!slotOverlayState.payload.coverage.complete){await slotPacket({scan:1,limit:1},false);await pause(0);}
+      return slotOverlayState.payload;
+    })().catch(error=>{slotOverlayState.scanPromise=null;throw error;});
+  }
+  return slotOverlayState.scanPromise;
+}
+
+async function slotPage(selectors={}) {await ensureSlotCensus();return slotPacket({limit:32,...selectors});}
+async function ensureOpaqueSlotPage(slot) {
+  const key=slot.document_id+'|'+slot.canonical_page_id;
+  if(!slotOverlayState.pages.has(key)){
+    const value=await slotPacket({slot_id:slot.id});
+    if(value.page.text_sha256!==slot.page_provenance.text_sha256)throw Error('Opaque source page pin changed.');
+    slotOverlayState.pages.set(key,value.page);
+    while(slotOverlayState.pages.size>8)slotOverlayState.pages.delete(slotOverlayState.pages.keys().next().value);
+  }
+  return slotOverlayState.pages.get(key);
+}
+
+function slotRows() {return slotOverlayState.enabled&&!state.guidePath?[...slotOverlayState.rows.values()]:[];}
+function opaqueSlot(id) {return slotOverlayState.enabled&&!state.guidePath?slotOverlayState.rows.get(id):null;}
+function slotContextEdges() {return slotRows().flatMap(row=>row.context_links);}
+function withSlotContext(detail) {
+  if(state.guidePath)return detail;
+  const node=opaqueSlot(detail.node.id)||detail.node;
+  const neighbors=new Map((detail.neighbors||[]).filter(row=>!row.overlay_slot).map(row=>[row.id,row]));
+  const edges=(detail.edges||[]).filter(edge=>!edge.slot_navigation);
+  const allowed=new Set(detail.slot_context?.ids||[]);
+  if(node.overlay_slot)allowed.add(node.id);
+  // Keep the current slot reciprocal even if it lies outside the anchor's page.
+  for(const panel of Object.values(state.panels))if(panel.slotFocusId)allowed.add(panel.slotFocusId);
+  for(const slot of slotRows().filter(row=>allowed.has(row.id)))for(const edge of slot.context_links){
+    if(edge.source!==node.id&&edge.target!==node.id)continue;
+    const other=edge.source===node.id?slot.anchors.find(row=>row.id===edge.target):slot;
+    if(!other)continue;
+    neighbors.set(other.id,neighbors.get(other.id)||other);
+    edges.push({...edge,hierarchy_scope:focusScope("evidence",node,other)});
+  }
+  return {...detail,node,neighbors:[...neighbors.values()],edges};
+}
+function slotGraphRows(panel,nodes,edges) {
+  if(panel.level!=="evidence"||panel.studyContext||state.guidePath)return {nodes,edges};
+  const parent=panel.trail.at(-1),focus=panel.slotFocusId;
+  const slots=slotRows().filter(row=>(parent?.type==="Community"?row.community_id===parent.id:row.id===focus)&&
+    (state.showIneligible||eligibilityReasons(row,{includeRelease:false}).length===0));
+  if(!slots.length)return {nodes,edges};
+  const map=new Map(nodes.map(row=>[row.id,row]));
+  for(const slot of slots){
+    map.set(slot.id,slot);
+    for(const anchor of slot.anchors)if(anchor.community_id===parent?.id||slot.id===focus)map.set(anchor.id,{...anchor,...(map.get(anchor.id)||{})});
+  }
+  const extra=slots.flatMap(row=>row.context_links).filter(edge=>map.has(edge.source)&&map.has(edge.target));
+  return panel.applyVisibilityPolicy([...slots,...[...map.values()].filter(row=>!row.overlay_slot)],[...edges,...extra]);
+}
+
+async function navigateOpaqueSlot(panel,slot) {
+  if(state.guidePath)throw Error('Close the saved case guide before independent slot exploration.');
+  slotOverlayState.enabled=true;$('#show-slot-overlay').checked=true;
+  cacheSlotRows([slot]);
+  panel.slotFocusId=slot.id;
+  if(slot.community_id)await panel.navigateToNode(slot);else await panel.focusNeighborhood(slot);
+  if(pageParams.get('connections')==='1')await panel.focusDirectConnections(slot);
+  const url=new URL(location.href);url.searchParams.set('scope','slot');url.searchParams.set('q',slot.id);url.searchParams.set('inspect','1');history.replaceState(null,'',url);
+  if(pageParams.get('slot_source')==='1')openOpaqueSlotSource(slot);
+}
+
+function slotPermalink(slot,source=false) {
+  const params=new URLSearchParams({corpus:corpusId,scope:'slot',q:slot.id,inspect:'1'});
+  if(source)params.set('slot_source','1');
+  return '/graph-full-v6.html?'+params;
+}
+
+function opaqueSlotInspectorHTML(panel,slot) {
+  const placed=slot.community_id?'Placed beside a visible earlier-view vocabulary anchor in its existing hierarchy. This is navigation, not concealed-entity membership.':'Unplaced: no unambiguous earlier-view visible vocabulary anchor was available. No hierarchy assignment was invented.';
+  return `<section class="slot-inspector" data-opaque-slot="${esc(slot.id)}"><p class="eyebrow">OpaqueRedactionSlot / source-context node, not semantic evidence</p><h3>${esc(slot.label)}</h3><p class="slot-boundary-notice">The hidden text, identity and length are unavailable. An observed broad mask is not split into hypothetical names or dates.</p><p>${esc(slot.document_id)} / ${esc(slot.date)} / earlier PDF page ${esc(slot.source_page)}</p><blockquote>${esc(slot.context_preview)}</blockquote><p>${esc(placed)}</p><div class="slot-source-actions"><button type="button" data-slot-source>Open earlier source and focal boundary</button><a href="${esc(slotPermalink(slot))}">Slot permalink</a><a href="${esc(slotPermalink(slot,true))}" data-slot-source-link>Source permalink</a></div><p>Use the ordinary direct-connection, node, Back and mother Community controls below. Dotted source-context links work in either direction; they do not claim what the hidden span means.</p>${panel.incidentConnections(slot)}<h4>Workbench</h4>${slot.workbench_links.length?slot.workbench_links.map(row=>`<a class="slot-workbench-link" href="${esc(row.href)}">${esc(row.label)}</a>`).join(''):'<p>No saved workbench question in the selected publication is bound to this document or mask.</p><a class="slot-workbench-link" href="/workbench-v6.html?corpus=cib">Open saved workbench / no slot run implied</a>'}<details><summary>Opaque-slot provenance</summary><dl><dt>Overlay ID</dt><dd>${esc(slot.id)}</dd><dt>Observed marker ID</dt><dd>${esc(slot.slot_id||'Unnumbered earlier mask')}</dd><dt>Canonical earlier page</dt><dd>${esc(slot.canonical_page_id)}</dd><dt>Context match authority</dt><dd>Literal visible vocabulary navigation only; identity not certified.</dd><dt>Graph</dt><dd>${esc(refreshBinding.graph_run_id)}</dd><dt>Hierarchy</dt><dd>${esc(refreshBinding.hierarchy_run_id)}</dd></dl></details></section>`;
+}
+
+function slotContextInspectorHTML(panel,edge) {
+  const slot=opaqueSlot(edge.source),proof=edge.source_proof,page=slot?.page_provenance;
+  if(!slot||!page||!proof?.text)throw Error('Exact base-visible source-context proof is unavailable. No relation was substituted.');
+  const anchor=slot.anchors.find(row=>row.id===edge.target);
+  const context=slot.context_preview;
+  return `<section class="slot-inspector" data-slot-context-edge="${esc(edge.id)}"><p class="eyebrow">Selected source-context connection / not a factual relationship</p><h3>${esc(slot.label)} &harr; ${esc(anchor?.label||proof.text)}</h3><p class="slot-boundary-notice">This dotted link says only that the vocabulary term is visible in this earlier source context. It does not connect the hidden identity to that term. Semantic: false. Eligible evidence: false. Weight: 0. No corroboration or native relationship count is added.</p><div class="edge-endpoints"><button data-inspect-entity="${esc(edge.source)}">${esc(slot.label)}</button><span>&harr;</span><button data-inspect-entity="${esc(edge.target)}">${esc(anchor?.label||proof.text)}</button></div><h4>Exact visible source term</h4><blockquote data-context-proof>${esc(proof.text)}</blockquote><p>Earlier transcript excerpt around the visible term, not a quote of concealed wording:</p><blockquote>${esc(context)}</blockquote><p>${esc(page.document_id)} / ${esc(page.date)} / earlier PDF page ${esc(page.source_page)}</p><button type="button" data-context-source>Open exact earlier context and opaque boundary</button><details><summary>Source-context provenance and coordinates</summary><dl><dt>Canonical earlier page</dt><dd>${esc(page.canonical_page_id)}</dd><dt>Visible-term coordinates</dt><dd>[${proof.start}, ${proof.end}) Unicode code points in normalized visible text</dd><dt>Normalized visible text SHA-256</dt><dd>${esc(page.text_sha256)}</dd><dt>Original marker-transport text SHA-256</dt><dd>${esc(page.transport_text_sha256)}</dd><dt>Match authority</dt><dd>${esc(proof.match_kind)} / lexical context only</dd><dt>Context edge ID</dt><dd>${esc(edge.id)}</dd></dl></details></section>`;
+}
+
+async function openOpaqueSlotSource(slot,proof=null) {
+  let page;
+  try{page=await ensureOpaqueSlotPage(slot);}catch(error){state.panels.current.inspectionError(error);return;}
+  closeCibSource();
+  const drawer=$('#cib-source-drawer');state.sourceReturnFocus=document.activeElement;drawer.inert=false;drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');$('#cib-drawer-scrim').hidden=false;$('#cib-source-close').focus({preventScroll:true});
+  $('#cib-source-kicker').textContent='Earlier-source provenance / no reveal';
+  $('#cib-source-title').textContent=slot.article_title;
+  $('#cib-source-meta').textContent=`${page.document_id} / ${page.date} / earlier PDF page ${page.source_page}`;
+  $('#cib-source-release-actions').textContent='Earlier transcript only. This drawer does not fetch later wording, a fill, or a hidden-span size.';
+  const chars=Array.from(page.text),spans=[{start:slot.marker_start,end:slot.marker_end,attribute:'data-focal-opaque-slot'}];
+  if(proof){
+    if(proof.canonical_page_id!==page.canonical_page_id||chars.slice(proof.start,proof.end).join('')!==proof.text)throw Error('Source-context coordinates do not match the earlier transcript.');
+    spans.push({start:proof.start,end:proof.end,attribute:'data-visible-context-term'});
+  }
+  let cursor=0,sourceHTML='';
+  for(const span of spans.sort((a,b)=>a.start-b.start)){
+    if(span.start<cursor)throw Error('Overlapping source-context markers are not supported.');
+    sourceHTML+=esc(chars.slice(cursor,span.start).join(''))+`<mark ${span.attribute}>${esc(chars.slice(span.start,span.end).join(''))}</mark>`;cursor=span.end;
+  }
+  sourceHTML+=esc(chars.slice(cursor).join(''));
+  $('#cib-source-body').innerHTML=`<p class="slot-boundary-notice">Provenance and visible context, NOT semantic evidence for the concealed contribution. The highlighted opaque token is transport syntax, not a measured hidden-text extent. ${proof?'The other highlight is the exact visible lexical term; it is not a hidden identity.':''}</p><section class="cib-source-page active slot-source-page" data-cib-page="${esc(page.canonical_page_id)}"><header><b>Earlier source / PDF page ${esc(page.source_page)}</b></header><div class="slot-source-text">${sourceHTML}</div></section><details><summary>Earlier transcript audit</summary><p>Canonical page: ${esc(page.canonical_page_id)}</p><p>Normalized visible transcript SHA-256: ${esc(page.text_sha256)}</p><p>Original marker-transport SHA-256: ${esc(page.transport_text_sha256)}</p><p>Coordinates are Unicode code points in normalized visible text. Only existing opaque marker transport syntax was normalized to [REDACTED]. No concealed wording or span length was read.</p></details>`;
+  $('[data-focal-opaque-slot]',drawer)?.scrollIntoView({block:'center'});
+}
+
+function appendHierarchySlots(panel,item) {
+  const key={Domain:'domain_id',Theme:'theme_id',Community:'community_id'}[item?.type];
+  if(!key)return;
+  if(state.guidePath||!slotOverlayState.enabled)return;
+  const section=document.createElement('section');section.className='slot-hierarchy-navigation';
+  section.innerHTML='<h4>Opaque base-visible source slots</h4><p>Visible lexical-context navigation only. Published membership counts are unchanged.</p><button type="button" data-load-branch-slots>Browse slots beside this branch</button><div data-branch-slots></div>';
+  panel.inspector.append(section);
+  const load=async offset=>{
+    const button=$('[data-load-branch-slots]',section);button.disabled=true;
+    try{
+      const value=await slotPage({[key]:item.id,offset});
+      if(!section.isConnected)return;
+      const host=$('[data-branch-slots]',section);
+      host.innerHTML=`<p>${fmt(value.matched_count)} observed slots beside this branch. Showing ${value.slots.length?offset+1:0}-${offset+value.slots.length}; not Community membership.</p>`+value.slots.map((row,index)=>`<button type="button" data-hierarchy-slot="${index}">${esc(row.label)}</button>`).join('')+`<div class="slot-pagination"><button data-branch-prev ${offset===0?'disabled':''}>Previous</button><button data-branch-next ${value.next_offset===null?'disabled':''}>Next</button></div>`;
+      $$('[data-hierarchy-slot]',host).forEach(b=>b.onclick=()=>navigateOpaqueSlot(panel,value.slots[Number(b.dataset.hierarchySlot)]).catch(e=>panel.inspectionError(e)));
+      $('[data-branch-prev]',host).onclick=()=>load(Math.max(0,offset-32));
+      $('[data-branch-next]',host).onclick=()=>load(value.next_offset);
+    }catch(error){$('[data-branch-slots]',section).textContent=error.message;}finally{button.disabled=false;}
+  };
+  $('[data-load-branch-slots]',section).onclick=()=>load(0);
+}
+
+async function initializeSlotOverlay() {
+  $('#slot-overlay-controls').hidden=false;
+  try{
+    await ensureSlotOverlay();
+    $('#show-slot-overlay').onchange=event=>{
+      slotOverlayState.enabled=event.target.checked;
+      for(const panel of Object.values(state.panels)){
+        if(panel.neighborhood?.node.overlay_slot&&!slotOverlayState.enabled){panel.neighborhood=null;panel.slotFocusId=null;}
+        if(panel.neighborhood)panel.neighborhood=withSlotContext(panel.neighborhood);
+        if(panel.localIncidentNeighborhood)panel.localIncidentNeighborhood=panel.localIncidentNeighborhood.node.overlay_slot&&!slotOverlayState.enabled?null:withSlotContext(panel.localIncidentNeighborhood);
+        panel.inducedNeighborEdges=panel.inducedNeighborEdges.filter(edge=>!edge.slot_navigation);panel.refreshGraph();
+      }
+    };
+    $('#browse-source-slots').onclick=()=>{$('#search-scope').value='slot';$('#graph-search').value='opaque slot';applySearch();};
+    $('#slot-search-prev').onclick=()=>{slotOverlayState.searchOffset=Math.max(0,slotOverlayState.searchOffset-32);applySearch(false);};
+    $('#slot-search-next').onclick=()=>{slotOverlayState.searchOffset=slotOverlayState.searchPage.next_offset;applySearch(false);};
+  }catch(error){$('#slot-overlay-status').textContent=`Overlay unavailable: ${error.message}`;$('#browse-source-slots').disabled=true;}
+}
 // BEGIN IDENTITY_AUTHORITY_ADAPTER
 const identityAuthoritySchemas={
   comparison:{legacy:'cib-legacy-current-comparison/4.8',native:'cib-legacy-current-comparison/4.9'},
@@ -264,6 +482,7 @@ class GraphPanel {
   constructor(name) {
     this.name=name; this.canvas=$(`#${name}-canvas`); this.ctx=this.canvas.getContext("2d");
     this.tooltip=$(`#${name}-tooltip`); this.inspector=$(`#${name}-inspector`);
+    document.body.append(this.inspector);
     this.nodes=[]; this.edges=[]; this.nodeMap=new Map(); this.matches=new Set();
     this.transform={x:0,y:0,scale:1}; this.drag=null; this.hover=null; this.selected=null; this.external=null;
     this.level=state.level; this.trail=[]; this.nodeLimit=DEFAULT_NODE_LIMIT; this.holdTimer=null;
@@ -271,6 +490,9 @@ class GraphPanel {
     this.neighborhood=null; this.localIncidentNeighborhood=null; this.expandedIncidentScopes=new Set();
     this.incidentPages=new Map();this.nodeHistory=[];
     this.investigativeContext=null;
+    this.slotFocusId=null;
+    this.labelOverrides=new Map();this.labelButtons=new Map();this.drawerOpen=false;this.physicsFrame=null;this.priorCenter=null;
+    this.labelLayer=document.createElement('div');this.labelLayer.className='map-labels';this.canvas.after(this.labelLayer);
     this.showNeighborEdges=false; this.inducedNeighborEdges=[]; this.inducedLoadRevision=0; this.inducedLoading=false; this.inducedError=""; this.focusBands=[]; this.inspectionRevision=0;
     this.bind(); this.resize();
     new ResizeObserver(()=>{ this.resize(); this.fit(); }).observe(this.canvas.parentElement);
@@ -281,7 +503,8 @@ class GraphPanel {
     this.canvas.addEventListener("pointermove",(event)=>this.pointerMove(event));
     this.canvas.addEventListener("pointerup",(event)=>this.pointerUp(event));
     this.canvas.addEventListener("pointercancel",(event)=>this.pointerCancel(event));
-    this.canvas.addEventListener("dblclick",(event)=>{ const node=this.hitNode(this.pointer(event)); if (node) { event.preventDefault(); this.enterNode(node); } });
+    this.canvas.addEventListener("dblclick",(event)=>{ const node=this.hitNode(this.pointer(event)); if (node) { event.preventDefault(); this.activateNode(node); } });
+    this.canvas.addEventListener('keydown',event=>this.keyboard(event));
     this.canvas.addEventListener("wheel",(event)=>this.wheel(event),{passive:false});
     this.canvas.addEventListener("mouseleave",()=>{ if (!this.drag) { this.hover=null; this.tooltip.hidden=true; this.draw(); } });
   }
@@ -293,6 +516,9 @@ class GraphPanel {
   }
 
   setGraph(view) {
+    this.guideCommunityContext=null;
+    this.closeInspector(false);this.labelOverrides.clear();this.priorCenter=null;
+    this.slotFocusId=null;
     this.view=view; this.level=state.level; this.trail=[]; this.nodeLimit=DEFAULT_NODE_LIMIT;
     this.nodeHistory=[];this.incidentPages.clear();
     this.neighborhood=null; this.localIncidentNeighborhood=null; this.expandedIncidentScopes.clear();
@@ -395,6 +621,7 @@ class GraphPanel {
     let policyExcludedNodeCount=0,policyExcludedEdgeCount=0;
     let allNodes=base.catalog_nodes?.length?base.catalog_nodes:(base.nodes||[]), allEdges=base.catalog_edges?.length?base.catalog_edges:(base.edges||[]), contract=base.contract||"";
     if (this.neighborhood) {
+      this.neighborhood=withSlotContext(this.neighborhood);
       const selected={...(this.level==="evidence"?this.normalizedEvidenceNode(this.neighborhood.node):this.neighborhood.node),focus_scope:"focus"};
       const strength=new Map();
       (this.neighborhood.edges||[]).forEach((edge)=>{
@@ -408,6 +635,7 @@ class GraphPanel {
       }).sort((left,right)=>{
         const leftPinned=pinnedOrder.has(left.id),rightPinned=pinnedOrder.has(right.id);
         if(leftPinned||rightPinned)return leftPinned&&rightPinned?pinnedOrder.get(left.id)-pinnedOrder.get(right.id):leftPinned?-1:1;
+        if(Boolean(left.overlay_slot)!==Boolean(right.overlay_slot))return left.overlay_slot?-1:1;
         return Number(strength.get(right.id)||0)-Number(strength.get(left.id)||0)||Number(right.mass||0)-Number(left.mass||0)||left.id.localeCompare(right.id);
       });
       allNodes=[selected,...neighbors.filter((row)=>row.id!==selected.id)];
@@ -423,17 +651,19 @@ class GraphPanel {
       let neighborEdges=this.showNeighborEdges?this.inducedNeighborEdges.filter((edge)=>ids.has(edge.source)&&ids.has(edge.target)&&!directPairs.has([edge.source,edge.target].sort().join("\u241f"))):[];
       neighborEdges=this.applyVisibilityPolicy(selectedNodes,neighborEdges).edges;
       const selectedEdges=[...directEdges,...neighborEdges].slice(0,MAX_ALL_RENDERED_EDGES);
+      const nativeEdges=allEdges.filter(edge=>!edge.slot_navigation),nativeNodes=allNodes.filter(node=>!node.overlay_slot);
       return {
         contract,nodes:selectedNodes,edges:selectedEdges,availableNodeCount:totalNodes,
         availableEdgeCount:allEdges.length+neighborEdges.length,scopedEdgeCount:allEdges.length,
-        fullGraphNodeCount:base.full_graph_node_count||totalNodes,
-        fullGraphEdgeCount:base.full_graph_edge_count||allEdges.length,
-        representedNodeCount:totalNodes,shownRepresentedNodeCount:selectedNodes.length,
+        fullGraphNodeCount:base.full_graph_node_count||nativeNodes.length,
+        fullGraphEdgeCount:base.full_graph_edge_count||nativeEdges.length,
+        representedNodeCount:nativeNodes.length,shownRepresentedNodeCount:selectedNodes.filter(node=>!node.overlay_slot).length,
         overviewGroupCount:0,overviewAggregateEdgeCount:0,corpusWide:false,
-        overviewMode:false,assignedNodeCount:totalNodes,assignedEdgeCount:allEdges.length,
+        overviewMode:false,assignedNodeCount:nativeNodes.length,assignedEdgeCount:nativeEdges.length,
         communityDetail:false,detailEdgeNodeRankLimit:0,focusMode:true,
-        focusNodeId:selected.id,directEdgeCount:allEdges.length,
-        shownDirectEdgeCount:directEdges.length,neighborEdgeCount:neighborEdges.length,
+        focusNodeId:selected.id,directEdgeCount:nativeEdges.length,
+        shownDirectEdgeCount:directEdges.filter(edge=>!edge.slot_navigation).length,neighborEdgeCount:neighborEdges.filter(edge=>!edge.slot_navigation).length,
+        contextDirectEdgeCount:allEdges.length-nativeEdges.length,contextNeighborEdgeCount:neighborEdges.filter(edge=>edge.slot_navigation).length,
         showNeighborEdges:this.showNeighborEdges,
         policyExcludedNodeCount,policyExcludedEdgeCount,
       };
@@ -448,6 +678,10 @@ class GraphPanel {
       allNodes=(parent.member_nodes||parent.top_nodes||[]).map((row)=>this.normalizedEvidenceNode(row));
       const ids=new Set(allNodes.map((row)=>row.id));
       allEdges=(parent.member_edges||parent.top_edges||[]).filter((edge)=>ids.has(edge.source)&&ids.has(edge.target));
+      if(state.guidePath&&this.guideCommunityContext?.community_id===parent.id){
+        const published=this.guideCommunityContext.edges.filter(edge=>ids.has(edge.source)&&ids.has(edge.target));
+        allEdges=[...new Map([...allEdges,...published].map(edge=>[edge.id,edge])).values()];
+      }
       contract=parent.community_detail_loaded?"Complete ranked Community membership; all published node-pair edges among the first 2,048 ranked members are available.":"Complete Community detail has not loaded.";
     } else if (parent&&this.level==="theme"&&parent.type==="Domain") {
       allNodes=allNodes.filter((row)=>row.domain_id===parent.id);
@@ -466,7 +700,7 @@ class GraphPanel {
     }
     if (this.level==="evidence"&&corpusWide&&this.pinnedSearchRecords.size) {
       const present=new Set(allNodes.map((row)=>row.id||row.node_id));
-      const injected=[...this.pinnedSearchRecords.values()].filter((row)=>!present.has(row.id)).map((row)=>this.normalizedEvidenceNode({...row,mass:Number(row.document_count||1),search_injected:true}));
+      const injected=[...this.pinnedSearchRecords.values()].filter((row)=>!row.overlay_slot&&!present.has(row.id)).map((row)=>this.normalizedEvidenceNode({...row,mass:Number(row.document_count||1),search_injected:true}));
       allNodes=[...injected,...allNodes];
     }
     if (this.pinnedFocusIds.size) {
@@ -486,6 +720,8 @@ class GraphPanel {
     const eligibility=this.applyVisibilityPolicy(allNodes,allEdges);
     allNodes=eligibility.nodes;allEdges=eligibility.edges;
     policyExcludedNodeCount=eligibility.excludedNodeCount;policyExcludedEdgeCount=eligibility.excludedEdgeCount;
+    const overlay=slotGraphRows(this,allNodes,allEdges);
+    allNodes=overlay.nodes;allEdges=overlay.edges;
     const scopeIds=new Set(allNodes.map((row)=>row.id||row.node_id));
     const scopedEdges=allEdges.filter((edge)=>scopeIds.has(edge.source)&&scopeIds.has(edge.target));
     const totalNodes=allNodes.length, limit=Math.min(totalNodes,this.nodeLimit,MAX_RENDERED_NODES);
@@ -500,10 +736,12 @@ class GraphPanel {
     // A node ceiling already bounds the drawing. Dropping induced hierarchy
     // edges after that point made connected Communities look like singletons.
     const selectedEdges=induced;
-    const connectedIds=new Set(selectedEdges.flatMap((edge)=>[edge.source,edge.target]));
-    const displayedIsolateIds=new Set(selectedNodes.filter((node)=>!connectedIds.has(node.id)).map((node)=>node.id));
+    const nativeEdges=selectedEdges.filter(edge=>!edge.slot_navigation),nativeNodes=allNodes.filter(node=>!node.overlay_slot);
+    const connectedIds=new Set(nativeEdges.flatMap((edge)=>[edge.source,edge.target]));
+    const displayedIsolateIds=new Set(selectedNodes.filter((node)=>!node.overlay_slot&&!connectedIds.has(node.id)).map((node)=>node.id));
     const hiddenLinkedIds=new Set();
     scopedEdges.forEach((edge)=>{
+      if(edge.slot_navigation)return;
       if(displayedIsolateIds.has(edge.source)&&!ids.has(edge.target))hiddenLinkedIds.add(edge.source);
       if(displayedIsolateIds.has(edge.target)&&!ids.has(edge.source))hiddenLinkedIds.add(edge.target);
     });
@@ -514,16 +752,16 @@ class GraphPanel {
       availableNodeCount:totalNodes,
       availableEdgeCount:induced.length,
       scopedEdgeCount:scopedEdges.length,
-      fullGraphNodeCount:base.full_graph_node_count||totalNodes,
-      fullGraphEdgeCount:base.full_graph_edge_count||allEdges.length,
-      representedNodeCount:overviewMode?Number(base.overview_represented_node_count||0):totalNodes,
-      shownRepresentedNodeCount:overviewMode?selectedNodes.reduce((sum,row)=>sum+Number(row.represented_node_count||0),0):selectedNodes.length,
+      fullGraphNodeCount:base.full_graph_node_count||nativeNodes.length,
+      fullGraphEdgeCount:base.full_graph_edge_count||allEdges.filter(edge=>!edge.slot_navigation).length,
+      representedNodeCount:overviewMode?Number(base.overview_represented_node_count||0):nativeNodes.length,
+      shownRepresentedNodeCount:overviewMode?selectedNodes.reduce((sum,row)=>sum+Number(row.represented_node_count||0),0):selectedNodes.filter(node=>!node.overlay_slot).length,
       overviewGroupCount:overviewMode?Number(base.overview_group_count||totalNodes):0,
       overviewAggregateEdgeCount:overviewMode?Number(base.overview_aggregate_edge_count||allEdges.length):0,
       corpusWide,
       overviewMode,
-      assignedNodeCount:this.level==="evidence"&&parent?.type==="Community"?Number(parent.mass||totalNodes):totalNodes,
-      assignedEdgeCount:this.level==="evidence"&&parent?.type==="Community"?Number(parent.mention_count||induced.length):induced.length,
+      assignedNodeCount:this.level==="evidence"&&parent?.type==="Community"?Number(parent.mass||nativeNodes.length):nativeNodes.length,
+      assignedEdgeCount:this.level==="evidence"&&parent?.type==="Community"?Number(parent.mention_count||nativeEdges.length):nativeEdges.length,
       communityDetail,
       detailEdgeNodeRankLimit:this.level==="evidence"&&parent?.type==="Community"?Number(parent.detail_edge_node_rank_limit||0):0,
       completeEdgesForRankedNodes:this.level==="evidence"&&parent?.type==="Community"&&Boolean(parent.complete_edges_for_ranked_nodes),
@@ -542,12 +780,13 @@ class GraphPanel {
     const previousEdgeId=this.selected?.source?this.selected?.id:null;
     this.graph=this.graphSelection();
     const masses=this.graph.nodes.map((row)=>{const value=Number(row.mass||row.document_count||1);return Number.isFinite(value)?Math.max(1,value):1;});
-    const maxLog=Math.max(1,...masses.map((value)=>Math.log1p(value)));
+    const minLog=Math.min(...masses.map(Math.log1p)),maxLog=Math.max(...masses.map(Math.log1p));
     this.nodes=this.graph.nodes.map((row,index)=>{
       const angle=index*2.3999632297+(hashNumber(row.id)%1000)/1000;
       const radius=45+Math.sqrt(index+1)*(this.level==="domain"?105:this.level==="theme"?70:this.level==="community"?43:35);
-      const relative=Math.sqrt(Math.log1p(masses[index])/maxLog);
-      return {...row,index,x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,vx:0,vy:0,r:displayRadius(5.5+relative*8.5,5.5,14)};
+      const relative=maxLog>minLog?(Math.log1p(masses[index])-minLog)/(maxLog-minLog):.5;
+      const range=this.level==='evidence'?[4.5,20]:this.level==='community'?[8,29]:[11,36];
+      return {...row,index,x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,vx:0,vy:0,r:row.overlay_slot?7:range[0]+Math.pow(relative,.85)*(range[1]-range[0])};
     });
     this.focusBands=[];
     if(this.graph.focusMode)this.positionFocusRings();
@@ -556,7 +795,7 @@ class GraphPanel {
     this.selected=previousNodeId&&this.nodeMap.has(previousNodeId)?this.nodeMap.get(previousNodeId):previousEdgeId?this.edges.find((edge)=>edge.id===previousEdgeId)||null:null;
     this.external=null; this.hover=null;
     this.matches=new Set([...this.pinnedFocusIds,...this.searchMatchIds].filter((id)=>this.nodeMap.has(id)));
-    this.layout(); this.fit(); this.renderInspector(); this.updateChrome();
+    this.stopPhysics();this.layout();this.resolveCollisions(null,4); this.fit(); this.renderInspector(); this.updateChrome();
   }
 
   positionFocusRings() {
@@ -609,12 +848,68 @@ class GraphPanel {
     }
   }
 
+  // Display-only broad-phase collisions. No membership, topology, or source weights change.
+  resolveCollisions(anchor=null,passes=2) {
+    const size=Math.max(128,...this.nodes.map(node=>(2*this.nodeRadius(node)+14)/displayScale(this.transform.scale)));
+    for(let pass=0;pass<passes;pass++){
+      const cells=new Map();
+      for(const node of this.nodes){const key=`${Math.floor(node.x/size)}:${Math.floor(node.y/size)}`;if(!cells.has(key))cells.set(key,[]);cells.get(key).push(node);}
+      for(const a of this.nodes){
+        const cx=Math.floor(a.x/size),cy=Math.floor(a.y/size);
+        for(let x=cx-1;x<=cx+1;x++)for(let y=cy-1;y<=cy+1;y++)for(const b of cells.get(`${x}:${y}`)||[]){
+          if(a.index>=b.index)continue;
+          let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),minimum=(this.nodeRadius(a)+this.nodeRadius(b)+14)/displayScale(this.transform.scale);
+          if(d>=minimum)continue;
+          if(d<.001){dx=1;dy=.5;d=Math.hypot(dx,dy);}
+          const push=(minimum-d)*.52,nx=dx/d,ny=dy/d;
+          const aShare=a===anchor?0:b===anchor?1:.5,bShare=1-aShare;
+          a.x-=nx*push*aShare;a.y-=ny*push*aShare;b.x+=nx*push*bShare;b.y+=ny*push*bShare;
+          a.vx-=nx*push*aShare*.12;a.vy-=ny*push*aShare*.12;b.vx+=nx*push*bShare*.12;b.vy+=ny*push*bShare*.12;
+        }
+      }
+    }
+  }
+
+  stopPhysics(){if(this.physicsFrame!==null)cancelAnimationFrame(this.physicsFrame);this.physicsFrame=null;delete this.canvas.dataset.settling;}
+  settlePhysics(){
+    this.stopPhysics();
+    if(guideReducedMotion()||state.guidePath){this.resolveCollisions(null,4);this.draw();return;}
+    const started=performance.now(),starts=new Map(this.nodes.map(node=>[node.id,{x:node.x,y:node.y}])),scale=displayScale(this.transform.scale);
+    let last=started;this.canvas.dataset.settling='true';
+    const tick=now=>{
+      const dt=Math.min(2,(now-last)/16.67);last=now;let energy=0;
+      for(const node of this.nodes){node.vx=Math.max(-1.4/scale,Math.min(1.4/scale,node.vx))*.965;node.vy=Math.max(-1.4/scale,Math.min(1.4/scale,node.vy))*.965;node.x+=node.vx*dt*.32;node.y+=node.vy*dt*.32;energy+=Math.abs(node.vx)+Math.abs(node.vy);}
+      this.resolveCollisions(null,1);
+      for(const node of this.nodes){const start=starts.get(node.id),dx=node.x-start.x,dy=node.y-start.y,distance=Math.hypot(dx,dy),budget=36/scale;if(distance>budget){node.x=start.x+dx/distance*budget;node.y=start.y+dy/distance*budget;node.vx*=.5;node.vy*=.5;}}
+      this.draw();
+      if(now-started<3200&&(now-started<650||energy>.025))this.physicsFrame=requestAnimationFrame(tick);else this.stopPhysics();
+    };
+    this.physicsFrame=requestAnimationFrame(tick);
+  }
+
+  usableBounds(){
+    const rect=this.canvas.getBoundingClientRect(),toolbar=$('.map-toolbar').getBoundingClientRect();
+    let top=Math.max(24,toolbar.bottom-rect.top+42),left=28;
+    const guide=$('#retrieval-path-guide')||$('#saved-kg-walk');
+    if(this.name==='current'&&guide?.getClientRects().length){
+      const box=guide.getBoundingClientRect();
+      if(this.width>=1000)left=Math.min(this.width*.36,box.right-rect.left+24);
+      else top=Math.max(top,box.bottom-rect.top+18);
+    }
+    const right=Math.max(left+80,this.width-28),bottom=Math.max(top+80,this.height-28);
+    return {left,top,right,bottom,width:right-left,height:bottom-top};
+  }
+
   fit() {
     if (!(this.width>0&&this.height>0)) return;
     if (!this.nodes.length) { this.transform={x:0,y:0,scale:1};this.draw();return; }
-    const xs=this.nodes.map((node)=>node.x),ys=this.nodes.map((node)=>node.y),minX=Math.min(...xs)-55,maxX=Math.max(...xs)+55,minY=Math.min(...ys)-55,maxY=Math.max(...ys)+55;
-    const scale=displayScale(Math.min(Math.max(1,this.width-74)/(maxX-minX),Math.max(1,this.height-74)/(maxY-minY),1.08));
-    this.transform={scale,x:this.width/2-(minX+maxX)/2*scale,y:this.height/2-(minY+maxY)/2*scale};this.draw();
+    const area=this.usableBounds(),spanX=Math.max(1,...this.nodes.map(n=>n.x+n.r))-Math.min(...this.nodes.map(n=>n.x-n.r)),spanY=Math.max(1,...this.nodes.map(n=>n.y+n.r))-Math.min(...this.nodes.map(n=>n.y-n.r));
+    const aspect=(area.width/area.height)/(spanX/spanY),stretchX=Math.min(2.5,Math.max(1,aspect)),stretchY=Math.min(2.5,Math.max(1,1/aspect));
+    if(stretchX>1.05||stretchY>1.05)for(const node of this.nodes){node.x*=stretchX;node.y*=stretchY;}
+    const minX=Math.min(...this.nodes.map(n=>n.x-n.r))-12,maxX=Math.max(...this.nodes.map(n=>n.x+n.r))+12,minY=Math.min(...this.nodes.map(n=>n.y-n.r))-12,maxY=Math.max(...this.nodes.map(n=>n.y+n.r))+12;
+    const scale=displayScale(Math.min(area.width/(maxX-minX),area.height/(maxY-minY)));
+    this.transform={scale,x:area.left+area.width/2-(minX+maxX)/2*scale,y:area.top+area.height/2-(minY+maxY)/2*scale};
+    this.reserveLabelSpace();this.draw();
   }
 
   transition(refresh) {
@@ -720,7 +1015,7 @@ class GraphPanel {
   }
 
   rememberLocation() {
-    return {level:this.level,trail:[...this.trail],nodeLimit:this.nodeLimit,neighborhood:this.neighborhood,
+    return {level:this.level,trail:[...this.trail],nodeLimit:this.nodeLimit,neighborhood:this.neighborhood,slotFocusId:this.slotFocusId,
       localIncidentNeighborhood:this.localIncidentNeighborhood,selectedId:this.selected?.id||this.external?.id,
       transform:{...this.transform},width:this.width,height:this.height,positions:this.nodes.map(n=>({id:n.id,x:n.x,y:n.y}))};
   }
@@ -728,7 +1023,7 @@ class GraphPanel {
   restoreLocation(saved) {
     this.navigationRevision+=1;this.inspectionRevision+=1;
     Object.assign(this,{level:saved.level,trail:saved.trail,nodeLimit:saved.nodeLimit,neighborhood:saved.neighborhood,
-      localIncidentNeighborhood:saved.localIncidentNeighborhood,showNeighborEdges:false,inducedNeighborEdges:[],external:null});
+      localIncidentNeighborhood:saved.localIncidentNeighborhood,slotFocusId:saved.slotFocusId||null,showNeighborEdges:false,inducedNeighborEdges:[],external:null});
     this.pinnedFocusIds=new Set(saved.selectedId?[saved.selectedId]:[]);this.searchMatchIds.clear();
     this.refreshGraph(saved.selectedId);
     for(const position of saved.positions){const node=this.nodeMap.get(position.id);if(node)Object.assign(node,{x:position.x,y:position.y});}
@@ -743,6 +1038,7 @@ class GraphPanel {
     if(revision!==this.navigationRevision)return;
     if(remember)this.nodeHistory.push(this.rememberLocation());
     this.trail=route.route;
+    this.slotFocusId=record.overlay_slot?record.id:null;
     this.level="evidence";this.neighborhood=detail;this.localIncidentNeighborhood=null;this.expandedIncidentScopes.clear();
     this.showNeighborEdges=false;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
     this.pinnedSearchRecords.set(record.id,{...record,...detail.node});
@@ -786,6 +1082,7 @@ class GraphPanel {
     this.neighborhood=null;this.localIncidentNeighborhood=incident;this.expandedIncidentScopes.clear();
     this.showNeighborEdges=false;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
     this.level="evidence";this.trail=[domain,theme,community].filter(Boolean);
+    this.slotFocusId=record.overlay_slot?record.id:null;
     this.pinnedFocusIds=new Set([record.id]);this.searchMatchIds.clear();this.nodeLimit=DEFAULT_NODE_LIMIT;
     this.refreshGraph(record.id);this.pulseIds([record.id]);
     if(scroll)this.canvas.focus({preventScroll:true});
@@ -921,6 +1218,8 @@ class GraphPanel {
   }
 
   async navigateToSearchResult(record) {
+    if(record.overlay_slot){await navigateOpaqueSlot(this,record);return;}
+    this.slotFocusId=null;
     if(record.kind==="edge")await this.navigateToEdge(record);
     else if(record.kind==="hierarchy")await this.navigateToHierarchy(record);
     else {
@@ -934,6 +1233,7 @@ class GraphPanel {
   }
 
   updateChrome() {
+    this.syncMapActions();
     if(this.studyContext){
       const c=this.studyContext;
       $(`#${this.name}-breadcrumb`).textContent="Case source graph / "+(c.community?.label||"Ungrouped state")+" / "+(c.view_kind==="community"?"Community members":"Connections centered on "+guideNodeLabel(c.nodes.find(n=>n.id===c.focus_id)));
@@ -956,15 +1256,19 @@ class GraphPanel {
 
   screen(node) { const scale=displayScale(this.transform.scale);return {x:node.x*scale+this.transform.x,y:node.y*scale+this.transform.y}; }
   world(point) { const scale=displayScale(this.transform.scale);return {x:(point.x-this.transform.x)/scale,y:(point.y-this.transform.y)/scale}; }
-  nodeRadius(node,padding=0,minimum=0) { return displayRadius(displayRadius(node.r,5.5,14)*displayScale(this.transform.scale)+padding,minimum,14*3.2+padding); }
+  nodeRadius(node,padding=0,minimum=0) {
+    const scale=displayScale(this.transform.scale),mobile=this.width<600,ceiling=mobile?34:54;
+    return displayRadius(displayRadius(node.r,3.5,36)*(scale<1?scale:Math.pow(scale,.45))*(mobile?.88:1)+padding,Math.max(3.5,minimum),ceiling+padding);
+  }
   pointer(event) { const rect=this.canvas.getBoundingClientRect();return {x:event.clientX-rect.left,y:event.clientY-rect.top}; }
-  hitNode(point) { const world=this.world(point);return [...this.nodes].reverse().find((node)=>Math.hypot(node.x-world.x,node.y-world.y)<=displayRadius(node.r,5.5,14)+6/displayScale(this.transform.scale))||null; }
+  hitNode(point) { return [...this.nodes].reverse().find((node)=>{const p=this.screen(node);return Math.hypot(point.x-p.x,point.y-p.y)<=this.nodeRadius(node)+6;})||null; }
   hitEdge(point) { let best=null,bestDistance=10;this.edges.forEach((edge)=>{ const distance=distanceToSegment(point,this.screen(this.nodeMap.get(edge.source)),this.screen(this.nodeMap.get(edge.target)));if(distance<bestDistance){best=edge;bestDistance=distance;} });return best; }
   clearHold() { if (this.holdTimer!==null) { clearTimeout(this.holdTimer);this.holdTimer=null; } }
 
   pointerDown(event) {
     if (event.button!==undefined&&event.button!==0) return;
     if(this.studyContext){pauseGuide();if(state.guidePath.busy)return;}
+    this.stopPhysics();
     const point=this.pointer(event),node=this.hitNode(point);try{this.canvas.setPointerCapture(event.pointerId);}catch(_error){}
     this.drag={pointerId:event.pointerId,start:point,last:point,node,moved:false};this.canvas.classList.add("dragging");this.clearHold();
     if (this.canEnter(node)) this.holdTimer=window.setTimeout(()=>{ this.holdTimer=null;if(!this.drag||this.drag.moved)return;this.drag=null;this.canvas.classList.remove("dragging");this.enterNode(node); },650);
@@ -973,26 +1277,152 @@ class GraphPanel {
     const point=this.pointer(event);
     if (this.drag) {
       const dx=point.x-this.drag.last.x,dy=point.y-this.drag.last.y;if(Math.hypot(point.x-this.drag.start.x,point.y-this.drag.start.y)>5){this.drag.moved=true;this.clearHold();}
-      if(this.drag.node){this.drag.node.x+=dx/this.transform.scale;this.drag.node.y+=dy/this.transform.scale;}else{this.transform.x+=dx;this.transform.y+=dy;}this.drag.last=point;this.draw();return;
+      if(this.drag.node){this.drag.node.x+=dx/this.transform.scale;this.drag.node.y+=dy/this.transform.scale;this.drag.node.vx=dx/this.transform.scale*.12;this.drag.node.vy=dy/this.transform.scale*.12;if(!state.guidePath)this.resolveCollisions(this.drag.node,4);}else{this.transform.x+=dx;this.transform.y+=dy;}this.drag.last=point;this.draw();return;
     }
     const hit=this.hitNode(point)||this.hitEdge(point);this.hover=hit;
     if(hit){const detail=hit.source?(hit.description||hit.weight_semantics||hit.edge_type||""):(hit.summary||hit.type||"");this.tooltip.innerHTML=`<b>${esc(compact(hit.label||hit.edge_type||"Connection",120))}</b><small>${esc(compact(detail,200))}</small>`;this.tooltip.style.left=`${Math.max(5,Math.min(this.width-275,point.x+13))}px`;this.tooltip.style.top=`${Math.max(5,Math.min(this.height-82,point.y+13))}px`;this.tooltip.hidden=false;}else this.tooltip.hidden=true;this.draw();
   }
   pointerUp(event) {
     if(!this.drag)return;
-    this.clearHold();const point=this.pointer(event),moved=this.drag.moved;this.drag=null;this.canvas.classList.remove("dragging");
+    this.clearHold();const point=this.pointer(event),moved=this.drag.moved,draggedNode=this.drag.node;this.drag=null;this.canvas.classList.remove("dragging");
     if(!moved){
       const hit=this.hitNode(point)||this.hitEdge(point);this.external=null;this.selected=hit;
       if(this.studyContext){if(hit?.source)inspectStudyEdge(hit);else if(hit)inspectStudyNode(hit.id);this.draw();return;}
-      if(this.level==="evidence"&&hit&&!hit.source&&!hit.aggregate_kind)this.inspectEvidenceNode(hit);
-      else if(hit&&!hit.source&&!hit.aggregate_kind&&nodeLevel[hit.type])this.inspectHierarchyNode(hit);
-      else if(hit?.source)this.inspectRenderedEdge(hit);
-      else this.renderInspector();
+      if(hit&&!hit.source){this.closeInspector(false);this.toggleLabel(hit);}
+      else if(hit?.source){this.drawerOpen=true;this.inspectRenderedEdge(hit);}
+      else this.closeInspector(false);
     }
+    if(moved&&draggedNode&&!state.guidePath)this.settlePhysics();
+    this.syncMapActions();
     this.draw();
   }
   pointerCancel() { this.clearHold();this.drag=null;this.canvas.classList.remove("dragging"); }
   wheel(event) { event.preventDefault();if(this.studyContext)pauseGuide();const point=this.pointer(event),before=this.world(point),scale=Math.max(.12,Math.min(3.2,this.transform.scale*Math.exp(-event.deltaY*.0012)));this.transform.scale=scale;this.transform.x=point.x-before.x*scale;this.transform.y=point.y-before.y*scale;this.draw(); }
+
+  toggleLabel(node){
+    this.labelOverrides.set(node.id,!this.labelButtons.has(node.id));
+    $('#map-keyboard-status').textContent=`${node.label}. Label ${this.labelOverrides.get(node.id)?'shown':'hidden'}.`;
+    if(this.labelOverrides.get(node.id))this.reserveLabelSpace();
+    this.draw();
+  }
+  activateNode(node){
+    clearTimeout(this.labelClickTimer);
+    this.closeInspector(false);
+    if(this.canEnter(node))return this.enterNode(node);
+    if(node.aggregate_kind)return this.openInspector(node);
+    return Promise.resolve(this.focusDirectConnections(node)).catch(error=>{this.drawerOpen=true;this.inspectionError(error);});
+  }
+  openInspector(node){
+    for(const panel of Object.values(state.panels))if(panel!==this)panel.closeInspector(false);
+    this.drawerOpen=true;this.inspectorReturnFocus=document.activeElement;
+    if(this.studyContext){inspectStudyNode(node.id);this.decorateInspector();}
+    else if(nodeLevel[node.type])this.inspectHierarchyNode(node);
+    else if(node.aggregate_kind){this.selected=node;this.external=null;this.renderInspector();}
+    else this.inspectEvidenceNode(node);
+    $('[data-close-inspector]',this.inspector)?.focus({preventScroll:true});
+    this.syncMapActions();
+  }
+  closeInspector(restoreFocus=true){this.drawerOpen=false;this.inspector.hidden=true;if(restoreFocus){const target=this.inspectorReturnFocus;if(target?.isConnected)target.focus({preventScroll:true});else this.canvas.focus({preventScroll:true});}}
+  syncMapActions(){
+    if(this.name!=='current')return;
+    const item=this.selected&&!this.selected.source?this.selected:this.neighborhood?.node;
+    const context=$('#map-context');if(context){context.textContent=this.neighborhood?'Community':'Neighborhood';context.setAttribute('aria-pressed',String(Boolean(this.neighborhood)));context.disabled=Boolean(this.v64Busy||state.guidePath?.busy||!item||item.aggregate_kind||this.neighborhood&&!item.community_id&&this.level==='evidence');}
+    const up=$('#map-up');if(up)up.disabled=Boolean(this.v64Busy||!this.trail.length&&!this.neighborhood);
+  }
+  keyboard(event){
+    if(this.v64Busy)return;
+    const current=this.selected&&!this.selected.source?this.nodes.findIndex(n=>n.id===this.selected.id):-1;
+    if(['ArrowRight','ArrowDown','ArrowLeft','ArrowUp'].includes(event.key)){
+      event.preventDefault();const direction=['ArrowRight','ArrowDown'].includes(event.key)?1:-1;
+      const node=this.nodes[(current+direction+this.nodes.length)%this.nodes.length];if(!node)return;
+      this.selected=node;this.external=null;this.labelOverrides.set(node.id,true);this.reserveLabelSpace();this.draw();this.syncMapActions();$('#map-keyboard-status').textContent=`${node.label}. ${node.type}. Enter for sources. Space toggles its label.`;
+    }else if(event.key===' '&&current>=0){event.preventDefault();this.toggleLabel(this.nodes[current]);}
+    else if(event.key==='Enter'&&current>=0){event.preventDefault();if(event.shiftKey)this.activateNode(this.nodes[current]);else this.openInspector(this.nodes[current]);}
+    else if(['+','=','-'].includes(event.key)){event.preventDefault();const scale=this.transform.scale,factor=event.key==='-'?.85:1.15;this.transform.scale=Math.max(.12,Math.min(3.2,scale*factor));this.transform.x=this.width/2+(this.transform.x-this.width/2)*this.transform.scale/scale;this.transform.y=this.height/2+(this.transform.y-this.height/2)*this.transform.scale/scale;this.draw();}
+    else if(event.key==='Escape')this.closeInspector();
+  }
+
+  mapLabelNodes(){
+    const defaults=[...this.nodes].sort((a,b)=>Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||b.document_count||0)-Number(a.mass||a.document_count||0)||a.id.localeCompare(b.id)).slice(0,5);
+    const ids=new Set(defaults.map(node=>node.id));
+    for(const [id,shown] of this.labelOverrides)if(shown)ids.add(id);else ids.delete(id);
+    return this.nodes.filter(node=>ids.has(node.id)).sort((a,b)=>Number(this.labelOverrides.get(b.id)===true)-Number(this.labelOverrides.get(a.id)===true)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||0)-Number(a.mass||0));
+  }
+
+  mapLabelSize(node){
+    const font=this.width<600?15:16,area=this.usableBounds(),label=mapDisplayLabel(node),family=getComputedStyle(document.body).fontFamily;
+    this.ctx.font=`500 ${font}px ${family}`;
+    for(const width of [this.width<600?142:176,Math.min(220,area.width-20)]){
+      const words=label.split(/\s+/),lines=[];let line='';
+      for(const word of words){const next=line?line+' '+word:word;if(line&&this.ctx.measureText(next).width>width){lines.push(line);line=word;}else line=next;}
+      if(line)lines.push(line);
+      const measured=Math.max(...lines.map(value=>this.ctx.measureText(value).width))+20;
+      if(lines.length<=3&&measured<=area.width-8)return {text:lines.join('\n'),font,width:Math.ceil(measured),height:Math.ceil(lines.length*font*1.25+12)};
+    }
+    return null;
+  }
+
+  reserveLabelSpace(){
+    if(!this.nodes.length||!(this.width>0&&this.height>0))return;
+    const area=this.usableBounds(),labels=new Map(this.mapLabelNodes().map(node=>[node.id,this.mapLabelSize(node)]));
+    const points=this.nodes.map(node=>({...this.screen(node),node,r:this.nodeRadius(node),label:labels.get(node.id)}));
+    const bounds=p=>({left:p.x-Math.max(p.r,p.label?.width/2||0),right:p.x+Math.max(p.r,p.label?.width/2||0),top:p.y-p.r,bottom:p.y+p.r+(p.label?p.label.height+6:0)});
+    const clamp=p=>{const b=bounds(p);p.x+=Math.max(0,area.left-b.left)-Math.max(0,b.right-area.right);p.y+=Math.max(0,area.top-b.top)-Math.max(0,b.bottom-area.bottom);};
+    const pairs=[];
+    if(points.length<=80){for(let i=0;i<points.length;i++)for(let j=i+1;j<points.length;j++)pairs.push([points[i],points[j]]);}
+    else for(const a of points.filter(point=>point.label))for(const b of points)if(a!==b&&(!b.label||a.node.index<b.node.index))pairs.push([a,b]);
+    // Display-only footprint relaxation reserves the capsule with its circle.
+    // Published positions are not graph facts; IDs, weights and edges stay intact.
+    for(let pass=0;pass<(points.length<80?70:24);pass++){
+      for(const [a,b] of pairs){
+        if(a.label||b.label){
+          const x=bounds(a),y=bounds(b),ox=Math.min(x.right,y.right)-Math.max(x.left,y.left)+12,oy=Math.min(x.bottom,y.bottom)-Math.max(x.top,y.top)+12;
+          if(ox<=0||oy<=0)continue;
+          const horizontal=ox<oy,direction=horizontal?(a.x<b.x?-1:1):((x.top+x.bottom)<(y.top+y.bottom)?-1:1),push=(horizontal?ox:oy)*.28;
+          if(horizontal){a.x+=direction*push;b.x-=direction*push;}else{a.y+=direction*push;b.y-=direction*push;}
+        }else{
+          let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),minimum=a.r+b.r+12;
+          if(d>=minimum)continue;if(d<.01){dx=1;dy=.5;d=Math.hypot(dx,dy);}
+          const push=(minimum-d)*.3;a.x-=dx/d*push;a.y-=dy/d*push;b.x+=dx/d*push;b.y+=dy/d*push;
+        }
+      }
+      points.forEach(clamp);
+    }
+    const scale=displayScale(this.transform.scale);
+    points.forEach(p=>{p.node.x=(p.x-this.transform.x)/scale;p.node.y=(p.y-this.transform.y)/scale;});
+  }
+
+  drawMapLabels(){
+    const area=this.usableBounds(),placed=[],visible=new Set();
+    const overlaps=box=>placed.some(other=>!(box.x+box.width+7<other.x||box.x>other.x+other.width+7||box.y+box.height+7<other.y||box.y>other.y+other.height+7));
+    for(const node of this.mapLabelNodes()){
+      const p=this.screen(node),r=this.nodeRadius(node),wrapped=this.mapLabelSize(node);
+      if(p.x+r<area.left||p.x-r>area.right||p.y+r<area.top||p.y-r>area.bottom)continue;
+      if(!wrapped)continue;
+      let box=null;
+      for(const gap of [6,10,14])for(const shift of [0,-12,12,-24,24]){
+        if(box)break;
+        const x=p.x-wrapped.width/2+shift,y=p.y+r+gap,candidate={x,y,...wrapped};
+        if(x<area.left||y<area.top||x+wrapped.width>area.right||y+wrapped.height>area.bottom||overlaps(candidate))continue;
+        if(this.nodes.some(other=>{if(other===node)return false;const q=this.screen(other);return Math.hypot(q.x-Math.max(x,Math.min(q.x,x+wrapped.width)),q.y-Math.max(y,Math.min(q.y,y+wrapped.height)))<this.nodeRadius(other)+4;}))continue;
+        box=candidate;
+      }
+      if(!box)continue;
+      let button=this.labelButtons.get(node.id);
+      if(!button){
+        button=document.createElement('button');button.type='button';button.className='map-label';button.dataset.nodeLabel=node.id;
+        button.onclick=event=>{clearTimeout(this.labelClickTimer);if(event.detail>1)return;const open=()=>{const current=this.nodeMap.get(node.id);if(current)this.openInspector(current);};if(event.detail===0)open();else this.labelClickTimer=setTimeout(open,230);};
+        button.ondblclick=event=>{event.preventDefault();clearTimeout(this.labelClickTimer);const current=this.nodeMap.get(node.id);if(current)this.activateNode(current);};
+        this.labelButtons.set(node.id,button);this.labelLayer.append(button);
+      }
+      if(button.textContent!==wrapped.text)button.textContent=wrapped.text;
+      button.title='Open information and sources for '+node.label;button.setAttribute('aria-label',button.title);button.dataset.placement='lower-rim';button.dataset.labelText=mapDisplayLabel(node);
+      button.style.setProperty('--label-anchor',Math.max(12,Math.min(box.width-12,p.x-box.x))+'px');
+      Object.assign(button.style,{left:box.x+'px',top:box.y+'px',width:box.width+'px',height:box.height+'px',fontSize:wrapped.font+'px'});button.classList.toggle('dimmed',Boolean(node.visibility_dimmed));
+      placed.push(box);visible.add(node.id);
+    }
+    for(const [id,button] of this.labelButtons)if(!visible.has(id)){button.remove();this.labelButtons.delete(id);}
+  }
 
   setMatchIds(ids) { this.searchMatchIds=new Set(ids);this.matches=new Set([...this.pinnedFocusIds,...this.searchMatchIds].filter((id)=>this.nodeMap.has(id)));if(this.matches.size){const first=this.nodeMap.get(this.matches.values().next().value);this.transform.x=this.width/2-first.x*this.transform.scale;this.transform.y=this.height/2-first.y*this.transform.scale;}this.draw(); }
   setPreviewSearch(query) { const terms=normalize(query).split(/\s+/).filter(Boolean);this.setMatchIds(this.nodes.filter((node)=>terms.length&&terms.every((term)=>normalize(`${node.label} ${node.summary} ${node.id}`).includes(term))).map((node)=>node.id)); }
@@ -1106,7 +1536,7 @@ class GraphPanel {
     this.transform.scale=displayScale(this.transform.scale);
     const ctx=this.ctx;ctx.clearRect(0,0,this.width,this.height);
     if(!this.nodes.length){const message=compact(this.graph?.contract||"No nodes are available at this level.",220);ctx.font='600 13px Georgia, serif';const words=message.split(/\s+/),lines=[];let line="";words.forEach((word)=>{const candidate=`${line} ${word}`.trim();if(ctx.measureText(candidate).width>Math.min(440,this.width-90)&&line){lines.push(line);line=word;}else line=candidate;});if(line)lines.push(line);ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle="#59696a";lines.forEach((value,index)=>ctx.fillText(value,this.width/2,this.height/2+(index-(lines.length-1)/2)*22));ctx.textAlign="start";return;}
-    if(this.graph?.focusMode&&this.focusBands.length)this.drawFocusBands();
+    if(state.guidePath&&this.graph?.focusMode&&this.focusBands.length)this.drawFocusBands();
     const incidentFocusId=this.neighborhood?.node?.id||null;
     const edgeWeights=this.edges.map((edge)=>Math.max(0,Number(edge.layout_weight||edge.weight||0)));
     const maximumEdgeWeight=Math.max(.000001,...edgeWeights);
@@ -1125,7 +1555,8 @@ class GraphPanel {
       ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
       const neutralOpacity=backgroundEdgeOpacity*(.35+.95*relativeStrength);
       const v64Style=guideEdgeVisualV64(this,edge,selectedNodeId);
-      if(v64Style){ctx.strokeStyle=v64Style.color;ctx.lineWidth=v64Style.width;
+      if(edge.slot_navigation){ctx.strokeStyle=explicitlyActive?'#806222':'rgba(128,98,34,.62)';ctx.lineWidth=explicitlyActive?2:1.2;
+      }else if(v64Style){ctx.strokeStyle=v64Style.color;ctx.lineWidth=v64Style.width;
       }else if(state.guideOverlay&&edge.visibility_dimmed){
         ctx.strokeStyle="rgba(112,128,134,.22)";ctx.lineWidth=.65;
       }else if(edge.investigative_only&&explicitlyActive){
@@ -1155,25 +1586,33 @@ class GraphPanel {
         ctx.strokeStyle=edge.visibility_dimmed?`rgba(112,128,134,${Math.max(.045,neutralOpacity*.34).toFixed(3)})`:`rgba(69,91,98,${Math.min(.72,neutralOpacity).toFixed(3)})`;
         ctx.lineWidth=edge.visibility_dimmed ? .45 : .35+2.25*relativeStrength;
       }
-      ctx.setLineDash(this.studyContext?(edge.kind==="NAVIGATION"?[8,6]:edge.kind==="SOURCE_AGGREGATE"?[2,6]:[]):edge.investigative_only?[3,5]:["later_only","redacted_placeholder"].includes(edge.visibility)||edge.contains_redaction_placeholder?[5,4]:[]);ctx.stroke();ctx.setLineDash([]);
+      if(!state.guidePath&&!edge.slot_navigation&&!edge.investigative_only){
+        const emphasized=explicitlyActive||selectedIncident||centerSpoke;
+        const opacity=edge.visibility_dimmed?.14:emphasized?.75:this.edges.length>4000?.14:this.edges.length>1200?.2:this.edges.length>400?.3:.48;
+        ctx.strokeStyle=`rgba(24,100,101,${opacity})`;ctx.lineWidth=explicitlyActive?2.8:edge.visibility_dimmed?.7:.85+1.8*relativeStrength;
+      }
+      ctx.setLineDash(edge.slot_navigation?[2,5]:this.studyContext?(edge.kind==="NAVIGATION"?[8,6]:edge.kind==="SOURCE_AGGREGATE"?[2,6]:[]):edge.investigative_only?[3,5]:["later_only","redacted_placeholder"].includes(edge.visibility)||edge.contains_redaction_placeholder?[5,4]:[]);ctx.stroke();ctx.setLineDash([]);
     });
     const selectedEdge=this.selected?.source?this.selected:null,hoverEdge=this.hover?.source?this.hover:null;
     this.nodes.forEach((node)=>{
       const point=this.screen(node),match=this.matches.has(node.id),selectedNode=this.selected===node,endpoint=[selectedEdge?.source,selectedEdge?.target,hoverEdge?.source,hoverEdge?.target].includes(node.id),active=selectedNode||this.hover===node||endpoint;
+      if(this.priorCenter?.id===node.id&&performance.now()<this.priorCenter.until){ctx.beginPath();ctx.arc(point.x,point.y,this.nodeRadius(node,14,14),0,Math.PI*2);ctx.fillStyle='rgba(164,124,46,.16)';ctx.fill();ctx.strokeStyle='rgba(164,124,46,.75)';ctx.lineWidth=2;ctx.stroke();}
       if(match){ctx.beginPath();ctx.arc(point.x,point.y,this.nodeRadius(node,9,9),0,Math.PI*2);ctx.strokeStyle="#d29b2e";ctx.lineWidth=4;ctx.stroke();}
       if(selectedNode){ctx.beginPath();ctx.arc(point.x,point.y,this.nodeRadius(node,4,4),0,Math.PI*2);ctx.strokeStyle=node.visibility_dimmed?"rgba(159,63,47,.58)":"#9f3f2f";ctx.lineWidth=2.8;ctx.stroke();}
-      ctx.beginPath();ctx.arc(point.x,point.y,this.nodeRadius(node,0,3.5),0,Math.PI*2);
+      ctx.beginPath();
+      if(node.overlay_slot){const r=this.nodeRadius(node,0,3.5);ctx.moveTo(point.x,point.y-r);ctx.lineTo(point.x+r,point.y);ctx.lineTo(point.x,point.y+r);ctx.lineTo(point.x-r,point.y);ctx.closePath();}
+      else ctx.arc(point.x,point.y,this.nodeRadius(node,0,3.5),0,Math.PI*2);
       ctx.fillStyle=node.visibility_dimmed?"rgba(112,128,134,.32)":colors[node.dominant_node_type]||colors[node.type]||colors.Unknown;ctx.fill();
       ctx.strokeStyle=node.visibility_dimmed?"rgba(112,128,134,.58)":active?"#13242a":"rgba(255,255,255,.78)";ctx.lineWidth=active?3:1.4;ctx.stroke();
     });
-    const labelLimit=this.level==="domain"?12:this.level==="theme"?18:this.level==="community"?14:10,labeled=[...this.nodes].filter((node)=>this.matches.has(node.id)||this.selected===node||Number(node.mass||0)>0).sort((left,right)=>{const lp=(this.selected===left?2:0)+(this.matches.has(left.id)?1:0),rp=(this.selected===right?2:0)+(this.matches.has(right.id)?1:0);return rp-lp||Number(right.mass||0)-Number(left.mass||0)||left.id.localeCompare(right.id);});ctx.font=this.studyContext?'600 16px "Avenir Next", sans-serif':'700 9px "Avenir Next", sans-serif';ctx.textBaseline="middle";const placed=[];let labelCount=0;labeled.forEach((node)=>{if(labelCount>=labelLimit)return;const p=this.screen(node),label=compact(node.label,this.level==="domain"?62:this.level==="theme"?46:34),width=ctx.measureText(label).width,nodeRadius=this.nodeRadius(node,5,5);let x=p.x+nodeRadius;if(x+width>this.width-8)x=p.x-nodeRadius-width;x=Math.max(8,Math.min(this.width-width-8,x));const box={left:x-2,right:x+width+2,top:p.y-7,bottom:p.y+7},priority=this.selected===node||this.matches.has(node.id),overlaps=placed.some((other)=>!(box.right<other.left||box.left>other.right||box.bottom<other.top||box.top>other.bottom));if(overlaps&&!priority)return;ctx.lineWidth=3;ctx.strokeStyle=node.visibility_dimmed?"rgba(255,250,240,.68)":"rgba(255,250,240,.96)";ctx.strokeText(label,x,p.y);ctx.fillStyle=node.visibility_dimmed?"#67777a":"#13242a";ctx.fillText(label,x,p.y);placed.push(box);labelCount+=1;});
+    this.drawMapLabels();
   }
 
   incidentConnections(item) {
     const detail=this.localIncidentNeighborhood?.node?.id===item.id?this.localIncidentNeighborhood:this.neighborhood?.node?.id===item.id?this.neighborhood:null;
     if(!detail)return "";
     const nodeById=new Map([detail.node,...(detail.neighbors||[])].map((row)=>[row.id,row]));
-    const scopeLabels={same_community:"Same Community",same_theme:"Same Theme, another Community",same_domain:"Same Domain, another Theme",cross_domain:"Another Domain",outside_hierarchy:"Outside the overview hierarchy"};
+    const scopeLabels={source_context:"Source-context navigation only (not relationships)",same_community:"Same Community",same_theme:"Same Theme, another Community",same_domain:"Same Domain, another Theme",cross_domain:"Another Domain",outside_hierarchy:"Outside the overview hierarchy"};
     const groups=new Map();
     (detail.edges||[]).forEach((edge)=>{
       const otherId=edge.source===item.id?edge.target:edge.source,other=nodeById.get(otherId);
@@ -1181,11 +1620,11 @@ class GraphPanel {
       if(!state.showIneligible&&ineligible)return;
       const knownScopes=["same_community","same_theme","same_domain","cross_domain","outside_hierarchy"];
       const inferred=focusScope(this.level,item,other);
-      const scope=knownScopes.includes(edge.hierarchy_scope)?edge.hierarchy_scope:knownScopes.includes(inferred)?inferred:"outside_hierarchy";
+      const scope=edge.slot_navigation?"source_context":knownScopes.includes(edge.hierarchy_scope)?edge.hierarchy_scope:knownScopes.includes(inferred)?inferred:"outside_hierarchy";
       if(!groups.has(scope))groups.set(scope,[]);
       groups.get(scope).push(edge);
     });
-    const order=["same_community","same_theme","same_domain","cross_domain","outside_hierarchy"];
+    const order=["source_context","same_community","same_theme","same_domain","cross_domain","outside_hierarchy"];
     const sections=order.filter((scope)=>groups.has(scope)).map((scope)=>{
       const edges=groups.get(scope),key=`${item.id}:${scope}`,pageSize=24,pages=Math.max(1,Math.ceil(edges.length/pageSize));
       const page=Math.max(0,Math.min(pages-1,this.incidentPages.get(key)||0)),start=page*pageSize,visible=edges.slice(start,start+pageSize);
@@ -1195,7 +1634,8 @@ class GraphPanel {
         const channels=Object.keys(edge.channel_counts||{}).join(", ")||edge.edge_type||"connection";
         const ineligible=eligibilityReasons(edge,{includeRelease:releaseFilterApplies(this.view)}).length>0||eligibilityReasons(other,{includeRelease:releaseFilterApplies(this.view)}).length>0;
         const dimmed=this.visibilityPolicy()==="dim"&&ineligible;
-        return `<article class="incident-row${dimmed?" visibility-dimmed-row":""}" data-incident-row="${esc(edge.id)}"><b>${esc(other.label)}</b><p>${esc(other.type)} / ${esc(channels)} / published weight ${graphWeight(edge.layout_weight??edge.weight??0)}${dimmed?" / outside the current display policy":""}</p><div class="incident-row-actions"><button type="button" data-incident-edge="${esc(edge.id)}">Inspect relationship</button><button type="button" data-connected-node="${esc(otherId)}">Inspect node</button><button type="button" data-traverse-node="${esc(otherId)}">Traverse direct connections</button><button type="button" data-open-mother="${esc(otherId)}">Open node's mother Community</button></div></article>`;
+        const channelLabel=edge.slot_navigation?'visible-source context / not evidence / weight 0':`${esc(channels)} / published weight ${graphWeight(edge.layout_weight??edge.weight??0)}`;
+        return `<article class="incident-row${edge.slot_navigation?" context-navigation-row":""}${dimmed?" visibility-dimmed-row":""}" data-incident-row="${esc(edge.id)}"><b>${esc(other.label)}</b><p>${esc(other.type)} / ${channelLabel}${dimmed?" / outside the current display policy":""}</p><div class="incident-row-actions"><button type="button" data-incident-edge="${esc(edge.id)}">${edge.slot_navigation?'Inspect source context':'Inspect relationship'}</button><button type="button" data-connected-node="${esc(otherId)}">Inspect node</button><button type="button" data-traverse-node="${esc(otherId)}">Traverse direct connections</button><button type="button" data-open-mother="${esc(otherId)}">Open node's mother Community</button></div></article>`;
       }).join("");
       const pageButton=(label,target,disabled)=>`<button type="button" data-incident-page="${target}" data-incident-scope="${esc(scope)}" data-incident-owner="${esc(item.id)}" ${disabled?"disabled":""}>${label}</button>`;
       const pager=`<div class="incident-pagination" data-scope="${esc(scope)}"><p role="status">Connections ${start+1}-${start+visible.length} of ${fmt(edges.length)} / page ${page+1} of ${pages}. The canvas node ceiling does not limit this list.</p><div>${pageButton("First",0,page===0)}${pageButton("Previous",page-1,page===0)}${pageButton("Next",page+1,page===pages-1)}${pageButton("Last",pages-1,page===pages-1)}</div></div>`;
@@ -1205,7 +1645,7 @@ class GraphPanel {
     const motherCommunity=detail.node?.community_id?`<button type="button" class="inspector-action secondary" data-open-local-community>Open this node's mother Community</button>`:'<p class="incident-status">No mother Community is recorded for this node in this exploration layout. No membership is invented.</p>';
     const returnHierarchy=ego&&this.level!=="evidence"?`<button type="button" class="inspector-action secondary" data-return-focus-view>Return to ${esc(this.level)} view</button>`:"";
     const recenter=ego&&!isCenter?`<button type="button" class="inspector-action" data-recenter-incident>Recenter direct connections here</button>`:"";
-    const switchView=ego?`${motherCommunity}${returnHierarchy}${recenter}`:this.localIncidentNeighborhood?`<button type="button" class="inspector-action secondary" data-open-incident-neighborhood>View all direct connections</button>`:"";
+    const switchView=ego?`${motherCommunity}${returnHierarchy}${recenter}`:this.localIncidentNeighborhood?`<button type="button" class="inspector-action secondary" data-open-incident-neighborhood>View all direct connections</button>${item.overlay_slot?motherCommunity:''}`:"";
     const induced=ego&&isCenter?`<button type="button" class="inspector-action tertiary" data-toggle-neighbor-edges ${this.inducedLoading?"disabled":""}>${this.inducedLoading?"Loading published links...":this.showNeighborEdges?"Hide links among neighbors":"Connect displayed neighbors"}</button>`:"";
     const status=this.inducedError?`<p class="incident-error">Neighbor links unavailable: ${esc(this.inducedError)}</p>`:ego&&this.showNeighborEdges&&!this.inducedLoading?`<p class="incident-status">${fmt(this.graph?.neighborEdgeCount||0)} published links among the displayed direct neighbors are rendered in addition to the selected node's spokes.</p>`:"";
     const legend=ego?`<div class="scope-legend"><span class="same-community">Same Community</span><span class="same-theme">Same Theme</span><span class="same-domain">Same Domain</span><span class="cross-domain">Another Domain</span><span class="outside-hierarchy">Outside hierarchy</span></div>`:"";
@@ -1213,7 +1653,11 @@ class GraphPanel {
     const explanation=ego?(isCenter?"The center is the selected node. Shaded rings encode increasing hierarchy distance; they do not create or filter edges.":`The graph remains centered on the prior node. Recenter here to make this ${String(item.type||"node").toLowerCase()} the hub${this.level==="evidence"?", or open its mother Community":""}.`):this.level==="evidence"?"The selected node remains in its assigned Community. Only visible local endpoints are drawn here; the complete direct-edge inventory remains grouped below.":"The node remains in the current hierarchy layout. Open its complete direct connections only when you want an ego view.";
     const listed=[...groups.values()].reduce((sum,edges)=>sum+edges.length,0),total=(detail.edges||[]).length;
     const empty=total?'No relationships match the current ineligible-context display controls. The frozen inventory is not empty.':'No published incident edge is recorded for this node. Source provenance is separate from semantic topology.';
-    return `<section class="incident-neighborhood"><div class="incident-heading"><p><b>${heading}</b><br>${explanation}<br>${fmt((detail.neighbors||[]).length)} directly connected nodes and ${fmt(total)} complete published incident relationships. ${fmt(listed)} listed across the pages below; ${fmt(total-listed)} hidden by the current display controls.</p><div class="incident-actions">${switchView}${induced}</div></div>${legend}${status}${sections||`<p>${empty}</p>`}</section>`;
+    const contextCount=(detail.edges||[]).filter(edge=>edge.slot_navigation).length;
+    const counts=`${fmt((detail.neighbors||[]).filter(node=>!node.overlay_slot).length)} ordinary graph neighbors and ${fmt(total-contextCount)} published incident relationships.${contextCount?` Separately: ${fmt(contextCount)} source-context navigation links, not factual relationships or corroboration.`:''}`;
+    const sc=detail.slot_context;
+    const contextPager=sc&&slotOverlayState.enabled?`<div class="slot-pagination"><p data-slot-neighborhood-count>${fmt(sc.total)} observed opaque slots with literal context at this node. Context page ${Math.floor(sc.offset/32)+1}; ${sc.ids.length} fetched, plus any active reciprocal slot. Not published relationships.</p><button data-slot-neighborhood-page="${Math.max(0,sc.offset-32)}" ${sc.offset===0?'disabled':''}>Previous context slots</button><button data-slot-neighborhood-page="${sc.next_offset}" ${sc.next_offset===null?'disabled':''}>Next context slots</button></div>`:'';
+    return `<section class="incident-neighborhood"><div class="incident-heading"><p><b>${heading}</b><br>${explanation}<br>${counts} ${fmt(listed)} connections listed across the pages below; ${fmt(total-listed)} hidden by the current display controls.</p><div class="incident-actions">${switchView}${induced}</div></div>${legend}${status}${contextPager}${sections||`<p>${empty}</p>`}</section>`;
   }
 
   claimTopologyLabels(item, relationType) {
@@ -1239,6 +1683,58 @@ class GraphPanel {
   }
 
   renderInspector() {
+    const closeFocused=document.activeElement?.hasAttribute('data-close-inspector');
+    const item=this.external||this.selected;
+    const itemKey=item?`${this.view?.key||''}:${item.source?'edge':'node'}:${item.id||`${item.source||''}:${item.target||''}`}`:null;
+    const sameItem=itemKey!==null&&itemKey===this.inspectorDisclosureItemKey;
+    const disclosures=()=>{
+      const counts=new Map();
+      return $$('details',this.inspector).map(element=>{
+        const path=[];
+        for(let parent=element;parent&&parent!==this.inspector;parent=parent.parentElement){
+          if(parent.tagName!=='DETAILS')continue;
+          const summary=$(':scope > summary',parent);
+          const label=parent.classList.contains('map-detail-disclosure')?'map-detail-disclosure':parent.id||[...(summary?.childNodes||[])].filter(node=>node.nodeType===Node.TEXT_NODE).map(node=>node.textContent).join('').trim()||summary?.textContent||'details';
+          path.unshift(label);
+        }
+        const pathKey=JSON.stringify(path),occurrence=counts.get(pathKey)||0;counts.set(pathKey,occurrence+1);
+        return {element,key:`${pathKey}:${occurrence}`};
+      });
+    };
+    // Async enrichment replaces the DOM, not the user's disclosure choices.
+    const saved=sameItem?new Map(disclosures().map(({element,key})=>[key,element.open])):new Map();
+    this.renderInspectorContent();this.decorateInspector();this.syncMapActions();
+    this.inspectorDisclosureItemKey=itemKey;
+    for(const {element,key} of disclosures())if(saved.has(key))element.open=saved.get(key);
+    if(closeFocused&&!this.inspector.hidden)$('[data-close-inspector]',this.inspector)?.focus({preventScroll:true});
+  }
+
+  decorateInspector(){
+    const item=this.external||this.selected;
+    this.inspector.hidden=!this.drawerOpen;
+    if(!this.drawerOpen||!item)return;
+    const close=document.createElement('div');close.className='inspector-close-row';
+    close.innerHTML='<span>Information &amp; sources</span><button type="button" data-close-inspector aria-label="Close information">Close</button>';
+    close.querySelector('button').onclick=()=>this.closeInspector();
+    const description=document.createElement('p');description.className='map-description';description.textContent=mapBriefDescription(item,this);description.dataset.descriptionFor=item.id||'';
+    const heading=this.inspector.querySelector('.inspector-head')||this.inspector.querySelector('h3');
+    const sources=document.createElement('section');sources.className='source-buttons evidence-list map-primary-sources';
+    const keys=new Set();
+    for(const button of $$('[data-cib-document]',this.inspector)){
+      const key=button.dataset.cibDocument+'|'+(button.dataset.cibPage||'');
+      if(keys.has(key)){button.remove();continue;}keys.add(key);sources.append(button);
+    }
+    const detail=document.createElement('details');detail.className='map-detail-disclosure';detail.innerHTML='<summary>Connections, members &amp; provenance</summary>';
+    while(this.inspector.firstChild)detail.append(this.inspector.firstChild);
+    this.inspector.append(close);if(heading)this.inspector.append(heading);this.inspector.append(description);
+    // The existing slot/source actions retain their original listeners and bound IDs.
+    for(const action of $$('[data-slot-source],.slot-source-actions',detail))if(detail.contains(action))this.inspector.append(action);
+    if(sources.childElementCount){const h=document.createElement('h4');h.textContent='Sources';this.inspector.append(h,sources);}
+    this.inspector.append(detail);
+    hydrateMapBrief(this,item,description);
+  }
+
+  renderInspectorContent() {
     if(this.studyContext){renderStudyInspector();return;}
     const selected=this.external||this.selected;
     // Community/search records are compact. The same-view incident record
@@ -1247,6 +1743,16 @@ class GraphPanel {
     const item=selected?{...detail,...selected,evidence_examples:detail?.evidence_examples??selected.evidence_examples}:null;
     const inspectorItemKey=item?`${item.source?"edge":"node"}:${item.id||`${item.source||""}:${item.target||""}`}`:"empty";
     if(this.inspectorItemKey!==inspectorItemKey){this.inspector.scrollTop=0;this.inspectorItemKey=inspectorItemKey;}
+    if(item?.overlay_slot){
+      this.inspector.classList.remove('visibility-dimmed');
+      this.inspector.innerHTML=opaqueSlotInspectorHTML(this,item);this.bindNodeInspector(item);return;
+    }
+    if(item?.slot_navigation){
+      this.inspector.classList.remove('visibility-dimmed');
+      this.inspector.innerHTML=slotContextInspectorHTML(this,item);
+      $$('[data-inspect-entity]',this.inspector).forEach(button=>button.onclick=()=>this.inspectEntity(button.dataset.inspectEntity));
+      $('[data-context-source]',this.inspector).onclick=()=>openOpaqueSlotSource(opaqueSlot(item.source),item.source_proof);return;
+    }
     if(!item){this.inspector.classList.remove("visibility-dimmed");this.inspector.innerHTML=`<div class="inspector-empty"><div><b>Select a node or connection</b><p>Hover previews. Click opens this panel. Double-click or hold a hierarchy node to move inward.</p></div></div>`;return;}
     const itemReasons=item.eligibility_reasons?.length?item.eligibility_reasons:eligibilityReasons(item,{includeRelease:releaseFilterApplies(this.view)});
     const visibilityDimmed=this.visibilityPolicy()==="dim"&&(item.visibility_dimmed||itemReasons.length>0);
@@ -1281,10 +1787,25 @@ class GraphPanel {
     const slotAudit=type!=="RedactionSlot"&&item.introduced_by_slot_ids?.length?`<p><b>Introduced by redaction slot:</b> ${item.introduced_by_slot_ids.map(esc).join(", ")}</p>`:"";
     const technicalId=type==="RedactionSlot"?"":`<div class="technical-id">${esc(item.id)}</div>`;
     this.inspector.innerHTML=`${visibilityNotice}${redactionNodeNotice}<div class="inspector-head"><div><p class="eyebrow">${this.external?"Full-catalog object":"Selected node"}</p><h3>${esc(compact(item.label,180))}</h3></div><span class="type-pill">${esc(type)}${item.visibility?` &middot; ${esc(visibilityLabel(item.visibility))}`:""}</span></div><div class="inspector-stats"><div><b>${firstStat}</b><span>${firstLabel}</span></div><div><b>${secondStat}</b><span>${secondLabel}</span></div><div><b>${thirdStat}</b><span>${thirdLabel}</span></div></div>${this.canEnter(item)?`<button class="inspector-action" data-enter-selected>Open ${esc(nextLevel[this.level])} level</button>`:""}${visibilityComposition}${identityAuditHtml(item)}${item.summary?`<p>${esc(item.summary)}</p>`:""}${item.aliases?.length?`<p><b>Observed surface forms:</b> ${item.aliases.map(esc).join(", ")}</p>`:""}${claimMetadata}${path}${incidentHtml}${childHtml}${associations?`<p><b>Audited related concepts:</b></p><div class="association-list">${associations}</div>`:""}${slotAudit}${evidence?`<div class="evidence-list source-buttons">${evidence}</div>`:""}${technicalId}`;
+    this.bindNodeInspector(item);
+  }
+
+  bindNodeInspector(item) {
+    $('[data-slot-source]',this.inspector)?.addEventListener('click',()=>openOpaqueSlotSource(item));
     $('[data-enter-selected]',this.inspector)?.addEventListener("click",()=>this.enterNode(item));
     $$('[data-association-index]',this.inspector).forEach((button)=>button.addEventListener("click",()=>this.showAssociation(item,(item.associations||[])[Number(button.dataset.associationIndex)])));
     $$('[data-incident-edge]',this.inspector).forEach((button)=>button.addEventListener("click",()=>this.inspectIncidentEdge(button.dataset.incidentEdge)));
     const navigate=action=>Promise.resolve().then(action).catch(error=>this.inspectionError(error));
+    $$('[data-slot-neighborhood-page]',this.inspector).forEach(button=>button.onclick=()=>navigate(async()=>{
+      button.disabled=true;
+      const value=await slotPacket({anchor_id:item.id,offset:button.dataset.slotNeighborhoodPage,limit:32});
+      const detail=this.localIncidentNeighborhood?.node.id===item.id?this.localIncidentNeighborhood:this.neighborhood;
+      if(!detail||detail.node.id!==item.id)return;
+      detail.slot_context={ids:value.slots.map(s=>s.id),total:value.matched_count,offset:value.offset,next_offset:value.next_offset};
+      const merged=withSlotContext(detail);
+      if(this.localIncidentNeighborhood?.node.id===item.id)this.localIncidentNeighborhood=merged;
+      if(this.neighborhood?.node.id===item.id){this.neighborhood=merged;this.refreshGraph(item.id);}else this.renderInspector();
+    }));
     $$('[data-incident-page]',this.inspector).forEach(button=>button.addEventListener('click',()=>{this.incidentPages.set(`${button.dataset.incidentOwner}:${button.dataset.incidentScope}`,Number(button.dataset.incidentPage));this.renderInspector();}));
     $$('[data-connected-node]',this.inspector).forEach(button=>button.addEventListener('click',()=>navigate(()=>this.inspectConnectedNode(button.dataset.connectedNode))));
     $$('[data-traverse-node]',this.inspector).forEach(button=>button.addEventListener('click',()=>navigate(()=>this.inspectConnectedNode(button.dataset.traverseNode,{traverse:true}))));
@@ -1295,7 +1816,49 @@ class GraphPanel {
     $('[data-recenter-incident]',this.inspector)?.addEventListener("click",()=>navigate(()=>this.focusDirectConnections(item)));
     $('[data-toggle-neighbor-edges]',this.inspector)?.addEventListener("click",()=>this.toggleNeighborEdges());
     bindCibSourceButtons(this.inspector,this);
+    appendHierarchySlots(this,item);
   }
+}
+
+function mapBriefDescription(item,panel){
+  if(item.overlay_slot)return 'An opaque source mask. Its hidden text and identity are unavailable.';
+  if(item.slot_navigation)return 'This link opens visible source context. It is not a factual relationship.';
+  if(nodeLevel[item.type]||item.aggregate_kind){
+    let labels=[];
+    if(!state.guidePath&&panel&&nodeLevel[item.type]){
+      const children=item.member_nodes||item.top_nodes||[];
+      labels=children.map(child=>panel.nodeMap.get(child.id||child.node_id)||child).filter(child=>child.type==='Entity'&&eligibilityReasons(child,{includeRelease:true}).length===0).map(child=>child.label);
+      // At the complete-corpus cutoff, fixed base-projection labels are safe
+      // topical names. Earlier cutoffs need individually dated member records.
+      if(!labels.length&&state.asOfPolicy.cutoff===state.asOfPolicy.maximum){
+        const base=state.data?.views?.[singleCorpusMode?'current_redaction':'current_earlier']?.levels?.[nodeLevel[item.type]];
+        const record=[...(base?.catalog_nodes||[]),...(base?.nodes||[])].find(n=>n.id===item.id);
+        if(record&&eligibilityReasons(record,{includeRelease:true}).length===0&&laterOnlyShare(record)===0)labels=String(record.label).replace(/^(?:Graph\s+)?(?:domain|theme|community):\s*/i,'').split(/\s*\/\s*/);
+      }
+    }
+    const topics=[...new Set(labels.filter(Boolean).map(label=>String(label).trim()).filter(label=>label.split(/\s+/).length<=7&&!/[;|]/.test(label)&&!/(?:redact|opaque|unknown)/i.test(label)))].slice(0,2);
+    if(topics.length)return 'Reports about '+topics.join(' and ')+'.';
+    return `This group contains ${fmt(item.mass||item.represented_node_count||0)} graph nodes. Open its members to inspect their sources.`;
+  }
+  if(eligibilityReasons(item,{includeRelease:true}).length)return 'This object is outside the active evidence policy. Its source details remain separate from eligible evidence.';
+  return item.source?'A recorded graph connection. Open its sources to check the supporting text.':'A recorded graph object. Open its sources to check the original wording.';
+}
+
+async function hydrateMapBrief(panel,item,element){
+  if(item.source||nodeLevel[item.type]||item.aggregate_kind||item.overlay_slot||item.slot_navigation||state.guidePath||eligibilityReasons(item,{includeRelease:true}).length)return;
+  const detail=[panel.localIncidentNeighborhood?.node,panel.neighborhood?.node].find(n=>n?.id===item.id);
+  const example=(detail?.evidence_examples||item.evidence_examples||[]).find(row=>row.document_id&&row.evidence_quote&&isDocumentAvailableAsOf(String(row.document_id)));
+  if(!example)return;
+  try{
+    const source=await ensureCibSource(panel.view,example.document_id);
+    if(!element.isConnected||!panel.drawerOpen||state.guidePath||eligibilityReasons(item,{includeRelease:true}).length||!isDocumentAvailableAsOf(example.document_id,source.document_date_iso||''))return;
+    const page=(source.pages||[]).find(p=>(!example.canonical_page_id||p.canonical_page_id===example.canonical_page_id)&&normalize(p.text).includes(normalize(example.evidence_quote)));
+    if(!page)return;
+    const summary=String(item.summary||'').replace(/\s+/g,' ').trim(),sentence=summary.match(/^[^;|.!?]+[.!?](?:\s|$)/)?.[0]?.trim()||summary;
+    if(sentence&&sentence.split(/\s+/).length<20&&!/[;|]/.test(sentence)&&normalize(page.text).includes(normalize(sentence))){element.textContent=sentence;element.dataset.descriptionSource='verified-source-sentence';}
+    else{const words=String(example.evidence_quote).replace(/[;|]+/g,',').replace(/\s+/g,' ').trim().split(' ');element.textContent='Source excerpt: '+words.slice(0,16).join(' ')+(words.length>16?'...':'');element.dataset.descriptionSource='verified-source-excerpt';}
+    element.title=`${example.document_id} / ${page.canonical_page_id}`;
+  }catch(_error){/* Keep the factual fallback when a source cannot be verified. */}
 }
 
 function currentViews() {
@@ -1415,27 +1978,68 @@ async function ensureCibSource(view,documentId) {
   return source;
 }
 
+function clearCibPDFPair(){
+  state.pdfPairRequestRevision=(state.pdfPairRequestRevision||0)+1;
+  const pair=$('#cib-pdf-pair');if(pair){pair.replaceChildren();pair.hidden=true;}
+  $('#cib-source-drawer')?.classList.remove('pdf-pair-open');
+  $('[data-cib-pdf-pair]')?.setAttribute('aria-pressed','false');
+}
+
+async function openCibPDFPair(panel,documentId,canonicalPageId,revision){
+  const pairRevision=state.pdfPairRequestRevision=(state.pdfPairRequestRevision||0)+1;
+  const pair=$('#cib-pdf-pair'),drawer=$('#cib-source-drawer');
+  pair.hidden=false;pair.innerHTML='<p role="status">Loading the original release pair...</p>';drawer.classList.add('pdf-pair-open');
+  $('[data-cib-pdf-pair]')?.setAttribute('aria-pressed','true');
+  const single=$('#cib-pdf-frame');single.hidden=true;single.removeAttribute('src');
+  try{
+    const records=await Promise.all(['earlier','later'].map(async release=>{
+      const view=state.data.views['current_'+release];
+      const source=await ensureCibSource(view,documentId).catch(()=>null);
+      // Only the saved canonical-page alignment may select a counterpart page.
+      const page=source?.pages?.find(p=>p.canonical_page_id===canonicalPageId),number=Number(page?.source_page||0);
+      let url=new URL('/api/cib-pdf',location.origin);url.search=new URLSearchParams({doc_id:documentId,release}).toString();url=await currentGraphPDFURL(url);
+      if(Number.isInteger(number)&&number>0)url.hash=`page=${number}&zoom=page-width`;
+      return {release,url,page:Number.isInteger(number)&&number>0?number:null};
+    }));
+    if(revision!==state.sourceRequestRevision||pairRevision!==state.pdfPairRequestRevision||pair.hidden)return;
+    pair.replaceChildren();
+    for(const record of records){
+      const section=document.createElement('section'),heading=document.createElement('h3'),frame=document.createElement('iframe');
+      heading.textContent=`${record.release==='earlier'?'Earlier':'Later'} release / ${record.page?'page '+record.page:'counterpart page unspecified'}`;
+      const link=document.createElement('a');link.href=record.url.href;link.target='_blank';link.rel='noopener';link.textContent='Open original PDF';
+      frame.className='cib-pdf-frame';frame.title=heading.textContent;frame.dataset.pdfRelease=record.release;frame.dataset.pdfPage=record.page||'';frame.src=record.url.href;
+      section.append(heading,link,frame);pair.append(section);
+    }
+    pair.scrollIntoView({block:'start',behavior:guideReducedMotion()?'instant':'smooth'});
+  }catch(error){if(revision===state.sourceRequestRevision&&pairRevision===state.pdfPairRequestRevision)pair.innerHTML=`<p role="alert">${esc(error.message)}. No alternate PDF or page is substituted.</p>`;}
+}
+
 function closeCibSource() {
   const drawer=$("#cib-source-drawer"),scrim=$("#cib-drawer-scrim");
   if(!drawer)return;
-  drawer.classList.remove("open");drawer.setAttribute("aria-hidden","true");
+  const wasOpen=drawer.classList.contains('open');drawer.classList.remove("open");drawer.setAttribute("aria-hidden","true");drawer.inert=true;
+  clearCibPDFPair();
   if(scrim)scrim.hidden=true;
   const frame=$("#cib-pdf-frame");if(frame){frame.hidden=true;frame.removeAttribute("src");}
   $("#cib-pdf-focus-status")?.remove();
   state.sourceRequestRevision=(state.sourceRequestRevision||0)+1;
+  if(wasOpen&&state.sourceReturnFocus?.isConnected)state.sourceReturnFocus.focus({preventScroll:true});
 }
 
 async function openCibSource(panel,documentId,{canonicalPageId="",highlights=[],slotId="",revealText=""}={}) {
+  if(!await allowSavedStorySource(()=>openCibSource(panel,documentId,{canonicalPageId,highlights,slotId,revealText})))return;
   const drawer=$("#cib-source-drawer"),scrim=$("#cib-drawer-scrim");
   if(!drawer)return;
   const revision=state.sourceRequestRevision=(state.sourceRequestRevision||0)+1;
+  clearCibPDFPair();
+  if(!drawer.classList.contains('open'))state.sourceReturnFocus=document.activeElement;
   const previousPdf=$("#cib-pdf-frame");if(previousPdf){previousPdf.hidden=true;previousPdf.removeAttribute("src");}
   $("#cib-pdf-focus-status")?.remove();
   const view=panel.view;
   const release=view.release_view,terms=[...new Set(highlights.filter(Boolean))];
   const markerSlotId=release==="earlier"?(state.redactionProjection?.cases||[]).find(row=>row.slot_id===slotId)?.source_marker_slot_id||slotId:slotId;
   const paired=!singleCorpusMode;
-  drawer.classList.add("open");drawer.setAttribute("aria-hidden","false");if(scrim)scrim.hidden=false;
+  drawer.inert=false;drawer.classList.add("open");drawer.setAttribute("aria-hidden","false");if(scrim)scrim.hidden=false;$('#cib-source-close').focus({preventScroll:true});
   $("#cib-source-kicker").textContent=singleCorpusMode?"Canonical cable source":`${release==="earlier"?"Earlier release / redacted":"Later release / less redacted"} source`;
   $("#cib-source-title").textContent=documentId;$("#cib-source-meta").innerHTML=`<span>Loading ${paired?"paired transcript":"source record"}...</span>`;$("#cib-source-body").innerHTML="";
   try{
@@ -1448,11 +2052,18 @@ async function openCibSource(panel,documentId,{canonicalPageId="",highlights=[],
     $("#cib-source-title").textContent=source.title?`${source.title} / ${documentId}`:documentId;
     $("#cib-source-meta").innerHTML=[source.date,`${pages.length} ${paired?"aligned pages":"source segments"}`,singleCorpusMode?"Canonical prepared cable transcript":release==="earlier"?"Earlier-release projection":"Later-release projection"].filter(Boolean).map((value)=>`<span>${esc(value)}</span>`).join("");
     $("#cib-source-release-actions").innerHTML=singleCorpusMode?'<span>Canonical prepared cable source; classification projections are not paired redactions.</span>':`<button type="button" class="${release==="earlier"?"active":""}" data-cib-switch-release="current_earlier">Earlier-release transcript</button><button type="button" class="${release==="later"?"active":""}" data-cib-switch-release="current_later">Later-release transcript</button>`;
+    if(paired&&state.pdfApiAvailable){
+      const button=document.createElement('button');button.type='button';button.dataset.cibPdfPair='';button.textContent='Pair PDFs';button.setAttribute('aria-pressed','false');
+      button.onclick=()=>{if(!$('#cib-pdf-pair').hidden){clearCibPDFPair();return;}openCibPDFPair(panel,documentId,active?.canonical_page_id||canonicalPageId,revision);};
+      $('#cib-source-release-actions').append(button);
+    }
     const pdfNote=state.pdfApiAvailable?"The frozen transcript supplies the release and PDF page. No PDF box coordinates are guessed; highlighted terms are text matches, not exact-offset entailment proofs.":"This frozen source transcript is available. Highlighted terms are text matches, not exact-offset entailment proofs; no PDF box coordinates are guessed.";
     const noPages=`<section class="cib-source-page"><p>No canonical aligned transcript page is retained for this pair.</p><button type="button" class="cib-pdf-button" data-cib-pdf-page="1" ${state.pdfApiAvailable?"":"disabled"}>${state.pdfApiAvailable?`Open ${esc(release)} PDF from page 1`:"PDF available in local mode"}</button></section>`;
     $("#cib-source-body").innerHTML=`<p class="cib-pdf-note">${esc(pdfNote)}${markerSlotId!==slotId?" This target shares an earlier masked region with another slot; the region is highlighted without inventing an internal boundary.":""}</p>`+(pages.map((page)=>`<section class="cib-source-page ${page===active?"active":""}" data-cib-page="${esc(page.canonical_page_id)}"><header><b>${paired?"Aligned page":"Source segment"} ${fmt(page.sequence_in_document)}</b>${paired?`<span>PDF page ${fmt(page.source_page)}</span>`:""}</header><div>${highlightedSourceText(page.text,terms)}</div>${paired?`<button type="button" class="cib-pdf-button" data-cib-pdf-page="${Number(page.source_page||1)}" ${state.pdfApiAvailable?"":"disabled"}>${state.pdfApiAvailable?`Open ${esc(release)} PDF at page ${fmt(page.source_page)}`:"PDF available in local mode"}</button>`:""}</section>`).join("")||noPages);
     $$('[data-cib-switch-release]',drawer).forEach((button)=>button.addEventListener("click",()=>openCibSource({...panel,view:state.data.views[button.dataset.cibSwitchRelease]},documentId,{canonicalPageId:active?.canonical_page_id||canonicalPageId,highlights:terms,slotId,revealText})));
     $$('[data-cib-pdf-page]',drawer).forEach((button)=>button.addEventListener("click",async()=>{
+      active=pages.find(page=>page.canonical_page_id===button.closest('.cib-source-page')?.dataset.cibPage)||active;
+      if(!$('#cib-pdf-pair').hidden){await openCibPDFPair(panel,documentId,button.closest('.cib-source-page')?.dataset.cibPage||'',revision);return;}
       const frame=$("#cib-pdf-frame"),page=Number(button.dataset.cibPdfPage||1);
       let status=$("#cib-pdf-focus-status");
       if(!status){status=document.createElement("p");status.id="cib-pdf-focus-status";status.className="cib-pdf-note";status.setAttribute("role","status");frame.before(status);}
@@ -1504,9 +2115,24 @@ async function ensureCommunityDetail(view,node) {
   node.detail_edge_node_rank_limit=Number(detail.edge_node_rank_limit||0);
   node.complete_edges_for_ranked_nodes=Boolean(detail.complete_edges_for_ranked_nodes);
   node.community_detail_loaded=true;
+  if(slotOverlayState.enabled&&!state.guidePath&&slotOverlayState.payload?.coverage.complete){
+    await slotPacket({community_id:node.id,limit:32});
+  }
 }
 
 async function ensureNodeNeighborhood(view,nodeId) {
+  let slot=opaqueSlot(nodeId);
+  if(!slot&&nodeId.startsWith('opaque_slot_')&&slotOverlayState.enabled&&!state.guidePath){
+    await ensureSlotCensus();slot=(await slotPacket({slot_id:nodeId})).slot;
+  }
+  if(slot)return withSlotContext({node:slot,neighbors:[],edges:[],level:"evidence"});
+  const published=await ensurePublishedNodeNeighborhood(view,nodeId);
+  if(!slotOverlayState.enabled||state.guidePath||!slotOverlayState.payload?.coverage.complete)return published;
+  const context=await slotPacket({anchor_id:nodeId,limit:32});
+  return withSlotContext({...published,slot_context:{ids:context.slots.map(s=>s.id),total:context.matched_count,offset:0,next_offset:context.next_offset}});
+}
+
+async function ensurePublishedNodeNeighborhood(view,nodeId) {
   const catalog=view?.levels?.evidence?.neighborhood_catalog;
   if(!catalog)throw new Error(`No incident-edge catalog is available for ${view?.key||"this view"}`);
   const shard=hashNumber(nodeId)%Number(catalog.shard_count||1);
@@ -1553,7 +2179,7 @@ async function ensureCompactAdjacency(view,nodeId) {
 
 async function ensureInducedEdges(view,nodeIds) {
   const ids=[...new Set(nodeIds.filter(Boolean))],selected=new Set(ids);
-  const rows=await Promise.all(ids.map(async(id)=>[id,await ensureCompactAdjacency(view,id)]));
+  const rows=await Promise.all(ids.filter(id=>!opaqueSlot(id)).map(async(id)=>[id,await ensureCompactAdjacency(view,id)]));
   const edges=new Map();
   rows.forEach(([source,neighbors])=>{
     (neighbors||[]).forEach(([target,weight,visibility,minimumDocumentDate])=>{
@@ -1563,12 +2189,15 @@ async function ensureInducedEdges(view,nodeIds) {
       edges.set(pair,{id:`induced:${pair}`,source:left,target:right,weight:Number(weight||0),layout_weight:Number(weight||0),visibility:visibility||"both",minimum_document_date:minimumDocumentDate||"",edge_type:"published neighbor-to-neighbor link",weight_semantics:"Published graph edge loaded from the compact adjacency index; select it to hydrate complete channels and provenance.",compact_induced:true});
     });
   });
-  return [...edges.values()].sort((left,right)=>Number(right.layout_weight)-Number(left.layout_weight)||left.id.localeCompare(right.id));
+  const contexts=slotContextEdges().filter(edge=>selected.has(edge.source)&&selected.has(edge.target));
+  return [...edges.values(),...contexts].sort((left,right)=>Number(right.layout_weight)-Number(left.layout_weight)||left.id.localeCompare(right.id));
 }
 
 function renderPanelCaption(panel) {
   const graph=panel.graph;
   if (!graph) return;
+  const slots=panel.nodes.filter(row=>row.overlay_slot),contextLinks=panel.edges.filter(row=>row.slot_navigation);
+  if(slots.length){$(`#${panel.name}-caption`).textContent=`${graph.focusMode?'Direct connections: ':''}${fmt(panel.nodes.length-slots.length)} ordinary graph objects and ${fmt(panel.edges.length-contextLinks.length)} published graph edges drawn, plus ${slots.length} opaque source slots and ${contextLinks.length} dotted source-context links (not factual relationships). ${graph.focusMode?`${fmt(graph.directEdgeCount)} published selected-node relationships; ${fmt(graph.contextDirectEdgeCount)} separate context links. `:''}Slot size is fixed, not concealed-text length. Native graph totals, weights and memberships are unchanged.`;return;}
   const context=panel.trail.length?` within ${panel.trail[panel.trail.length-1].label}`:" in the corpus view";
   const setCaption=(value)=>{
     const policy=state.guideOverlay
@@ -1739,6 +2368,11 @@ function hierarchySearchRecord(row,level) {
 
 async function searchRecordsForScope(view,scope,query) {
   const key=view.key;
+  if(scope==='slot'){
+    const page=await slotPage({q:query,offset:slotOverlayState.searchOffset});
+    slotOverlayState.searchPage=page;
+    return {records:page.slots,count:page.matched_count};
+  }
   if(scope==="entity"){
     const catalog=await ensureSearchCatalog([key]);
     return {
@@ -1818,8 +2452,8 @@ function renderSearchResults() {
   if (!state.query) { container.hidden=true; container.innerHTML=""; return; }
   const column=(name,label)=>`<section class="search-column"><h3>${esc(label)}</h3>${state.searchResults[name].length?state.searchResults[name].map((row,index)=>{
     const edge=row.kind==="edge",hierarchy=row.kind==="hierarchy";
-    const detail=edge?`${fmt(row.evidence_count)} supporting documents / ${row.edge_type}`:hierarchy?`${row.type} / ${fmt(row.mass)} assigned evidence nodes`:`${row.type||"Entity"} / ${fmt(row.document_count)} documents${row.visibility?` / ${visibilityLabel(row.visibility)}`:""}${identityScopeLabel(row)?` / ${identityScopeLabel(row)}`:""}${row.aliases?.length?` / observed forms: ${compact(row.aliases.join(", "),90)}`:""}`;
-    const action=edge?"Inspect edge":hierarchy?`Open ${row.hierarchy_level}`:"Inspect node";
+    const detail=row.overlay_slot?`${row.document_id} / earlier page ${row.source_page} / opaque, context navigation only`:edge?`${fmt(row.evidence_count)} supporting documents / ${row.edge_type}`:hierarchy?`${row.type} / ${fmt(row.mass)} assigned evidence nodes`:`${row.type||"Entity"} / ${fmt(row.document_count)} documents${row.visibility?` / ${visibilityLabel(row.visibility)}`:""}${identityScopeLabel(row)?` / ${identityScopeLabel(row)}`:""}${row.aliases?.length?` / observed forms: ${compact(row.aliases.join(", "),90)}`:""}`;
+    const action=row.overlay_slot?'Inspect opaque slot':edge?"Inspect edge":hierarchy?`Open ${row.hierarchy_level}`:"Inspect node";
     return `<button class="search-hit" type="button" data-search-panel="${name}" data-search-index="${index}"><span><b>${esc(row.label)}</b><small>${esc(detail)}</small></span><span>${esc(action)}</span></button>`;
   }).join(""):`<p class="metric-caveat">No match in the complete selected object index.</p>`}</section>`;
   const {legacy,current}=currentViews(),visible=new Set(visiblePanelNames()); container.innerHTML=(visible.has("legacy")?column("legacy",legacy.label):"")+(visible.has("current")?column("current",current.label):""); container.hidden=false;
@@ -1832,16 +2466,17 @@ function renderSearchResults() {
 }
 
 let searchTimer=null;
-function applySearch() {
+function applySearch(resetSlotOffset=true) {
+  if(resetSlotOffset!==false)slotOverlayState.searchOffset=0;
   clearTimeout(searchTimer); const raw=$("#graph-search").value.trim(); state.query=normalize(raw);state.searchScope=$("#search-scope").value;
-  if (!state.query) { $("#search-status").textContent=""; state.panels.legacy.setPreviewSearch(""); state.panels.current.setPreviewSearch(""); renderSearchResults(); return; }
+  if (!state.query) { $('#slot-search-pagination').hidden=true;$("#search-status").textContent=""; state.panels.legacy.setPreviewSearch(""); state.panels.current.setPreviewSearch(""); renderSearchResults(); return; }
   state.panels.legacy.setPreviewSearch(raw); state.panels.current.setPreviewSearch(raw); $("#search-status").textContent=`Loading complete ${state.searchScope} indexes...`;
   searchTimer=setTimeout(async()=>{
     try {
       const {legacy,current}=currentViews(),query=state.query,scope=state.searchScope;
       const [legacyCatalog,currentCatalog]=await Promise.all([searchRecordsForScope(legacy,scope,query),searchRecordsForScope(current,scope,query)]);
       if (query!==normalize($("#graph-search").value)||scope!==$("#search-scope").value) return;
-      state.searchResults.legacy=topMatches(searchableRecords(legacyCatalog.records,"legacy"),query); state.searchResults.current=topMatches(searchableRecords(currentCatalog.records,"current"),query);
+      state.searchResults.legacy=scope==='slot'?searchableRecords(legacyCatalog.records,"legacy"):topMatches(searchableRecords(legacyCatalog.records,"legacy"),query); state.searchResults.current=scope==='slot'?searchableRecords(currentCatalog.records,"current"):topMatches(searchableRecords(currentCatalog.records,"current"),query);
       state.panels.legacy.setMatchIds(matchHierarchyIds(state.searchResults.legacy,state.panels.legacy)); state.panels.current.setMatchIds(matchHierarchyIds(state.searchResults.current,state.panels.current));
       const filterNote=state.hideIsolates?" Analyst-projection isolates are hidden.":" Isolates are included.";
       const pairLabels=singleCorpusMode?(state.data.corpus_metadata?.name||"single corpus"):redactionOnlyMode?"redaction-aware earlier":currentOnlyMode?"earlier and later":"legacy and current";
@@ -1857,7 +2492,13 @@ function applySearch() {
           ? ` Complete incident edges were read for ${fmt(legacyCatalog.matchedEndpointCount)} and ${fmt(currentCatalog.matchedEndpointCount)} matching entity endpoints in the ${pairLabels} views; those views contain ${fmt(legacyCatalog.count)} and ${fmt(currentCatalog.count)} published relationships.`
           : ` Matches were ranked across ${fmt(legacyCatalog.count)} and ${fmt(currentCatalog.count)} indexed ${state.searchScope} objects in the ${pairLabels} views.`;
       const matchSummary=singleCorpusMode?`${state.searchResults.current.length} corpus`:redactionOnlyMode?`${state.searchResults.current.length} redaction-graph`:currentOnlyMode?visiblePanelNames().map((name)=>`${state.searchResults[name].length} ${name==="legacy"?"earlier":"later"}`).join(" and "):`${state.searchResults.legacy.length} legacy and ${state.searchResults.current.length} current`;
-      $("#search-status").textContent=`${matchSummary} matches shown.${basis}${filterNote}`; renderSearchResults();
+      $("#search-status").textContent=scope==='slot'?`${fmt(currentCatalog.count)} opaque source slots matched; ${state.searchResults.current.length} displayed on this page. Base-visible context and source IDs only; hidden names and lengths are not indexed. Navigation, not semantic evidence.`:`${matchSummary} matches shown.${basis}${filterNote}`; renderSearchResults();
+      const slotPager=$('#slot-search-pagination');slotPager.hidden=scope!=='slot';
+      if(scope==='slot'){
+        const page=slotOverlayState.searchPage;
+        $('#slot-search-page-status').textContent=`${page.slots.length?page.offset+1:0}-${page.offset+page.slots.length} of ${fmt(page.matched_count)} / 32 per page`;
+        $('#slot-search-prev').disabled=page.offset===0;$('#slot-search-next').disabled=page.next_offset===null;
+      }
       if(state.autoOpenSearch){
         const openDirect=state.autoOpenDirect;
         state.autoOpenSearch=false;
@@ -2025,6 +2666,112 @@ let guideEpoch=0,guideSourceEpoch=0;
 const guideReducedMotion=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 const guideNodeLabel=node=>node?.label||node?.id||"Unknown state";
 
+let savedStoryCatalogPromise;
+if(pageParams.has('walk_case')){
+  const mount=new MutationObserver(()=>{
+    const host=$('#saved-kg-walk');if(!host)return;
+    host.classList.add('guide-v63');mount.disconnect();
+    new ResizeObserver(()=>{const panel=state.panels.current;if(panel?.nodes.length&&!panel.v64Busy)panel.fit();}).observe(host);
+  });
+  mount.observe($('main'),{childList:true});
+}
+async function savedStorySourceAccess(caseId){
+  const guideId=pageParams.get('guide_case'),walkId=pageParams.get('walk_case');
+  if(guideId&&walkId&&guideId!==walkId)throw Error('Mixed saved guide and walkthrough cases are not accepted.');
+  const id=caseId||guideId||walkId;
+  if(!id)return null;
+  if(!savedStoryCatalogPromise)savedStoryCatalogPromise=Promise.all([
+    import('./narrative-catalog-v1.js'),import('./narrative-attempts-v1.js'),import('./narrative-guide-access-v1.js')
+  ]).then(async([catalog,access,guide])=>{
+    const {report}=await catalog.loadSavedCatalog();guide.gateWalkthrough(report);return {report,access};
+  });
+  const {report,access}=await savedStoryCatalogPromise;
+  if(!report.privacy_contract)return null;
+  const row=report.cases.find(value=>value.case.case_id===id);
+  if(!row||row.case.corpus!==corpusId)throw Error('The saved source access request does not match this released case and corpus.');
+  return {report,row,access,status:access.storyAccess(report,row)};
+}
+
+async function allowSavedStorySource(action,{landing=false,caseId}={}){
+  const context=await savedStorySourceAccess(caseId);
+  if(!context||context.status.unlocked)return true;
+  pauseGuide();
+  const returnFocus=document.activeElement,host=landing?guideHost():document.createElement('dialog');
+  host.replaceChildren();host.setAttribute('aria-busy','false');
+  if(!landing){host.className='narrative-guide-access';host.setAttribute('aria-label','Story answer access');}
+  const title=document.createElement('h2');title.textContent=landing?'KG Navigator':'Story answer access';
+  const text=document.createElement('p');text.textContent=`${context.status.opened} of ${context.status.total} saved results opened. This saved guide and original sources can reveal other story answers.`;
+  const actions=document.createElement('div');actions.className='guide-actions';
+  const reveal=document.createElement('button');reveal.type='button';reveal.textContent='Reveal story answers and continue';reveal.dataset.testid='acknowledge-story-reveal';
+  reveal.onclick=()=>{
+    reveal.disabled=true;
+    context.access.acknowledgeStoryReveal(context.report,context.row);
+    if(!landing)host.close();
+    Promise.resolve().then(action).catch(error=>{state.guideError=error.message;renderPathGuide();});
+  };
+  actions.append(reveal);
+  if(landing){
+    const back=document.createElement('a');back.textContent='Return to the questions';back.href=guideReturnUrl();actions.append(back);
+  }else{
+    const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Return to the graph';cancel.onclick=()=>host.close();actions.append(cancel);
+    host.addEventListener('close',()=>{host.remove();if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});},{once:true});
+  }
+  host.append(title,text,actions);
+  if(!landing){document.body.append(host);host.showModal();reveal.focus({preventScroll:true});}
+  return false;
+}
+
+async function savedWalkGraphReady(signal){
+  const aborted=()=>{if(signal?.aborted)throw new DOMException('Saved walk cancelled','AbortError');};
+  aborted();
+  if(document.body.dataset.graphReady!=='true')await new Promise((resolve,reject)=>{
+    let observer,timer;
+    const finish=error=>{observer?.disconnect();clearTimeout(timer);signal?.removeEventListener('abort',cancel);error?reject(error):resolve();};
+    const cancel=()=>finish(new DOMException('Saved walk cancelled','AbortError'));
+    observer=new MutationObserver(()=>{if(document.body.dataset.graphReady==='true')finish();});
+    observer.observe(document.body,{attributes:true,attributeFilter:['data-graph-ready']});
+    timer=setTimeout(()=>finish(Error('The existing corpus map is not ready. No replacement graph is used.')),30000);
+    signal?.addEventListener('abort',cancel,{once:true});
+    if(signal?.aborted)cancel();else if(document.body.dataset.graphReady==='true')finish();
+  });
+  aborted();
+}
+
+async function navigateSavedWalkNode(node,{resourceBinding,signal}={}){
+  if(node?.is_graph_node!==true||typeof node.id!=='string'||!node.id)throw Error('Only an actual saved graph-node ID can be navigated.');
+  await savedWalkGraphReady(signal);
+  const aborted=()=>{if(signal?.aborted)throw new DOMException('Saved walk cancelled','AbortError');};
+  const binding=currentGraphResource();
+  if(resourceBinding?.corpus!==corpusId||binding&&Object.keys(binding).some(key=>binding[key]!==resourceBinding[key]))throw Error('Saved walk and map resource selectors differ.');
+  const sameGraph=refreshBinding.graph_run_id===resourceBinding.graph_id;
+  const declaredStudy=refreshBinding.study_graph_id===resourceBinding.graph_id&&refreshBinding.study_hierarchy_id===resourceBinding.hierarchy_id;
+  if(!sameGraph&&!declaredStudy)throw Error('The map has no declared lineage for this saved source graph.');
+  if(state.guidePath)throw Error('Close the other saved guide before stepping through this walk.');
+  const panel=state.panels.current,view=panel.view;
+  await ensureEvidenceSearchCatalog([view.key]);aborted();
+  if(state.panels.current!==panel||panel.view!==view)throw new DOMException('Map view changed','AbortError');
+  const record=state.searchEvidenceIndexes[view.key]?.get(node.id);
+  if(!record)return {status:'unavailable',id:node.id,message:'This saved ID is absent from the current map. No label-based substitute is used.'};
+  if(panel.v64Busy)return {status:'busy',id:node.id,message:'The map is finishing another navigation. Select this stage again.'};
+  panel.stopPhysics();panel.closeInspector(false);
+  // Reuse the installed cancellable hierarchy/community navigator, not a new graph.
+  const pending=panel.openLocalCommunity(record,{scroll:false,remember:false}),token=panel.v64Token;
+  const cancel=()=>{if(panel.v64Token===token)guideCancelMotionV64(panel);};
+  signal?.addEventListener('abort',cancel,{once:true});
+  if(signal?.aborted)cancel();
+  try{
+    await pending;aborted();
+    const selected=panel.nodeMap.get(node.id);
+    if(!selected||panel.selected?.id!==node.id)throw Error('The exact saved node did not settle in the existing map.');
+    const area=panel.usableBounds(),point=panel.screen(selected);
+    panel.transform.x+=area.left+area.width/2-point.x;panel.transform.y+=area.top+area.height/2-point.y;
+    panel.pulseIds([node.id]);panel.draw();
+    return {status:'focused',id:node.id,label:record.label||node.id,level:panel.level,
+      community_id:panel.trail.at(-1)?.id||null,view_key:view.key,
+      browser_graph_id:refreshBinding.graph_run_id,source_graph_id:resourceBinding.graph_id};
+  }finally{signal?.removeEventListener('abort',cancel);}
+}
+
 function guideSelection(params) {
   if(!params.has("guide_case")){
     if(["guide","guide_data","guide_ref"].some(k=>params.has(k)))throw Error("Only server-saved guides are accepted.");
@@ -2041,28 +2788,44 @@ function guideSelection(params) {
 }
 
 function normalizeSavedGuide(packet,selection) {
-  if(packet?.case_id!==selection.case_id||packet.corpus!==corpusId||packet.config&&packet.config!==selection.config||packet.candidate?.id!==selection.candidate_id)throw Error("Saved guide belongs to another case, corpus, condition or candidate.");
+  const traceAdapter=packet?.version==="narrative-current-guide-adapter/4";
+  if(traceAdapter&&(!/^path_[a-f0-9]{24}$/.test(packet.path_id||"")||!/^[a-f0-9]{64}$/.test(packet.trace_sha256||"")||
+      packet.api_calls!==0||packet.factual_support_from_guide!==false||typeof packet.original_traversal_claimed!=="boolean"||
+      typeof packet.postrun_view!=="boolean"||packet.original_traversal_claimed&&packet.postrun_view||
+      !packet.candidate?.id||packet.source_readout?.outside_kg!==true||!Array.isArray(packet.candidate.sources)||
+      JSON.stringify(packet.source_readout.source_refs)!==JSON.stringify(packet.candidate.sources)))throw Error("Invalid source-bound trace guide.");
+  // A trace route has its own selector; the readout retains its native outcome ID.
+  const target=traceAdapter&&selection.candidate_id.startsWith("path_")?packet.path_id:packet?.candidate?.id;
+  if(packet?.case_id!==selection.case_id||packet.corpus!==corpusId||packet.config&&packet.config!==selection.config||target!==selection.candidate_id)throw Error("Saved guide belongs to another case, corpus, condition or candidate.");
   const route=packet.route,nodes=route?.nodes,hops=route?.hops;
   if(!Array.isArray(nodes)||!nodes.length||!Array.isArray(hops)||hops.length!==nodes.length-1||nodes.some(n=>typeof n.id!=="string"||!n.id||n.id.length>600))throw Error("Invalid ordered saved route.");
   const lexical=route.route_kind==="LEXICAL_SOURCE_READOUT";
-  const sourceEndpointInspection=route.route_kind==='SOURCE_ENDPOINT_INSPECTION'||packet.source_endpoint_inspection_only===true||packet.status==='SOURCE_ENDPOINT_INSPECTION';
-  if(sourceEndpointInspection&&(packet.version!=='narrative-current-guide-adapter/2'||packet.status!=='SOURCE_ENDPOINT_INSPECTION'||
-      !['iran','vietnam'].includes(corpusId)||route.route_kind!=='SOURCE_ENDPOINT_INSPECTION'||
-      packet.source_endpoint_inspection_only!==true||packet.retrieval_route_certified!==false||
-      packet.original_traversal_claimed!==false||packet.factual_support_from_guide!==false||
-      packet.graph_hops!==0||nodes.length!==1||hops.length!==0||nodes[0].is_graph_node!==true||nodes[0].id.startsWith('hierarchy:')))
-    throw Error('Invalid zero-hop source-endpoint inspection. No retrieval route or support hop is inferred.');
   hops.forEach((h,i)=>{if(h.source!==nodes[i].id||h.target!==nodes[i+1].id||!(lexical?["SEARCH_RECEIPT_READOUT","EXACT_QUOTATION_READOUT","CONSTRUCTION_READOUT"]:["SOURCE","NAVIGATION","SOURCE_AGGREGATE"]).includes(h.kind))throw Error("Saved connection order or kind differs.");});
   if(lexical&&(nodes.some(n=>n.solver_state!==false||n.readout_only!==true)||hops.map(h=>h.kind).join()!=="SEARCH_RECEIPT_READOUT,EXACT_QUOTATION_READOUT,CONSTRUCTION_READOUT"))throw Error("Malformed lexical source readout.");
-  const inventories=[route.citations,route.sources,route.source_quotes,packet.citations,...hops.map(h=>h.citations)].filter(v=>v!=null);
+  const inventories=[route.citations,route.sources,route.source_quotes,packet.citations,packet.candidate.sources,...hops.map(h=>h.citations)].filter(v=>v!=null);
   if(inventories.some(v=>!Array.isArray(v)))throw Error("Invalid source inventory.");
   const seen=new Set(),citations=inventories.flat().filter(c=>{if(!c||typeof c!=="object")throw Error("Invalid source proof.");const key=JSON.stringify([c.document_id,c.canonical_page_id,c.start,c.end,c.text]);if(seen.has(key))return false;seen.add(key);return true;});
-  if(sourceEndpointInspection&&!citations.length)throw Error('A source-endpoint inspection needs its selected original quotation.');
-  const steps=sourceEndpointInspection?[{type:'context',node_index:0,label:'Source endpoint community'},
-    {type:'endpoint_connections',node_index:0,label:'Inspect endpoint connections'}]:lexical?[{type:"receipt",label:"Search to source"}]:[{type:"context",node_index:0,label:"Starting community"},...hops.map((h,i)=>({type:"connection",hop_index:i,node_index:i+1,label:h.kind==="NAVIGATION"?"Hierarchy navigation":"Source context"}))];
-  if(citations.length)steps.push({type:"source",label:"Original sources"});
-  if(!sourceEndpointInspection&&(lexical||packet.candidate.binding==="source_page_readout"))steps.push({type:"readout",label:"Proposed wording"});
-  return {packet,selection,nodes,hops,citations,steps,lexical,sourceEndpointInspection,index:0,busy:false,playing:false,timer:null,error:null,limit:256,settledAt:null,sourceIndex:0};
+  const steps=lexical?[{type:"receipt",label:"Search to source"}]:[{type:"context",node_index:0,label:"Starting community"},...hops.map((h,i)=>({type:"connection",hop_index:i,node_index:i+1,label:h.kind==="NAVIGATION"?"Hierarchy navigation":"Source context"}))];
+  if(citations.length)steps.push({type:"source",label:"Source & wording"});
+  else if(lexical||packet.candidate.binding==="source_page_readout")steps.push({type:"readout",label:"Proposed wording"});
+  return {packet,selection,nodes,hops,citations,steps,lexical,index:0,busy:false,playing:false,timer:null,error:null,limit:256,settledAt:null,sourceIndex:0};
+}
+
+function selectGuideHandoff(g,params){
+  const keys=['guide_source','guide_start','guide_end','guide_hash'];
+  if(!keys.some(key=>params.has(key)))return;
+  if(keys.some(key=>params.getAll(key).length!==1)||!params.get('guide_source')||!/^\d+$/.test(params.get('guide_start'))||!/^\d+$/.test(params.get('guide_end'))||!/^[a-f0-9]{64}$/.test(params.get('guide_hash')))throw Error('Incomplete or mixed exact-quotation handoff. No alternate source is selected.');
+  const start=Number(params.get('guide_start')),end=Number(params.get('guide_end'));
+  if(!Number.isSafeInteger(start)||!Number.isSafeInteger(end)||start<0||end<=start)throw Error('Invalid exact-quotation coordinates.');
+  const inventory=[...(g.packet.candidate.sources||[]),...(g.packet.decision?.used_citations||[]),...(g.packet.candidate.decision?.used_citations||[])].map(c=>c?.citation||c);
+  const matches=inventory.filter(c=>c&&(c.canonical_page_id||c.page_id)===params.get('guide_source')&&c.start===start&&c.end===end&&c.page_sha256===params.get('guide_hash'));
+  const exact=new Map(matches.map(c=>[JSON.stringify([c.document_id,c.date,c.text]),c]));
+  if(exact.size!==1)throw Error('The requested quotation is not one exact bound candidate source or decision-used citation. No same-page substitute is used.');
+  const citation=exact.values().next().value;
+  if(typeof citation.text!=='string'||!citation.text||!citation.document_id||!(citation.date<g.packet.scope.strictly_before)||citation.document_id===g.packet.scope.whole_origin_excluded)throw Error('The requested quotation is outside this saved guide source policy.');
+  let index=g.citations.findIndex(c=>c.canonical_page_id===citation.canonical_page_id&&c.page_sha256===citation.page_sha256&&c.start===citation.start&&c.end===citation.end&&c.text===citation.text);
+  if(index<0){g.citations.push(citation);index=g.citations.length-1;}
+  g.handoffCitation=citation;g.sourceIndex=index;
 }
 
 function guideReturnUrl() {
@@ -2077,8 +2840,13 @@ function guideReturnUrl() {
 
 function guideHost() {
   let host=$("#retrieval-path-guide");
-  if(!host){host=document.createElement("aside");host.id="retrieval-path-guide";host.className="retrieval-path-guide guide-v63 guide-v64";host.setAttribute("aria-label","Saved source-context navigator");$(".graph-grid").before(host);}
+  if(!host){host=document.createElement("aside");host.id="retrieval-path-guide";host.className="retrieval-path-guide guide-v63 guide-v64";host.setAttribute("aria-label","Saved source-context navigator");$(".graph-grid").before(host);new ResizeObserver(()=>{const panel=state.panels.current;if(panel?.nodes.length&&!panel.v64Busy)panel.fit();}).observe(host);}
   return host;
+}
+
+function renderGuideLoading(){
+  const host=guideHost();host.setAttribute('aria-busy','true');
+  host.innerHTML='<header><h2>KG Navigator</h2></header><p class="guide-current" role="status">Loading saved stages...</p><div class="guide-actions"><button disabled>Previous</button><button disabled>Next</button><button disabled>Play</button></div>';
 }
 
 function pauseGuide() {
@@ -2109,6 +2877,7 @@ function closeSavedGuide() {
   const g=state.guidePath;if(!g)return;
   pauseGuide();guideEpoch++;g.abort?.abort();guideCloseSource();
   const panel=state.panels.current;
+  panel.guideCommunityContext=null;
   guideCancelMotionV64(panel);panel.v64Traversal=null;panel.studyContext=null;
   for(const name of ['data-guide-context','data-native-graph-id','data-native-hierarchy-id'])panel.canvas.removeAttribute(name);
   state.guidePath=null;state.guideOverlay=null;document.body.classList.remove("guide-active","guide-v63-active","guide-v64-active");
@@ -2172,42 +2941,35 @@ function scheduleGuide() {
 
 function renderPathGuide() {
   const host=guideHost(),g=state.guidePath;
-  if(state.guideError){host.innerHTML='<h2>Guide unavailable</h2><p role="alert">'+esc(state.guideError)+'</p><a href="'+esc(guideReturnUrl())+'">Return to result</a>';return;}
+  if(state.guideError){host.innerHTML='<header><h2>KG Navigator</h2></header><p role="alert">'+esc(state.guideError)+'</p><a href="'+esc(guideReturnUrl())+'">Return to result</a>';host.setAttribute('aria-busy','false');return;}
   if(!g)return;
-  const current=g.overlay?.version==='current-context-inspection/1';
-  host.innerHTML='<header><div><p class="eyebrow">Saved source context</p><h2>KG Navigator</h2></div><button data-guide-close aria-label="Close guide">Close</button></header>'+
-    '<p id="guide-level-v64" class="kg-level-v64" aria-label="Current guide KG level"></p>'+
-    '<p id="guide-case-bound" class="guide-case-bound" role="note">Case sources: strictly before <time datetime="'+esc(g.packet.scope.strictly_before)+'">'+esc(g.packet.scope.strictly_before)+'</time> (exclusive). Origin excluded.</p>'+
-    '<p class="guide-scope">'+(g.sourceEndpointInspection?'Source-endpoint inspection only: one verified extracted state, zero route hops. Community and incident connections are case-eligible context, not a recorded retrieval traversal, identity certificate or factual support. The standalone overview is separate.':g.caseContext?'Case source graph. The saved route uses its exact graph and hierarchy, not the separate overview map. Source links locate quotations; memberships and paths are not proof of the query.':current?'Same current KG. Exact source-bound nodes guide navigation; browser edges remain gray and uncertified.':'Same full KG. Red spokes: selected context, not a source assessment. Gold/red trace: an exact source-proven connection.')+'</p>'+
-    '<label class="guide-step-line"><span id="guide-count"></span><select id="guide-step" aria-label="Saved guide step">'+g.steps.map((s,i)=>'<option value="'+i+'">'+(i+1)+'. '+esc(s.label)+'</option>').join("")+'</select></label>'+
-    '<div id="guide-current" class="guide-current" role="status" aria-live="polite"></div><div class="guide-actions"></div>'+
-    '<div class="guide-context-actions"><button data-guide-neighborhood>32 connections</button><button data-guide-community>256 community</button></div>'+
-    '<details><summary>Sources and binding</summary>'+(g.citations.length?'<label class="guide-source-picker">Original source <select id="guide-source" aria-label="Original study source">'+g.citations.map((c,i)=>'<option value="'+i+'">'+(i+1)+'. '+esc(c.document_id)+'</option>').join('')+'</select></label><button data-guide-source>Open source</button>':'')+
-    '<p>Before '+esc(g.packet.scope.strictly_before)+'; origin '+esc(g.packet.scope.whole_origin_excluded)+' excluded. '+(g.caseContext?'Source graph '+esc(g.packet.resource_binding.graph_id)+' / hierarchy '+esc(g.packet.resource_binding.hierarchy_id)+'. The standalone Corpus Map is unchanged.':'Browser memberships remain unchanged'+(current?'; exact current graph and hierarchy IDs are bound. No browser-edge correspondence is certified.':g.overlay?.layout_matches_study?'.':'; the study hierarchy differs.'))+'</p><p id="guide-mapping-status"></p></details>'+
-    '<a class="guide-return" href="'+esc(guideReturnUrl())+'">Return to this result</a>';
-  $('#guide-step').onchange=e=>activateGuideStep(Number(e.target.value));
+  host.innerHTML='<header><h2>KG Navigator</h2><button data-guide-close aria-label="Close guide">Close</button></header>'+
+    '<div class="guide-stages" role="group" aria-label="Saved guide stages">'+g.steps.map((step,index)=>{
+      const node=Number.isInteger(step.node_index)?g.nodes[step.node_index]:null;
+      return '<button type="button" data-guide-step="'+index+'" title="'+esc(node?.label||step.label)+'"><span class="guide-stage-number">'+(index+1)+'</span><strong>'+esc(step.label)+'</strong>'+(node?'<small>'+esc(compact(guideNodeLabel(node),52))+'</small>':'')+'</button>';
+    }).join('')+'</div><div class="guide-actions"></div><p id="guide-current" class="guide-current" role="status" aria-live="polite"></p>'+
+    '<details class="guide-details"><summary>Details</summary><p id="guide-level-v64" class="kg-level-v64" aria-label="Current guide KG level"></p><p id="guide-case-bound">Before '+esc(g.packet.scope.strictly_before)+'; origin excluded. A route is navigation, not proof.</p><p id="guide-mapping-status"></p><div class="guide-context-actions"><button data-guide-neighborhood>Neighborhood</button><button data-guide-community>Community</button></div><div class="guide-source-buttons">'+g.citations.map((citation,index)=>'<button type="button" data-guide-citation="'+index+'">'+esc(citation.document_id)+' / '+esc(citation.canonical_page_id||citation.page_id)+'</button>').join('')+'</div><a class="guide-return" href="'+esc(guideReturnUrl())+'">Return to result</a></details>';
+  $$('[data-guide-step]',host).forEach(button=>button.onclick=()=>activateGuideStep(Number(button.dataset.guideStep)));
   $('[data-guide-close]',host).onclick=closeSavedGuide;
   $('[data-guide-neighborhood]',host).onclick=()=>guideContextView("neighborhood");
   $('[data-guide-community]',host).onclick=()=>guideContextView("community");
-  $('#guide-source',host)?.addEventListener('change',e=>{pauseGuide();g.sourceIndex=Number(e.target.value);});
-  $('[data-guide-source]',host)?.addEventListener('click',async()=>{
+  $$('[data-guide-citation]',host).forEach(button=>button.onclick=async()=>{
     pauseGuide();g.busy=true;renderGuideStatus();
-    try{await openStudySource(g.citations[g.sourceIndex]);}catch(e){g.error=e.message;}
+    try{g.sourceIndex=Number(button.dataset.guideCitation);await openStudySource(g.citations[g.sourceIndex]);}catch(e){g.error=e.message;}
     finally{g.busy=false;renderGuideStatus();}
   });
   renderGuideStatus();
 }
 
 function renderGuideStatus() {
-  const g=state.guidePath;if(!g||!$('#guide-step'))return;
-  $('#guide-step').value=String(g.index);$('#guide-step').disabled=g.busy;
-  $('#guide-count').textContent=(g.index+1)+' / '+g.steps.length;
-  $('#guide-current').textContent=g.busy?'Loading and settling...':g.error||g.message||g.steps[g.index].label;
+  const g=state.guidePath;if(!g||!$('.guide-stages'))return;
+  $$('[data-guide-step]').forEach(button=>{button.disabled=g.busy;button.setAttribute('aria-current',Number(button.dataset.guideStep)===g.index?'step':'false');});
+  $('#guide-current').textContent=g.busy?'Loading...':g.error||g.steps[g.index].label;
   $('#guide-current').classList.toggle('guide-warning',Boolean(g.error));
-  const actions=$('.guide-actions',guideHost());actions.innerHTML=guideControls()+'<small>3 seconds after loading and animation settle.</small>';bindGuideControls(actions);
+  const actions=$('.guide-actions',guideHost());actions.innerHTML=guideControls();bindGuideControls(actions);
   $$('[data-guide-neighborhood],[data-guide-community]').forEach(b=>b.disabled=g.busy||g.lexical||!g.currentRecord||Boolean(nodeLevel[g.currentRecord.type]));
-  $('[data-guide-source]')?.toggleAttribute('disabled',g.busy);
-  $('#guide-mapping-status').textContent=g.caseContext?'Exact saved-source node IDs and recorded memberships. No spelling-based join to the standalone overview and no new answer or inference.':g.overlay?.endpoint_mappings.filter(m=>m.browser_id===null).map(m=>m.native_id+': '+m.reason).join('\n')||'Exact canonical/source-ID mapping. '+(g.overlay?.verified_browser_edges.length||0)+' source-proven existing edge correspondences. All other edges remain gray and unassessed.';
+  $$('[data-guide-citation]').forEach(button=>button.disabled=g.busy);
+  $('#guide-mapping-status').textContent=g.caseContext?'Exact saved source graph and recorded memberships.':g.overlay?.endpoint_mappings.filter(m=>m.browser_id===null).map(m=>m.native_id+': '+m.reason).join('\n')||'Exact bound IDs. Uncertified browser edges remain unassessed.';
   const footer=$('#study-guide-drawer footer');if(footer){footer.innerHTML=guideControls();bindGuideControls(footer);}
   guideHost().setAttribute('aria-busy',String(g.busy));
   if(g.caseContext&&state.panels.current.studyContext)state.panels.current.updateChrome();
@@ -2248,7 +3010,7 @@ async function guideContextView(kind,{limit}={}) {
   try{
     const panel=state.panels.current;
     if(g.caseContext){
-      const step=g.steps[g.index],target=!g.sourceEndpointInspection&&(step.type==='connection'||!['context','connection'].includes(step.type)&&panel.studyContext?.phase.startsWith('target_'));
+      const step=g.steps[g.index],target=step.type==='connection'||!['context','connection'].includes(step.type)&&panel.studyContext?.phase.startsWith('target_');
       await guideCaseView((target?'target_':'start_')+(kind==='neighborhood'?'connections':'community'),{limit:limit??(kind==='neighborhood'?32:256)});
       return;
     }
@@ -2269,8 +3031,12 @@ async function guideContextView(kind,{limit}={}) {
 async function guideShowEndpoint(step) {
   const g=state.guidePath,panel=state.panels.current;
   if(g.caseContext){
-    await guideCaseView(step.type==='context'?'start_community':g.sourceEndpointInspection?'start_connections':'target_connections',{limit:step.type==='context'?256:32});
-    g.message=g.sourceEndpointInspection?(step.type==='context'?'Inspecting the verified endpoint in its recorded source community. Membership is navigation, not assertion proof.':'Inspecting eligible incident connections of that same endpoint. No edge is claimed as an original retrieval hop or proof of the query.'):step.type==='context'?'Starting in the recorded source community. Only case-eligible source states are shown.':'Following an existing source connection or recorded membership. The highlighted path is not proof of the missing answer.';
+    const source=g.nodes[step.hop_index],target=g.nodes[step.node_index];
+    const community=node=>node?.community_id||/^hierarchy:community:(.+)$/.exec(node?.parent_id||'')?.[1];
+    const same=step.type==='connection'&&g.hops[step.hop_index]?.kind==='SOURCE'&&community(source)&&community(source)===community(target);
+    await guideCaseView(step.type==='context'?'start_community':same?'target_community':'target_connections',{limit:step.type==='context'||same?256:32});
+    g.movement=same&&panel.edges.some(edge=>edge.kind==='SOURCE'&&guidePairV64(edge,source.id,target.id))?'same_community':step.type==='context'?'community':'case_source_context';
+    g.message=step.type==='context'?'Starting in the recorded source community. Only case-eligible source states are shown.':'Following an existing source connection or recorded membership. The highlighted path is not proof of the missing answer.';
     return;
   }
   const record=await guideRecord(step.node_index);
@@ -2289,7 +3055,8 @@ async function guideShowEndpoint(step) {
     panel.v64Traversal=null;
     if(hop.kind==='SOURCE'&&sourceId&&!nodeLevel[record.type]){
       await guidePulseV64(panel,sourceId,token);
-      if(panel.nodeMap.has(sourceId)&&panel.nodeMap.has(record.id))g.movement='horizontal';
+      if(await guideRetainCommunity(panel,sourceId,record,token))g.movement='same_community';
+      else if(panel.nodeMap.has(sourceId)&&panel.nodeMap.has(record.id))g.movement='horizontal';
       else{
         const incident=await ensureNodeNeighborhood(panel.view,sourceId);guideAssertV64(token);
         if(incident.neighbors.some(n=>n.id===record.id)&&incident.edges.some(e=>guidePairV64(e,sourceId,record.id))){
@@ -2306,6 +3073,20 @@ async function guideShowEndpoint(step) {
   });
   g.message=(hop.kind==='NAVIGATION'?'Recorded membership is navigation, not a historical relation. ':panel.v64Traversal?.verified?'Exact source-proven existing edge; both endpoints highlighted. ':panel.v64Traversal?.context_edge_ids.length?'Selected browser connection context; its view-specific edge ID is not certified by the saved source proof. ':'Eligible source handoff; no browser-edge traversal is certified. ')+(g.movement==='horizontal'?'Perspective retained. ':g.movement==='direct_neighborhood'?'Existing direct-neighborhood view; no invented link. ':'Actual browser hierarchy retained. ');
   g.activeCitations=connection.citations;
+}
+
+async function guideRetainCommunity(panel,sourceId,target,token){
+  if(panel.neighborhood||panel.level!=='evidence'||!target.community_id||panel.trail.at(-1)?.id!==target.community_id)return false;
+  const incident=panel.localIncidentNeighborhood?.node?.id===sourceId?panel.localIncidentNeighborhood:await ensureNodeNeighborhood(panel.view,sourceId);
+  guideAssertV64(token);
+  if(incident.node.community_id!==target.community_id)return false;
+  const parent=panel.trail.at(-1),members=new Set((parent.member_nodes||[]).map(node=>node.id||node.node_id));
+  const edges=incident.edges.filter(edge=>edge.id&&guidePairV64(edge,sourceId,target.id));
+  if(!members.has(sourceId)||!members.has(target.id)||!edges.length)return false;
+  // These exact edge IDs come from the same bound published incident catalog.
+  panel.guideCommunityContext={community_id:parent.id,edges};
+  panel.pinnedFocusIds=new Set([sourceId,target.id]);panel.refreshGraph(target.id);
+  return panel.nodeMap.has(sourceId)&&panel.nodeMap.has(target.id)&&panel.edges.some(edge=>edges.some(actual=>actual.id===edge.id));
 }
 
 async function guideCaseView(phase,{limit=256}={}) {
@@ -2356,12 +3137,25 @@ function inspectStudyEdge(edge){
   const panel=state.panels.current;panel.selected=edge;panel.renderInspector();panel.draw();
 }
 
+function guideVerifiedSourceMarkup(text,start,end,wording){
+  const chars=Array.from(text),quote=chars.slice(start,end).join(''),literal=String(wording||'');
+  let cursor=0,body='',matches=0;
+  const word=char=>/[\p{L}\p{N}_]/u.test(char||'');
+  if(literal)for(let index=quote.indexOf(literal);index>=0;index=quote.indexOf(literal,index+literal.length)){
+    if(word(literal[0])&&word(quote[index-1])||word(literal.at(-1))&&word(quote[index+literal.length]))continue;
+    body+=esc(quote.slice(cursor,index))+'<mark class="proposed-wording">'+esc(literal)+'</mark>';cursor=index+literal.length;matches++;
+  }
+  body+=esc(quote.slice(cursor));
+  return {html:esc(chars.slice(0,start).join(''))+'<mark class="source-quotation">'+body+'</mark>'+esc(chars.slice(end).join('')),matches};
+}
+
 async function openStudySource(citation,{manual=true}={}) {
+  if(!await allowSavedStorySource(()=>openStudySource(citation,{manual})))return;
   if(manual)pauseGuide();guideCloseSource();const epoch=++guideSourceEpoch;
   const scrim=document.createElement('div');scrim.id='study-guide-scrim';scrim.onclick=()=>{pauseGuide();guideCloseSource();};document.body.append(scrim);
   const current=Boolean(currentGraphResource());
   const drawer=document.createElement('aside');drawer.id='study-guide-drawer';drawer.setAttribute('role','dialog');drawer.setAttribute('aria-modal','true');drawer.setAttribute('aria-label',current?'Verified eligible current-resource source':'Verified eligible study source');
-  drawer.innerHTML='<header><h2>'+(current?'Original eligible source':'Original study source')+'</h2><button data-study-close>Close source</button></header><div class="study-source-content" role="status">Verifying the exact saved page and quotation...</div><footer>'+guideControls()+'</footer>';
+  drawer.innerHTML='<header><h2>Source &amp; wording</h2><button data-study-close>Close source</button></header><div class="study-source-content" role="status">Verifying the exact saved page and quotation...</div><footer>'+guideControls()+'</footer>';
   document.body.append(drawer);$('[data-study-close]',drawer).onclick=()=>{pauseGuide();guideCloseSource();};bindGuideControls($('footer',drawer));$('[data-study-close]',drawer).focus({preventScroll:true});
   const pageId=citation.canonical_page_id||citation.page_id;
   try{
@@ -2373,7 +3167,10 @@ async function openStudySource(citation,{manual=true}={}) {
     const chars=Array.from(page.text),start=citation.start,end=citation.end;
     if(page.id!==pageId||page.document_id!==citation.document_id||page.date!==citation.date||hash!==citation.page_sha256||page.document_id===state.guidePath.packet.scope.whole_origin_excluded||!(page.date<state.guidePath.packet.scope.strictly_before)||!Number.isInteger(start)||!Number.isInteger(end)||start<0||end<=start||end>chars.length||chars.slice(start,end).join('')!==citation.text)throw Error('Exact saved source proof did not replay. No alternate quote or transcript was substituted.');
     if(epoch!==guideSourceEpoch)return;
-    $('.study-source-content',drawer).innerHTML='<p class="study-proof-status">Verified original '+(current?'eligible source':'study')+' page and exact quotation. Source handoff, not a browser-edge transition.</p><p>'+esc(page.document_id)+' / '+esc(page.date)+'</p><pre>'+esc(chars.slice(0,start).join(''))+'<mark>'+esc(citation.text)+'</mark>'+esc(chars.slice(end).join(''))+'</pre>';
+    const wording=String(state.guidePath.packet.candidate.fill||''),marked=guideVerifiedSourceMarkup(page.text,start,end,wording);
+    drawer.dataset.proofPage=pageId;drawer.dataset.proofHash=hash;drawer.dataset.proofStart=String(start);drawer.dataset.proofEnd=String(end);
+    $('.study-source-content',drawer).innerHTML='<section class="study-wording"><h3>Proposed wording</h3><p>'+esc(wording||'No proposed wording saved.')+'</p><small>'+(marked.matches?'Verbatim wording is highlighted inside the verified quotation.':'Not quoted verbatim in this quotation.')+'</small></section><p>'+esc(page.document_id)+' / '+esc(page.date)+'</p><div class="study-mark-legend"><span class="quotation-swatch">Saved quotation</span>'+(marked.matches?'<span class="wording-swatch">Verbatim wording</span>':'')+'</div><pre>'+marked.html+'</pre>';
+    $('.source-quotation',drawer)?.scrollIntoView({block:'center',behavior:'instant'});
   }catch(e){if(epoch===guideSourceEpoch){$('.study-source-content',drawer).textContent=e.message;$('.study-source-content',drawer).setAttribute('role','alert');}throw e;}
 }
 
@@ -2384,15 +3181,18 @@ async function activateGuideStep(index,{automatic=false}={}) {
   const panel=state.panels.current;panel.canvas.setAttribute('aria-busy','true');
   const step=g.steps[index];
   try{
-    if(['context','connection','endpoint_connections'].includes(step.type))await guideShowEndpoint(step);
+    if(['context','connection'].includes(step.type))await guideShowEndpoint(step);
     else if(step.type==='source'){
       g.message=g.caseContext?'Original eligible source context. The case-source graph stays in place.':'Original source context. The full KG stays in place.';
-      await openStudySource(g.citations[g.sourceIndex]||g.citations[0],{manual:false});
+      await openStudySource(g.handoffCitation||g.citations[g.sourceIndex]||g.citations[0],{manual:false});
     }else if(step.type==='receipt'){
       g.message='Saved lexical search and document receipts, not KG nodes or edges.';
       const hits=g.nodes[0].executed_searches||[];
       g.message+=' '+hits.length+' executed searches; source '+guideNodeLabel(g.nodes[1])+'.';
-    }else g.message='Proposed wording: '+(g.packet.candidate.fill||g.packet.candidate.id)+'. Constructed source readout, not a KG node.';
+    }else{
+      if(g.handoffCitation)await openStudySource(g.handoffCitation,{manual:false});
+      g.message='Proposed wording: '+(g.packet.candidate.fill||g.packet.candidate.id)+'. Constructed source readout, not a KG node.';
+    }
     await guideFrames();
   }catch(e){if(epoch===guideEpoch){g.error=e.message;pauseGuide();}}
   finally{
@@ -2407,11 +3207,12 @@ async function activateGuideStep(index,{automatic=false}={}) {
 async function loadSavedGuide(params) {
   try{
     const selection=guideSelection(params);if(!selection)return;
+    if(!await allowSavedStorySource(()=>loadSavedGuide(params),{landing:true,caseId:selection.case_id}))return;
     const g=normalizeSavedGuide(await currentGraphJSON('/api/guide-v6?'+new URLSearchParams(selection)),selection);
+    selectGuideHandoff(g,params);
     // Cable overview exports have a different hierarchy. Select a separate,
     // exact source-context lens instead of weakening the full-map ID check.
     g.caseContext=Boolean(currentGraphResource(params)&&['iran','vietnam'].includes(corpusId));
-    if(g.sourceEndpointInspection&&!g.caseContext)throw Error('A source-endpoint inspection requires the exact cable case-source lens.');
     if(!g.caseContext)verifyCurrentMapBinding(g.packet.resource_binding);
     const overlay=await currentGraphJSON('/api/guide-overlay-v64?'+new URLSearchParams(selection));
     if(overlay.version==='current-context-inspection/1'){
@@ -2438,10 +3239,6 @@ async function loadSavedGuide(params) {
         ['#exploration-layout','Source graph '+g.packet.resource_binding.graph_id+' / hierarchy '+g.packet.resource_binding.hierarchy_id+'.'],
         ['#level-explanation','Use the navigator to switch between the selected state\'s community and direct connections. Membership is navigation; a path is not proof of the query.']
       ]){const node=$(selector);if(node){g.savedCaseLabels.push([node,node.textContent]);node.textContent=text;}}
-      if(g.sourceEndpointInspection){
-        $('#document-count').textContent='Saved source-endpoint context';
-        $('#purpose').textContent='Inspect one source-owned extracted endpoint and its eligible context. Zero retrieval hops are claimed; the independent overview returns when this inspector closes.';
-      }
       for(const [selector,text] of [['.graph-legend .edge.solid',' Source connection'],['.graph-legend .edge.dashed',' Recorded membership']]){
         const node=$(selector)?.parentElement?.lastChild;
         if(node?.nodeType===Node.TEXT_NODE){g.savedCaseLabels.push([node,node.textContent]);node.textContent=text;}
@@ -2455,10 +3252,10 @@ async function loadSavedGuide(params) {
   }catch(e){state.guideError=e.message;pauseGuide();renderPathGuide();}
 }
 
-document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseGuide();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden){pauseGuide();Object.values(state.panels).forEach(panel=>panel.stopPhysics());}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){pauseGuide();guideCloseSource();}});
 document.addEventListener('pointerdown',e=>{if(state.guidePath&&!e.target.closest('#retrieval-path-guide,#study-guide-drawer'))pauseGuide();},true);
-matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',()=>pauseGuide());
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',()=>{pauseGuide();Object.values(state.panels).forEach(panel=>panel.stopPhysics());});
 
 
 // View-only motion over the original GraphPanel. No node/edge is synthesized.
@@ -2493,8 +3290,7 @@ function guideExportV64() {
     index:g.index,steps:g.steps.map(s=>({type:s.type,node_index:s.node_index??null,hop_index:s.hop_index??null})),
     current_level:guideLevelV64(p),movement:g.movement||null,traversal:p.v64Traversal||null,busy:g.busy,playing:g.playing,
     settled_at:g.settledAt,layout_only:true,native_route_changed:false,case_source_context:g.caseContext===true,
-    source_resource_binding:g.caseContext?g.packet.resource_binding:null,
-    source_endpoint_inspection_only:g.sourceEndpointInspection===true,retrieval_route_certified:g.sourceEndpointInspection?false:null}));
+    source_resource_binding:g.caseContext?g.packet.resource_binding:null}));
 }
 window.guideExportV64=guideExportV64;
 
@@ -2634,6 +3430,7 @@ async function guideRunV64(panel,work,{manual=false}={}) {
 }
 
 function guideResetViewV64(panel,level,trail,focusIds=[]) {
+  panel.guideCommunityContext=null;
   panel.neighborhood=null;panel.localIncidentNeighborhood=null;panel.investigativeContext=null;panel.expandedIncidentScopes.clear();
   panel.showNeighborEdges=false;panel.inducedNeighborEdges=[];panel.inducedLoadRevision++;panel.inducedLoading=false;panel.inducedError='';
   panel.level=level;panel.trail=[...trail];panel.nodeLimit=256;panel.external=null;panel.pinnedFocusIds=new Set(focusIds.filter(Boolean));panel.searchMatchIds.clear();
@@ -2734,7 +3531,8 @@ function guideInstallV64() {
     },{manual:true}).catch(e=>this.inspectionError(e));
   };
   p.focusNeighborhood=function(record,{scroll=true,remember=true}={}){
-    return guideRunV64(this,async token=>{this.v64Traversal=null;await guideOpenNeighborhoodV64(this,record,token,{remember});if(scroll)this.canvas.focus({preventScroll:true});},{manual:true});
+    const previous=this.neighborhood?.node?.id;
+    return guideRunV64(this,async token=>{this.v64Traversal=null;await guideOpenNeighborhoodV64(this,record,token,{remember});if(previous&&previous!==record.id&&!state.guidePath){this.priorCenter={id:previous,until:performance.now()+3000};setTimeout(()=>{this.priorCenter=null;this.draw();},3000);this.draw();}if(scroll)this.canvas.focus({preventScroll:true});},{manual:true});
   };
   p.openLocalCommunity=function(record,{scroll=true,remember=true}={}){
     return guideRunV64(this,async token=>{this.v64Traversal=null;const saved=remember?this.rememberLocation():null;await guideMoveRecordV64(this,record,token);if(saved)this.nodeHistory.push(saved);if(scroll)this.canvas.focus({preventScroll:true});},{manual:true});
@@ -2746,15 +3544,17 @@ guideInstallV64();
 
 function syncVisibilityControl() {
   $$('[data-eligibility-style]').forEach((button)=>{
-    const active=button.dataset.eligibilityStyle===state.visibilityMode;
+    const active=state.showIneligible&&button.dataset.eligibilityStyle===state.visibilityMode;
     button.classList.toggle("active",active);
     button.setAttribute("aria-pressed",String(active));
   });
   const checkbox=$("#show-ineligible");
   if(checkbox)checkbox.checked=state.showIneligible;
+  const hide=$('#hide-ineligible');hide?.classList.toggle('active',!state.showIneligible);hide?.setAttribute('aria-pressed',String(!state.showIneligible));
 }
 
 function setVisibilityMode(mode) {
+  if(visibilityModes.includes(mode)&&!state.showIneligible){state.visibilityMode=mode;setIneligiblePresence(true);return;}
   if(!visibilityModes.includes(mode)||mode===state.visibilityMode){syncVisibilityControl();return;}
   state.visibilityMode=mode;syncVisibilityControl();
   const url=new URL(window.location.href);url.searchParams.set("ineligible",state.visibilityMode);history.replaceState(null,"",url);
@@ -2908,6 +3708,7 @@ async function init() {
     $$('[data-back]').forEach((button)=>button.addEventListener("click",()=>state.panels[button.dataset.back].back()));
     $$('[data-node-cap]').forEach((select)=>select.addEventListener("change",()=>state.panels[select.dataset.nodeCap].setNodeCap(select.value)));
     $("#graph-search").addEventListener("input",applySearch); $("#search-scope").addEventListener("change",applySearch); $("#hide-isolates").addEventListener("change",(event)=>{ state.hideIsolates=event.target.checked; applySearch(); });
+    await initializeSlotOverlay();
     const requestedScope=params.get("scope"),requestedQuery=params.get("q")||"";
     if(requestedScope&&[...$("#search-scope").options].some((option)=>option.value===requestedScope))$("#search-scope").value=requestedScope;
     if(hasSavedGuide(params)){
@@ -2930,15 +3731,10 @@ async function init() {
     $("#cib-source-close")?.addEventListener("click",closeCibSource);$("#cib-drawer-scrim")?.addEventListener("click",closeCibSource);window.addEventListener("keydown",(event)=>{if(event.key==="Escape")closeCibSource();});
     const focusId=params.get("node_id")||params.get("node");
     if(focusId&&!state.guidePath&&!state.guideError){
-      if(params.has('focus_graph_id')||params.has('focus_hierarchy_id')){
-        if(!currentGraphResource(params)||params.getAll('focus_graph_id').length!==1||params.getAll('focus_hierarchy_id').length!==1||
-            params.get('focus_graph_id')!==refreshBinding.graph_run_id||params.get('focus_hierarchy_id')!==refreshBinding.hierarchy_run_id)
-          throw Error('The exact endpoint and current map graph/hierarchy pins differ. No archived graph or label substitute is selected.');
-      }
       const view=currentViews().current;
       await ensureEvidenceSearchCatalog([view.key]);
-      const record=state.searchEvidenceIndexes[view.key]?.get(focusId);
-      if(record){await state.panels.current.navigateToNode(record);document.body.dataset.exactFocusNodeId=record.id;document.body.dataset.exactFocusCommunityId=record.community_id||'';}
+      const record=opaqueSlot(focusId)||state.searchEvidenceIndexes[view.key]?.get(focusId);
+      if(record)await state.panels.current.navigateToNode(record);
       else $("#search-status").textContent="The requested semantic ID is not in this separately bound exploration catalog. No substitute identity or route was invented.";
     }
     document.body.dataset.graphReady="true";
@@ -2952,9 +3748,9 @@ async function init() {
 }
 
 $("#full-corpus").value=corpusId;
-$("#full-workbench-link").href=returnWorkbench;
-$("#full-home-link").href=$("#full-home-brand").href="index.html";
-$("#full-graph-link").href=location.pathname+location.search;
+$("#nav-workbench").href=returnWorkbench;
+$("#nav-home").href=$("#nav-brand").href="index.html";
+$("#nav-graph").href=location.pathname+location.search;
 $("#full-corpus").addEventListener("change",event=>{
   const url=new URL(location.href);url.searchParams.set("corpus",event.target.value);
   for(const key of [...url.searchParams.keys()])if(key.startsWith("guide_")||["node","node_id","q","as_of","path_seed_id","path_neighbor_id"].includes(key))url.searchParams.delete(key);
@@ -2964,7 +3760,6 @@ $("#full-corpus").addEventListener("change",event=>{
 // Presentation-only provenance. Append before the existing graph init call.
 function guideRouteBadgeV65(packet) {
   const route=packet?.route||{};
-  if(route.route_kind==='SOURCE_ENDPOINT_INSPECTION')return {kind:'source_endpoint_inspection',label:'Source-endpoint inspection',note:'One verified extracted endpoint and its eligible context; zero retrieval hops. Not a saved positive walk, identity certificate or query-support proof.'};
   if(route.route_kind==='LEXICAL_SOURCE_READOUT')return {kind:'readout',label:'Source readout',note:'Document and quote readout, not a numerical KG walk.'};
   const derived=route.derived_witness===true||route.route_kind==='DERIVED_BOUNDED_PROJECTION_WITNESS';
   if(derived)return {kind:'derived',label:'Derived projection witness',note:'Selected from actual bounded projection edges and the bound native kernel. Not a native-saved witness or a correctness probability.'};
@@ -2977,13 +3772,45 @@ function guideRenderRouteBadgeV65() {
   if(!host||!g)return;
   const badge=guideRouteBadgeV65(g.packet);
   let node=host.querySelector('#guide-route-provenance-v65');
-  if(!node){node=document.createElement('p');node.id='guide-route-provenance-v65';node.className='guide-case-bound';node.setAttribute('role','note');host.querySelector('header').after(node);}
+  if(!node){node=document.createElement('p');node.id='guide-route-provenance-v65';node.className='guide-case-bound';node.setAttribute('role','note');host.querySelector('.guide-details')?.append(node);}
   node.dataset.routeProvenance=badge.kind;
   node.textContent=badge.label;node.title=badge.note;node.setAttribute('aria-label',badge.label+'. '+badge.note);
-  host.querySelector('.eyebrow').textContent=g.sourceEndpointInspection?'Source endpoint context':'Source path context';
 }
 
 const guideOriginalRenderV65=renderPathGuide;
 renderPathGuide=function(){guideOriginalRenderV65();guideRenderRouteBadgeV65();};
 
+function bindMapToolbar(){
+  const toolbar=$('.map-toolbar'),search=$('#graph-search'),dropdown=$('#map-search-dropdown');
+  const resize=()=>{const bottom=Math.ceil(toolbar.getBoundingClientRect().bottom),origin=$('main').getBoundingClientRect().top;document.documentElement.style.setProperty('--toolbar-height',Math.max(0,bottom-origin)+'px');document.documentElement.style.setProperty('--toolbar-bottom',bottom+'px');for(const panel of Object.values(state.panels))panel.fit();};
+  new ResizeObserver(resize).observe(toolbar);
+  const closePopovers=except=>$$('.toolbar-popover[open]').forEach(d=>{if(d!==except)d.open=false;});
+  $$('.toolbar-popover').forEach(d=>d.addEventListener('toggle',()=>{if(d.open){closePopovers(d);dropdown.hidden=true;}}));
+  document.addEventListener('pointerdown',event=>{if(!event.target.closest('.toolbar-popover'))closePopovers();if(!event.target.closest('.search-box'))dropdown.hidden=true;});
+  $('#hide-ineligible').onclick=()=>setIneligiblePresence(false);
+  $('#map-up').onclick=()=>{const panel=state.panels.current;if(!panel||panel.v64Busy)return;panel.closeInspector(false);guideRunV64(panel,token=>guideParentV64(panel,token),{manual:true}).catch(e=>panel.inspectionError(e));};
+  $('#map-context').onclick=()=>{const p=state.panels.current;if(!p||p.v64Busy)return;const item=p.selected&&!p.selected.source?p.selected:p.neighborhood?.node;if(!item)return;
+    if(state.guidePath)return guideContextView(p.neighborhood?'community':'neighborhood');
+    p.closeInspector(false);Promise.resolve(p.neighborhood?(p.level==='evidence'?p.openLocalCommunity(item):p.returnFromNeighborhood()):p.focusDirectConnections(item)).catch(e=>{p.drawerOpen=true;p.inspectionError(e);});};
+  $('#reset-map-labels').onclick=()=>{for(const p of Object.values(state.panels)){p.labelOverrides.clear();p.draw();}};
+  const openSearch=()=>{if(search.value||$('#search-scope').value==='slot'){dropdown.hidden=false;closePopovers();}};
+  search.addEventListener('input',()=>{dropdown.hidden=!search.value;closePopovers();});search.addEventListener('focus',openSearch);
+  $('#search-scope').addEventListener('change',()=>{dropdown.hidden=false;});
+  $('#close-search').onclick=()=>{search.focus({preventScroll:true});dropdown.hidden=true;};
+  $('#browse-source-slots').addEventListener('click',()=>{closePopovers();dropdown.hidden=false;search.focus({preventScroll:true});});
+  $('#search-results').addEventListener('click',e=>{if(e.target.closest('button'))dropdown.hidden=true;});
+  new MutationObserver(()=>{if($('#search-results').hidden&&!search.value&&$('#search-scope').value!=='slot')dropdown.hidden=true;}).observe($('#search-results'),{attributes:true,attributeFilter:['hidden']});
+  document.addEventListener('keydown',event=>{
+    const editing=event.target.matches('input,select,textarea,[contenteditable=true]');
+    if(event.key==='/'&&!editing){event.preventDefault();search.focus();}
+    if(event.key==='Escape'){closePopovers();for(const panel of Object.values(state.panels))if(panel.drawerOpen)panel.closeInspector();dropdown.hidden=true;}
+    const dialog=$('#study-guide-drawer')||($('#cib-source-drawer').classList.contains('open')?$('#cib-source-drawer'):null);
+    if(event.key==='Tab'&&dialog){const focusable=$$('button:not(:disabled),a[href],input,select,iframe,[tabindex="0"]',dialog).filter(n=>n.getClientRects().length);const first=focusable[0],last=focusable.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}}
+  });
+  const syncPressed=()=>{$$('[data-display-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.displayMode===state.displayMode)));$$('[data-level]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.level===state.level)));};
+  toolbar.addEventListener('click',()=>queueMicrotask(syncPressed));syncPressed();resize();
+}
+bindMapToolbar();
+
+if(hasSavedGuide(pageParams))renderGuideLoading();
 if (!redirectCibRoute) init();

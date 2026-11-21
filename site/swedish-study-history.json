@@ -1,0 +1,2038 @@
+{
+  "controls": [
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 11,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 152,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet Marshal Malinovsky told a visiting"
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_46643994e92bf266c33d",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 117,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1834,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1737,
+            "text": "A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare"
+          },
+          "fill": "Swedish",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_121ec8dd53fa88386de0",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1779,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1773,
+            "text": "Swedes"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1255,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1157,
+            "text": "Strauss told American officials in Bonn on 6 March he is afraid of a change in US defense strategy"
+          },
+          "fill": "American",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9b7f990c8d3c057b5be4",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1178,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1170,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "fill": "Yugoslav",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "condition": "L1",
+      "document_date_filter": "NONE",
+      "eligible_page_count": 22574,
+      "inspected_page_count": 80,
+      "label": "All Later Documents Including Origin",
+      "profile_id": "broad",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 11,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1255,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1157,
+            "text": "Strauss told American officials in Bonn on 6 March he is afraid of a change in US defense strategy"
+          },
+          "fill": "American",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9b7f990c8d3c057b5be4",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1178,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1170,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_b7bcf472ea2fd86867ee",
+            "date": "1960-01-07",
+            "document_id": "CIA-RDP79T00975A004900040001-3",
+            "end": 314,
+            "page_sha256": "c05c25f700e170af90275368b7684d37b8188257c303921ca4f9a380fd359459",
+            "release": "later",
+            "source_page": 9,
+            "start": 249,
+            "text": "The Swedish ambassador in Moscow has learned from a Soviet source"
+          },
+          "fill": "Swedish",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9adb94d2b4c6ea46e892",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_b7bcf472ea2fd86867ee",
+            "date": "1960-01-07",
+            "document_id": "CIA-RDP79T00975A004900040001-3",
+            "end": 260,
+            "page_sha256": "c05c25f700e170af90275368b7684d37b8188257c303921ca4f9a380fd359459",
+            "release": "later",
+            "source_page": 9,
+            "start": 253,
+            "text": "Swedish"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "fill": "Yugoslav",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "condition": "L2",
+      "document_date_filter": "NONE",
+      "eligible_page_count": 22561,
+      "inspected_page_count": 80,
+      "label": "All Later Documents Except Whole Origin",
+      "profile_id": "broad",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 9,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "fill": "Yugoslav",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "date": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "end": 158,
+            "page_sha256": "91ee6bcb189ca660f1cb3f06d71095d3c0de2a1b0c72d6931da3ac7b25b5d5cc",
+            "release": "later",
+            "source_page": 4,
+            "start": 60,
+            "text": "An adviser to the Soviet representative on the UN Disarmament Subcommittee told American officials"
+          },
+          "fill": "American",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_33647cbc3f2fe920a50a",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "date": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "end": 148,
+            "page_sha256": "91ee6bcb189ca660f1cb3f06d71095d3c0de2a1b0c72d6931da3ac7b25b5d5cc",
+            "release": "later",
+            "source_page": 4,
+            "start": 140,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_0fb51a40163be53a9edd",
+            "date": "1957-08-08",
+            "document_id": "CIA-RDP79T00975A003200330001-9",
+            "end": 716,
+            "page_sha256": "e03f36fa14c3642fbb5f3aa270c84370377fb70a051aff090e115fa6a2d1c9cf",
+            "release": "later",
+            "source_page": 6,
+            "start": 612,
+            "text": "leftist Syrian officers reportedly went to Moscow recently to discuss the present Soviet views on union."
+          },
+          "fill": "Syrian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f1ec7dce1f0f34a7dc78",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_0fb51a40163be53a9edd",
+            "date": "1957-08-08",
+            "document_id": "CIA-RDP79T00975A003200330001-9",
+            "end": 626,
+            "page_sha256": "e03f36fa14c3642fbb5f3aa270c84370377fb70a051aff090e115fa6a2d1c9cf",
+            "release": "later",
+            "source_page": 6,
+            "start": 620,
+            "text": "Syrian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "condition": "L3",
+      "document_date_filter": "<",
+      "eligible_page_count": 15287,
+      "inspected_page_count": 80,
+      "label": "Later Documents Strictly Before Cutoff",
+      "profile_id": "broad",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 11,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 152,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet Marshal Malinovsky told a visiting"
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_46643994e92bf266c33d",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 117,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1834,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1737,
+            "text": "A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare"
+          },
+          "fill": "Swedish",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_121ec8dd53fa88386de0",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1779,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1773,
+            "text": "Swedes"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1255,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1157,
+            "text": "Strauss told American officials in Bonn on 6 March he is afraid of a change in US defense strategy"
+          },
+          "fill": "American",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9b7f990c8d3c057b5be4",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1178,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1170,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "fill": "Yugoslav",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_f25dc327b5927818",
+      "condition": "L1",
+      "document_date_filter": "NONE",
+      "eligible_page_count": 22574,
+      "inspected_page_count": 80,
+      "label": "All Later Documents Including Origin",
+      "profile_id": "broad",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 11,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1255,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1157,
+            "text": "Strauss told American officials in Bonn on 6 March he is afraid of a change in US defense strategy"
+          },
+          "fill": "American",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9b7f990c8d3c057b5be4",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1178,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1170,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_b7bcf472ea2fd86867ee",
+            "date": "1960-01-07",
+            "document_id": "CIA-RDP79T00975A004900040001-3",
+            "end": 314,
+            "page_sha256": "c05c25f700e170af90275368b7684d37b8188257c303921ca4f9a380fd359459",
+            "release": "later",
+            "source_page": 9,
+            "start": 249,
+            "text": "The Swedish ambassador in Moscow has learned from a Soviet source"
+          },
+          "fill": "Swedish",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9adb94d2b4c6ea46e892",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_b7bcf472ea2fd86867ee",
+            "date": "1960-01-07",
+            "document_id": "CIA-RDP79T00975A004900040001-3",
+            "end": 260,
+            "page_sha256": "c05c25f700e170af90275368b7684d37b8188257c303921ca4f9a380fd359459",
+            "release": "later",
+            "source_page": 9,
+            "start": 253,
+            "text": "Swedish"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "fill": "Yugoslav",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_f25dc327b5927818",
+      "condition": "L2",
+      "document_date_filter": "NONE",
+      "eligible_page_count": 22561,
+      "inspected_page_count": 80,
+      "label": "All Later Documents Except Whole Origin",
+      "profile_id": "broad",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 9,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "fill": "Yugoslav",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "date": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "end": 158,
+            "page_sha256": "91ee6bcb189ca660f1cb3f06d71095d3c0de2a1b0c72d6931da3ac7b25b5d5cc",
+            "release": "later",
+            "source_page": 4,
+            "start": 60,
+            "text": "An adviser to the Soviet representative on the UN Disarmament Subcommittee told American officials"
+          },
+          "fill": "American",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_33647cbc3f2fe920a50a",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "date": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "end": 148,
+            "page_sha256": "91ee6bcb189ca660f1cb3f06d71095d3c0de2a1b0c72d6931da3ac7b25b5d5cc",
+            "release": "later",
+            "source_page": 4,
+            "start": 140,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_0fb51a40163be53a9edd",
+            "date": "1957-08-08",
+            "document_id": "CIA-RDP79T00975A003200330001-9",
+            "end": 716,
+            "page_sha256": "e03f36fa14c3642fbb5f3aa270c84370377fb70a051aff090e115fa6a2d1c9cf",
+            "release": "later",
+            "source_page": 6,
+            "start": 612,
+            "text": "leftist Syrian officers reportedly went to Moscow recently to discuss the present Soviet views on union."
+          },
+          "fill": "Syrian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f1ec7dce1f0f34a7dc78",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_0fb51a40163be53a9edd",
+            "date": "1957-08-08",
+            "document_id": "CIA-RDP79T00975A003200330001-9",
+            "end": 626,
+            "page_sha256": "e03f36fa14c3642fbb5f3aa270c84370377fb70a051aff090e115fa6a2d1c9cf",
+            "release": "later",
+            "source_page": 6,
+            "start": 620,
+            "text": "Syrian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_f25dc327b5927818",
+      "condition": "L3",
+      "document_date_filter": "<",
+      "eligible_page_count": 15287,
+      "inspected_page_count": 80,
+      "label": "Later Documents Strictly Before Cutoff",
+      "profile_id": "broad",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 15,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 152,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet Marshal Malinovsky told a visiting"
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_46643994e92bf266c33d",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 117,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1834,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1737,
+            "text": "A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare"
+          },
+          "fill": "Swedish",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_121ec8dd53fa88386de0",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1779,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1773,
+            "text": "Swedes"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 161,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 118,
+            "text": "told several German journalists that he was"
+          },
+          "fill": "German",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_e6ce13e80db0932d4876",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 137,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 131,
+            "text": "German"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1255,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1157,
+            "text": "Strauss told American officials in Bonn on 6 March he is afraid of a change in US defense strategy"
+          },
+          "fill": "American",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9b7f990c8d3c057b5be4",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1178,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1170,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "condition": "L1",
+      "document_date_filter": "NONE",
+      "eligible_page_count": 22574,
+      "inspected_page_count": 80,
+      "label": "All Later Documents Including Origin",
+      "profile_id": "native_boundary",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 15,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 161,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 118,
+            "text": "told several German journalists that he was"
+          },
+          "fill": "German",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_e6ce13e80db0932d4876",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 137,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 131,
+            "text": "German"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1255,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1157,
+            "text": "Strauss told American officials in Bonn on 6 March he is afraid of a change in US defense strategy"
+          },
+          "fill": "American",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9b7f990c8d3c057b5be4",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1178,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1170,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_b7bcf472ea2fd86867ee",
+            "date": "1960-01-07",
+            "document_id": "CIA-RDP79T00975A004900040001-3",
+            "end": 314,
+            "page_sha256": "c05c25f700e170af90275368b7684d37b8188257c303921ca4f9a380fd359459",
+            "release": "later",
+            "source_page": 9,
+            "start": 249,
+            "text": "The Swedish ambassador in Moscow has learned from a Soviet source"
+          },
+          "fill": "Swedish",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9adb94d2b4c6ea46e892",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_b7bcf472ea2fd86867ee",
+            "date": "1960-01-07",
+            "document_id": "CIA-RDP79T00975A004900040001-3",
+            "end": 260,
+            "page_sha256": "c05c25f700e170af90275368b7684d37b8188257c303921ca4f9a380fd359459",
+            "release": "later",
+            "source_page": 9,
+            "start": 253,
+            "text": "Swedish"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "condition": "L2",
+      "document_date_filter": "NONE",
+      "eligible_page_count": 22561,
+      "inspected_page_count": 80,
+      "label": "All Later Documents Except Whole Origin",
+      "profile_id": "native_boundary",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 13,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 161,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 118,
+            "text": "told several German journalists that he was"
+          },
+          "fill": "German",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_e6ce13e80db0932d4876",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 137,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 131,
+            "text": "German"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "fill": "Yugoslav",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_90ae6ed4753037ae684b",
+            "date": "1957-08-01",
+            "document_id": "CIA-RDP79T00975A003200270001-6",
+            "end": 165,
+            "page_sha256": "0466847ef4af45e164608b7e052785237a77edff3237de13cf3a34dee3467a51",
+            "release": "later",
+            "source_page": 4,
+            "start": 64,
+            "text": "The Turkish official in charge of Soviet affairs in the Foreign Ministry reportedly stated on 27 July"
+          },
+          "fill": "Turkish",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_1e77ef1f261708ded4da",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_90ae6ed4753037ae684b",
+            "date": "1957-08-01",
+            "document_id": "CIA-RDP79T00975A003200270001-6",
+            "end": 75,
+            "page_sha256": "0466847ef4af45e164608b7e052785237a77edff3237de13cf3a34dee3467a51",
+            "release": "later",
+            "source_page": 4,
+            "start": 68,
+            "text": "Turkish"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "condition": "L3",
+      "document_date_filter": "<",
+      "eligible_page_count": 15287,
+      "inspected_page_count": 80,
+      "label": "Later Documents Strictly Before Cutoff",
+      "profile_id": "native_boundary",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 15,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 152,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet Marshal Malinovsky told a visiting"
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_46643994e92bf266c33d",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 117,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1834,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1737,
+            "text": "A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare"
+          },
+          "fill": "Swedish",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_121ec8dd53fa88386de0",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1779,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1773,
+            "text": "Swedes"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 161,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 118,
+            "text": "told several German journalists that he was"
+          },
+          "fill": "German",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_e6ce13e80db0932d4876",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 137,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 131,
+            "text": "German"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1255,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1157,
+            "text": "Strauss told American officials in Bonn on 6 March he is afraid of a change in US defense strategy"
+          },
+          "fill": "American",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9b7f990c8d3c057b5be4",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1178,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1170,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_f25dc327b5927818",
+      "condition": "L1",
+      "document_date_filter": "NONE",
+      "eligible_page_count": 22574,
+      "inspected_page_count": 80,
+      "label": "All Later Documents Including Origin",
+      "profile_id": "native_boundary",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 15,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 161,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 118,
+            "text": "told several German journalists that he was"
+          },
+          "fill": "German",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_e6ce13e80db0932d4876",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 137,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 131,
+            "text": "German"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1255,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1157,
+            "text": "Strauss told American officials in Bonn on 6 March he is afraid of a change in US defense strategy"
+          },
+          "fill": "American",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9b7f990c8d3c057b5be4",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_73c23404f8c57b0d5f98",
+            "date": "1961-03-10",
+            "document_id": "CIA-RDP79T00975A005600090001-0",
+            "end": 1178,
+            "page_sha256": "b9e4de35184ebd4cdf1919551809961320925b7c7e1d3e296469abfeddc4a3a5",
+            "release": "later",
+            "source_page": 7,
+            "start": 1170,
+            "text": "American"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_b7bcf472ea2fd86867ee",
+            "date": "1960-01-07",
+            "document_id": "CIA-RDP79T00975A004900040001-3",
+            "end": 314,
+            "page_sha256": "c05c25f700e170af90275368b7684d37b8188257c303921ca4f9a380fd359459",
+            "release": "later",
+            "source_page": 9,
+            "start": 249,
+            "text": "The Swedish ambassador in Moscow has learned from a Soviet source"
+          },
+          "fill": "Swedish",
+          "future_document": true,
+          "gold": null,
+          "id": "later_nationality_9adb94d2b4c6ea46e892",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_b7bcf472ea2fd86867ee",
+            "date": "1960-01-07",
+            "document_id": "CIA-RDP79T00975A004900040001-3",
+            "end": 260,
+            "page_sha256": "c05c25f700e170af90275368b7684d37b8188257c303921ca4f9a380fd359459",
+            "release": "later",
+            "source_page": 9,
+            "start": 253,
+            "text": "Swedish"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_f25dc327b5927818",
+      "condition": "L2",
+      "document_date_filter": "NONE",
+      "eligible_page_count": 22561,
+      "inspected_page_count": 80,
+      "label": "All Later Documents Except Whole Origin",
+      "profile_id": "native_boundary",
+      "retrospective": true
+    },
+    {
+      "admissible_under_default_policies": false,
+      "candidate_count": 13,
+      "candidates": [
+        {
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "fill": "Soviet",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "rank": 1,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 161,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 118,
+            "text": "told several German journalists that he was"
+          },
+          "fill": "German",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_e6ce13e80db0932d4876",
+          "rank": 2,
+          "source": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 137,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 131,
+            "text": "German"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "fill": "Belgian",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "rank": 3,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "fill": "Yugoslav",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "rank": 4,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "context": {
+            "canonical_page_id": "page_90ae6ed4753037ae684b",
+            "date": "1957-08-01",
+            "document_id": "CIA-RDP79T00975A003200270001-6",
+            "end": 165,
+            "page_sha256": "0466847ef4af45e164608b7e052785237a77edff3237de13cf3a34dee3467a51",
+            "release": "later",
+            "source_page": 4,
+            "start": 64,
+            "text": "The Turkish official in charge of Soviet affairs in the Foreign Ministry reportedly stated on 27 July"
+          },
+          "fill": "Turkish",
+          "future_document": false,
+          "gold": null,
+          "id": "later_nationality_1e77ef1f261708ded4da",
+          "rank": 5,
+          "source": {
+            "canonical_page_id": "page_90ae6ed4753037ae684b",
+            "date": "1957-08-01",
+            "document_id": "CIA-RDP79T00975A003200270001-6",
+            "end": 75,
+            "page_sha256": "0466847ef4af45e164608b7e052785237a77edff3237de13cf3a34dee3467a51",
+            "release": "later",
+            "source_page": 4,
+            "start": 68,
+            "text": "Turkish"
+          },
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "case_id": "withheld_delegation_f25dc327b5927818",
+      "condition": "L3",
+      "document_date_filter": "<",
+      "eligible_page_count": 15287,
+      "inspected_page_count": 80,
+      "label": "Later Documents Strictly Before Cutoff",
+      "profile_id": "native_boundary",
+      "retrospective": true
+    }
+  ],
+  "default": false,
+  "future_reports_allowed_only_in_explicit_historical_controls": true,
+  "gold": null,
+  "not_evidence_for_S0_S1_S2": true,
+  "prediction_claimed": false,
+  "version": "withheld-nationality-archived-controls-public/1"
+}

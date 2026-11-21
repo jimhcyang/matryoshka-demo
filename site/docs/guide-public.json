@@ -1,0 +1,145 @@
+{
+  "version": "evidence-field-guide/1",
+  "implementation_under_review": true,
+  "mode": "saved_report_snapshot",
+  "report_byte_sha256": "0444fc3704868b557b26f0a539357cc5edc3813c8f67e2a804f67c57dca0d3bf",
+  "saved_report_status": "PARTIAL",
+  "release_qualification_inferred": false,
+  "cases": [
+    {
+      "case_id": "narrative_cib_revision_ac39b62cbc7070a340c5d62d",
+      "task": "redaction",
+      "corpus": "cib",
+      "query_utf8_sha256": "43ad9d3a64bee57cfa5e23769dc476653658ca053096a1ec2602c0296052c6bf",
+      "arm": "llm_readings",
+      "saved_status": "CANDIDATE_SUGGESTIONS",
+      "citation_count": 2
+    },
+    {
+      "case_id": "narrative_cib_revision_3eea5176c0eab4abfb6452a4",
+      "task": "redaction",
+      "corpus": "cib",
+      "query_utf8_sha256": "0838b8c56ce7789eb956bd83398fde211e6be37672ec945674d22b75c1394fef",
+      "arm": "llm_readings",
+      "saved_status": "CANDIDATE_SUGGESTIONS",
+      "citation_count": 1
+    },
+    {
+      "case_id": "cloze_132dbc991d56c1c3ff66331a",
+      "task": "redaction",
+      "corpus": "cib",
+      "query_utf8_sha256": "3709f2c0989d1c20a64c626b21484be707327c9831e36b1909c61366bf63ce28",
+      "arm": "llm_readings",
+      "saved_status": "CANDIDATE_SUGGESTIONS",
+      "citation_count": 1
+    },
+    {
+      "case_id": "cloze_225a750400eb38718fa5bb9b",
+      "task": "redaction",
+      "corpus": "cib",
+      "query_utf8_sha256": "49f7da832730bf1f5a9a68904783cb7b140597a68c75cb9b3b4304e70714a36d",
+      "arm": "llm_readings",
+      "saved_status": "CANDIDATE_SUGGESTIONS",
+      "citation_count": 1
+    },
+    {
+      "case_id": "narrative_cib_revision_ac4fb499beb4b345b5384ae6",
+      "task": "redaction",
+      "corpus": "cib",
+      "query_utf8_sha256": "f19983fbfa965263e0f0cca6240b7818a269b0172332c7367f94bcafdbff6738",
+      "arm": "llm_readings",
+      "saved_status": "CANDIDATE_SUGGESTIONS",
+      "citation_count": 1
+    },
+    {
+      "case_id": "narrative_cib_alt_h_3af565c9ad6e532e16c9264b",
+      "task": "hypothesis",
+      "corpus": "cib",
+      "query_utf8_sha256": "8a84e30e36bc6ba127bc89596ef4cfc7c062d6af6d8038016e638729db395c31",
+      "arm": "llm_readings",
+      "saved_status": "SUPPORTED",
+      "citation_count": 1
+    },
+    {
+      "case_id": "narrative_cib_revision_ab8506d47badd3718e892a7e",
+      "task": "mosaic",
+      "corpus": "cib",
+      "query_utf8_sha256": "913a29aff426fd25b7ab3416f5ebe12fcf376d5756784603d5b7140b17c0de27",
+      "arm": "llm_readings",
+      "saved_status": "EVIDENCE_BACKED_RECONSTRUCTION",
+      "citation_count": 2
+    },
+    {
+      "case_id": "narrative_cib_revision_50e63144067940b5debe3fea",
+      "task": "redaction",
+      "corpus": "cib",
+      "query_utf8_sha256": "25efa075c9a410c0cc6b4480f550d426d517083a4bcf39e8ab036087bbbd92f0",
+      "arm": "llm_readings",
+      "saved_status": "CANDIDATE_SUGGESTIONS",
+      "citation_count": 2
+    },
+    {
+      "case_id": "curation_v65_overlap_haeri_teacher_student_h01",
+      "task": "hypothesis",
+      "corpus": "iran",
+      "query_utf8_sha256": "2edf329f7ecaf93b44c3fccf2b813c129251b7f66b426bf4364543199331bcc1",
+      "arm": "llm_readings",
+      "saved_status": "SUPPORTED",
+      "citation_count": 3
+    },
+    {
+      "case_id": "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
+      "task": "mosaic",
+      "corpus": "iran",
+      "query_utf8_sha256": "6b16f8aaa014d700b4fdd034c9dfa79f224ad4acc4cbb51922770fa907ada794",
+      "arm": "llm_readings",
+      "saved_status": "EVIDENCE_BACKED_RECONSTRUCTION",
+      "citation_count": 4
+    },
+    {
+      "case_id": "source_window_9c77b0239a74f169bcf84785",
+      "task": "redaction",
+      "corpus": "iran",
+      "query_utf8_sha256": "afa0eca6595a3a1d6c56445825c8c8b36ce98c60523a96dd2f99a31cf539910e",
+      "arm": "llm_readings",
+      "saved_status": "CANDIDATE_SUGGESTIONS",
+      "citation_count": 18
+    },
+    {
+      "case_id": "vietnam_hunt_h_632b274b01c56feb2484",
+      "task": "hypothesis",
+      "corpus": "vietnam",
+      "query_utf8_sha256": "b8e345cc56d6c8a914df820ad8736b9bf2656b3ffa965636682be1e9caecdc92",
+      "arm": "llm_readings",
+      "saved_status": "UNRESOLVED",
+      "citation_count": 0
+    },
+    {
+      "case_id": "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+      "task": "mosaic",
+      "corpus": "vietnam",
+      "query_utf8_sha256": "9b9f1b002af8bc800e2f10b8184c8f4d27d4334317f21b1381dc76a371b86934",
+      "arm": "llm_readings",
+      "saved_status": "EVIDENCE_BACKED_RECONSTRUCTION",
+      "citation_count": 2
+    },
+    {
+      "case_id": "fullresume_vietnam_nghi_r_c77afffc57790227",
+      "task": "redaction",
+      "corpus": "vietnam",
+      "query_utf8_sha256": "4c60406e48f0f72118974abdd2c340c81ba722000651ebf5b1546bbbc9dd7b8d",
+      "arm": "llm_readings",
+      "saved_status": "CANDIDATE_SUGGESTIONS",
+      "citation_count": 1
+    }
+  ],
+  "source_replay_performed": false,
+  "api_calls": 0,
+  "native_runs": 0,
+  "case_inputs": "PINNED_PUBLIC_CONDITIONS_ONLY",
+  "pdf_pages": 36,
+  "files": {
+    "field-guide.pdf": "2be344edcbee3da90d14fa1d160502b30046f8514ef561d67fc6bdb004319c5e",
+    "field-guide.txt": "8dcfafcbdcb95555e3a8b976e05ad5c0c5f0d73b26bfc62b89f7d64e485f5df6"
+  }
+}
