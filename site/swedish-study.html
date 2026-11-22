@@ -1,20 +1,23 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="study-data-sha256" content="2d239fbce042a2a71323c11fd48bf9f3451660bd82cc40c847d28fa3a65abbae"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
-<title>Nationality Study | Matryoshka</title><link rel="icon" href="data:,"><link rel="stylesheet" href="app-navigation.css"><link rel="stylesheet" href="swedish-study.css"><script type="module" src="swedish-study.js"></script></head>
+<meta name="study-data-sha256" data-file="delegation-study-data.json" content="0ad61b164f6383b67d8115b8979b237cc8d7bf693194af2ada078a4aa3960706"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
+<title>Unknown Delegation | Matryoshka</title><link rel="icon" href="data:,"><link rel="stylesheet" href="app-navigation.css"><link rel="stylesheet" href="swedish-study.css"><link rel="stylesheet" href="evidence-map.css"><script type="module" src="delegation-study-v2.js"></script></head>
 <body><header id="app-navigation" data-view="workbench"></header><script src="app-navigation.js"></script><main>
-<p class="breadcrumb"><a href="workbench-v6.html">Analyst workbench</a><span>/</span>Nationality study</p>
-<header class="study-intro"><div><p class="eyebrow">17 February 1959 / two queries</p><h1>One report.<br><em>Two withheld nationalities.</em></h1></div><p class="study-badge">Executed study<br><strong>Reference unknown</strong></p></header>
-<p class="intro-copy">The same source scope, planning method and bounded engine for both queries. Nominations are not recovered hidden words.</p>
-<div id="slot-controls" class="query-tabs" role="tablist" aria-label="Nationality query"></div>
+<p class="breadcrumb"><a href="workbench-v6.html">Analyst workbench</a><span>/</span>Unknown delegation</p>
+<header class="study-intro"><div><p class="eyebrow">17 February 1959 / two queries</p><h1>One report.<br><em>Two withheld descriptions.</em></h1></div><p class="study-badge">Reference<br><strong>Not given</strong></p></header>
+<p class="intro-copy">Who was the visiting delegation? Explore both gaps using the same evidence and local checks.</p>
+<div id="window-controls" class="query-tabs" role="group" aria-label="Input context"></div>
+<div id="slot-controls" class="query-tabs" role="tablist" aria-label="Delegation query"></div>
 <div id="query-workspace" role="tabpanel" tabindex="0">
 <nav class="stage-nav" aria-label="Study stages"><a href="#input">Input</a><a href="#facts">Facts</a><a href="#readings">Readings</a><a href="#sources">Sources</a><a href="#results">Results</a></nav>
-<section id="input" class="query-panel"><div class="section-top"><h2>Input</h2><span id="slot-position"></span></div><div id="query-text" class="source-query"></div></section>
-<section id="facts" class="source-panel"><h2>Facts</h2><p class="scope-copy">Query-only planner propositions, not established source facts.</p><ol id="fact-list"></ol></section>
+<section id="input" class="query-panel"><div class="section-top"><h2>01 Input</h2><span id="slot-position"></span><button id="study-origin" type="button">Origin</button></div><div id="query-text" class="source-query"></div></section>
+<section id="facts" class="source-panel"><h2>02 Facts</h2><p class="scope-copy">Parsed input assertions.</p><ol id="fact-list"></ol></section>
 <section id="readings" class="source-panel"><h2>Readings</h2><label>Phrase type <select id="reading-select"></select></label><p id="reading-note" class="scope-copy"></p></section>
+<section class="source-panel"><h2>03 Sources</h2><div id="study-map"></div></section>
 <section id="sources" class="source-panel"><div class="section-top"><h2>Sources for selected candidates</h2><span id="source-count"></span></div><p class="scope-copy">A selection of result quotations; use View sources on any result to see all its recorded sources. This is not a list of every page checked.</p><div id="source-list"></div></section>
 <section id="results"><div class="section-top"><h2>Results</h2><span>Engine nominations / reference unknown</span></div><ol id="result-list" class="candidate-list" aria-live="polite"></ol></section></div>
-<details class="method-details"><summary>Method, source scope and execution provenance</summary><p id="scope-rule"></p><p id="method-delta"></p><p>Both queries used 40-document retrieval, an 80-page retrieval budget, 20 inspected constructor pages and 24 checked drafts per reading. Identical normalized surfaces are grouped before the five-result cap. Their separate source decisions are preserved; a union of quotations is not pooled proof.</p><p>These are versioned scoped shared-kernel executions, not unchanged canonical native /3 runs. Gold and delegation identities remain unknown. No named-country bonus or special nationality conversion was added.</p><p id="run-pin" class="source-hash"></p><h3>Recorded reading and status metadata</h3><pre id="reading-metadata" class="source-hash"></pre></details>
+<details class="method-details"><summary>Method and exact execution details</summary><p id="scope-rule"></p><p id="method-delta"></p><p id="run-pin" class="source-hash"></p><h3>Recorded interpretation and checks</h3><pre id="reading-metadata" class="source-hash"></pre></details>
+<details class="method-details"><summary>Compare all input windows</summary><table><thead><tr><th>Context</th><th>Gap</th><th>Recorded nominees</th></tr></thead><tbody id="comparison-table"></tbody></table></details>
 <details id="archive" class="deferred-panel"><summary>Archived lexical study, separate from this execution</summary><p>The older eight-page lexical conversion is an archived control, not the result above.</p><div id="archive-results"></div></details>
 <p id="study-status" class="study-status" role="status">Loading pinned executed study...</p></main>
 <footer><span>Source wording, grammatical fit and historical identity remain separate.</span><a href="workbench-v6.html">Analyst workbench</a></footer>

@@ -1,0 +1,26 @@
+{
+  "version": "source-bound-interactive-data-qa/1",
+  "date": "2026-11-22",
+  "status": "PASS_DIAGNOSTIC_DATA",
+  "candidate_manifest_sha256": "d1fccd88477dcca734d96ee0899251ace296f15e1610fd7906441d2162018398",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "integrity_sha256": "ee2efb7e50f479891076c2d219825932ce39070ece3d79dc2c5e7fa0cdc7315d",
+  "browser_sha256": "ad911faf59d3ab91f7230cc8f49be6441019133cd8edab8c55678befdb96b414",
+  "independent_ui_sha256": "98acaa82a04d3132104531b9f99a42513c4409d6e4baffcf35cf22f04c59ce29",
+  "source_audit_sha256": "df43da07dc14eed743f3d6004c9ed9a6a4fdf4a15ece6210c8f193bbfbfc7cc4",
+  "ordinary_native_packets_replayed": 14,
+  "logical_roots_reconstructed": 10041,
+  "datasets_revalidated": 1576,
+  "managed_browser_release_cells": 25,
+  "all_six_saved_cib_exact_source_handoffs_checked": true,
+  "ordinary_native_report_changed": false,
+  "new_experiment_qualification_inferred": false,
+  "benchmark_accuracy_claimed": false,
+  "unmet_research_goals": [
+    "Unknown-delegation trials did not recover Swedish",
+    "Richer Mosaic/Hypothesis native results remain unqualified",
+    "Isolated constructor regressions not promoted over saved controls",
+    "Contextual candidates not upgraded to evidence-backed actions"
+  ],
+  "live_scope": "Authenticated local execution verified; Pages hosts frontend only"
+}

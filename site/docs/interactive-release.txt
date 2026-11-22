@@ -1,0 +1,35 @@
+Matryoshka / Interactive Guide
+Explore the corpus map, inspect the selected evidence, and distinguish a promising candidate from an established claim. The saved casebook and Live execution use the same evidence-oriented presentation.
+
+The Corpus Map
+Redactions Show/Hide controls source-visible redacted-slot markers. Ineligible Dim/Hide controls evidence outside the active access/date view. They are independent. In paired mode, the shared Back and Fit controls affect both releases; the controls beside a map affect only that map. Search applies to both until a map is individually explored.
+
+Why These Nodes?
+The display ceiling is not a source filter. Pinned selections are retained first. Additional nodes greedily add previously uncovered semantic neighbors, represent new hierarchy/type facets, and expose source-backed connections to the current selection. Context-only slot links do not count as semantic evidence, and unpinned context markers have a separate small display quota. The node-selection audit is available under More.
+
+Size, Strength And Movement
+Node radius is normalized within the displayed view. With t equal to the normalized log(1 + mass), evidence radius is 9 + 22 t^0.8 pixels before zoom; communities use 13 + 24 t^0.8, higher groups 16 + 26 t^0.8. Slot markers use a fixed base radius of 10. The renderer applies zoom, density and overlap caps. Ordinary edge width is 0.55 + 1.1 sqrt(w / maximum displayed w) pixels. These are orientation encodings, not probabilities. After dragging, zooming or deselecting, a bounded relaxation draws nodes toward compact homes and separates overlapping circles.
+
+Input, Facts And Sources
+Opening an example loads its completed result immediately. A redaction marker toggles its reference on a second click. Unknown references remain unknown. The initial grammatical reading is chosen from readings that contain saved candidates when available; an explicitly selected empty reading stays empty. Facts are query assertions, not established historical facts.
+
+Reading The Source Map
+The directed diagram begins with the input facts and ends only at quotations retained for the displayed decisions. Shared sources merge visually. Dotted lookup/readout links are not historical KG assertions. Where the saved trace does not assign a match to one particular fact, the diagram uses Combined facts rather than inventing attribution. Green means support, red opposition, and amber context or partial evidence.
+
+Follow A Result On The KG
+View on KG opens the existing corpus canvas and plays the exact saved inspection stages. It does not build a second graph. Source-bound node IDs and actual stored edges are retained. The final handoff binds the selected quotation by page, character interval and text hash. Clicking an excerpt opens its supplied document pages with that exact span highlighted. Some saved paths are post-run inspection routes; they must not be read as the original retrieval execution or as a chain of factual entailment.
+
+Ranks, Evidence And Repeated Wording
+Candidate rank and the evidence verdict are separate. Existing ordered criteria and source-priority arithmetic remain unchanged. The score chart identifies its basis; a ranking-position index is not calibrated confidence and is not comparable as a correctness probability across questions. Identical completed fill surfaces appear once, preserving the first native-ranked occurrence and separate source assessments. Repeated page observations from one document are not independent corroboration.
+
+A Concrete Saved Example
+For the Salvadoran-peasants redaction, the earlier report says the peasants can easily be manipulated politically. The displayed fill easily politically manipulated remains rank one and evidence-backed for that focal description. Two saved observations of the same wording now occupy one row, not two. Arias remains a high-ranking contextual candidate: a source identifying a powerful opposition organizer is not by itself proof of every action in the masked report.
+
+Unknown Delegation
+The study offers two gaps and four retained input windows, including a window with the visible Swedes sentence. That sentence is an explicit input clue, never an independent evidence vote. The entire originating report is excluded from retrieved evidence. Seven primary executions completed and one planning failure is retained. The reference words are not given, and these trials do not establish recovery. A source mention of a nationality elsewhere does not establish the identity of this visiting delegation.
+
+Live Execution
+The Live page requires an authenticated backend. The OpenAI API key stays in the server environment; the browser receives only a short-lived session capability. Query-only model planning and redaction readings precede local deterministic retrieval, construction and verdicts. Progress reports stage names, not model reasoning. Cancellation stops the worker but cannot undo already incurred provider charges. The shared spending ceiling, bounded runtime, source cutoff and whole-origin exclusion remain enforced.
+
+Hosting And Source Boundaries
+GitHub Pages hosts the saved casebook and Live frontend, not Python inference. Run the local companion or connect an independently hosted authenticated backend with explicit origin permissions. The source-only CIB resource is unchanged. Iran and Vietnam retain their existing resource exports; no new source-only alias certification is implied. Additional document pages are provenance context, not extra inspected evidence. The richer experimental questions remain outside the presentation until their native results qualify.

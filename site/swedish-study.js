@@ -105,7 +105,7 @@ function render(focus = false) {
   });
   $('#query-workspace').setAttribute('aria-labelledby', 'tab-' + c.position);
   $('#query-text').replaceChildren(masked(c.case.query));
-  $('#slot-position').textContent = state.slot ? 'Second nationality slot' : 'First nationality slot';
+  $('#slot-position').textContent = state.slot ? 'Second gap' : 'First gap';
   $('#fact-list').replaceChildren(...c.facts.map(a => {const li = el('li'); li.append(masked(a.text)); return li;}));
   $('#reading-select').replaceChildren(...c.readings.map((r, i) => el('option', familyLabel(r.reading), {value: i})));
   $('#scope-rule').textContent = state.data.scope_rule;

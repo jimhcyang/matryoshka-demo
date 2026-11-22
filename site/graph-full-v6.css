@@ -80,6 +80,14 @@ main{inset:var(--app-nav-height,64px) 0 0}main>.graph-grid{position:absolute;ins
 /* F02: wrap whole control groups instead of reducing interactive text. */
 .toolbar-main{flex-wrap:wrap}
 .toolbar-main>*{flex-shrink:0}
+.segmented>span{align-self:center;padding:0 7px;font-size:12px;color:var(--ink-soft)}
+.map-detail-content{border-top:1px solid var(--line);padding-top:10px;margin-top:12px}
+.map-technical{border-top:1px solid var(--line);margin-top:16px;padding-top:10px;font-size:12px}
+.map-primary-sources,.association-list,.bridge-list{max-height:390px;overflow:auto;overscroll-behavior:contain}
+.list-cap-note{font-size:12px!important}
+#selection-audit pre{white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.5 monospace;max-height:340px;overflow:auto;padding:10px;background:#f4f8f5}
+.graph-actions button{font-size:12px;min-height:32px;padding:4px 8px}
+.single-panel .later-card .graph-actions{display:none}
 .map-toolbar :is(button,input,select,summary){font-size:14px}
 .map-toolbar #graph-search{font-size:16px}
 .map-toolbar .corpus-control select{width:143px}
@@ -99,3 +107,4 @@ main{inset:var(--app-nav-height,64px) 0 0}main>.graph-grid{position:absolute;ins
   .toolbar-navigation button{padding-inline:4px}
   .toolbar-popover>summary{padding-inline:6px}
 }
+.walk-source-excerpt{display:block;width:100%;text-align:left;padding:0!important;background:transparent!important;border:0!important;font:inherit!important;white-space:pre-wrap;color:inherit;cursor:pointer}

@@ -1,0 +1,23 @@
+{
+  "version": "source-bound-release-authorization/1",
+  "date": "2026-11-22",
+  "candidate_manifest_sha256": "d1fccd88477dcca734d96ee0899251ace296f15e1610fd7906441d2162018398",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "backend_code_sha256": "ae20f841f9d37eb9cf7f96107ce4c4b1e80c18b3419822d71b87e4795d6db122",
+  "publish_authorized": true,
+  "new_data_qa_accepted": true,
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "qualified_data_qa_ref": {
+    "path": "data-qa-interactive-2026-11-22.json",
+    "sha256": "0d4419ebf9f7199891eb209b8024e3f0b6803b9b63fa76b042ea8816260cded1"
+  },
+  "privacy_and_rights_ref": {
+    "path": "privacy-and-rights-interactive-2026-11-22.json",
+    "sha256": "4bc22916771e361c2b28f550a0ae3d8c8671dab7ccb3f2a659f1df1187dec07f"
+  },
+  "ordinary_inference_preserved": true,
+  "new_research_performance_claimed": false,
+  "live_public_paid_backend_deployed": false
+}

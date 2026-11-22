@@ -36,6 +36,17 @@ export function decisionProofs(item={},unit={}){
     ])
   ]);
 }
+export function groupDuplicateFills(values){
+  const groups=new Map();
+  const ranked=list(values).filter(item=>item.rank!=null);
+  if(ranked.length&&(ranked.length!==list(values).length||ranked.some((item,i)=>!Number.isSafeInteger(item.rank)||item.rank<1||i>0&&item.rank<=ranked[i-1].rank)))throw Error('Candidate ranks must retain their strict native order.');
+  for(const [index,item]of list(values).entries()){
+    const key=typeof item.fill==='string'?item.fill.normalize('NFKC').trim().replace(/\s+/g,' ').toLocaleLowerCase('en'):item.id;
+    if(!groups.has(key))groups.set(key,{...item,presentation_variants:[],native_display_positions:[]});
+    const group=groups.get(key);group.presentation_variants.push(item);group.native_display_positions.push(index+1);
+  }
+  return [...groups.values()];
+}
 export function scoreRows(item={}){
   const candidates=[
     ["Reciprocal rank fusion",item.ranking?.fused_rrf??item.ranking?.rrf,"ranking.fused_rrf"],

@@ -3,7 +3,8 @@ import {formatNumber,formatTargetText} from "./flow-layout-v4.js";
 import {direction as humanDirection,displayText,coverage as recordedCoverage,localTaskVerdict,factual,feasibility,localDecisions,selectionSummary,llmReview} from "./verdict-v64.js";
 import {decisionLabel,packetFor,unitFor,overviewFor,reviewDisclosure,guideDisclosure,routeProvenance,exactGateReview,verdictSummary,exactOriginAnchors,sidebarDecisionSummary,decisionSummaryFor,preferredReading,canonicalGateJSON,isCounterhypothesis,presentationDecisionReview,presentationTitle,hasRequestedAnalystDigest,hypothesisReadout,assertionDecision,currentResourceURL,verifyCurrentResourceResponse,readingExplanation,currentPDFURL,currentReportStatusBadge,publishedConditionStatus,readingLabel} from "./local-decisions-v65.js";
 import {preparePostrunReview,verifyPostrunReview} from "./postrun-review-v74.js";
-import {mountSavedRoutes,uniqueProofs,decisionProofs,digestProofs,renderScoreChart,renderEndingScoreChart,recordedAtomLinks,guideRoutes} from "./workbench-visuals.js";
+import {mountSavedRoutes,uniqueProofs,decisionProofs,digestProofs,renderScoreChart,renderEndingScoreChart,recordedAtomLinks,guideRoutes,groupDuplicateFills} from "./workbench-visuals.js";
+import {mountEvidenceMap} from './evidence-map.js';
 const $ = selector => document.querySelector(selector);
 const list = value => Array.isArray(value) ? value : [];
 const CORPORA = {cib:"Central Intelligence Bulletins",iran:"Iran",vietnam:"Vietnam"};
@@ -97,7 +98,7 @@ const ARMS = {
   C:{key:"llm_local",name:"Local readings",origin:"Required assertions and local grammatical readings"}
 };
 for(const option of $("#arm-select").options)if(ARMS[option.value])option.textContent=ARMS[option.value].name;
-const STAGES = [["01","Question"],["02","Atoms"],["03","Routes"],["04","Sources"],["05","Construction"],["06","Review"]];
+const STAGES = [["01","Input"],["02","Facts"],["03","Routes"],["04","Sources"],["05","Construction"],["06","Review"]];
 const GRAPH_SCOPE = "The full Corpus Map is separate from this question's evidence view. Ordinary map lookup does not inherit the strict cutoff or whole-origin exclusion; a saved Guide Path carries its own case scope. Map context is not automatically eligible proof.";
 const state = {report:null,sourceReport:null,manifest:null,trace:null,catalog:null,casebook:null,casebookPending:"Loading the source-bound examples catalog...",filters:{corpus:"",task:""},row:null,saved:null,gateReview:null,home:false,arm:"A",reading:"",candidate:"",originalPath:0,stage:"01",reference:false,loading:false,pending:"",epoch:0,drawerEpoch:0,flow:null,paths:null,projection:null,compareReadings:false,reviewReading:"",independentReview:null,reviewEpoch:0};
 const conditionCache = new Map();
@@ -204,9 +205,11 @@ function badge(text,kind="") { return el("span",text,{class:"badge "+kind}); }
 function heading(text) { return el("h3",text,{class:"section-title"}); }
 function short(text,n=12) { const words=String(text||"").trim().split(/\s+/);return words.slice(0,n).join(" ")+(words.length>n?"...":""); }
 function title(row) { return typeof row.presentation_title==="string"&&row.presentation_title.trim()?presentationTitle(row):row.display_title || row.case.title || short(row.case.query.replace(/^(?:\s*\[REDACTED\]\s*)+/i,"").replace(/\[(?:REDACTED|REDACTION[^\]]*)\]/gi,"masked passage"),11); }
-function isNarrativePublication(){return state.report?.version==='narrative-workbench-publication/1';}
+let livePacket=null;
+function isLivePublication(){return state.report?.version==='matryoshka-live-report/1';}
+function isNarrativePublication(){return isLivePublication()||state.report?.version==='narrative-workbench-publication/1';}
 function isCurrentPublication(){return isNarrativePublication()||state.report?.version==='current-workbench-publication/1';}
-function hasOpenedResult(row=state.row){return !isNarrativePublication()||!!narrativeAccess?.hasOpenedResult(state.report,row);}
+function hasOpenedResult(){return true;}
 function isStaticPublicReplay(){return staticCurrentPublications.has(state.report);}
 function publicAuditNotice(){
   return isStaticPublicReplay()&&[state.row,state.saved,state.saved?.result].some(value=>value?.public_audit_projection&&typeof value.public_audit_projection==='object'&&!Array.isArray(value.public_audit_projection))?
@@ -273,6 +276,16 @@ function pinGraphQuery(params){
 async function sha256(bytes) { if(!crypto.subtle)throw Error("This browser cannot verify saved data.");return [...new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))].map(b=>b.toString(16).padStart(2,"0")).join(""); }
 async function getJSON(path,options={}) { return viewportAnchor.run(()=>readJSON(path,options)); }
 async function readJSON(path,{hash,signal,captureHash=false}={}) {
+  if(livePacket){
+    const url=new URL(path,location.href),params=url.searchParams;
+    if(params.has('case_id')&&params.get('case_id')!==state.row.case.case_id)throw Error('The Live source belongs to another run.');
+    if(/\/source-v6$/.test(url.pathname)){
+      const page=livePacket.sources[params.get('source_id')];
+      if(!page)throw Error('This source was not retained by the Live execution.');
+      return {page,document_pages:livePacket.document_pages?.[page.document_id]||Object.values(livePacket.sources).filter(p=>p.document_id===page.document_id)};
+    }
+    throw Error('No matching Live artifact was retained. Saved data is not substituted.');
+  }
   const url=localURL(path),response=await fetch(url,{cache:"no-store",signal});
   if(!response.ok){const error=Error(`Saved data is unavailable (${response.status}). No result has been substituted.`);error.status=response.status;throw error;}
   const bytes=await response.arrayBuffer();
@@ -415,8 +428,12 @@ async function bindCurrentRail(row,arm,record){
   }catch{unavailableRail(row,arm);}
 }
 function readingRows() { return list((state.saved?.result?.redaction||state.saved?.result)?.readings); }
+function initialDisplayReading(record,caseInfo){
+  const rows=list((record?.result?.redaction||record?.result)?.readings),preferred=preferredReading(record||{},caseInfo);
+  return rows.find(row=>row.reading?.id===preferred&&list(row.candidates).length)?.reading.id||rows.find(row=>list(row.candidates).length)?.reading?.id||preferred||rows[0]?.reading?.id||'';
+}
 function currentReading() { const rows=readingRows();return rows.find(r=>r.reading?.id===state.reading)||rows[0]; }
-function candidates() { return list(currentReading()?.candidates).slice(0,5); }
+function candidates() { return groupDuplicateFills(currentReading()?.candidates).slice(0,5); }
 function flowItems() {
   if(state.row.case.task==="redaction")return candidates();
   if(isNarrativePublication())return list(state.saved?.result?.atoms).map(atom=>({...atom,fill:atom.text||atom.id,atom_id:atom.id}));
@@ -427,6 +444,11 @@ function nativeFlow() { return state.saved?.result?.flow||state.saved?.flow_v3||
 function contributor(item) { return state.projection?.candidates?.find(c=>c.id===item?.id)||nativeFlow()?.candidate_flows?.[item?.id]||state.saved?.result?.candidate_flows?.[item?.id]; }
 
 async function chooseCase(row,{push=true,reading,candidate,scroll=false}={}) {
+  if(livePacket){
+    if(row.case.case_id!==livePacket.row.case.case_id)throw Error('A Live run cannot select a saved case.');
+    state.reading=reading||state.reading;state.candidate=candidate||state.candidate;
+    renderWorkspace();renderRail();savePosition({push});await hydrateFlow(state.epoch);return;
+  }
   const epoch=++state.epoch;request?.abort();request=new AbortController();destroyVisuals();state.projection=null;state.trace=null;clearIndependentReview();
   state.home=false;state.row=row;state.saved=null;state.gateReview=null;state.loading=true;state.pending="";state.reference=false;state.originalPath=0;state.reading=reading??"";state.candidate=candidate??"";state.compareReadings=false;state.reviewReading="";
   for(const option of $("#arm-select").options){const available=!isCurrentPublication()||!!row.configurations?.[ARMS[option.value]?.key];option.disabled=!available;option.textContent=ARMS[option.value].name+(available?"":" / not published");}
@@ -434,7 +456,6 @@ async function chooseCase(row,{push=true,reading,candidate,scroll=false}={}) {
   $("#page-state").textContent=`Loading saved evidence for method ${state.arm}.`;
   const arm=state.arm,key=ARMS[arm].key,cacheKey=state.report.run_id+"/"+row.case.case_id+"/"+key;
   if(isCurrentPublication()&&!row.configurations?.[key]){state.loading=false;state.pending=`${ARMS[arm].name}: this method's saved result is not published yet. No other method is substituted.`;renderWorkspace();$("#page-state").textContent=state.pending;return;}
-  if(!hasOpenedResult(row)){state.loading=false;renderWorkspace();$('#page-state').textContent='Saved question. Open its completed result when ready.';return;}
   try {
     let detail=conditionCache.get(cacheKey);
     if(!detail){
@@ -466,7 +487,7 @@ async function chooseCase(row,{push=true,reading,candidate,scroll=false}={}) {
     if(!state.saved?.result&&!recordedFailure(state.saved)||pendingRecord(state.saved)||pendingRecord(state.saved?.result)||pendingRecord(detail)){state.pending=publicationNote(state.saved)||publicationNote(detail)||`No completed v6 arm ${arm} execution is published. No older run or other arm is substituted.`;state.saved=null;}
     const rows=readingRows();
     if(!rows.some(r=>r.reading?.id===state.reading)){
-      const ordinal=/^reading_(\d+)$/.exec(state.reading);state.reading=(ordinal?rows[Number(ordinal[1])-1]?.reading?.id:null)||preferredReading(state.saved||{},state.row.case)||rows[0]?.reading?.id||"";
+      const ordinal=/^reading_(\d+)$/.exec(state.reading);state.reading=(ordinal?rows[Number(ordinal[1])-1]?.reading?.id:null)||initialDisplayReading(state.saved,state.row.case);
     }
     if(!flowItems().some(c=>c.id===state.candidate))state.candidate=flowItems()[0]?.id||"";
     if(state.saved)await bindCurrentRail(state.row,arm,state.saved);
@@ -527,9 +548,6 @@ function renderWorkspace() {
   for(const [number,name] of STAGES){const a=el("a",null,{href:"#stage-"+number,"data-stage":number});a.append(el("strong",number,{class:"workflow-step-number"}),el("span",name));if(number===state.stage)a.setAttribute("aria-current","step");a.onclick=e=>{e.preventDefault();stagePosition(number);};nav.append(a);}host.append(nav);
   const workflow=el("div",null,{class:"workflow","data-arm":state.arm});host.append(workflow);
   workflow.append(renderQuestion());
-  if(!hasOpenedResult()&&state.row.configurations?.[ARMS[state.arm].key]){
-    workflow.append(button('Open saved result',()=>{narrativeAccess.markOpenedResult(state.report,state.row);return chooseCase(catalogCases().find(row=>row.case.case_id===c.case_id),{push:false});},'primary',{'data-testid':'open-saved-result'}));host.setAttribute('aria-busy','false');return;
-  }
   if(state.loading){workflow.append(el("p",`Loading saved results for arm ${state.arm}. Source verification may take a moment.`,{class:"empty",role:"status","aria-live":"polite","data-testid":"condition-loading"}));return;}
   if(!state.saved){workflow.append(note(state.pending||"No completed result is currently loaded for this selected arm. No archived result is substituted.","empty"));return;}
   if(state.saved.frozen_control===true||state.saved.fallback===true||state.row.fallback===true)workflow.append(note(publicationNote(state.saved)||"Explicit frozen control / fallback record. This is not a new v6 execution.","notice"));
@@ -588,6 +606,7 @@ function renderQuestion() {
   if(awaitingReference)s.body.append(el("p","Loading the verified reference. Click the redaction again to keep it hidden.",{class:"note",role:"status","aria-live":"polite","data-testid":"reference-loading"}));
   const actions=el("div",null,{class:"actions"});
   actions.append(button("Origin",async()=>{
+    if(livePacket){openDrawer('Analyst input','Live query provenance',box(note(c.query,'cue'),fields([['As of',c.date],['Excluded origin',c.document_id,true]]),note('Entered in the Live form. No historical origin transcription or hidden answer was supplied.')));return;}
     if(!allowPrivileged(()=>$('#stage-01 [data-testid=origin-open]')?.click()))return;
     if(attachment.missing){openDrawer("Origin not attached","Question provenance",box(note("No verified origin attachment is published. No source is substituted."),note(c.query)));return;}
     openDrawer("Origin","Question provenance / excluded from evidence",note("Verifying the saved origin..."));
@@ -602,7 +621,7 @@ function renderQuestion() {
   provenance.append(heading("Where this query came from"),note(attachment.missing?"Original-source transcription is not attached in this temporary preview. The saved question and eligible evidence remain inspectable.":"Loading the audited source proof. This privileged origin is not evidence for the result."));
   s.body.append(provenance);
   const reveal=state.reference;
-  if(!attachment.missing&&(!isNarrativePublication()||state.reference))queueMicrotask(()=>loadOrigin(provenance,{...c},reveal,context));return s.outer;
+  if(!livePacket&&!attachment.missing&&(!isNarrativePublication()||state.reference))queueMicrotask(()=>loadOrigin(provenance,{...c},reveal,context));return s.outer;
 }
 function toggleReference(){
   if(!state.reference&&!allowPrivileged(toggleReference))return;
@@ -616,11 +635,7 @@ function toggleReference(){
 }
 
 function allowPrivileged(action,row=state.row){
-  if(!isNarrativePublication())return true;
-  const access=narrativeAccess.storyAccess(state.report,row);if(access.unlocked)return true;
-  const id=row.case.case_id,body=box(note(`${access.opened} of ${access.total} saved results opened in this story.`),note('Original documents and reference answers can reveal other tasks. Open the remaining results first, or explicitly reveal all story answers.'));
-  body.append(button('Reveal all story answers',()=>{const bound=catalogCases().find(value=>value.case.case_id===id);if(!bound)return;narrativeAccess.acknowledgeStoryReveal(state.report,bound);closeDrawer();action();},'primary',{'data-testid':'acknowledge-story-reveal'}));
-  openDrawer('Story answer access','Explicit privileged inspection',body);return false;
+  return true;
 }
 function currentRedactionReview(){return !isNarrativePublication()&&state.row?.case?.task==='redaction'&&state.saved?.current_resource_execution===true;}
 function clearIndependentReview(){
@@ -927,46 +942,58 @@ function renderPlan(){
 function usedProofs(item){return decisionProofs(item,newDecision(item));}
 function quoteCard(proof){
   const refs=proof.digest_ids?.join(', ')||(/^S\d+$/.test(proof.id||'')?proof.id:'');
-  const b=button("",()=>sourceDrawer(proof),"exact-quote",{"data-testid":"used-source-quote","data-source-id":proof.canonical_page_id,"data-document-id":proof.document_id,"data-digest-ids":proof.digest_ids?.join(' ')});
-  b.append(el("small",[refs,...list(proof.atom_ids)].filter(Boolean).join(' / ')||'Matched quotation'),el("blockquote",proof.text),el('footer',`${proof.document_id||"Source"} / ${proof.earlier_page?"page "+proof.earlier_page:proof.canonical_page_id} / ${proof.date||""}`));return b;
+  const b=el('article',null,{class:'exact-quote'}),bar=el('header',null,{class:'quote-toolbar'});
+  bar.append(el("small",[refs,...list(proof.atom_ids)].filter(Boolean).join(' / ')||'Selected evidence'));
+  const path=list(state.trace?.paths).find(path=>list(path.decision_source_refs?.length?path.decision_source_refs:path.source_refs).some(p=>typeof p==='object'&&p.canonical_page_id===proof.canonical_page_id&&p.start===proof.start&&p.end===proof.end&&p.text===proof.text));
+  if(path){
+    const index=state.trace.paths.filter(p=>p.candidate_or_atom_id===path.candidate_or_atom_id).findIndex(p=>p.id===path.id);
+    bar.append(button('View on KG',()=>guidePath({candidate:{id:path.candidate_or_atom_id},route:path,route_index:index,proof}),'quote-kg',{'data-testid':'quote-view-on-kg'}));
+    b.dataset.tone=/^(FOR|SUPPORT|SUPPORTED)$/.test(path.direction)?'support':/^(AGAINST|OPPOSE|OPPOSED|COUNTER|COUNTEREVIDENCE)$/.test(path.direction)?'oppose':'context';
+  }
+  const text=button('',()=>sourceDrawer(proof),'excerpt-text',{"data-testid":"used-source-quote","data-source-id":proof.canonical_page_id,"data-document-id":proof.document_id,"data-digest-ids":proof.digest_ids?.join(' '),'aria-label':'Inspect source'});
+  text.append(el('blockquote',proof.text),el('footer',[proof.date,proof.earlier_page?'Page '+proof.earlier_page:''].filter(Boolean).join(' / ')));
+  b.append(bar,text);return b;
 }
 function renderDiffusion(){
-  const s=stage("03",isNarrativePublication()?"Saved evidence steps":"Follow the saved routes",isNarrativePublication()?"Saved narrative trace":"Relevance, not proof");
-  s.body.append(note(isNarrativePublication()?"Recorded evidence scenes, not numerical diffusion or an invented graph route.":"Query inputs to recorded graph states to used source quotations."),el("div",null,{id:"diffusion-v6","data-testid":"flow-host"}));
+  const s=stage("03","Facts to evidence","Source map");
+  s.body.append(el("div",null,{id:"diffusion-v6","data-testid":"flow-host"}));
   return s.outer;
 }
 function narrativeFlowExpected(){
-  return {case_id:state.row.case.case_id,config:ARMS[state.arm].key,reading_id:state.reading,query_sha256:decisionPacket()?.query_sha256,native_checkpoint:state.saved.native_checkpoint,resource_binding:state.row.resource_binding||state.saved.resource_binding,task:state.row.case.task,strictly_before:state.row.case.date,whole_origin_excluded:state.row.case.document_id,allowed_endpoint_ids:state.row.case.task==='redaction'?candidates().flatMap(item=>[item.id,state.reading+'/'+item.id]):list(state.saved.result.atoms).map(atom=>atom.id)};
+  return {case_id:state.row.case.case_id,config:ARMS[state.arm].key,reading_id:state.reading,query_sha256:decisionPacket()?.query_sha256,native_checkpoint:state.saved.native_checkpoint,resource_binding:state.row.resource_binding||state.saved.resource_binding,task:state.row.case.task,strictly_before:state.row.case.date,whole_origin_excluded:state.row.case.document_id,allowed_endpoint_ids:state.row.case.task==='redaction'?list(currentReading()?.candidates).flatMap(item=>[item.id,state.reading+'/'+item.id]):list(state.saved.result.atoms).map(atom=>atom.id)};
 }
 async function hydrateNarrativeTrace(epoch){
   const host=$('#diffusion-v6'),paths=$('#retrieval-paths-v6');if(!host||!paths)return;
   host.replaceChildren(note('Loading the exact saved narrative trace...'));
   try{
-    const envelope=await getJSON('/api/flow-v6?'+caseQuery({reading:state.reading,limit:'256'}),{signal:request?.signal});
+    const envelope=livePacket?null:await getJSON('/api/flow-v6?'+caseQuery({reading:state.reading,limit:'256'}),{signal:request?.signal});
     if(epoch!==state.epoch||!host.isConnected)return;
     const expected=narrativeFlowExpected();
-    if(envelope.version!=='narrative-saved-flow/1'||envelope.case_id!==expected.case_id||envelope.config!==expected.config||envelope.reading_id!==expected.reading_id||envelope.query_sha256!==expected.query_sha256||canonicalGateJSON(envelope.native_checkpoint)!==canonicalGateJSON(expected.native_checkpoint)||canonicalGateJSON(envelope.resource_binding)!==canonicalGateJSON(expected.resource_binding)||!['narrative-local-execution/2','narrative-local-execution/3'].includes(envelope.native_version)||envelope.execution_kind!=='saved_narrative'||envelope.current_native_execution!==false||envelope.numerical_projection_available!==false||envelope.native_decisions_or_ranks_modified!==false||envelope.frames!=null||envelope.projection!=null)throw Error('The narrative flow envelope changed its exact saved execution or source binding.');
-    if(envelope.available!==true){
+    if(!livePacket&&(envelope.version!=='narrative-saved-flow/1'||envelope.case_id!==expected.case_id||envelope.config!==expected.config||envelope.reading_id!==expected.reading_id||envelope.query_sha256!==expected.query_sha256||canonicalGateJSON(envelope.native_checkpoint)!==canonicalGateJSON(expected.native_checkpoint)||canonicalGateJSON(envelope.resource_binding)!==canonicalGateJSON(expected.resource_binding)||!['narrative-local-execution/2','narrative-local-execution/3'].includes(envelope.native_version)||envelope.execution_kind!=='saved_narrative'||envelope.current_native_execution!==false||envelope.numerical_projection_available!==false||envelope.native_decisions_or_ranks_modified!==false||envelope.frames!=null||envelope.projection!=null))throw Error('The narrative flow envelope changed its exact saved execution or source binding.');
+    if(!livePacket&&envelope.available!==true){
       if(envelope.trace!=null)throw Error('An unavailable narrative trace must not include substituted steps.');
       state.trace=null;host.dataset.status='unavailable';host.replaceChildren(note('No saved trace or graph route is published for this execution.','empty'));renderPaths();return;
     }
-    const trace=narrativeUI.validateTrace(envelope,expected);state.trace=trace;host.dataset.status='available';host.dataset.readingId=state.reading;
+    const trace=livePacket?{...livePacket.trace,reading_id:state.reading}:narrativeUI.validateTrace(envelope,expected);state.trace=trace;host.dataset.status='available';host.dataset.readingId=state.reading;
     const safe=fn=>(...args)=>{if(epoch===state.epoch)fn(...args);};
     state.flow?.destroy();state.paths?.destroy();
-    state.flow=narrativeUI.mountTrace(host,{trace,preserveViewport:fn=>viewportAnchor.run(fn),onDismiss:closeDrawer,onSource:safe(sourceDrawer),onNode:safe(value=>{
+    state.flow=mountEvidenceMap(host,{trace,plan:state.saved.plan,items:flowItems(),onSource:safe(sourceDrawer),onNode:safe(value=>{
       if(value.is_graph_node===true){void nodeDrawer(value);return;}
-      const body=box(note(value.label||value.name||'Saved query/readout'),note('Saved display object, not a numerical or semantic graph state.'));
+      if(value.id&&list(state.saved.plan?.atoms).some(atom=>atom.id===value.id)){atomDetail(value);return;}
+      const body=box(note(value.label||value.text||value.name||'Query lookup'));
       if(value.citation)body.append(sourceButton(value.citation));openDrawer('Saved trace object','Recorded query or source readout',body);
     }),onEdge:safe(edge=>{
-      const body=box(fields([['From',edge.source,true],['To',edge.target,true],['Recorded kind',edge.kind||edge.relation,true]]),note('A recorded source or display connection is not an evidence verdict.'));
+      const body=box(note((edge.record?.relation||edge.kind||'Source connection').replaceAll('_',' ')));
+      if(edge.inspectionOnly)body.append(note('A source-inspection route, recorded after evidence selection.'));
       const lookup=trace.sources||trace.source_refs_by_id||{};
-      for(const proof of uniqueProofs([...list(edge.citations),...list(edge.source_refs).map(ref=>typeof ref==='string'?lookup[ref]:ref)]))body.append(sourceButton(proof));
-      openDrawer('Saved trace connection','Recorded provenance',body);
-    })});
-    paths.replaceChildren();state.paths=narrativeUI.mountEvidencePaths(paths,{trace,corpus:state.row.case.corpus,selectedId:state.candidate,preserveViewport:fn=>viewportAnchor.run(fn),onSource:safe(sourceDrawer),onSelect:safe(selectCandidate),onStep:id=>{state.flow?.selectStep?.(id);stagePosition('03');},independentMapURL:graphURL(),endpointForPath:path=>verifiedNarrativeEndpoint(path,epoch),onGuide:({path,route_index})=>{
+      for(const proof of uniqueProofs([edge.citation,...list(edge.records?.length?edge.records:[edge.record]).filter(Boolean).flatMap(record=>[record.citation,...list(record.citations),...list(record.source_refs).map(ref=>typeof ref==='string'?lookup[ref]:ref)])].filter(Boolean)))body.append(sourceButton(proof));
+      openDrawer('Connection','Source map',body);
+    }),onGuide:livePacket?null:safe(path=>{
       const lookup=trace.sources||trace.source_refs_by_id||{},raw=list(path.decision_source_refs||path.source_refs)[0],proof=typeof raw==='string'?lookup[raw]:raw;
+      const route_index=trace.paths.filter(p=>p.candidate_or_atom_id===path.candidate_or_atom_id).findIndex(p=>p.id===path.id);
       guidePath({candidate:{id:path.candidate_or_atom_id},route:{...path,nodes:[]},route_index,proof});
-    }});
+    })});
+    paths.replaceChildren();state.paths=null;renderPaths();
     renderNarrativeScores();viewportAnchor.schedule();
   }catch(error){
     if(epoch!==state.epoch||error.name==='AbortError'||!host.isConnected)return;
@@ -974,7 +1001,6 @@ async function hydrateNarrativeTrace(epoch){
   }
 }
 async function verifiedNarrativeEndpoint(path,epoch){
-  if(!narrativeAccess.storyAccess(state.report,state.row).unlocked)return null;
   const record=state.saved,c={...state.row.case},reading=state.reading,binding=state.row.resource_binding||record.resource_binding;
   const saved=narrativeEndpoints.savedEndpointForPath(record,c,reading,path);if(!saved)return null;
   const key=canonicalGateJSON([c.case_id,record.config,record.native_checkpoint,reading,saved]);
@@ -992,7 +1018,7 @@ async function verifiedNarrativeEndpoint(path,epoch){
   return {...endpoint,href:graphURL({node_id:endpoint.node_id,focus_graph_id:endpoint.graph_id,focus_hierarchy_id:endpoint.hierarchy_id})};
 }
 function renderNarrativeScores(host=$('#narrative-scorecards-v1')){
-  if(host&&state.trace)narrativeUI.renderScorecards(host,state.trace.scorecards,{readingId:state.reading,onSource:sourceDrawer});
+  if(host&&state.trace?.scorecards)narrativeUI.renderScorecards(host,state.trace.scorecards,{readingId:state.reading,onSource:sourceDrawer});
 }
 async function hydrateFlow(epoch){
   if(!state.saved)return;
@@ -1020,20 +1046,28 @@ async function hydrateFlow(epoch){
   }
 }
 function renderPathsStage(){
-  const s=stage("04","Read the used sources","Exact quotations");s.outer.dataset.testid="paths-stage";
+  const s=stage("04","Selected evidence","Sources");s.outer.dataset.testid="paths-stage";
   s.body.append(el("div",null,{id:"retrieval-paths-v6"}));queueMicrotask(renderPaths);return s.outer;
 }
 function renderPaths(){
-  if(isNarrativePublication()&&state.paths)return;
   const host=$("#retrieval-paths-v6");if(!host)return;host.replaceChildren();
-  if(isNarrativePublication())host.append(note('No verified saved trace is available for graph navigation. Exact saved source quotations remain inspectable below.','empty'));
   const items=state.row.case.task==='redaction'?candidates():list(state.saved.result?.atoms).filter(a=>verdictSummary(state.saved,state.row.case,state.reading).units.some(u=>u.id===a.id));
+  if(state.row.case.task!=='redaction'){
+    for(const [index,item]of items.entries()){
+      const section=el('section',null,{class:'fact-evidence-group','data-atom-id':item.id});
+      section.append(el('h3','F'+(index+1)+' / '+(item.text||item.source_quote||item.id)));
+      const proofs=uniqueProofs(usedProofs(item)).map(proof=>({...proof,atom_ids:[item.id]})),grid=el('div',null,{class:'matched-quotation-grid'});
+      for(const proof of proofs)grid.append(quoteCard(proof));
+      section.append(grid);if(!proofs.length)section.append(note('No selected source establishes this fact.','empty'));
+      host.append(section);
+    }
+    return;
+  }
   const proofs=uniqueProofs(items.flatMap(usedProofs)).map(proof=>({...proof,atom_ids:[...new Set([...list(proof.atom_ids),...items.filter(item=>state.row.case.task!=='redaction'&&usedProofs(item).some(p=>p.canonical_page_id===proof.canonical_page_id&&p.start===proof.start&&p.end===proof.end&&p.text===proof.text)).map(item=>item.id)])]})),docs=new Map();
   for(const proof of proofs){const id=proof.document_id||proof.canonical_page_id;if(!docs.has(id))docs.set(id,new Map());const pages=docs.get(id);if(!pages.has(proof.canonical_page_id))pages.set(proof.canonical_page_id,[]);pages.get(proof.canonical_page_id).push(proof);}
   const groups=el("div",null,{class:"matched-quotation-grid"});
   for(const proof of proofs)groups.append(quoteCard(proof));
   host.append(groups);if(!proofs.length)host.append(note("No exact used source quotations are published for this selection.","empty"));
-  const item=selectedItem();if(item)host.append(button("Selected item: sources and checks",()=>state.row.case.task==='redaction'?candidateDetail(item):atomDetail(list(state.saved.result?.atoms).find(a=>a.id===(item.atom_id||item.id))||item)));
 }
 function renderResultBody(){
   const host=$("#result-body");if(!host||!state.saved)return;host.replaceChildren();
@@ -1063,7 +1097,12 @@ function renderResultBody(){
     if(task==='redaction')card.append(button("Routes",()=>{selectCandidate(item.id);stagePosition("03");},"quiet"));grid.append(card);
   }
   host.append(grid);if(!items.length)host.append(note("No saved alternatives for this selection. No other reading or method is substituted.","empty"));
-  const recordedCounts=localVerdictPanel().querySelector('.verdict-counts');if(recordedCounts)host.append(recordedCounts);
+  const groupedOccurrences=task==='redaction'&&items.some(item=>list(item.presentation_variants).length>1);
+  if(groupedOccurrences){
+    const counts={backed:0,context:0,other:0};
+    for(const item of items){const status=newDecision(item)?.status;counts[status==='evidence_backed_suggestion'?'backed':status==='exploratory_contextual'?'context':'other']++;}
+    host.append(note(`${items.length} distinct fills / ${counts.backed} evidence-backed / ${counts.context} contextual${counts.other?' / '+counts.other+' other':''}. Repeated source occurrences are grouped, not counted as extra corroboration.`));
+  }else{const recordedCounts=localVerdictPanel().querySelector('.verdict-counts');if(recordedCounts)host.append(recordedCounts);}
   if(isNarrativePublication()){
     if(task==='redaction'){
       const chart=renderEndingScoreChart(items,{onExplain:(rows)=>{
@@ -1090,6 +1129,7 @@ function renderFindings(){
   queueMicrotask(()=>loadAnalystDigest(host,state.epoch,state.reading));return s.outer;
 }
 async function loadAnalystDigest(host,epoch,reading){
+  if(livePacket){host.dataset.status='unavailable';host.replaceChildren(note('The local verdict and its source checks are shown above. No separate model digest was requested for this Live run.'));return;}
   try{
     const params=caseQuery(),key=params.toString();
     let data=digestCache.get(key);if(!data){data=await getJSON("/api/current/analyst-digest?"+params);if(data.available===true)digestCache.set(key,data);}
@@ -1293,7 +1333,8 @@ function guidePath({candidate,route,route_index,proof}={}) {
   if(!candidate?.id||!route)return;
   if(!allowPrivileged(()=>guidePath({candidate,route,route_index,proof})))return;
   const params=new URLSearchParams({corpus:state.row.case.corpus,guide_case:state.row.case.case_id,guide_arm:ARMS[state.arm].key,
-    guide_reading:state.reading,guide_candidate:candidate.id,guide_route:String(route_index),return_to:location.pathname+location.search});
+    guide_reading:state.reading,guide_candidate:candidate.id,guide_route:String(route_index),guide_autoplay:'1',return_to:location.pathname+location.search});
+  if(isNarrativePublication()&&/^path_[a-f0-9]{24}$/.test(route.id||'')){params.set('guide_candidate',route.id);params.set('guide_route','0');}
   if(proof){
     const item=flowItems().find(item=>item.id===candidate.id),path=isNarrativePublication()?state.trace?.paths.find(p=>p.id===route.id&&p.candidate_or_atom_id===candidate.id):null,lookup=state.trace?.sources||state.trace?.source_refs_by_id||{};
     const inventory=path?uniqueProofs(list(path.decision_source_refs||path.source_refs).map(ref=>typeof ref==='string'?lookup[ref]:ref)):usedProofs(item);
@@ -1301,11 +1342,14 @@ function guidePath({candidate,route,route_index,proof}={}) {
     if(!bound)throw Error("The guide destination is not a saved used quotation.");
     for(const [key,value] of Object.entries({guide_source:bound.canonical_page_id,guide_start:bound.start,guide_end:bound.end,guide_hash:bound.page_sha256}))params.set(key,String(value));
   }
-  const provenance=isNarrativePublication()?{label:'Saved final-evidence path',note:route.route_mode==='POSTRUN_GRAPH_VIEW'?'Post-run graph navigation to inspect the selected witness, not the original traversal.':route.graph_hops===0||route.route_mode==='DIRECT_SOURCE_HANDOFF'?'Direct source handoff. No intermediate graph hop is claimed.':'Recorded source navigation; connections are not evidence verdicts.'}:routeProvenance(route),body=box(badge(provenance.label),note(provenance.note),note("The Knowledge graph resolves this case-bound path against the pinned source policy. Membership navigation is not factual entailment.","notice"),link("Guide Path in Knowledge graph","graph-full-v6.html?"+params,"button primary"));
-  for(const node of list(route.nodes))body.append(note(node.label||node.id));
-  if(candidate.binding==="source_page_readout")body.append(note("Source-only proposal: the guide follows source contributors. No answer identity is invented."));
-  pinGraphQuery(params);body.querySelector('a.button.primary').href="graph-full-v6.html?"+params;
-  openDrawer("Guide source path","Case-bound path handoff / independent map context",body);
+  pinGraphQuery(params);
+  if(isNarrativePublication()&&/^path_[a-f0-9]{24}$/.test(route.id||'')){
+    const walk=new URLSearchParams({corpus:state.row.case.corpus,walk_case:state.row.case.case_id,walk_config:ARMS[state.arm].key,walk_reading:state.reading,walk_path:route.id,walk_autoplay:'1',return_to:location.pathname+location.search});
+    if(proof)for(const [key,value]of Object.entries({walk_source:proof.canonical_page_id,walk_start:proof.start,walk_end:proof.end,walk_hash:proof.page_sha256}))walk.set(key,String(value));
+    for(const key of ['resource_id','registry_sha256','index_sha256'])if(params.has(key))walk.set(key,params.get(key));
+    location.assign('graph-full-v6.html?'+walk);return;
+  }
+  location.assign('graph-full-v6.html?'+params);
 }
 
 function selectCandidate(id,{fromFlow=false}={}) {
@@ -1961,8 +2005,8 @@ async function citationContext(proof,c) {
 function sourceButton(value,{back}={}) {
   const proof=proofOf(value);if(!proof?.canonical_page_id)return note("No source-bound quotation was supplied.");
   const b=button("",()=>sourceDrawer(proof,{back}),"source-card",{"data-testid":"source-proof","data-anchor-key":JSON.stringify([proof.canonical_page_id,proof.start,proof.end,proof.page_sha256])});
-  const copy=el("span",proof.text||"Open original source text"),status=el("small","Open to verify the full source transcription",{class:"context-status"});
-  b.append(el("small",`${proof.document_id||"Saved source page"} / ${proof.date||"Date in source record"}`),copy,status);
+  const copy=el("span",proof.text||"Inspect source"),status=el("small",proof.date||'',{class:"context-status"});
+  b.append(copy,status);
   const c={...state.row.case};
   b.loadContext=async()=>{
     try{
@@ -1970,10 +2014,10 @@ function sourceButton(value,{back}={}) {
       if(!b.isConnected)return;
       const precise=context.anchors.filter(a=>a.start!==0||a.end!==Array.from(context.text).length);
       const highlighted=highlightedText(context.text,precise,{class:"citation-context","data-testid":"citation-paragraph"});
-      copy.replaceWith(highlighted);status.textContent=precise.length?"Full source paragraph / exact relevant quotation highlighted / open full transcription":"Full source segment / no narrower exact assertion span supplied";
+      copy.replaceWith(highlighted);status.textContent=proof.date||'';
     }catch{if(b.isConnected)status.textContent="Saved quotation only / paragraph context could not be verified. Open source details to inspect.";}
   };
-  return b;
+  citationObserver.observe(b);return b;
 }
 async function sourceDrawer(value,{back}={}) {
   if(!allowPrivileged(()=>sourceDrawer(value,{back})))return;
@@ -2004,15 +2048,14 @@ async function sourceDrawer(value,{back}={}) {
       verified=true;
     }
     if(epoch!==state.drawerEpoch||!$("#detail-drawer").open)return;
-    const body=box(fields([["Document",page.document_id,true],["Source date",page.date],["View",c.corpus==="cib"?"Earlier-visible CIB":"Bound CONFIDENTIAL evidence"],["Canonical page",proof.canonical_page_id,true]]),
-      note(verified?"Original quotation verified":"Original segment text/hash verified / no localized quotation supplied","verified"));
-    body.append(note("The highlight uses raw Unicode character offsets within the selected segment, not the entire cable or PDF. A matching text hash does not certify a historical assertion."));
+    const body=box(el('p',`${page.document_id} / ${page.date}`,{class:'source-document-meta'}));
+    const technical=el('details',null,{class:'source-technical'});technical.append(el('summary','Source details'),fields([["Document",page.document_id,true],["Source date",page.date],["View",c.corpus==="cib"?"Earlier-visible CIB":"Bound CONFIDENTIAL evidence"],["Canonical page",proof.canonical_page_id,true]]),note(verified?'Exact quotation and source hash verified.':'Source hash verified; no localized quotation was supplied.'));
     if(c.corpus==="cib"){
       const earlierPage=proof.earlier_page??page.earlier_page;
       body.append(link("Open earlier-release PDF"+(Number.isInteger(earlierPage)?" / page "+earlierPage:""),"/api/cib-pdf?"+new URLSearchParams({doc_id:page.document_id,release:"earlier"})+(Number.isInteger(earlierPage)&&earlierPage>0?"#page="+earlierPage:""),"button"));
     }
-    body.append(link("Look up this source in the corpus graph",graphURL({source_id:proof.canonical_page_id}),"button"),note(GRAPH_SCOPE,"notice"));
-    body.append(heading("Source document / supplied transcription"),note(Array.isArray(data.document_pages)?`${additional.length+1} distinct segments independently verified. All supplied segments appear below; this packet does not certify that every original page or format is present.`:"Only one segment was supplied. The complete original document is not available in this response.","notice"));
+    technical.append(link("View source on KG",graphURL({source_id:proof.canonical_page_id}),"button"),note(Array.isArray(data.document_pages)?`${additional.length+1} independently verified supplied segments. This inventory does not certify original-format completeness.`:'Only one source segment is supplied; other pages are unavailable.'));
+    body.append(technical);
     const supplied=list(data.document_pages),ordered=supplied.length?supplied.filter((p,i,all)=>all.findIndex(q=>(q.canonical_page_id||q.id)===(p.canonical_page_id||p.id))===i):[page];
     if(!ordered.some(p=>(p.canonical_page_id||p.id)===proof.canonical_page_id))ordered.unshift(page);
     const physical=p=>c.corpus==="cib"?(p.earlier_page??p.physical_page??((p.canonical_page_id||p.id)===proof.canonical_page_id?proof.earlier_page:undefined)):p.physical_page;
@@ -2068,14 +2111,24 @@ async function nodeDrawer(value) {
     if(groupId)body.append(link("Open Corpus Map / separate scope",graphURL({node_id:groupId}),"button"),note(GRAPH_SCOPE));
     openDrawer(node.label||"Hierarchy group","Navigation, not historical evidence",body);return;
   }
+  if(livePacket){
+    const traceSteps=list(livePacket.trace.steps).filter(step=>list(step.nodes).some(n=>n.id===id));
+    const refs=uniqueProofs(traceSteps.flatMap(step=>list(step.source_refs)));
+    const body=box(note(node.label||'Recorded source object'));
+    for(const proof of refs)body.append(sourceButton(proof));
+    if(!refs.length)body.append(note('No exact source quotation was retained for this object.'));
+    openDrawer('Source object','Live execution',body);return;
+  }
   const c={...state.row.case},epoch=openDrawer(node.label||"Source-connected node","Case-scoped knowledge graph",note("Loading eligible source connections..."));
   try{
     const data=await getJSON("/api/node-v6?"+new URLSearchParams({case_id:c.case_id,node_id:id}));
     if(epoch!==state.drawerEpoch||!$("#detail-drawer").open)return;
     if(data.cutoff&&data.cutoff!==c.date||data.whole_origin_excluded&&data.whole_origin_excluded!==c.document_id)throw Error("The node view belongs to another source boundary.");
-    const body=box(note("Eligible source connections, not proof of a new assertion. Hierarchy navigation is separate from source testimony.","notice"),link("Open Corpus Map / separate scope",graphURL({node_id:id}),"button"),note(GRAPH_SCOPE));
+    const body=box(link("View on KG",graphURL({node_id:id}),"button"));
     if(data.scope==="SAVED_DISPLAY_PROJECTION_ONLY"&&typeof data.note==="string"&&data.note.trim())body.append(note(data.note,"notice"));
-    for(const edge of list(data.edges)){const item=el("section",null,{class:"path-card"});item.append(heading(edge.relation||primitive(edge.kind)));for(const proof of list(edge.citations))item.append(sourceButton(proof));body.append(item);}
+    const edges=list(data.edges);let count=0;
+    const addConnections=()=>{const end=Math.min(count+6,edges.length);for(;count<end;count++){const edge=edges[count],item=el('section',null,{class:'path-card'});item.append(heading(edge.relation||primitive(edge.kind)));for(const proof of uniqueProofs(list(edge.citations)).slice(0,3))item.append(sourceButton(proof));body.append(item);}more.hidden=count>=edges.length;more.textContent=`More connections / ${edges.length-count}`;body.append(more);};
+    const more=button('More connections',addConnections,'quiet');addConnections();
     if(!list(data.edges).length)body.append(note(data.scope==="SAVED_DISPLAY_PROJECTION_ONLY"?"No source connections are saved for this node in the displayed projection. The full corpus graph is separate.":"No eligible source edges were returned for this node.","empty"));
     $("#detail-body").replaceChildren(body);
   }catch(error){if(epoch===state.drawerEpoch)$("#detail-body").replaceChildren(note(error.message,"error-card"));}
@@ -2130,8 +2183,21 @@ function modifierCarrierPanel(candidate){
   return panel;
 }
 function candidateDetail(candidate) {
-  const support=candidate.support_assessment||{},d=disposition(candidate),body=box(el("blockquote",candidate.fill,{class:"cue"}),dispositionPanel(candidate),
-    note(support.scope||"Focal contribution only, not a whole-event guarantee.","notice"));
+  const support=candidate.support_assessment||{},d=disposition(candidate),body=box(el("blockquote",candidate.fill,{class:"cue"}),badge(decisionLabel(newDecision(candidate))));
+  const quotes=uniqueProofs([...list(candidate.sources),...list(support.evidence).map(e=>e.citation).filter(Boolean)]);
+  for(const proof of quotes)body.append(sourceButton(proof,{back:()=>candidateDetail(candidate)}));
+  if(list(candidate.presentation_variants).length>1){
+    const other=el('details');other.append(el('summary',`${candidate.presentation_variants.length} separately assessed source occurrences`));
+    for(const variant of candidate.presentation_variants){other.append(heading(decisionLabel(newDecision(variant))));for(const proof of uniqueProofs(variant.sources))other.append(sourceButton(proof,{back:()=>candidateDetail(candidate)}));}
+    body.append(other);
+  }
+  const audit=el('details');audit.append(el('summary','Construction and ranking details'));body.append(audit);
+  const detailBody=body; // Main evidence is immediate; the original audit stays available below.
+  const auditBody=box(dispositionPanel(candidate));audit.append(auditBody);
+  renderCandidateAudit(candidate,support,d,auditBody);
+  openDrawer('Candidate',`Recorded local decision`,detailBody);
+}
+function renderCandidateAudit(candidate,support,d,body){
   body.append(localDecisionPanel(candidate));
   const explanation=displayText(d.explanation||support.explanation);if(explanation)body.append(note(explanation));
   body.append(fields([["Recorded insertion fit",feasibility(candidate).label],["Source identity binding",candidate.support_dimensions?.identity],["Support scope",supportDimensions(candidate).scope]].filter(([,value])=>value!=null)));
@@ -2155,7 +2221,6 @@ function candidateDetail(candidate) {
     const key=[source.canonical_page_id,source.start,source.end].join("/");if(seen.has(key))continue;seen.add(key);body.append(sourceButton(source,{back:()=>candidateDetail(candidate)}));
   }
   if(!seen.size)body.append(note("No source quotations were supplied.","empty"));
-  openDrawer("Candidate / "+short(candidate.fill,9),`Arm ${state.arm} / saved rank, not probability`,body);
 }
 function roleCertificatePanel(evidence,atom,back) {
   const cert=evidence.source_local_role_certificate;if(!cert)return null;
@@ -2255,7 +2320,28 @@ async function navigateFromURL({push=false,scroll=true}={}) {
   }
 }
 window.addEventListener("popstate",()=>{viewportAnchor.cancel();navigateFromURL({scroll:false});});
+async function mountLiveWorkbench(packet){
+  livePacket=packet;state.report=packet.report;state.sourceReport=packet.report;
+  state.row=packet.row;state.saved=packet.condition;state.arm='A';state.stage='01';
+  state.loading=false;state.pending='';state.epoch++;state.catalog=null;state.casebookPending='';
+  [narrativeUI,narrativeAccess,narrativeEndpoints]=await Promise.all([import('./narrative-assets/narrative-trace-v1.js'),import('./narrative-attempts-v1.js'),import('./narrative-endpoint-v1.js')]);
+  state.casebook={primary:[{case_id:packet.row.case.case_id,corpus:packet.row.case.corpus,task:packet.row.case.task,row:packet.row}],special_redactions:[],backgrounds:{},selection_scope:'live',completed_primary_count:1};
+  state.readySingleMethod=true;$('.workspace-toolbar').hidden=true;
+  state.reading=initialDisplayReading(state.saved,state.row.case);
+  state.candidate=flowItems()[0]?.id||'';
+  railDecisionCache.set(railKey(state.row),{record:state.saved});
+  renderWorkspace();renderRail();savePosition();await hydrateFlow(state.epoch);
+  $('#casebook-notice').hidden=true;
+  $('#page-state').textContent=packet.execution_kind==='live'?'Live execution / local evidence decisions.':'Transport test fixture / not an inference.';
+}
+window.MatryoshkaLiveWorkbench=Object.freeze({mount:mountLiveWorkbench});
 try{
+  const liveRun=new URLSearchParams(location.search).get('live_run');
+  if(liveRun){
+    $('#page-state').textContent='Receiving the authenticated Live execution...';
+    const {loadWorkbenchRun}=await import('./live-result-adapter.js');
+    await mountLiveWorkbench(await loadWorkbenchRun(liveRun));
+  }else{
   let selection=null;
   state.sourceReport=await getJSON("/data/report-v6.json",{captureHash:true});
   state.report=state.sourceReport;
@@ -2291,4 +2377,5 @@ try{
   if(state.report.status==="PARTIAL"){const scope=$("#publication-scope");scope.hidden=true;scope.textContent=`Preview: ${state.report.completed_cases??0} saved questions; ${state.report.pending_cases??0} declared questions are pending. This is not the final question selection.`;}
   await loadCasebook();
   await navigateFromURL();
+  }
 }catch(error){state.catalog=null;state.report=null;state.sourceReport=null;showError(error.message);$("#page-state").textContent="The bound public casebook is unavailable. No archived data has been substituted.";$("#case-view").setAttribute("aria-busy","false");$("#case-view").replaceChildren(note("The explicitly selected publication, reader and server pins must agree before saved questions can be displayed.","empty"));}

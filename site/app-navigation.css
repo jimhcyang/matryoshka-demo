@@ -14,3 +14,4 @@ body{padding-top:var(--app-nav-height);font-family:var(--font-body)}
 @media(max-width:760px){:root{--app-nav-height:58px}#app-navigation{padding:0 10px;gap:10px}#app-navigation .app-brand b{display:none}#app-navigation .app-brand span{width:29px;height:32px;font-size:23px}#app-navigation .app-view-tabs{flex:1;justify-content:flex-end;font-size:14px}#app-navigation .app-view-tabs a{padding:0 10px}}
 @media(max-width:520px){#app-navigation{padding-inline:7px;gap:0}#app-navigation .app-brand{display:none}#app-navigation .app-view-tabs{justify-content:space-between;font-size:14px}#app-navigation .app-view-tabs a{padding-inline:5px;font-size:14px}}
 @media(prefers-reduced-motion:reduce){#app-navigation .app-view-tabs a{transition:none}}
+@media(max-width:520px){#app-navigation .app-view-tabs [data-short]>span{display:none}#app-navigation .app-view-tabs [data-short]::after{content:attr(data-short)}#app-navigation .app-view-tabs{min-width:0;width:100%}}

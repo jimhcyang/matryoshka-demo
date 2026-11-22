@@ -104,8 +104,8 @@ $$('.preview-caption').forEach(caption=>$('#map-accounting').append(caption));
 const releaseFilterApplies = (view) => currentOnlyMode && state.displayMode !== "pair" && ["current_reveal","current_later"].includes(view?.key);
 const colors = {Domain:"#176e70",Theme:"#c89535",Community:"#315e78",EvidenceGroup:"#68787b",Entity:"#4d8068",Event:"#d39d35",Claim:"#bd5b44",RedactionSlot:"#bd5b44",RelationEvidence:"#79617e",Segment:"#68787b",Document:"#283f49",Unknown:"#68787b"};
 const visibilityLabel = (value) => (singleCorpusMode?{both:"present in Confidential and expanded classification views",later_only:"added by the Secret projection",redacted_placeholder:"opaque redaction placeholder"}:{both:"visible in earlier + later releases",later_only:"present in later release only",redacted_placeholder:"opaque redaction placeholder"})[value] || String(value || "");
-const visibilityModes = ["dim","show"];
-const visibilityModeLabels = {dim:"ineligible evidence dimmed",show:"ineligible evidence fully colored"};
+const visibilityModes = ["dim"];
+const visibilityModeLabels = {dim:"ineligible evidence dimmed"};
 const isLaterOnly = (item) => {
   if (!item) return false;
   if (item.visibility === "later_only") return true;
@@ -242,12 +242,14 @@ function slotGraphRows(panel,nodes,edges) {
     for(const anchor of slot.anchors)if(anchor.community_id===parent?.id||slot.id===focus)map.set(anchor.id,{...anchor,...(map.get(anchor.id)||{})});
   }
   const extra=slots.flatMap(row=>row.context_links).filter(edge=>map.has(edge.source)&&map.has(edge.target));
-  return panel.applyVisibilityPolicy([...slots,...[...map.values()].filter(row=>!row.overlay_slot)],[...edges,...extra]);
+  const selected=panel.external||panel.selected;
+  const preserveIds=new Set([...panel.pinnedFocusIds,...(focus?[focus]:[]),...(!selected?.source&&selected?.id?[selected.id]:[])]);
+  return panel.applyVisibilityPolicy([...map.values()],[...edges,...extra],{preserveIds});
 }
 
 async function navigateOpaqueSlot(panel,slot) {
   if(state.guidePath)throw Error('Close the saved case guide before independent slot exploration.');
-  slotOverlayState.enabled=true;$('#show-slot-overlay').checked=true;
+  setRedactionVisibility(true,false);
   cacheSlotRows([slot]);
   panel.slotFocusId=slot.id;
   if(slot.community_id)await panel.navigateToNode(slot);else await panel.focusNeighborhood(slot);
@@ -325,15 +327,7 @@ async function initializeSlotOverlay() {
   $('#slot-overlay-controls').hidden=false;
   try{
     await ensureSlotOverlay();
-    $('#show-slot-overlay').onchange=event=>{
-      slotOverlayState.enabled=event.target.checked;
-      for(const panel of Object.values(state.panels)){
-        if(panel.neighborhood?.node.overlay_slot&&!slotOverlayState.enabled){panel.neighborhood=null;panel.slotFocusId=null;}
-        if(panel.neighborhood)panel.neighborhood=withSlotContext(panel.neighborhood);
-        if(panel.localIncidentNeighborhood)panel.localIncidentNeighborhood=panel.localIncidentNeighborhood.node.overlay_slot&&!slotOverlayState.enabled?null:withSlotContext(panel.localIncidentNeighborhood);
-        panel.inducedNeighborEdges=panel.inducedNeighborEdges.filter(edge=>!edge.slot_navigation);panel.refreshGraph();
-      }
-    };
+    $('#show-slot-overlay').onchange=event=>setRedactionVisibility(event.target.checked);
     $('#browse-source-slots').onclick=()=>{$('#search-scope').value='slot';$('#graph-search').value='Redacted Slot';applySearch();};
     $('#slot-search-prev').onclick=()=>{slotOverlayState.searchOffset=Math.max(0,slotOverlayState.searchOffset-32);applySearch(false);};
     $('#slot-search-next').onclick=()=>{slotOverlayState.searchOffset=slotOverlayState.searchPage.next_offset;applySearch(false);};
@@ -568,6 +562,11 @@ class GraphPanel {
   }
 
   applyVisibilityPolicy(nodes, edges, {preserveIds=new Set()}={}) {
+    if(!slotOverlayState.enabled){
+      const hidden=new Set(nodes.filter(node=>node.overlay_slot||node.type==='RedactionSlot').map(node=>node.id));
+      nodes=nodes.filter(node=>!hidden.has(node.id));
+      edges=edges.filter(edge=>!edge.slot_navigation&&!hidden.has(edge.source)&&!hidden.has(edge.target));
+    }
     const includeRelease=releaseFilterApplies(this.view);
     const policy=state.guideOverlay?"dim":this.visibilityPolicy();
     const styledNodes=nodes.map((node)=>{
@@ -655,7 +654,6 @@ class GraphPanel {
       }).sort((left,right)=>{
         const leftPinned=pinnedOrder.has(left.id),rightPinned=pinnedOrder.has(right.id);
         if(leftPinned||rightPinned)return leftPinned&&rightPinned?pinnedOrder.get(left.id)-pinnedOrder.get(right.id):leftPinned?-1:1;
-        if(Boolean(left.overlay_slot)!==Boolean(right.overlay_slot))return left.overlay_slot?-1:1;
         return Number(strength.get(right.id)||0)-Number(strength.get(left.id)||0)||Number(right.mass||0)-Number(left.mass||0)||left.id.localeCompare(right.id);
       });
       allNodes=[selected,...neighbors.filter((row)=>row.id!==selected.id)];
@@ -665,7 +663,8 @@ class GraphPanel {
       policyExcludedNodeCount=eligibility.excludedNodeCount;policyExcludedEdgeCount=eligibility.excludedEdgeCount;
       contract="Exact one-hop analyst neighborhood grouped by strict hierarchy distance. Direct edges are always complete; optional neighbor-to-neighbor edges come from the compact published topology index.";
       const totalNodes=allNodes.length,limit=Math.min(totalNodes,this.nodeLimit,MAX_RENDERED_NODES);
-      const selectedNodes=allNodes.slice(0,Math.max(1,limit)),ids=new Set(selectedNodes.map((row)=>row.id));
+      const selection=GraphKG.selectCoverage(allNodes,[...allEdges,...this.inducedNeighborEdges],{limit,pinned:[selected.id,...this.pinnedFocusIds]});
+      const selectedNodes=selection.nodes,ids=new Set(selectedNodes.map((row)=>row.id));
       const directEdges=allEdges.filter((edge)=>ids.has(edge.source)&&ids.has(edge.target));
       const directPairs=new Set(directEdges.map((edge)=>[edge.source,edge.target].sort().join("\u241f")));
       let neighborEdges=this.showNeighborEdges?this.inducedNeighborEdges.filter((edge)=>ids.has(edge.source)&&ids.has(edge.target)&&!directPairs.has([edge.source,edge.target].sort().join("\u241f"))):[];
@@ -673,7 +672,7 @@ class GraphPanel {
       const selectedEdges=[...directEdges,...neighborEdges].slice(0,MAX_ALL_RENDERED_EDGES);
       const nativeEdges=allEdges.filter(edge=>!edge.slot_navigation),nativeNodes=allNodes.filter(node=>!node.overlay_slot);
       return {
-        contract,nodes:selectedNodes,edges:selectedEdges,availableNodeCount:totalNodes,
+        contract,nodes:selectedNodes,edges:selectedEdges,selectionAudit:selection.audit,availableNodeCount:totalNodes,
         availableEdgeCount:allEdges.length+neighborEdges.length,scopedEdgeCount:allEdges.length,
         fullGraphNodeCount:base.full_graph_node_count||nativeNodes.length,
         fullGraphEdgeCount:base.full_graph_edge_count||nativeEdges.length,
@@ -723,21 +722,9 @@ class GraphPanel {
       const injected=[...this.pinnedSearchRecords.values()].filter((row)=>!row.overlay_slot&&!present.has(row.id)).map((row)=>this.normalizedEvidenceNode({...row,mass:Number(row.document_count||1),search_injected:true}));
       allNodes=[...injected,...allNodes];
     }
-    if (this.pinnedFocusIds.size) {
-      const naturalLimit=Math.min(allNodes.length,this.nodeLimit,MAX_RENDERED_NODES);
-      const naturallyVisible=new Set(allNodes.slice(0,naturalLimit).map((row)=>row.id||row.node_id));
-      const requiresInjection=[...this.pinnedFocusIds].some((id)=>!naturallyVisible.has(id));
-      if(requiresInjection){
-        const order=new Map([...this.pinnedFocusIds].map((id,index)=>[id,index]));
-        allNodes=[...allNodes].sort((left,right)=>{
-          const leftRank=order.has(left.id||left.node_id)?order.get(left.id||left.node_id):-1;
-          const rightRank=order.has(right.id||right.node_id)?order.get(right.id||right.node_id):-1;
-          if(leftRank>=0||rightRank>=0) return leftRank<0?1:rightRank<0?-1:leftRank-rightRank;
-          return 0;
-        });
-      }
-    }
-    const eligibility=this.applyVisibilityPolicy(allNodes,allEdges);
+    const currentFocus=this.external||this.selected;
+    const preserveIds=new Set([...this.pinnedFocusIds,...(this.slotFocusId?[this.slotFocusId]:[]),...(!currentFocus?.source&&currentFocus?.id?[currentFocus.id]:[])]);
+    const eligibility=this.applyVisibilityPolicy(allNodes,allEdges,{preserveIds});
     allNodes=eligibility.nodes;allEdges=eligibility.edges;
     policyExcludedNodeCount=eligibility.excludedNodeCount;policyExcludedEdgeCount=eligibility.excludedEdgeCount;
     const overlay=slotGraphRows(this,allNodes,allEdges);
@@ -745,7 +732,8 @@ class GraphPanel {
     const scopeIds=new Set(allNodes.map((row)=>row.id||row.node_id));
     const scopedEdges=allEdges.filter((edge)=>scopeIds.has(edge.source)&&scopeIds.has(edge.target));
     const totalNodes=allNodes.length, limit=Math.min(totalNodes,this.nodeLimit,MAX_RENDERED_NODES);
-    const selectedNodes=allNodes.slice(0,limit), ids=new Set(selectedNodes.map((row)=>row.id));
+    const selection=GraphKG.selectCoverage(allNodes,scopedEdges,{limit,pinned:[...preserveIds]});
+    const selectedNodes=selection.nodes, ids=new Set(selectedNodes.map((row)=>row.id));
     const induced=scopedEdges.filter((edge)=>ids.has(edge.source)&&ids.has(edge.target));
     induced.sort((left,right)=>{
       const leftPinned=this.pinnedFocusIds.has(left.source)&&this.pinnedFocusIds.has(left.target);
@@ -768,6 +756,7 @@ class GraphPanel {
     return {
       contract,
       nodes:selectedNodes,
+      selectionAudit:selection.audit,
       edges:selectedEdges,
       availableNodeCount:totalNodes,
       availableEdgeCount:induced.length,
@@ -822,11 +811,12 @@ class GraphPanel {
     if(!this.graph.focusMode){
       for(let pass=0;pass<(this.nodes.length>700?4:10);pass++){this.resolveCollisions(null,24);this.fit();}
     }
+    this.compactHomes=new Map(this.nodes.map(node=>[node.id,{x:node.x,y:node.y}]));
     this.renderInspector();this.updateChrome();
     if(this.graph.focusMode){this.showRingLegend();this.startOrbit();}else this.ringLegend.hidden=true;
   }
 
-  positionFocusRings(requestedInner=0) {
+  positionFocusRings() {
     this.focusBands=[];
     const definitions=[
       ["same_community","Same Community","rgba(71,120,92,.13)","rgba(71,120,92,.45)"],
@@ -837,47 +827,37 @@ class GraphPanel {
     ];
     const focus=this.nodes.find((node)=>node.id===this.graph.focusNodeId)||this.nodes[0];
     if(focus){focus.x=0;focus.y=0;focus.vx=0;focus.vy=0;}
-    let inner=Math.max(84,(focus?.r||30)+58,requestedInner);
+    let inner=Math.max(54,(focus?.r||30)+24);
     definitions.forEach(([scope,label,fill,stroke],scopeIndex)=>{
       const members=this.nodes.filter((node)=>node!==focus&&node.focus_scope===scope);
       if(!members.length)return;
       const largest=Math.max(10,...members.map(node=>node.r));
-      let offset=0,radius=inner+largest+16,lastRadius=radius;
+      let offset=0,radius=inner+largest+8,lastRadius=radius;
       while(offset<members.length){
-        const capacity=Math.max(4,Math.floor(2*Math.PI*radius/(2*largest+20)));
+        const capacity=Math.max(4,Math.floor(2*Math.PI*radius/(2*largest+12)));
         const ring=members.slice(offset,offset+capacity);
         const phase=((hashNumber(`${this.graph.focusNodeId}:${scope}:${radius}`)%1000)/1000)*Math.PI*2;
         ring.forEach((node,index)=>{
           const angle=phase+index*Math.PI*2/ring.length;
           node.x=Math.cos(angle)*radius;node.y=Math.sin(angle)*radius;node.vx=0;node.vy=0;
           node.orbitRadius=radius;node.orbitAngle=angle;node.orbitBand=scopeIndex;
+          node.orbitClearance=Math.min(largest+3,radius*Math.sin(Math.PI/Math.max(2,ring.length))-3);
         });
-        offset+=ring.length;lastRadius=radius;radius+=2*largest+20;
+        offset+=ring.length;lastRadius=radius;radius+=2*largest+12;
       }
-      const outer=lastRadius+largest+15;
+      const outer=lastRadius+largest+8;
       this.focusBands.push({scope,label,fill,stroke,inner,outer,count:members.length,index:scopeIndex});
-      inner=outer+12;
+      inner=outer+8;
     });
   }
 
   reserveFocusLabelHole(){
-    if(!(this.width>0&&this.height>0)||!this.focusBands.length)return;
-    const focus=this.nodeMap.get(this.graph.focusNodeId),area=this.usableBounds();
-    if(!focus)return;
-    const outerPixels=Math.min(area.width,area.height)*.44;
-    for(let pass=0;pass<3;pass++){
-      const label=this.mapLabelSize(focus);if(!label)return;
-      const needed=Math.hypot(label.width/2+8,this.nodeRadius(focus)+label.height+16);
-      const first=this.focusBands[0],outer=this.focusBands.at(-1).outer;
-      if(first.inner*this.transform.scale>=needed)return;
-      const fraction=Math.min(.82,needed/Math.max(1,outerPixels));
-      const inner=Math.max(first.inner+8,fraction*(outer-first.inner)/(1-fraction));
-      this.positionFocusRings(inner);this.fit();
-    }
+    // Labels find a collision-free local caption; they never enlarge hierarchy rings.
+    this.draw();
   }
 
   layout() {
-    const nodes=this.nodes, edges=this.edges;
+    const nodes=this.nodes, edges=this.edges.filter(GraphKG.semanticEdge);
     if(this.graph?.focusMode)return;
     // Dense corpus-wide layers use the deterministic phyllotaxis seed directly.
     // Pulling hundreds of nodes toward thousands of edges creates an unreadable
@@ -922,6 +902,12 @@ class GraphPanel {
   }
 
   stopPhysics(){if(this.physicsFrame!==null)cancelAnimationFrame(this.physicsFrame);this.physicsFrame=null;delete this.canvas.dataset.settling;}
+  resolveFocusCollisions(anchor=null){
+    const scale=displayScale(this.transform.scale);
+    const points=this.nodes.map(node=>({id:node.id,x:node.x,y:node.y,homeX:node.x,homeY:node.y,r:this.nodeRadius(node)/scale,fixed:node.id===this.graph.focusNodeId,band:this.focusBands.find(band=>band.index===node.orbitBand)}));
+    GraphKG.relax(points,{steps:2,pull:0,gap:2/scale,anchor:anchor?.id});
+    points.forEach((point,index)=>{const node=this.nodes[index];node.x=point.x;node.y=point.y;if(!point.fixed){node.orbitRadius=Math.hypot(point.x,point.y);node.orbitAngle=Math.atan2(point.y,point.x);}});
+  }
   stopOrbit(){if(this.orbitFrame!==null)cancelAnimationFrame(this.orbitFrame);this.orbitFrame=null;this.canvas.dataset.orbitState='stopped';}
   startOrbit(){
     this.stopOrbit();
@@ -953,18 +939,28 @@ class GraphPanel {
     this.ringLegend.hidden=false;this.hideRingLegendSoon();
   }
   settlePhysics(){
+    this.compactLayout();
+  }
+
+  compactLayout({immediate=false}={}){
     this.stopPhysics();
-    if(guideReducedMotion()||state.guidePath){this.resolveCollisions(null,4);this.draw();return;}
-    const started=performance.now(),starts=new Map(this.nodes.map(node=>[node.id,{x:node.x,y:node.y}])),scale=displayScale(this.transform.scale);
-    let last=started;this.canvas.dataset.settling='true';
-    const tick=now=>{
-      const dt=Math.min(2,(now-last)/16.67);last=now;let energy=0;
-      for(const node of this.nodes){node.vx=Math.max(-1.4/scale,Math.min(1.4/scale,node.vx))*.965;node.vy=Math.max(-1.4/scale,Math.min(1.4/scale,node.vy))*.965;node.x+=node.vx*dt*.32;node.y+=node.vy*dt*.32;energy+=Math.abs(node.vx)+Math.abs(node.vy);}
-      this.resolveCollisions(null,1);
-      for(const node of this.nodes){const start=starts.get(node.id),dx=node.x-start.x,dy=node.y-start.y,distance=Math.hypot(dx,dy),budget=36/scale;if(distance>budget){node.x=start.x+dx/distance*budget;node.y=start.y+dy/distance*budget;node.vx*=.5;node.vy*=.5;}}
+    if(this.drag||state.guidePath||this.v64Busy||!this.nodes.length)return;
+    if(this.graph?.focusMode){
+      this.positionFocusRings();this.draw();return;
+    }
+    const scale=displayScale(this.transform.scale),homes=this.compactHomes;
+    const points=this.nodes.map(node=>{const home=homes?.get(node.id)||node;return {id:node.id,x:node.x,y:node.y,homeX:home.x,homeY:home.y,r:this.nodeRadius(node)/scale};});
+    const step=()=>{
+      GraphKG.relax(points,{steps:1,gap:6/scale,maxStep:12/scale});
+      for(let i=0;i<points.length;i++){const p=points[i],n=this.nodes[i];n.x=p.x;n.y=p.y;n.vx=0;n.vy=0;}
       this.draw();
-      if(now-started<3200&&(now-started<650||energy>.025))this.physicsFrame=requestAnimationFrame(tick);else this.stopPhysics();
     };
+    if(immediate||guideReducedMotion()){
+      GraphKG.relax(points,{steps:32,gap:6/scale,maxStep:12/scale});step();return;
+    }
+    let frames=0;this.canvas.dataset.settling='true';
+    step();
+    const tick=()=>{if(this.drag){this.stopPhysics();return;}step();if(++frames<36)this.physicsFrame=requestAnimationFrame(tick);else this.stopPhysics();};
     this.physicsFrame=requestAnimationFrame(tick);
   }
 
@@ -1105,7 +1101,7 @@ class GraphPanel {
   restoreLocation(saved) {
     this.navigationRevision+=1;this.inspectionRevision+=1;
     Object.assign(this,{level:saved.level,trail:saved.trail,nodeLimit:saved.nodeLimit,neighborhood:saved.neighborhood,
-      localIncidentNeighborhood:saved.localIncidentNeighborhood,slotFocusId:saved.slotFocusId||null,showNeighborEdges:saved.showNeighborEdges!==false,inducedNeighborEdges:[],external:null});
+      localIncidentNeighborhood:saved.localIncidentNeighborhood,slotFocusId:saved.slotFocusId||null,showNeighborEdges:saved.showNeighborEdges!==false,inducedNeighborEdges:[],external:null,selected:null});
     this.pinnedFocusIds=new Set(saved.selectedId?[saved.selectedId]:[]);this.searchMatchIds.clear();
     this.refreshGraph(saved.selectedId);
     for(const position of saved.positions){const node=this.nodeMap.get(position.id);if(node)Object.assign(node,{x:position.x,y:position.y});}
@@ -1318,6 +1314,8 @@ class GraphPanel {
 
   updateChrome() {
     this.syncMapActions();
+    syncPairActions();
+    renderSelectionAudit();
     if(this.studyContext){
       const c=this.studyContext;
       $(`#${this.name}-breadcrumb`).textContent="Case source graph / "+(c.community?.label||"Ungrouped state")+" / "+(c.view_kind==="community"?"Community members":"Connections centered on "+guideNodeLabel(c.nodes.find(n=>n.id===c.focus_id)));
@@ -1344,7 +1342,8 @@ class GraphPanel {
     const scale=displayScale(this.transform.scale),mobile=this.width<600,ceiling=mobile?38:58;
     const denseNeighbor=mobile&&this.graph?.focusMode&&this.nodes.length>96&&node.id!==this.graph.focusNodeId;
     const density=denseNeighbor?Math.max(.45,Math.sqrt(64/this.nodes.length)):1;
-    return displayRadius(displayRadius(node.r,5,42)*Math.pow(scale,.62)*(mobile?.9:1)*density+padding,Math.max(2,4*density,minimum),ceiling+padding);
+    const radius=displayRadius(displayRadius(node.r,5,42)*Math.pow(scale,.62)*(mobile?.9:1)*density+padding,Math.max(2,4*density,minimum),ceiling+padding);
+    return this.graph?.focusMode&&Number.isFinite(node.orbitClearance)?Math.min(radius,Math.max(1,node.orbitClearance*scale)+padding):radius;
   }
   pointer(event) { const rect=this.canvas.getBoundingClientRect();return {x:event.clientX-rect.left,y:event.clientY-rect.top}; }
   hitNode(point) {
@@ -1372,7 +1371,7 @@ class GraphPanel {
     const point=this.pointer(event);
     if (this.drag) {
       const dx=point.x-this.drag.last.x,dy=point.y-this.drag.last.y;if(Math.hypot(point.x-this.drag.start.x,point.y-this.drag.start.y)>5){this.drag.moved=true;this.clearHold();}
-      if(this.drag.node&&!(this.graph?.focusMode&&this.drag.node.id===this.graph.focusNodeId)){this.drag.node.x+=dx/this.transform.scale;this.drag.node.y+=dy/this.transform.scale;this.drag.node.vx=dx/this.transform.scale*.12;this.drag.node.vy=dy/this.transform.scale*.12;if(!state.guidePath&&!this.graph?.focusMode)this.resolveCollisions(this.drag.node,4);}else{this.transform.x+=dx;this.transform.y+=dy;}this.drag.last=point;this.draw();return;
+      if(this.drag.node&&!(this.graph?.focusMode&&this.drag.node.id===this.graph.focusNodeId)){this.drag.node.x+=dx/this.transform.scale;this.drag.node.y+=dy/this.transform.scale;this.drag.node.vx=dx/this.transform.scale*.12;this.drag.node.vy=dy/this.transform.scale*.12;if(!state.guidePath){if(this.graph?.focusMode)this.resolveFocusCollisions(this.drag.node);else this.resolveCollisions(this.drag.node,4);}}else{this.transform.x+=dx;this.transform.y+=dy;}this.drag.last=point;this.draw();return;
     }
     const hit=this.hitNode(point)||this.hitEdge(point);this.hover=hit;
     if(hit){const detail=hit.source?(hit.description||hit.weight_semantics||hit.edge_type||""):(hit.summary||hit.type||"");this.tooltip.innerHTML=`<b>${esc(compact(hit.label||hit.edge_type||"Connection",120))}</b><small>${esc(compact(detail,200))}</small>`;this.tooltip.style.left=`${Math.max(5,Math.min(this.width-275,point.x+13))}px`;this.tooltip.style.top=`${Math.max(5,Math.min(this.height-82,point.y+13))}px`;this.tooltip.hidden=false;}else this.tooltip.hidden=true;this.draw();
@@ -1385,7 +1384,7 @@ class GraphPanel {
       if(this.studyContext){if(hit?.source)inspectStudyEdge(hit);else if(hit)inspectStudyNode(hit.id);this.draw();return;}
       if(hit&&!hit.source){this.closeInspector(false);this.toggleLabel(hit);}
       else if(hit?.source){this.drawerOpen=true;this.inspectRenderedEdge(hit);}
-      else this.closeInspector(false);
+      else {this.closeInspector(false);this.compactLayout();}
     }
     if(moved&&draggedNode&&!state.guidePath){
       if(this.graph?.focusMode&&draggedNode.id!==this.graph.focusNodeId){
@@ -1394,6 +1393,7 @@ class GraphPanel {
         draggedNode.orbitRadius=band?Math.max(band.inner+draggedNode.r+8,Math.min(band.outer-draggedNode.r-8,radius)):radius;
         draggedNode.orbitAngle=Math.atan2(draggedNode.y,draggedNode.x);
         draggedNode.x=Math.cos(draggedNode.orbitAngle)*draggedNode.orbitRadius;draggedNode.y=Math.sin(draggedNode.orbitAngle)*draggedNode.orbitRadius;
+        this.resolveFocusCollisions(draggedNode);
       }else if(!this.graph?.focusMode)this.settlePhysics();
     }
     this.startOrbit();
@@ -1401,12 +1401,12 @@ class GraphPanel {
     this.draw();
   }
   pointerCancel() { this.clearHold();this.drag=null;this.canvas.classList.remove("dragging");this.startOrbit(); }
-  wheel(event) { event.preventDefault();if(this.studyContext)pauseGuide();const point=this.pointer(event),before=this.world(point),scale=Math.max(.12,Math.min(3.2,this.transform.scale*Math.exp(-event.deltaY*.0012)));this.transform.scale=scale;this.transform.x=point.x-before.x*scale;this.transform.y=point.y-before.y*scale;this.draw(); }
+  wheel(event) { event.preventDefault();if(this.studyContext)pauseGuide();const point=this.pointer(event),before=this.world(point),scale=Math.max(.12,Math.min(3.2,this.transform.scale*Math.exp(-event.deltaY*.0012)));this.transform.scale=scale;this.transform.x=point.x-before.x*scale;this.transform.y=point.y-before.y*scale;this.compactLayout();this.draw(); }
 
   toggleLabel(node){
     this.labelOverrides.set(node.id,!this.labelButtons.has(node.id));
     $('#map-keyboard-status').textContent=`${node.label}. Label ${this.labelOverrides.get(node.id)?'shown':'hidden'}.`;
-    if(this.labelOverrides.get(node.id))this.reserveLabelSpace();
+    this.reserveLabelSpace();
     this.draw();
   }
   activateNode(node){
@@ -1430,6 +1430,7 @@ class GraphPanel {
   }
   closeInspector(restoreFocus=true){this.drawerOpen=false;this.inspector.hidden=true;if(restoreFocus){const target=this.inspectorReturnFocus;if(target?.isConnected)target.focus({preventScroll:true});else this.canvas.focus({preventScroll:true});}}
   syncMapActions(){
+    syncPairActions();
     if(this!==activePanel())return;
     const item=this.selected&&!this.selected.source?this.selected:this.neighborhood?.node;
     const context=$('#map-context');if(context){context.textContent=this.neighborhood?'Community':'Neighborhood';context.setAttribute('aria-pressed',String(Boolean(this.neighborhood)));context.disabled=Boolean(this.v64Busy||state.guidePath?.busy||!item||item.aggregate_kind||this.neighborhood&&!item.community_id&&this.level==='evidence');}
@@ -1445,7 +1446,7 @@ class GraphPanel {
       this.selected=node;this.external=null;this.labelOverrides.set(node.id,true);this.reserveLabelSpace();this.draw();this.syncMapActions();$('#map-keyboard-status').textContent=`${node.label}. ${node.type}. Enter for sources. Space toggles its label.`;
     }else if(event.key===' '&&current>=0){event.preventDefault();this.toggleLabel(this.nodes[current]);}
     else if(event.key==='Enter'&&current>=0){event.preventDefault();if(event.shiftKey)this.activateNode(this.nodes[current]);else this.openInspector(this.nodes[current]);}
-    else if(['+','=','-'].includes(event.key)){event.preventDefault();const scale=this.transform.scale,factor=event.key==='-'?.85:1.15;this.transform.scale=Math.max(.12,Math.min(3.2,scale*factor));this.transform.x=this.width/2+(this.transform.x-this.width/2)*this.transform.scale/scale;this.transform.y=this.height/2+(this.transform.y-this.height/2)*this.transform.scale/scale;this.draw();}
+    else if(['+','=','-'].includes(event.key)){event.preventDefault();const scale=this.transform.scale,factor=event.key==='-'?.85:1.15;this.transform.scale=Math.max(.12,Math.min(3.2,scale*factor));this.transform.x=this.width/2+(this.transform.x-this.width/2)*this.transform.scale/scale;this.transform.y=this.height/2+(this.transform.y-this.height/2)*this.transform.scale/scale;this.compactLayout();this.draw();}
     else if(event.key==='Escape')this.closeInspector();
   }
 
@@ -1473,33 +1474,7 @@ class GraphPanel {
   }
 
   reserveLabelSpace(){
-    if(this.graph?.focusMode||!this.nodes.length||!(this.width>0&&this.height>0))return;
-    const area=this.usableBounds(),labels=new Map(this.mapLabelNodes().map(node=>[node.id,this.mapLabelSize(node)]));
-    const points=this.nodes.map(node=>({...this.screen(node),node,r:this.nodeRadius(node),label:labels.get(node.id)}));
-    const bounds=p=>({left:p.x-Math.max(p.r,p.label?.width/2||0),right:p.x+Math.max(p.r,p.label?.width/2||0),top:p.y-p.r,bottom:p.y+p.r+(p.label?p.label.height+6:0)});
-    const clamp=p=>{const b=bounds(p);p.x+=Math.max(0,area.left-b.left)-Math.max(0,b.right-area.right);p.y+=Math.max(0,area.top-b.top)-Math.max(0,b.bottom-area.bottom);};
-    const pairs=[];
-    if(points.length<=80){for(let i=0;i<points.length;i++)for(let j=i+1;j<points.length;j++)pairs.push([points[i],points[j]]);}
-    else for(const a of points.filter(point=>point.label))for(const b of points)if(a!==b&&(!b.label||a.node.index<b.node.index))pairs.push([a,b]);
-    // Display-only footprint relaxation reserves the capsule with its circle.
-    // Published positions are not graph facts; IDs, weights and edges stay intact.
-    for(let pass=0;pass<(points.length<80?70:24);pass++){
-      for(const [a,b] of pairs){
-        if(a.label||b.label){
-          const x=bounds(a),y=bounds(b),ox=Math.min(x.right,y.right)-Math.max(x.left,y.left)+12,oy=Math.min(x.bottom,y.bottom)-Math.max(x.top,y.top)+12;
-          if(ox<=0||oy<=0)continue;
-          const horizontal=ox<oy,direction=horizontal?(a.x<b.x?-1:1):((x.top+x.bottom)<(y.top+y.bottom)?-1:1),push=(horizontal?ox:oy)*.28;
-          if(horizontal){a.x+=direction*push;b.x-=direction*push;}else{a.y+=direction*push;b.y-=direction*push;}
-        }else{
-          let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),minimum=a.r+b.r+12;
-          if(d>=minimum)continue;if(d<.01){dx=1;dy=.5;d=Math.hypot(dx,dy);}
-          const push=(minimum-d)*.3;a.x-=dx/d*push;a.y-=dy/d*push;b.x+=dx/d*push;b.y+=dy/d*push;
-        }
-      }
-      points.forEach(clamp);
-    }
-    const scale=displayScale(this.transform.scale);
-    points.forEach(p=>{p.node.x=(p.x-this.transform.x)/scale;p.node.y=(p.y-this.transform.y)/scale;});
+    this.compactLayout();
   }
 
   drawMapLabels(){
@@ -1522,6 +1497,9 @@ class GraphPanel {
           {x:p.x-wrapped.width/2,y:p.y-r-wrapped.height-gap,placement:'focus-caption'},
           {x:p.x+r+gap,y:p.y-wrapped.height/2,placement:'focus-caption'},
           {x:p.x-r-wrapped.width-gap,y:p.y-wrapped.height/2,placement:'focus-caption'});
+        for(let y=area.top;y+wrapped.height<=area.bottom;y+=wrapped.height+10)candidates.push(
+          {x:area.left,y,placement:'focus-caption'},
+          {x:area.right-wrapped.width,y,placement:'focus-caption'});
       }
       for(const position of candidates){
         if(box)break;
@@ -1558,7 +1536,8 @@ class GraphPanel {
     const revision=++this.inspectionRevision;
     if(this.pulseTimer!==null){window.clearTimeout(this.pulseTimer);this.pulseTimer=null;}
     this.external=null;this.selected=node;
-    this.localIncidentNeighborhood=this.neighborhood?.node?.id===node.id?null:this.localIncidentNeighborhood?.node?.id===node.id?this.localIncidentNeighborhood:null;
+    const drawnEdges=this.edges.filter(edge=>edge.source===node.id||edge.target===node.id);
+    this.localIncidentNeighborhood=this.neighborhood?.node?.id===node.id?null:this.localIncidentNeighborhood?.node?.id===node.id?this.localIncidentNeighborhood:{node,edges:drawnEdges,neighbors:[...new Set(drawnEdges.flatMap(edge=>[edge.source,edge.target]))].filter(id=>id!==node.id).map(id=>this.nodeMap.get(id)).filter(Boolean),partial_drawn_inventory:true};
     this.pinnedFocusIds.clear();this.searchMatchIds.clear();this.matches.clear();
     this.renderInspector();this.draw();
     if(this.neighborhood?.node?.id===node.id)return;
@@ -1746,7 +1725,7 @@ class GraphPanel {
     });
     const order=["source_context","same_community","same_theme","same_domain","cross_domain","outside_hierarchy"];
     const sections=order.filter((scope)=>groups.has(scope)).map((scope)=>{
-      const edges=groups.get(scope),key=`${item.id}:${scope}`,pageSize=24,pages=Math.max(1,Math.ceil(edges.length/pageSize));
+      const edges=groups.get(scope),key=`${item.id}:${scope}`,pageSize=8,pages=Math.max(1,Math.ceil(edges.length/pageSize));
       const page=Math.max(0,Math.min(pages-1,this.incidentPages.get(key)||0)),start=page*pageSize,visible=edges.slice(start,start+pageSize);
       this.incidentPages.set(key,page);
       const rows=visible.map((edge)=>{
@@ -1774,7 +1753,7 @@ class GraphPanel {
     const listed=[...groups.values()].reduce((sum,edges)=>sum+edges.length,0),total=(detail.edges||[]).length;
     const empty=total?'No relationships match the current ineligible-context display controls. The frozen inventory is not empty.':'No published incident edge is recorded for this node. Source provenance is separate from semantic topology.';
     const contextCount=(detail.edges||[]).filter(edge=>edge.slot_navigation).length;
-    const counts=`${fmt((detail.neighbors||[]).filter(node=>!node.overlay_slot).length)} ordinary graph neighbors and ${fmt(total-contextCount)} published incident relationships.${contextCount?` Separately: ${fmt(contextCount)} source-context navigation links, not factual relationships or corroboration.`:''}`;
+    const counts=`${detail.partial_drawn_inventory?'Loading the complete saved inventory; immediately showing drawn connections only. ':''}${fmt((detail.neighbors||[]).filter(node=>!node.overlay_slot).length)} ordinary graph neighbors and ${fmt(total-contextCount)} published incident relationships.${contextCount?` Separately: ${fmt(contextCount)} source-context navigation links, not factual relationships or corroboration.`:''}`;
     const sc=detail.slot_context;
     const contextPager=sc&&slotOverlayState.enabled?`<div class="slot-pagination"><p data-slot-neighborhood-count>${fmt(sc.total)} Redacted Slots with literal context at this node. Context page ${Math.floor(sc.offset/32)+1}; ${sc.ids.length} fetched, plus any active reciprocal slot. Not published relationships.</p><button data-slot-neighborhood-page="${Math.max(0,sc.offset-32)}" ${sc.offset===0?'disabled':''}>Previous context slots</button><button data-slot-neighborhood-page="${sc.next_offset}" ${sc.next_offset===null?'disabled':''}>Next context slots</button></div>`:'';
     return `<section class="incident-neighborhood"><div class="incident-heading"><p><b>${heading}</b><br>${explanation}<br>${counts} ${fmt(listed)} connections listed across the pages below; ${fmt(total-listed)} hidden by the current display controls.</p><div class="incident-actions">${switchView}${induced}</div></div>${legend}${status}${contextPager}${sections||`<p>${empty}</p>`}</section>`;
@@ -1837,6 +1816,10 @@ class GraphPanel {
     close.innerHTML='<span>Information &amp; sources</span><button type="button" data-close-inspector aria-label="Close information">Close</button>';
     close.querySelector('button').onclick=()=>this.closeInspector();
     const description=document.createElement('p');description.className='map-description';description.textContent=mapBriefDescription(item,this);description.dataset.descriptionFor=item.id||'';
+    if(item.overlay_slot){
+      const provenance=document.createElement('p');provenance.className='slot-readable-provenance';provenance.textContent=`${item.document_id} / ${item.date} / earlier PDF page ${item.source_page}`;
+      $('.slot-inspector',this.inspector)?.prepend(provenance);
+    }
     const heading=this.inspector.querySelector('.inspector-head')||this.inspector.querySelector('h3');
     const sources=document.createElement('section');sources.className='source-buttons evidence-list map-primary-sources';
     const keys=new Set();
@@ -1844,13 +1827,24 @@ class GraphPanel {
       const key=button.dataset.cibDocument+'|'+(button.dataset.cibPage||'');
       if(keys.has(key)){button.remove();continue;}keys.add(key);sources.append(button);
     }
-    const detail=document.createElement('details');detail.className='map-detail-disclosure';detail.innerHTML='<summary>Connections, members &amp; provenance</summary>';
+    const technical=document.createElement('details');technical.className='map-technical';technical.innerHTML='<summary>Technical fields</summary>';
+    const status=$('.inspector-stats>div:nth-child(3)>b',this.inspector);
+    if(status&&[item.domain_id,item.theme_id,item.community_id].filter(Boolean).includes(status.textContent)){
+      const ids=document.createElement('div');ids.className='technical-id';ids.textContent=[item.domain_id,item.theme_id,item.community_id].filter(Boolean).join(' / ');technical.append(ids);status.textContent='Assigned';
+    }
+    for(const node of $$('.technical-id,.claim-metadata',this.inspector))technical.append(node);
+    const detail=document.createElement('section');detail.className='map-detail-content';
     while(this.inspector.firstChild)detail.append(this.inspector.firstChild);
     this.inspector.append(close);if(heading)this.inspector.append(heading);this.inspector.append(description);
     // The existing slot/source actions retain their original listeners and bound IDs.
     for(const action of $$('[data-slot-source],.slot-source-actions',detail))if(detail.contains(action))this.inspector.append(action);
     if(sources.childElementCount){const h=document.createElement('h4');h.textContent='Sources';this.inspector.append(h,sources);}
-    this.inspector.append(detail);
+    this.inspector.append(detail);if(technical.childElementCount>1)this.inspector.append(technical);
+    for(const list of $$('.evidence-list,.bridge-list,.association-list',this.inspector)){
+      const rows=[...list.children];if(rows.length<=12)continue;
+      rows.slice(12).forEach(row=>row.remove());
+      const note=document.createElement('p');note.className='list-cap-note';note.textContent=`Showing 12 of ${rows.length} retained entries. Open a source or direct connections for the bounded inventory.`;list.after(note);
+    }
     hydrateMapBrief(this,item,description);
   }
 
@@ -2091,23 +2085,11 @@ async function boundJson(response,expectedSha256) {
 }
 
 function highlightedSourceText(value, terms) {
-  const stop=new Set(['under','the','and','for','of','with','to','in','at','a','an','by','from','as','is','was','were','on','this','that','said']);
-  const source=String(value||""),usable=[...new Set((terms||[]).map((term)=>String(term||"").trim()).filter((term)=>term.length>=3&&normalize(term).split(/\s+/).some(word=>!stop.has(word))))].sort((left,right)=>right.length-left.length).slice(0,16);
-  if(!usable.length)return esc(source);
-  const pattern=new RegExp(`(${usable.map((term)=>term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")})`,"gi");
-  return source.split(pattern).map((part,index)=>index%2?`<mark>${esc(part)}</mark>`:esc(part)).join("");
+  return GraphKG.literalMarkup(value,terms);
 }
 
 function focalSourceText(value, terms, slotId, revealText="", markerSlotId=slotId) {
-  const text=String(value||"");let cursor=0,output="",ordinal=0;
-  const pattern=/\[\[REDACTION_SLOT:\d+:([^\]]+)\]\]|\[(?:STILL\s+)?(?:REDACTION|REDACTED)(?:\s+\d+)?\]/gi;
-  for(const match of text.matchAll(pattern)){
-    output+=highlightedSourceText(text.slice(cursor,match.index),revealText?[revealText]:terms);
-    ordinal+=1;
-    output+=match[1]===markerSlotId?`<mark class="focal-source-slot" data-focal-slot="${esc(slotId)}">[REDACTION ${ordinal}] · selected${markerSlotId!==slotId?" region":""}</mark>`:`<span class="source-opaque-slot">[REDACTION ${ordinal}]</span>`;
-    cursor=match.index+match[0].length;
-  }
-  return output+highlightedSourceText(text.slice(cursor),revealText?[revealText]:terms);
+  return GraphKG.literalMarkup(value,revealText?[revealText]:terms,{focalSlot:markerSlotId});
 }
 
 function sourceMatchScore(page, terms) {
@@ -2219,7 +2201,7 @@ async function openCibSource(panel,documentId,{canonicalPageId="",highlights=[],
     }
     const pdfNote=state.pdfApiAvailable?"The frozen transcript supplies the release and PDF page. No PDF box coordinates are guessed; highlighted terms are text matches, not exact-offset entailment proofs.":"This frozen source transcript is available. Highlighted terms are text matches, not exact-offset entailment proofs; no PDF box coordinates are guessed.";
     const noPages=`<section class="cib-source-page"><p>No canonical aligned transcript page is retained for this pair.</p><button type="button" class="cib-pdf-button" data-cib-pdf-page="1" ${state.pdfApiAvailable?"":"disabled"}>${state.pdfApiAvailable?`Open ${esc(release)} PDF from page 1`:"PDF available in local mode"}</button></section>`;
-    $("#cib-source-body").innerHTML=`<p class="cib-pdf-note">${esc(pdfNote)}${markerSlotId!==slotId?" This target shares an earlier masked region with another slot; the region is highlighted without inventing an internal boundary.":""}</p>`+(pages.map((page)=>`<section class="cib-source-page ${page===active?"active":""}" data-cib-page="${esc(page.canonical_page_id)}"><header><b>${paired?"Aligned page":"Source segment"} ${fmt(page.sequence_in_document)}</b>${paired?`<span>PDF page ${fmt(page.source_page)}</span>`:""}</header><div>${highlightedSourceText(page.text,terms)}</div>${paired?`<button type="button" class="cib-pdf-button" data-cib-pdf-page="${Number(page.source_page||1)}" ${state.pdfApiAvailable?"":"disabled"}>${state.pdfApiAvailable?`Open ${esc(release)} PDF at page ${fmt(page.source_page)}`:"PDF available in local mode"}</button>`:""}</section>`).join("")||noPages);
+    $("#cib-source-body").innerHTML=`<p class="cib-pdf-note">${esc(pdfNote)}${markerSlotId!==slotId?" This target shares an earlier masked region with another slot; the region is highlighted without inventing an internal boundary.":""}</p>`+(pages.map((page)=>`<section class="cib-source-page ${page===active?"active":""}" data-cib-page="${esc(page.canonical_page_id)}"><header><b>${paired?"Aligned page":"Source segment"} ${fmt(page.sequence_in_document)}</b>${paired?`<span>PDF page ${fmt(page.source_page)}</span>`:""}</header><div>${slotId?focalSourceText(page.text,terms,slotId,revealText,markerSlotId):highlightedSourceText(page.text,terms)}</div>${paired?`<button type="button" class="cib-pdf-button" data-cib-pdf-page="${Number(page.source_page||1)}" ${state.pdfApiAvailable?"":"disabled"}>${state.pdfApiAvailable?`Open ${esc(release)} PDF at page ${fmt(page.source_page)}`:"PDF available in local mode"}</button>`:""}</section>`).join("")||noPages);
     $$('[data-cib-switch-release]',drawer).forEach((button)=>button.addEventListener("click",()=>openCibSource({...panel,view:state.data.views[button.dataset.cibSwitchRelease]},documentId,{canonicalPageId:active?.canonical_page_id||canonicalPageId,highlights:terms,slotId,revealText})));
     $$('[data-cib-pdf-page]',drawer).forEach((button)=>button.addEventListener("click",async()=>{
       active=pages.find(page=>page.canonical_page_id===button.closest('.cib-source-page')?.dataset.cibPage)||active;
@@ -2363,12 +2345,12 @@ function renderPanelCaption(panel) {
     const policy=state.guideOverlay
       ? ` Case source context: strictly before ${state.guideOverlay.scope.strictly_before} (exclusive); origin ${state.guideOverlay.scope.whole_origin_excluded} excluded. Full KG topology and aggregate weights remain unchanged; gray edges are unassessed.`
       : state.asOfPolicy.enabled
-      ? ` Independent inclusive as-of orientation: objects with no admissible support by ${state.asOfPolicy.cutoff}, or only undated support, are ineligible for this date. ${fmt(graph.policyExcludedNodeCount)} loaded nodes and ${fmt(graph.policyExcludedEdgeCount)} loaded edges are marked and are ${state.showIneligible?(state.visibilityMode==="dim"?"dimmed":"shown in full color"):"hidden"}; the hierarchy and level do not change. Published aggregate weights are orientation metadata, not date-recomputed evidence weights or a workbench verdict.`
+      ? ` Independent inclusive as-of orientation: objects with no admissible support by ${state.asOfPolicy.cutoff}, or only undated support, are ineligible for this date. ${fmt(graph.policyExcludedNodeCount)} loaded nodes and ${fmt(graph.policyExcludedEdgeCount)} loaded edges are marked and are ${state.showIneligible?"dimmed":"hidden"}; the hierarchy and level do not change. Published aggregate weights are orientation metadata, not date-recomputed evidence weights or a workbench verdict.`
       : "";
     $(`#${panel.name}-caption`).textContent=`${value}${policy}`;
   };
   if (graph.focusMode) {
-    const ceiling=graph.availableNodeCount>MAX_RENDERED_NODES?` The 2,048-node maximum shows ${fmt(MAX_RENDERED_NODES)} of ${fmt(graph.availableNodeCount)} endpoints.`:" The selected ceiling includes every directly connected endpoint.";
+    const ceiling=graph.availableNodeCount>panel.nodes.length?` Marginal coverage selects ${fmt(panel.nodes.length)} of ${fmt(graph.availableNodeCount)} loaded endpoints at this ceiling; the incident inventory remains separately inspectable.`:" The selected ceiling includes every directly connected endpoint.";
     const induced=graph.showNeighborEdges?` ${fmt(graph.neighborEdgeCount)} published links among the displayed neighbors are also shown.`:" Neighbor-to-neighbor links are off.";
     const returnNote=panel.level==="evidence"?"Open the selected node's mother Community to restore its hierarchy branch.":`Return to the ${panel.level} view to restore the prior layout.`;
     setCaption(`${fmt(panel.nodes.length)} of ${fmt(graph.availableNodeCount)} direct-neighborhood nodes / ${fmt(graph.shownDirectEdgeCount)} of ${fmt(graph.directEdgeCount)} complete selected-node edges shown.${induced}${ceiling} ${returnNote}`);
@@ -2854,32 +2836,37 @@ async function savedStorySourceAccess(caseId){
 }
 
 async function allowSavedStorySource(action,{landing=false,caseId}={}){
-  const context=await savedStorySourceAccess(caseId);
-  if(!context||context.status.unlocked)return true;
-  pauseGuide();
-  const returnFocus=document.activeElement,host=landing?guideHost():document.createElement('dialog');
-  host.replaceChildren();host.setAttribute('aria-busy','false');
-  if(!landing){host.className='narrative-guide-access';host.setAttribute('aria-label','Story answer access');}
-  const title=document.createElement('h2');title.textContent=landing?'KG Navigator':'Story answer access';
-  const text=document.createElement('p');text.textContent=`${context.status.opened} of ${context.status.total} saved results opened. This saved guide and original sources can reveal other story answers.`;
-  const actions=document.createElement('div');actions.className='guide-actions';
-  const reveal=document.createElement('button');reveal.type='button';reveal.textContent='Reveal story answers and continue';reveal.dataset.testid='acknowledge-story-reveal';
-  reveal.onclick=()=>{
-    reveal.disabled=true;
-    context.access.acknowledgeStoryReveal(context.report,context.row);
-    if(!landing)host.close();
-    Promise.resolve().then(action).catch(error=>{state.guideError=error.message;renderPathGuide();});
-  };
-  actions.append(reveal);
-  if(landing){
-    const back=document.createElement('a');back.textContent='Return to the questions';back.href=guideReturnUrl();actions.append(back);
-  }else{
-    const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Return to the graph';cancel.onclick=()=>host.close();actions.append(cancel);
-    host.addEventListener('close',()=>{host.remove();if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});},{once:true});
-  }
-  host.append(title,text,actions);
-  if(!landing){document.body.append(host);host.showModal();reveal.focus({preventScroll:true});}
-  return false;
+  // Verify the released case/corpus binding, without a second reveal consent.
+  await savedStorySourceAccess(caseId);
+  return true;
+}
+
+async function openSavedWalkSource(proof,{caseInfo,config,resourceBinding}={}){
+  if(!caseInfo||!proof?.canonical_page_id)throw Error('An exact saved source and case are required.');
+  await savedStorySourceAccess(caseInfo.case_id);
+  guideCloseSource();const epoch=++guideSourceEpoch;
+  const drawer=document.createElement('aside');drawer.id='study-guide-drawer';drawer.setAttribute('role','dialog');drawer.setAttribute('aria-label','Original source');
+  drawer.innerHTML='<header><h2>Original source</h2><button data-study-close>Close</button></header><div class="study-source-content" role="status">Verifying source...</div>';
+  document.body.append(drawer);$('[data-study-close]',drawer).onclick=guideCloseSource;
+  try{
+    const params=new URLSearchParams({case_id:caseInfo.case_id,config,source_id:proof.canonical_page_id});
+    for(const key of ['resource_id','registry_sha256','index_sha256'])if(resourceBinding?.[key])params.set(key,resourceBinding[key]);
+    const data=await currentGraphJSON('/api/source-v6?'+params),page=data.page||data;
+    const digest=async text=>{const canonical=JSON.stringify(text).replace(/[\u007f-\uffff]/g,c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0'));return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonical)))].map(v=>v.toString(16).padStart(2,'0')).join('');};
+    const eligible=p=>p.document_id===proof.document_id&&p.date===proof.date&&p.date<caseInfo.date&&p.document_id!==caseInfo.document_id&&p.permitted!==false&&p.visibility!=='later'&&!(p.handling||[]).includes('NOFORN')&&(caseInfo.corpus==='cib'||p.classification==='CONFIDENTIAL');
+    if(!eligible(page)||(page.id||page.canonical_page_id)!==proof.canonical_page_id||await digest(page.text)!==proof.page_sha256||!Number.isInteger(proof.start)||!Number.isInteger(proof.end)||proof.start<0||proof.end<=proof.start||Array.from(page.text).slice(proof.start,proof.end).join('')!==proof.text)throw Error('The exact source proof or eligibility check failed.');
+    const pages=Array.isArray(data.document_pages)?data.document_pages:[page],seen=new Set();let html='<p>'+esc(proof.document_id)+' / '+esc(proof.date)+'</p>';
+    for(const p of pages){
+      const id=p.id||p.canonical_page_id;if(seen.has(id))continue;seen.add(id);
+      if(!eligible(p)||await digest(p.text)!==(p.source_sha256||p.page_sha256))throw Error('An additional source segment failed verification.');
+      const selected=id===proof.canonical_page_id,chars=Array.from(p.text),number=p.earlier_page||p.physical_page;
+      html+='<h3>'+(number?'Page '+esc(number):'Source segment')+'</h3><pre>'+(selected?esc(chars.slice(0,proof.start).join(''))+'<mark class="source-quotation">'+esc(proof.text)+'</mark>'+esc(chars.slice(proof.end).join('')):esc(p.text))+'</pre>';
+    }
+    if(!seen.has(proof.canonical_page_id))throw Error('The selected source is missing from its document inventory.');
+    if(epoch!==guideSourceEpoch)return;
+    drawer.dataset.proofPage=proof.canonical_page_id;drawer.dataset.proofHash=proof.page_sha256;drawer.dataset.proofStart=String(proof.start);drawer.dataset.proofEnd=String(proof.end);
+    $('.study-source-content',drawer).innerHTML=html;$('.source-quotation',drawer)?.scrollIntoView({block:'center',behavior:'instant'});
+  }catch(error){if(epoch===guideSourceEpoch)$('.study-source-content',drawer).textContent=error.message;}
 }
 
 async function savedWalkGraphReady(signal){
@@ -3019,7 +3006,7 @@ function pauseGuide() {
 function guideCloseSource() {guideSourceEpoch++;$("#study-guide-drawer")?.remove();$("#study-guide-scrim")?.remove();}
 
 function enterGuideControls(g) {
-  g.savedControls=$$('[data-eligibility-style],#show-ineligible,#temporal-control input,#temporal-control button').map(node=>[node,node.disabled]);
+  g.savedControls=$$('[data-eligibility-style],#hide-ineligible,[data-redactions],#show-slot-overlay,#show-ineligible,#temporal-control input,#temporal-control button').map(node=>[node,node.disabled]);
   g.visibilityNoteNode=$('.visibility-note');g.visibilityNote=g.visibilityNoteNode?.innerHTML;
   const temporal=$('#temporal-control');g.savedTemporalControl=temporal?{node:temporal,hidden:temporal.hidden}:null;
   for(const [node] of g.savedControls)node.disabled=true;
@@ -3410,7 +3397,13 @@ async function loadSavedGuide(params) {
     renderPathGuide();
     const requested=Number(params.get('guide_step')||0);
     await activateGuideStep(Number.isInteger(requested)&&requested>=0&&requested<g.steps.length?requested:0);
+    startBoundGuideAutoplay(g,params);
   }catch(e){state.guideError=e.message;pauseGuide();renderPathGuide();}
+}
+
+function startBoundGuideAutoplay(g,params){
+  if(params.get('guide_autoplay')!=='1'||state.guidePath!==g||!g.overlay||g.busy||g.error||!Number.isFinite(g.settledAt)||g.index>=g.steps.length-1)return false;
+  g.playing=true;renderGuideStatus();scheduleGuide();return true;
 }
 
 document.addEventListener('visibilitychange',()=>{if(document.hidden){pauseGuide();Object.values(state.panels).forEach(panel=>panel.stopPhysics());}});
@@ -3715,6 +3708,45 @@ function syncVisibilityControl() {
   const hide=$('#hide-ineligible');hide?.classList.toggle('active',!state.showIneligible);hide?.setAttribute('aria-pressed',String(!state.showIneligible));
 }
 
+function setRedactionVisibility(show,refresh=true){
+  slotOverlayState.enabled=Boolean(show);
+  $('#show-slot-overlay').checked=slotOverlayState.enabled;
+  $$('[data-redactions]').forEach(button=>{const active=(button.dataset.redactions==='show')===slotOverlayState.enabled;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));});
+  if(!refresh)return;
+  for(const panel of Object.values(state.panels)){
+    if(!show){
+      if(panel.neighborhood?.node.overlay_slot)panel.neighborhood=null;
+      panel.slotFocusId=null;
+      if(panel.selected?.overlay_slot||panel.selected?.slot_navigation){panel.selected=null;panel.closeInspector(false);}
+      if(panel.external?.overlay_slot||panel.external?.slot_navigation){panel.external=null;panel.closeInspector(false);}
+    }
+    if(panel.neighborhood)panel.neighborhood=withSlotContext(panel.neighborhood);
+    if(panel.localIncidentNeighborhood)panel.localIncidentNeighborhood=panel.localIncidentNeighborhood.node.overlay_slot&&!show?null:withSlotContext(panel.localIncidentNeighborhood);
+    panel.inducedNeighborEdges=panel.inducedNeighborEdges.filter(edge=>!edge.slot_navigation);panel.refreshGraph();
+  }
+}
+
+function syncPairActions(){
+  const panels=activePanels(),back=$('[data-back="all"]'),fit=$('[data-fit="all"]'),pair=state.displayMode==='pair';
+  if(back){back.textContent=pair?'Back both maps':'Back';back.disabled=!panels.some(panel=>!panel.v64Busy&&(panel.nodeHistory?.length||panel.neighborhood||panel.trail?.length||state.guidePath?.index>0));}
+  if(fit){fit.textContent=pair?'Fit both maps':'Fit';fit.disabled=!panels.length;}
+}
+
+function renderSelectionAudit(){
+  const host=$('#selection-audit-content');if(!host||!$('#selection-audit').open)return;
+  host.replaceChildren();
+  for(const panel of activePanels()){
+    const audit=panel.graph?.selectionAudit,section=document.createElement('section');
+    const heading=document.createElement('h4');heading.textContent=panel.name+' map';section.append(heading);
+    const pre=document.createElement('pre');pre.textContent=JSON.stringify(audit||{note:'Exact saved study context; no independent overview selection.'},null,2);section.append(pre);host.append(section);
+  }
+}
+
+function bindPanelNavigation(){
+  $$('[data-fit]').forEach(button=>button.addEventListener('click',()=>{pauseGuide();const panels=button.dataset.fit==='all'?activePanels():[state.panels[button.dataset.fit]];panels.filter(Boolean).forEach(panel=>{panel.compactLayout({immediate:true});panel.fit();});}));
+  $$('[data-back]').forEach(button=>button.addEventListener('click',()=>{const panels=button.dataset.back==='all'?activePanels():[state.panels[button.dataset.back]];Promise.all(panels.filter(Boolean).map(panel=>panel.back())).catch(error=>$('#search-status').textContent=error.message);}));
+}
+
 function setVisibilityMode(mode) {
   if(visibilityModes.includes(mode)&&!state.showIneligible){state.visibilityMode=mode;setIneligiblePresence(true);return;}
   if(!visibilityModes.includes(mode)||mode===state.visibilityMode){syncVisibilityControl();return;}
@@ -3724,7 +3756,7 @@ function setVisibilityMode(mode) {
 }
 
 function setIneligiblePresence(show) {
-  state.showIneligible=Boolean(show);syncVisibilityControl();
+  state.visibilityMode='dim';state.showIneligible=Boolean(show);syncVisibilityControl();
   const url=new URL(window.location.href);url.searchParams.set("show_ineligible",state.showIneligible?"1":"0");history.replaceState(null,"",url);
   Object.values(state.panels).forEach((panel)=>panel?.applyVisibilityMode());
   applySearch();
@@ -3845,10 +3877,10 @@ async function init() {
     document.title="Matryoshka | "+(state.data.corpus_metadata?.name||"Paired corpus graph");
     $("#document-count").textContent=`${fmt(state.data.corpus_metadata?.document_count)} ${singleCorpusMode?"prepared documents":"paired Central Intelligence Bulletins"}`;
     renderExplorationBinding();
-    const params=new URLSearchParams(window.location.search); if (["earlier","later"].includes(params.get("release"))) state.release=params.get("release"); if (["single","pair"].includes(params.get("view"))) state.displayMode=params.get("view"); const legacyVisibility=params.get("visibility"); if (["show","dim"].includes(params.get("ineligible"))) state.visibilityMode=params.get("ineligible"); else if (["show","dim"].includes(legacyVisibility)) state.visibilityMode=legacyVisibility; if(params.get("show_ineligible")==="0"||legacyVisibility==="hide")state.showIneligible=false; if (["domain","theme","community","evidence"].includes(params.get("level"))) state.level=params.get("level"); state.guidePath=null;state.autoOpenSearch=params.get("inspect")==="1"&&!params.has("guide_case");state.autoOpenDirect=params.get("connections")==="1"&&!params.has("guide_case");
-    $("#purpose").textContent=singleCorpusMode?state.data.comparison_contract.purpose:"Start from the fixed earlier-release hierarchy. Later-only, post-cutoff and undated evidence can remain dimmed, fully colored or hidden without refitting assignments. Pair compares the two release-visibility projections, not source classification labels.";
+    const params=new URLSearchParams(window.location.search); if (["earlier","later"].includes(params.get("release"))) state.release=params.get("release"); if (["single","pair"].includes(params.get("view"))) state.displayMode=params.get("view"); const legacyVisibility=params.get("visibility"); state.visibilityMode='dim'; if(params.get("show_ineligible")==="0"||params.get('ineligible')==='hide'||legacyVisibility==="hide")state.showIneligible=false; if (["domain","theme","community","evidence"].includes(params.get("level"))) state.level=params.get("level"); state.guidePath=null;state.autoOpenSearch=params.get("inspect")==="1"&&!params.has("guide_case");state.autoOpenDirect=params.get("connections")==="1"&&!params.has("guide_case");
+    $("#purpose").textContent=singleCorpusMode?state.data.comparison_contract.purpose:"Start from the fixed earlier-release hierarchy. Later-only, post-cutoff and undated evidence can remain dimmed or hidden without refitting assignments. Pair compares the two release-visibility projections, not source classification labels.";
     if(singleCorpusMode){
-      $(".visibility-note").textContent="Eligibility display: the fixed Confidential taxonomy is retained when the permitted SECRET projection is added. Added, post-date or undated context may be dimmed, fully colored or hidden. These are classification projections, not paired redactions; no workbench case cutoff or document exclusion is inherited.";
+      $(".visibility-note").textContent="Eligibility display: the fixed Confidential taxonomy is retained when the permitted SECRET projection is added. Added, post-date or undated context may be dimmed or hidden. These are classification projections, not paired redactions; no workbench case cutoff or document exclusion is inherited.";
       const added=$$('.graph-legend span').find(item=>item.textContent.includes('Later-only addition'));
       if(added)added.innerHTML='<i class="edge dashed"></i>Added classification evidence';
       const legacyKicker=$('[data-panel="legacy"] .eyebrow');if(legacyKicker)legacyKicker.textContent="Base classification projection";
@@ -3871,9 +3903,8 @@ async function init() {
     $$('[data-eligibility-style]').forEach((button)=>button.addEventListener("click",()=>setVisibilityMode(button.dataset.eligibilityStyle)));
     $("#show-ineligible")?.addEventListener("change",(event)=>setIneligiblePresence(event.target.checked));
     $$('[data-level]').forEach((button)=>button.addEventListener("click",async()=>{ state.level=button.dataset.level; $$('[data-level]').forEach((item)=>item.classList.toggle("active",item===button)); $("#level-explanation").textContent=levelCopy[state.level]; const url=new URL(window.location.href); url.searchParams.set("level",state.level); history.replaceState(null,"",url); await renderRelease(); }));
-    $$('[data-fit]').forEach((button)=>button.addEventListener("click",()=>{pauseGuide();const panels=button.closest('.map-toolbar')?activePanels():[state.panels[button.dataset.fit]];panels.forEach(panel=>panel.fit());}));
-    $$('[data-back]').forEach((button)=>button.addEventListener("click",()=>{const panels=button.closest('.map-toolbar')?activePanels():[state.panels[button.dataset.back]];Promise.all(panels.map(panel=>panel.back())).catch(error=>$('#search-status').textContent=error.message);}));
-    $$('[data-node-cap]').forEach((select)=>select.addEventListener("change",()=>activePanels().forEach(panel=>panel.setNodeCap(select.value))));
+    bindPanelNavigation();
+    $$('[data-node-cap]').forEach((select)=>select.addEventListener("change",()=>{const panels=select.closest('.map-toolbar')?activePanels():[state.panels[select.dataset.nodeCap]];panels.filter(Boolean).forEach(panel=>panel.setNodeCap(select.value));}));
     $("#graph-search").addEventListener("input",applySearch); $("#search-scope").addEventListener("change",applySearch); $("#hide-isolates").addEventListener("change",(event)=>{ state.hideIsolates=event.target.checked; applySearch(); });
     await initializeSlotOverlay();
     const requestedScope=params.get("scope"),requestedQuery=params.get("q")||"";
@@ -3927,6 +3958,7 @@ $("#full-corpus").addEventListener("change",event=>{
 // Presentation-only provenance. Append before the existing graph init call.
 function guideRouteBadgeV65(packet) {
   const route=packet?.route||{};
+  if(packet?.postrun_view===true||route.route_kind==='POSTRUN_GRAPH_VIEW')return {kind:'postrun_inspection',label:'Post-run graph inspection',note:'Inspection of the actual saved graph, not an original retrieval traversal or new factual support.'};
   if(route.route_kind==='LEXICAL_SOURCE_READOUT')return {kind:'readout',label:'Source readout',note:'Document and quote readout, not a numerical KG walk.'};
   const derived=route.derived_witness===true||route.route_kind==='DERIVED_BOUNDED_PROJECTION_WITNESS';
   if(derived)return {kind:'derived',label:'Derived projection witness',note:'Selected from actual bounded projection edges and the bound native kernel. Not a native-saved witness or a correctness probability.'};
@@ -3955,6 +3987,8 @@ function bindMapToolbar(){
   $$('.toolbar-popover').forEach(d=>d.addEventListener('toggle',()=>{if(d.open){closePopovers(d);dropdown.hidden=true;}}));
   document.addEventListener('pointerdown',event=>{if(!event.target.closest('.toolbar-popover'))closePopovers();if(!event.target.closest('.search-box'))dropdown.hidden=true;});
   $('#hide-ineligible').onclick=()=>setIneligiblePresence(false);
+  $$('[data-redactions]').forEach(button=>button.onclick=()=>setRedactionVisibility(button.dataset.redactions==='show'));
+  $('#selection-audit').addEventListener('toggle',renderSelectionAudit);
   $('#map-up').onclick=()=>{for(const panel of activePanels()){if(panel.v64Busy)continue;panel.closeInspector(false);guideRunV64(panel,token=>guideParentV64(panel,token),{manual:true}).catch(e=>panel.inspectionError(e));}};
   $('#map-context').onclick=()=>{const selected=activePanel();if(!selected||selected.v64Busy)return;
     if(state.guidePath)return guideContextView(selected.neighborhood?'community':'neighborhood');
@@ -3966,7 +4000,7 @@ function bindMapToolbar(){
   };
   $('#neighborhood-motion')?.addEventListener('change',event=>{state.neighborhoodMotion=event.target.checked;for(const p of activePanels())state.neighborhoodMotion?p.startOrbit():p.stopOrbit();});
   $('#show-neighborhood-legend')?.addEventListener('click',()=>activePanels().filter(p=>p.graph?.focusMode).forEach(p=>p.showRingLegend()));
-  $('#reset-map-labels').onclick=()=>{for(const p of Object.values(state.panels)){p.labelOverrides.clear();p.draw();}};
+  $('#reset-map-labels').onclick=()=>{for(const p of activePanels()){p.labelOverrides.clear();p.compactLayout();}};
   const openSearch=()=>{if(search.value||$('#search-scope').value==='slot'){dropdown.hidden=false;closePopovers();}};
   search.addEventListener('input',()=>{dropdown.hidden=!search.value;closePopovers();});search.addEventListener('focus',openSearch);
   $('#search-scope').addEventListener('change',()=>{dropdown.hidden=false;});

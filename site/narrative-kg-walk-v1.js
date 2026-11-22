@@ -43,16 +43,12 @@ function savedWalkStageNode(step,requested){
   const style=make('style');style.textContent='#saved-kg-walk{display:flex;flex-direction:column;overflow:hidden}#saved-kg-walk>header,#saved-kg-walk .walk-stages,#saved-kg-walk .guide-actions,#saved-kg-walk .walk-status{flex-shrink:0}#saved-kg-walk>header{margin-bottom:0;gap:8px}#saved-kg-walk>header .walk-mode{margin:0;text-align:right}#saved-kg-walk .walk-stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:6px 0}#saved-kg-walk .walk-stages button{min-width:0;width:100%;min-height:44px;padding:7px;text-align:left;white-space:normal;font-size:14px;line-height:1.3}#saved-kg-walk .walk-stages span{display:inline-block;margin-inline-end:4px;font-size:14px;color:var(--ink-soft)}#saved-kg-walk .walk-stages [aria-current="step"]{background:var(--teal-light);border-color:var(--teal)}#saved-kg-walk .guide-actions{margin-top:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px;max-width:100%}#saved-kg-walk .guide-actions button{min-width:0;min-height:36px;font-size:14px}#saved-kg-walk .walk-mode,#saved-kg-walk .walk-status,#saved-kg-walk .walk-proof-meta{font-size:14px;line-height:1.5;overflow-wrap:anywhere;margin:6px 0}#saved-kg-walk .walk-current{flex:1 1 auto;min-height:61px;overflow:auto;border-top:1px solid var(--line);margin-top:6px;padding-top:8px}#saved-kg-walk .walk-current h3{font-size:16px;line-height:1.5;margin:0 0 8px;overflow-wrap:anywhere}#saved-kg-walk blockquote{white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0 14px;padding:8px;border-left:3px solid #347d78;font-size:16px;line-height:1.6}#saved-kg-walk .walk-nodes{margin-top:10px;font-size:14px}#saved-kg-walk .walk-nodes button{display:block;width:100%;white-space:normal;overflow-wrap:anywhere;text-align:left;font-size:14px}@media(max-width:600px){#saved-kg-walk{max-height:min(calc(100dvh - var(--toolbar-bottom,190px) - 20px),max(36dvh,300px))}}';
   host.append(style,make('h2','KG Navigator'),make('p','Loading saved stages...'));
   try{
-    const [{loadSavedCatalog},{validateTrace},{canonicalGateJSON},{storyAccess,acknowledgeStoryReveal}]=await Promise.all([
-      import('./narrative-catalog-v1.js'),import('./narrative-trace-v1.js'),import('./local-decisions-v65.js'),import('./narrative-attempts-v1.js')]);
+    const [{loadSavedCatalog},{validateTrace},{canonicalGateJSON}]=await Promise.all([
+      import('./narrative-catalog-v1.js'),import('./narrative-trace-v1.js'),import('./local-decisions-v65.js')]);
     const {report}=await loadSavedCatalog(),row=report.cases.find(r=>r.case.case_id===id),config=params.get('walk_config')||'llm_readings',reading=params.get('walk_reading')||'';
     if(!row||row.case.corpus!==params.get('corpus')||!row.configurations[config])throw Error('This walkthrough does not match a released case.');
     for(const key of ['walk_case','walk_path','walk_config','walk_reading','resource_id','registry_sha256','index_sha256']){
       if(params.getAll(key).length>1||['resource_id','registry_sha256','index_sha256'].includes(key)&&params.has(key)&&params.get(key)!==row.resource_binding[key])throw Error('The saved walk selectors conflict with this released resource.');
-    }
-    if(!storyAccess(report,row).unlocked){
-      host.replaceChildren(style,make('h2','KG Navigator'),make('p','This saved walkthrough includes story outcomes and source quotations.'));
-      const reveal=make('button','Reveal story answers and show walkthrough');reveal.dataset.testid='kg-walk-reveal';reveal.onclick=()=>{reveal.disabled=true;acknowledgeStoryReveal(report,row);location.reload();};host.append(reveal);return;
     }
     const saved=row.configurations[config],query=new URLSearchParams({case_id:id,config,reading,...Object.fromEntries(['resource_id','registry_sha256','index_sha256'].map(key=>[key,row.resource_binding[key]]))});
     const response=await fetch('/api/narrative-v1/trace?'+query,{cache:'no-store'});if(!response.ok)throw Error('The exact saved trace is unavailable.');
@@ -61,6 +57,13 @@ function savedWalkStageNode(step,requested){
       native_checkpoint:saved.native_checkpoint,resource_binding:row.resource_binding,task:row.case.task,
       strictly_before:row.case.date,whole_origin_excluded:row.case.document_id}),row.case);
     const path=trace.paths.find(value=>value.id===params.get('walk_path'));if(!path)throw Error('The selected saved path is unavailable.');
+    const proofKeys=['walk_source','walk_start','walk_end','walk_hash'];let handoff=null;
+    if(proofKeys.some(key=>params.has(key))){
+      if(proofKeys.some(key=>params.getAll(key).length!==1)||!/^\d+$/.test(params.get('walk_start'))||!/^\d+$/.test(params.get('walk_end'))||!/^[a-f0-9]{64}$/.test(params.get('walk_hash')))throw Error('Incomplete or mixed quotation handoff.');
+      const refs=savedWalkProofs(trace,path.decision_source_refs?.length?path.decision_source_refs:path.source_refs),matches=refs.filter(p=>p.canonical_page_id===params.get('walk_source')&&p.page_sha256===params.get('walk_hash')&&p.start===Number(params.get('walk_start'))&&p.end===Number(params.get('walk_end')));
+      const unique=new Map(matches.map(p=>[JSON.stringify(p),p]));if(unique.size!==1)throw Error('The exact selected quotation is not a final evidence endpoint of this route.');
+      handoff=unique.values().next().value;
+    }
     const steps=path.steps.map(stepId=>trace.steps.find(step=>step.id===stepId));if(!steps.length||steps.some(step=>!step))throw Error('The saved step sequence is incomplete.');
     const hasGraph=steps.some(step=>step.nodes.some(node=>node.is_graph_node===true));
     const mode=make('p',hasGraph?'Post-run graph view':path.graph_hops===0?'Source handoff / 0 hops':'Source handoff');mode.className='walk-mode';mode.title='Saved source navigation, not original execution chronology or proof of the query.';
@@ -96,11 +99,12 @@ function savedWalkStageNode(step,requested){
     const detail=(step,nodesOpen)=>{
       current.replaceChildren(make('h3',step.label||step.kind));
       current.scrollTop=0;
-      const proofs=savedWalkStepProofs(trace,step);
+      const proofs=step.kind==='SOURCE_READOUT'&&handoff?[handoff]:savedWalkStepProofs(trace,step);
       for(const proof of proofs){
         const meta=make('p',savedWalkProofCaption(proof));meta.className='walk-proof-meta';
         meta.title=`Document: ${proof.document_id}\nPage ID: ${proof.canonical_page_id}\nSHA-256: ${proof.page_sha256}\nQuotation: [${proof.start}, ${proof.end})`;
-        const quote=make('blockquote',proof.text);quote.dataset.proofPage=proof.canonical_page_id;quote.dataset.proofHash=proof.page_sha256;quote.dataset.proofStart=String(proof.start);quote.dataset.proofEnd=String(proof.end);
+        const quote=make('blockquote');quote.dataset.proofPage=proof.canonical_page_id;quote.dataset.proofHash=proof.page_sha256;quote.dataset.proofStart=String(proof.start);quote.dataset.proofEnd=String(proof.end);
+        const inspect=make('button',proof.text);inspect.type='button';inspect.className='walk-source-excerpt';inspect.onclick=()=>{stop();openSavedWalkSource(proof,{caseInfo:row.case,config,resourceBinding:row.resource_binding});};quote.append(inspect);
         current.append(meta,quote);
       }
       const nodes=step.nodes.filter(node=>node.is_graph_node===true);
@@ -129,6 +133,7 @@ function savedWalkStageNode(step,requested){
           else status.textContent=result.message;
         }else{
           host.dataset.mapStatus='source-only';status.textContent='No saved graph node in this stage.';
+          if(steps[index].kind==='SOURCE_READOUT'&&handoff)await openSavedWalkSource(handoff,{caseInfo:row.case,config,resourceBinding:row.resource_binding});
         }
       }catch(error){
         if(turn!==epoch)return;
@@ -147,5 +152,6 @@ function savedWalkStageNode(step,requested){
     matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',stop);
     window.addEventListener('pagehide',stop,{once:true});
     await activate(0);host.dataset.status='ready';
+    if(params.get('walk_autoplay')==='1'&&steps.length>1){playing=true;chrome();schedule();}
   }catch(error){host.replaceChildren(style,make('h2','KG Navigator'),make('p',error.message));host.dataset.status='unavailable';}
 })();
