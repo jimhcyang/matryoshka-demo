@@ -1,0 +1,1803 @@
+{
+  "archived_lexical": {
+    "candidates": [
+      {
+        "context": {
+          "canonical_page_id": "page_d884726ce3791d6d8092",
+          "date": "1959-02-17",
+          "document_id": "CIA-RDP79T00975A004300220001-9",
+          "end": 1834,
+          "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+          "release": "later",
+          "source_page": 8,
+          "start": 1737,
+          "text": "A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare"
+        },
+        "fill": "Swedish",
+        "rank": 1,
+        "source": {
+          "canonical_page_id": "page_d884726ce3791d6d8092",
+          "date": "1959-02-17",
+          "document_id": "CIA-RDP79T00975A004300220001-9",
+          "end": 1779,
+          "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+          "release": "later",
+          "source_page": 8,
+          "start": 1773,
+          "text": "Swedes"
+        }
+      }
+    ],
+    "execution_kind": "ARCHIVED_LEXICAL_NOT_THIS_EXECUTION",
+    "native_execution": false,
+    "saved_record_sha256": "e90c9f765fb44ea081c4c228bf96c1ba62648f5cd344f79247085a7d9e838b5c"
+  },
+  "canonical_native_run": false,
+  "case": {
+    "case_id": "withheld_delegation_4cbba4dde487d017",
+    "corpus": "cib",
+    "date": "1959-02-17",
+    "document_id": "CIA-RDP79T00975A004300220001-9",
+    "focal_marker": "[MASK]",
+    "query": "[[REDACTION_SLOT:001:slot_53adb17685e6fe219948]]Malinovsky Comments on Soviet Strategy\n\nSoviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.\n\nThe [REDACTED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense.",
+    "task": "redaction"
+  },
+  "coordinate_policy_version": "declared-producer-job-local-coordinates/3",
+  "executed_snapshot_identity": "20abb18b4186aa3f5ea04eeea05e98752ffeb6b1ffc55c3e46f94022811f6973",
+  "execution_performed": true,
+  "execution_ref": {
+    "sha256": "6e9f7659708d4a90e826a168840fa233d7d81c4d7b0e598c4a24a114c5c3bcb8"
+  },
+  "execution_version": "narrative-scoped-source-study-execution/3",
+  "facts": [
+    {
+      "id": "a1",
+      "kind": "proposition",
+      "modality": "asserted",
+      "object": "a visiting [MASK] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength",
+      "polarity": "positive",
+      "predicate": "told",
+      "query_quotes": [
+        "Soviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength."
+      ],
+      "query_spans": [
+        {
+          "end": 272,
+          "start": 88,
+          "text": "Soviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength."
+        }
+      ],
+      "required": true,
+      "source_quote": "Soviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.",
+      "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+      "subject": "Soviet Marshal Malinovsky",
+      "text": "Soviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength."
+    },
+    {
+      "id": "a2",
+      "kind": "proposition",
+      "modality": "possible",
+      "object": "the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense",
+      "polarity": "negative",
+      "predicate": "apparently learned nothing about",
+      "query_quotes": [
+        "The [REDACTED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense."
+      ],
+      "query_spans": [
+        {
+          "end": 435,
+          "start": 274,
+          "text": "The [REDACTED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense."
+        }
+      ],
+      "required": true,
+      "source_quote": "The [REDACTED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense.",
+      "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+      "subject": "The [REDACTED] delegation",
+      "text": "The [REDACTED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense."
+    }
+  ],
+  "gold": null,
+  "inspected_page_count": 20,
+  "label": "Scoped shared-kernel execution",
+  "origin_inspected": true,
+  "position": "first",
+  "query_hash_scheme": "SHA256_CANONICAL_JSON_STRING_ENSURE_ASCII_TRUE_SORT_KEYS_COMPACT",
+  "query_sha256": "766066ff7b65735d20db0401f6a704311f6c719dc15a568d2b4ec0977fe5d7a2",
+  "query_utf8_sha256": "ca9c7ead12dd9b4e3e95d6400b4c04239b8eaf20477bbdf1c5d4836ac4413404",
+  "raw_result_audit_digest": "85e439cfe1346d606c122a65ce0635973cfcbf8e3d818a81d5e2ecf21314f4d6",
+  "readings": [
+    {
+      "candidates": [],
+      "reading": {
+        "attachment_spans": [
+          {
+            "end": 156,
+            "start": 137,
+            "text": "military delegation"
+          }
+        ],
+        "constructor_form": "modifier",
+        "constructor_routing": {
+          "constructor_form": "modifier",
+          "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+          "version": "next-possessor-surface-routing/1"
+        },
+        "constructor_status": "legacy_compatible_subset",
+        "cues": [
+          {
+            "kind": "boundary",
+            "span": {
+              "end": 129,
+              "start": 119,
+              "text": "a visiting"
+            }
+          },
+          {
+            "kind": "attachment",
+            "span": {
+              "end": 156,
+              "start": 137,
+              "text": "military delegation"
+            }
+          }
+        ],
+        "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: modifier. Legacy subset route: modifier.",
+        "finite": null,
+        "form": "nominal",
+        "function": "modifier",
+        "grammatical_number": "unknown",
+        "id": "next_reading_599a187521e62946f64403ad",
+        "operators": [],
+        "outer_family": "nominal",
+        "role": "nominal_property",
+        "target_kind": "any",
+        "variant": "compound_modifier",
+        "wrappers": []
+      }
+    },
+    {
+      "candidates": [
+        {
+          "citation_union": [
+            {
+              "canonical_page_id": "page_9c9a3f8647b125e6fd4a",
+              "corpus": "cib",
+              "date": "1959-02-09",
+              "document_id": "CIA-RDP79T00975A004300290001-2",
+              "earlier_page": null,
+              "end": 1883,
+              "page_sha256": "77729f58694fbbe068f81fbc4ef6df4ea487d0aa5c5a36dd1b43b737f6cd3377",
+              "release": "later",
+              "source_page": 5,
+              "start": 1799,
+              "text": "According to Ala, the Shah told the Soviet delegation he would consider their offer."
+            },
+            {
+              "canonical_page_id": "page_9c9a3f8647b125e6fd4a",
+              "corpus": "cib",
+              "date": "1959-02-09",
+              "document_id": "CIA-RDP79T00975A004300290001-2",
+              "earlier_page": null,
+              "end": 1650,
+              "page_sha256": "77729f58694fbbe068f81fbc4ef6df4ea487d0aa5c5a36dd1b43b737f6cd3377",
+              "release": "later",
+              "source_page": 5,
+              "start": 1455,
+              "text": "Ala also stated that the Shah had seen a Soviet delegation and that the USSR had agreed to proceed with a nonaggression pact on Iran's original terms, provided Iran did not sign the US agreement."
+            },
+            {
+              "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+              "corpus": "cib",
+              "date": "1951-09-01",
+              "document_id": "CIA-RDP79T00975A000300550001-7",
+              "earlier_page": null,
+              "end": 1818,
+              "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+              "release": "later",
+              "source_page": 4,
+              "start": 1713,
+              "text": "A US observer concluded that the Soviet delegation had instructions to press for a broader trade meeting."
+            },
+            {
+              "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+              "corpus": "cib",
+              "date": "1951-09-01",
+              "document_id": "CIA-RDP79T00975A000300550001-7",
+              "earlier_page": null,
+              "end": 1969,
+              "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+              "release": "later",
+              "source_page": 4,
+              "start": 1819,
+              "text": "The Soviet delegation, however, would not specify any details or indicate willingness to reach ultimate agreement on increased East-West trade.\n\n- 4 -"
+            }
+          ],
+          "fill": "Soviet",
+          "id": "narrative_fill_413a0beaa8cf6329330f24d1f1c7",
+          "identity_merged": false,
+          "local_decision": {
+            "checklist": [
+              {
+                "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                "id": "provenance",
+                "label": "Eligible raw source provenance",
+                "state": "pass"
+              },
+              {
+                "detail": "Focal contribution only; no surrounding event is inferred.",
+                "id": "binding",
+                "label": "Bound query requirements",
+                "state": "pass"
+              },
+              {
+                "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                "id": "facts",
+                "label": "All required facts grounded",
+                "state": "missing"
+              },
+              {
+                "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                "id": "conflicts",
+                "label": "No same-scoped counterevidence",
+                "state": "missing"
+              },
+              {
+                "detail": "The completed focal slot passes the local grammar checks.",
+                "id": "legacy_syntax",
+                "label": "Syntax-only admission / not a full insertion certificate",
+                "state": "pass"
+              },
+              {
+                "detail": "The literal fill replays without padding or rewritten text.",
+                "id": "slot_tokens",
+                "label": "Exact insertion token boundary",
+                "state": "pass"
+              },
+              {
+                "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                "id": "slot_number",
+                "label": "Inserted count / visible noun agreement",
+                "state": "pass"
+              },
+              {
+                "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                "id": "slot_attachment",
+                "label": "Declared modifier / attachment role",
+                "state": "pass"
+              },
+              {
+                "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                "id": "slot_source_role",
+                "label": "Source phrase / participle argument role",
+                "state": "pass"
+              },
+              {
+                "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                "id": "grammar",
+                "label": "Local insertion criteria",
+                "state": "pass"
+              }
+            ],
+            "counterevidence": false,
+            "coverage": "Partial",
+            "id": "narrative_fill_413a0beaa8cf6329330f24d1f1c7",
+            "label": "Partial grounding",
+            "scope": "FOCAL_PROPERTY_ONLY",
+            "status": "partial_grounding"
+          },
+          "rank": 1,
+          "raw_decision_digest": "4bbad218d47296c4b504f51a4fd4f8976dbdeac82a163b0bd72d7f538b622f26",
+          "source_span": [
+            1835,
+            1841
+          ],
+          "source_variants": [
+            {
+              "fill": "Soviet",
+              "id": "narrative_fill_413a0beaa8cf6329330f24d1f1c7",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Partial",
+                "id": "narrative_fill_413a0beaa8cf6329330f24d1f1c7",
+                "label": "Partial grounding",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "partial_grounding"
+              },
+              "raw_decision_digest": "4bbad218d47296c4b504f51a4fd4f8976dbdeac82a163b0bd72d7f538b622f26",
+              "source_span": [
+                1835,
+                1841
+              ],
+              "source_wording": "Soviet",
+              "sources": [
+                {
+                  "canonical_page_id": "page_9c9a3f8647b125e6fd4a",
+                  "corpus": "cib",
+                  "date": "1959-02-09",
+                  "document_id": "CIA-RDP79T00975A004300290001-2",
+                  "earlier_page": null,
+                  "end": 1883,
+                  "page_sha256": "77729f58694fbbe068f81fbc4ef6df4ea487d0aa5c5a36dd1b43b737f6cd3377",
+                  "release": "later",
+                  "source_page": 5,
+                  "start": 1799,
+                  "text": "According to Ala, the Shah told the Soviet delegation he would consider their offer."
+                }
+              ]
+            },
+            {
+              "fill": "Soviet",
+              "id": "narrative_fill_beb7e3f7e72195a7f0703932d964",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Partial",
+                "id": "narrative_fill_beb7e3f7e72195a7f0703932d964",
+                "label": "Partial grounding",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "partial_grounding"
+              },
+              "raw_decision_digest": "83f9d01d682503a3c46d324df3349941444a28b197eae386b66068704f95a075",
+              "source_span": [
+                1496,
+                1502
+              ],
+              "source_wording": "Soviet",
+              "sources": [
+                {
+                  "canonical_page_id": "page_9c9a3f8647b125e6fd4a",
+                  "corpus": "cib",
+                  "date": "1959-02-09",
+                  "document_id": "CIA-RDP79T00975A004300290001-2",
+                  "earlier_page": null,
+                  "end": 1650,
+                  "page_sha256": "77729f58694fbbe068f81fbc4ef6df4ea487d0aa5c5a36dd1b43b737f6cd3377",
+                  "release": "later",
+                  "source_page": 5,
+                  "start": 1455,
+                  "text": "Ala also stated that the Shah had seen a Soviet delegation and that the USSR had agreed to proceed with a nonaggression pact on Iran's original terms, provided Iran did not sign the US agreement."
+                }
+              ]
+            },
+            {
+              "fill": "Soviet",
+              "id": "narrative_fill_b93f684859125edf731cb806843b",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Partial",
+                "id": "narrative_fill_b93f684859125edf731cb806843b",
+                "label": "Partial grounding",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "partial_grounding"
+              },
+              "raw_decision_digest": "4a1f80170aa10e59040215158f1190629409c32d0f28a717670a657d522a46bc",
+              "source_span": [
+                1746,
+                1752
+              ],
+              "source_wording": "Soviet",
+              "sources": [
+                {
+                  "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+                  "corpus": "cib",
+                  "date": "1951-09-01",
+                  "document_id": "CIA-RDP79T00975A000300550001-7",
+                  "earlier_page": null,
+                  "end": 1818,
+                  "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+                  "release": "later",
+                  "source_page": 4,
+                  "start": 1713,
+                  "text": "A US observer concluded that the Soviet delegation had instructions to press for a broader trade meeting."
+                }
+              ]
+            },
+            {
+              "fill": "Soviet",
+              "id": "narrative_fill_a5eba03fc1f4dca9e5b060457036",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Partial",
+                "id": "narrative_fill_a5eba03fc1f4dca9e5b060457036",
+                "label": "Partial grounding",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "partial_grounding"
+              },
+              "raw_decision_digest": "1abd3a860b049c40b935fead24f1e2d3625473e2303c78b499b64ff030de6ada",
+              "source_span": [
+                1823,
+                1829
+              ],
+              "source_wording": "Soviet",
+              "sources": [
+                {
+                  "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+                  "corpus": "cib",
+                  "date": "1951-09-01",
+                  "document_id": "CIA-RDP79T00975A000300550001-7",
+                  "earlier_page": null,
+                  "end": 1969,
+                  "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+                  "release": "later",
+                  "source_page": 4,
+                  "start": 1819,
+                  "text": "The Soviet delegation, however, would not specify any details or indicate willingness to reach ultimate agreement on increased East-West trade.\n\n- 4 -"
+                }
+              ]
+            }
+          ],
+          "source_wording": "Soviet",
+          "sources": [
+            {
+              "canonical_page_id": "page_9c9a3f8647b125e6fd4a",
+              "corpus": "cib",
+              "date": "1959-02-09",
+              "document_id": "CIA-RDP79T00975A004300290001-2",
+              "earlier_page": null,
+              "end": 1883,
+              "page_sha256": "77729f58694fbbe068f81fbc4ef6df4ea487d0aa5c5a36dd1b43b737f6cd3377",
+              "release": "later",
+              "source_page": 5,
+              "start": 1799,
+              "text": "According to Ala, the Shah told the Soviet delegation he would consider their offer."
+            }
+          ],
+          "union_is_support_proof": false
+        },
+        {
+          "citation_union": [
+            {
+              "canonical_page_id": "page_7f93b473e5aee57b650e",
+              "corpus": "cib",
+              "date": "1952-07-27",
+              "document_id": "CIA-RDP79T00975A000800070001-8",
+              "earlier_page": null,
+              "end": 148,
+              "page_sha256": "9d1a658ccbd870846d132438f5997900bde3d2b913aa6fff2e8128a46405f36e",
+              "release": "later",
+              "source_page": 6,
+              "start": 0,
+              "text": "Comment: The United States delegation in New York has reported that similar opinions have been voiced by a high official in the French delegation.\n\n"
+            },
+            {
+              "canonical_page_id": "page_9221bf452a2aaa2e98a9",
+              "corpus": "cib",
+              "date": "1958-02-20",
+              "document_id": "CIA-RDP79T00975A003500170001-4",
+              "earlier_page": null,
+              "end": 545,
+              "page_sha256": "ac998aa541e255e1674281c43f24efac508c3e9be12bc1979f661061a7640c03",
+              "release": "later",
+              "source_page": 11,
+              "start": 445,
+              "text": "General Ailleret is a member of a French delegation now visiting the atomic test center in Nevada.\n\n"
+            }
+          ],
+          "fill": "French",
+          "id": "narrative_fill_4ec9f0975c8b5cc81e8f2fa2e67a",
+          "identity_merged": false,
+          "local_decision": {
+            "checklist": [
+              {
+                "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                "id": "provenance",
+                "label": "Eligible raw source provenance",
+                "state": "pass"
+              },
+              {
+                "detail": "Focal contribution only; no surrounding event is inferred.",
+                "id": "binding",
+                "label": "Bound query requirements",
+                "state": "pass"
+              },
+              {
+                "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                "id": "facts",
+                "label": "All required facts grounded",
+                "state": "missing"
+              },
+              {
+                "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                "id": "conflicts",
+                "label": "No same-scoped counterevidence",
+                "state": "missing"
+              },
+              {
+                "detail": "The completed focal slot passes the local grammar checks.",
+                "id": "legacy_syntax",
+                "label": "Syntax-only admission / not a full insertion certificate",
+                "state": "pass"
+              },
+              {
+                "detail": "The literal fill replays without padding or rewritten text.",
+                "id": "slot_tokens",
+                "label": "Exact insertion token boundary",
+                "state": "pass"
+              },
+              {
+                "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                "id": "slot_number",
+                "label": "Inserted count / visible noun agreement",
+                "state": "pass"
+              },
+              {
+                "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                "id": "slot_attachment",
+                "label": "Declared modifier / attachment role",
+                "state": "pass"
+              },
+              {
+                "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                "id": "slot_source_role",
+                "label": "Source phrase / participle argument role",
+                "state": "pass"
+              },
+              {
+                "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                "id": "grammar",
+                "label": "Local insertion criteria",
+                "state": "pass"
+              }
+            ],
+            "counterevidence": false,
+            "coverage": "Partial",
+            "id": "narrative_fill_4ec9f0975c8b5cc81e8f2fa2e67a",
+            "label": "Partial grounding",
+            "scope": "FOCAL_PROPERTY_ONLY",
+            "status": "partial_grounding"
+          },
+          "rank": 2,
+          "raw_decision_digest": "0440a3f16aa14002660694c257a1e30214c0971d928467395bc217d419cd7665",
+          "source_span": [
+            128,
+            134
+          ],
+          "source_variants": [
+            {
+              "fill": "French",
+              "id": "narrative_fill_4ec9f0975c8b5cc81e8f2fa2e67a",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Partial",
+                "id": "narrative_fill_4ec9f0975c8b5cc81e8f2fa2e67a",
+                "label": "Partial grounding",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "partial_grounding"
+              },
+              "raw_decision_digest": "0440a3f16aa14002660694c257a1e30214c0971d928467395bc217d419cd7665",
+              "source_span": [
+                128,
+                134
+              ],
+              "source_wording": "French",
+              "sources": [
+                {
+                  "canonical_page_id": "page_7f93b473e5aee57b650e",
+                  "corpus": "cib",
+                  "date": "1952-07-27",
+                  "document_id": "CIA-RDP79T00975A000800070001-8",
+                  "earlier_page": null,
+                  "end": 148,
+                  "page_sha256": "9d1a658ccbd870846d132438f5997900bde3d2b913aa6fff2e8128a46405f36e",
+                  "release": "later",
+                  "source_page": 6,
+                  "start": 0,
+                  "text": "Comment: The United States delegation in New York has reported that similar opinions have been voiced by a high official in the French delegation.\n\n"
+                }
+              ]
+            },
+            {
+              "fill": "French",
+              "id": "narrative_fill_57b68957c043f890905ffe4d9169",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Missing",
+                "id": "narrative_fill_57b68957c043f890905ffe4d9169",
+                "label": "Exploratory / contextual",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "exploratory_contextual"
+              },
+              "raw_decision_digest": "ad27e34aa397a3294614004311447eb1504344772437ad2beb232889458529c7",
+              "source_span": [
+                479,
+                485
+              ],
+              "source_wording": "French",
+              "sources": [
+                {
+                  "canonical_page_id": "page_9221bf452a2aaa2e98a9",
+                  "corpus": "cib",
+                  "date": "1958-02-20",
+                  "document_id": "CIA-RDP79T00975A003500170001-4",
+                  "earlier_page": null,
+                  "end": 545,
+                  "page_sha256": "ac998aa541e255e1674281c43f24efac508c3e9be12bc1979f661061a7640c03",
+                  "release": "later",
+                  "source_page": 11,
+                  "start": 445,
+                  "text": "General Ailleret is a member of a French delegation now visiting the atomic test center in Nevada.\n\n"
+                }
+              ]
+            }
+          ],
+          "source_wording": "French",
+          "sources": [
+            {
+              "canonical_page_id": "page_7f93b473e5aee57b650e",
+              "corpus": "cib",
+              "date": "1952-07-27",
+              "document_id": "CIA-RDP79T00975A000800070001-8",
+              "earlier_page": null,
+              "end": 148,
+              "page_sha256": "9d1a658ccbd870846d132438f5997900bde3d2b913aa6fff2e8128a46405f36e",
+              "release": "later",
+              "source_page": 6,
+              "start": 0,
+              "text": "Comment: The United States delegation in New York has reported that similar opinions have been voiced by a high official in the French delegation.\n\n"
+            }
+          ],
+          "union_is_support_proof": false
+        },
+        {
+          "citation_union": [
+            {
+              "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+              "corpus": "cib",
+              "date": "1951-09-01",
+              "document_id": "CIA-RDP79T00975A000300550001-7",
+              "earlier_page": null,
+              "end": 1206,
+              "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+              "release": "later",
+              "source_page": 4,
+              "start": 1086,
+              "text": "In the opinion of the Western European delegations, the motivations of the USSR were both commercial and propagandistic."
+            }
+          ],
+          "fill": "European",
+          "id": "narrative_fill_7574bdd6339bf04fcde9cf5572bc",
+          "identity_merged": false,
+          "local_decision": {
+            "checklist": [
+              {
+                "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                "id": "provenance",
+                "label": "Eligible raw source provenance",
+                "state": "pass"
+              },
+              {
+                "detail": "Focal contribution only; no surrounding event is inferred.",
+                "id": "binding",
+                "label": "Bound query requirements",
+                "state": "pass"
+              },
+              {
+                "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                "id": "facts",
+                "label": "All required facts grounded",
+                "state": "missing"
+              },
+              {
+                "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                "id": "conflicts",
+                "label": "No same-scoped counterevidence",
+                "state": "missing"
+              },
+              {
+                "detail": "The completed focal slot passes the local grammar checks.",
+                "id": "legacy_syntax",
+                "label": "Syntax-only admission / not a full insertion certificate",
+                "state": "pass"
+              },
+              {
+                "detail": "The literal fill replays without padding or rewritten text.",
+                "id": "slot_tokens",
+                "label": "Exact insertion token boundary",
+                "state": "pass"
+              },
+              {
+                "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                "id": "slot_number",
+                "label": "Inserted count / visible noun agreement",
+                "state": "pass"
+              },
+              {
+                "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                "id": "slot_attachment",
+                "label": "Declared modifier / attachment role",
+                "state": "pass"
+              },
+              {
+                "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                "id": "slot_source_role",
+                "label": "Source phrase / participle argument role",
+                "state": "pass"
+              },
+              {
+                "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                "id": "grammar",
+                "label": "Local insertion criteria",
+                "state": "pass"
+              }
+            ],
+            "counterevidence": false,
+            "coverage": "Partial",
+            "id": "narrative_fill_7574bdd6339bf04fcde9cf5572bc",
+            "label": "Partial grounding",
+            "scope": "FOCAL_PROPERTY_ONLY",
+            "status": "partial_grounding"
+          },
+          "rank": 3,
+          "raw_decision_digest": "15df295066ca0685b8e19cd7f1fcd09d50c0fd1c3204c9c05fae0a551cfafe9b",
+          "source_span": [
+            1116,
+            1124
+          ],
+          "source_variants": [
+            {
+              "fill": "European",
+              "id": "narrative_fill_7574bdd6339bf04fcde9cf5572bc",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Partial",
+                "id": "narrative_fill_7574bdd6339bf04fcde9cf5572bc",
+                "label": "Partial grounding",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "partial_grounding"
+              },
+              "raw_decision_digest": "15df295066ca0685b8e19cd7f1fcd09d50c0fd1c3204c9c05fae0a551cfafe9b",
+              "source_span": [
+                1116,
+                1124
+              ],
+              "source_wording": "European",
+              "sources": [
+                {
+                  "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+                  "corpus": "cib",
+                  "date": "1951-09-01",
+                  "document_id": "CIA-RDP79T00975A000300550001-7",
+                  "earlier_page": null,
+                  "end": 1206,
+                  "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+                  "release": "later",
+                  "source_page": 4,
+                  "start": 1086,
+                  "text": "In the opinion of the Western European delegations, the motivations of the USSR were both commercial and propagandistic."
+                }
+              ]
+            }
+          ],
+          "source_wording": "European",
+          "sources": [
+            {
+              "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+              "corpus": "cib",
+              "date": "1951-09-01",
+              "document_id": "CIA-RDP79T00975A000300550001-7",
+              "earlier_page": null,
+              "end": 1206,
+              "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+              "release": "later",
+              "source_page": 4,
+              "start": 1086,
+              "text": "In the opinion of the Western European delegations, the motivations of the USSR were both commercial and propagandistic."
+            }
+          ],
+          "union_is_support_proof": false
+        },
+        {
+          "citation_union": [
+            {
+              "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+              "corpus": "cib",
+              "date": "1951-09-01",
+              "document_id": "CIA-RDP79T00975A000300550001-7",
+              "earlier_page": null,
+              "end": 1435,
+              "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+              "release": "later",
+              "source_page": 4,
+              "start": 1207,
+              "text": "Many delegations believe that the USSR is seriously interested in promoting increased trade or at least in maintaining the present level, which is already jeopardized by the general rearmament program and Western trade controls."
+            }
+          ],
+          "fill": "Many",
+          "id": "narrative_fill_126511fd5fef2e40fd609aa17646",
+          "identity_merged": false,
+          "local_decision": {
+            "checklist": [
+              {
+                "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                "id": "provenance",
+                "label": "Eligible raw source provenance",
+                "state": "pass"
+              },
+              {
+                "detail": "Focal contribution only; no surrounding event is inferred.",
+                "id": "binding",
+                "label": "Bound query requirements",
+                "state": "pass"
+              },
+              {
+                "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                "id": "facts",
+                "label": "All required facts grounded",
+                "state": "missing"
+              },
+              {
+                "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                "id": "conflicts",
+                "label": "No same-scoped counterevidence",
+                "state": "missing"
+              },
+              {
+                "detail": "The completed focal slot passes the local grammar checks.",
+                "id": "legacy_syntax",
+                "label": "Syntax-only admission / not a full insertion certificate",
+                "state": "pass"
+              },
+              {
+                "detail": "The literal fill replays without padding or rewritten text.",
+                "id": "slot_tokens",
+                "label": "Exact insertion token boundary",
+                "state": "pass"
+              },
+              {
+                "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                "id": "slot_number",
+                "label": "Inserted count / visible noun agreement",
+                "state": "pass"
+              },
+              {
+                "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                "id": "slot_attachment",
+                "label": "Declared modifier / attachment role",
+                "state": "pass"
+              },
+              {
+                "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                "id": "slot_source_role",
+                "label": "Source phrase / participle argument role",
+                "state": "pass"
+              },
+              {
+                "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                "id": "grammar",
+                "label": "Local insertion criteria",
+                "state": "pass"
+              }
+            ],
+            "counterevidence": false,
+            "coverage": "Missing",
+            "id": "narrative_fill_126511fd5fef2e40fd609aa17646",
+            "label": "Exploratory / contextual",
+            "scope": "FOCAL_PROPERTY_ONLY",
+            "status": "exploratory_contextual"
+          },
+          "rank": 4,
+          "raw_decision_digest": "c11b3c7e57258dd390b249a0ff2822b47c196cc7c2fea9a434fcf7ca993f371e",
+          "source_span": [
+            1207,
+            1211
+          ],
+          "source_variants": [
+            {
+              "fill": "Many",
+              "id": "narrative_fill_126511fd5fef2e40fd609aa17646",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Missing",
+                "id": "narrative_fill_126511fd5fef2e40fd609aa17646",
+                "label": "Exploratory / contextual",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "exploratory_contextual"
+              },
+              "raw_decision_digest": "c11b3c7e57258dd390b249a0ff2822b47c196cc7c2fea9a434fcf7ca993f371e",
+              "source_span": [
+                1207,
+                1211
+              ],
+              "source_wording": "Many",
+              "sources": [
+                {
+                  "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+                  "corpus": "cib",
+                  "date": "1951-09-01",
+                  "document_id": "CIA-RDP79T00975A000300550001-7",
+                  "earlier_page": null,
+                  "end": 1435,
+                  "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+                  "release": "later",
+                  "source_page": 4,
+                  "start": 1207,
+                  "text": "Many delegations believe that the USSR is seriously interested in promoting increased trade or at least in maintaining the present level, which is already jeopardized by the general rearmament program and Western trade controls."
+                }
+              ]
+            }
+          ],
+          "source_wording": "Many",
+          "sources": [
+            {
+              "canonical_page_id": "page_29f7828ed2912f6d4cb3",
+              "corpus": "cib",
+              "date": "1951-09-01",
+              "document_id": "CIA-RDP79T00975A000300550001-7",
+              "earlier_page": null,
+              "end": 1435,
+              "page_sha256": "871416b0195812ef6c35f73aa70e14bca4213857298c63076eb91b851f572990",
+              "release": "later",
+              "source_page": 4,
+              "start": 1207,
+              "text": "Many delegations believe that the USSR is seriously interested in promoting increased trade or at least in maintaining the present level, which is already jeopardized by the general rearmament program and Western trade controls."
+            }
+          ],
+          "union_is_support_proof": false
+        },
+        {
+          "citation_union": [
+            {
+              "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+              "corpus": "cib",
+              "date": "1956-10-12",
+              "document_id": "CIA-RDP79T00975A002700550001-1",
+              "earlier_page": null,
+              "end": 595,
+              "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+              "release": "later",
+              "source_page": 6,
+              "start": 443,
+              "text": "Currently, a Yugoslav military delegation is visiting Communist China and last July, the chief of the Yugoslav air force led a delegation to the USSR.\n\n"
+            },
+            {
+              "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+              "corpus": "cib",
+              "date": "1956-10-12",
+              "document_id": "CIA-RDP79T00975A002700550001-1",
+              "earlier_page": null,
+              "end": 353,
+              "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+              "release": "later",
+              "source_page": 6,
+              "start": 39,
+              "text": "THE USSR\n\nComment on:\n\nThe departure of a Yugoslav army delegation headed by Col. Gen. Pavle Jaksic, deputy chief of staff, on a \"friendly visit\" to the USSR on 10 October may be motivated by a desire to show that normal relations between Moscow and Belgrade are continuing despite serious ideological differences."
+            }
+          ],
+          "fill": "Yugoslav",
+          "id": "narrative_fill_82052fb385a02e913795365016b4",
+          "identity_merged": false,
+          "local_decision": {
+            "checklist": [
+              {
+                "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                "id": "provenance",
+                "label": "Eligible raw source provenance",
+                "state": "pass"
+              },
+              {
+                "detail": "Focal contribution only; no surrounding event is inferred.",
+                "id": "binding",
+                "label": "Bound query requirements",
+                "state": "pass"
+              },
+              {
+                "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                "id": "facts",
+                "label": "All required facts grounded",
+                "state": "missing"
+              },
+              {
+                "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                "id": "conflicts",
+                "label": "No same-scoped counterevidence",
+                "state": "missing"
+              },
+              {
+                "detail": "The completed focal slot passes the local grammar checks.",
+                "id": "legacy_syntax",
+                "label": "Syntax-only admission / not a full insertion certificate",
+                "state": "pass"
+              },
+              {
+                "detail": "The literal fill replays without padding or rewritten text.",
+                "id": "slot_tokens",
+                "label": "Exact insertion token boundary",
+                "state": "pass"
+              },
+              {
+                "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                "id": "slot_number",
+                "label": "Inserted count / visible noun agreement",
+                "state": "pass"
+              },
+              {
+                "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                "id": "slot_attachment",
+                "label": "Declared modifier / attachment role",
+                "state": "pass"
+              },
+              {
+                "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                "id": "slot_source_role",
+                "label": "Source phrase / participle argument role",
+                "state": "pass"
+              },
+              {
+                "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                "id": "grammar",
+                "label": "Local insertion criteria",
+                "state": "pass"
+              }
+            ],
+            "counterevidence": false,
+            "coverage": "Missing",
+            "id": "narrative_fill_82052fb385a02e913795365016b4",
+            "label": "Exploratory / contextual",
+            "scope": "FOCAL_PROPERTY_ONLY",
+            "status": "exploratory_contextual"
+          },
+          "rank": 5,
+          "raw_decision_digest": "c17c35f18ac3d10c4c649e08c729805c157c42d9509a0ade446cb2d554edcfcc",
+          "source_span": [
+            456,
+            464
+          ],
+          "source_variants": [
+            {
+              "fill": "Yugoslav",
+              "id": "narrative_fill_82052fb385a02e913795365016b4",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Missing",
+                "id": "narrative_fill_82052fb385a02e913795365016b4",
+                "label": "Exploratory / contextual",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "exploratory_contextual"
+              },
+              "raw_decision_digest": "c17c35f18ac3d10c4c649e08c729805c157c42d9509a0ade446cb2d554edcfcc",
+              "source_span": [
+                456,
+                464
+              ],
+              "source_wording": "Yugoslav",
+              "sources": [
+                {
+                  "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+                  "corpus": "cib",
+                  "date": "1956-10-12",
+                  "document_id": "CIA-RDP79T00975A002700550001-1",
+                  "earlier_page": null,
+                  "end": 595,
+                  "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+                  "release": "later",
+                  "source_page": 6,
+                  "start": 443,
+                  "text": "Currently, a Yugoslav military delegation is visiting Communist China and last July, the chief of the Yugoslav air force led a delegation to the USSR.\n\n"
+                }
+              ]
+            },
+            {
+              "fill": "Yugoslav",
+              "id": "narrative_fill_56813182cd7c1692a2150b975d30",
+              "local_decision": {
+                "checklist": [
+                  {
+                    "detail": "Pinned quotes replay under the explicit scoped source policy.",
+                    "id": "provenance",
+                    "label": "Eligible raw source provenance",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "Focal contribution only; no surrounding event is inferred.",
+                    "id": "binding",
+                    "label": "Bound query requirements",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "At least one required owner, predicate, argument or scope remains unestablished.",
+                    "id": "facts",
+                    "label": "All required facts grounded",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "Counter comparison is incomplete or unmodeled; the inspected pool is not counter-cleared.",
+                    "id": "conflicts",
+                    "label": "No same-scoped counterevidence",
+                    "state": "missing"
+                  },
+                  {
+                    "detail": "The completed focal slot passes the local grammar checks.",
+                    "id": "legacy_syntax",
+                    "label": "Syntax-only admission / not a full insertion certificate",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "The literal fill replays without padding or rewritten text.",
+                    "id": "slot_tokens",
+                    "label": "Exact insertion token boundary",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No explicit singular-count/plural-carrier conflict; partitives and coordinated counts are not flattened.",
+                    "id": "slot_number",
+                    "label": "Inserted count / visible noun agreement",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No clause-level adjunct has been substituted for the declared nominal modifier.",
+                    "id": "slot_attachment",
+                    "label": "Declared modifier / attachment role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "No finite-active source phrase is being certified as a passive property of a different owner.",
+                    "id": "slot_source_role",
+                    "label": "Source phrase / participle argument role",
+                    "state": "pass"
+                  },
+                  {
+                    "detail": "All applicable bounded token, attachment, number and source-role checks pass.",
+                    "id": "grammar",
+                    "label": "Local insertion criteria",
+                    "state": "pass"
+                  }
+                ],
+                "counterevidence": false,
+                "coverage": "Missing",
+                "id": "narrative_fill_56813182cd7c1692a2150b975d30",
+                "label": "Exploratory / contextual",
+                "scope": "FOCAL_PROPERTY_ONLY",
+                "status": "exploratory_contextual"
+              },
+              "raw_decision_digest": "788e49f64acd436e43d465d4db46ca7f7ba5a85c3f4f0b0d0529994c512942c7",
+              "source_span": [
+                81,
+                89
+              ],
+              "source_wording": "Yugoslav",
+              "sources": [
+                {
+                  "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+                  "corpus": "cib",
+                  "date": "1956-10-12",
+                  "document_id": "CIA-RDP79T00975A002700550001-1",
+                  "earlier_page": null,
+                  "end": 353,
+                  "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+                  "release": "later",
+                  "source_page": 6,
+                  "start": 39,
+                  "text": "THE USSR\n\nComment on:\n\nThe departure of a Yugoslav army delegation headed by Col. Gen. Pavle Jaksic, deputy chief of staff, on a \"friendly visit\" to the USSR on 10 October may be motivated by a desire to show that normal relations between Moscow and Belgrade are continuing despite serious ideological differences."
+                }
+              ]
+            }
+          ],
+          "source_wording": "Yugoslav",
+          "sources": [
+            {
+              "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+              "corpus": "cib",
+              "date": "1956-10-12",
+              "document_id": "CIA-RDP79T00975A002700550001-1",
+              "earlier_page": null,
+              "end": 595,
+              "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+              "release": "later",
+              "source_page": 6,
+              "start": 443,
+              "text": "Currently, a Yugoslav military delegation is visiting Communist China and last July, the chief of the Yugoslav air force led a delegation to the USSR.\n\n"
+            }
+          ],
+          "union_is_support_proof": false
+        }
+      ],
+      "reading": {
+        "attachment_spans": [
+          {
+            "end": 156,
+            "start": 137,
+            "text": "military delegation"
+          }
+        ],
+        "constructor_form": "modifier",
+        "constructor_routing": {
+          "constructor_form": "modifier",
+          "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+          "version": "next-possessor-surface-routing/1"
+        },
+        "constructor_status": "legacy_compatible_subset",
+        "cues": [
+          {
+            "kind": "boundary",
+            "span": {
+              "end": 129,
+              "start": 119,
+              "text": "a visiting"
+            }
+          },
+          {
+            "kind": "attachment",
+            "span": {
+              "end": 156,
+              "start": 137,
+              "text": "military delegation"
+            }
+          }
+        ],
+        "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+        "finite": null,
+        "form": "adjectival",
+        "function": "modifier",
+        "grammatical_number": "unknown",
+        "id": "next_reading_7f9539a4367a2059e4c3b339",
+        "operators": [],
+        "outer_family": "adjectival",
+        "role": "nominal_property",
+        "target_kind": "any",
+        "variant": "default",
+        "wrappers": []
+      }
+    }
+  ],
+  "source_policy_version": "isolated-explicit-s2-source-admission/1",
+  "source_view_sha256": "c29a007bd930fc9c158c21b10f80aa81327b420b6a5b0df04cef3f7257fcfd64",
+  "version": "scoped-shared-kernel-study-display/3"
+}

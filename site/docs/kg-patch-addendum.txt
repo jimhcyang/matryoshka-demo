@@ -1,0 +1,59 @@
+01 / A Closer Graph
+KG interaction / November 2026 patch
+
+What This Edition Changes
+This addendum describes the KG interaction and source-visible slot context patch. Read it alongside the saved-report field guide. Where that guide describes the old Swedish result-opening acknowledgment, use the updated behavior on page 4 of this addendum.
+
+Explore Without Reinterpreting
+The graph keeps its saved entities, aliases, hierarchy, relationships and source bindings. Node sizing, compact circular fitting, neighborhood spacing and label placement are view-local presentation choices. A larger node or shorter screen distance is not new evidence, a changed identity, a confidence score or a new relationship.
+
+A Practical Starting Point
+Choose a corpus, search across all evidence, then inspect a result and its source. The default hierarchy view shows up to 32 nodes; evidence views allow up to 256. These are drawing limits, not claims about corpus coverage. Use source and case bindings, not visual prominence, to interpret a saved result.
+
+02 / Navigate The Neighborhood
+Fitting, paired panels and source scope
+
+Read The Rings
+Neighborhood rings express hierarchy distance. The temporary legend explains the visible groups; an empty group is not filled with invented neighbors. Induced links between displayed nodes are enabled by default. A visible link still has the meaning recorded in its saved source.
+
+Move The View
+Fit returns the visible neighborhood to a compact circular envelope. Drag nodes to inspect crowded areas. Slow orbital motion and quadrant-aware labels help separate nearby labels without changing the graph. Reduced-motion settings suppress orbiting. Layout motion is not a temporal narrative or an inferred causal sequence.
+
+Compare Carefully
+Paired panels begin with synchronized search and controls. Direct manipulation of one panel can leave its view independent, so compare the selected corpus, source view and date settings before interpreting a visual difference. Date hints and clamps use the selected corpus bounds. A valid date does not override source eligibility, resource identity or a case-specific policy.
+
+03 / Redacted Slots
+Visible context is navigation, never a recovered answer
+
+What A Label Means
+A Redacted Slot marks an observed mask in a saved base-visible source page. Labels use an exact nearby visible phrase, or a short literal excerpt. With no usable context, the label remains Redacted Slot. A label such as Redacted Slot / near Israeli Foreign Minister describes neighboring text; it does not identify the hidden value.
+
+Conservative Anchors
+Function words, generic fragments and ambiguous partial names are not useful anchors. Complete titles or multiword names may be retained when visible source spans support them. Search previews remain marker-centered and source-only. Open the source to inspect the literal wording, marker position and document/page provenance rather than treating a label as a finding.
+
+Hard Boundaries
+Slot context links have zero semantic and layout weight. They are navigation/provenance only, not eligible case evidence, new semantic relationships or a hidden-answer lookup. Existing slot identities, marker offsets, saved page routes, page hashes and source audits remain fixed. A zero-marker source stays empty; missing or unobserved masks are not invented.
+
+04 / Two Executed Queries
+S2 by default / exact sources / reference unknown
+
+Read The Actual Results
+First query and Second query now open results from two actual, bounded shared-kernel executions. S2 is selected without an acknowledgment gate. Facts are query-derived planning propositions, not established world facts. Readings are model-selected grammatical alternatives. Choose a reading to inspect its own results and quotations.
+
+The Same Narrow Source Exception
+Both queries use later-release prior documents plus the exact origin CIA-RDP79T00975A004300220001-9 on 1959-02-17. Unrelated same-day and future reports remain excluded. Permission and quarantine checks are retained. This study-specific exception does not apply to ordinary cases.
+
+Do Not Substitute The Archive
+The withheld answers remain unknown. The executed results need not include Swedish. The older lexical nomination of Swedish remains under archived-study details, separate from the actual results. It is not a recovered answer, a new engine nomination or a rank to transplant into an empty result. These scoped runs have their own declared source-policy and execution versions; they are not unchanged canonical native runs.
+
+05 / Inspect Before Concluding
+Input / Facts / Readings / Sources / Results
+
+A Bounded Comparison
+Both queries use the same retrieval and construction budgets: 40 documents, up to 80 retrieval pages, 20 inspected constructor pages and 24 checked drafts per reading. Those are search limits, not completeness claims about every potentially relevant source. Changing the reading changes the grammatical question being tested.
+
+Separate Source Observations
+Repeated normalized surface forms are grouped before the five-result cap. Inspect the separate source variants: their literal quotations and individual decisions remain distinct. A union of quotations does not establish a shared identity or turn several uncertain observations into pooled proof.
+
+Bind The Source Occurrence
+A complete producer window plus its declared job-local mapping binds the source occurrence. An identical quotation elsewhere does not authorize relocation or a direct-page fallback. Earlier-view coordinates require pinned full-page earlier/later identity; otherwise the observation is held. Document, date, record and view identities must agree before any quotation is accepted.

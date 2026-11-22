@@ -8,7 +8,14 @@ import threading
 import traceback
 from urllib.parse import parse_qs, urlencode, urlsplit
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+tools_root = Path(__file__).resolve().parents[1]
+if not (tools_root / 'fragment_reader.py').is_file():
+    tools_root = next((parent / 'matryoshka_demo_site/release-tools'
+        for parent in Path(__file__).resolve().parents
+        if (parent / 'matryoshka_demo_site/release-tools/fragment_reader.py').is_file()), None)
+    if tools_root is None:
+        raise RuntimeError('Run with the installed or contained release-tools closure')
+sys.path.insert(0, str(tools_root))
 from serve_static import server
 from fragment_reader import Reader
 from playwright.sync_api import expect, sync_playwright
@@ -19,6 +26,8 @@ def main():
     parser.add_argument('--site', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--datasets-root', type=Path)
+    parser.add_argument('--minimum-free-gib', type=int, choices=(3, 8), default=8,
+                        help='Default CI reserve 8 GiB; explicit bounded-workstation option 3 GiB')
     args = parser.parse_args()
     site, out = args.site.resolve(), args.output.absolute()
     out.mkdir(parents=True, exist_ok=False)
@@ -34,7 +43,7 @@ def main():
     thread.start()
     origin = 'http://127.0.0.1:' + str(http.server_port)
     base = origin + '/nested/matryoshka-demo/'
-    reader = Reader(site, out / 'smoke.sqlite3')
+    reader = Reader(site, out / 'smoke.sqlite3', minimum_free_bytes=args.minimum_free_gib * 1024**3)
     try:
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
@@ -118,14 +127,60 @@ def main():
                 if label in fixtures:
                     run('walk-' + label, walk(fixtures[label]), mobile='source' in label)
             def swedish(page, row):
-                page.goto(base + 'swedish-study.html?policy=S2', wait_until='domcontentloaded')
+                study = json.loads((site / 'swedish-scoped-study-v04.json').read_bytes())
+                assert study['execution_performed'] is True and study['canonical_native_run'] is False and study['gold'] is None
+                private_requests = []
+                page.on('request', lambda request: private_requests.append(request.url)
+                        if '/phase/' in request.url or '/attempt0' in request.url or 'execution.json.gz' in request.url else None)
+                page.goto(base + 'swedish-study.html', wait_until='domcontentloaded')
                 page.wait_for_function("()=>document.body.dataset.studyReady==='true'", timeout=60000)
-                card = page.locator('[data-policy=S2]')
-                expect(card.get_by_test_id('open-saved-result')).to_be_disabled()
-                card.get_by_test_id('origin-exception-ack').check()
-                card.get_by_test_id('open-saved-result').click()
-                expect(card.get_by_test_id('saved-candidate').first).to_be_visible()
-                row['explicit_acknowledgment'] = True
+                assert page.get_by_role('tab').count() == 2
+                assert page.locator('input[type="checkbox"], [data-testid="origin-exception-ack"], [data-testid="open-saved-result"]').count() == 0
+                expect(page.locator('.study-badge')).to_contain_text('Reference unknown')
+                row['queries'] = []
+                for index, label in enumerate(('First query', 'Second query')):
+                    display = json.loads((site / study['cases'][index]['path']).read_bytes())
+                    completion = json.loads((site / study['public_completions'][index]['path']).read_bytes())
+                    assert display['execution_performed'] is True and display['canonical_native_run'] is False and display['gold'] is None
+                    assert display['execution_version'] == 'narrative-scoped-source-study-execution/3'
+                    assert display['coordinate_policy_version'] == 'declared-producer-job-local-coordinates/3'
+                    assert completion['public_display_ref'] == study['cases'][index] and completion['gold'] is None
+                    page.get_by_role('tab', name=label, exact=True).click()
+                    expect(page.locator('#tab-' + display['position'])).to_have_attribute('aria-selected', 'true')
+                    assert 'policy=S2' in page.url
+                    selected = next((i for i,r in enumerate(display['readings']) if r['reading']['outer_family'] == 'adjectival'), 0)
+                    expect(page.locator('#reading-select')).to_have_value(str(selected))
+                    expected = display['readings'][selected]['candidates']
+                    expect(page.get_by_test_id('scoped-candidate')).to_have_count(len(expected))
+                    assert page.locator('[data-testid="scoped-candidate"] .fill').all_text_contents() == [c['fill'] for c in expected]
+                    assert page.locator('#fact-list li').count() == len(display['facts'])
+                    assert page.locator('#query-text mark').count() == 1
+                    assert page.locator('#query-text').inner_text().count('[MASKED]') == 3
+                    inspected = False
+                    for number, reading in enumerate(display['readings']):
+                        if not reading['candidates']:
+                            continue
+                        page.select_option('#reading-select', str(number))
+                        page.get_by_test_id('inspect-variants').first.click()
+                        expect(page.locator('#source-dialog')).to_be_visible()
+                        citation = reading['candidates'][0]['source_variants'][0]['sources'][0]
+                        expect(page.locator('#dialog-body')).to_contain_text(citation['text'])
+                        page.get_by_role('button', name='Close', exact=True).click()
+                        inspected = True
+                        break
+                    assert inspected, 'These pinned runs have source-grounded candidates to inspect'
+                    archive = page.locator('#archive')
+                    assert not archive.evaluate('element=>element.open')
+                    archive.locator('summary').click()
+                    for candidate in display['archived_lexical']['candidates']:
+                        expect(page.locator('#archive-results')).to_contain_text(candidate['fill'])
+                    archive.locator('summary').click()
+                    row['queries'].append(dict(position=display['position'], actual_execution=True,
+                        canonical_native_run=False, gold=None, exact_source_inspected=inspected, archive_separate=True))
+                assert not private_requests, private_requests
+                row['default_policy'] = 'S2'
+                row['explicit_acknowledgment'] = False
+                row['unknown_gold'] = True
             run('swedish-S2', swedish, mobile=True)
             browser.close()
     finally:

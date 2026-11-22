@@ -1,0 +1,20 @@
+{
+  "version": "source-bound-kg-patch-privacy-review/1",
+  "date": "2026-11-22",
+  "candidate_manifest_sha256": "9d03341150d9cc137e6842a897cde7d461f9f645d3d189dd0eb9449f95b9a818",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "status": "PASS_SCOPED_INDICATOR_AND_SOURCE_REVIEW",
+  "indicators_scanned": 579,
+  "unresolved_indicator_findings": [],
+  "notices_unchanged": true,
+  "reviewed_synthetic_fixtures": [
+    {
+      "path": "export-package/installed/tests/test_publication_guard.py",
+      "sha256": "cb6d27a69b740a9f6486e8505db055bf5a9e4c441aa41cd52b39fb74a73d6aca",
+      "matches": 2,
+      "finding": "Exact synthetic sentinel in unchanged adversarial security tests; not a credential. No file-wide or pattern-wide exemption."
+    }
+  ],
+  "review_tool_sha256": "7f07d02a8f111a10f2dd851d3a6a537ad06606efa0d6085cde0ad4c979749d8e",
+  "review_scope": "Source-visible slot contexts, explicitly scoped CIB study quotations, code and original authored guide; retained dataset/source permissions and notices. Not a general legal certification."
+}

@@ -1,0 +1,142 @@
+{
+  "budget": {
+    "cumulative_ceiling_usd": 50,
+    "incremental_ceiling_usd": 1,
+    "new_spend_usd": 0,
+    "receipt_count": 605,
+    "receipt_set_sha256": "d85f705b0bd59c3a58ae8c48e5bd4cc4b220e8cec4766943e598a022bcd76089",
+    "total_usd": "12.72189610000000000017"
+  },
+  "cases": [
+    {
+      "path": "swedish-first-v01.json",
+      "sha256": "235f526637b0f95b07e84dc87ec9e03652aa1e105afa09fdfde118411c5060ab"
+    },
+    {
+      "path": "swedish-second-v01.json",
+      "sha256": "35006142bdaa0d2e51ba5d9936bee22d5e3c5b5fd83483fe8add3f79ec905786"
+    }
+  ],
+  "default_policy": "S2",
+  "default_profile": "bridge_v2",
+  "display_completions": [
+    {
+      "path": "swedish-first-completion-v01.json",
+      "sha256": "5edf636794a7556b988edf8656151b60f9d1c1bde1d8422522193f6f07a3ca92"
+    },
+    {
+      "path": "swedish-second-completion-v01.json",
+      "sha256": "ceb0414ccf239aab968eedc5a5a68b92b6baa62f81cb7ae54b60388811e0f1d7"
+    }
+  ],
+  "gold": null,
+  "historical_controls": {
+    "default": false,
+    "path": "swedish-study-history.json",
+    "sha256": "a7c91c22ed02ac6da7e35adbb3149e4c8ec6adf8c54417af9226eac1692863db"
+  },
+  "native_blocker": "The current native CIB index contains earlier text only. Native retrieval and SourcePolicy both enforce strictly prior dates and whole-origin exclusion. S2 requires later text plus its exact origin/date. No policy/context injection seam exists in Session.execute; changing the public date or origin, monkeypatching guards, or presenting this lexical adapter as native would misstate execution.",
+  "native_execution": false,
+  "original_source_display": {
+    "path": "swedish-study-origins.json",
+    "sha256": "d8ef67eb7283fd335a8d02105b70c6d8f9dd3a06c7a17c11e68b3b3931620a68"
+  },
+  "policies": {
+    "S0": {
+      "id": "S0",
+      "release": "earlier",
+      "retrospective": false,
+      "rule": "date < cutoff AND document != origin",
+      "saved_id": "earlier_strict"
+    },
+    "S1": {
+      "id": "S1",
+      "release": "later",
+      "retrospective": true,
+      "rule": "date < cutoff AND document != origin",
+      "saved_id": "later_release_prior"
+    },
+    "S2": {
+      "id": "S2",
+      "release": "later",
+      "retrospective": true,
+      "rule": "(date < cutoff AND document != origin) OR (document == exact_origin AND date == cutoff)",
+      "saved_id": "same_origin_disclosed_later_context"
+    }
+  },
+  "preflight_ref": {
+    "path": "native-preflight-v01.json",
+    "sha256": "19fc164db2f22515b9cd4046361766b9773501a03b705bc33b51ee1e9318247b"
+  },
+  "profiles": {
+    "bridge_v2": {
+      "candidate_universe": {
+        "candidate_budget": 8,
+        "graph_hops": 1,
+        "passage_budget": 8
+      },
+      "default_profile": true,
+      "matched_policy_universe": true,
+      "nomination": "Saved noun-to-nationality conversion with bounded native-edge/node examples; no new nominations",
+      "policies": [
+        "S0",
+        "S1",
+        "S2"
+      ]
+    },
+    "broad_v1": {
+      "L4_base_dependency_hash_was_not_separately_recorded": true,
+      "budgets": {
+        "candidate_cap": null,
+        "documents": 40,
+        "pages": 80
+      },
+      "candidate_universe": {
+        "all_three_new_arms_matched": true,
+        "bridge_v2": "NOUN_TO_ADJECTIVE_CONVERSION_AND_SAMPLED_NODE_EXAMPLES_EIGHT_PAGES",
+        "bridge_v2_rank_comparable": false,
+        "no_nationality_specific_bonus": true,
+        "this_comparison": "NOUN_CONVERSION_OR_LITERAL_NATIONALITY_ADJECTIVES_ALL_INCIDENT_OBSERVED_MENTIONS_40DOC80PAGES",
+        "typed_owner_filter_applied": false
+      },
+      "default_profile": false,
+      "earlier_strict_status": "NO_SAVED_S0_FOR_THIS_PROFILE",
+      "matched_policy_universe": true,
+      "matching_scope": "EQUAL_SAVED_UNIVERSE_DECLARATIONS_AND_VERIFIED_SOURCE_FILTER; NOT_INDEPENDENT_HISTORICAL_ACCURACY",
+      "policies": [
+        "S1",
+        "S2"
+      ],
+      "policy_reuse": "L3 strict prior; L4 independently proven identical to exact-date S2 over all frozen source rows"
+    },
+    "native_boundary_v2": {
+      "candidate_universe": {
+        "all_three_new_arms_matched": true,
+        "bridge_v2": "NOUN_TO_ADJECTIVE_CONVERSION_AND_SAMPLED_NODE_EXAMPLES_EIGHT_PAGES",
+        "bridge_v2_rank_comparable": false,
+        "no_nationality_specific_bonus": true,
+        "this_comparison": "NOUN_CONVERSION_OR_LITERAL_NATIONALITY_ADJECTIVES_ALL_INCIDENT_OBSERVED_MENTIONS_40DOC80PAGES",
+        "typed_owner_filter_applied": false
+      },
+      "default_profile": false,
+      "matched_policy_universe": false,
+      "missing": "No matching saved S0 or exact-origin S2 under this native-boundary profile",
+      "native_quote_boundary_rule": {
+        "baseline_v1_sha256": "37035aafc2faf23f9e59623c4f8079f9651b22219192ebbb2c3a1334679be5bb",
+        "nationality_specific_bonus": false,
+        "query_keywords_added": false,
+        "same_inspected_pools_and_budgets": true,
+        "scope": "Only exact source-replaying same-page/job incident native ClaimMention/EventMention quotes covering the original entity quote; shortest boundary first",
+        "source_owner_rule_applied": false
+      },
+      "policies": [
+        "S1"
+      ]
+    }
+  },
+  "source_projection_ref": {
+    "path": "experiments/full_resume_20261120/swedish/swedish-study-data-v02.json",
+    "sha256": "9fb9a0af722771791c944d6e5d7a518dfca5c863b1cde29f7adbf9533d32102b"
+  },
+  "version": "withheld-nationality-study-patch/1"
+}

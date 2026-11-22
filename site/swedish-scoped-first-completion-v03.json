@@ -1,0 +1,22 @@
+{
+  "canonical_native_run": false,
+  "case_id": "withheld_delegation_4cbba4dde487d017",
+  "coordinate_policy_version": "declared-producer-job-local-coordinates/3",
+  "executed_snapshot_identity": "20abb18b4186aa3f5ea04eeea05e98752ffeb6b1ffc55c3e46f94022811f6973",
+  "execution_performed": true,
+  "gold": null,
+  "position": "first",
+  "private_execution_completion_sha256": "6e041da8a7fdcdfc3725667ad8c1fa61aa8a787e9cface3763f2d5bf954b1b83",
+  "private_execution_wire_sha256": "6e9f7659708d4a90e826a168840fa233d7d81c4d7b0e598c4a24a114c5c3bcb8",
+  "public_display_ref": {
+    "path": "swedish-scoped-first-v03.json",
+    "sha256": "bbd8769c9fe1f773e4cb04acd27ced561ac486403baebda1a2e179058d93b0f0"
+  },
+  "query_hash_scheme": "SHA256_CANONICAL_JSON_STRING_ENSURE_ASCII_TRUE_SORT_KEYS_COMPACT",
+  "query_sha256": "766066ff7b65735d20db0401f6a704311f6c719dc15a568d2b4ec0977fe5d7a2",
+  "query_utf8_sha256": "ca9c7ead12dd9b4e3e95d6400b4c04239b8eaf20477bbdf1c5d4836ac4413404",
+  "raw_result_audit_digest": "85e439cfe1346d606c122a65ce0635973cfcbf8e3d818a81d5e2ecf21314f4d6",
+  "source_policy_version": "isolated-explicit-s2-source-admission/1",
+  "source_view_sha256": "c29a007bd930fc9c158c21b10f80aa81327b420b6a5b0df04cef3f7257fcfd64",
+  "version": "scoped-study-public-completion/3"
+}

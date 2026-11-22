@@ -1,0 +1,93 @@
+{
+  "canonical_files_modified": false,
+  "execution_version": "narrative-scoped-source-study-execution/3",
+  "files": [
+    {
+      "snapshot": "narrative_construction.py",
+      "snapshot_sha256": "b82977a4e2598014b73e7810591ca2190c4ae4ea2613a30bf4d375dfc67b9d10",
+      "source": "matryoshka_narrative/construction.py",
+      "source_sha256": "6796113a6371c5d5c81fb7882e4e1fffe4a8d8b6bcf066ded3c5044cf5f0de5f"
+    },
+    {
+      "snapshot": "next_construction.py",
+      "snapshot_sha256": "a5a294623245f16633dd167a70c52c26a39230e8b2bf75b5448d9e3c4d7fe94f",
+      "source": "matryoshka_next/construction.py",
+      "source_sha256": "449be7c83b7551c43bb7d19299047d392a538244b8d21c8ba63af0157425192d"
+    },
+    {
+      "snapshot": "local_gate.py",
+      "snapshot_sha256": "add6425ef572779053e110ffcc671359e0599a9fa5b5ddec75807277fbab4778",
+      "source": "matryoshka_demo_v6/reporting_local_decisions_v65.py",
+      "source_sha256": "cfcdcaafcc8dd2ad17a7452a3592f11a74270fba2868bf3c995fd41c71e42b3a"
+    },
+    {
+      "snapshot": "evidence_gate.py",
+      "snapshot_sha256": "dc925204c72c47579bdc5e97e491b97738e8e2978bbdaaa30ea07d1fb2eac6ec",
+      "source": "matryoshka_demo_v6/reporting_fixed_pool_decisions_v65.py",
+      "source_sha256": "d24e568167b278068d6f9ff6fa2cf2a5f836feb2d4b878a8f17cef73bda98c98"
+    },
+    {
+      "snapshot": "slot_grammar.py",
+      "snapshot_sha256": "83c03ba8d40347662c67a3cb123a62bb9a7d65a935bc741cabc1e67fd579c967",
+      "source": "matryoshka_demo_v6/reporting_fixed_pool_grammar_v65.py",
+      "source_sha256": "7577eb101070849685ed2495dcbda666e33045aaf0573f858fb9d5ac13203b40"
+    },
+    {
+      "snapshot": "retrieval.py",
+      "snapshot_sha256": "fce19f5ddcbe4247744c4e7f6db3fee93da8e69d43b9a645e927f89314502170",
+      "source": "matryoshka_narrative/retrieval.py",
+      "source_sha256": "c56332027bca7aae0c593c7556ce6e95c5e61d00e03d3e16a446de3a244f2309"
+    },
+    {
+      "snapshot": "planning.py",
+      "snapshot_sha256": "858f82215e111e389825e0d37520e6634df5520625f0e421e9ec9b6ebe6d45ac",
+      "source": "matryoshka_narrative/planning.py",
+      "source_sha256": "c9d4d3cef33d0a70e31ce0b8e56f26fd15691427ac05c11ab44619390159bd93"
+    },
+    {
+      "snapshot": "api.py",
+      "snapshot_sha256": "e06995c0433149be0dc3478a770b058e9fd5483aa485535978087ff74f58d425",
+      "source": "matryoshka_narrative/api.py",
+      "source_sha256": "e06995c0433149be0dc3478a770b058e9fd5483aa485535978087ff74f58d425"
+    },
+    {
+      "snapshot": "v02/narrative_construction.py",
+      "snapshot_sha256": "e27cbac11a7cfc89b8a259f778277560087e3c51523eabbcf340f219ded4707c",
+      "source": "isolated_engine/narrative_construction.py",
+      "source_sha256": "b82977a4e2598014b73e7810591ca2190c4ae4ea2613a30bf4d375dfc67b9d10"
+    },
+    {
+      "snapshot": "v02/context.py",
+      "snapshot_sha256": "2d418fff58c3b731a53cbbb5355e1b8d6bd96a49f4edb0f18c110f25ea2cfae4",
+      "source": "isolated_engine/context.py",
+      "source_sha256": "9605be79a8d971e1dce6b6c44d62e6582616980875d1d1079be17e773c152668"
+    },
+    {
+      "snapshot": "v03/__init__.py",
+      "snapshot_sha256": "aa8f3d14ea1de8098a42a5bbb578b5bc081e48a5bc01a67f423fe584ce9f2b38",
+      "source": "v03/__init__.py",
+      "source_sha256": "aa8f3d14ea1de8098a42a5bbb578b5bc081e48a5bc01a67f423fe584ce9f2b38"
+    },
+    {
+      "snapshot": "v03/context.py",
+      "snapshot_sha256": "6896c3be10709f0e23649c0b580be7966fc44150886d17ee35fc653047b713e2",
+      "source": "v03/context.py",
+      "source_sha256": "6896c3be10709f0e23649c0b580be7966fc44150886d17ee35fc653047b713e2"
+    },
+    {
+      "snapshot": "v03/coordinates.py",
+      "snapshot_sha256": "3d16fcead910121c145f0b23578ffc8f6a8bc68a4386f2969d574697cc3bbe9b",
+      "source": "v03/coordinates.py",
+      "source_sha256": "3d16fcead910121c145f0b23578ffc8f6a8bc68a4386f2969d574697cc3bbe9b"
+    },
+    {
+      "snapshot": "v03/run.py",
+      "snapshot_sha256": "4675a4482949b29756adae085a79a45bf4ca3bebe0d8bc8dca81a8c207e98428",
+      "source": "v03/run.py",
+      "source_sha256": "4675a4482949b29756adae085a79a45bf4ca3bebe0d8bc8dca81a8c207e98428"
+    }
+  ],
+  "global_monkeypatching": false,
+  "source_policy_version": "isolated-explicit-s2-source-admission/1",
+  "version": "scoped-engine-public-source-metadata/1"
+}

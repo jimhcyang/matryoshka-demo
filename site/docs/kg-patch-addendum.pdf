@@ -1,0 +1,210 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 5 /Kids [7 0 R 9 0 R 11 0 R 13 0 R 15 0 R] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold >>
+endobj
+6 0 obj
+<< /Length 2487 >>
+stream
+0.97 0.96 0.92 rg 0 0 612 792 re f
+0.10 0.23 0.28 rg 0 694 612 98 re f
+0.82 0.34 0.15 rg 44 673 45 5 re f
+0.96 0.94 0.87 rg BT /F2 10 Tf 1 0 0 1 44 756 Tm (MATRYOSHKA / FIELD GUIDE ADDENDUM) Tj ET
+1 1 1 rg BT /F3 26 Tf 1 0 0 1 44 714 Tm (A Closer Graph) Tj ET
+0.10 0.23 0.28 rg BT /F1 11 Tf 1 0 0 1 44 645 Tm (KG interaction / November 2026 patch) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 596 Tm (What This Edition Changes) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 570 Tm (This addendum describes the KG interaction and source-visible slot context patch.) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 554 Tm (Read it alongside the saved-report field guide. Where that guide describes the old) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 538 Tm (Swedish result-opening acknowledgment, use the updated behavior on page 4 of this) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 522 Tm (addendum.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 479 Tm (Explore Without Reinterpreting) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 453 Tm (The graph keeps its saved entities, aliases, hierarchy, relationships and source) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 437 Tm (bindings. Node sizing, compact circular fitting, neighborhood spacing and label) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 421 Tm (placement are view-local presentation choices. A larger node or shorter screen) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 405 Tm (distance is not new evidence, a changed identity, a confidence score or a new) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 389 Tm (relationship.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 346 Tm (A Practical Starting Point) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 320 Tm (Choose a corpus, search across all evidence, then inspect a result and its source.) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 304 Tm (The default hierarchy view shows up to 32 nodes; evidence views allow up to 256.) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 288 Tm (These are drawing limits, not claims about corpus coverage. Use source and case) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 272 Tm (bindings, not visual prominence, to interpret a saved result.) Tj ET
+0.74 0.76 0.72 RG 44 55 m 568 55 l S
+0.10 0.23 0.28 rg BT /F1 9 Tf 1 0 0 1 44 34 Tm (KG PATCH / INTERACTION AND SOURCE POLICY / 22 NOVEMBER 2026) Tj ET
+0.10 0.23 0.28 rg BT /F2 9 Tf 1 0 0 1 533 34 Tm (01 / 05) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 2610 >>
+stream
+0.97 0.96 0.92 rg 0 0 612 792 re f
+0.10 0.23 0.28 rg 0 694 612 98 re f
+0.82 0.34 0.15 rg 44 673 45 5 re f
+0.96 0.94 0.87 rg BT /F2 10 Tf 1 0 0 1 44 756 Tm (MATRYOSHKA / FIELD GUIDE ADDENDUM) Tj ET
+1 1 1 rg BT /F3 26 Tf 1 0 0 1 44 714 Tm (Navigate The Neighborhood) Tj ET
+0.10 0.23 0.28 rg BT /F1 11 Tf 1 0 0 1 44 645 Tm (Fitting, paired panels and source scope) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 596 Tm (Read The Rings) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 570 Tm (Neighborhood rings express hierarchy distance. The temporary legend explains the) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 554 Tm (visible groups; an empty group is not filled with invented neighbors. Induced) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 538 Tm (links between displayed nodes are enabled by default. A visible link still has the) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 522 Tm (meaning recorded in its saved source.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 479 Tm (Move The View) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 453 Tm (Fit returns the visible neighborhood to a compact circular envelope. Drag nodes to) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 437 Tm (inspect crowded areas. Slow orbital motion and quadrant-aware labels help separate) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 421 Tm (nearby labels without changing the graph. Reduced-motion settings suppress) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 405 Tm (orbiting. Layout motion is not a temporal narrative or an inferred causal) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 389 Tm (sequence.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 346 Tm (Compare Carefully) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 320 Tm (Paired panels begin with synchronized search and controls. Direct manipulation of) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 304 Tm (one panel can leave its view independent, so compare the selected corpus, source) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 288 Tm (view and date settings before interpreting a visual difference. Date hints and) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 272 Tm (clamps use the selected corpus bounds. A valid date does not override source) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 256 Tm (eligibility, resource identity or a case-specific policy.) Tj ET
+0.74 0.76 0.72 RG 44 55 m 568 55 l S
+0.10 0.23 0.28 rg BT /F1 9 Tf 1 0 0 1 44 34 Tm (KG PATCH / INTERACTION AND SOURCE POLICY / 22 NOVEMBER 2026) Tj ET
+0.10 0.23 0.28 rg BT /F2 9 Tf 1 0 0 1 533 34 Tm (02 / 05) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 2764 >>
+stream
+0.97 0.96 0.92 rg 0 0 612 792 re f
+0.10 0.23 0.28 rg 0 694 612 98 re f
+0.82 0.34 0.15 rg 44 673 45 5 re f
+0.96 0.94 0.87 rg BT /F2 10 Tf 1 0 0 1 44 756 Tm (MATRYOSHKA / FIELD GUIDE ADDENDUM) Tj ET
+1 1 1 rg BT /F3 26 Tf 1 0 0 1 44 714 Tm (Redacted Slots) Tj ET
+0.10 0.23 0.28 rg BT /F1 11 Tf 1 0 0 1 44 645 Tm (Visible context is navigation, never a recovered answer) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 596 Tm (What A Label Means) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 570 Tm (A Redacted Slot marks an observed mask in a saved base-visible source page. Labels) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 554 Tm (use an exact nearby visible phrase, or a short literal excerpt. With no usable) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 538 Tm (context, the label remains Redacted Slot. A label such as Redacted Slot / near) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 522 Tm (Israeli Foreign Minister describes neighboring text; it does not identify the) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 506 Tm (hidden value.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 463 Tm (Conservative Anchors) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 437 Tm (Function words, generic fragments and ambiguous partial names are not useful) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 421 Tm (anchors. Complete titles or multiword names may be retained when visible source) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 405 Tm (spans support them. Search previews remain marker-centered and source-only. Open) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 389 Tm (the source to inspect the literal wording, marker position and document/page) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 373 Tm (provenance rather than treating a label as a finding.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 330 Tm (Hard Boundaries) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 304 Tm (Slot context links have zero semantic and layout weight. They are) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 288 Tm (navigation/provenance only, not eligible case evidence, new semantic relationships) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 272 Tm (or a hidden-answer lookup. Existing slot identities, marker offsets, saved page) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 256 Tm (routes, page hashes and source audits remain fixed. A zero-marker source stays) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 240 Tm (empty; missing or unobserved masks are not invented.) Tj ET
+0.74 0.76 0.72 RG 44 55 m 568 55 l S
+0.10 0.23 0.28 rg BT /F1 9 Tf 1 0 0 1 44 34 Tm (KG PATCH / INTERACTION AND SOURCE POLICY / 22 NOVEMBER 2026) Tj ET
+0.10 0.23 0.28 rg BT /F2 9 Tf 1 0 0 1 533 34 Tm (03 / 05) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 2774 >>
+stream
+0.97 0.96 0.92 rg 0 0 612 792 re f
+0.10 0.23 0.28 rg 0 694 612 98 re f
+0.82 0.34 0.15 rg 44 673 45 5 re f
+0.96 0.94 0.87 rg BT /F2 10 Tf 1 0 0 1 44 756 Tm (MATRYOSHKA / FIELD GUIDE ADDENDUM) Tj ET
+1 1 1 rg BT /F3 26 Tf 1 0 0 1 44 714 Tm (Two Executed Queries) Tj ET
+0.10 0.23 0.28 rg BT /F1 11 Tf 1 0 0 1 44 645 Tm (S2 by default / exact sources / reference unknown) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 596 Tm (Read The Actual Results) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 570 Tm (First query and Second query now open results from two actual, bounded shared-) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 554 Tm (kernel executions. S2 is selected without an acknowledgment gate. Facts are query-) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 538 Tm (derived planning propositions, not established world facts. Readings are model-) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 522 Tm (selected grammatical alternatives. Choose a reading to inspect its own results and) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 506 Tm (quotations.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 463 Tm (The Same Narrow Source Exception) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 437 Tm (Both queries use later-release prior documents plus the exact origin CIA-) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 421 Tm (RDP79T00975A004300220001-9 on 1959-02-17. Unrelated same-day and future reports) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 405 Tm (remain excluded. Permission and quarantine checks are retained. This study-) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 389 Tm (specific exception does not apply to ordinary cases.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 346 Tm (Do Not Substitute The Archive) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 320 Tm (The withheld answers remain unknown. The executed results need not include) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 304 Tm (Swedish. The older lexical nomination of Swedish remains under archived-study) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 288 Tm (details, separate from the actual results. It is not a recovered answer, a new) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 272 Tm (engine nomination or a rank to transplant into an empty result. These scoped runs) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 256 Tm (have their own declared source-policy and execution versions; they are not) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 240 Tm (unchanged canonical native runs.) Tj ET
+0.74 0.76 0.72 RG 44 55 m 568 55 l S
+0.10 0.23 0.28 rg BT /F1 9 Tf 1 0 0 1 44 34 Tm (KG PATCH / INTERACTION AND SOURCE POLICY / 22 NOVEMBER 2026) Tj ET
+0.10 0.23 0.28 rg BT /F2 9 Tf 1 0 0 1 533 34 Tm (04 / 05) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 2664 >>
+stream
+0.97 0.96 0.92 rg 0 0 612 792 re f
+0.10 0.23 0.28 rg 0 694 612 98 re f
+0.82 0.34 0.15 rg 44 673 45 5 re f
+0.96 0.94 0.87 rg BT /F2 10 Tf 1 0 0 1 44 756 Tm (MATRYOSHKA / FIELD GUIDE ADDENDUM) Tj ET
+1 1 1 rg BT /F3 26 Tf 1 0 0 1 44 714 Tm (Inspect Before Concluding) Tj ET
+0.10 0.23 0.28 rg BT /F1 11 Tf 1 0 0 1 44 645 Tm (Input / Facts / Readings / Sources / Results) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 596 Tm (A Bounded Comparison) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 570 Tm (Both queries use the same retrieval and construction budgets: 40 documents, up to) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 554 Tm (80 retrieval pages, 20 inspected constructor pages and 24 checked drafts per) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 538 Tm (reading. Those are search limits, not completeness claims about every potentially) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 522 Tm (relevant source. Changing the reading changes the grammatical question being) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 506 Tm (tested.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 463 Tm (Separate Source Observations) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 437 Tm (Repeated normalized surface forms are grouped before the five-result cap. Inspect) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 421 Tm (the separate source variants: their literal quotations and individual decisions) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 405 Tm (remain distinct. A union of quotations does not establish a shared identity or) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 389 Tm (turn several uncertain observations into pooled proof.) Tj ET
+0.10 0.23 0.28 rg BT /F2 15 Tf 1 0 0 1 44 346 Tm (Bind The Source Occurrence) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 320 Tm (A complete producer window plus its declared job-local mapping binds the source) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 304 Tm (occurrence. An identical quotation elsewhere does not authorize relocation or a) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 288 Tm (direct-page fallback. Earlier-view coordinates require pinned full-page) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 272 Tm (earlier/later identity; otherwise the observation is held. Document, date, record) Tj ET
+0.10 0.23 0.28 rg BT /F1 11.3 Tf 1 0 0 1 44 256 Tm (and view identities must agree before any quotation is accepted.) Tj ET
+0.74 0.76 0.72 RG 44 55 m 568 55 l S
+0.10 0.23 0.28 rg BT /F1 9 Tf 1 0 0 1 44 34 Tm (KG PATCH / INTERACTION AND SOURCE POLICY / 22 NOVEMBER 2026) Tj ET
+0.10 0.23 0.28 rg BT /F2 9 Tf 1 0 0 1 533 34 Tm (05 / 05) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 14 0 R >>
+endobj
+xref
+0 16
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000142 00000 n 
+0000000212 00000 n 
+0000000287 00000 n 
+0000000358 00000 n 
+0000002896 00000 n 
+0000003042 00000 n 
+0000005703 00000 n 
+0000005849 00000 n 
+0000008665 00000 n 
+0000008813 00000 n 
+0000011639 00000 n 
+0000011787 00000 n 
+0000014503 00000 n 
+trailer
+<< /Size 16 /Root 1 0 R >>
+startxref
+14651
+%%EOF

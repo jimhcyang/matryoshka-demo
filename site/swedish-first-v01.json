@@ -1,0 +1,3415 @@
+{
+  "all_displayed_citations_replayed": true,
+  "archived_native_runs": [],
+  "default_policy": "S2",
+  "default_profile": "bridge_v2",
+  "execution_kind": "ARCHIVED_LEXICAL_DISPLAY_NOT_NATIVE",
+  "gold": null,
+  "map_binding": {
+    "api_index_sha256": "a4f08ac865bb21faed97e1792fc2c84baba0e8483f5fb92c7604fec96f5e30f0",
+    "graph_id": "graph_2e1f8d6c2443987c",
+    "hierarchy_id": "hierarchy_dcfb5058b0e6e571",
+    "independent_map_not_policy_filtered": true,
+    "later_browser_catalog_sha256": "fb8851d0aeaa639563bff1b00142fcf8d3aebc660ebd004566aa204c489e0fc1",
+    "node_identity_match": "EXACT_ID_ONLY",
+    "ordinary_native_source_index_used": false,
+    "resource_id": "cib_resource_623c60e1e128944377f0"
+  },
+  "native_execution": false,
+  "native_facts": null,
+  "native_readings": null,
+  "native_routes": null,
+  "native_run_ref": null,
+  "original_projection_ref": {
+    "path": "experiments/full_resume_20261120/swedish/swedish-study-data-v02.json",
+    "sha256": "9fb9a0af722771791c944d6e5d7a518dfca5c863b1cde29f7adbf9533d32102b"
+  },
+  "original_traversal_claimed": false,
+  "position": "first",
+  "public_case": {
+    "case_id": "withheld_delegation_4cbba4dde487d017",
+    "corpus": "cib",
+    "date": "1959-02-17",
+    "document_id": "CIA-RDP79T00975A004300220001-9",
+    "focal_marker": "[MASK]",
+    "query": "[[REDACTION_SLOT:001:slot_53adb17685e6fe219948]]Malinovsky Comments on Soviet Strategy\n\nSoviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.\n\nThe [REDACTED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense.",
+    "task": "redaction"
+  },
+  "query_binding": {
+    "masked_word_revealed": false,
+    "query_sha256": "766066ff7b65735d20db0401f6a704311f6c719dc15a568d2b4ec0977fe5d7a2",
+    "source_replayed": true
+  },
+  "ranks_modified": false,
+  "records": [
+    {
+      "all_citations_independently_replayed": true,
+      "candidate_count": 0,
+      "candidate_display_limit": 5,
+      "candidates": [],
+      "candidates_omitted": 0,
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "eligible_page_count": 15287,
+      "eligible_source_identities_sha256": "dd0971d223550db731ad109bbf95337ce683e1c61d6a9c8ea9eaa59ffcec52e3",
+      "inspected_page_count": 8,
+      "inspected_sources": [
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "earlier/page_cb42b3e11c83cebe93eb"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "earlier/page_f08c4affc9e7ce067def"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "earlier/page_1dd3d03f40664498d180"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "earlier/page_efe811240821f4f3bb36"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "earlier/page_1483011416a0af3054a0"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "earlier/page_38ca331d474aadf98130"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "earlier/page_469b5871780c7741241e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "earlier/page_2aeee9a68670a12d124a"
+        }
+      ],
+      "policy_id": "S0",
+      "profile_id": "bridge_v2",
+      "saved_record_sha256": "cb58d653f864d0f94ee09007523d7cc7a3fe0ba8d5721608cba8f7001a381e39",
+      "status": "NO_GROUNDED_NATIONALITY_FORM"
+    },
+    {
+      "all_citations_independently_replayed": true,
+      "candidate_count": 0,
+      "candidate_display_limit": 5,
+      "candidates": [],
+      "candidates_omitted": 0,
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "eligible_page_count": 15287,
+      "eligible_source_identities_sha256": "39a5838f16c63634f2fa3aaede3ff92d9b6e995b988866ce72249d1b4d2da819",
+      "inspected_page_count": 8,
+      "inspected_sources": [
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cb42b3e11c83cebe93eb"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f3edbb243986e8eaa02c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f08c4affc9e7ce067def"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_efe811240821f4f3bb36"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1dd3d03f40664498d180"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d4c02c3176a3473c5a7a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_9221bf452a2aaa2e98a9"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1967bc340025c7416031"
+        }
+      ],
+      "policy_id": "S1",
+      "profile_id": "bridge_v2",
+      "saved_record_sha256": "220edb0607a4832bb0a62a3862c25bc35be7d4892205d66540e22e63befd056a",
+      "status": "NO_GROUNDED_NATIONALITY_FORM"
+    },
+    {
+      "all_citations_independently_replayed": true,
+      "candidate_count": 1,
+      "candidate_display_limit": 5,
+      "candidates": [
+        {
+          "browser_node": {
+            "community_id": "community_e0401aa5493276eabdc6",
+            "id": "entity_source_reference_3d62e16910a356202bfa",
+            "instance_identity_asserted": false,
+            "label": "Swedes",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1834,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1737,
+            "text": "A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Swedish",
+          "gold": null,
+          "id": "nationality_context_fa3ac0e19851dcf3031c",
+          "own_source_edge": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "document_date_iso": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": "slot_620d7113da80962d030b",
+            "job_id": "extract_726d17fe06e45957a466",
+            "relation_evidence_id": "relation_evidence_dd84ae97d2bb4ea2ace0",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_0fc6103a66f71459b91f",
+            "source_id": "event_88934c2188134359cfbf",
+            "target_id": "entity_source_reference_3d62e16910a356202bfa",
+            "visibility": "later_only"
+          },
+          "rank": 1,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1779,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1773,
+            "text": "Swedes"
+          },
+          "source_node_id": "entity_source_reference_3d62e16910a356202bfa",
+          "source_wording": "Swedes",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "candidates_omitted": 0,
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "eligible_page_count": 15300,
+      "eligible_source_identities_sha256": "550692ad642544a371edb2f1fa8fc2a1ba6ac90e537cb42ccd71b25558c6e611",
+      "inspected_page_count": 8,
+      "inspected_sources": [
+        {
+          "origin_exception": true,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d884726ce3791d6d8092"
+        },
+        {
+          "origin_exception": true,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_bc0b57e7b5788ee66022"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cb42b3e11c83cebe93eb"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f3edbb243986e8eaa02c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_efe811240821f4f3bb36"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f08c4affc9e7ce067def"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1dd3d03f40664498d180"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d4c02c3176a3473c5a7a"
+        }
+      ],
+      "policy_id": "S2",
+      "profile_id": "bridge_v2",
+      "saved_record_sha256": "e90c9f765fb44ea081c4c228bf96c1ba62648f5cd344f79247085a7d9e838b5c",
+      "status": "CONTEXTUAL_HYPOTHESES_ONLY"
+    },
+    {
+      "all_citations_independently_replayed": true,
+      "candidate_count": 9,
+      "candidate_display_limit": 5,
+      "candidates": [
+        {
+          "browser_node": {
+            "community_id": "community_55617bae44dd117b0f95",
+            "id": "identity_32d09740f62de1bb97b82ba543f3215e5567206733bac5b6683fab72c787fd49",
+            "instance_identity_asserted": true,
+            "label": "Malinovsky",
+            "reference_scope": "source_referent",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Soviet",
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "own_source_edge": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "document_date_iso": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_ed7e301c9e326cc209f2",
+            "relation_evidence_id": "relation_evidence_ed4fce820eb318dc1040",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_6fb99feab5793e5e86cd",
+            "source_id": "event_e9cd5c56ced38bb4a491",
+            "target_id": "identity_32d09740f62de1bb97b82ba543f3215e5567206733bac5b6683fab72c787fd49",
+            "visibility": "both"
+          },
+          "rank": 1,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "source_node_id": "identity_32d09740f62de1bb97b82ba543f3215e5567206733bac5b6683fab72c787fd49",
+          "source_wording": "Soviet",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_ee7d6541d1ce9f88a29a",
+            "id": "entity_source_reference_8e1e6795aa31d27036b1",
+            "instance_identity_asserted": false,
+            "label": "Belgian military leaders",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Belgian",
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "own_source_edge": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "document_date_iso": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_aaa755a51f86f6d25231",
+            "relation_evidence_id": "relation_evidence_6a446386b1fe2cf3fe19",
+            "relation_type": "CLAIM_SPEAKER",
+            "semantic_edge_id": "semantic_edge_70f7227b1a914e7e0acf",
+            "source_id": "claim_f44d832ff799998afe06",
+            "target_id": "entity_source_reference_8e1e6795aa31d27036b1",
+            "visibility": "both"
+          },
+          "rank": 2,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "source_node_id": "entity_source_reference_8e1e6795aa31d27036b1",
+          "source_wording": "Belgian",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_3f62692cdc2f44937849",
+            "id": "entity_source_reference_248c7520ee1de7965f6b",
+            "instance_identity_asserted": false,
+            "label": "Yugoslav military delegation",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Yugoslav",
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "own_source_edge": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "document_date_iso": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_3f67623a9216cf7301ab",
+            "relation_evidence_id": "relation_evidence_6b73b25af6ded6e29d3e",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_f9dd27cb618f2bce711f",
+            "source_id": "event_81674dbf928f1b515fc4",
+            "target_id": "entity_source_reference_248c7520ee1de7965f6b",
+            "visibility": "both"
+          },
+          "rank": 3,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "source_node_id": "entity_source_reference_248c7520ee1de7965f6b",
+          "source_wording": "Yugoslav",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_d09d3e67643d4f108e7c",
+            "id": "entity_source_reference_b20ab81e1903106f3025",
+            "instance_identity_asserted": false,
+            "label": "American officials",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "date": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "end": 158,
+            "page_sha256": "91ee6bcb189ca660f1cb3f06d71095d3c0de2a1b0c72d6931da3ac7b25b5d5cc",
+            "release": "later",
+            "source_page": 4,
+            "start": 60,
+            "text": "An adviser to the Soviet representative on the UN Disarmament Subcommittee told American officials"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "American",
+          "gold": null,
+          "id": "later_nationality_33647cbc3f2fe920a50a",
+          "own_source_edge": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "document_date_iso": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_8be5734bd7eabf9bb735",
+            "relation_evidence_id": "relation_evidence_f4606eeb4880c290c1b3",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_2f1793f20344c6672c5e",
+            "source_id": "event_40f856b0a842d959e452",
+            "target_id": "entity_source_reference_b20ab81e1903106f3025",
+            "visibility": "both"
+          },
+          "rank": 4,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "date": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "end": 148,
+            "page_sha256": "91ee6bcb189ca660f1cb3f06d71095d3c0de2a1b0c72d6931da3ac7b25b5d5cc",
+            "release": "later",
+            "source_page": 4,
+            "start": 140,
+            "text": "American"
+          },
+          "source_node_id": "entity_source_reference_b20ab81e1903106f3025",
+          "source_wording": "American",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_c66d0d720804cd1b6775",
+            "id": "entity_source_reference_31a91bafe6fa3bd04b90",
+            "instance_identity_asserted": false,
+            "label": "leftist Syrian officers",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_0fb51a40163be53a9edd",
+            "date": "1957-08-08",
+            "document_id": "CIA-RDP79T00975A003200330001-9",
+            "end": 716,
+            "page_sha256": "e03f36fa14c3642fbb5f3aa270c84370377fb70a051aff090e115fa6a2d1c9cf",
+            "release": "later",
+            "source_page": 6,
+            "start": 612,
+            "text": "leftist Syrian officers reportedly went to Moscow recently to discuss the present Soviet views on union."
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Syrian",
+          "gold": null,
+          "id": "later_nationality_f1ec7dce1f0f34a7dc78",
+          "own_source_edge": {
+            "canonical_page_id": "page_0fb51a40163be53a9edd",
+            "document_date_iso": "1957-08-08",
+            "document_id": "CIA-RDP79T00975A003200330001-9",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_8b01cfe77dc774547154",
+            "relation_evidence_id": "relation_evidence_96912934ff05cbd5c5f9",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_30d10d695f093e3c705a",
+            "source_id": "event_e77a286b53db6efca644",
+            "target_id": "entity_source_reference_31a91bafe6fa3bd04b90",
+            "visibility": "both"
+          },
+          "rank": 5,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_0fb51a40163be53a9edd",
+            "date": "1957-08-08",
+            "document_id": "CIA-RDP79T00975A003200330001-9",
+            "end": 626,
+            "page_sha256": "e03f36fa14c3642fbb5f3aa270c84370377fb70a051aff090e115fa6a2d1c9cf",
+            "release": "later",
+            "source_page": 6,
+            "start": 620,
+            "text": "Syrian"
+          },
+          "source_node_id": "entity_source_reference_31a91bafe6fa3bd04b90",
+          "source_wording": "Syrian",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "candidates_omitted": 4,
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "eligible_page_count": 15287,
+      "eligible_source_identities_sha256": "6cff4f16044d5e8d36248e280fd2d8fc04f85cc688979ed495137e9e17311941",
+      "inspected_page_count": 80,
+      "inspected_sources": [
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cb42b3e11c83cebe93eb"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f3edbb243986e8eaa02c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f08c4affc9e7ce067def"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_efe811240821f4f3bb36"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1dd3d03f40664498d180"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d4c02c3176a3473c5a7a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_9221bf452a2aaa2e98a9"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1967bc340025c7416031"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_a61206e3794f83ee2af0"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_8964b817a5f52589faae"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_412851c700b5bd72f8ad"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_2aeee9a68670a12d124a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_466ecd68c47b833ea111"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1483011416a0af3054a0"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d71d9494b5e7f0083a9f"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_063d812ac455b6eb4c6a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c60250d245bfc08aa9e2"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_04f5ab9013b787f3e9b6"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_90ae6ed4753037ae684b"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e4d63808eab733362849"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_36ab9ee676aee7b81617"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_469b5871780c7741241e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_fbe81b7ee3c5a88c37a2"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c798ace21301485a4b33"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_4408ed0c291fe6d0366d"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_375d60fdf544abea151a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_50c0a805e25ca1abb99a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_3b214256ddc4d260ab2e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_38ca331d474aadf98130"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_0fb51a40163be53a9edd"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_321030a4274d1601a130"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_3d006cc5e8776acb3375"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cd2b14f3228d55c95a6d"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_add37a642006d969101e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d7af2d1f8abf219b5f08"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_5aaecf043221570cb880"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c6b0647f850a3f50a022"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_84e715f211c5d7d4e786"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1d431e953658c41eb145"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7711b7c3dd1bbb6bc715"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_2336360a51e78db59472"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_089d1e5d35b86fea6c06"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_88041d966e577b511a92"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_684e7301027986abe805"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d8fe5aeb5fce2f49d86c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f416836bd069e10117b8"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e6eb95642b5fa3c7497f"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_b37d9982e70605693ab4"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7b433786a2d56a081534"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_090c4380bd0180543336"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_16e7dcce105bea18d26e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_50fa683adf4346ff3e05"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_46bbece173078d211c56"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d2278daa17bbebb806c2"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e0ea0eb60a01f125b329"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_a99ec4d0ce95f9d5d63a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c4402a68ecff390f3bca"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_68d306e2a718d647f984"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cdbff929ade41cca6ed9"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_931b375fe80f512aa308"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_6ce8ada3d76a4045de3e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_5554ca4a5b3a46d6bf1b"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e620b04cdd7b34ff40f7"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f22f907818182700f518"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_9258ef130efa6f9a1a57"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_04ad8a42b7c4ff85d767"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_34bd2b502d2af4065ea7"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_b82f2e3a763ee4eb7d76"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_510eb145d0f77867338c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_b16f925a3e96cfcf153b"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_53c20355c938d795604a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7ec89278322d322156db"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_ebaea81d0bf03a79a7c8"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_a3264b1c0612942ce459"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_0e3ca05b22dc5a4bd9c7"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c9bf243af381c7e8d075"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c56c0d51d06ea2fe87e6"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_952a2fe3565edb444af1"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f0b51cabb8a2ef9197ff"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_34483eeb6447a84c665b"
+        }
+      ],
+      "policy_id": "S1",
+      "profile_id": "broad_v1",
+      "saved_record_sha256": "17a6b2a009a820a252c1eb34825e526d2ea9f94eec66cd9db36aeb460edcaf34",
+      "status": "CONTEXT_ONLY_GOLD_UNKNOWN"
+    },
+    {
+      "all_citations_independently_replayed": true,
+      "candidate_count": 9,
+      "candidate_display_limit": 5,
+      "candidates": [
+        {
+          "browser_node": {
+            "community_id": "community_55617bae44dd117b0f95",
+            "id": "identity_32d09740f62de1bb97b82ba543f3215e5567206733bac5b6683fab72c787fd49",
+            "instance_identity_asserted": true,
+            "label": "Malinovsky",
+            "reference_scope": "source_referent",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 152,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet Marshal Malinovsky told a visiting"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Soviet",
+          "gold": null,
+          "id": "later_nationality_46643994e92bf266c33d",
+          "own_source_edge": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "document_date_iso": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": "slot_990a2d5414a9c150d9de",
+            "job_id": "extract_9910d40289da311f0aef",
+            "relation_evidence_id": "relation_evidence_d47dbe7705597d35500e",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_c68313fd1e7afcc226f8",
+            "source_id": "event_23a0653c5ff8ade3bef0",
+            "target_id": "identity_32d09740f62de1bb97b82ba543f3215e5567206733bac5b6683fab72c787fd49",
+            "visibility": "later_only"
+          },
+          "rank": 1,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 117,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 111,
+            "text": "Soviet"
+          },
+          "source_node_id": "identity_32d09740f62de1bb97b82ba543f3215e5567206733bac5b6683fab72c787fd49",
+          "source_wording": "Soviet",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_e0401aa5493276eabdc6",
+            "id": "entity_source_reference_3d62e16910a356202bfa",
+            "instance_identity_asserted": false,
+            "label": "Swedes",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1834,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1737,
+            "text": "A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Swedish",
+          "gold": null,
+          "id": "later_nationality_121ec8dd53fa88386de0",
+          "own_source_edge": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "document_date_iso": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": "slot_620d7113da80962d030b",
+            "job_id": "extract_726d17fe06e45957a466",
+            "relation_evidence_id": "relation_evidence_dd84ae97d2bb4ea2ace0",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_0fc6103a66f71459b91f",
+            "source_id": "event_88934c2188134359cfbf",
+            "target_id": "entity_source_reference_3d62e16910a356202bfa",
+            "visibility": "later_only"
+          },
+          "rank": 2,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_d884726ce3791d6d8092",
+            "date": "1959-02-17",
+            "document_id": "CIA-RDP79T00975A004300220001-9",
+            "end": 1779,
+            "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+            "release": "later",
+            "source_page": 8,
+            "start": 1773,
+            "text": "Swedes"
+          },
+          "source_node_id": "entity_source_reference_3d62e16910a356202bfa",
+          "source_wording": "Swedes",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_ee7d6541d1ce9f88a29a",
+            "id": "entity_source_reference_8e1e6795aa31d27036b1",
+            "instance_identity_asserted": false,
+            "label": "Belgian military leaders",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Belgian",
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "own_source_edge": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "document_date_iso": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_aaa755a51f86f6d25231",
+            "relation_evidence_id": "relation_evidence_6a446386b1fe2cf3fe19",
+            "relation_type": "CLAIM_SPEAKER",
+            "semantic_edge_id": "semantic_edge_70f7227b1a914e7e0acf",
+            "source_id": "claim_f44d832ff799998afe06",
+            "target_id": "entity_source_reference_8e1e6795aa31d27036b1",
+            "visibility": "both"
+          },
+          "rank": 3,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "source_node_id": "entity_source_reference_8e1e6795aa31d27036b1",
+          "source_wording": "Belgian",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_3f62692cdc2f44937849",
+            "id": "entity_source_reference_248c7520ee1de7965f6b",
+            "instance_identity_asserted": false,
+            "label": "Yugoslav military delegation",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Yugoslav",
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "own_source_edge": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "document_date_iso": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_3f67623a9216cf7301ab",
+            "relation_evidence_id": "relation_evidence_6b73b25af6ded6e29d3e",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_f9dd27cb618f2bce711f",
+            "source_id": "event_81674dbf928f1b515fc4",
+            "target_id": "entity_source_reference_248c7520ee1de7965f6b",
+            "visibility": "both"
+          },
+          "rank": 4,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "source_node_id": "entity_source_reference_248c7520ee1de7965f6b",
+          "source_wording": "Yugoslav",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_d09d3e67643d4f108e7c",
+            "id": "entity_source_reference_b20ab81e1903106f3025",
+            "instance_identity_asserted": false,
+            "label": "American officials",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "date": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "end": 158,
+            "page_sha256": "91ee6bcb189ca660f1cb3f06d71095d3c0de2a1b0c72d6931da3ac7b25b5d5cc",
+            "release": "later",
+            "source_page": 4,
+            "start": 60,
+            "text": "An adviser to the Soviet representative on the UN Disarmament Subcommittee told American officials"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "American",
+          "gold": null,
+          "id": "later_nationality_33647cbc3f2fe920a50a",
+          "own_source_edge": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "document_date_iso": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_8be5734bd7eabf9bb735",
+            "relation_evidence_id": "relation_evidence_f4606eeb4880c290c1b3",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_2f1793f20344c6672c5e",
+            "source_id": "event_40f856b0a842d959e452",
+            "target_id": "entity_source_reference_b20ab81e1903106f3025",
+            "visibility": "both"
+          },
+          "rank": 5,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_4408ed0c291fe6d0366d",
+            "date": "1955-09-28",
+            "document_id": "CIA-RDP79T00975A002200230001-1",
+            "end": 148,
+            "page_sha256": "91ee6bcb189ca660f1cb3f06d71095d3c0de2a1b0c72d6931da3ac7b25b5d5cc",
+            "release": "later",
+            "source_page": 4,
+            "start": 140,
+            "text": "American"
+          },
+          "source_node_id": "entity_source_reference_b20ab81e1903106f3025",
+          "source_wording": "American",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "candidates_omitted": 4,
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "eligible_page_count": 15300,
+      "eligible_source_identities_sha256": "d862793ed6008fe5acfceec3bf0f723fd6c7a82bd4aa23cacb59d54d29788db3",
+      "inspected_page_count": 80,
+      "inspected_sources": [
+        {
+          "origin_exception": true,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d884726ce3791d6d8092"
+        },
+        {
+          "origin_exception": true,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_bc0b57e7b5788ee66022"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cb42b3e11c83cebe93eb"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f3edbb243986e8eaa02c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_efe811240821f4f3bb36"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f08c4affc9e7ce067def"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1dd3d03f40664498d180"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d4c02c3176a3473c5a7a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_9221bf452a2aaa2e98a9"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1967bc340025c7416031"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_a61206e3794f83ee2af0"
+        },
+        {
+          "origin_exception": true,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_3e6168e5e1d7b45b6b61"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_8964b817a5f52589faae"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_412851c700b5bd72f8ad"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_466ecd68c47b833ea111"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1483011416a0af3054a0"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d71d9494b5e7f0083a9f"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_063d812ac455b6eb4c6a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_2aeee9a68670a12d124a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_04f5ab9013b787f3e9b6"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c60250d245bfc08aa9e2"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_90ae6ed4753037ae684b"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e4d63808eab733362849"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_36ab9ee676aee7b81617"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_469b5871780c7741241e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_fbe81b7ee3c5a88c37a2"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c798ace21301485a4b33"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_4408ed0c291fe6d0366d"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_375d60fdf544abea151a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_50c0a805e25ca1abb99a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_38ca331d474aadf98130"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_3b214256ddc4d260ab2e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_0fb51a40163be53a9edd"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_321030a4274d1601a130"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_3d006cc5e8776acb3375"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cd2b14f3228d55c95a6d"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_add37a642006d969101e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d7af2d1f8abf219b5f08"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_5aaecf043221570cb880"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c6b0647f850a3f50a022"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_84e715f211c5d7d4e786"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1d431e953658c41eb145"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7711b7c3dd1bbb6bc715"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_089d1e5d35b86fea6c06"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_88041d966e577b511a92"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_684e7301027986abe805"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d8fe5aeb5fce2f49d86c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f416836bd069e10117b8"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e6eb95642b5fa3c7497f"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_b37d9982e70605693ab4"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7b433786a2d56a081534"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_090c4380bd0180543336"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_16e7dcce105bea18d26e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_50fa683adf4346ff3e05"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_46bbece173078d211c56"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d2278daa17bbebb806c2"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_a99ec4d0ce95f9d5d63a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e0ea0eb60a01f125b329"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c4402a68ecff390f3bca"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_68d306e2a718d647f984"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cdbff929ade41cca6ed9"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_931b375fe80f512aa308"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_6ce8ada3d76a4045de3e"
+        },
+        {
+          "origin_exception": true,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7a6d2d1eea14194c17df"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e620b04cdd7b34ff40f7"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_5554ca4a5b3a46d6bf1b"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f22f907818182700f518"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_9258ef130efa6f9a1a57"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_04ad8a42b7c4ff85d767"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_34bd2b502d2af4065ea7"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_b82f2e3a763ee4eb7d76"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_510eb145d0f77867338c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_b16f925a3e96cfcf153b"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_53c20355c938d795604a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7ec89278322d322156db"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_ebaea81d0bf03a79a7c8"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_a3264b1c0612942ce459"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_0e3ca05b22dc5a4bd9c7"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c9bf243af381c7e8d075"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c56c0d51d06ea2fe87e6"
+        }
+      ],
+      "policy_id": "S2",
+      "profile_id": "broad_v1",
+      "saved_record_sha256": "ac41017bd90593718939f82fdd9bc9a5e1ccdd5870ab3b3cb6492ad80f4fef99",
+      "status": "CONTEXT_ONLY_GOLD_UNKNOWN"
+    },
+    {
+      "all_citations_independently_replayed": true,
+      "candidate_count": 13,
+      "candidate_display_limit": 5,
+      "candidates": [
+        {
+          "browser_node": {
+            "community_id": "community_55617bae44dd117b0f95",
+            "id": "identity_32d09740f62de1bb97b82ba543f3215e5567206733bac5b6683fab72c787fd49",
+            "instance_identity_asserted": true,
+            "label": "Malinovsky",
+            "reference_scope": "source_referent",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 312,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet Defense Minister Malinovsky's speech on 27 November to the Chinese military mission now concluding its three-week stay in the USSR."
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Soviet",
+          "gold": null,
+          "id": "later_nationality_a9eb534f5e657e80d82e",
+          "own_source_edge": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "document_date_iso": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_ed7e301c9e326cc209f2",
+            "relation_evidence_id": "relation_evidence_ed4fce820eb318dc1040",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_6fb99feab5793e5e86cd",
+            "source_id": "event_e9cd5c56ced38bb4a491",
+            "target_id": "identity_32d09740f62de1bb97b82ba543f3215e5567206733bac5b6683fab72c787fd49",
+            "visibility": "both"
+          },
+          "rank": 1,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+            "date": "1957-11-30",
+            "document_id": "CIA-RDP79T00975A003400240001-7",
+            "end": 180,
+            "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+            "release": "later",
+            "source_page": 4,
+            "start": 174,
+            "text": "Soviet"
+          },
+          "source_node_id": "identity_32d09740f62de1bb97b82ba543f3215e5567206733bac5b6683fab72c787fd49",
+          "source_wording": "Soviet",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": null,
+            "id": "entity_source_reference_c95427f3b73685c54af2",
+            "instance_identity_asserted": false,
+            "label": "German journalists",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 161,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 118,
+            "text": "told several German journalists that he was"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "German",
+          "gold": null,
+          "id": "later_nationality_e6ce13e80db0932d4876",
+          "own_source_edge": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "document_date_iso": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": "slot_04d66b8bf6997f7b8b51",
+            "job_id": "extract_f1ee4b9856a014e17bf7",
+            "relation_evidence_id": "relation_evidence_6a00bab939bf4484d9b9",
+            "relation_type": "CLAIM_TARGET",
+            "semantic_edge_id": "semantic_edge_b7dfad826bdfed16e5ac",
+            "source_id": "claim_2437c84838c94eb68427",
+            "target_id": "entity_source_reference_c95427f3b73685c54af2",
+            "visibility": "later_only"
+          },
+          "rank": 2,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_f3edbb243986e8eaa02c",
+            "date": "1958-05-22",
+            "document_id": "CIA-RDP79T00975A003700190001-0",
+            "end": 137,
+            "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+            "release": "later",
+            "source_page": 20,
+            "start": 131,
+            "text": "German"
+          },
+          "source_node_id": "entity_source_reference_c95427f3b73685c54af2",
+          "source_wording": "German",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_ee7d6541d1ce9f88a29a",
+            "id": "entity_source_reference_8e1e6795aa31d27036b1",
+            "instance_identity_asserted": false,
+            "label": "Belgian military leaders",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 116,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian military leaders told a visiting SHAPE team on 28 May"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Belgian",
+          "gold": null,
+          "id": "later_nationality_0999c9d5249f981b751f",
+          "own_source_edge": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "document_date_iso": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_aaa755a51f86f6d25231",
+            "relation_evidence_id": "relation_evidence_cdcb2d4374dd72a49db7",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_b2a95a42a495510fda8b",
+            "source_id": "event_d0693768aed8993536cc",
+            "target_id": "entity_source_reference_8e1e6795aa31d27036b1",
+            "visibility": "both"
+          },
+          "rank": 3,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+            "date": "1956-06-06",
+            "document_id": "CIA-RDP79T00975A002600070001-5",
+            "end": 62,
+            "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+            "release": "later",
+            "source_page": 5,
+            "start": 55,
+            "text": "Belgian"
+          },
+          "source_node_id": "entity_source_reference_8e1e6795aa31d27036b1",
+          "source_wording": "Belgian",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": "community_3f62692cdc2f44937849",
+            "id": "entity_source_reference_248c7520ee1de7965f6b",
+            "instance_identity_asserted": false,
+            "label": "Yugoslav military delegation",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 512,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 443,
+            "text": "Currently, a Yugoslav military delegation is visiting Communist China"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Yugoslav",
+          "gold": null,
+          "id": "later_nationality_f66dbff53dcdb75511e5",
+          "own_source_edge": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "document_date_iso": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": null,
+            "job_id": "extract_3f67623a9216cf7301ab",
+            "relation_evidence_id": "relation_evidence_6b73b25af6ded6e29d3e",
+            "relation_type": "EVENT_PARTICIPANT",
+            "semantic_edge_id": "semantic_edge_f9dd27cb618f2bce711f",
+            "source_id": "event_81674dbf928f1b515fc4",
+            "target_id": "entity_source_reference_248c7520ee1de7965f6b",
+            "visibility": "both"
+          },
+          "rank": 4,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+            "date": "1956-10-12",
+            "document_id": "CIA-RDP79T00975A002700550001-1",
+            "end": 464,
+            "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+            "release": "later",
+            "source_page": 6,
+            "start": 456,
+            "text": "Yugoslav"
+          },
+          "source_node_id": "entity_source_reference_248c7520ee1de7965f6b",
+          "source_wording": "Yugoslav",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        },
+        {
+          "browser_node": {
+            "community_id": null,
+            "id": "entity_source_reference_88cd84cfdbfaa7b2d335",
+            "instance_identity_asserted": false,
+            "label": "The Turkish official in charge of Soviet affairs in the Foreign Ministry",
+            "reference_scope": "lexical_reference",
+            "type": "Entity"
+          },
+          "context": {
+            "canonical_page_id": "page_90ae6ed4753037ae684b",
+            "date": "1957-08-01",
+            "document_id": "CIA-RDP79T00975A003200270001-6",
+            "end": 165,
+            "page_sha256": "0466847ef4af45e164608b7e052785237a77edff3237de13cf3a34dee3467a51",
+            "release": "later",
+            "source_page": 4,
+            "start": 64,
+            "text": "The Turkish official in charge of Soviet affairs in the Foreign Ministry reportedly stated on 27 July"
+          },
+          "exact_masked_word_verified": false,
+          "fill": "Turkish",
+          "gold": null,
+          "id": "later_nationality_1e77ef1f261708ded4da",
+          "own_source_edge": {
+            "canonical_page_id": "page_90ae6ed4753037ae684b",
+            "document_date_iso": "1957-08-01",
+            "document_id": "CIA-RDP79T00975A003200270001-6",
+            "graph_contract_version": "cib-visibility-semantic-graph/1.4",
+            "introduced_by_slot_id": "slot_475572d97c64af6f43e8",
+            "job_id": "extract_e503a600267fa1ded9c5",
+            "relation_evidence_id": "relation_evidence_6171db0c6faf42b0d5b3",
+            "relation_type": "CLAIM_SPEAKER",
+            "semantic_edge_id": "semantic_edge_e0417f62b3fba22bba80",
+            "source_id": "claim_fec24ef7dfb2c149276b",
+            "target_id": "entity_source_reference_88cd84cfdbfaa7b2d335",
+            "visibility": "later_only"
+          },
+          "rank": 5,
+          "same_delegation_identity_certified": false,
+          "source": {
+            "canonical_page_id": "page_90ae6ed4753037ae684b",
+            "date": "1957-08-01",
+            "document_id": "CIA-RDP79T00975A003200270001-6",
+            "end": 75,
+            "page_sha256": "0466847ef4af45e164608b7e052785237a77edff3237de13cf3a34dee3467a51",
+            "release": "later",
+            "source_page": 4,
+            "start": 68,
+            "text": "Turkish"
+          },
+          "source_node_id": "entity_source_reference_88cd84cfdbfaa7b2d335",
+          "source_wording": "Turkish",
+          "status": "exploratory_contextual",
+          "substantive_support": false
+        }
+      ],
+      "candidates_omitted": 8,
+      "case_id": "withheld_delegation_4cbba4dde487d017",
+      "eligible_page_count": 15287,
+      "eligible_source_identities_sha256": "6cff4f16044d5e8d36248e280fd2d8fc04f85cc688979ed495137e9e17311941",
+      "inspected_page_count": 80,
+      "inspected_sources": [
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cb42b3e11c83cebe93eb"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f3edbb243986e8eaa02c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f08c4affc9e7ce067def"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_efe811240821f4f3bb36"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1dd3d03f40664498d180"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d4c02c3176a3473c5a7a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_9221bf452a2aaa2e98a9"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1967bc340025c7416031"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_a61206e3794f83ee2af0"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_8964b817a5f52589faae"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_412851c700b5bd72f8ad"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_2aeee9a68670a12d124a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_466ecd68c47b833ea111"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1483011416a0af3054a0"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d71d9494b5e7f0083a9f"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_063d812ac455b6eb4c6a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c60250d245bfc08aa9e2"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_04f5ab9013b787f3e9b6"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_90ae6ed4753037ae684b"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e4d63808eab733362849"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_36ab9ee676aee7b81617"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_469b5871780c7741241e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_fbe81b7ee3c5a88c37a2"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c798ace21301485a4b33"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_4408ed0c291fe6d0366d"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_375d60fdf544abea151a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_50c0a805e25ca1abb99a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_3b214256ddc4d260ab2e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_38ca331d474aadf98130"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_0fb51a40163be53a9edd"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_321030a4274d1601a130"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_3d006cc5e8776acb3375"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cd2b14f3228d55c95a6d"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_add37a642006d969101e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d7af2d1f8abf219b5f08"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_5aaecf043221570cb880"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c6b0647f850a3f50a022"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_84e715f211c5d7d4e786"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_1d431e953658c41eb145"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7711b7c3dd1bbb6bc715"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_2336360a51e78db59472"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_089d1e5d35b86fea6c06"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_88041d966e577b511a92"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_684e7301027986abe805"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d8fe5aeb5fce2f49d86c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f416836bd069e10117b8"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e6eb95642b5fa3c7497f"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_b37d9982e70605693ab4"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7b433786a2d56a081534"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_090c4380bd0180543336"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_16e7dcce105bea18d26e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_50fa683adf4346ff3e05"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_46bbece173078d211c56"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_d2278daa17bbebb806c2"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e0ea0eb60a01f125b329"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_a99ec4d0ce95f9d5d63a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c4402a68ecff390f3bca"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_68d306e2a718d647f984"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_cdbff929ade41cca6ed9"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_931b375fe80f512aa308"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_6ce8ada3d76a4045de3e"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_5554ca4a5b3a46d6bf1b"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_e620b04cdd7b34ff40f7"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f22f907818182700f518"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_9258ef130efa6f9a1a57"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_04ad8a42b7c4ff85d767"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_34bd2b502d2af4065ea7"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_b82f2e3a763ee4eb7d76"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_510eb145d0f77867338c"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_b16f925a3e96cfcf153b"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_53c20355c938d795604a"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_7ec89278322d322156db"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_ebaea81d0bf03a79a7c8"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_a3264b1c0612942ce459"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_0e3ca05b22dc5a4bd9c7"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c9bf243af381c7e8d075"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_c56c0d51d06ea2fe87e6"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_952a2fe3565edb444af1"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_f0b51cabb8a2ef9197ff"
+        },
+        {
+          "origin_exception": false,
+          "preview_not_decision_evidence": true,
+          "source_key": "later/page_34483eeb6447a84c665b"
+        }
+      ],
+      "policy_id": "S1",
+      "profile_id": "native_boundary_v2",
+      "saved_record_sha256": "148ac3e35ba5ed9bdb8595dfda50e6e2dda7949ca00f70e77455b48d875f7356",
+      "status": "CONTEXT_ONLY_GOLD_UNKNOWN"
+    }
+  ],
+  "source_bundle_ref": {
+    "path": "src-demo-day/experiments/full_resume_20261120/swedish/artifacts_v02/study_bundle.json.gz",
+    "sha256": "9bb317650688b37ecb2340ff5bd5533ba69b1adf7d9c6e25845b32a1a2610715"
+  },
+  "source_context": {
+    "alias_id": "alias_sense_fa9fe8608add36db785f",
+    "graph_extraction_or_alias_rebuilt": false,
+    "graph_id": "graph_2e1f8d6c2443987c",
+    "native_earlier_index_pages": 22579,
+    "native_index_rebuilt": false,
+    "resource_id": "cib_resource_623c60e1e128944377f0",
+    "source_file_sha256": {
+      "matryoshka_redaction/data/preflight_v3/source/quarantine_policy.json": "6f544d902426ac92bb83756938d7a2279150ae1fcd6da4319cac42042502418c",
+      "src-demo-day/experiments/memorandum_trials_20261120/cib/resource_pins.json": "de3b60dda59f95c27d547bb8487a2048485f074f11f9b6ff54cc41fee089dccd",
+      "src-redaction/data/preparation_refresh/runs/preparation_74af77d5f2b9a925c4fe/canonical_page_quarantine.jsonl": "f64818b40b5f33568a5e43cdedab5c8ef71e062a8cf6ba2516f2a1535b4747e2",
+      "src-redaction/data/preparation_refresh/runs/preparation_74af77d5f2b9a925c4fe/documents.jsonl": "4edd301029ccc2cd9d8563d4f5affc21894ccb6e05cfc4c3fbfa9679ced726bf",
+      "src-redaction/data/preparation_refresh/runs/preparation_74af77d5f2b9a925c4fe/views/earlier/pages.jsonl": "b5832148ca764554d99c43f92397227129ca6aeaef04f7535707ed966b5259bb",
+      "src-redaction/data/preparation_refresh/runs/preparation_74af77d5f2b9a925c4fe/views/later/pages.jsonl": "814f110a7c8e4026fa4db0eb49d079c472dbeda9a6cc4ff0f1c588198b9bd8fb",
+      "src-redaction/data/preparation_refresh/source_sense_refresh/graph/runs/graph_2e1f8d6c2443987c/summary.json": "ddf77c68e791efcb8b34890f2be95829d43160620cef47789bbe21a33a03364d",
+      "src-redaction/data/preparation_refresh/source_sense_refresh/graph/runs/graph_2e1f8d6c2443987c/views/earlier/semantic_edge_evidence.jsonl": "ebaaba013156e4e8efd66200a4b741407635ca8f064bb35d5f1322e1dab50aae",
+      "src-redaction/data/preparation_refresh/source_sense_refresh/graph/runs/graph_2e1f8d6c2443987c/views/later/semantic_edge_evidence.jsonl": "6b19c3845e918d698ebe47827a432d96d71ba5e118308adc72ff94198f369973",
+      "src-redaction/data/preparation_refresh/source_sense_refresh/graph/runs/graph_2e1f8d6c2443987c/views/later/semantic_nodes.jsonl": "5a5a12a2f6ba8731409fca42efdc4456f7245a5224057dcdf6ff3fc688178663"
+    }
+  },
+  "source_position": {
+    "position": "first",
+    "source_mask_span": [
+      153,
+      163
+    ],
+    "source_page_id": "page_d884726ce3791d6d8092"
+  },
+  "source_previews": {
+    "earlier/page_1483011416a0af3054a0": {
+      "canonical_page_id": "page_1483011416a0af3054a0",
+      "date": "1958-06-12",
+      "document_id": "CIA-RDP79T00975A003700370001-0",
+      "end": 180,
+      "page_sha256": "e4cd514189267354be539d78fd2f81ae2c5488ca0206ee1d506fca9fc93f082e",
+      "release": "earlier",
+      "source_page": 7,
+      "start": 0,
+      "text": "Soviet Nuclear Electric Power Program Delayed\n\nAlthough the Soviet Five-Year Plan (1956-1960) called for the construction of nuclear power stations with an installed capacity of 2,"
+    },
+    "earlier/page_1dd3d03f40664498d180": {
+      "canonical_page_id": "page_1dd3d03f40664498d180",
+      "date": "1957-12-07",
+      "document_id": "CIA-RDP79T00975A003400300001-0",
+      "end": 180,
+      "page_sha256": "10b0374fc82b7963bd159075c950724eb6ca15a1dfaca42b17dbda2f63c2ca32",
+      "release": "earlier",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. PARIS URGES INDEPENDENT EUROPEAN NUCLEAR WEAPONS CAPABILITY\n\nFrance now favors a European nuclear weapons program--independent of the United States and if necessary of Britain--"
+    },
+    "earlier/page_2aeee9a68670a12d124a": {
+      "canonical_page_id": "page_2aeee9a68670a12d124a",
+      "date": "1959-01-29",
+      "document_id": "CIA-RDP79T00975A004300380001-2",
+      "end": 180,
+      "page_sha256": "7acf896262e49f03bcc769923d3fccfe64debb0f2c8609fc46f89decb448281c",
+      "release": "earlier",
+      "source_page": 6,
+      "start": 0,
+      "text": "I. THE COMMUNIST BLOC\n\nKhrushchev's Claim of ICBM Series Production\n\nKhrushchev told the 21st party congress that \"in the Soviet Union, serial production of intercontinental ballis"
+    },
+    "earlier/page_38ca331d474aadf98130": {
+      "canonical_page_id": "page_38ca331d474aadf98130",
+      "date": "1958-10-23",
+      "document_id": "CIA-RDP79T00975A004000360001-7",
+      "end": 180,
+      "page_sha256": "531f770a0f906065c6af232944973fa8be5dfbdd14d18ee8d1d4ec58efe98081",
+      "release": "earlier",
+      "source_page": 3,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n23 October 1958\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\nUSSR: The USSR will \"definitely suspend\" nuclear tests by 31 October, the opening date of the Ge"
+    },
+    "earlier/page_469b5871780c7741241e": {
+      "canonical_page_id": "page_469b5871780c7741241e",
+      "date": "1957-05-12",
+      "document_id": "CIA-RDP79T00975A003100160001-9",
+      "end": 180,
+      "page_sha256": "57660929f019a0a974c03959c1f85004ce228db911bbc0c41bb8ec67bc6376d8",
+      "release": "earlier",
+      "source_page": 5,
+      "start": 0,
+      "text": "current London disarmament conferences, it has been evident that the Soviet position on nuclear test bans has been aimed most immediately at obstructing the UK weapons development "
+    },
+    "earlier/page_cb42b3e11c83cebe93eb": {
+      "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+      "date": "1957-11-30",
+      "document_id": "CIA-RDP79T00975A003400240001-7",
+      "end": 180,
+      "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+      "release": "earlier",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. USSR WILLING TO SUPPLY \"LATEST WEAPONS\"\nTO CHINA\n\n[REDACTED] Indications that the USSR has agreed to supply the Chinese with some of its \"latest weapons\" are contained in Soviet"
+    },
+    "earlier/page_efe811240821f4f3bb36": {
+      "canonical_page_id": "page_efe811240821f4f3bb36",
+      "date": "1958-05-01",
+      "document_id": "CIA-RDP79T00975A003700010001-9",
+      "end": 180,
+      "page_sha256": "c094243abc7033c234274082e15b7f2a106c3a40af45cd56b101ecdd171a5c6e",
+      "release": "earlier",
+      "source_page": 16,
+      "start": 0,
+      "text": "III. THE WEST\n\nAdenauer Comments on Mikoyan Visit\n\nSoviet First Deputy Premier Mikoyan's recent visit to Bonn has strengthened Chancellor Adenauer's view--expressed earlier in Lond"
+    },
+    "earlier/page_f08c4affc9e7ce067def": {
+      "canonical_page_id": "page_f08c4affc9e7ce067def",
+      "date": "1957-10-26",
+      "document_id": "CIA-RDP79T00975A003300470001-3",
+      "end": 180,
+      "page_sha256": "adb80558930fa3c557f2c10947d9ea15a6dd9cabc45ee2a7acb105da698780d2",
+      "release": "earlier",
+      "source_page": 15,
+      "start": 0,
+      "text": "13. NORSTAD STATEMENTS IMPROVE OUTLOOK FOR NATO MINISTERIAL MEETING\n\nProspects for a productive NATO ministerial meeting in December were improved by the favorable initial reaction"
+    },
+    "later/page_04ad8a42b7c4ff85d767": {
+      "canonical_page_id": "page_04ad8a42b7c4ff85d767",
+      "date": "1958-02-26",
+      "document_id": "CIA-RDP79T00975A003500220001-8",
+      "end": 180,
+      "page_sha256": "a6e13342175eec3309f3d2bfc5b6644d5ef7af1d8f3249483c60cca30d2b0f9e",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n26 February 1958\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\n*Soviet central committee meeting: The central committee of the Soviet Communist party is meeti"
+    },
+    "later/page_04f5ab9013b787f3e9b6": {
+      "canonical_page_id": "page_04f5ab9013b787f3e9b6",
+      "date": "1956-10-12",
+      "document_id": "CIA-RDP79T00975A002700550001-1",
+      "end": 180,
+      "page_sha256": "c86496a92a96fb73cd0c99ed2f965022adcc3bdca30b6c5a574a639c56fe6f55",
+      "release": "later",
+      "source_page": 6,
+      "start": 0,
+      "text": "3. YUGOSLAV MILITARY DELEGATION VISITS THE USSR\n\nComment on:\n\nThe departure of a Yugoslav army delegation headed by Col. Gen. Pavle Jaksic, deputy chief of staff, on a \"friendly vi"
+    },
+    "later/page_063d812ac455b6eb4c6a": {
+      "canonical_page_id": "page_063d812ac455b6eb4c6a",
+      "date": "1956-05-25",
+      "document_id": "CIA-RDP79T00975A002500530001-5",
+      "end": 180,
+      "page_sha256": "d5fe068c2efd07ceef69282066aa85a0a8e4d4f52ce15ee034217575d88d22e0",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. MARSHAL ZHUKOV CITES CHANGES IN SOVIET ARMED FORCES\n\nIn a recent speech to political officers of the Soviet army, Marshal Zhukov said, [REDACTED] that a basic transformation in "
+    },
+    "later/page_089d1e5d35b86fea6c06": {
+      "canonical_page_id": "page_089d1e5d35b86fea6c06",
+      "date": "1958-06-25",
+      "document_id": "CIA-RDP79T00975A003800050001-4",
+      "end": 180,
+      "page_sha256": "44469ded79cbf952fdd40a202f1394945c5b7d663afeb013e8c14dbcf7d4e34a",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "India-Rumania: An Indian delegation left on 21 June for Bucharest to conduct negotiations on Rumania's offer to finance and construct an oil refinery worth an estimated $20-30,000,"
+    },
+    "later/page_090c4380bd0180543336": {
+      "canonical_page_id": "page_090c4380bd0180543336",
+      "date": "1953-11-13",
+      "document_id": "CIA-RDP79T00975A001300530001-8",
+      "end": 180,
+      "page_sha256": "7271b9661bed2c04b60d6ef0bf83e16f10daf2de36272cb023e0fec900f6357f",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "Comment: All television transmitting equipment known to be in operation in the USSR is of Western manufacture and obsolescent. This sale would provide new prototypes and ease the p"
+    },
+    "later/page_0e3ca05b22dc5a4bd9c7": {
+      "canonical_page_id": "page_0e3ca05b22dc5a4bd9c7",
+      "date": "1956-06-06",
+      "document_id": "CIA-RDP79T00975A002600070001-5",
+      "end": 180,
+      "page_sha256": "986c495a2efbe5dc5f165d540e551752930b867d722fc3eb587aebe49ef20c21",
+      "release": "later",
+      "source_page": 6,
+      "start": 0,
+      "text": "3. TITO MAY RAISE GERMAN CONFEDERATION SCHEME IN MOSCOW\n\nWest German Social Democrat Herbert Wehner indicated that[[REDACTION_SLOT:001:slot_cbc7c7c14c8fef77af60]] Marshal Tito had "
+    },
+    "later/page_0fb51a40163be53a9edd": {
+      "canonical_page_id": "page_0fb51a40163be53a9edd",
+      "date": "1957-08-08",
+      "document_id": "CIA-RDP79T00975A003200330001-9",
+      "end": 180,
+      "page_sha256": "e03f36fa14c3642fbb5f3aa270c84370377fb70a051aff090e115fa6a2d1c9cf",
+      "release": "later",
+      "source_page": 6,
+      "start": 0,
+      "text": "3. USSR REPORTEDLY PRESSING FOR EGYPTIAN-SYRIAN UNION\n\nThe USSR is encouraging a federal union between Egypt and Syria and is \"attempting to pressure\" Cairo into sending Defense Mi"
+    },
+    "later/page_1483011416a0af3054a0": {
+      "canonical_page_id": "page_1483011416a0af3054a0",
+      "date": "1958-06-12",
+      "document_id": "CIA-RDP79T00975A003700370001-0",
+      "end": 180,
+      "page_sha256": "2237d7706ffd8578f51be83589914c2968eeef2bf669fa4c2dca7604e04f360a",
+      "release": "later",
+      "source_page": 8,
+      "start": 0,
+      "text": "Soviet Nuclear Electric Power Program Delayed\n\nAlthough the Soviet Five-Year Plan (1956-1960) called for the construction of nuclear power stations with an installed capacity of 2,"
+    },
+    "later/page_16e7dcce105bea18d26e": {
+      "canonical_page_id": "page_16e7dcce105bea18d26e",
+      "date": "1956-05-25",
+      "document_id": "CIA-RDP79T00975A002500530001-5",
+      "end": 180,
+      "page_sha256": "4cb17796f9a219fd5533b6221aed93b4d580152a633bc21693de69395bf89110",
+      "release": "later",
+      "source_page": 8,
+      "start": 0,
+      "text": "5. USSR REPORTED PROMISING ARAB STATES\n\"VOLUNTEERS\" IF ISRAEL ATTACKS\n\n[REDACTED] Lebanese president Chamoun told Ambassador Heath in Beirut on 23 May that he was \"authentically in"
+    },
+    "later/page_1967bc340025c7416031": {
+      "canonical_page_id": "page_1967bc340025c7416031",
+      "date": "1957-08-28",
+      "document_id": "CIA-RDP79T00975A003200500001-0",
+      "end": 180,
+      "page_sha256": "5926975acdcd2d399941646950a718996f0d6a6c62904aeff05e244b581956c4",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. EVALUATION OF THE SOVIET ANNOUNCEMENT OF\nSUCCESSFUL ICBM TEST\n\nAside from the TASS announcement there is no evidence of the successful launching in the USSR of an ICBM test vehi"
+    },
+    "later/page_1d431e953658c41eb145": {
+      "canonical_page_id": "page_1d431e953658c41eb145",
+      "date": "1956-05-17",
+      "document_id": "CIA-RDP79T00975A002500460001-3",
+      "end": 180,
+      "page_sha256": "f1e80ce9dd694fc1618406a768b7712407e5b729cafb766fa17bc84b931ac3f4",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. KHRUSHCHEV STRESSES IMPORTANCE OF GUIDED-MISSILE SUBMARINES\n\nDuring his recent voyage to Great Britain, Soviet Communist Party leader Khrushchev reportedly told a British naval "
+    },
+    "later/page_1dd3d03f40664498d180": {
+      "canonical_page_id": "page_1dd3d03f40664498d180",
+      "date": "1957-12-07",
+      "document_id": "CIA-RDP79T00975A003400300001-0",
+      "end": 180,
+      "page_sha256": "10b0374fc82b7963bd159075c950724eb6ca15a1dfaca42b17dbda2f63c2ca32",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. PARIS URGES INDEPENDENT EUROPEAN NUCLEAR WEAPONS CAPABILITY\n\nFrance now favors a European nuclear weapons program--independent of the United States and if necessary of Britain--"
+    },
+    "later/page_2336360a51e78db59472": {
+      "canonical_page_id": "page_2336360a51e78db59472",
+      "date": "1957-11-24",
+      "document_id": "CIA-RDP79T00975A003400200001-1",
+      "end": 180,
+      "page_sha256": "6aa3efeca75af38fed13f6cb8ac9f2577c9dfd42515a6f821451e1897d94c54a",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "4. JAPAN SEEKS ASSOCIATION WITH NATO PROGRAMS\n\nThe Japanese government has informed Ambassador MacArthur that it is prepared to participate in a program of greater free world coope"
+    },
+    "later/page_2aeee9a68670a12d124a": {
+      "canonical_page_id": "page_2aeee9a68670a12d124a",
+      "date": "1959-01-29",
+      "document_id": "CIA-RDP79T00975A004300380001-2",
+      "end": 180,
+      "page_sha256": "7acf896262e49f03bcc769923d3fccfe64debb0f2c8609fc46f89decb448281c",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "I. THE COMMUNIST BLOC\n\nKhrushchev's Claim of ICBM Series Production\n\nKhrushchev told the 21st party congress that \"in the Soviet Union, serial production of intercontinental ballis"
+    },
+    "later/page_321030a4274d1601a130": {
+      "canonical_page_id": "page_321030a4274d1601a130",
+      "date": "1957-11-01",
+      "document_id": "CIA-RDP79T00975A003400010001-2",
+      "end": 180,
+      "page_sha256": "f4da4b59bf52c1da8723979cd2101b733e6503a7268c69e5f11bf82efb8a3d09",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. ZHUKOV REPORTEDLY ASSIGNED TO URAL MILITARY DISTRICT\n\nComment on:\n\n[REDACTED] An official communique on the final decision in the Zhukov case will be issued on 1 or 2 November, "
+    },
+    "later/page_34483eeb6447a84c665b": {
+      "canonical_page_id": "page_34483eeb6447a84c665b",
+      "date": "1958-01-13",
+      "document_id": "CIA-RDP79T00975A003500340001-5",
+      "end": 180,
+      "page_sha256": "c7bc089580464e14efd007b2642a32eb9b8d5e9dc75fd10139623a6a0958dcb7",
+      "release": "later",
+      "source_page": 13,
+      "start": 0,
+      "text": "10. PRESIDENT RHEE TO REJECT US-PROPOSED SOUTH KOREAN ARMED FORCES REDUCTION\n\nThe South Korean defense minister, the chairman of the Joint Chiefs of Staff, and the army chief of st"
+    },
+    "later/page_34bd2b502d2af4065ea7": {
+      "canonical_page_id": "page_34bd2b502d2af4065ea7",
+      "date": "1956-10-12",
+      "document_id": "CIA-RDP79T00975A002700550001-1",
+      "end": 180,
+      "page_sha256": "80cece77bb941b27669a89ad4f82d4c039fabfc293668c8b47b8a2887a0ccca7",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "4. PEIPING REPORTEDLY OFFERS TO STOP COMMUNIST RESISTANCE IN MALAYA\n\nThe British Foreign Office is perturbed at the current Chinese Communist maneuver to obtain official recognitio"
+    },
+    "later/page_36ab9ee676aee7b81617": {
+      "canonical_page_id": "page_36ab9ee676aee7b81617",
+      "date": "1956-10-28",
+      "document_id": "CIA-RDP79T00975A002800080001-2",
+      "end": 180,
+      "page_sha256": "61abfa4233fa3144f9b47be8787390e044f67e565ed19fdd1277ec420c5423b1",
+      "release": "later",
+      "source_page": 17,
+      "start": 0,
+      "text": "8. FURTHER REVISIONS IN WEST GERMAN DEFENSE TARGETS PLANNED\n\n[REDACTED] The American embassy in Bonn fears that unless NATO makes it clear to the West Germans that their force targ"
+    },
+    "later/page_375d60fdf544abea151a": {
+      "canonical_page_id": "page_375d60fdf544abea151a",
+      "date": "1958-06-25",
+      "document_id": "CIA-RDP79T00975A003800050001-4",
+      "end": 180,
+      "page_sha256": "f65571fac6ab427c7c62613cfc607b444f3f4966e9423ef558e44ed0ca499c00",
+      "release": "later",
+      "source_page": 17,
+      "start": 0,
+      "text": "III. THE WEST\n\nBritain Encouraging Federation of Aden Protectorate Rulers\n\nLondon is trying to retain its influence on the fringes of the Arabian Peninsula by increasing the capabi"
+    },
+    "later/page_38ca331d474aadf98130": {
+      "canonical_page_id": "page_38ca331d474aadf98130",
+      "date": "1958-10-23",
+      "document_id": "CIA-RDP79T00975A004000360001-7",
+      "end": 180,
+      "page_sha256": "dfed4a03fe4255dbd6c9686a64458a79f9b0e9bb79053c0fd761fa4f5beb4090",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n23 October 1958\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\nUSSR: The USSR will \"definitely suspend\" nuclear tests by 31 October, the opening date of the Ge"
+    },
+    "later/page_3b214256ddc4d260ab2e": {
+      "canonical_page_id": "page_3b214256ddc4d260ab2e",
+      "date": "1958-02-14",
+      "document_id": "CIA-RDP79T00975A003500120001-9",
+      "end": 180,
+      "page_sha256": "7ae9860c7a3aa70f1991960949c45f1c8e3b460a71fdeded7a0de26f2bae6daf",
+      "release": "later",
+      "source_page": 10,
+      "start": 0,
+      "text": "Marshall Malinovsky's Visit to East Germany\n\nSoviet Defense Minister Marshal Malinovsky has been attending a party conference of Soviet forces in East Germany, according to the Sov"
+    },
+    "later/page_3d006cc5e8776acb3375": {
+      "canonical_page_id": "page_3d006cc5e8776acb3375",
+      "date": "1956-10-24",
+      "document_id": "CIA-RDP79T00975A002800040001-6",
+      "end": 180,
+      "page_sha256": "7eef974353881d5da5b496fc7b12bec0641b1d4d26d349c46b740750d4ca0332",
+      "release": "later",
+      "source_page": 9,
+      "start": 0,
+      "text": "6. USSR BUILDING NEW TYPE OF SUBMARINE\n\nComment None of the features or characteristics of submarine Project 641 are known [REDACTED] The USSR has shown a marked interest in the di"
+    },
+    "later/page_3e6168e5e1d7b45b6b61": {
+      "canonical_page_id": "page_3e6168e5e1d7b45b6b61",
+      "date": "1959-02-17",
+      "document_id": "CIA-RDP79T00975A004300220001-9",
+      "end": 180,
+      "page_sha256": "1be7cf7020592d89642f2765dc3acefd5512890c2606677b293cff3e601421a9",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "LATE ITEM\n\n*Probable ICBM launching on Tyura Tam Range: A valid launching operation began on the Tyura Tam Missile Test Range at 1100 hours EST on 16 February 1959 and culminated i"
+    },
+    "later/page_412851c700b5bd72f8ad": {
+      "canonical_page_id": "page_412851c700b5bd72f8ad",
+      "date": "1958-09-03",
+      "document_id": "CIA-RDP79T00975A003900290001-7",
+      "end": 180,
+      "page_sha256": "45fac429de55998d7c100b5bc8a4ad91fd76f432fec5fc1edae34d62176c264a",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "II. ASIA-AFRICA\n\nIraq: Iraqi army authorities are reported to be building a case charging the United States with organizing \"sabotage cells\" against Iraq. Charges in the current \"t"
+    },
+    "later/page_4408ed0c291fe6d0366d": {
+      "canonical_page_id": "page_4408ed0c291fe6d0366d",
+      "date": "1955-09-28",
+      "document_id": "CIA-RDP79T00975A002200230001-1",
+      "end": 180,
+      "page_sha256": "91ee6bcb189ca660f1cb3f06d71095d3c0de2a1b0c72d6931da3ac7b25b5d5cc",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. SOVIET OFFICIALS DISCUSS PRESIDENT'S BLUEPRINT PROPOSAL\n\nAn adviser to the Soviet representative on the UN Disarmament Subcommittee told American officials on 23 September that "
+    },
+    "later/page_466ecd68c47b833ea111": {
+      "canonical_page_id": "page_466ecd68c47b833ea111",
+      "date": "1957-10-27",
+      "document_id": "CIA-RDP79T00975A003300480001-2",
+      "end": 180,
+      "page_sha256": "7ed8d2321a02bdc2491d7242da65d721042f4dcf7f3d150f4ca23b8c14230175",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. ZHUKOV REPLACED AS SOVIET DEFENSE MINISTER\n\n[REDACTED] There has been no official statement from the Soviet Union on the replacement of Marshal Georgy Zhukov by Marshal Rodion M"
+    },
+    "later/page_469b5871780c7741241e": {
+      "canonical_page_id": "page_469b5871780c7741241e",
+      "date": "1957-05-12",
+      "document_id": "CIA-RDP79T00975A003100160001-9",
+      "end": 180,
+      "page_sha256": "57660929f019a0a974c03959c1f85004ce228db911bbc0c41bb8ec67bc6376d8",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "current London disarmament conferences, it has been evident that the Soviet position on nuclear test bans has been aimed most immediately at obstructing the UK weapons development "
+    },
+    "later/page_46bbece173078d211c56": {
+      "canonical_page_id": "page_46bbece173078d211c56",
+      "date": "1956-10-28",
+      "document_id": "CIA-RDP79T00975A002800080001-2",
+      "end": 180,
+      "page_sha256": "19626baf4de92fae298e4588ec6088ead9d46128bf208507708e64bcbe905ea2",
+      "release": "later",
+      "source_page": 9,
+      "start": 0,
+      "text": "3. AMBASSADOR BOHLEN DESCRIBES BEHAVIOR OF SOVIET LEADERS\n\nAmbassador Bohlen reports that Khru-shchev, Bulganin, Molotov and Kaganovich were the only full members of the party pres"
+    },
+    "later/page_50c0a805e25ca1abb99a": {
+      "canonical_page_id": "page_50c0a805e25ca1abb99a",
+      "date": "1956-04-25",
+      "document_id": "CIA-RDP79T00975A002500270001-4",
+      "end": 180,
+      "page_sha256": "4f5503cca984e7b6c98e16dce4f8b672315d2542d37d3d973bb72396fcdb6321",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. SOVIET LEADERS ATTACK WESTERN DISARMAMENT VIEWS\n\nThe British delegate to the UN Disarmament Subcommittee, Anthony Nutting, told his Western colleagues on 23 April that on the ba"
+    },
+    "later/page_50fa683adf4346ff3e05": {
+      "canonical_page_id": "page_50fa683adf4346ff3e05",
+      "date": "1957-10-26",
+      "document_id": "CIA-RDP79T00975A003300470001-3",
+      "end": 180,
+      "page_sha256": "33b653b52a83771b48c89d5a4c7d4b50b9f03d83c25fc99fdfa30c79e75f57a1",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. MARSHAL ZHUKOV REITERATES USSR'S READINESS TO\nACT IF TURKEY INVADES SYRIA\n\nComment on:\n\n[REDACTED] Soviet Defense Minister Zhukov declared in a speech in Tirana on 24 October: \""
+    },
+    "later/page_510eb145d0f77867338c": {
+      "canonical_page_id": "page_510eb145d0f77867338c",
+      "date": "1958-06-25",
+      "document_id": "CIA-RDP79T00975A003800050001-4",
+      "end": 180,
+      "page_sha256": "e88aace968e9e1190f7c2041d809eecf1546dd1cfb2eb3a7b4602a3e401d5173",
+      "release": "later",
+      "source_page": 15,
+      "start": 0,
+      "text": "Ethiopia Considering a Soviet Offer of Jet Aircraft\n\nThe USSR, [REDACTED] has offered 34 jet fighters and suitable train-\n[REDACTED] ing facilities for an \"unlimited\" number of pil"
+    },
+    "later/page_53c20355c938d795604a": {
+      "canonical_page_id": "page_53c20355c938d795604a",
+      "date": "1957-10-18",
+      "document_id": "CIA-RDP79T00975A003300400001-0",
+      "end": 180,
+      "page_sha256": "f2571582e12b3581b3a7d8c3b7b75a89aa23791305e32a8ab7b3f09471cf383a",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "2. USSR ANNOUNCES ATOMIC ICEBREAKER WILL BE\nLAUNCHED SOON\n\nLaunching of the Soviet atomic icebreaker Lenin, to be proclaimed as the first atomic-powered surface vessel in the world"
+    },
+    "later/page_5554ca4a5b3a46d6bf1b": {
+      "canonical_page_id": "page_5554ca4a5b3a46d6bf1b",
+      "date": "1958-02-14",
+      "document_id": "CIA-RDP79T00975A003500120001-9",
+      "end": 180,
+      "page_sha256": "a64ebddebe66cadb49781b0c3ad64aa222ea1a983deeb523f5a3a9439e5764e2",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "The Soviet Army newspaper in Moscow states Malinovsky has been attending a GSFG party conference. The GSFG has been undergoing a military reorganization since last spring. [REDACTE"
+    },
+    "later/page_5aaecf043221570cb880": {
+      "canonical_page_id": "page_5aaecf043221570cb880",
+      "date": "1953-11-13",
+      "document_id": "CIA-RDP79T00975A001300530001-8",
+      "end": 180,
+      "page_sha256": "9c80d5fcc8874cb94aaf317c768bd779ac6932d64ede077a8d0078c702456a6f",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "Comment: The expansion of production indicates that the USSR has adopted the Gorki model as the principal offensive weapon in building up a modern submarine fleet. This program end"
+    },
+    "later/page_684e7301027986abe805": {
+      "canonical_page_id": "page_684e7301027986abe805",
+      "date": "1958-02-26",
+      "document_id": "CIA-RDP79T00975A003500220001-8",
+      "end": 180,
+      "page_sha256": "eb52eaf90608fb690f081b8dd625c62a0a4a4d350cf32a33bb62cf3611e4b755",
+      "release": "later",
+      "source_page": 6,
+      "start": 0,
+      "text": "Defense Minister Malinovsky recently criticized senior Soviet officers in East Germany for failing to simulate the use of atomic weapons during maneuvers in which these weapons wer"
+    },
+    "later/page_68d306e2a718d647f984": {
+      "canonical_page_id": "page_68d306e2a718d647f984",
+      "date": "1958-06-25",
+      "document_id": "CIA-RDP79T00975A003800050001-4",
+      "end": 180,
+      "page_sha256": "d40932a0a5b9710423b17c01acc6b114e076e0618d436a019f3f9e723697721e",
+      "release": "later",
+      "source_page": 14,
+      "start": 0,
+      "text": "Indian Delegation to Negotiate With Rumania for Oil Refinery\n\nAn Indian delegation left for Rumania on 21 June to discuss Rumania's offer of last March to help finance and construc"
+    },
+    "later/page_6ce8ada3d76a4045de3e": {
+      "canonical_page_id": "page_6ce8ada3d76a4045de3e",
+      "date": "1957-10-18",
+      "document_id": "CIA-RDP79T00975A003300400001-0",
+      "end": 180,
+      "page_sha256": "adf1c3064a620413948f3d04087e5e30fb0dd3eb64c1d674f68d821e16cdeec6",
+      "release": "later",
+      "source_page": 13,
+      "start": 0,
+      "text": "ANNEX\n\nWatch Report 376, 17 October 1957 of the Intelligence Advisory Committee\n\nConclusions on Indications of Hostilities\n\nOn the basis of findings by its Watch Committee, the Int"
+    },
+    "later/page_7711b7c3dd1bbb6bc715": {
+      "canonical_page_id": "page_7711b7c3dd1bbb6bc715",
+      "date": "1955-06-25",
+      "document_id": "CIA-RDP79T00975A002100110001-4",
+      "end": 180,
+      "page_sha256": "ca949226193a3f523ebc101a7a7daff33d282bc442ff55221bd82a040fb26381",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "Vinogradov in Paris told Ambassador Dillon that the USSR was now prepared to accept free all-German elections subject to strict international control, provided only that foreign tr"
+    },
+    "later/page_7a6d2d1eea14194c17df": {
+      "canonical_page_id": "page_7a6d2d1eea14194c17df",
+      "date": "1959-02-17",
+      "document_id": "CIA-RDP79T00975A004300220001-9",
+      "end": 180,
+      "page_sha256": "8e0b620cee6b20758eab1f7cd40bd8d1902de63592e152fb20dbd8988124e1c7",
+      "release": "later",
+      "source_page": 12,
+      "start": 0,
+      "text": "Cambodian Situation Becoming Tense\n\nThe sharp deterioration in relations between Cambodian Premier Sihanouk and General Dap Chhuon, governor of Siem Reap Province, implies that the"
+    },
+    "later/page_7b433786a2d56a081534": {
+      "canonical_page_id": "page_7b433786a2d56a081534",
+      "date": "1958-02-26",
+      "document_id": "CIA-RDP79T00975A003500220001-8",
+      "end": 180,
+      "page_sha256": "80c7e458ba076c9d03b6e5139786f79a05151a2a8b8fa5c9cca8369a719fe21f",
+      "release": "later",
+      "source_page": 18,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n26 February 1958\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\n*Soviet central committee meeting: The central committee of the Soviet Communist party is meeti"
+    },
+    "later/page_7ec89278322d322156db": {
+      "canonical_page_id": "page_7ec89278322d322156db",
+      "date": "1958-10-23",
+      "document_id": "CIA-RDP79T00975A004000360001-7",
+      "end": 180,
+      "page_sha256": "17f81d0ea02fb36fa98228e7f737267ecd451bc89221b8efff6e5d8f6d358593",
+      "release": "later",
+      "source_page": 13,
+      "start": 0,
+      "text": "UAR Vice President's Visit to Moscow\n\nSince arriving in Moscow from Prague on 19 October, UAR Vice President and Minister of War Marshal Amir has met twice with Khrushchev, as well"
+    },
+    "later/page_84e715f211c5d7d4e786": {
+      "canonical_page_id": "page_84e715f211c5d7d4e786",
+      "date": "1956-06-30",
+      "document_id": "CIA-RDP79T00975A002600280001-2",
+      "end": 180,
+      "page_sha256": "27b2added398271c30fc08b535794873efa671640267ac393f8f3f3f20a2ec50",
+      "release": "later",
+      "source_page": 10,
+      "start": 0,
+      "text": "7. SOVIET OFFICIAL CLAIMS SOLUTION OF NUCLEAR AIRCRAFT PROPULSION\n\nDuring the visit of the American air force delegation to the USSR for Air Force Day ceremonies Khrushchev made th"
+    },
+    "later/page_88041d966e577b511a92": {
+      "canonical_page_id": "page_88041d966e577b511a92",
+      "date": "1957-10-27",
+      "document_id": "CIA-RDP79T00975A003300480001-2",
+      "end": 180,
+      "page_sha256": "bb0475e6cca5d7ccb7bc940c8437efcb085c5b25484a7267e4235fcf5a31851f",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "3. USSR REPORTEDLY SENDS ARABS \"DOCUMENTARY EVIDENCE\" OF TURKISH PLANS\n\nComment on:\n\n[REDACTED] The Soviet embassy in Washington is reportedly sending Arab embassies and UN delegat"
+    },
+    "later/page_8964b817a5f52589faae": {
+      "canonical_page_id": "page_8964b817a5f52589faae",
+      "date": "1958-02-14",
+      "document_id": "CIA-RDP79T00975A003500120001-9",
+      "end": 180,
+      "page_sha256": "aeb571ae457589b061e24299d6e3441a7a5fb036e3972b04eb6d5490d186f417",
+      "release": "later",
+      "source_page": 16,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n14 February 1958\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\n*Soviet missile activity: [REDACTED] activity related to the Tyura Tam ballistic missile test r"
+    },
+    "later/page_90ae6ed4753037ae684b": {
+      "canonical_page_id": "page_90ae6ed4753037ae684b",
+      "date": "1957-08-01",
+      "document_id": "CIA-RDP79T00975A003200270001-6",
+      "end": 180,
+      "page_sha256": "0466847ef4af45e164608b7e052785237a77edff3237de13cf3a34dee3467a51",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. TURKEY MAY EXPAND ECONOMIC RELATIONS WITH USSR\n\nComment on:\n\nThe Turkish official in charge of Soviet affairs in the Foreign Ministry reportedly stated on 27 July that his gover"
+    },
+    "later/page_9221bf452a2aaa2e98a9": {
+      "canonical_page_id": "page_9221bf452a2aaa2e98a9",
+      "date": "1958-02-20",
+      "document_id": "CIA-RDP79T00975A003500170001-4",
+      "end": 180,
+      "page_sha256": "ac998aa541e255e1674281c43f24efac508c3e9be12bc1979f661061a7640c03",
+      "release": "later",
+      "source_page": 11,
+      "start": 0,
+      "text": "III. THE WEST\n\nFrance Preparing Test Center for Nuclear Weapons\n\nFrance will soon begin building an \"interservice test center\" at Zaouiet Reggane in southern Algeria, [REDACTED] Th"
+    },
+    "later/page_9258ef130efa6f9a1a57": {
+      "canonical_page_id": "page_9258ef130efa6f9a1a57",
+      "date": "1957-11-01",
+      "document_id": "CIA-RDP79T00975A003400010001-2",
+      "end": 180,
+      "page_sha256": "051b39ee12c094be61bf05b3330725647e5ee8512ff75eba1c76319981cf47d8",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "2. USSR PREPARING NEW PROPOSALS TO EGYPT\n\nComment on:\n\nThe USSR may make new \"military, political,and economic proposals\" when Egyptian Defense Minister Amir visits Moscow in Novem"
+    },
+    "later/page_931b375fe80f512aa308": {
+      "canonical_page_id": "page_931b375fe80f512aa308",
+      "date": "1956-10-24",
+      "document_id": "CIA-RDP79T00975A002800040001-6",
+      "end": 180,
+      "page_sha256": "be8e3a2ff71d44180615ea590c9a3a944d6cda4e2161f42d9c7095cb2c7a6050",
+      "release": "later",
+      "source_page": 6,
+      "start": 0,
+      "text": "3. POLISH OFFICIAL COMMENTS ON SITUATION IN POLAND\n\n[REDACTED] Julian Hochfield, a prominent member of the Polish parliament currently visiting England, reportedly told [REDACTED] "
+    },
+    "later/page_952a2fe3565edb444af1": {
+      "canonical_page_id": "page_952a2fe3565edb444af1",
+      "date": "1958-02-14",
+      "document_id": "CIA-RDP79T00975A003500120001-9",
+      "end": 180,
+      "page_sha256": "d5105ace768c8b7360adb900db9865f976b8b7e816371fa268ac4625541f1c25",
+      "release": "later",
+      "source_page": 11,
+      "start": 0,
+      "text": "II. ASIA-AFRICA\n\nIraqi-Jordanian Union\n\nApparent agreement has been reached between Iraq and Jordan on a federal union of the two states. In response to a Jordanian demand, Iraq ha"
+    },
+    "later/page_a3264b1c0612942ce459": {
+      "canonical_page_id": "page_a3264b1c0612942ce459",
+      "date": "1958-02-20",
+      "document_id": "CIA-RDP79T00975A003500170001-4",
+      "end": 180,
+      "page_sha256": "e2b46fb553a49d8c711eb0a2a54d0b48b9b717cb4b0325f7c4d7278c1b3c6b6f",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "Nasir's Views on Yemen's Adherence to Egyptian-Syrian Union\n\nYemen's monarchy will be linked with the proposed United Arab Republic (UAR) in a form of confederation, according to E"
+    },
+    "later/page_a61206e3794f83ee2af0": {
+      "canonical_page_id": "page_a61206e3794f83ee2af0",
+      "date": "1957-10-18",
+      "document_id": "CIA-RDP79T00975A003300400001-0",
+      "end": 180,
+      "page_sha256": "7f7d6ed64fd4f012fd7422441aad4ea7373c2ddbdeef9ef75a78aa61d6b18b03",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. FURTHER EVIDENCE OF SOVIET NUCLEAR-POWERED SUBMARINES\n\n[REDACTED] the USSR is building nuclear-powered submarines in that city at \"Plant 564\" (unidentified), [REDACTED] Hundreds"
+    },
+    "later/page_a99ec4d0ce95f9d5d63a": {
+      "canonical_page_id": "page_a99ec4d0ce95f9d5d63a",
+      "date": "1958-06-12",
+      "document_id": "CIA-RDP79T00975A003700370001-0",
+      "end": 180,
+      "page_sha256": "dd56059b2cbc3ec521e0f393904a9020a23462becea30d651599e3da546deed7",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n12 June 1958\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\nSoviet summit tactics: Soviet officials have used the line in private conversations with Westerners"
+    },
+    "later/page_add37a642006d969101e": {
+      "canonical_page_id": "page_add37a642006d969101e",
+      "date": "1956-07-21",
+      "document_id": "CIA-RDP79T00975A002600450001-3",
+      "end": 180,
+      "page_sha256": "551ead76b30c48c2a867defff749ce4b53e646055b4dc14bdfc9df60a49347ee",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. SHAH COMMENTS ON VISIT TO USSR\n\nKhrushchev \"more than once\" told the Shah of Iran during the latter's recent trip to Moscow that the Soviet Union did not want war but that it wa"
+    },
+    "later/page_b16f925a3e96cfcf153b": {
+      "canonical_page_id": "page_b16f925a3e96cfcf153b",
+      "date": "1955-09-11",
+      "document_id": "CIA-RDP79T00975A002200090001-7",
+      "end": 180,
+      "page_sha256": "ca8be89fa784320bf972439489630aa74a94619c224f78d9c1c38e5d9d673d80",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "2. COMMENT ON INCREASED CHINESE COMMUNIST JET FIGHTER STRENGTH NORTH OF THE MATSUS\n\nThe Chinese Communists recently have almost doubled the number of [REDACTED] jet fighters at the"
+    },
+    "later/page_b37d9982e70605693ab4": {
+      "canonical_page_id": "page_b37d9982e70605693ab4",
+      "date": "1958-10-23",
+      "document_id": "CIA-RDP79T00975A004000360001-7",
+      "end": 180,
+      "page_sha256": "100ede5d3e646d38f1d2b31f23849e14ee121fbb6172cb6e738dc0125899163b",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "I. THE COMMUNIST BLOC\n\nUSSR to Suspend Nuclear Testing by 31 October\n\nA Soviet Embassy official in London, who had just returned from Moscow, told a US Embassy officer on 20 Octobe"
+    },
+    "later/page_b82f2e3a763ee4eb7d76": {
+      "canonical_page_id": "page_b82f2e3a763ee4eb7d76",
+      "date": "1957-05-12",
+      "document_id": "CIA-RDP79T00975A003100160001-9",
+      "end": 180,
+      "page_sha256": "70e14d4df51ef9e97b4dd415c5aa44789305cf05ddda131030d022bbbaa4d264",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. GROMYKO AGAIN CALLS FOR NUCLEAR TEST BAN\n\nForeign Minister Gromyko, in a speech to the Supreme Soviet summarizing the now familiar Soviet arguments for banning nuclear weapons t"
+    },
+    "later/page_bc0b57e7b5788ee66022": {
+      "canonical_page_id": "page_bc0b57e7b5788ee66022",
+      "date": "1959-02-17",
+      "document_id": "CIA-RDP79T00975A004300220001-9",
+      "end": 180,
+      "page_sha256": "549b1ce1a6fb7fdf7e2df86a9caaa6e9b5f9454eda7d75f59ac6eac897386381",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n17 February 1959\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\nUSSR: [REDACTED] Soviet Marshal Malinovsky said that the USSR intends to retain a modern conven"
+    },
+    "later/page_c4402a68ecff390f3bca": {
+      "canonical_page_id": "page_c4402a68ecff390f3bca",
+      "date": "1958-02-20",
+      "document_id": "CIA-RDP79T00975A003500170001-4",
+      "end": 180,
+      "page_sha256": "525db463a5a291e3ac2f061de11a3744713d27006b0380b4c6ef39a9246bad2a",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "Egypt-Yemen: Yemen will be linked to the Egyptian-Syrian union in a kind of \"confederation\" rather than as a full-fledged member, according to Nasir, who is trying to sound out the"
+    },
+    "later/page_c56c0d51d06ea2fe87e6": {
+      "canonical_page_id": "page_c56c0d51d06ea2fe87e6",
+      "date": "1958-05-01",
+      "document_id": "CIA-RDP79T00975A003700010001-9",
+      "end": 180,
+      "page_sha256": "50eca5b69d3d18e12bc25fd00e2e7e3c59f5650a250322ad029fc8c45296ae2e",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "Mikoyan he was opposed to the creation of a \"nuclear-free zone\" because it could be overshot by nuclear weapons from both sides and the zone would itself be endangered by fall-out."
+    },
+    "later/page_c60250d245bfc08aa9e2": {
+      "canonical_page_id": "page_c60250d245bfc08aa9e2",
+      "date": "1958-02-26",
+      "document_id": "CIA-RDP79T00975A003500220001-8",
+      "end": 180,
+      "page_sha256": "d4c00b9dcf4706756448d280df5537dbf7e55173885b6183b26d2a585f944d7f",
+      "release": "later",
+      "source_page": 10,
+      "start": 0,
+      "text": "USSR Gives Army Commanders Control of Atomic Weapons\n\nthe USSR has delegated control over atomic artillery to ground army commanders and may at some future date give division comma"
+    },
+    "later/page_c6b0647f850a3f50a022": {
+      "canonical_page_id": "page_c6b0647f850a3f50a022",
+      "date": "1958-04-01",
+      "document_id": "CIA-RDP79T00975A003600270001-2",
+      "end": 180,
+      "page_sha256": "472be7822b6bbc97e24e31ab7cb8188c7c31e0eab3bca6afe44ff883af6a1749",
+      "release": "later",
+      "source_page": 13,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n1 April 1958\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\nBloc arms for North Africa and Middle East: The Soviet bloc has apparently decided to extend major "
+    },
+    "later/page_c798ace21301485a4b33": {
+      "canonical_page_id": "page_c798ace21301485a4b33",
+      "date": "1957-07-25",
+      "document_id": "CIA-RDP79T00975A003200210001-2",
+      "end": 180,
+      "page_sha256": "aad9454cdfadb2d2b6f2608307f8ec418c597a072fee7f75307cb229624760ba",
+      "release": "later",
+      "source_page": 9,
+      "start": 0,
+      "text": "6. PERVUKHIN NAMED CHAIRMAN OF SOVIET STATE COMMITTEE ON FOREIGN ECONOMIC RELATIONS\n\n[[REDACTION_SLOT:001:slot_3d81fead9391edf46c10]]Mikhail G. Pervukhin has been relieved as head "
+    },
+    "later/page_c9bf243af381c7e8d075": {
+      "canonical_page_id": "page_c9bf243af381c7e8d075",
+      "date": "1958-01-13",
+      "document_id": "CIA-RDP79T00975A003500340001-5",
+      "end": 180,
+      "page_sha256": "abf03408db92ff57fb52e36f20c366675ac7aef494e34a7ccbc1d997fde64803",
+      "release": "later",
+      "source_page": 3,
+      "start": 0,
+      "text": "CONTENTS\n\n1. USSR PROPOSES EXTENSION OF NUCLEAR-FREE ZONE IN EUROPE (Confidential) (page 3).\n\n2. POLES PLAN CAMPAIGN FOR RAPACKI PLAN IN WEST GERMANY (Secret Noform) (page 4).\n\n3. "
+    },
+    "later/page_cb42b3e11c83cebe93eb": {
+      "canonical_page_id": "page_cb42b3e11c83cebe93eb",
+      "date": "1957-11-30",
+      "document_id": "CIA-RDP79T00975A003400240001-7",
+      "end": 180,
+      "page_sha256": "91287a5548b79a67174fd2b1c450cd0c2f72e8cfff25f4353359307632063342",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. USSR WILLING TO SUPPLY \"LATEST WEAPONS\"\nTO CHINA\n\n[REDACTED] Indications that the USSR has agreed to supply the Chinese with some of its \"latest weapons\" are contained in Soviet"
+    },
+    "later/page_cd2b14f3228d55c95a6d": {
+      "canonical_page_id": "page_cd2b14f3228d55c95a6d",
+      "date": "1958-01-13",
+      "document_id": "CIA-RDP79T00975A003500340001-5",
+      "end": 180,
+      "page_sha256": "e387891c2726d2bfc54806ea58ef15e47e59239d13b691935496db9d014d003c",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "1. USSR PROPOSES EXTENSION OF NUCLEAR-FREE\nZONE IN EUROPE\n\n[REDACTED] The Soviet Union has stepped up its diplomatic efforts against the NATO agreement in principle to establish gu"
+    },
+    "later/page_cdbff929ade41cca6ed9": {
+      "canonical_page_id": "page_cdbff929ade41cca6ed9",
+      "date": "1957-12-07",
+      "document_id": "CIA-RDP79T00975A003400300001-0",
+      "end": 180,
+      "page_sha256": "ae15d3ae16b29a4092511698a5fc50605065f5ac98d523f15e6cc02bb7f2f26b",
+      "release": "later",
+      "source_page": 10,
+      "start": 0,
+      "text": "7. GUIDED MISSILES POSSIBLY INSTALLED ON\nTWO SOVIET SUBMARINES\n\nComment on:\n[REDACTED] the USSR may have installed a new weapons system, possibly for guided cruise-type missiles, o"
+    },
+    "later/page_d2278daa17bbebb806c2": {
+      "canonical_page_id": "page_d2278daa17bbebb806c2",
+      "date": "1958-10-23",
+      "document_id": "CIA-RDP79T00975A004000360001-7",
+      "end": 180,
+      "page_sha256": "6332a7696428016b68d38494ede227ac1bc7ceb99574f0fdf55a749670c3cab0",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "USSR- Communist China: The USSR on 7 October was forced to halt rail delivery of petroleum products to China for five days because the Chinese rail system had been unable to move t"
+    },
+    "later/page_d4c02c3176a3473c5a7a": {
+      "canonical_page_id": "page_d4c02c3176a3473c5a7a",
+      "date": "1958-01-25",
+      "document_id": "CIA-RDP79T00975A003500450001-3",
+      "end": 180,
+      "page_sha256": "167d34361eb4248f0e6f48d4f14d6151e302ccb3dd52fc4b233e02076724e205",
+      "release": "later",
+      "source_page": 8,
+      "start": 0,
+      "text": "I. THE COMMUNIST BLOC\n\nPossible Sensitive Soviet Naval Construction in White Sea Area\n\nviet White Sea port of Severodvinsk, formerly Molotovsk, which has long been denied to Wester"
+    },
+    "later/page_d71d9494b5e7f0083a9f": {
+      "canonical_page_id": "page_d71d9494b5e7f0083a9f",
+      "date": "1956-06-06",
+      "document_id": "CIA-RDP79T00975A002600070001-5",
+      "end": 180,
+      "page_sha256": "e243abc5082eee3e7f693761082c532332ae79cce1323e03d7d6b890f7ecab5b",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "2. BELGIANS PROPOSE CUT IN ARMY STRENGTH\n\nComment on:\n\nBelgian military leaders told a visiting SHAPE team on 28 May that total army strength would be reduced from about 108,000 at"
+    },
+    "later/page_d7af2d1f8abf219b5f08": {
+      "canonical_page_id": "page_d7af2d1f8abf219b5f08",
+      "date": "1958-05-14",
+      "document_id": "CIA-RDP79T00975A003700120001-7",
+      "end": 180,
+      "page_sha256": "348b3ccac8a498135d58f006e0a8aaad2627a13a7fc8f1b02c70f70423917cc6",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "military in Algiers--the latest manifestation of the army's dissatisfaction with the politicians in Paris--will make Pflimlin's task of reasserting control extremely difficult.\n\nth"
+    },
+    "later/page_d884726ce3791d6d8092": {
+      "canonical_page_id": "page_d884726ce3791d6d8092",
+      "date": "1959-02-17",
+      "document_id": "CIA-RDP79T00975A004300220001-9",
+      "end": 180,
+      "page_sha256": "9258c7233e921e703b3e0089a8a1aa06c4ca585a4cd312f47790cb642074bb00",
+      "release": "later",
+      "source_page": 8,
+      "start": 0,
+      "text": "I. THE COMMUNIST BLOC\n\n[[REDACTION_SLOT:001:slot_53adb17685e6fe219948]]Malinovsky Comments on Soviet Strategy\n\nSoviet Marshal Malinovsky told a visiting [REDACTED] military delegat"
+    },
+    "later/page_d8fe5aeb5fce2f49d86c": {
+      "canonical_page_id": "page_d8fe5aeb5fce2f49d86c",
+      "date": "1958-09-03",
+      "document_id": "CIA-RDP79T00975A003900290001-7",
+      "end": 180,
+      "page_sha256": "5e1ff7363692c363676e14fbe74a07f0ab86cc90c0251d7f51280c5ad2e820ea",
+      "release": "later",
+      "source_page": 10,
+      "start": 0,
+      "text": "USSR Offers Civil Air Development Program to Afghanistan\n\nThe USSR has offered Afghanistan a long-term credit to finance the entire cost of a civil air development program, accordi"
+    },
+    "later/page_e0ea0eb60a01f125b329": {
+      "canonical_page_id": "page_e0ea0eb60a01f125b329",
+      "date": "1959-01-29",
+      "document_id": "CIA-RDP79T00975A004300380001-2",
+      "end": 180,
+      "page_sha256": "534d75d96740b6431fa9df0ce9e2afca9d4de411400e86e6fe5d0607dfdcbb52",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n29 January 1959\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\nUSSR: The Moscow Home Service version of Khrushchev's speech before the party congress includes "
+    },
+    "later/page_e4d63808eab733362849": {
+      "canonical_page_id": "page_e4d63808eab733362849",
+      "date": "1955-09-11",
+      "document_id": "CIA-RDP79T00975A002200090001-7",
+      "end": 180,
+      "page_sha256": "e202a0e90f511a2a95221f24cf021798ad0d34d911e8eb97b7e6ed8165134259",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "4. STASSEN COMMENTS ON SOVIET TACTICS IN DISARMAMENT SUBCOMMITTEE\n\nGovernor Stassen has reported that the most important thing about the disarmament subcommittee meetings in New Yo"
+    },
+    "later/page_e620b04cdd7b34ff40f7": {
+      "canonical_page_id": "page_e620b04cdd7b34ff40f7",
+      "date": "1957-08-28",
+      "document_id": "CIA-RDP79T00975A003200500001-0",
+      "end": 180,
+      "page_sha256": "9b9f41ec3b9229d81a39105311bd05a1a631529b30e1060e253b7897c800db42",
+      "release": "later",
+      "source_page": 5,
+      "start": 0,
+      "text": "2. POLITICAL IMPLICATIONS OF SOVIET\nMISSILE ANNOUNCEMENT\n\nComment on:\n\n[REDACTED] The Soviet announcement on 26 August of a successful test of an intercontinental ballistic missile"
+    },
+    "later/page_e6eb95642b5fa3c7497f": {
+      "canonical_page_id": "page_e6eb95642b5fa3c7497f",
+      "date": "1957-11-01",
+      "document_id": "CIA-RDP79T00975A003400010001-2",
+      "end": 180,
+      "page_sha256": "ec183261364d4a16f32aa2283261b8382a5d2902e5246d655baa52f944f82744",
+      "release": "later",
+      "source_page": 15,
+      "start": 0,
+      "text": "ANNEX\n\nWatch Report 378, 31 October 1957 of the Intelligence Advisory Committee\n\nConclusions on Indications of Hostilities\n\nOn the basis of findings by its Watch Committee, the Int"
+    },
+    "later/page_ebaea81d0bf03a79a7c8": {
+      "canonical_page_id": "page_ebaea81d0bf03a79a7c8",
+      "date": "1957-10-27",
+      "document_id": "CIA-RDP79T00975A003300480001-2",
+      "end": 180,
+      "page_sha256": "b7bff91f2af17e665199521128a6333dd190379f8e1ba92d768316c78fa2e90e",
+      "release": "later",
+      "source_page": 6,
+      "start": 0,
+      "text": "2. POSSIBLE EARLY LAUNCHING OF SOVIET ICBM TEST VEHICLE OR EARTH SATELLITE\n\n[REDACTED] Operational activity of an as yet unde-termined nature resumed on 25 October on the Tyura Tam"
+    },
+    "later/page_efe811240821f4f3bb36": {
+      "canonical_page_id": "page_efe811240821f4f3bb36",
+      "date": "1958-05-01",
+      "document_id": "CIA-RDP79T00975A003700010001-9",
+      "end": 180,
+      "page_sha256": "c094243abc7033c234274082e15b7f2a106c3a40af45cd56b101ecdd171a5c6e",
+      "release": "later",
+      "source_page": 18,
+      "start": 0,
+      "text": "III. THE WEST\n\nAdenauer Comments on Mikoyan Visit\n\nSoviet First Deputy Premier Mikoyan's recent visit to Bonn has strengthened Chancellor Adenauer's view--expressed earlier in Lond"
+    },
+    "later/page_f08c4affc9e7ce067def": {
+      "canonical_page_id": "page_f08c4affc9e7ce067def",
+      "date": "1957-10-26",
+      "document_id": "CIA-RDP79T00975A003300470001-3",
+      "end": 180,
+      "page_sha256": "adb80558930fa3c557f2c10947d9ea15a6dd9cabc45ee2a7acb105da698780d2",
+      "release": "later",
+      "source_page": 16,
+      "start": 0,
+      "text": "13. NORSTAD STATEMENTS IMPROVE OUTLOOK FOR NATO MINISTERIAL MEETING\n\nProspects for a productive NATO ministerial meeting in December were improved by the favorable initial reaction"
+    },
+    "later/page_f0b51cabb8a2ef9197ff": {
+      "canonical_page_id": "page_f0b51cabb8a2ef9197ff",
+      "date": "1958-05-01",
+      "document_id": "CIA-RDP79T00975A003700010001-9",
+      "end": 180,
+      "page_sha256": "4ef2a418b08d591599c42c3c13f47eff9c96363f7bf5a8594ebe02e4e6f5fb14",
+      "release": "later",
+      "source_page": 4,
+      "start": 0,
+      "text": "CENTRAL INTELLIGENCE BULLETIN\n\n1 May 1958\n\nDAILY BRIEF\n\nI. THE COMMUNIST BLOC\n\nSoviet summit tactics: The Soviet response to the American Arctic inspection proposal indicates that "
+    },
+    "later/page_f22f907818182700f518": {
+      "canonical_page_id": "page_f22f907818182700f518",
+      "date": "1956-07-21",
+      "document_id": "CIA-RDP79T00975A002600450001-3",
+      "end": 180,
+      "page_sha256": "0c353804a915b0680882024e53d6f4b6599a070ac74da89a4d4e7c8e7395e1ea",
+      "release": "later",
+      "source_page": 10,
+      "start": 0,
+      "text": "7. BRAZILIAN OFFICIAL WARNS OF POLITICAL AND ECONOMIC DETERIORATION\n\nSecretary General Souza Gomes of the Brazilian Foreign Ministry told American charge Trimble on 19 July that if"
+    },
+    "later/page_f3edbb243986e8eaa02c": {
+      "canonical_page_id": "page_f3edbb243986e8eaa02c",
+      "date": "1958-05-22",
+      "document_id": "CIA-RDP79T00975A003700190001-0",
+      "end": 180,
+      "page_sha256": "8b1c3d95d70b09998616780a1fa750b6b1abc0736891e19870ab87d486050578",
+      "release": "later",
+      "source_page": 20,
+      "start": 0,
+      "text": "West German Defense Minister Favors European Atomic Weapons Production\n\nWest German Defense Minister Strauss recently told several German journalists that he was \"forced\" by US off"
+    },
+    "later/page_f416836bd069e10117b8": {
+      "canonical_page_id": "page_f416836bd069e10117b8",
+      "date": "1958-04-01",
+      "document_id": "CIA-RDP79T00975A003600270001-2",
+      "end": 180,
+      "page_sha256": "994d059e8f0af80f3031835204161c8c3324e814e6adfe851d1087263101fc93",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "Gromyko Announces Unilateral Soviet Suspension of Nuclear Tests\n\nSoviet Foreign Minister Gromyko's announcement that the USSR will \"unilaterally cease conducting tests of all forms"
+    },
+    "later/page_fbe81b7ee3c5a88c37a2": {
+      "canonical_page_id": "page_fbe81b7ee3c5a88c37a2",
+      "date": "1958-04-25",
+      "document_id": "CIA-RDP79T00975A003600480001-9",
+      "end": 180,
+      "page_sha256": "8429eae7658b4d9f4e2346bc0480d389d6c981a249056dfcf9069d37d7bdfc86",
+      "release": "later",
+      "source_page": 7,
+      "start": 0,
+      "text": "I. THE COMMUNIST BLOC\n\nNew Soviet Submarines Apparently Being Equipped With Antisonar Coating\n\nannual requirement for 120 tons of \"coating rubber\" for submarines of two new project"
+    }
+  },
+  "version": "withheld-nationality-saved-projection/2"
+}

@@ -354,18 +354,36 @@
     if (p.corpus !== status.corpus || p.graph_id !== status.graph_run_id || p.hierarchy_id !== status.hierarchy_run_id)
       fail("INVALID_PARAMETER", "Opaque slots require the exact saved corpus graph and hierarchy");
     const offset=Number(p.offset),limit=Number(p.limit);
-    if (!Number.isSafeInteger(offset)||offset<0||!Number.isSafeInteger(limit)||limit<1||limit>64||p.q.length>200||!["0","1"].includes(p.scan))
+    if (!Number.isSafeInteger(offset)||offset<0||!Number.isSafeInteger(limit)||limit<1||limit>64||typeof p.q!=="string"||p.q.length>200||!["0","1"].includes(p.scan))
       fail("INVALID_PARAMETER", "Opaque-slot pagination/search bounds exceeded");
     if (Object.prototype.hasOwnProperty.call(p,"slot_id")) {
       const slot=catalog.slots.find(s=>s.id===p.slot_id);
       if (!slot) fail("PUBLIC_PACKET_NOT_EXPORTED", "Unknown opaque slot; no identity substitute");
       return {...status,slot};
     }
+    let candidates=catalog.slots;
+    if(Object.prototype.hasOwnProperty.call(p,"anchor_id")){
+      if(!Object.prototype.hasOwnProperty.call(catalog,"_visibleAnchorSlots")){
+        const reverse=new Map();
+        for(const slot of catalog.slots)for(const anchor of slot.anchors){
+          if(!reverse.has(anchor.id))reverse.set(anchor.id,[]);
+          reverse.get(anchor.id).push(slot);
+        }
+        Object.defineProperty(catalog,"_visibleAnchorSlots",{value:reverse});
+      }
+      candidates=catalog._visibleAnchorSlots.get(p.anchor_id)||[];
+    }
     const terms=slotNormalized(p.q).split(" ").filter(Boolean);
-    const matches=catalog.slots.filter(s=>{
-      const surface=slotNormalized([s.id,s.slot_id||"","opaque slot",s.document_id,s.date,s.context_preview].join(" ")).split(" ");
+    const matches=candidates.filter(s=>{
+      const context=slotNormalized(s.context_preview||"").split(" ");
+      const label=typeof s.label==="string"?s.label:"";
+      const labelTerms=slotNormalized(label).split(" ").filter(Boolean);
+      // A display label is not evidence. Only source-visible words may expand search.
+      const visibleLabel=s.context_policy==="source-visible-slot-context/1"&&
+        /^Redacted Slot(?: \/ (?:near )?.+)?$/.test(label)&&
+        labelTerms.every(t=>["redacted","slot","near"].includes(t)||context.includes(t))?label:"";
+      const surface=slotNormalized([s.id,s.slot_id||"","opaque slot redacted slot",s.document_id,s.date,s.context_preview,visibleLabel].join(" ")).split(" ");
       if (!terms.every(t=>surface.includes(t))) return false;
-      if (Object.prototype.hasOwnProperty.call(p,"anchor_id")&&!s.anchors.some(a=>a.id===p.anchor_id)) return false;
       return ["domain_id","theme_id","community_id"].every(k=>!Object.prototype.hasOwnProperty.call(p,k)||s[k]===p[k]);
     });
     return {...status,slots:matches.slice(offset,offset+limit),offset,limit,matched_count:matches.length,next_offset:offset+limit<matches.length?offset+limit:null};
@@ -374,7 +392,14 @@
     const p=Object.fromEntries(new URL(key,base).searchParams),path="/data/slots/"+p.corpus+".json";
     if (!slotCatalogs.has(path)) slotCatalogs.set(path,(async()=>{
       const packet=await verified(new URL(path.slice(1),base));
-      return JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(packet.decoded));
+      const catalog=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(packet.decoded));
+      const status=catalog.status,earlier=p.corpus==="cib";
+      if(status.version!=="current-opaque-source-slots/2"||status.context_policy!=="source-visible-slot-context/1"||
+        status.corpus!==p.corpus||status.source_view!==(earlier?"current_earlier":"current_redaction")||
+        status.release!==(earlier?"earlier":"confidential")||status.semantic_graph_modified!==false||status.hidden_values_read!==false||
+        status.coverage.complete!==true||!Array.isArray(catalog.slots)||status.coverage.total_slots!==catalog.slots.length)
+        fail("INTEGRITY_FAILURE","Opaque catalog is not the complete source-only context snapshot");
+      return catalog;
     })());
     let catalog;
     try { catalog=await slotCatalogs.get(path); } catch(error) { slotCatalogs.delete(path);throw error; }
@@ -387,14 +412,33 @@
         return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(packet.decoded));
       })());
       const record=(await records.get(thin.record_path)).find(s=>s.id===thin.id);
-      if(!record)fail('INTEGRITY_FAILURE','Exact opaque record is absent from its declared shard');
+      if(!record||record.context_policy!==catalog.status.context_policy||record.type!=="RedactionSlot"||
+        record.semantic!==false||record.eligible_evidence!==false||record.visibility!=="redacted_placeholder"||
+        ["label","context_preview","domain_id","theme_id","community_id"].some(k=>record[k]!==thin[k])||
+        JSON.stringify(record.anchors.map(a=>a.id))!==JSON.stringify(thin.anchors.map(a=>a.id))||
+        record.context_links.length!==record.anchors.length||record.context_links.some((e,i)=>
+          e.source!==record.id||e.target!==record.anchors[i].id||e.semantic!==false||e.eligible_evidence!==false||
+          e.slot_navigation!==true||e.weight!==0||e.layout_weight!==0))
+        fail('INTEGRITY_FAILURE','Exact opaque record differs from its source-only catalog');
       return record;
     }
     if(value.slot){
       value.slot=await hydrate(value.slot);
       const page=await verified(new URL(catalog.details[value.slot.id].slice(1),base),signal);
       value.page=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(page.decoded));
-      if(value.page.text_sha256!==value.slot.page_provenance.text_sha256)fail("INTEGRITY_FAILURE","Opaque page differs from its exact slot provenance");
+      const slot=value.slot,source=value.page,text=Array.from(source.text);
+      if(source.text_sha256!==slot.page_provenance.text_sha256||source.release!==catalog.status.release||
+        ["document_id","canonical_page_id","source_page"].some(k=>source[k]!==slot[k])||
+        text.slice(slot.marker_start,slot.marker_end).join("")!=="[REDACTED]")
+        fail("INTEGRITY_FAILURE","Opaque page differs from its exact slot provenance");
+      await matches(new TextEncoder().encode(source.text),slot.page_provenance.text_sha256,"Opaque visible page text");
+      for(const proof of [...slot.anchors.map(a=>a.visible_proof),slot.label_context].filter(Boolean)){
+        if(!Number.isSafeInteger(proof.start)||!Number.isSafeInteger(proof.end)||proof.start<0||proof.end<=proof.start||
+          proof.end>text.length||text.slice(proof.start,proof.end).join("")!==proof.text||
+          ["document_id","canonical_page_id","release"].some(k=>proof[k]!==source[k])||
+          proof.semantic!==false||proof.identity_certified!==false)
+          fail("INTEGRITY_FAILURE","Opaque visible-context proof differs from its saved page");
+      }
     }else value.slots=await Promise.all(value.slots.map(hydrate));
     const decoded=new TextEncoder().encode(JSON.stringify(value));
     return {key,entry:{mime:"application/json"},wire:decoded,decoded,gzip:false,httpDecoded:false};
@@ -402,7 +446,7 @@
 
   async function verified(input, signal) {
     const key = canonicalKey(input), index = await ready;
-    if (key.startsWith("/api/current/slots-v1?") && !own(index.entries,key)) return verifiedSlots(key, signal);
+    if (key.startsWith("/api/current/slots-v1?")) return verifiedSlots(key, signal);
     if (!own(index.entries, key)) fail("PUBLIC_PACKET_NOT_EXPORTED", "This saved packet is not in the public export; no other method or archive is substituted");
     const entry = index.entries[key];
     if (entry.encoding === "fragment-dag") {

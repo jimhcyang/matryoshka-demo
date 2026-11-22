@@ -15,7 +15,10 @@ def sha(raw):
 
 
 class Reader:
-    def __init__(self, site, database):
+    def __init__(self, site, database, *, minimum_free_bytes=8 * 1024**3):
+        if type(minimum_free_bytes) is not int or minimum_free_bytes < 3 * 1024**3:
+            raise ValueError('Verification must retain at least 3 GiB free')
+        self.minimum_free_bytes = minimum_free_bytes
         self.site, self.database = Path(site), Path(database)
         self.db = sqlite3.connect(self.database)
         self.db.execute('PRAGMA journal_mode=OFF')
@@ -39,7 +42,7 @@ class Reader:
             assert manifest.get('literal_encoding') in (None, 'ascii', 'base64')
             previous = 0
             for chunk in manifest['chunks']:
-                assert shutil.disk_usage(self.database.parent).free >= 8 * 1024**3, '8 GiB verification disk guard'
+                assert shutil.disk_usage(self.database.parent).free >= self.minimum_free_bytes, 'Verification disk reserve exhausted'
                 wire = self.path(str(Path(key).parent / chunk['path'])).read_bytes()
                 assert sha(wire) == chunk['wire_sha256'] and len(wire) == chunk['wire_bytes']
                 decoded = gzip.decompress(wire)

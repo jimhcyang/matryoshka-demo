@@ -1,48 +1,21 @@
 <!doctype html>
-<html lang="en">
-<head>
-<script src="runtime/public-runtime.js" data-dataset-mirror="same-repository" data-index="data/api-index.json" data-index-sha256="55010cf870bd4ce46cae48011fb0a39aa94a6108b9172167947ac33c17be4b59"></script>
-<link rel="stylesheet" href="public-transport.css">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="study-data-sha256" content="9fb9a0af722771791c944d6e5d7a518dfca5c863b1cde29f7adbf9533d32102b">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
-  <meta name="description" content="Two still-withheld nationality slots, three explicit evidence policies, unknown gold.">
-  <title>Withheld Nationality Study | Matryoshka</title>
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="app-navigation.css">
-  <link rel="stylesheet" href="swedish-study.css">
-  <script type="module" src="swedish-study.js"></script>
-</head>
-<body>
-  <header id="app-navigation" data-view="workbench"></header>
-  <script src="app-navigation.js"></script>
-  <main>
-    <p class="breadcrumb"><a href="workbench-v6.html">Analyst workbench</a><span>/</span>Separate saved study</p>
-    <header class="study-intro">
-      <div><p class="eyebrow">Withheld nationality / 17 February 1959</p><h1>Two hidden words.<br><em>Three evidence windows.</em></h1></div>
-      <aside class="gold-box" aria-label="Ground truth status"><span>Gold status</span><strong>UNKNOWN</strong><p>Both original slots remain withheld. No predicted form is a verified recovery.</p></aside>
-    </header>
-    <p class="intro-copy">Saved results from later, still-masked text. This retrospective comparison is not a blind recovery.</p>
-    <section class="control-bar" aria-label="Select the saved case and evidence policy">
-      <fieldset class="slot-select"><legend>Nationality slot</legend><div id="slot-controls"></div></fieldset>
-      <label>Saved comparison<select id="profile-select"><option value="bridge_v2">Matched study / 8 pages</option><option value="broad_v1">Broader study / 40 documents, 80 pages</option><option value="native_boundary_v2">Quotation-boundary study / prior only</option></select></label>
-      <label>Evidence window<select id="policy-select"><option value="">Choose S0, S1 or S2</option><option value="S0">S0 / Earlier strict</option><option value="S1">S1 / Later release, prior only</option><option value="S2">S2 / Later prior + exact origin</option></select></label>
-    </section>
-    <p id="profile-note" class="profile-note"></p>
-    <section class="query-panel" aria-labelledby="query-title"><div class="section-top"><h2 id="query-title">The masked question</h2><span id="slot-position"></span></div><div id="query-text" class="source-query"></div><details class="source-binding"><summary>Source details</summary><p id="origin-binding" class="source-meta"></p><p>Display labels replace opaque markers only. The exact stored question and source proof are unchanged.</p></details></section>
-    <aside class="exception-banner"><span class="exception-symbol" aria-hidden="true">S2</span><div><strong>Exact-origin exception, not independent earlier evidence</strong><p>Only the later release of <code>CIA-RDP79T00975A004300220001-9</code> on <b>1959-02-17</b> is added. Unrelated same-day reports and every future report stay excluded. An origin with a different date is also rejected.</p></div></aside>
-    <section aria-labelledby="comparison-title"><div class="section-top"><h2 id="comparison-title">Compare the saved windows</h2><span>No rank changes. No hidden-word verification.</span></div><div id="policy-cards" class="policy-grid" aria-live="polite"></div></section>
-    <section class="boundary-grid">
-      <article><p class="eyebrow">An excluded future report</p><h2>A heading is not a document date.</h2><p>The JAEIC/Popov report is dated <strong>1959-02-19</strong>, even though its statement heading says 17 February. It is excluded from S0, S1 and S2.</p><p class="boundary-note">A source-group mention does not certify which delegation either hidden slot describes.</p></article>
-      <article><p class="eyebrow">Separate corpus exploration</p><h2>Explore the graph, not a guessed identity.</h2><p>The full map is an independent retrospective view, not this study's filtered evidence. A source-group mention does not establish either hidden delegation's identity.</p><a href="graph-full-v6.html?corpus=cib">Open the complete CIB map</a></article>
-    </section>
-    <details class="deferred-panel"><summary>Inspect the original still-masked source</summary><p>Full origin text can expose contextual clues. It is post-attempt display, not ordinary S0/S1 evidence; S2 admits only its explicit origin/date exception.</p><label class="ack"><input id="origin-ack" type="checkbox">I acknowledge the original-source exposure.</label><div class="origin-actions"><select id="origin-release" aria-label="Original source release"><option value="earlier">Earlier release</option><option value="later">Later release</option></select><button id="origin-open" disabled>Open exact source</button></div></details>
-    <details class="deferred-panel"><summary>Archived full-later / future-inclusive controls</summary><p>Historical L1/L2/L3 comparisons are preserved separately. L1/L2 admit future documents and are <strong>not</strong> evidence for the default policies. These are optional retrospective controls, not a prediction result.</p><label class="ack"><input id="history-ack" type="checkbox">I understand the future-inclusive control is not admissible evidence.</label><button id="history-open" disabled>Load archived controls</button><div id="history-content"></div></details>
-    <details class="deferred-panel"><summary>Study method and provenance</summary><p>This page displays saved results only; it makes no model calls and runs no new native inference. Candidate profiles and ranks remain separate and unchanged. No nationality seed or answer bonus was added.</p><p>Both exact hidden words and delegation identities remain unknown. The original question, source quotations and hashes are retained unchanged. Display labels reveal neither an answer nor a hidden word's length.</p><p>Source-opening controls are presentation choices, not authentication.</p><p id="data-pin" class="source-hash"></p></details>
-    <p id="study-status" class="study-status" role="status">Loading saved comparison...</p>
-  </main>
-  <footer><span>Source wording, grammatical form and historical identity remain separate.</span><a href="index.html">Corpus home</a></footer>
-  <dialog id="source-dialog"><header><div><p class="eyebrow">Exact original text / not new evidence</p><h2 id="dialog-title">Source quotation</h2></div><button id="dialog-close" aria-label="Close source">Close</button></header><div id="dialog-body"></div></dialog>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="study-data-sha256" content="2d239fbce042a2a71323c11fd48bf9f3451660bd82cc40c847d28fa3a65abbae"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
+<title>Nationality Study | Matryoshka</title><link rel="icon" href="data:,"><link rel="stylesheet" href="app-navigation.css"><link rel="stylesheet" href="swedish-study.css"><script type="module" src="swedish-study.js"></script></head>
+<body><header id="app-navigation" data-view="workbench"></header><script src="app-navigation.js"></script><main>
+<p class="breadcrumb"><a href="workbench-v6.html">Analyst workbench</a><span>/</span>Nationality study</p>
+<header class="study-intro"><div><p class="eyebrow">17 February 1959 / two queries</p><h1>One report.<br><em>Two withheld nationalities.</em></h1></div><p class="study-badge">Executed study<br><strong>Reference unknown</strong></p></header>
+<p class="intro-copy">The same source scope, planning method and bounded engine for both queries. Nominations are not recovered hidden words.</p>
+<div id="slot-controls" class="query-tabs" role="tablist" aria-label="Nationality query"></div>
+<div id="query-workspace" role="tabpanel" tabindex="0">
+<nav class="stage-nav" aria-label="Study stages"><a href="#input">Input</a><a href="#facts">Facts</a><a href="#readings">Readings</a><a href="#sources">Sources</a><a href="#results">Results</a></nav>
+<section id="input" class="query-panel"><div class="section-top"><h2>Input</h2><span id="slot-position"></span></div><div id="query-text" class="source-query"></div></section>
+<section id="facts" class="source-panel"><h2>Facts</h2><p class="scope-copy">Query-only planner propositions, not established source facts.</p><ol id="fact-list"></ol></section>
+<section id="readings" class="source-panel"><h2>Readings</h2><label>Phrase type <select id="reading-select"></select></label><p id="reading-note" class="scope-copy"></p></section>
+<section id="sources" class="source-panel"><div class="section-top"><h2>Sources for selected candidates</h2><span id="source-count"></span></div><p class="scope-copy">A selection of result quotations; use View sources on any result to see all its recorded sources. This is not a list of every page checked.</p><div id="source-list"></div></section>
+<section id="results"><div class="section-top"><h2>Results</h2><span>Engine nominations / reference unknown</span></div><ol id="result-list" class="candidate-list" aria-live="polite"></ol></section></div>
+<details class="method-details"><summary>Method, source scope and execution provenance</summary><p id="scope-rule"></p><p id="method-delta"></p><p>Both queries used 40-document retrieval, an 80-page retrieval budget, 20 inspected constructor pages and 24 checked drafts per reading. Identical normalized surfaces are grouped before the five-result cap. Their separate source decisions are preserved; a union of quotations is not pooled proof.</p><p>These are versioned scoped shared-kernel executions, not unchanged canonical native /3 runs. Gold and delegation identities remain unknown. No named-country bonus or special nationality conversion was added.</p><p id="run-pin" class="source-hash"></p><h3>Recorded reading and status metadata</h3><pre id="reading-metadata" class="source-hash"></pre></details>
+<details id="archive" class="deferred-panel"><summary>Archived lexical study, separate from this execution</summary><p>The older eight-page lexical conversion is an archived control, not the result above.</p><div id="archive-results"></div></details>
+<p id="study-status" class="study-status" role="status">Loading pinned executed study...</p></main>
+<footer><span>Source wording, grammatical fit and historical identity remain separate.</span><a href="workbench-v6.html">Analyst workbench</a></footer>
+<dialog id="source-dialog" aria-labelledby="dialog-title"><header><h2 id="dialog-title">Executed source quotations</h2><button id="dialog-close" type="button">Close</button></header><div id="dialog-body"></div></dialog></body></html>

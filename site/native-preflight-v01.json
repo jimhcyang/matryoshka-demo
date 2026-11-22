@@ -1,0 +1,51 @@
+{
+  "api_calls": 0,
+  "archived_native_packets_scanned": 278,
+  "explanation": "The current native CIB index contains earlier text only. Native retrieval and SourcePolicy both enforce strictly prior dates and whole-origin exclusion. S2 requires later text plus its exact origin/date. No policy/context injection seam exists in Session.execute; changing the public date or origin, monkeypatching guards, or presenting this lexical adapter as native would misstate execution.",
+  "guard_code_refs": [
+    {
+      "path": "matryoshka_next/facts.py",
+      "sha256": "661e19fe8c96dcc8de1306175ab1ed5b3d21847f2299e4a066d42f87ad280280"
+    },
+    {
+      "path": "matryoshka_demo/corpus.py",
+      "sha256": "96c4ec5cbc86c22549ccc9f06925d2282475d8e075a74947d39625ab0b4123c1"
+    },
+    {
+      "path": "matryoshka_current/index.py",
+      "sha256": "afc89684c65a0cc0f40ca8d14ebb7b3a5cbbaa4af2ac5864e964e831df9b415b"
+    },
+    {
+      "path": "matryoshka_narrative/retrieval.py",
+      "sha256": "c56332027bca7aae0c593c7556ce6e95c5e61d00e03d3e16a446de3a244f2309"
+    }
+  ],
+  "matching_native_packets": [],
+  "native_context_opened": false,
+  "native_execution": false,
+  "native_index_ref": {
+    "corpus": "cib",
+    "native_index_ref": {
+      "index_id": "current_index_0c8587c8fa8e78ddad1c24cc",
+      "manifest": {
+        "path": "src-demo-day/experiments/current_refresh/resource_handoff/indexes/current_index_0c8587c8fa8e78ddad1c24cc/manifest.json",
+        "sha256": "13134b11baf1ed798a0db9b9e628d0cb7ced4dfc2f899ab9517115f556c05767"
+      },
+      "path": "src-demo-day/experiments/current_refresh/resource_handoff/indexes/current_index_0c8587c8fa8e78ddad1c24cc/graph.sqlite3",
+      "registry_digest": "db09a0bd26047428e9350b578c71967096e8bb531919e3ca2c2816e5e5f976dc",
+      "resource_id": "cib_resource_623c60e1e128944377f0",
+      "sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980"
+    },
+    "path": "experiments/current_refresh/resource_handoff/indexes/current_index_0c8587c8fa8e78ddad1c24cc/graph.sqlite3",
+    "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+    "resource_id": "cib_resource_623c60e1e128944377f0",
+    "sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+    "source_binding_sha256": "d8485f08b4cc3461c28d02572eff355e3316dec16e94e03d8e97d8d77d06f238",
+    "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+  },
+  "native_index_visibility_counts": {
+    "earlier": 22579
+  },
+  "native_origin_text_sha256": "7b8f7fdd22560705d594206f9ad991d9e0a3e5cf444224965958b4726a32ff6a",
+  "status": "NATIVE_S2_UNAVAILABLE_WITHOUT_POLICY_AND_CONTEXT_CHANGE"
+}

@@ -1,0 +1,56 @@
+{
+  "case_id": "withheld_delegation_f25dc327b5927818",
+  "completed_work": "Exact saved query, source policy, rank, quote and nomination-edge replay",
+  "gold": null,
+  "native_completion_claimed": false,
+  "native_execution": false,
+  "native_facts_recorded": false,
+  "native_readings_recorded": false,
+  "native_run_ref": null,
+  "preflight_ref": {
+    "path": "native-preflight-v01.json",
+    "sha256": "19fc164db2f22515b9cd4046361766b9773501a03b705bc33b51ee1e9318247b"
+  },
+  "projection_digest": "9d34913a1af5bebd656a523df2cbf6c12f11e958fbe1a5a08869065f7e7f5ea1",
+  "projection_ref": {
+    "path": "swedish-second-v01.json",
+    "sha256": "35006142bdaa0d2e51ba5d9936bee22d5e3c5b5fd83483fe8add3f79ec905786"
+  },
+  "saved_records": [
+    {
+      "policy_id": "S0",
+      "profile_id": "bridge_v2",
+      "saved_record_sha256": "cb58d653f864d0f94ee09007523d7cc7a3fe0ba8d5721608cba8f7001a381e39"
+    },
+    {
+      "policy_id": "S1",
+      "profile_id": "bridge_v2",
+      "saved_record_sha256": "220edb0607a4832bb0a62a3862c25bc35be7d4892205d66540e22e63befd056a"
+    },
+    {
+      "policy_id": "S2",
+      "profile_id": "bridge_v2",
+      "saved_record_sha256": "04d9255337d575b863deab7b3d812c844cf6e68cbd0f8ac131903762a168e5d7"
+    },
+    {
+      "policy_id": "S1",
+      "profile_id": "broad_v1",
+      "saved_record_sha256": "a443f0bbd136d3b28b2f7740485732dfc2fb62934d738f7a864ba4ec7deec513"
+    },
+    {
+      "policy_id": "S2",
+      "profile_id": "broad_v1",
+      "saved_record_sha256": "77ab59bc9a23694cbb56fb89dfd6b9c4712a86eb839ff7e25c74231afb77dfd9"
+    },
+    {
+      "policy_id": "S1",
+      "profile_id": "native_boundary_v2",
+      "saved_record_sha256": "8446bcff496f9dadb4a23ba84a9737fe4c743e8336ff1b307eb75ba08725d874"
+    }
+  ],
+  "source_bundle_ref": {
+    "path": "src-demo-day/experiments/full_resume_20261120/swedish/artifacts_v02/study_bundle.json.gz",
+    "sha256": "9bb317650688b37ecb2340ff5bd5533ba69b1adf7d9c6e25845b32a1a2610715"
+  },
+  "version": "swedish-saved-display-verification-completion/1"
+}

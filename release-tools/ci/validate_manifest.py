@@ -130,7 +130,7 @@ class Dependencies(HTMLParser):
             at(self.site, str((self.path.parent / urlsplit(target).path).relative_to(self.site)))
 
 
-def validate(site, scratch, *, full=True, repository=None):
+def validate(site, scratch, *, full=True, repository=None, minimum_free_bytes=8 * 1024**3):
     manifest = load((site / 'release-manifest.json').read_bytes())
     assert manifest['version'] == 'source-bound-static-release/1' and manifest['base_path'] == '/matryoshka-demo/'
     expected = manifest['files']
@@ -166,7 +166,7 @@ def validate(site, scratch, *, full=True, repository=None):
     scratch.mkdir(parents=True, exist_ok=True)
     roots, native_rows = set(), []
     with tempfile.TemporaryDirectory(dir=scratch) as temporary:
-        reader = Reader(site, Path(temporary) / 'verification.sqlite3')
+        reader = Reader(site, Path(temporary) / 'verification.sqlite3', minimum_free_bytes=minimum_free_bytes)
         try:
             for key, entry in entries.items():
                 assert key.startswith(('/api/', '/graph-assets-v4/', '/data/', '/swedish-study-'))
@@ -211,7 +211,7 @@ def validate(site, scratch, *, full=True, repository=None):
         stored_bytes=sum(r['bytes'] for r in expected), largest_file=max(r['bytes'] for r in expected),
         logical_roots=len(roots), all_logical_roots_reconstructed=full, native=native_rows,
         source_report_ref=manifest['source_report_ref'], manifest_sha256=sha((site / 'release-manifest.json').read_bytes()),
-        same_repository_datasets=datasets,
+        same_repository_datasets=datasets, minimum_free_bytes=minimum_free_bytes,
         publish_authorized=False, privacy_or_research_approval_created=False)
 
 
@@ -245,8 +245,11 @@ def main():
     parser.add_argument('--approval-ref', type=Path)
     parser.add_argument('--inventory-only', action='store_true')
     parser.add_argument('--repository-root', type=Path, help='Installed repository root containing datasets/; default site/..')
+    parser.add_argument('--minimum-free-gib', type=int, choices=(3, 8), default=8,
+                        help='Disk reserve; default 8 GiB, explicit bounded-workstation option 3 GiB')
     args = parser.parse_args()
-    result = validate(args.site.resolve(), args.scratch, full=not args.inventory_only, repository=args.repository_root)
+    result = validate(args.site.resolve(), args.scratch, full=not args.inventory_only, repository=args.repository_root,
+                      minimum_free_bytes=args.minimum_free_gib * 1024**3)
     if args.mode == 'publish':
         result['publish_authorized'] = authorize(args.site.resolve(), args.approval_ref)
     args.output.write_text(json.dumps(result, indent=2) + '\n')

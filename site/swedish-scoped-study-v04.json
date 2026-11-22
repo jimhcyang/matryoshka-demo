@@ -1,0 +1,63 @@
+{
+  "budget": {
+    "cumulative_total_usd": 12.831014099999997,
+    "new_spend_usd": 0,
+    "total_new_study_spend_usd": 0.109118
+  },
+  "canonical_native_run": false,
+  "cases": [
+    {
+      "path": "swedish-scoped-first-v03.json",
+      "sha256": "bbd8769c9fe1f773e4cb04acd27ced561ac486403baebda1a2e179058d93b0f0"
+    },
+    {
+      "path": "swedish-scoped-second-v03.json",
+      "sha256": "5181b8ec3532fb0cbd9834d55c52397cff09be186f6a1ce3a6d00c4661837717"
+    }
+  ],
+  "configuration": {
+    "construction_pages": 20,
+    "discovery_profile": null,
+    "drafts_per_reading": 24,
+    "retrieval_documents": 40,
+    "retrieval_pages": 80,
+    "selection_profile": null,
+    "top_k": 5
+  },
+  "coordinate_audit_summary": {
+    "counts": {
+      "node:both_held": 65621,
+      "node:old_accepted_new_held": 20030,
+      "node:old_held_new_accepted": 1662,
+      "node:same_occurrence": 279057,
+      "relation:both_held": 59187,
+      "relation:old_accepted_new_held": 16112,
+      "relation:old_held_new_accepted": 865,
+      "relation:same_occurrence": 245226
+    },
+    "held_reasons": {
+      "coordinate_held_earlier_later_page_not_identical": 160916,
+      "coordinate_held_missing_job_or_page": 34
+    },
+    "ordered_row_resolution_sha256": "7c2b312ce6b9f1fd3324e90353b12a5719a00530c199dfe4b2996ad10b332aef"
+  },
+  "coordinate_policy_version": "declared-producer-job-local-coordinates/3",
+  "default_policy": "S2",
+  "executed_snapshot_identity": "20abb18b4186aa3f5ea04eeea05e98752ffeb6b1ffc55c3e46f94022811f6973",
+  "execution_performed": true,
+  "gold": null,
+  "label": "Scoped shared-kernel execution",
+  "method_delta": "Explicit S2 source view. Producer offsets are job-local: complete declared windows, document/date/record identity and exact quote replay are required. Earlier coordinates require pinned full-page earlier/later identity. No global-match fallback or guessed alignment. Page-coverage and unique-surface fixes retained; canonical /3 unchanged.",
+  "public_completions": [
+    {
+      "path": "swedish-scoped-first-completion-v03.json",
+      "sha256": "aec8fbe816019742bae8f69560f49dd98dcee585a6bc82c9176cb7da77d11bb2"
+    },
+    {
+      "path": "swedish-scoped-second-completion-v03.json",
+      "sha256": "43ed6a035d52270c6f97bebbc5d866bf9a493169af72452f6677bc66fe75cda7"
+    }
+  ],
+  "scope_rule": "Later-release documents strictly before 1959-02-17, excluding the origin, plus only the exact origin CIA-RDP79T00975A004300220001-9 on 1959-02-17. Permissions/quarantine retained; unrelated same-day and future reports excluded.",
+  "version": "swedish-scoped-shared-kernel-ui/3"
+}

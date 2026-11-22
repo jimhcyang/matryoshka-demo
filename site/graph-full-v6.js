@@ -27,7 +27,12 @@ function mapDisplayLabel(node){
   if(short(label))return readable(label);
   const sentence=typeof Intl.Segmenter==='function'?[...new Intl.Segmenter('en',{granularity:'sentence'}).segment(label)][0]?.segment.trim():'';
   if(['Claim','Event'].includes(node.type)&&sentence&&sentence.split(/\s+/).length>=4&&/[.!?]$/.test(sentence)&&short(sentence))return readable(sentence);
-  return node.overlay_slot?'Opaque slot':({Entity:'Source entity',Claim:'Source claim',Event:'Source event',Document:'Source document',Segment:'Source passage',RelationEvidence:'Source relation',EvidenceGroup:'Evidence group'}[node.type]||'Graph object');
+  if(['Claim','Event'].includes(node.type)&&label){
+    const words=label.split(/\s+/).slice(0,11);
+    while(words.length>4&&/^(?:a|an|the|to|of|in|on|at|for|and|or|with|by)$/i.test(words.at(-1)))words.pop();
+    return readable(words.join(' ').replace(/[,;:]$/,''));
+  }
+  return node.overlay_slot?(node.display_label||'Redacted Slot'):({Entity:'Source entity',Claim:'Source claim',Event:'Source event',Document:'Source document',Segment:'Source passage',RelationEvidence:'Source relation',EvidenceGroup:'Evidence group'}[node.type]||'Graph object');
 }
 const pause = (milliseconds) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
 const redactionOnlyMode = false;
@@ -97,7 +102,7 @@ const returnWorkbench=safeWorkbench(pageParams.get("return_to")||pageParams.get(
 // Dense-view accounting can be long; it must never intercept canvas input.
 $$('.preview-caption').forEach(caption=>$('#map-accounting').append(caption));
 const releaseFilterApplies = (view) => currentOnlyMode && state.displayMode !== "pair" && ["current_reveal","current_later"].includes(view?.key);
-const colors = {Domain:"#176e70",Theme:"#a47c2e",Community:"#315e78",EvidenceGroup:"#68787b",Entity:"#176e70",Event:"#a47c2e",Claim:"#b75e48",RedactionSlot:"#b75e48",RelationEvidence:"#176e70",Segment:"#68787b",Document:"#283f49",Unknown:"#68787b"};
+const colors = {Domain:"#176e70",Theme:"#c89535",Community:"#315e78",EvidenceGroup:"#68787b",Entity:"#4d8068",Event:"#d39d35",Claim:"#bd5b44",RedactionSlot:"#bd5b44",RelationEvidence:"#79617e",Segment:"#68787b",Document:"#283f49",Unknown:"#68787b"};
 const visibilityLabel = (value) => (singleCorpusMode?{both:"present in Confidential and expanded classification views",later_only:"added by the Secret projection",redacted_placeholder:"opaque redaction placeholder"}:{both:"visible in earlier + later releases",later_only:"present in later release only",redacted_placeholder:"opaque redaction placeholder"})[value] || String(value || "");
 const visibilityModes = ["dim","show"];
 const visibilityModeLabels = {dim:"ineligible evidence dimmed",show:"ineligible evidence fully colored"};
@@ -114,10 +119,21 @@ const levelCopy = {
   community:"Communities are focused evidence neighborhoods built from explicit relations, audited related concepts, and substantially overlapping grounded source spans. Selecting this tab uses the corpus-wide Community catalog; entering a Theme scopes it to that Theme's child Communities.",
   evidence:"Selecting this tab uses a complete count-preserving corpus map: every semantic node belongs to a weighted community or outside-core aggregate. Entering a Community loads its ranked membership and defaults to 256 nodes. Clicking an evidence node inspects it without changing that Community layout; only View all direct connections opens the hierarchy-banded one-hop view. The available ceilings are 32, 256, and 2,048 nodes.",
 };
-const state = {data:null,searchManifest:null,searchViews:{},searchIndexes:{},searchEvidenceViews:{},searchEvidenceIndexes:{},searchEvidencePromises:{},searchPromises:{},hierarchyPromises:{},communityDetailPromises:{},communityDetailShards:{},neighborhoodPromises:{},neighborhoodShards:{},adjacencyPromises:{},adjacencyShards:{},sourcePromises:{},sourceShards:{},renderRevision:0,release:"earlier",displayMode:"single",visibilityMode:"dim",showIneligible:true,level:"domain",hideIsolates:true,query:"",searchScope:"entity",autoOpenSearch:false,autoOpenDirect:false,pdfApiAvailable:false,redactionResolutionApiAvailable:false,redactionProjection:null,redactionCategory:"entity_value",redactionIndex:0,redactionResolutionCache:{},guidePath:null,guideStep:0,guideBusy:false,panels:{},searchResults:{legacy:[],current:[]},asOfPolicy:{enabled:false,cutoff:"",inclusive:true,excludedDocument:"",caseId:"",minimum:"",maximum:""}};
+const state = {
+  data:null,searchManifest:null,searchViews:{},searchIndexes:{},searchEvidenceViews:{},searchEvidenceIndexes:{},
+  searchEvidencePromises:{},searchPromises:{},hierarchyPromises:{},communityDetailPromises:{},communityDetailShards:{},
+  neighborhoodPromises:{},neighborhoodShards:{},adjacencyPromises:{},adjacencyShards:{},sourcePromises:{},sourceShards:{},
+  renderRevision:0,release:"earlier",displayMode:"single",visibilityMode:"dim",showIneligible:true,level:"domain",
+  hideIsolates:true,query:"",searchScope:"evidence",autoOpenSearch:false,autoOpenDirect:false,neighborhoodMotion:true,
+  activePanelName:"current",pdfApiAvailable:false,redactionResolutionApiAvailable:false,redactionProjection:null,
+  redactionCategory:"entity_value",redactionIndex:0,redactionResolutionCache:{},guidePath:null,guideStep:0,guideBusy:false,
+  panels:{},searchResults:{legacy:[],current:[]},
+  asOfPolicy:{enabled:false,cutoff:"",inclusive:true,excludedDocument:"",caseId:"",minimum:"",maximum:""}
+};
 const nextLevel = {domain:"theme",theme:"community",community:"evidence"};
 const nodeLevel = {Domain:"domain",Theme:"theme",Community:"community"};
-const DEFAULT_NODE_LIMIT = 256;
+const DEFAULT_NODE_LIMIT = 32;
+const nodeLimitFor = level => level==='evidence'?256:DEFAULT_NODE_LIMIT;
 const NODE_CAPS = new Set([32,256,2048]);
 const MAX_RENDERED_NODES = 2048;
 const MAX_ALL_RENDERED_EDGES = 16384;
@@ -159,7 +175,7 @@ async function slotPacket(selectors={},cacheRows=true) {
 function updateSlotStatus(coverage) {
   if(!coverage)return;
   $('#slot-overlay-status').textContent=coverage.complete
-    ? `${fmt(coverage.total_slots)} observed opaque markers / ${fmt(coverage.scanned_documents)} base-visible documents / ${fmt(coverage.scanned_pages)} pages or segments. Complete bound-catalog scan.`
+    ? `${fmt(coverage.total_slots)} Redacted Slots in ${fmt(coverage.scanned_documents)} documents.`
     : `Not a complete count: ${coverage.scanned_shards}/${coverage.total_shards} source shards scanned; ${fmt(coverage.observed_slots)} markers observed so far. Browse or search to scan.`;
 }
 
@@ -186,7 +202,7 @@ async function ensureOpaqueSlotPage(slot) {
   const key=slot.document_id+'|'+slot.canonical_page_id;
   if(!slotOverlayState.pages.has(key)){
     const value=await slotPacket({slot_id:slot.id});
-    if(value.page.text_sha256!==slot.page_provenance.text_sha256)throw Error('Opaque source page pin changed.');
+    if(value.page.text_sha256!==slot.page_provenance.text_sha256)throw Error('Redacted Slot source page pin changed.');
     slotOverlayState.pages.set(key,value.page);
     while(slotOverlayState.pages.size>8)slotOverlayState.pages.delete(slotOverlayState.pages.keys().next().value);
   }
@@ -248,7 +264,7 @@ function slotPermalink(slot,source=false) {
 
 function opaqueSlotInspectorHTML(panel,slot) {
   const placed=slot.community_id?'Placed beside a visible earlier-view vocabulary anchor in its existing hierarchy. This is navigation, not concealed-entity membership.':'Unplaced: no unambiguous earlier-view visible vocabulary anchor was available. No hierarchy assignment was invented.';
-  return `<section class="slot-inspector" data-opaque-slot="${esc(slot.id)}"><p class="eyebrow">OpaqueRedactionSlot / source-context node, not semantic evidence</p><h3>${esc(slot.label)}</h3><p class="slot-boundary-notice">The hidden text, identity and length are unavailable. An observed broad mask is not split into hypothetical names or dates.</p><p>${esc(slot.document_id)} / ${esc(slot.date)} / earlier PDF page ${esc(slot.source_page)}</p><blockquote>${esc(slot.context_preview)}</blockquote><p>${esc(placed)}</p><div class="slot-source-actions"><button type="button" data-slot-source>Open earlier source and focal boundary</button><a href="${esc(slotPermalink(slot))}">Slot permalink</a><a href="${esc(slotPermalink(slot,true))}" data-slot-source-link>Source permalink</a></div><p>Use the ordinary direct-connection, node, Back and mother Community controls below. Dotted source-context links work in either direction; they do not claim what the hidden span means.</p>${panel.incidentConnections(slot)}<h4>Workbench</h4>${slot.workbench_links.length?slot.workbench_links.map(row=>`<a class="slot-workbench-link" href="${esc(row.href)}">${esc(row.label)}</a>`).join(''):'<p>No saved workbench question in the selected publication is bound to this document or mask.</p><a class="slot-workbench-link" href="/workbench-v6.html?corpus=cib">Open saved workbench / no slot run implied</a>'}<details><summary>Opaque-slot provenance</summary><dl><dt>Overlay ID</dt><dd>${esc(slot.id)}</dd><dt>Observed marker ID</dt><dd>${esc(slot.slot_id||'Unnumbered earlier mask')}</dd><dt>Canonical earlier page</dt><dd>${esc(slot.canonical_page_id)}</dd><dt>Context match authority</dt><dd>Literal visible vocabulary navigation only; identity not certified.</dd><dt>Graph</dt><dd>${esc(refreshBinding.graph_run_id)}</dd><dt>Hierarchy</dt><dd>${esc(refreshBinding.hierarchy_run_id)}</dd></dl></details></section>`;
+  return `<section class="slot-inspector" data-opaque-slot="${esc(slot.id)}"><p class="eyebrow">Redacted Slot</p><h3>${esc(slot.label)}</h3><blockquote>${esc(slot.context_preview)}</blockquote><div class="slot-source-actions"><button type="button" data-slot-source>Open source</button><a href="${esc(slotPermalink(slot))}">Link to slot</a><a href="${esc(slotPermalink(slot,true))}" data-slot-source-link>Link to source</a></div>${panel.incidentConnections(slot)}${slot.workbench_links.length?`<h4>Workbench</h4>${slot.workbench_links.map(row=>`<a class="slot-workbench-link" href="${esc(row.href)}">${esc(row.label)}</a>`).join('')}`:''}<details><summary>Source and navigation details</summary><p>${esc(slot.document_id)} / ${esc(slot.date)} / earlier PDF page ${esc(slot.source_page)}</p><p>${esc(placed)}</p><p>Connections identify literal visible context, not the hidden identity. Concealed wording and length are unavailable.</p><dl><dt>Slot ID</dt><dd>${esc(slot.id)}</dd><dt>Observed marker</dt><dd>${esc(slot.slot_id||'Unnumbered earlier mask')}</dd><dt>Source page</dt><dd>${esc(slot.canonical_page_id)}</dd><dt>Graph</dt><dd>${esc(refreshBinding.graph_run_id)}</dd><dt>Hierarchy</dt><dd>${esc(refreshBinding.hierarchy_run_id)}</dd></dl></details></section>`;
 }
 
 function slotContextInspectorHTML(panel,edge) {
@@ -288,7 +304,7 @@ function appendHierarchySlots(panel,item) {
   if(!key)return;
   if(state.guidePath||!slotOverlayState.enabled)return;
   const section=document.createElement('section');section.className='slot-hierarchy-navigation';
-  section.innerHTML='<h4>Opaque base-visible source slots</h4><p>Visible lexical-context navigation only. Published membership counts are unchanged.</p><button type="button" data-load-branch-slots>Browse slots beside this branch</button><div data-branch-slots></div>';
+  section.innerHTML='<h4>Redacted Slots</h4><button type="button" data-load-branch-slots>Browse nearby slots</button><div data-branch-slots></div>';
   panel.inspector.append(section);
   const load=async offset=>{
     const button=$('[data-load-branch-slots]',section);button.disabled=true;
@@ -318,7 +334,7 @@ async function initializeSlotOverlay() {
         panel.inducedNeighborEdges=panel.inducedNeighborEdges.filter(edge=>!edge.slot_navigation);panel.refreshGraph();
       }
     };
-    $('#browse-source-slots').onclick=()=>{$('#search-scope').value='slot';$('#graph-search').value='opaque slot';applySearch();};
+    $('#browse-source-slots').onclick=()=>{$('#search-scope').value='slot';$('#graph-search').value='Redacted Slot';applySearch();};
     $('#slot-search-prev').onclick=()=>{slotOverlayState.searchOffset=Math.max(0,slotOverlayState.searchOffset-32);applySearch(false);};
     $('#slot-search-next').onclick=()=>{slotOverlayState.searchOffset=slotOverlayState.searchPage.next_offset;applySearch(false);};
   }catch(error){$('#slot-overlay-status').textContent=`Overlay unavailable: ${error.message}`;$('#browse-source-slots').disabled=true;}
@@ -485,7 +501,7 @@ class GraphPanel {
     document.body.append(this.inspector);
     this.nodes=[]; this.edges=[]; this.nodeMap=new Map(); this.matches=new Set();
     this.transform={x:0,y:0,scale:1}; this.drag=null; this.hover=null; this.selected=null; this.external=null;
-    this.level=state.level; this.trail=[]; this.nodeLimit=DEFAULT_NODE_LIMIT; this.holdTimer=null;
+    this.level=state.level; this.trail=[]; this.nodeLimit=nodeLimitFor(this.level); this.holdTimer=null;
     this.pinnedFocusIds=new Set(); this.searchMatchIds=new Set(); this.pinnedSearchRecords=new Map(); this.navigationRevision=0; this.pulseTimer=null;
     this.neighborhood=null; this.localIncidentNeighborhood=null; this.expandedIncidentScopes=new Set();
     this.incidentPages=new Map();this.nodeHistory=[];
@@ -493,9 +509,13 @@ class GraphPanel {
     this.slotFocusId=null;
     this.labelOverrides=new Map();this.labelButtons=new Map();this.drawerOpen=false;this.physicsFrame=null;this.priorCenter=null;
     this.labelLayer=document.createElement('div');this.labelLayer.className='map-labels';this.canvas.after(this.labelLayer);
-    this.showNeighborEdges=false; this.inducedNeighborEdges=[]; this.inducedLoadRevision=0; this.inducedLoading=false; this.inducedError=""; this.focusBands=[]; this.inspectionRevision=0;
+    this.showNeighborEdges=true; this.inducedNeighborEdges=[]; this.inducedLoadRevision=0; this.inducedLoading=false; this.inducedError=""; this.focusBands=[]; this.inspectionRevision=0;
+    this.orbitFrame=null;this.orbitHoverId=null;this.fitScale=1;
+    this.ringLegend=document.createElement('aside');this.ringLegend.className='neighborhood-legend';this.ringLegend.hidden=true;this.canvas.after(this.ringLegend);
+    this.ringLegend.addEventListener('pointerenter',()=>clearTimeout(this.legendTimer));
+    this.ringLegend.addEventListener('pointerleave',()=>this.hideRingLegendSoon());
     this.bind(); this.resize();
-    new ResizeObserver(()=>{ this.resize(); this.fit(); }).observe(this.canvas.parentElement);
+    new ResizeObserver(()=>{ this.resize(); this.fit();this.startOrbit(); }).observe(this.canvas.parentElement);
   }
 
   bind() {
@@ -519,11 +539,11 @@ class GraphPanel {
     this.guideCommunityContext=null;
     this.closeInspector(false);this.labelOverrides.clear();this.priorCenter=null;
     this.slotFocusId=null;
-    this.view=view; this.level=state.level; this.trail=[]; this.nodeLimit=DEFAULT_NODE_LIMIT;
+    this.view=view; this.level=state.level; this.trail=[]; this.nodeLimit=nodeLimitFor(this.level);
     this.nodeHistory=[];this.incidentPages.clear();
     this.neighborhood=null; this.localIncidentNeighborhood=null; this.expandedIncidentScopes.clear();
     this.investigativeContext=null;
-    this.showNeighborEdges=false; this.inducedNeighborEdges=[]; this.inducedLoadRevision+=1; this.inducedLoading=false; this.inducedError=""; this.focusBands=[];
+    this.showNeighborEdges=true; this.inducedNeighborEdges=[]; this.inducedLoadRevision+=1; this.inducedLoading=false; this.inducedError=""; this.focusBands=[];
     this.pinnedFocusIds.clear(); this.searchMatchIds.clear(); this.pinnedSearchRecords.clear(); this.navigationRevision+=1; this.inspectionRevision+=1;
     this.refreshGraph();
   }
@@ -783,10 +803,10 @@ class GraphPanel {
     const minLog=Math.min(...masses.map(Math.log1p)),maxLog=Math.max(...masses.map(Math.log1p));
     this.nodes=this.graph.nodes.map((row,index)=>{
       const angle=index*2.3999632297+(hashNumber(row.id)%1000)/1000;
-      const radius=45+Math.sqrt(index+1)*(this.level==="domain"?105:this.level==="theme"?70:this.level==="community"?43:35);
-      const relative=maxLog>minLog?(Math.log1p(masses[index])-minLog)/(maxLog-minLog):.5;
-      const range=this.level==='evidence'?[4.5,20]:this.level==='community'?[8,29]:[11,36];
-      return {...row,index,x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,vx:0,vy:0,r:row.overlay_slot?7:range[0]+Math.pow(relative,.85)*(range[1]-range[0])};
+      const radius=38+Math.sqrt(index+1)*(this.level==='evidence'?32:62);
+      const relative=maxLog>minLog?(Math.log1p(masses[index])-minLog)/(maxLog-minLog):.35;
+      const range=this.level==='evidence'?[9,31]:this.level==='community'?[13,37]:[16,42];
+      return {...row,index,x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,vx:0,vy:0,r:row.overlay_slot?10:range[0]+Math.pow(relative,.8)*(range[1]-range[0])};
     });
     this.focusBands=[];
     if(this.graph.focusMode)this.positionFocusRings();
@@ -795,10 +815,19 @@ class GraphPanel {
     this.selected=previousNodeId&&this.nodeMap.has(previousNodeId)?this.nodeMap.get(previousNodeId):previousEdgeId?this.edges.find((edge)=>edge.id===previousEdgeId)||null:null;
     this.external=null; this.hover=null;
     this.matches=new Set([...this.pinnedFocusIds,...this.searchMatchIds].filter((id)=>this.nodeMap.has(id)));
-    this.stopPhysics();this.layout();this.resolveCollisions(null,4); this.fit(); this.renderInspector(); this.updateChrome();
+    this.stopPhysics();this.stopOrbit();this.layout();
+    if(!this.graph.focusMode)this.resolveCollisions(null,4);
+    this.fit();
+    if(this.graph.focusMode)this.reserveFocusLabelHole();
+    if(!this.graph.focusMode){
+      for(let pass=0;pass<(this.nodes.length>700?4:10);pass++){this.resolveCollisions(null,24);this.fit();}
+    }
+    this.renderInspector();this.updateChrome();
+    if(this.graph.focusMode){this.showRingLegend();this.startOrbit();}else this.ringLegend.hidden=true;
   }
 
-  positionFocusRings() {
+  positionFocusRings(requestedInner=0) {
+    this.focusBands=[];
     const definitions=[
       ["same_community","Same Community","rgba(71,120,92,.13)","rgba(71,120,92,.45)"],
       ["same_theme","Same Theme","rgba(210,155,46,.12)","rgba(176,124,27,.45)"],
@@ -808,25 +837,43 @@ class GraphPanel {
     ];
     const focus=this.nodes.find((node)=>node.id===this.graph.focusNodeId)||this.nodes[0];
     if(focus){focus.x=0;focus.y=0;focus.vx=0;focus.vy=0;}
-    let inner=48;
+    let inner=Math.max(84,(focus?.r||30)+58,requestedInner);
     definitions.forEach(([scope,label,fill,stroke],scopeIndex)=>{
       const members=this.nodes.filter((node)=>node!==focus&&node.focus_scope===scope);
       if(!members.length)return;
-      let offset=0,radius=inner+42,lastRadius=radius;
+      const largest=Math.max(10,...members.map(node=>node.r));
+      let offset=0,radius=inner+largest+16,lastRadius=radius;
       while(offset<members.length){
-        const capacity=Math.max(7,Math.floor(2*Math.PI*radius/52));
+        const capacity=Math.max(4,Math.floor(2*Math.PI*radius/(2*largest+20)));
         const ring=members.slice(offset,offset+capacity);
         const phase=((hashNumber(`${this.graph.focusNodeId}:${scope}:${radius}`)%1000)/1000)*Math.PI*2;
         ring.forEach((node,index)=>{
           const angle=phase+index*Math.PI*2/ring.length;
           node.x=Math.cos(angle)*radius;node.y=Math.sin(angle)*radius;node.vx=0;node.vy=0;
+          node.orbitRadius=radius;node.orbitAngle=angle;node.orbitBand=scopeIndex;
         });
-        offset+=ring.length;lastRadius=radius;radius+=54;
+        offset+=ring.length;lastRadius=radius;radius+=2*largest+20;
       }
-      const outer=lastRadius+32;
+      const outer=lastRadius+largest+15;
       this.focusBands.push({scope,label,fill,stroke,inner,outer,count:members.length,index:scopeIndex});
       inner=outer+12;
     });
+  }
+
+  reserveFocusLabelHole(){
+    if(!(this.width>0&&this.height>0)||!this.focusBands.length)return;
+    const focus=this.nodeMap.get(this.graph.focusNodeId),area=this.usableBounds();
+    if(!focus)return;
+    const outerPixels=Math.min(area.width,area.height)*.44;
+    for(let pass=0;pass<3;pass++){
+      const label=this.mapLabelSize(focus);if(!label)return;
+      const needed=Math.hypot(label.width/2+8,this.nodeRadius(focus)+label.height+16);
+      const first=this.focusBands[0],outer=this.focusBands.at(-1).outer;
+      if(first.inner*this.transform.scale>=needed)return;
+      const fraction=Math.min(.82,needed/Math.max(1,outerPixels));
+      const inner=Math.max(first.inner+8,fraction*(outer-first.inner)/(1-fraction));
+      this.positionFocusRings(inner);this.fit();
+    }
   }
 
   layout() {
@@ -836,14 +883,17 @@ class GraphPanel {
     // Pulling hundreds of nodes toward thousands of edges creates an unreadable
     // hairball and hides nodes; scoped branches still receive the force layout.
     if ((this.graph?.corpusWide&&nodes.length>250)||nodes.length>700) return;
-    const iterations=nodes.length>500?28:nodes.length>220?55:nodes.length>90?100:220;
+    const degrees=new Map(nodes.map(node=>[node.id,0]));
+    edges.forEach(edge=>{degrees.set(edge.source,degrees.get(edge.source)+1);degrees.set(edge.target,degrees.get(edge.target)+1);});
+    const iterations=nodes.length>500?28:nodes.length>220?65:nodes.length>90?110:220;
     for (let iteration=0;iteration<iterations;iteration+=1) {
       for (let i=0;i<nodes.length;i+=1) for (let j=i+1;j<nodes.length;j+=1) {
-        const a=nodes[i],b=nodes[j]; let dx=a.x-b.x,dy=a.y-b.y; const d2=dx*dx+dy*dy+28,d=Math.sqrt(d2),force=1500/d2;
+        const a=nodes[i],b=nodes[j]; let dx=a.x-b.x,dy=a.y-b.y; const d2=dx*dx+dy*dy+28,d=Math.sqrt(d2),force=2200/d2;
         dx/=d;dy/=d;a.vx+=dx*force;a.vy+=dy*force;b.vx-=dx*force;b.vy-=dy*force;
         const minimum=a.r+b.r+24; if (d<minimum) { const push=(minimum-d)*.04;a.vx+=dx*push;a.vy+=dy*push;b.vx-=dx*push;b.vy-=dy*push; }
       }
-      edges.forEach((edge)=>{ const a=this.nodeMap.get(edge.source),b=this.nodeMap.get(edge.target);let dx=b.x-a.x,dy=b.y-a.y;const d=Math.max(1,Math.hypot(dx,dy));const desired=this.level==="domain"?250:this.level==="theme"?190:this.level==="community"?135:92,force=(d-desired)*.0035;dx/=d;dy/=d;a.vx+=dx*force;a.vy+=dy*force;b.vx-=dx*force;b.vy-=dy*force; });
+      // Normalize drawing springs by endpoint degree so dense evidence cannot collapse into one hub.
+      edges.forEach((edge)=>{ const a=this.nodeMap.get(edge.source),b=this.nodeMap.get(edge.target);let dx=b.x-a.x,dy=b.y-a.y;const d=Math.max(1,Math.hypot(dx,dy)),desired=a.r+b.r+(this.level==='evidence'?44:70),force=(d-desired)*.032/Math.sqrt(Math.max(1,degrees.get(a.id)*degrees.get(b.id)));dx/=d;dy/=d;a.vx+=dx*force;a.vy+=dy*force;b.vx-=dx*force;b.vy-=dy*force; });
       nodes.forEach((node)=>{ node.vx+=-node.x*.0006;node.vy+=-node.y*.0006;node.vx*=.84;node.vy*=.84;node.x+=node.vx;node.y+=node.vy; });
     }
   }
@@ -858,7 +908,8 @@ class GraphPanel {
         const cx=Math.floor(a.x/size),cy=Math.floor(a.y/size);
         for(let x=cx-1;x<=cx+1;x++)for(let y=cy-1;y<=cy+1;y++)for(const b of cells.get(`${x}:${y}`)||[]){
           if(a.index>=b.index)continue;
-          let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),minimum=(this.nodeRadius(a)+this.nodeRadius(b)+14)/displayScale(this.transform.scale);
+          const gap=Math.max(3,12/Math.sqrt(Math.max(1,this.nodes.length/32)));
+          let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),minimum=(this.nodeRadius(a)+this.nodeRadius(b)+gap)/displayScale(this.transform.scale);
           if(d>=minimum)continue;
           if(d<.001){dx=1;dy=.5;d=Math.hypot(dx,dy);}
           const push=(minimum-d)*.52,nx=dx/d,ny=dy/d;
@@ -871,6 +922,36 @@ class GraphPanel {
   }
 
   stopPhysics(){if(this.physicsFrame!==null)cancelAnimationFrame(this.physicsFrame);this.physicsFrame=null;delete this.canvas.dataset.settling;}
+  stopOrbit(){if(this.orbitFrame!==null)cancelAnimationFrame(this.orbitFrame);this.orbitFrame=null;this.canvas.dataset.orbitState='stopped';}
+  startOrbit(){
+    this.stopOrbit();
+    if(!this.graph?.focusMode||!state.neighborhoodMotion||guideReducedMotion()||state.guidePath||this.v64Busy||!this.canvas.getClientRects().length)return;
+    let last=performance.now();
+    const tick=now=>{
+      if(!this.graph?.focusMode||!state.neighborhoodMotion||guideReducedMotion()||state.guidePath||!this.canvas.getClientRects().length){this.stopOrbit();return;}
+      const elapsed=Math.min(.05,(now-last)/1000);last=now;
+      const paused=document.hidden||this.v64Busy||this.drag||this.drawerOpen||(this.hover&&!this.hover.source)||this.orbitHoverId;
+      this.canvas.dataset.orbitState=paused?'paused':'moving';
+      if(!paused){
+        for(const node of this.nodes){
+          if(node.id===this.graph.focusNodeId||!Number.isFinite(node.orbitAngle))continue;
+          node.orbitAngle+=elapsed*(.012/(1+(node.orbitBand||0)*.12));
+          node.x=Math.cos(node.orbitAngle)*node.orbitRadius;node.y=Math.sin(node.orbitAngle)*node.orbitRadius;
+        }
+        this.draw();
+      }
+      this.orbitFrame=requestAnimationFrame(tick);
+    };
+    this.orbitFrame=requestAnimationFrame(tick);
+  }
+  hideRingLegendSoon(){clearTimeout(this.legendTimer);this.legendTimer=setTimeout(()=>{this.ringLegend.hidden=true;},12000);}
+  showRingLegend(){
+    const groups=[['same_community','Same community','#73a184'],['same_theme','Same theme','#d6b465'],['same_domain','Same domain','#80a9bb'],['cross_domain','Other domain','#cf927e']];
+    if(this.focusBands.some(band=>band.scope==='outside_hierarchy'))groups.push(['outside_hierarchy','Unassigned','#a4b1b0']);
+    this.ringLegend.innerHTML='<header><b>Neighborhood</b><button type="button" aria-label="Hide neighborhood legend">Close</button></header>'+groups.map(([scope,label,color])=>`<div><i style="--ring-color:${color}"></i><span>${label}</span><small>${this.nodes.filter(node=>node.focus_scope===scope).length}</small></div>`).join('');
+    this.ringLegend.querySelector('button').onclick=()=>{this.ringLegend.hidden=true;clearTimeout(this.legendTimer);};
+    this.ringLegend.hidden=false;this.hideRingLegendSoon();
+  }
   settlePhysics(){
     this.stopPhysics();
     if(guideReducedMotion()||state.guidePath){this.resolveCollisions(null,4);this.draw();return;}
@@ -903,13 +984,14 @@ class GraphPanel {
   fit() {
     if (!(this.width>0&&this.height>0)) return;
     if (!this.nodes.length) { this.transform={x:0,y:0,scale:1};this.draw();return; }
-    const area=this.usableBounds(),spanX=Math.max(1,...this.nodes.map(n=>n.x+n.r))-Math.min(...this.nodes.map(n=>n.x-n.r)),spanY=Math.max(1,...this.nodes.map(n=>n.y+n.r))-Math.min(...this.nodes.map(n=>n.y-n.r));
-    const aspect=(area.width/area.height)/(spanX/spanY),stretchX=Math.min(2.5,Math.max(1,aspect)),stretchY=Math.min(2.5,Math.max(1,1/aspect));
-    if(stretchX>1.05||stretchY>1.05)for(const node of this.nodes){node.x*=stretchX;node.y*=stretchY;}
-    const minX=Math.min(...this.nodes.map(n=>n.x-n.r))-12,maxX=Math.max(...this.nodes.map(n=>n.x+n.r))+12,minY=Math.min(...this.nodes.map(n=>n.y-n.r))-12,maxY=Math.max(...this.nodes.map(n=>n.y+n.r))+12;
+    const available=this.usableBounds(),diameter=Math.min(available.width,available.height)*(this.graph?.focusMode ? .88 : .78);
+    const area={width:diameter,height:diameter,left:available.left+(available.width-diameter)/2,top:available.top+(available.height-diameter)/2};
+    const extent=this.graph?.focusMode?Math.max(this.focusBands.at(-1)?.outer||0,...this.nodes.map(n=>n.r+8)):null;
+    const minX=extent===null?Math.min(...this.nodes.map(n=>n.x-n.r))-12:-extent,maxX=extent===null?Math.max(...this.nodes.map(n=>n.x+n.r))+12:extent,minY=extent===null?Math.min(...this.nodes.map(n=>n.y-n.r))-12:-extent,maxY=extent===null?Math.max(...this.nodes.map(n=>n.y+n.r))+12:extent;
     const scale=displayScale(Math.min(area.width/(maxX-minX),area.height/(maxY-minY)));
     this.transform={scale,x:area.left+area.width/2-(minX+maxX)/2*scale,y:area.top+area.height/2-(minY+maxY)/2*scale};
-    this.reserveLabelSpace();this.draw();
+    this.fitScale=scale;
+    this.draw();
   }
 
   transition(refresh) {
@@ -935,7 +1017,7 @@ class GraphPanel {
     }
     this.neighborhood=null;this.localIncidentNeighborhood=null;this.investigativeContext=null;this.expandedIncidentScopes.clear();
     this.showNeighborEdges=false;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
-    this.trail.push({...node}); this.level=nextLevel[this.level]; this.nodeLimit=DEFAULT_NODE_LIMIT;
+    this.trail.push({...node}); this.level=nextLevel[this.level]; this.nodeLimit=nodeLimitFor(this.level);
     this.transition(()=>this.refreshGraph());
   }
   back() {
@@ -945,14 +1027,14 @@ class GraphPanel {
     const exited=this.trail.pop(); if (!exited) return;
     this.neighborhood=null;this.localIncidentNeighborhood=null;this.investigativeContext=null;this.expandedIncidentScopes.clear();
     this.showNeighborEdges=false;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
-    this.level=nodeLevel[exited.type]||state.level; this.nodeLimit=DEFAULT_NODE_LIMIT;
+    this.level=nodeLevel[exited.type]||state.level; this.nodeLimit=nodeLimitFor(this.level);
     this.pinnedFocusIds.clear(); this.pinnedSearchRecords.clear(); this.navigationRevision+=1; this.inspectionRevision+=1;
     this.transition(()=>this.refreshGraph(exited.id));
   }
   setNodeCap(rawValue) {
     if(state.guidePath?.caseContext)return guideContextView(this.studyContext?.view_kind==='incident'?'neighborhood':'community',{limit:NODE_CAPS.has(Number(rawValue))?Number(rawValue):DEFAULT_NODE_LIMIT});
     if(state.guidePath){pauseGuide();state.guidePath.limit=NODE_CAPS.has(Number(rawValue))?Number(rawValue):DEFAULT_NODE_LIMIT;}
-    const value=Number(rawValue);this.nodeLimit=NODE_CAPS.has(value)?value:DEFAULT_NODE_LIMIT;
+    const value=Number(rawValue);this.nodeLimit=NODE_CAPS.has(value)?value:nodeLimitFor(this.level);
     this.refreshGraph(!this.selected?.source?this.selected?.id:null);
     if(this.neighborhood&&this.showNeighborEdges)this.loadInducedNeighborEdges();
   }
@@ -994,7 +1076,7 @@ class GraphPanel {
     if(revision!==this.navigationRevision){this.canvas.classList.remove("transitioning");return false;}
     this.neighborhood=null;this.localIncidentNeighborhood=null;this.expandedIncidentScopes.clear();
     this.showNeighborEdges=false;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
-    this.level=level;this.trail=[...trail];this.nodeLimit=DEFAULT_NODE_LIMIT;
+    this.level=level;this.trail=[...trail];this.nodeLimit=nodeLimitFor(level);
     this.pinnedFocusIds=new Set(focusIds.filter(Boolean));
     this.refreshGraph(selectedId||null);
     this.centerIds(this.pinnedFocusIds);
@@ -1015,7 +1097,7 @@ class GraphPanel {
   }
 
   rememberLocation() {
-    return {level:this.level,trail:[...this.trail],nodeLimit:this.nodeLimit,neighborhood:this.neighborhood,slotFocusId:this.slotFocusId,
+    return {level:this.level,trail:[...this.trail],nodeLimit:this.nodeLimit,neighborhood:this.neighborhood,showNeighborEdges:this.showNeighborEdges,slotFocusId:this.slotFocusId,
       localIncidentNeighborhood:this.localIncidentNeighborhood,selectedId:this.selected?.id||this.external?.id,
       transform:{...this.transform},width:this.width,height:this.height,positions:this.nodes.map(n=>({id:n.id,x:n.x,y:n.y}))};
   }
@@ -1023,7 +1105,7 @@ class GraphPanel {
   restoreLocation(saved) {
     this.navigationRevision+=1;this.inspectionRevision+=1;
     Object.assign(this,{level:saved.level,trail:saved.trail,nodeLimit:saved.nodeLimit,neighborhood:saved.neighborhood,
-      localIncidentNeighborhood:saved.localIncidentNeighborhood,slotFocusId:saved.slotFocusId||null,showNeighborEdges:false,inducedNeighborEdges:[],external:null});
+      localIncidentNeighborhood:saved.localIncidentNeighborhood,slotFocusId:saved.slotFocusId||null,showNeighborEdges:saved.showNeighborEdges!==false,inducedNeighborEdges:[],external:null});
     this.pinnedFocusIds=new Set(saved.selectedId?[saved.selectedId]:[]);this.searchMatchIds.clear();
     this.refreshGraph(saved.selectedId);
     for(const position of saved.positions){const node=this.nodeMap.get(position.id);if(node)Object.assign(node,{x:position.x,y:position.y});}
@@ -1040,19 +1122,21 @@ class GraphPanel {
     this.trail=route.route;
     this.slotFocusId=record.overlay_slot?record.id:null;
     this.level="evidence";this.neighborhood=detail;this.localIncidentNeighborhood=null;this.expandedIncidentScopes.clear();
-    this.showNeighborEdges=false;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
+    this.showNeighborEdges=true;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
     this.pinnedSearchRecords.set(record.id,{...record,...detail.node});
     this.pinnedFocusIds=new Set([record.id]);
-    this.nodeLimit=DEFAULT_NODE_LIMIT;
+    this.nodeLimit=nodeLimitFor(this.level);
     this.refreshGraph(record.id);this.pulseIds([record.id]);
+    if(this.showNeighborEdges)this.loadInducedNeighborEdges();
     if(scroll)this.canvas.focus({preventScroll:true});
   }
 
   focusHierarchyNeighborhood(record,{scroll=true}={}) {
     this.neighborhood=this.hierarchyNeighborhood(record);this.localIncidentNeighborhood=null;this.expandedIncidentScopes.clear();
-    this.showNeighborEdges=false;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
-    this.pinnedFocusIds=new Set([record.id]);this.nodeLimit=DEFAULT_NODE_LIMIT;
+    this.showNeighborEdges=true;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
+    this.pinnedFocusIds=new Set([record.id]);this.nodeLimit=nodeLimitFor(this.level);
     this.refreshGraph(record.id);this.pulseIds([record.id]);
+    if(this.showNeighborEdges)this.loadInducedNeighborEdges();
     if(scroll)this.canvas.focus({preventScroll:true});
   }
 
@@ -1083,7 +1167,7 @@ class GraphPanel {
     this.showNeighborEdges=false;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
     this.level="evidence";this.trail=[domain,theme,community].filter(Boolean);
     this.slotFocusId=record.overlay_slot?record.id:null;
-    this.pinnedFocusIds=new Set([record.id]);this.searchMatchIds.clear();this.nodeLimit=DEFAULT_NODE_LIMIT;
+    this.pinnedFocusIds=new Set([record.id]);this.searchMatchIds.clear();this.nodeLimit=nodeLimitFor(this.level);
     this.refreshGraph(record.id);this.pulseIds([record.id]);
     if(scroll)this.canvas.focus({preventScroll:true});
   }
@@ -1257,18 +1341,29 @@ class GraphPanel {
   screen(node) { const scale=displayScale(this.transform.scale);return {x:node.x*scale+this.transform.x,y:node.y*scale+this.transform.y}; }
   world(point) { const scale=displayScale(this.transform.scale);return {x:(point.x-this.transform.x)/scale,y:(point.y-this.transform.y)/scale}; }
   nodeRadius(node,padding=0,minimum=0) {
-    const scale=displayScale(this.transform.scale),mobile=this.width<600,ceiling=mobile?34:54;
-    return displayRadius(displayRadius(node.r,3.5,36)*(scale<1?scale:Math.pow(scale,.45))*(mobile?.88:1)+padding,Math.max(3.5,minimum),ceiling+padding);
+    const scale=displayScale(this.transform.scale),mobile=this.width<600,ceiling=mobile?38:58;
+    const denseNeighbor=mobile&&this.graph?.focusMode&&this.nodes.length>96&&node.id!==this.graph.focusNodeId;
+    const density=denseNeighbor?Math.max(.45,Math.sqrt(64/this.nodes.length)):1;
+    return displayRadius(displayRadius(node.r,5,42)*Math.pow(scale,.62)*(mobile?.9:1)*density+padding,Math.max(2,4*density,minimum),ceiling+padding);
   }
   pointer(event) { const rect=this.canvas.getBoundingClientRect();return {x:event.clientX-rect.left,y:event.clientY-rect.top}; }
-  hitNode(point) { return [...this.nodes].reverse().find((node)=>{const p=this.screen(node);return Math.hypot(point.x-p.x,point.y-p.y)<=this.nodeRadius(node)+6;})||null; }
+  hitNode(point) {
+    let best=null,score=Infinity,painted=false;
+    for(const node of this.nodes){
+      const p=this.screen(node),radius=this.nodeRadius(node),distance=Math.hypot(point.x-p.x,point.y-p.y),inside=distance<=radius;
+      if(distance>radius+6||painted&&!inside)continue;
+      const candidate=inside?distance/Math.max(1,radius):distance-radius;
+      if(inside&&!painted||candidate<score){best=node;score=candidate;painted=inside;}
+    }
+    return best;
+  }
   hitEdge(point) { let best=null,bestDistance=10;this.edges.forEach((edge)=>{ const distance=distanceToSegment(point,this.screen(this.nodeMap.get(edge.source)),this.screen(this.nodeMap.get(edge.target)));if(distance<bestDistance){best=edge;bestDistance=distance;} });return best; }
   clearHold() { if (this.holdTimer!==null) { clearTimeout(this.holdTimer);this.holdTimer=null; } }
 
   pointerDown(event) {
     if (event.button!==undefined&&event.button!==0) return;
     if(this.studyContext){pauseGuide();if(state.guidePath.busy)return;}
-    this.stopPhysics();
+    state.activePanelName=this.name;this.stopPhysics();this.stopOrbit();
     const point=this.pointer(event),node=this.hitNode(point);try{this.canvas.setPointerCapture(event.pointerId);}catch(_error){}
     this.drag={pointerId:event.pointerId,start:point,last:point,node,moved:false};this.canvas.classList.add("dragging");this.clearHold();
     if (this.canEnter(node)) this.holdTimer=window.setTimeout(()=>{ this.holdTimer=null;if(!this.drag||this.drag.moved)return;this.drag=null;this.canvas.classList.remove("dragging");this.enterNode(node); },650);
@@ -1277,7 +1372,7 @@ class GraphPanel {
     const point=this.pointer(event);
     if (this.drag) {
       const dx=point.x-this.drag.last.x,dy=point.y-this.drag.last.y;if(Math.hypot(point.x-this.drag.start.x,point.y-this.drag.start.y)>5){this.drag.moved=true;this.clearHold();}
-      if(this.drag.node){this.drag.node.x+=dx/this.transform.scale;this.drag.node.y+=dy/this.transform.scale;this.drag.node.vx=dx/this.transform.scale*.12;this.drag.node.vy=dy/this.transform.scale*.12;if(!state.guidePath)this.resolveCollisions(this.drag.node,4);}else{this.transform.x+=dx;this.transform.y+=dy;}this.drag.last=point;this.draw();return;
+      if(this.drag.node&&!(this.graph?.focusMode&&this.drag.node.id===this.graph.focusNodeId)){this.drag.node.x+=dx/this.transform.scale;this.drag.node.y+=dy/this.transform.scale;this.drag.node.vx=dx/this.transform.scale*.12;this.drag.node.vy=dy/this.transform.scale*.12;if(!state.guidePath&&!this.graph?.focusMode)this.resolveCollisions(this.drag.node,4);}else{this.transform.x+=dx;this.transform.y+=dy;}this.drag.last=point;this.draw();return;
     }
     const hit=this.hitNode(point)||this.hitEdge(point);this.hover=hit;
     if(hit){const detail=hit.source?(hit.description||hit.weight_semantics||hit.edge_type||""):(hit.summary||hit.type||"");this.tooltip.innerHTML=`<b>${esc(compact(hit.label||hit.edge_type||"Connection",120))}</b><small>${esc(compact(detail,200))}</small>`;this.tooltip.style.left=`${Math.max(5,Math.min(this.width-275,point.x+13))}px`;this.tooltip.style.top=`${Math.max(5,Math.min(this.height-82,point.y+13))}px`;this.tooltip.hidden=false;}else this.tooltip.hidden=true;this.draw();
@@ -1292,11 +1387,20 @@ class GraphPanel {
       else if(hit?.source){this.drawerOpen=true;this.inspectRenderedEdge(hit);}
       else this.closeInspector(false);
     }
-    if(moved&&draggedNode&&!state.guidePath)this.settlePhysics();
+    if(moved&&draggedNode&&!state.guidePath){
+      if(this.graph?.focusMode&&draggedNode.id!==this.graph.focusNodeId){
+        const band=this.focusBands.find(row=>row.index===draggedNode.orbitBand);
+        const radius=Math.hypot(draggedNode.x,draggedNode.y);
+        draggedNode.orbitRadius=band?Math.max(band.inner+draggedNode.r+8,Math.min(band.outer-draggedNode.r-8,radius)):radius;
+        draggedNode.orbitAngle=Math.atan2(draggedNode.y,draggedNode.x);
+        draggedNode.x=Math.cos(draggedNode.orbitAngle)*draggedNode.orbitRadius;draggedNode.y=Math.sin(draggedNode.orbitAngle)*draggedNode.orbitRadius;
+      }else if(!this.graph?.focusMode)this.settlePhysics();
+    }
+    this.startOrbit();
     this.syncMapActions();
     this.draw();
   }
-  pointerCancel() { this.clearHold();this.drag=null;this.canvas.classList.remove("dragging"); }
+  pointerCancel() { this.clearHold();this.drag=null;this.canvas.classList.remove("dragging");this.startOrbit(); }
   wheel(event) { event.preventDefault();if(this.studyContext)pauseGuide();const point=this.pointer(event),before=this.world(point),scale=Math.max(.12,Math.min(3.2,this.transform.scale*Math.exp(-event.deltaY*.0012)));this.transform.scale=scale;this.transform.x=point.x-before.x*scale;this.transform.y=point.y-before.y*scale;this.draw(); }
 
   toggleLabel(node){
@@ -1306,6 +1410,7 @@ class GraphPanel {
     this.draw();
   }
   activateNode(node){
+    state.activePanelName=this.name;
     clearTimeout(this.labelClickTimer);
     this.closeInspector(false);
     if(this.canEnter(node))return this.enterNode(node);
@@ -1313,6 +1418,7 @@ class GraphPanel {
     return Promise.resolve(this.focusDirectConnections(node)).catch(error=>{this.drawerOpen=true;this.inspectionError(error);});
   }
   openInspector(node){
+    state.activePanelName=this.name;
     for(const panel of Object.values(state.panels))if(panel!==this)panel.closeInspector(false);
     this.drawerOpen=true;this.inspectorReturnFocus=document.activeElement;
     if(this.studyContext){inspectStudyNode(node.id);this.decorateInspector();}
@@ -1324,12 +1430,13 @@ class GraphPanel {
   }
   closeInspector(restoreFocus=true){this.drawerOpen=false;this.inspector.hidden=true;if(restoreFocus){const target=this.inspectorReturnFocus;if(target?.isConnected)target.focus({preventScroll:true});else this.canvas.focus({preventScroll:true});}}
   syncMapActions(){
-    if(this.name!=='current')return;
+    if(this!==activePanel())return;
     const item=this.selected&&!this.selected.source?this.selected:this.neighborhood?.node;
     const context=$('#map-context');if(context){context.textContent=this.neighborhood?'Community':'Neighborhood';context.setAttribute('aria-pressed',String(Boolean(this.neighborhood)));context.disabled=Boolean(this.v64Busy||state.guidePath?.busy||!item||item.aggregate_kind||this.neighborhood&&!item.community_id&&this.level==='evidence');}
     const up=$('#map-up');if(up)up.disabled=Boolean(this.v64Busy||!this.trail.length&&!this.neighborhood);
   }
   keyboard(event){
+    state.activePanelName=this.name;
     if(this.v64Busy)return;
     const current=this.selected&&!this.selected.source?this.nodes.findIndex(n=>n.id===this.selected.id):-1;
     if(['ArrowRight','ArrowDown','ArrowLeft','ArrowUp'].includes(event.key)){
@@ -1343,27 +1450,30 @@ class GraphPanel {
   }
 
   mapLabelNodes(){
-    const defaults=[...this.nodes].sort((a,b)=>Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||b.document_count||0)-Number(a.mass||a.document_count||0)||a.id.localeCompare(b.id)).slice(0,5);
+    const focus=this.graph?.focusMode?this.nodeMap.get(this.graph.focusNodeId):null;
+    const automatic=focus?this.nodes.filter(node=>node===focus||node.x>focus.x&&node.y<focus.y):this.nodes;
+    const defaults=[...automatic].sort((a,b)=>Number(b===focus)-Number(a===focus)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||b.document_count||0)-Number(a.mass||a.document_count||0)||a.id.localeCompare(b.id)).slice(0,5);
     const ids=new Set(defaults.map(node=>node.id));
     for(const [id,shown] of this.labelOverrides)if(shown)ids.add(id);else ids.delete(id);
-    return this.nodes.filter(node=>ids.has(node.id)).sort((a,b)=>Number(this.labelOverrides.get(b.id)===true)-Number(this.labelOverrides.get(a.id)===true)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||0)-Number(a.mass||0));
+    return this.nodes.filter(node=>ids.has(node.id)).sort((a,b)=>Number(b===focus)-Number(a===focus)||Number(this.labelOverrides.get(b.id)===true)-Number(this.labelOverrides.get(a.id)===true)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||0)-Number(a.mass||0));
   }
 
   mapLabelSize(node){
-    const font=this.width<600?15:16,area=this.usableBounds(),label=mapDisplayLabel(node),family=getComputedStyle(document.body).fontFamily;
-    this.ctx.font=`500 ${font}px ${family}`;
-    for(const width of [this.width<600?142:176,Math.min(220,area.width-20)]){
+    const font=Math.round(16*Math.min(1.4,Math.max(1,Math.sqrt(this.transform.scale/this.fitScale)))),area=this.usableBounds(),label=mapDisplayLabel(node),family=getComputedStyle(document.body).fontFamily;
+    this.ctx.font=`600 ${font}px ${family}`;
+    const widths=this.graph?.focusMode&&node.id===this.graph.focusNodeId?[130,160,Math.min(220,area.width-20)]:[this.width<600?142:176,Math.min(220,area.width-20)];
+    for(const width of widths){
       const words=label.split(/\s+/),lines=[];let line='';
       for(const word of words){const next=line?line+' '+word:word;if(line&&this.ctx.measureText(next).width>width){lines.push(line);line=word;}else line=next;}
       if(line)lines.push(line);
-      const measured=Math.max(...lines.map(value=>this.ctx.measureText(value).width))+20;
+      const measured=Math.max(...lines.map(value=>this.ctx.measureText(value).width))+26;
       if(lines.length<=3&&measured<=area.width-8)return {text:lines.join('\n'),font,width:Math.ceil(measured),height:Math.ceil(lines.length*font*1.25+12)};
     }
     return null;
   }
 
   reserveLabelSpace(){
-    if(!this.nodes.length||!(this.width>0&&this.height>0))return;
+    if(this.graph?.focusMode||!this.nodes.length||!(this.width>0&&this.height>0))return;
     const area=this.usableBounds(),labels=new Map(this.mapLabelNodes().map(node=>[node.id,this.mapLabelSize(node)]));
     const points=this.nodes.map(node=>({...this.screen(node),node,r:this.nodeRadius(node),label:labels.get(node.id)}));
     const bounds=p=>({left:p.x-Math.max(p.r,p.label?.width/2||0),right:p.x+Math.max(p.r,p.label?.width/2||0),top:p.y-p.r,bottom:p.y+p.r+(p.label?p.label.height+6:0)});
@@ -1394,17 +1504,32 @@ class GraphPanel {
 
   drawMapLabels(){
     const area=this.usableBounds(),placed=[],visible=new Set();
+    const requested=this.mapLabelNodes();
     const overlaps=box=>placed.some(other=>!(box.x+box.width+7<other.x||box.x>other.x+other.width+7||box.y+box.height+7<other.y||box.y>other.y+other.height+7));
-    for(const node of this.mapLabelNodes()){
+    for(const node of requested){
       const p=this.screen(node),r=this.nodeRadius(node),wrapped=this.mapLabelSize(node);
       if(p.x+r<area.left||p.x-r>area.right||p.y+r<area.top||p.y-r>area.bottom)continue;
       if(!wrapped)continue;
       let box=null;
-      for(const gap of [6,10,14])for(const shift of [0,-12,12,-24,24]){
+      const candidates=[6,10].flatMap(gap=>[0,-12,12].map(shift=>({x:p.x-wrapped.width/2+shift,y:p.y+r+gap,placement:'lower-rim'})));
+      candidates.push({x:p.x+r+8,y:p.y-wrapped.height/2,placement:'side'},
+        {x:p.x-wrapped.width/2,y:p.y-r-wrapped.height-8,placement:'above'},
+        {x:p.x-r-wrapped.width-8,y:p.y-wrapped.height/2,placement:'side'});
+      if(node===requested[0]||this.labelOverrides.get(node.id)===true){
+        // Explicitly requested labels must remain readable when the local ring is crowded.
+        for(const gap of [16,28,44,64,88,112,144,184,232,288])candidates.push(
+          {x:p.x-wrapped.width/2,y:p.y+r+gap,placement:'focus-caption'},
+          {x:p.x-wrapped.width/2,y:p.y-r-wrapped.height-gap,placement:'focus-caption'},
+          {x:p.x+r+gap,y:p.y-wrapped.height/2,placement:'focus-caption'},
+          {x:p.x-r-wrapped.width-gap,y:p.y-wrapped.height/2,placement:'focus-caption'});
+      }
+      for(const position of candidates){
         if(box)break;
-        const x=p.x-wrapped.width/2+shift,y=p.y+r+gap,candidate={x,y,...wrapped};
+        const x=position.placement==='focus-caption'?Math.max(area.left,Math.min(area.right-wrapped.width,position.x)):position.x;
+        const y=position.placement==='focus-caption'?Math.max(area.top,Math.min(area.bottom-wrapped.height,position.y)):position.y;
+        const candidate={...position,x,y,...wrapped};
         if(x<area.left||y<area.top||x+wrapped.width>area.right||y+wrapped.height>area.bottom||overlaps(candidate))continue;
-        if(this.nodes.some(other=>{if(other===node)return false;const q=this.screen(other);return Math.hypot(q.x-Math.max(x,Math.min(q.x,x+wrapped.width)),q.y-Math.max(y,Math.min(q.y,y+wrapped.height)))<this.nodeRadius(other)+4;}))continue;
+        if(this.nodes.some(other=>{const q=this.screen(other);return Math.hypot(q.x-Math.max(x,Math.min(q.x,x+wrapped.width)),q.y-Math.max(y,Math.min(q.y,y+wrapped.height)))<this.nodeRadius(other)+4;}))continue;
         box=candidate;
       }
       if(!box)continue;
@@ -1413,15 +1538,16 @@ class GraphPanel {
         button=document.createElement('button');button.type='button';button.className='map-label';button.dataset.nodeLabel=node.id;
         button.onclick=event=>{clearTimeout(this.labelClickTimer);if(event.detail>1)return;const open=()=>{const current=this.nodeMap.get(node.id);if(current)this.openInspector(current);};if(event.detail===0)open();else this.labelClickTimer=setTimeout(open,230);};
         button.ondblclick=event=>{event.preventDefault();clearTimeout(this.labelClickTimer);const current=this.nodeMap.get(node.id);if(current)this.activateNode(current);};
+        button.onpointerenter=()=>{this.orbitHoverId=node.id;};button.onpointerleave=()=>{this.orbitHoverId=null;};
         this.labelButtons.set(node.id,button);this.labelLayer.append(button);
       }
       if(button.textContent!==wrapped.text)button.textContent=wrapped.text;
-      button.title='Open information and sources for '+node.label;button.setAttribute('aria-label',button.title);button.dataset.placement='lower-rim';button.dataset.labelText=mapDisplayLabel(node);
+      button.title='Open information and sources for '+node.label;button.setAttribute('aria-label',button.title);button.dataset.placement=box.placement;button.dataset.labelText=mapDisplayLabel(node);
       button.style.setProperty('--label-anchor',Math.max(12,Math.min(box.width-12,p.x-box.x))+'px');
       Object.assign(button.style,{left:box.x+'px',top:box.y+'px',width:box.width+'px',height:box.height+'px',fontSize:wrapped.font+'px'});button.classList.toggle('dimmed',Boolean(node.visibility_dimmed));
       placed.push(box);visible.add(node.id);
     }
-    for(const [id,button] of this.labelButtons)if(!visible.has(id)){button.remove();this.labelButtons.delete(id);}
+    for(const [id,button] of this.labelButtons)if(!visible.has(id)){button.remove();this.labelButtons.delete(id);if(this.orbitHoverId===id)this.orbitHoverId=null;}
   }
 
   setMatchIds(ids) { this.searchMatchIds=new Set(ids);this.matches=new Set([...this.pinnedFocusIds,...this.searchMatchIds].filter((id)=>this.nodeMap.has(id)));if(this.matches.size){const first=this.nodeMap.get(this.matches.values().next().value);this.transform.x=this.width/2-first.x*this.transform.scale;this.transform.y=this.height/2-first.y*this.transform.scale;}this.draw(); }
@@ -1515,19 +1641,11 @@ class GraphPanel {
     [...this.focusBands].reverse().forEach((band)=>{
       const radius=displayRadius(band.outer*displayScale(this.transform.scale));
       ctx.beginPath();ctx.arc(center.x,center.y,radius,0,Math.PI*2);
-      ctx.fillStyle=band.fill;ctx.fill();
+      ctx.arc(center.x,center.y,band.inner*displayScale(this.transform.scale),0,Math.PI*2,true);
+      ctx.fillStyle=band.fill;ctx.fill('evenodd');
+      ctx.beginPath();ctx.arc(center.x,center.y,radius,0,Math.PI*2);
       ctx.strokeStyle=band.stroke;ctx.lineWidth=1;ctx.setLineDash([4,5]);ctx.stroke();ctx.setLineDash([]);
     });
-    ctx.textBaseline="middle";ctx.textAlign="left";ctx.font='700 8px "Avenir Next", sans-serif';
-    const legendX=12,legendY=14,legendWidth=142,legendHeight=10+this.focusBands.length*17;
-    ctx.fillStyle="rgba(255,253,248,.91)";ctx.fillRect(legendX,legendY,legendWidth,legendHeight);
-    ctx.strokeStyle="rgba(69,91,98,.22)";ctx.lineWidth=1;ctx.strokeRect(legendX+.5,legendY+.5,legendWidth-1,legendHeight-1);
-    this.focusBands.forEach((band,index)=>{
-      const y=legendY+11+index*17;
-      ctx.fillStyle=band.fill;ctx.fillRect(legendX+7,y-5,9,9);ctx.strokeStyle=band.stroke;ctx.strokeRect(legendX+7.5,y-4.5,8,8);
-      ctx.fillStyle="#34484d";ctx.fillText(`${band.label.toUpperCase()}  ${fmt(band.count)}`,legendX+22,y);
-    });
-    ctx.textAlign="start";
   }
 
   draw() {
@@ -1536,7 +1654,7 @@ class GraphPanel {
     this.transform.scale=displayScale(this.transform.scale);
     const ctx=this.ctx;ctx.clearRect(0,0,this.width,this.height);
     if(!this.nodes.length){const message=compact(this.graph?.contract||"No nodes are available at this level.",220);ctx.font='600 13px Georgia, serif';const words=message.split(/\s+/),lines=[];let line="";words.forEach((word)=>{const candidate=`${line} ${word}`.trim();if(ctx.measureText(candidate).width>Math.min(440,this.width-90)&&line){lines.push(line);line=word;}else line=candidate;});if(line)lines.push(line);ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillStyle="#59696a";lines.forEach((value,index)=>ctx.fillText(value,this.width/2,this.height/2+(index-(lines.length-1)/2)*22));ctx.textAlign="start";return;}
-    if(state.guidePath&&this.graph?.focusMode&&this.focusBands.length)this.drawFocusBands();
+    if(this.graph?.focusMode&&this.focusBands.length)this.drawFocusBands();
     const incidentFocusId=this.neighborhood?.node?.id||null;
     const edgeWeights=this.edges.map((edge)=>Math.max(0,Number(edge.layout_weight||edge.weight||0)));
     const maximumEdgeWeight=Math.max(.000001,...edgeWeights);
@@ -1587,9 +1705,11 @@ class GraphPanel {
         ctx.lineWidth=edge.visibility_dimmed ? .45 : .35+2.25*relativeStrength;
       }
       if(!state.guidePath&&!edge.slot_navigation&&!edge.investigative_only){
-        const emphasized=explicitlyActive||selectedIncident||centerSpoke;
-        const opacity=edge.visibility_dimmed?.14:emphasized?.75:this.edges.length>4000?.14:this.edges.length>1200?.2:this.edges.length>400?.3:.48;
-        ctx.strokeStyle=`rgba(24,100,101,${opacity})`;ctx.lineWidth=explicitlyActive?2.8:edge.visibility_dimmed?.7:.85+1.8*relativeStrength;
+        const incident=selectedIncident&&(!incidentFocusId||selectedAwayFromCenter);
+        const density=this.edges.length>1200?.035:this.edges.length>400?.065:this.edges.length>150?.12:.23;
+        const opacity=edge.visibility_dimmed?.08:density*(.65+.65*relativeStrength);
+        ctx.strokeStyle=explicitlyActive?'rgba(184,77,54,.96)':incident?'rgba(40,121,148,.76)':`rgba(54,75,81,${opacity})`;
+        ctx.lineWidth=explicitlyActive?2.7:incident?1.7:edge.visibility_dimmed?.5:.55+1.1*relativeStrength;
       }
       ctx.setLineDash(edge.slot_navigation?[2,5]:this.studyContext?(edge.kind==="NAVIGATION"?[8,6]:edge.kind==="SOURCE_AGGREGATE"?[2,6]:[]):edge.investigative_only?[3,5]:["later_only","redacted_placeholder"].includes(edge.visibility)||edge.contains_redaction_placeholder?[5,4]:[]);ctx.stroke();ctx.setLineDash([]);
     });
@@ -1656,7 +1776,7 @@ class GraphPanel {
     const contextCount=(detail.edges||[]).filter(edge=>edge.slot_navigation).length;
     const counts=`${fmt((detail.neighbors||[]).filter(node=>!node.overlay_slot).length)} ordinary graph neighbors and ${fmt(total-contextCount)} published incident relationships.${contextCount?` Separately: ${fmt(contextCount)} source-context navigation links, not factual relationships or corroboration.`:''}`;
     const sc=detail.slot_context;
-    const contextPager=sc&&slotOverlayState.enabled?`<div class="slot-pagination"><p data-slot-neighborhood-count>${fmt(sc.total)} observed opaque slots with literal context at this node. Context page ${Math.floor(sc.offset/32)+1}; ${sc.ids.length} fetched, plus any active reciprocal slot. Not published relationships.</p><button data-slot-neighborhood-page="${Math.max(0,sc.offset-32)}" ${sc.offset===0?'disabled':''}>Previous context slots</button><button data-slot-neighborhood-page="${sc.next_offset}" ${sc.next_offset===null?'disabled':''}>Next context slots</button></div>`:'';
+    const contextPager=sc&&slotOverlayState.enabled?`<div class="slot-pagination"><p data-slot-neighborhood-count>${fmt(sc.total)} Redacted Slots with literal context at this node. Context page ${Math.floor(sc.offset/32)+1}; ${sc.ids.length} fetched, plus any active reciprocal slot. Not published relationships.</p><button data-slot-neighborhood-page="${Math.max(0,sc.offset-32)}" ${sc.offset===0?'disabled':''}>Previous context slots</button><button data-slot-neighborhood-page="${sc.next_offset}" ${sc.next_offset===null?'disabled':''}>Next context slots</button></div>`:'';
     return `<section class="incident-neighborhood"><div class="incident-heading"><p><b>${heading}</b><br>${explanation}<br>${counts} ${fmt(listed)} connections listed across the pages below; ${fmt(total-listed)} hidden by the current display controls.</p><div class="incident-actions">${switchView}${induced}</div></div>${legend}${status}${contextPager}${sections||`<p>${empty}</p>`}</section>`;
   }
 
@@ -1821,7 +1941,7 @@ class GraphPanel {
 }
 
 function mapBriefDescription(item,panel){
-  if(item.overlay_slot)return 'An opaque source mask. Its hidden text and identity are unavailable.';
+  if(item.overlay_slot)return 'A Redacted Slot with searchable visible source context.';
   if(item.slot_navigation)return 'This link opens visible source context. It is not a factual relationship.';
   if(nodeLevel[item.type]||item.aggregate_kind){
     let labels=[];
@@ -1872,6 +1992,46 @@ function visiblePanelNames() {
   if(redactionOnlyMode)return ["current"];
   if(!currentOnlyMode||state.displayMode==="pair")return ["legacy","current"];
   return ["current"];
+}
+
+function activePanels(){return visiblePanelNames().map(name=>state.panels[name]).filter(Boolean);}
+function activePanel(){return state.panels[state.activePanelName]&&visiblePanelNames().includes(state.activePanelName)?state.panels[state.activePanelName]:state.panels.current;}
+
+async function counterpartSearchRecord(panel,row){
+  if(row.overlay_slot)return row;
+  if(row.kind==='hierarchy'){
+    await ensureHierarchyCatalog(panel.view,row.hierarchy_level);
+    const base=panel.view.levels[row.hierarchy_level];
+    const exact=(base.catalog_nodes||base.nodes||[]).find(node=>node.id===row.id);
+    return exact?hierarchySearchRecord(exact,row.hierarchy_level):null;
+  }
+  await ensureEvidenceSearchCatalog([panel.view.key]);
+  const index=state.searchEvidenceIndexes[panel.view.key];
+  if(row.kind!=='edge')return index.get(row.id)||null;
+  const source=index.get(row.source),target=index.get(row.target);
+  if(!source||!target)return null;
+  const detail=await ensureNodeNeighborhood(panel.view,source.id);
+  const exact=detail.edges.find(edge=>edge.id===row.id||edge.source===source.id&&edge.target===target.id||edge.source===target.id&&edge.target===source.id);
+  return exact?{...exact,kind:'edge',label:row.label,source_record:source,target_record:target,source_label:source.label,target_label:target.label}:null;
+}
+
+async function navigateSharedSearch(panelName,row,{direct=false}={}){
+  const names=state.displayMode==='pair'?visiblePanelNames():[panelName];
+  await Promise.all(names.map(async name=>{
+    const panel=state.panels[name],record=name===panelName?row:await counterpartSearchRecord(panel,row);
+    panel.canvas.dataset.searchTarget=row.id;
+    if(!record){
+      // A missing object stays missing; only its recorded parent may be opened in the other projection.
+      const route=await panel.hierarchyRoute(row.kind==='edge'?row.source_record:row);
+      const parent=route.community||route.theme||route.domain;
+      if(parent)await panel.navigateToHierarchy(hierarchySearchRecord(parent,nodeLevel[parent.type]));
+      panel.canvas.dataset.searchTargetState='absent';
+      return;
+    }
+    await panel.navigateToSearchResult(record);
+    if(direct&&record.kind!=='edge'&&record.kind!=='hierarchy')await panel.focusNeighborhood(record);
+    panel.canvas.dataset.searchTargetState='present';
+  }));
 }
 
 async function ensureHierarchyCatalog(view,level) {
@@ -2197,7 +2357,7 @@ function renderPanelCaption(panel) {
   const graph=panel.graph;
   if (!graph) return;
   const slots=panel.nodes.filter(row=>row.overlay_slot),contextLinks=panel.edges.filter(row=>row.slot_navigation);
-  if(slots.length){$(`#${panel.name}-caption`).textContent=`${graph.focusMode?'Direct connections: ':''}${fmt(panel.nodes.length-slots.length)} ordinary graph objects and ${fmt(panel.edges.length-contextLinks.length)} published graph edges drawn, plus ${slots.length} opaque source slots and ${contextLinks.length} dotted source-context links (not factual relationships). ${graph.focusMode?`${fmt(graph.directEdgeCount)} published selected-node relationships; ${fmt(graph.contextDirectEdgeCount)} separate context links. `:''}Slot size is fixed, not concealed-text length. Native graph totals, weights and memberships are unchanged.`;return;}
+  if(slots.length){$(`#${panel.name}-caption`).textContent=`${graph.focusMode?'Direct connections: ':''}${fmt(panel.nodes.length-slots.length)} ordinary graph objects and ${fmt(panel.edges.length-contextLinks.length)} published graph edges drawn, plus ${slots.length} Redacted Slots and ${contextLinks.length} dotted source-context links (not factual relationships). ${graph.focusMode?`${fmt(graph.directEdgeCount)} published selected-node relationships; ${fmt(graph.contextDirectEdgeCount)} separate context links. `:''}Slot size is fixed, not concealed-text length. Native graph totals, weights and memberships are unchanged.`;return;}
   const context=panel.trail.length?` within ${panel.trail[panel.trail.length-1].label}`:" in the corpus view";
   const setCaption=(value)=>{
     const policy=state.guideOverlay
@@ -2270,7 +2430,7 @@ async function renderRelease() {
   if(currentOnlyMode){
     $$('[data-panel]').forEach((card)=>{card.hidden=!visiblePanelNames().includes(card.dataset.panel);});
     $(".graph-grid")?.classList.toggle("single-panel",visiblePanelNames().length===1);
-    $(".reveal-control")?.toggleAttribute("hidden",state.displayMode==="pair");
+    $(".reveal-control")?.removeAttribute("hidden");
   }
   state.panels.legacy.setGraph(legacy); state.panels.current.setGraph(current); renderMetrics(legacy,current); applySearch();
 }
@@ -2387,6 +2547,10 @@ async function searchRecordsForScope(view,scope,query) {
     const catalog=await ensureEvidenceSearchCatalog([key]);
     const records=catalog.views[key]||[];
     const filtered=scope==="evidence"?records:records.filter((row)=>scope==="redaction"?normalize(row.type)==="redactionslot":normalize(row.type)===scope);
+    if(scope==='evidence'&&slotOverlayState.enabled&&query.length>=3){
+      const page=await slotPage({q:query,limit:16});
+      return {records:[...filtered,...page.slots],count:filtered.length+page.matched_count};
+    }
     if(scope==="redaction"){
       const enriched=filtered.map((row)=>{
         const redactionCase=redactionCaseForRecord(row);
@@ -2453,7 +2617,7 @@ function renderSearchResults() {
   const column=(name,label)=>`<section class="search-column"><h3>${esc(label)}</h3>${state.searchResults[name].length?state.searchResults[name].map((row,index)=>{
     const edge=row.kind==="edge",hierarchy=row.kind==="hierarchy";
     const detail=row.overlay_slot?`${row.document_id} / earlier page ${row.source_page} / opaque, context navigation only`:edge?`${fmt(row.evidence_count)} supporting documents / ${row.edge_type}`:hierarchy?`${row.type} / ${fmt(row.mass)} assigned evidence nodes`:`${row.type||"Entity"} / ${fmt(row.document_count)} documents${row.visibility?` / ${visibilityLabel(row.visibility)}`:""}${identityScopeLabel(row)?` / ${identityScopeLabel(row)}`:""}${row.aliases?.length?` / observed forms: ${compact(row.aliases.join(", "),90)}`:""}`;
-    const action=row.overlay_slot?'Inspect opaque slot':edge?"Inspect edge":hierarchy?`Open ${row.hierarchy_level}`:"Inspect node";
+    const action=row.overlay_slot?'Inspect Redacted Slot':edge?"Inspect edge":hierarchy?`Open ${row.hierarchy_level}`:"Inspect node";
     return `<button class="search-hit" type="button" data-search-panel="${name}" data-search-index="${index}"><span><b>${esc(row.label)}</b><small>${esc(detail)}</small></span><span>${esc(action)}</span></button>`;
   }).join(""):`<p class="metric-caveat">No match in the complete selected object index.</p>`}</section>`;
   const {legacy,current}=currentViews(),visible=new Set(visiblePanelNames()); container.innerHTML=(visible.has("legacy")?column("legacy",legacy.label):"")+(visible.has("current")?column("current",current.label):""); container.hidden=false;
@@ -2461,7 +2625,7 @@ function renderSearchResults() {
     const panel=button.dataset.searchPanel,row=state.searchResults[panel][Number(button.dataset.searchIndex)];
     const actionLabel=button.lastElementChild.textContent;
     button.disabled=true;button.lastElementChild.textContent="Opening...";container.hidden=true;
-    try{await state.panels[panel].navigateToSearchResult(row);}catch(error){state.panels[panel].showExternalNode({...row,summary:`Navigation could not complete: ${error.message}. ${row.summary||""}`});}finally{button.disabled=false;button.lastElementChild.textContent=actionLabel;}
+    try{await navigateSharedSearch(panel,row);}catch(error){state.panels[panel].showExternalNode({...row,summary:`Navigation could not complete: ${error.message}. ${row.summary||""}`});}finally{button.disabled=false;button.lastElementChild.textContent=actionLabel;}
   }));
 }
 
@@ -2492,7 +2656,7 @@ function applySearch(resetSlotOffset=true) {
           ? ` Complete incident edges were read for ${fmt(legacyCatalog.matchedEndpointCount)} and ${fmt(currentCatalog.matchedEndpointCount)} matching entity endpoints in the ${pairLabels} views; those views contain ${fmt(legacyCatalog.count)} and ${fmt(currentCatalog.count)} published relationships.`
           : ` Matches were ranked across ${fmt(legacyCatalog.count)} and ${fmt(currentCatalog.count)} indexed ${state.searchScope} objects in the ${pairLabels} views.`;
       const matchSummary=singleCorpusMode?`${state.searchResults.current.length} corpus`:redactionOnlyMode?`${state.searchResults.current.length} redaction-graph`:currentOnlyMode?visiblePanelNames().map((name)=>`${state.searchResults[name].length} ${name==="legacy"?"earlier":"later"}`).join(" and "):`${state.searchResults.legacy.length} legacy and ${state.searchResults.current.length} current`;
-      $("#search-status").textContent=scope==='slot'?`${fmt(currentCatalog.count)} opaque source slots matched; ${state.searchResults.current.length} displayed on this page. Base-visible context and source IDs only; hidden names and lengths are not indexed. Navigation, not semantic evidence.`:`${matchSummary} matches shown.${basis}${filterNote}`; renderSearchResults();
+      $("#search-status").textContent=scope==='slot'?`${fmt(currentCatalog.count)} Redacted Slots matched; ${state.searchResults.current.length} displayed on this page. Base-visible context and source IDs only; hidden names and lengths are not indexed. Navigation, not semantic evidence.`:`${matchSummary} matches shown.${basis}${filterNote}`; renderSearchResults();
       const slotPager=$('#slot-search-pagination');slotPager.hidden=scope!=='slot';
       if(scope==='slot'){
         const page=slotOverlayState.searchPage;
@@ -2507,10 +2671,7 @@ function applySearch(resetSlotOffset=true) {
         const row=state.searchResults[panelName]?.[0];
         if(row){
           $("#search-results").hidden=true;
-          await state.panels[panelName].navigateToSearchResult(row);
-          if(openDirect&&row.kind!=="edge"&&row.kind!=="hierarchy"){
-            await state.panels[panelName].focusNeighborhood(row);
-          }
+          await navigateSharedSearch(panelName,row,{direct:openDirect});
         }
       }
     } catch (error) { $("#search-status").textContent=`Full search unavailable: ${error.message}`; }
@@ -3424,7 +3585,7 @@ async function guideRunV64(panel,work,{manual=false}={}) {
   const token=guideTokenV64(panel);panel.v64Busy=true;panel.canvas.setAttribute('aria-busy','true');guideUpdateLevelV64(panel);
   try{return await work(token);}catch(e){if(e.name!=='AbortError'){if(g&&state.guidePath===g)g.error=e.message;throw e;}}
   finally{
-    if(panel.v64Token===token){panel.v64Busy=false;panel.canvas.setAttribute('aria-busy','false');panel.updateChrome();}
+    if(panel.v64Token===token){panel.v64Busy=false;panel.canvas.setAttribute('aria-busy','false');panel.updateChrome();panel.startOrbit();}
     if(owns&&g===state.guidePath&&!token.cancelled){g.busy=false;g.settledAt=performance.now();renderGuideStatus();scheduleGuide();}
   }
 }
@@ -3433,7 +3594,7 @@ function guideResetViewV64(panel,level,trail,focusIds=[]) {
   panel.guideCommunityContext=null;
   panel.neighborhood=null;panel.localIncidentNeighborhood=null;panel.investigativeContext=null;panel.expandedIncidentScopes.clear();
   panel.showNeighborEdges=false;panel.inducedNeighborEdges=[];panel.inducedLoadRevision++;panel.inducedLoading=false;panel.inducedError='';
-  panel.level=level;panel.trail=[...trail];panel.nodeLimit=256;panel.external=null;panel.pinnedFocusIds=new Set(focusIds.filter(Boolean));panel.searchMatchIds.clear();
+  panel.level=level;panel.trail=[...trail];panel.nodeLimit=nodeLimitFor(level);panel.external=null;panel.pinnedFocusIds=new Set(focusIds.filter(Boolean));panel.searchMatchIds.clear();
   panel.refreshGraph(focusIds.at(-1)||null);
 }
 
@@ -3443,7 +3604,7 @@ async function guideParentV64(panel,token) {
     if(community?.type==='Community')await ensureCommunityDetail(panel.view,community);
     guideAssertV64(token);
     return guideTransitionV64(panel,{direction:'up',anchor_id:focus.id},()=>{
-      panel.nodeLimit=256;guideNativeV64.returnFromNeighborhood.call(panel);panel.refreshGraph(focus.id);
+      panel.nodeLimit=nodeLimitFor(panel.level);guideNativeV64.returnFromNeighborhood.call(panel);panel.refreshGraph(focus.id);
     },token);
   }
   const parent=panel.trail.at(-1);if(!parent)return;
@@ -3490,9 +3651,10 @@ async function guideOpenNeighborhoodV64(panel,record,token,{limit=256,remember=t
   await guideTransitionV64(panel,{direction:panel.nodeMap.has(record.id)?'down':'crossfade',anchor_id:record.id},()=>{
     if(saved)panel.nodeHistory.push(saved);
     panel.neighborhood=detail;panel.localIncidentNeighborhood=null;panel.level='evidence';panel.trail=route.route;panel.nodeLimit=limit;
-    panel.investigativeContext=null;panel.showNeighborEdges=false;panel.inducedNeighborEdges=[];panel.inducedLoadRevision++;
+    panel.investigativeContext=null;panel.showNeighborEdges=true;panel.inducedNeighborEdges=[];panel.inducedLoadRevision++;
     panel.pinnedFocusIds=new Set(ids);panel.external=null;panel.refreshGraph(record.id);
   },token);
+  if(!state.guidePath?.caseContext)await panel.loadInducedNeighborEdges();
 }
 
 function guideSetTraversalV64(panel,sourceId,targetId,connection) {
@@ -3586,6 +3748,9 @@ function configureTemporalControl(params) {
   const minus=$("#as-of-minus"),plus=$("#as-of-plus"),error=$("#as-of-date-error");
   if(!control||!slider||!dateInput||minDay===null||maxDay===null||maxDay<minDay)return;
   state.asOfPolicy.minimum=minimum;state.asOfPolicy.maximum=maximum;
+  const hint=$('#as-of-range-hint');
+  if(hint)hint.textContent=`Available dates: ${minimum} to ${maximum}. Outside dates snap to the nearest boundary.`;
+  dateInput.dataset.minimum=minimum;dateInput.dataset.maximum=maximum;
   const requested=String(params.get("as_of")||"");
   let selectedDay=maxDay;
   if(requested&&utcDay(requested)!==null){selectedDay=Math.max(minDay,Math.min(maxDay,utcDay(requested)));state.asOfPolicy.inclusive=true;}
@@ -3612,7 +3777,7 @@ function configureTemporalControl(params) {
   };
   const commitDate=()=>{
     const day=utcDay(dateInput.value.trim());
-    if(day===null||day<minDay||day>maxDay){
+    if(day===null){
       dateInput.setAttribute("aria-invalid","true");
       if(error){error.textContent=`Enter a valid date from ${minimum} to ${maximum} (YYYY-MM-DD). The graph's date has not changed.`;error.hidden=false;}
       return;
@@ -3620,6 +3785,8 @@ function configureTemporalControl(params) {
     selectDay(day);
   };
   dateInput.addEventListener("input",clearError);
+  dateInput.addEventListener('focus',()=>{if(hint)hint.hidden=false;});
+  dateInput.addEventListener('blur',()=>{commitDate();if(hint)hint.hidden=true;});
   dateInput.addEventListener("change",commitDate);
   dateInput.addEventListener("keydown",(event)=>{if(event.key==="Enter"){event.preventDefault();commitDate();}else if(event.key==="Escape"){event.preventDefault();sync();}});
   slider.addEventListener("input",()=>preview(Number(slider.value)));
@@ -3704,9 +3871,9 @@ async function init() {
     $$('[data-eligibility-style]').forEach((button)=>button.addEventListener("click",()=>setVisibilityMode(button.dataset.eligibilityStyle)));
     $("#show-ineligible")?.addEventListener("change",(event)=>setIneligiblePresence(event.target.checked));
     $$('[data-level]').forEach((button)=>button.addEventListener("click",async()=>{ state.level=button.dataset.level; $$('[data-level]').forEach((item)=>item.classList.toggle("active",item===button)); $("#level-explanation").textContent=levelCopy[state.level]; const url=new URL(window.location.href); url.searchParams.set("level",state.level); history.replaceState(null,"",url); await renderRelease(); }));
-    $$('[data-fit]').forEach((button)=>button.addEventListener("click",()=>{pauseGuide();state.panels[button.dataset.fit].fit();}));
-    $$('[data-back]').forEach((button)=>button.addEventListener("click",()=>state.panels[button.dataset.back].back()));
-    $$('[data-node-cap]').forEach((select)=>select.addEventListener("change",()=>state.panels[select.dataset.nodeCap].setNodeCap(select.value)));
+    $$('[data-fit]').forEach((button)=>button.addEventListener("click",()=>{pauseGuide();const panels=button.closest('.map-toolbar')?activePanels():[state.panels[button.dataset.fit]];panels.forEach(panel=>panel.fit());}));
+    $$('[data-back]').forEach((button)=>button.addEventListener("click",()=>{const panels=button.closest('.map-toolbar')?activePanels():[state.panels[button.dataset.back]];Promise.all(panels.map(panel=>panel.back())).catch(error=>$('#search-status').textContent=error.message);}));
+    $$('[data-node-cap]').forEach((select)=>select.addEventListener("change",()=>activePanels().forEach(panel=>panel.setNodeCap(select.value))));
     $("#graph-search").addEventListener("input",applySearch); $("#search-scope").addEventListener("change",applySearch); $("#hide-isolates").addEventListener("change",(event)=>{ state.hideIsolates=event.target.checked; applySearch(); });
     await initializeSlotOverlay();
     const requestedScope=params.get("scope"),requestedQuery=params.get("q")||"";
@@ -3734,7 +3901,7 @@ async function init() {
       const view=currentViews().current;
       await ensureEvidenceSearchCatalog([view.key]);
       const record=opaqueSlot(focusId)||state.searchEvidenceIndexes[view.key]?.get(focusId);
-      if(record)await state.panels.current.navigateToNode(record);
+      if(record)await navigateSharedSearch('current',record);
       else $("#search-status").textContent="The requested semantic ID is not in this separately bound exploration catalog. No substitute identity or route was invented.";
     }
     document.body.dataset.graphReady="true";
@@ -3788,10 +3955,17 @@ function bindMapToolbar(){
   $$('.toolbar-popover').forEach(d=>d.addEventListener('toggle',()=>{if(d.open){closePopovers(d);dropdown.hidden=true;}}));
   document.addEventListener('pointerdown',event=>{if(!event.target.closest('.toolbar-popover'))closePopovers();if(!event.target.closest('.search-box'))dropdown.hidden=true;});
   $('#hide-ineligible').onclick=()=>setIneligiblePresence(false);
-  $('#map-up').onclick=()=>{const panel=state.panels.current;if(!panel||panel.v64Busy)return;panel.closeInspector(false);guideRunV64(panel,token=>guideParentV64(panel,token),{manual:true}).catch(e=>panel.inspectionError(e));};
-  $('#map-context').onclick=()=>{const p=state.panels.current;if(!p||p.v64Busy)return;const item=p.selected&&!p.selected.source?p.selected:p.neighborhood?.node;if(!item)return;
-    if(state.guidePath)return guideContextView(p.neighborhood?'community':'neighborhood');
-    p.closeInspector(false);Promise.resolve(p.neighborhood?(p.level==='evidence'?p.openLocalCommunity(item):p.returnFromNeighborhood()):p.focusDirectConnections(item)).catch(e=>{p.drawerOpen=true;p.inspectionError(e);});};
+  $('#map-up').onclick=()=>{for(const panel of activePanels()){if(panel.v64Busy)continue;panel.closeInspector(false);guideRunV64(panel,token=>guideParentV64(panel,token),{manual:true}).catch(e=>panel.inspectionError(e));}};
+  $('#map-context').onclick=()=>{const selected=activePanel();if(!selected||selected.v64Busy)return;
+    if(state.guidePath)return guideContextView(selected.neighborhood?'community':'neighborhood');
+    const showNeighborhood=!selected.neighborhood;
+    for(const p of activePanels()){
+      if(p.v64Busy)continue;const item=p.selected&&!p.selected.source?p.selected:p.neighborhood?.node;if(!item)continue;
+      p.closeInspector(false);Promise.resolve(showNeighborhood?p.focusDirectConnections(item):p.neighborhood?(p.level==='evidence'?p.openLocalCommunity(p.neighborhood.node):p.returnFromNeighborhood()):null).catch(e=>{p.drawerOpen=true;p.inspectionError(e);});
+    }
+  };
+  $('#neighborhood-motion')?.addEventListener('change',event=>{state.neighborhoodMotion=event.target.checked;for(const p of activePanels())state.neighborhoodMotion?p.startOrbit():p.stopOrbit();});
+  $('#show-neighborhood-legend')?.addEventListener('click',()=>activePanels().filter(p=>p.graph?.focusMode).forEach(p=>p.showRingLegend()));
   $('#reset-map-labels').onclick=()=>{for(const p of Object.values(state.panels)){p.labelOverrides.clear();p.draw();}};
   const openSearch=()=>{if(search.value||$('#search-scope').value==='slot'){dropdown.hidden=false;closePopovers();}};
   search.addEventListener('input',()=>{dropdown.hidden=!search.value;closePopovers();});search.addEventListener('focus',openSearch);

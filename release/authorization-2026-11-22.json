@@ -1,0 +1,22 @@
+{
+  "version": "source-bound-release-authorization/1",
+  "date": "2026-11-22",
+  "candidate_manifest_sha256": "9d03341150d9cc137e6842a897cde7d461f9f645d3d189dd0eb9449f95b9a818",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "backend_code_sha256": "a2dc220c2cab099422429fbf420f1bc547cb39bd4ceee274e47c21720ae83b9b",
+  "publish_authorized": true,
+  "new_data_qa_accepted": true,
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "qualified_data_qa_ref": {
+    "path": "data-qa-2026-11-22.json",
+    "sha256": "245f53f6d9798b77a849aaa8fde31b14f711ae47b4b9fe7a9bfc5d92dada3850"
+  },
+  "privacy_and_rights_ref": {
+    "path": "privacy-and-rights-2026-11-22.json",
+    "sha256": "cbacab400a1c5d2e4a9a019b92a4757b64910979999e7884f60415ed1598e0e0"
+  },
+  "ordinary_inference_preserved": true,
+  "hidden_nationality_reference_unknown": true
+}

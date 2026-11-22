@@ -1,0 +1,16 @@
+{
+  "version": "source-bound-kg-patch-data-qa/1",
+  "status": "PASS_DIAGNOSTIC_DATA",
+  "date": "2026-11-22",
+  "candidate_manifest_sha256": "9d03341150d9cc137e6842a897cde7d461f9f645d3d189dd0eb9449f95b9a818",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "qa_sha256": "f5c6b9b76d10c07cdf313aa239742bf5f7e8233061948243f34d5c7b7ec387f8",
+  "integrity_sha256": "e4720cf9ef0cc77f7022213e10f73deb300499f451c7fbbc5f7ad187cd96bc83",
+  "browser_sha256": "27ecb79a7f9e8f69460a2ca497965a8f0abb68f43270044c0115f1508455e762",
+  "ordinary_native_packets_replayed": 14,
+  "datasets_revalidated": 1576,
+  "source_only_slot_records": 28201,
+  "ordinary_report_changed": false,
+  "benchmark_accuracy_claimed": false,
+  "research_qualification_inferred": false
+}
