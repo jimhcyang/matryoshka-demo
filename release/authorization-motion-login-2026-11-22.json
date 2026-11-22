@@ -1,0 +1,24 @@
+{
+  "version": "source-bound-release-authorization/1",
+  "date": "2026-11-22",
+  "candidate_manifest_sha256": "f71ee1a59eba3d732f9f41718bd959c910d096948f9d5fad48d8945c52787d04",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "backend_code_sha256": "02142eac8426045df9479b2fed1aabeb10b5bba625e3521b698cffcfa3dc2ee4",
+  "publish_authorized": true,
+  "new_data_qa_accepted": true,
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "qualified_data_qa_ref": {
+    "path": "data-qa-motion-login-2026-11-22.json",
+    "sha256": "997bb1397122a198259e4a9c39f409863bafc8c2aabcc31d5b309a45a3a4e1fd"
+  },
+  "privacy_and_rights_ref": {
+    "path": "privacy-and-rights-motion-login-2026-11-22.json",
+    "sha256": "25afdb18b42fd191d737f44a6b6d4d1aac4b96212f4c651dcfa2221cefe09f6f"
+  },
+  "ordinary_inference_preserved": true,
+  "api_key_server_only": true,
+  "client_key_reconstruction": false,
+  "new_scientific_performance_claimed": false
+}

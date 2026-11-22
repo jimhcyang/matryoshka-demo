@@ -487,9 +487,17 @@ def main():
                     assert page.locator('#run').is_disabled()
                     assert page.locator('#capability').input_value() == ''
                     assert page.locator('#capability').get_attribute('autocomplete') == 'off'
+                    assert page.locator('#login-password').input_value() == ''
+                    assert page.locator('#login-password').get_attribute('autocomplete') == 'off'
                     assert page.locator('input[name*="api_key" i],input[id*="api-key" i],input[id*="apikey" i]').count() == 0
                     assert not page.evaluate('()=>Boolean(window.PublicReplay)||localStorage.length||sessionStorage.length')
                     before = len(requests)
+                    page.locator('#login-password').fill('sk-fixture-rejection-not-a-real-provider-key')
+                    page.locator('#login-submit').click()
+                    expect(page.locator('#availability')).to_contain_text('not a model API key')
+                    assert page.locator('#login-password').input_value() == '' and len(requests) == before
+                    page.locator('#connection > summary').click()
+                    page.get_by_text('Advanced capability compatibility', exact=True).click()
                     page.locator('#capability').fill('sk-fixture-rejection-not-a-real-provider-key')
                     page.locator('#connect').click()
                     expect(page.locator('#availability')).to_contain_text('not a model API key')
@@ -499,7 +507,7 @@ def main():
                     connect = next(part.strip().split()[1:] for part in csp.split(';') if part.strip().startswith('connect-src '))
                     assert "'self'" in connect and '*' not in connect
                     assert all(value == "'self'" or re.fullmatch(r'http://127\.0\.0\.1:\d+', value) for value in connect), connect
-                    row.update(honest_unavailable=True, provider_key_rejected_before_transport=True,
+                    row.update(honest_unavailable=True, password_login_no_provider_key=True, provider_key_rejected_before_transport=True,
                                automatic_backend_requests=False, browser_credential_storage=False, connect_src=connect)
                 run('live-unconfigured', live, mobile=True)
             browser.close()

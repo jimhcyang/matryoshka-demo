@@ -1,0 +1,18 @@
+{
+  "version": "source-bound-motion-password-qa/1",
+  "date": "2026-11-22",
+  "status": "PASS_DIAGNOSTIC_DATA",
+  "candidate_manifest_sha256": "f71ee1a59eba3d732f9f41718bd959c910d096948f9d5fad48d8945c52787d04",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "integrity_sha256": "7515b3dcb2be793e8d6d2e945f1c527c63bcf2b269b0b4acfa268368c2a8f409",
+  "browser_sha256": "6443c923f6461fbe38372a400d1ff73b5c798ff3b06cc0fef10f6823d1714846",
+  "independent_kg_sha256": "6b354555f6915ab301f096b41fa2cccf1db5c58b02ae41bdfb11ad0fc81c5c23",
+  "independent_auth_privacy_sha256": "43e3ab51f88515b6cbe0001e4b8b03aecfc365a2311559593424fb1ee68aed91",
+  "logical_roots_reconstructed": 10041,
+  "ordinary_native_packets_replayed": 14,
+  "browser_release_cells": 25,
+  "native_outputs_or_source_bindings_changed": false,
+  "scientific_case_qualification_inferred": false,
+  "new_model_api_calls": 0,
+  "public_paid_backend_deployed": false
+}

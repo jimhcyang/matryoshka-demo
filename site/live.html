@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="no-referrer">
+  <meta name="live-backend" content="">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' http://127.0.0.1:8977; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'">
   <title>Matryoshka | Live</title>
   <link rel="icon" href="data:,">
@@ -19,18 +20,32 @@
       <p class="eyebrow">Analyst workbench / Live execution</p>
       <h1>A new question.<br><em>The actual pipeline.</em></h1>
       <p class="lede">Query-only planning, deterministic source retrieval and decisions. Every result retains its source scope, selected evidence and receipt.</p>
-      <p id="availability" class="notice" role="status">Live unavailable until you connect an authenticated backend. GitHub Pages cannot execute the pipeline. Saved cases are replay, not new inference.</p>
+      <p id="availability" class="notice" role="status">Live unavailable until an authenticated backend is configured. GitHub Pages cannot execute the pipeline. A password is access to that backend, not a model API key or browser-side inference.</p>
     </section>
     <div class="workspace">
       <section class="question-panel" aria-labelledby="question-title">
-        <details id="connection" open>
-          <summary>Authenticated connection</summary>
-          <p>Use a server-issued session capability, never an OpenAI API key. It stays in memory only, not URLs or browser storage.</p>
+        <section class="login-box" aria-labelledby="login-title">
+          <h2 id="login-title">Log in to Live</h2>
+          <p class="hint">Enter the private password supplied by your backend operator. Neither your password nor the short-lived session is saved by this page.</p>
+          <form id="login-form" autocomplete="off">
+            <label for="login-password">Access password</label>
+            <input id="login-password" type="password" required autocomplete="off" spellcheck="false" maxlength="256">
+            <div class="actions"><button id="login-submit" type="submit">Log in</button><button id="logout" class="secondary" type="button" disabled>Log out</button></div>
+          </form>
+          <p id="session-status" class="hint" role="status">Not logged in. No background login or inference requests.</p>
+        </section>
+        <details id="connection">
+          <summary>Connection settings</summary>
+          <p>The backend address is not a secret. Remote login requires an explicitly configured HTTPS backend. For local development, use the loopback companion.</p>
           <label for="backend">Backend URL</label>
           <input id="backend" type="url" autocomplete="off" spellcheck="false" placeholder="http://127.0.0.1:8977/live-api/">
-          <label for="capability">Session capability</label>
-          <input id="capability" type="password" autocomplete="off" spellcheck="false" maxlength="256">
-          <div class="actions"><button id="connect" type="button">Connect</button><button id="disconnect" class="secondary" type="button" disabled>Disconnect</button></div>
+          <details id="legacy-connection">
+            <summary>Advanced capability compatibility</summary>
+            <p class="hint">Only for an operator-enabled legacy capability, never a provider key. Normal access uses the password above.</p>
+            <label for="capability">Legacy session capability</label>
+            <input id="capability" type="password" autocomplete="off" spellcheck="false" maxlength="256">
+            <div class="actions"><button id="connect" type="button">Connect capability</button></div>
+          </details>
           <p class="hint">This page permits self and the explicit default loopback companion only. An external HTTPS backend also needs its exact origin added to this page's CSP, and this frontend's exact origin allowed by the backend. If public-to-local access is blocked, open the local companion page.</p>
         </details>
         <h2 id="question-title">Declare the question</h2>

@@ -104,8 +104,8 @@ $$('.preview-caption').forEach(caption=>$('#map-accounting').append(caption));
 const releaseFilterApplies = (view) => currentOnlyMode && state.displayMode !== "pair" && ["current_reveal","current_later"].includes(view?.key);
 const colors = {Domain:"#176e70",Theme:"#c89535",Community:"#315e78",EvidenceGroup:"#68787b",Entity:"#4d8068",Event:"#d39d35",Claim:"#bd5b44",RedactionSlot:"#bd5b44",RelationEvidence:"#79617e",Segment:"#68787b",Document:"#283f49",Unknown:"#68787b"};
 const visibilityLabel = (value) => (singleCorpusMode?{both:"present in Confidential and expanded classification views",later_only:"added by the Secret projection",redacted_placeholder:"opaque redaction placeholder"}:{both:"visible in earlier + later releases",later_only:"present in later release only",redacted_placeholder:"opaque redaction placeholder"})[value] || String(value || "");
-const visibilityModes = ["dim"];
-const visibilityModeLabels = {dim:"ineligible evidence dimmed"};
+const visibilityModes = ["show","dim"];
+const visibilityModeLabels = {show:"shown in full color",dim:"dimmed"};
 const isLaterOnly = (item) => {
   if (!item) return false;
   if (item.visibility === "later_only") return true;
@@ -505,11 +505,15 @@ class GraphPanel {
     this.labelLayer=document.createElement('div');this.labelLayer.className='map-labels';this.canvas.after(this.labelLayer);
     this.showNeighborEdges=true; this.inducedNeighborEdges=[]; this.inducedLoadRevision=0; this.inducedLoading=false; this.inducedError=""; this.focusBands=[]; this.inspectionRevision=0;
     this.orbitFrame=null;this.orbitHoverId=null;this.fitScale=1;
+    this.motionFrame=null;this.motionJob=null;this.orbitEnabled=false;this.orbitPhase=0;
+    this.motionStats={frames:0,collisionPasses:0,maxFrameMs:0,maxStepPx:0};
     this.ringLegend=document.createElement('aside');this.ringLegend.className='neighborhood-legend';this.ringLegend.hidden=true;this.canvas.after(this.ringLegend);
     this.ringLegend.addEventListener('pointerenter',()=>clearTimeout(this.legendTimer));
     this.ringLegend.addEventListener('pointerleave',()=>this.hideRingLegendSoon());
     this.bind(); this.resize();
-    new ResizeObserver(()=>{ this.resize(); this.fit();this.startOrbit(); }).observe(this.canvas.parentElement);
+    new ResizeObserver(()=>{const width=this.width,height=this.height;this.resize();if(width!==this.width||height!==this.height){this.fit();this.startOrbit();}}).observe(this.canvas.parentElement);
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden){this.compactLayout();this.startOrbit();}});
+    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',()=>{if(guideReducedMotion()){this.compactLayout({immediate:true});this.stopOrbit();}else this.startOrbit();});
   }
 
   bind() {
@@ -576,7 +580,7 @@ class GraphPanel {
         ...node,
         eligibility_ineligible:ineligible,
         eligibility_reasons:reasons,
-        visibility_dimmed:ineligible&&(policy==="dim"||!state.showIneligible||preserved),
+        visibility_dimmed:ineligible&&(policy==="dim"||!state.showIneligible),
         visibility_hidden_anchor:ineligible&&!state.showIneligible&&preserved,
       };
     });
@@ -785,6 +789,7 @@ class GraphPanel {
   }
 
   refreshGraph(focusId=null) {
+    const priorNodes=new Map(this.nodes.map(node=>[node.id,node])),priorKey=this.layoutKey;
     const previousNodeId=focusId||(!this.selected?.source?this.selected?.id:null);
     const previousEdgeId=this.selected?.source?this.selected?.id:null;
     this.graph=this.graphSelection();
@@ -797,6 +802,10 @@ class GraphPanel {
       const range=this.level==='evidence'?[9,31]:this.level==='community'?[13,37]:[16,42];
       return {...row,index,x:Math.cos(angle)*radius,y:Math.sin(angle)*radius,vx:0,vy:0,r:row.overlay_slot?10:range[0]+Math.pow(relative,.8)*(range[1]-range[0])};
     });
+    this.layoutKey=[this.view.key,this.level,...this.trail.map(row=>row.id),this.graph.focusMode?this.graph.focusNodeId:'packed'].join('|');
+    const sameScope=priorKey===this.layoutKey;
+    const sameMembers=sameScope&&priorNodes.size===this.nodes.length&&this.nodes.every(node=>priorNodes.has(node.id));
+    if(!sameScope)this.orbitPhase=0;
     this.focusBands=[];
     if(this.graph.focusMode)this.positionFocusRings();
     this.nodeMap=new Map(this.nodes.map((node)=>[node.id,node]));
@@ -804,14 +813,26 @@ class GraphPanel {
     this.selected=previousNodeId&&this.nodeMap.has(previousNodeId)?this.nodeMap.get(previousNodeId):previousEdgeId?this.edges.find((edge)=>edge.id===previousEdgeId)||null:null;
     this.external=null; this.hover=null;
     this.matches=new Set([...this.pinnedFocusIds,...this.searchMatchIds].filter((id)=>this.nodeMap.has(id)));
-    this.stopPhysics();this.stopOrbit();this.layout();
-    if(!this.graph.focusMode)this.resolveCollisions(null,4);
-    this.fit();
-    if(this.graph.focusMode)this.reserveFocusLabelHole();
-    if(!this.graph.focusMode){
-      for(let pass=0;pass<(this.nodes.length>700?4:10);pass++){this.resolveCollisions(null,24);this.fit();}
+    this.stopPhysics();this.stopOrbit();
+    if(sameMembers&&this.compactHomes){
+      for(const node of this.nodes){const old=priorNodes.get(node.id);node.x=old.x;node.y=old.y;node.orbitAngle=old.orbitAngle;node.orbitRadius=old.orbitRadius;}
+    }else{
+      this.packedLayout=this.nodes.length>700&&!this.graph.focusMode;
+      this.layout();
+      this.fit();
+      if(!this.packedLayout&&!this.graph.focusMode){
+        const scale=displayScale(this.transform.scale),points=this.motionPoints();
+        GraphKG.relax(points,{steps:32,pull:0,gap:2/scale,maxStep:24/scale});
+        if(GraphKG.overlaps(points,0,.4/scale)){this.packedLayout=true;this.planPackedFit();}
+        else points.forEach((point,index)=>{this.nodes[index].x=point.x;this.nodes[index].y=point.y;});
+      }
+      this.compactHomes=new Map(this.nodes.map(node=>[node.id,{x:node.x,y:node.y}]));
+      if(sameScope&&!state.guidePath&&!this.v64Busy&&!guideReducedMotion()){
+        for(const node of this.nodes){const old=priorNodes.get(node.id);if(old){node.x=old.x;node.y=old.y;}}
+        this.compactLayout();
+      }
     }
-    this.compactHomes=new Map(this.nodes.map(node=>[node.id,{x:node.x,y:node.y}]));
+    if(this.graph.focusMode)this.reserveFocusLabelHole();
     this.renderInspector();this.updateChrome();
     if(this.graph.focusMode){this.showRingLegend();this.startOrbit();}else this.ringLegend.hidden=true;
   }
@@ -839,8 +860,10 @@ class GraphPanel {
         const phase=((hashNumber(`${this.graph.focusNodeId}:${scope}:${radius}`)%1000)/1000)*Math.PI*2;
         ring.forEach((node,index)=>{
           const angle=phase+index*Math.PI*2/ring.length;
-          node.x=Math.cos(angle)*radius;node.y=Math.sin(angle)*radius;node.vx=0;node.vy=0;
-          node.orbitRadius=radius;node.orbitAngle=angle;node.orbitBand=scopeIndex;
+          const phaseAngle=angle+this.orbitPhase/(1+scopeIndex*.12);
+          node.x=Math.cos(phaseAngle)*radius;node.y=Math.sin(phaseAngle)*radius;node.vx=0;node.vy=0;
+          node.ringHomeAngle=angle;node.ringHomeRadius=radius;
+          node.orbitRadius=radius;node.orbitAngle=phaseAngle;node.orbitBand=scopeIndex;
           node.orbitClearance=Math.min(largest+3,radius*Math.sin(Math.PI/Math.max(2,ring.length))-3);
         });
         offset+=ring.length;lastRadius=radius;radius+=2*largest+12;
@@ -880,55 +903,120 @@ class GraphPanel {
 
   // Display-only broad-phase collisions. No membership, topology, or source weights change.
   resolveCollisions(anchor=null,passes=2) {
-    const size=Math.max(128,...this.nodes.map(node=>(2*this.nodeRadius(node)+14)/displayScale(this.transform.scale)));
-    for(let pass=0;pass<passes;pass++){
-      const cells=new Map();
-      for(const node of this.nodes){const key=`${Math.floor(node.x/size)}:${Math.floor(node.y/size)}`;if(!cells.has(key))cells.set(key,[]);cells.get(key).push(node);}
-      for(const a of this.nodes){
-        const cx=Math.floor(a.x/size),cy=Math.floor(a.y/size);
-        for(let x=cx-1;x<=cx+1;x++)for(let y=cy-1;y<=cy+1;y++)for(const b of cells.get(`${x}:${y}`)||[]){
-          if(a.index>=b.index)continue;
-          const gap=Math.max(3,12/Math.sqrt(Math.max(1,this.nodes.length/32)));
-          let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),minimum=(this.nodeRadius(a)+this.nodeRadius(b)+gap)/displayScale(this.transform.scale);
-          if(d>=minimum)continue;
-          if(d<.001){dx=1;dy=.5;d=Math.hypot(dx,dy);}
-          const push=(minimum-d)*.52,nx=dx/d,ny=dy/d;
-          const aShare=a===anchor?0:b===anchor?1:.5,bShare=1-aShare;
-          a.x-=nx*push*aShare;a.y-=ny*push*aShare;b.x+=nx*push*bShare;b.y+=ny*push*bShare;
-          a.vx-=nx*push*aShare*.12;a.vy-=ny*push*aShare*.12;b.vx+=nx*push*bShare*.12;b.vy+=ny*push*bShare*.12;
-        }
-      }
-    }
+    const scale=displayScale(this.transform.scale),points=this.motionPoints();
+    GraphKG.relax(points,{steps:1,passes:Math.min(2,passes),pull:0,gap:1/scale,anchor:anchor?.id,maxStep:4/scale});
+    points.forEach((point,index)=>{this.nodes[index].x=point.x;this.nodes[index].y=point.y;});
+    this.motionStats.collisionPasses+=Math.min(2,passes);
   }
 
-  stopPhysics(){if(this.physicsFrame!==null)cancelAnimationFrame(this.physicsFrame);this.physicsFrame=null;delete this.canvas.dataset.settling;}
+  motionPoints(){
+    const scale=displayScale(this.transform.scale);
+    return this.nodes.map(node=>({id:node.id,x:node.x,y:node.y,homeX:node.x,homeY:node.y,r:(this.nodeRadius(node,0,3.5)+this.nodeStrokeRadius(node))/scale,
+      fixed:this.graph?.focusMode&&node.id===this.graph.focusNodeId,band:this.graph?.focusMode?this.focusBands.find(band=>band.index===node.orbitBand):null}));
+  }
+  focusPaintClearance(node){
+    if(!this.graph?.focusMode)return Infinity;
+    const world=node.id===this.graph.focusNodeId?(this.focusBands[0]?.inner||node.r+24)-8:node.orbitClearance;
+    return Number.isFinite(world)?Math.max(0,world*displayScale(this.transform.scale)):Infinity;
+  }
+  nodeStrokeRadius(node){return Math.min(.7,this.focusPaintClearance(node)*.15);}
+  packedTargets(scale=displayScale(this.transform.scale)){
+    const previous=this.transform.scale,area=this.usableBounds();
+    this.transform.scale=scale;
+    try{return GraphKG.packed(this.nodes.map(node=>({id:node.id,r:this.nodeRadius(node,0,3.5)+this.nodeStrokeRadius(node)})),{gap:Math.max(1,4/Math.sqrt(this.nodes.length/32))*(this.packingDensity||1),aspect:area.width/area.height});}
+    finally{this.transform.scale=previous;}
+  }
+  planPackedFit(){
+    const area=this.usableBounds();this.packingDensity=1;
+    let low=.000001,high=3.2,plan=this.packedTargets(low);
+    if(plan.width>area.width*.92||plan.height>area.height*.92){
+      let lowDensity=.0001,highDensity=1;
+      for(let i=0;i<12;i++){
+        this.packingDensity=(lowDensity+highDensity)/2;const candidate=this.packedTargets(low);
+        if(candidate.width<=area.width*.92&&candidate.height<=area.height*.92)lowDensity=this.packingDensity;else highDensity=this.packingDensity;
+      }
+      this.packingDensity=lowDensity;plan=this.packedTargets(low);
+    }
+    this.packingFeasible=plan.width<=area.width*.94&&plan.height<=area.height*.94;
+    this.canvas.dataset.packingDensity=String(this.packingDensity);
+    this.canvas.dataset.packingFeasible=String(this.packingFeasible);
+    // Solve the screen-radius constraint offscreen, never alternate visible fit/repulsion.
+    for(let i=0;i<18;i++){
+      const scale=(low+high)/2,next=this.packedTargets(scale);
+      if(next.width<=area.width*.94&&next.height<=area.height*.94){low=scale;plan=next;}else high=scale;
+    }
+    this.transform={scale:low,x:(area.left+area.right)/2,y:(area.top+area.bottom)/2};this.fitScale=low;
+    this.nodes.forEach((node,index)=>{node.x=plan.points[index].x/low;node.y=plan.points[index].y/low;node.vx=0;node.vy=0;});
+  }
+  stopPhysics(){
+    this.motionJob=null;this.physicsFrame=null;delete this.canvas.dataset.settling;
+    if(!this.orbitEnabled&&this.motionFrame!==null){cancelAnimationFrame(this.motionFrame);this.motionFrame=null;}
+  }
   resolveFocusCollisions(anchor=null){
     const scale=displayScale(this.transform.scale);
-    const points=this.nodes.map(node=>({id:node.id,x:node.x,y:node.y,homeX:node.x,homeY:node.y,r:this.nodeRadius(node)/scale,fixed:node.id===this.graph.focusNodeId,band:this.focusBands.find(band=>band.index===node.orbitBand)}));
-    GraphKG.relax(points,{steps:2,pull:0,gap:2/scale,anchor:anchor?.id});
+    const points=this.motionPoints();
+    GraphKG.relax(points,{steps:1,pull:0,gap:.5/scale,anchor:anchor?.id,maxStep:4/scale});
     points.forEach((point,index)=>{const node=this.nodes[index];node.x=point.x;node.y=point.y;if(!point.fixed){node.orbitRadius=Math.hypot(point.x,point.y);node.orbitAngle=Math.atan2(point.y,point.x);}});
+    this.motionStats.collisionPasses+=2;
   }
-  stopOrbit(){if(this.orbitFrame!==null)cancelAnimationFrame(this.orbitFrame);this.orbitFrame=null;this.canvas.dataset.orbitState='stopped';}
+  stopOrbit(){
+    this.orbitEnabled=false;this.orbitFrame=null;this.canvas.dataset.orbitState='stopped';
+    if(!this.motionJob&&this.motionFrame!==null){cancelAnimationFrame(this.motionFrame);this.motionFrame=null;}
+  }
   startOrbit(){
-    this.stopOrbit();
-    if(!this.graph?.focusMode||!state.neighborhoodMotion||guideReducedMotion()||state.guidePath||this.v64Busy||!this.canvas.getClientRects().length)return;
+    if(state.guidePath||this.v64Busy){this.stopPhysics();this.stopOrbit();return;}
+    this.orbitEnabled=Boolean(this.graph?.focusMode&&state.neighborhoodMotion&&!guideReducedMotion()&&!state.guidePath&&!this.v64Busy);
+    this.scheduleMotion();
+  }
+  scheduleMotion(){
+    if(this.motionFrame!==null||document.hidden||!this.canvas.getClientRects().length||(!this.motionJob&&!this.orbitEnabled&&!this.dragCollisionPending))return;
     let last=performance.now();
     const tick=now=>{
-      if(!this.graph?.focusMode||!state.neighborhoodMotion||guideReducedMotion()||state.guidePath||!this.canvas.getClientRects().length){this.stopOrbit();return;}
-      const elapsed=Math.min(.05,(now-last)/1000);last=now;
-      const paused=document.hidden||this.v64Busy||this.drag||this.drawerOpen||(this.hover&&!this.hover.source)||this.orbitHoverId;
-      this.canvas.dataset.orbitState=paused?'paused':'moving';
-      if(!paused){
+      this.motionFrame=null;this.physicsFrame=null;this.orbitFrame=null;
+      if(document.hidden||state.guidePath||this.v64Busy||!this.canvas.getClientRects().length)return;
+      if(!state.neighborhoodMotion&&!guideReducedMotion()){this.canvas.dataset.orbitState='paused';return;}
+      const interval=now-last,elapsed=interval>GraphKG.MOTION.stallMs?0:interval;last=now;
+      const started=performance.now(),scale=displayScale(this.transform.scale);let changed=false;
+      if(this.dragCollisionPending&&this.drag?.node){
+        this.dragCollisionPending=false;
+        if(this.graph?.focusMode)this.resolveFocusCollisions(this.drag.node);else this.resolveCollisions(this.drag.node);
+        changed=true;
+      }
+      if(this.motionJob&&!this.drag){
+        const job=this.motionJob;job.elapsed+=elapsed;const progress=Math.min(1,job.elapsed/job.duration),ease=GraphKG.ease(progress);
+        let remaining=0;
+        this.nodes.forEach((node,index)=>{const from=job.from[index],to=job.to[index];let x=from.x+(to.x-from.x)*ease,y=from.y+(to.y-from.y)*ease;
+          if(this.graph?.focusMode&&node.id!==this.graph.focusNodeId){
+            const startAngle=Math.atan2(from.y,from.x),endAngle=Math.atan2(to.y,to.x),angle=startAngle+Math.atan2(Math.sin(endAngle-startAngle),Math.cos(endAngle-startAngle))*ease;
+            const radius=Math.hypot(from.x,from.y)+(Math.hypot(to.x,to.y)-Math.hypot(from.x,from.y))*ease;
+            x=Math.cos(angle)*radius;y=Math.sin(angle)*radius;
+          }
+          const dx=x-node.x,dy=y-node.y,distance=Math.hypot(dx,dy),fraction=distance?Math.min(1,GraphKG.MOTION.maxStepPx/(distance*scale)):1;
+          this.motionStats.maxStepPx=Math.max(this.motionStats.maxStepPx,distance*fraction*scale);node.x+=dx*fraction;node.y+=dy*fraction;node.vx=0;node.vy=0;
+          remaining=Math.max(remaining,Math.hypot(node.x-to.x,node.y-to.y)*scale);
+          if(this.graph?.focusMode&&node.id!==this.graph.focusNodeId){node.orbitRadius=Math.hypot(node.x,node.y);node.orbitAngle=Math.atan2(node.y,node.x);}});
+        if(progress===1&&remaining<.05){this.motionStats.lastReturnWallMs=performance.now()-job.startedAt;this.motionStats.lastReturnDurationMs=job.duration;this.motionJob=null;delete this.canvas.dataset.settling;}
+        changed=true;
+      }
+      this.orbitEnabled=Boolean(this.graph?.focusMode&&state.neighborhoodMotion&&!guideReducedMotion());
+      const paused=this.motionJob||this.drag||this.drawerOpen||(this.hover&&!this.hover.source)||this.orbitHoverId;
+      this.canvas.dataset.orbitState=this.orbitEnabled?(paused?'paused':'moving'):'stopped';
+      if(this.orbitEnabled&&!paused){
+        this.orbitPhase+=elapsed/1000*GraphKG.MOTION.orbitRate;
         for(const node of this.nodes){
           if(node.id===this.graph.focusNodeId||!Number.isFinite(node.orbitAngle))continue;
-          node.orbitAngle+=elapsed*(.012/(1+(node.orbitBand||0)*.12));
+          node.orbitAngle+=elapsed/1000*(GraphKG.MOTION.orbitRate/(1+(node.orbitBand||0)*.12));
           node.x=Math.cos(node.orbitAngle)*node.orbitRadius;node.y=Math.sin(node.orbitAngle)*node.orbitRadius;
         }
-        this.draw();
+        changed=true;
       }
-      this.orbitFrame=requestAnimationFrame(tick);
+      if(changed){this.draw();this.motionStats.frames++;this.motionStats.maxFrameMs=Math.max(this.motionStats.maxFrameMs,performance.now()-started);}
+      if(this.motionJob||this.orbitEnabled||this.dragCollisionPending){
+        this.motionFrame=requestAnimationFrame(frame);this.physicsFrame=this.motionJob?this.motionFrame:null;this.orbitFrame=this.orbitEnabled?this.motionFrame:null;
+      }
     };
-    this.orbitFrame=requestAnimationFrame(tick);
+    const frame=now=>{if(now-last<GraphKG.MOTION.frameMs-.5){this.motionFrame=requestAnimationFrame(frame);return;}tick(now);};
+    this.motionFrame=requestAnimationFrame(frame);
   }
   hideRingLegendSoon(){clearTimeout(this.legendTimer);this.legendTimer=setTimeout(()=>{this.ringLegend.hidden=true;},12000);}
   showRingLegend(){
@@ -945,23 +1033,28 @@ class GraphPanel {
   compactLayout({immediate=false}={}){
     this.stopPhysics();
     if(this.drag||state.guidePath||this.v64Busy||!this.nodes.length)return;
-    if(this.graph?.focusMode){
-      this.positionFocusRings();this.draw();return;
-    }
     const scale=displayScale(this.transform.scale),homes=this.compactHomes;
-    const points=this.nodes.map(node=>{const home=homes?.get(node.id)||node;return {id:node.id,x:node.x,y:node.y,homeX:home.x,homeY:home.y,r:this.nodeRadius(node)/scale};});
-    const step=()=>{
-      GraphKG.relax(points,{steps:1,gap:6/scale,maxStep:12/scale});
-      for(let i=0;i<points.length;i++){const p=points[i],n=this.nodes[i];n.x=p.x;n.y=p.y;n.vx=0;n.vy=0;}
-      this.draw();
-    };
-    if(immediate||guideReducedMotion()){
-      GraphKG.relax(points,{steps:32,gap:6/scale,maxStep:12/scale});step();return;
+    let targets;
+    if(this.graph?.focusMode)targets=this.nodes.map(node=>{
+      if(node.id===this.graph.focusNodeId)return {x:0,y:0};
+      const angle=node.ringHomeAngle+this.orbitPhase/(1+(node.orbitBand||0)*.12);
+      return {x:Math.cos(angle)*node.ringHomeRadius,y:Math.sin(angle)*node.ringHomeRadius};
+    });
+    else if(this.packedLayout)targets=this.packedTargets(scale).points.map(point=>({x:point.x/scale,y:point.y/scale}));
+    else{
+      const points=this.motionPoints();
+      points.forEach(point=>{const home=homes?.get(point.id)||point;point.x=home.x;point.y=home.y;});
+      GraphKG.relax(points,{steps:32,pull:0,gap:2/scale,maxStep:24/scale});
+      if(GraphKG.overlaps(points,0,.4/scale)){this.packedLayout=true;targets=this.packedTargets(scale).points.map(point=>({x:point.x/scale,y:point.y/scale}));}
+      else targets=points;
     }
-    let frames=0;this.canvas.dataset.settling='true';
-    step();
-    const tick=()=>{if(this.drag){this.stopPhysics();return;}step();if(++frames<36)this.physicsFrame=requestAnimationFrame(tick);else this.stopPhysics();};
-    this.physicsFrame=requestAnimationFrame(tick);
+    const distance=Math.max(...this.nodes.map((node,index)=>Math.hypot(node.x-targets[index].x,node.y-targets[index].y)*scale));
+    if(immediate||guideReducedMotion()||!state.neighborhoodMotion||distance<.05){
+      this.nodes.forEach((node,index)=>{node.x=targets[index].x;node.y=targets[index].y;if(this.graph?.focusMode){node.orbitRadius=Math.hypot(node.x,node.y);node.orbitAngle=Math.atan2(node.y,node.x);}});this.draw();return;
+    }
+    const duration=Math.min(GraphKG.MOTION.maxReturnMs,Math.max(GraphKG.MOTION.returnMs,distance*2.5));
+    this.motionJob={from:this.nodes.map(node=>({x:node.x,y:node.y})),to:targets,elapsed:0,duration,startedAt:performance.now()};
+    this.canvas.dataset.settling='true';this.scheduleMotion();
   }
 
   usableBounds(){
@@ -980,6 +1073,7 @@ class GraphPanel {
   fit() {
     if (!(this.width>0&&this.height>0)) return;
     if (!this.nodes.length) { this.transform={x:0,y:0,scale:1};this.draw();return; }
+    if(this.packedLayout&&!this.graph?.focusMode){this.planPackedFit();this.draw();return;}
     const available=this.usableBounds(),diameter=Math.min(available.width,available.height)*(this.graph?.focusMode ? .88 : .78);
     const area={width:diameter,height:diameter,left:available.left+(available.width-diameter)/2,top:available.top+(available.height-diameter)/2};
     const extent=this.graph?.focusMode?Math.max(this.focusBands.at(-1)?.outer||0,...this.nodes.map(n=>n.r+8)):null;
@@ -1343,7 +1437,10 @@ class GraphPanel {
     const denseNeighbor=mobile&&this.graph?.focusMode&&this.nodes.length>96&&node.id!==this.graph.focusNodeId;
     const density=denseNeighbor?Math.max(.45,Math.sqrt(64/this.nodes.length)):1;
     const radius=displayRadius(displayRadius(node.r,5,42)*Math.pow(scale,.62)*(mobile?.9:1)*density+padding,Math.max(2,4*density,minimum),ceiling+padding);
-    return this.graph?.focusMode&&Number.isFinite(node.orbitClearance)?Math.min(radius,Math.max(1,node.orbitClearance*scale)+padding):radius;
+    // A packed dense viewport may lower its pixel floor; never alter stored mass.
+    const packedRadius=this.nodes.length>700&&this.packedLayout&&!this.graph?.focusMode?(radius-padding)*(this.packingDensity||1)+padding:radius;
+    const clearance=this.focusPaintClearance(node);
+    return Number.isFinite(clearance)?Math.min(radius,Math.max(0,clearance-this.nodeStrokeRadius(node))+padding):packedRadius;
   }
   pointer(event) { const rect=this.canvas.getBoundingClientRect();return {x:event.clientX-rect.left,y:event.clientY-rect.top}; }
   hitNode(point) {
@@ -1371,7 +1468,10 @@ class GraphPanel {
     const point=this.pointer(event);
     if (this.drag) {
       const dx=point.x-this.drag.last.x,dy=point.y-this.drag.last.y;if(Math.hypot(point.x-this.drag.start.x,point.y-this.drag.start.y)>5){this.drag.moved=true;this.clearHold();}
-      if(this.drag.node&&!(this.graph?.focusMode&&this.drag.node.id===this.graph.focusNodeId)){this.drag.node.x+=dx/this.transform.scale;this.drag.node.y+=dy/this.transform.scale;this.drag.node.vx=dx/this.transform.scale*.12;this.drag.node.vy=dy/this.transform.scale*.12;if(!state.guidePath){if(this.graph?.focusMode)this.resolveFocusCollisions(this.drag.node);else this.resolveCollisions(this.drag.node,4);}}else{this.transform.x+=dx;this.transform.y+=dy;}this.drag.last=point;this.draw();return;
+      if(this.drag.node&&!(this.graph?.focusMode&&this.drag.node.id===this.graph.focusNodeId)){
+        const scale=displayScale(this.transform.scale);this.drag.node.x+=dx/scale;this.drag.node.y+=dy/scale;
+        if(!state.guidePath){this.dragCollisionPending=true;this.scheduleMotion();}
+      }else{this.transform.x+=dx;this.transform.y+=dy;}this.drag.last=point;this.draw();return;
     }
     const hit=this.hitNode(point)||this.hitEdge(point);this.hover=hit;
     if(hit){const detail=hit.source?(hit.description||hit.weight_semantics||hit.edge_type||""):(hit.summary||hit.type||"");this.tooltip.innerHTML=`<b>${esc(compact(hit.label||hit.edge_type||"Connection",120))}</b><small>${esc(compact(detail,200))}</small>`;this.tooltip.style.left=`${Math.max(5,Math.min(this.width-275,point.x+13))}px`;this.tooltip.style.top=`${Math.max(5,Math.min(this.height-82,point.y+13))}px`;this.tooltip.hidden=false;}else this.tooltip.hidden=true;this.draw();
@@ -1387,21 +1487,15 @@ class GraphPanel {
       else {this.closeInspector(false);this.compactLayout();}
     }
     if(moved&&draggedNode&&!state.guidePath){
-      if(this.graph?.focusMode&&draggedNode.id!==this.graph.focusNodeId){
-        const band=this.focusBands.find(row=>row.index===draggedNode.orbitBand);
-        const radius=Math.hypot(draggedNode.x,draggedNode.y);
-        draggedNode.orbitRadius=band?Math.max(band.inner+draggedNode.r+8,Math.min(band.outer-draggedNode.r-8,radius)):radius;
-        draggedNode.orbitAngle=Math.atan2(draggedNode.y,draggedNode.x);
-        draggedNode.x=Math.cos(draggedNode.orbitAngle)*draggedNode.orbitRadius;draggedNode.y=Math.sin(draggedNode.orbitAngle)*draggedNode.orbitRadius;
-        this.resolveFocusCollisions(draggedNode);
-      }else if(!this.graph?.focusMode)this.settlePhysics();
+      this.dragCollisionPending=false;this.compactLayout();
     }
     this.startOrbit();
     this.syncMapActions();
     this.draw();
   }
-  pointerCancel() { this.clearHold();this.drag=null;this.canvas.classList.remove("dragging");this.startOrbit(); }
-  wheel(event) { event.preventDefault();if(this.studyContext)pauseGuide();const point=this.pointer(event),before=this.world(point),scale=Math.max(.12,Math.min(3.2,this.transform.scale*Math.exp(-event.deltaY*.0012)));this.transform.scale=scale;this.transform.x=point.x-before.x*scale;this.transform.y=point.y-before.y*scale;this.compactLayout();this.draw(); }
+  pointerCancel() { this.clearHold();this.drag=null;this.dragCollisionPending=false;this.canvas.classList.remove("dragging");this.compactLayout();this.startOrbit(); }
+  zoomFloor(){return Math.max(.000001,Math.min(.12,this.fitScale||.12)/16);}
+  wheel(event) { event.preventDefault();if(this.studyContext)pauseGuide();const point=this.pointer(event),before=this.world(point),scale=Math.max(this.zoomFloor(),Math.min(3.2,this.transform.scale*Math.exp(-event.deltaY*.0012)));this.transform.scale=scale;this.transform.x=point.x-before.x*scale;this.transform.y=point.y-before.y*scale;this.compactLayout();this.draw(); }
 
   toggleLabel(node){
     this.labelOverrides.set(node.id,!this.labelButtons.has(node.id));
@@ -1446,13 +1540,13 @@ class GraphPanel {
       this.selected=node;this.external=null;this.labelOverrides.set(node.id,true);this.reserveLabelSpace();this.draw();this.syncMapActions();$('#map-keyboard-status').textContent=`${node.label}. ${node.type}. Enter for sources. Space toggles its label.`;
     }else if(event.key===' '&&current>=0){event.preventDefault();this.toggleLabel(this.nodes[current]);}
     else if(event.key==='Enter'&&current>=0){event.preventDefault();if(event.shiftKey)this.activateNode(this.nodes[current]);else this.openInspector(this.nodes[current]);}
-    else if(['+','=','-'].includes(event.key)){event.preventDefault();const scale=this.transform.scale,factor=event.key==='-'?.85:1.15;this.transform.scale=Math.max(.12,Math.min(3.2,scale*factor));this.transform.x=this.width/2+(this.transform.x-this.width/2)*this.transform.scale/scale;this.transform.y=this.height/2+(this.transform.y-this.height/2)*this.transform.scale/scale;this.compactLayout();this.draw();}
+    else if(['+','=','-'].includes(event.key)){event.preventDefault();const scale=this.transform.scale,factor=event.key==='-'?.85:1.15;this.transform.scale=Math.max(this.zoomFloor(),Math.min(3.2,scale*factor));this.transform.x=this.width/2+(this.transform.x-this.width/2)*this.transform.scale/scale;this.transform.y=this.height/2+(this.transform.y-this.height/2)*this.transform.scale/scale;this.compactLayout();this.draw();}
     else if(event.key==='Escape')this.closeInspector();
   }
 
   mapLabelNodes(){
     const focus=this.graph?.focusMode?this.nodeMap.get(this.graph.focusNodeId):null;
-    const automatic=focus?this.nodes.filter(node=>node===focus||node.x>focus.x&&node.y<focus.y):this.nodes;
+    const automatic=focus?this.nodes.filter(node=>node===focus||Math.cos(node.ringHomeAngle)>0&&Math.sin(node.ringHomeAngle)<0):this.nodes;
     const defaults=[...automatic].sort((a,b)=>Number(b===focus)-Number(a===focus)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||b.document_count||0)-Number(a.mass||a.document_count||0)||a.id.localeCompare(b.id)).slice(0,5);
     const ids=new Set(defaults.map(node=>node.id));
     for(const [id,shown] of this.labelOverrides)if(shown)ids.add(id);else ids.delete(id);
@@ -1702,7 +1796,7 @@ class GraphPanel {
       if(node.overlay_slot){const r=this.nodeRadius(node,0,3.5);ctx.moveTo(point.x,point.y-r);ctx.lineTo(point.x+r,point.y);ctx.lineTo(point.x,point.y+r);ctx.lineTo(point.x-r,point.y);ctx.closePath();}
       else ctx.arc(point.x,point.y,this.nodeRadius(node,0,3.5),0,Math.PI*2);
       ctx.fillStyle=node.visibility_dimmed?"rgba(112,128,134,.32)":colors[node.dominant_node_type]||colors[node.type]||colors.Unknown;ctx.fill();
-      ctx.strokeStyle=node.visibility_dimmed?"rgba(112,128,134,.58)":active?"#13242a":"rgba(255,255,255,.78)";ctx.lineWidth=active?3:1.4;ctx.stroke();
+      ctx.strokeStyle=node.visibility_dimmed?"rgba(112,128,134,.58)":active?"#13242a":"rgba(255,255,255,.78)";ctx.lineWidth=active?3:2*this.nodeStrokeRadius(node);ctx.stroke();
     });
     this.drawMapLabels();
   }
@@ -1733,7 +1827,7 @@ class GraphPanel {
         const channels=Object.keys(edge.channel_counts||{}).join(", ")||edge.edge_type||"connection";
         const ineligible=eligibilityReasons(edge,{includeRelease:releaseFilterApplies(this.view)}).length>0||eligibilityReasons(other,{includeRelease:releaseFilterApplies(this.view)}).length>0;
         const dimmed=this.visibilityPolicy()==="dim"&&ineligible;
-        const channelLabel=edge.slot_navigation?'visible-source context / not evidence / weight 0':`${esc(channels)} / published weight ${graphWeight(edge.layout_weight??edge.weight??0)}`;
+        const channelLabel=edge.slot_navigation?'visible-source context / not a factual relationship':esc(channels);
         return `<article class="incident-row${edge.slot_navigation?" context-navigation-row":""}${dimmed?" visibility-dimmed-row":""}" data-incident-row="${esc(edge.id)}"><b>${esc(other.label)}</b><p>${esc(other.type)} / ${channelLabel}${dimmed?" / outside the current display policy":""}</p><div class="incident-row-actions"><button type="button" data-incident-edge="${esc(edge.id)}">${edge.slot_navigation?'Inspect source context':'Inspect relationship'}</button><button type="button" data-connected-node="${esc(otherId)}">Inspect node</button><button type="button" data-traverse-node="${esc(otherId)}">Traverse direct connections</button><button type="button" data-open-mother="${esc(otherId)}">Open node's mother Community</button></div></article>`;
       }).join("");
       const pageButton=(label,target,disabled)=>`<button type="button" data-incident-page="${target}" data-incident-scope="${esc(scope)}" data-incident-owner="${esc(item.id)}" ${disabled?"disabled":""}>${label}</button>`;
@@ -1828,6 +1922,26 @@ class GraphPanel {
       if(keys.has(key)){button.remove();continue;}keys.add(key);sources.append(button);
     }
     const technical=document.createElement('details');technical.className='map-technical';technical.innerHTML='<summary>Technical fields</summary>';
+    if(item.source&&!item.slot_navigation){
+      const stats=$('.inspector-stats',this.inspector),metric=stats?.firstElementChild;
+      if(metric&&/aggregate edge weight|display priority/.test(metric.textContent)){
+        metric.remove();
+        const audit=document.createElement('section');audit.dataset.edgeWeightAudit='true';
+        const label=item.investigative_only?'Display priority':'Stored graph weight';
+        audit.innerHTML=`<p><b>${label}:</b> ${esc(graphWeight(item.weight||0))}</p><p>Summarizes the published graph connection for navigation and line prominence. It is not a support verdict or correctness probability, and it is not recomputed for the selected date.</p>`;
+        technical.append(audit);
+      }
+      if(stats){
+        stats.style.gridTemplateColumns='repeat(2,minmax(0,1fr))';
+        const documents=(item.supporting_document_ids||(item.document_id?[item.document_id]:[])).filter(id=>isDocumentAvailableAsOf(String(id)));
+        const count=$('div:first-child b',stats),label=$('div:first-child span',stats);
+        if(count)count.textContent=fmt(new Set(documents).size);
+        if(label)label.textContent='source documents in view';
+      }
+      for(const node of $$('.channel-list',this.inspector))technical.append(node);
+      for(const node of $$('p',this.inspector))if(/^(Weight|Score) semantics:/.test(node.textContent))technical.append(node);
+      for(const node of $$('.bridge-card small',this.inspector))node.textContent=node.textContent.replace(/\s*\u00b7 weight [-+\d.eE]+/,'');
+    }
     const status=$('.inspector-stats>div:nth-child(3)>b',this.inspector);
     if(status&&[item.domain_id,item.theme_id,item.community_id].filter(Boolean).includes(status.textContent)){
       const ids=document.createElement('div');ids.className='technical-id';ids.textContent=[item.domain_id,item.theme_id,item.community_id].filter(Boolean).join(' / ');technical.append(ids);status.textContent='Assigned';
@@ -2345,7 +2459,7 @@ function renderPanelCaption(panel) {
     const policy=state.guideOverlay
       ? ` Case source context: strictly before ${state.guideOverlay.scope.strictly_before} (exclusive); origin ${state.guideOverlay.scope.whole_origin_excluded} excluded. Full KG topology and aggregate weights remain unchanged; gray edges are unassessed.`
       : state.asOfPolicy.enabled
-      ? ` Independent inclusive as-of orientation: objects with no admissible support by ${state.asOfPolicy.cutoff}, or only undated support, are ineligible for this date. ${fmt(graph.policyExcludedNodeCount)} loaded nodes and ${fmt(graph.policyExcludedEdgeCount)} loaded edges are marked and are ${state.showIneligible?"dimmed":"hidden"}; the hierarchy and level do not change. Published aggregate weights are orientation metadata, not date-recomputed evidence weights or a workbench verdict.`
+      ? ` Independent inclusive as-of orientation: objects with no admissible support by ${state.asOfPolicy.cutoff}, or only undated support, are ineligible for this date. ${fmt(graph.policyExcludedNodeCount)} loaded nodes and ${fmt(graph.policyExcludedEdgeCount)} loaded edges are ${state.showIneligible?visibilityModeLabels[state.visibilityMode]:"hidden"}; the hierarchy and level do not change. Stored weights are orientation metadata, not date-recomputed evidence weights or a workbench verdict.`
       : "";
     $(`#${panel.name}-caption`).textContent=`${value}${policy}`;
   };
@@ -3748,16 +3862,18 @@ function bindPanelNavigation(){
 }
 
 function setVisibilityMode(mode) {
-  if(visibilityModes.includes(mode)&&!state.showIneligible){state.visibilityMode=mode;setIneligiblePresence(true);return;}
-  if(!visibilityModes.includes(mode)||mode===state.visibilityMode){syncVisibilityControl();return;}
-  state.visibilityMode=mode;syncVisibilityControl();
-  const url=new URL(window.location.href);url.searchParams.set("ineligible",state.visibilityMode);history.replaceState(null,"",url);
+  if(!visibilityModes.includes(mode)){syncVisibilityControl();return;}
+  const changed=mode!==state.visibilityMode||!state.showIneligible;
+  state.visibilityMode=mode;state.showIneligible=true;syncVisibilityControl();
+  const url=new URL(window.location.href);url.searchParams.set("ineligible",mode);url.searchParams.set("show_ineligible","1");url.searchParams.delete('visibility');history.replaceState(null,"",url);
+  if(!changed)return;
   Object.values(state.panels).forEach((panel)=>panel?.applyVisibilityMode());applySearch();
 }
 
 function setIneligiblePresence(show) {
-  state.visibilityMode='dim';state.showIneligible=Boolean(show);syncVisibilityControl();
-  const url=new URL(window.location.href);url.searchParams.set("show_ineligible",state.showIneligible?"1":"0");history.replaceState(null,"",url);
+  if(show){setVisibilityMode(state.visibilityMode);return;}
+  state.showIneligible=false;syncVisibilityControl();
+  const url=new URL(window.location.href);url.searchParams.set("show_ineligible","0");url.searchParams.set("ineligible","hide");url.searchParams.delete('visibility');history.replaceState(null,"",url);
   Object.values(state.panels).forEach((panel)=>panel?.applyVisibilityMode());
   applySearch();
 }
@@ -3781,7 +3897,7 @@ function configureTemporalControl(params) {
   if(!control||!slider||!dateInput||minDay===null||maxDay===null||maxDay<minDay)return;
   state.asOfPolicy.minimum=minimum;state.asOfPolicy.maximum=maximum;
   const hint=$('#as-of-range-hint');
-  if(hint)hint.textContent=`Available dates: ${minimum} to ${maximum}. Outside dates snap to the nearest boundary.`;
+  if(hint)hint.textContent=`Available dates: ${minimum} to ${maximum}. Dates outside this range use the nearest available date.`;
   dateInput.dataset.minimum=minimum;dateInput.dataset.maximum=maximum;
   const requested=String(params.get("as_of")||"");
   let selectedDay=maxDay;
@@ -3877,7 +3993,7 @@ async function init() {
     document.title="Matryoshka | "+(state.data.corpus_metadata?.name||"Paired corpus graph");
     $("#document-count").textContent=`${fmt(state.data.corpus_metadata?.document_count)} ${singleCorpusMode?"prepared documents":"paired Central Intelligence Bulletins"}`;
     renderExplorationBinding();
-    const params=new URLSearchParams(window.location.search); if (["earlier","later"].includes(params.get("release"))) state.release=params.get("release"); if (["single","pair"].includes(params.get("view"))) state.displayMode=params.get("view"); const legacyVisibility=params.get("visibility"); state.visibilityMode='dim'; if(params.get("show_ineligible")==="0"||params.get('ineligible')==='hide'||legacyVisibility==="hide")state.showIneligible=false; if (["domain","theme","community","evidence"].includes(params.get("level"))) state.level=params.get("level"); state.guidePath=null;state.autoOpenSearch=params.get("inspect")==="1"&&!params.has("guide_case");state.autoOpenDirect=params.get("connections")==="1"&&!params.has("guide_case");
+    const params=new URLSearchParams(window.location.search); if (["earlier","later"].includes(params.get("release"))) state.release=params.get("release"); if (["single","pair"].includes(params.get("view"))) state.displayMode=params.get("view"); const requestedVisibility=params.get('ineligible')||params.get('visibility');state.visibilityMode=visibilityModes.includes(requestedVisibility)?requestedVisibility:'dim';state.showIneligible=params.get("show_ineligible")!=="0"&&requestedVisibility!=='hide'; if (["domain","theme","community","evidence"].includes(params.get("level"))) state.level=params.get("level"); state.guidePath=null;state.autoOpenSearch=params.get("inspect")==="1"&&!params.has("guide_case");state.autoOpenDirect=params.get("connections")==="1"&&!params.has("guide_case");
     $("#purpose").textContent=singleCorpusMode?state.data.comparison_contract.purpose:"Start from the fixed earlier-release hierarchy. Later-only, post-cutoff and undated evidence can remain dimmed or hidden without refitting assignments. Pair compares the two release-visibility projections, not source classification labels.";
     if(singleCorpusMode){
       $(".visibility-note").textContent="Eligibility display: the fixed Confidential taxonomy is retained when the permitted SECRET projection is added. Added, post-date or undated context may be dimmed or hidden. These are classification projections, not paired redactions; no workbench case cutoff or document exclusion is inherited.";

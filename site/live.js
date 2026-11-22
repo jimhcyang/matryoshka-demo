@@ -1,4 +1,4 @@
-import {LiveClient, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js';
+import {LiveClient, credentialLike, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js';
 
 const $ = selector => document.querySelector(selector);
 const terminal = new Set(['completed', 'failed', 'cancelled', 'timed_out', 'resource_limited']);
@@ -7,8 +7,9 @@ const stageLabels = {queued: 'Queued', validating: 'Validating request', plannin
   retrieval: 'Deterministic eligible-source retrieval', construction: 'Deterministic Redaction construction',
   task_decisions: 'Deterministic task decisions', projection: 'Verifying display and source evidence', saving: 'Saving output and receipt',
   completed: 'Completed', failed: 'Failed closed', cancelled: 'Cancelled', timed_out: 'Runtime limit reached', resource_limited: 'Resource limit reached'};
-let client = null, job = null, result = null, pollEpoch = 0, handoffCleanup = null;
-$('#backend').value = ['127.0.0.1', 'localhost'].includes(location.hostname) ? `${location.origin}/live-api/` : 'http://127.0.0.1:8977/live-api/';
+let client = null, job = null, result = null, pollEpoch = 0, handoffCleanup = null, expiryTimer = null, retryTimer = null;
+const configuredBackend = $('meta[name="live-backend"]')?.content || '';
+$('#backend').value = configuredBackend || (['127.0.0.1', 'localhost'].includes(location.hostname) ? `${location.origin}/live-api/` : '');
 $('#as-of').max = new Date().toLocaleDateString('en-CA');
 
 function availability(message, error = false) {
@@ -21,36 +22,99 @@ function node(tag, text, className) {
   if (className) n.className = className;
   return n;
 }
-function disconnect() {
+function disconnect(message = 'Logged out. Log in again to obtain a new short-lived session.') {
   pollEpoch++;
+  clearTimeout(expiryTimer);
+  handoffCleanup?.(); handoffCleanup = null;
   client?.disconnect(); client = null;
-  $('#capability').value = '';
+  $('#capability').value = ''; $('#login-password').value = '';
   $('#question-fields').disabled = true;
-  $('#disconnect').disabled = true;
+  $('#logout').disabled = true;
   $('#connect').disabled = false;
+  $('#backend').disabled = false;
+  $('#login-submit').disabled = false;
+  $('#login-submit').textContent = 'Log in';
   $('#cancel').hidden = true; $('#retry').hidden = true;
-  availability('Live disconnected. An already-running server job is not cancelled by disconnecting; its budget and runtime limits still apply.');
+  $('#result').hidden = true;
+  $('#decisions').replaceChildren(); $('#evidence').replaceChildren();
+  $('#paths').textContent = ''; $('#receipt').textContent = ''; $('#source-scope').replaceChildren();
+  result = null; job = null;
+  $('#session-status').textContent = message;
+  availability(message + ' GitHub Pages still requires a separately operated backend; it cannot run the engine.');
 }
-$('#disconnect').addEventListener('click', disconnect);
+$('#logout').addEventListener('click', async () => {
+  const active = client;
+  pollEpoch++;
+  try {
+    await active?.logout();
+    disconnect('Logged out; the server session was revoked and unfinished jobs were cancelled. Incurred charges remain in the shared ledger.');
+  } catch {
+    disconnect('Disconnected locally, but server revocation could not be confirmed. The short expiry and job limits still apply.');
+  }
+});
+async function connected() {
+  const health = await client.health();
+  if (health.version !== 'matryoshka-live-api/1') throw new Error('This backend does not implement the Live contract.');
+  $('#logout').disabled = false;
+  $('#connect').disabled = true;
+  $('#backend').disabled = true;
+  $('#question-fields').disabled = !health.ready;
+  $('#limits').textContent = `Model: ${health.model}. One worker; ${health.limits.max_seconds}s/job; ${health.limits.max_rss_mib} MiB; $${health.limits.job_spend_usd.toFixed(2)}/job; up to $${health.limits.max_session_spend_usd.toFixed(2)} retained Live envelope against the shared $50 ledger.`;
+  const seconds = health.session_expires_in_seconds;
+  $('#session-status').textContent = `Logged in. Session expires in ${seconds}s; no credentials are stored.`;
+  clearTimeout(expiryTimer);
+  expiryTimer = setTimeout(() => disconnect('Session expired. Log in again; no password or bearer was retained.'), Math.max(0, seconds) * 1000);
+  availability(health.mode === 'fixture' ? 'Connected to a synthetic API0 fixture. This is NOT inference and does not use the historical corpus.' : health.ready ?
+    'Authenticated Live ready. The server holds the model key; the browser holds only a short-lived session.' :
+    'Logged in, but execution is disabled. The operator must configure a server-side model key and explicitly enable paid execution.', !health.ready);
+  $('#connection').open = false;
+}
+function loginError(error) {
+  client?.disconnect(); client = null;
+  $('#question-fields').disabled = true;
+  $('#logout').disabled = true;
+  $('#connect').disabled = false;
+  availability(error.message, true);
+  $('#session-status').textContent = 'Not logged in. Password entry has been cleared.';
+  clearInterval(retryTimer);
+  let left = error.retryAfter || 0;
+  $('#login-submit').disabled = left > 0;
+  $('#login-submit').textContent = left > 0 ? `Try again in ${left}s` : 'Log in';
+  if (left > 0) retryTimer = setInterval(() => {
+    left--;
+    $('#login-submit').textContent = left > 0 ? `Try again in ${left}s` : 'Log in';
+    if (left <= 0) { clearInterval(retryTimer); $('#login-submit').disabled = false; }
+  }, 1000);
+}
+$('#login-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  const password = $('#login-password').value;
+  $('#login-password').value = '';
+  if ($('#login-submit').disabled) return;
+  $('#login-submit').disabled = true;
+  try {
+    if (credentialLike(password)) throw new Error('Enter an access password, not a model API key or bearer token. Nothing was sent.');
+    if (!$('#backend').value) throw new Error('Live backend is not configured. GitHub Pages cannot execute the engine; open Connection settings or use the local companion. Nothing was sent.');
+    if (client) throw new Error('Log out of the current session before logging in again.');
+    client = new LiveClient({backend: $('#backend').value});
+    await client.login(password);
+    await connected();
+  } catch (error) { loginError(error); }
+  finally { if (client) { $('#login-submit').disabled = true; $('#login-submit').textContent = 'Logged in'; } }
+});
 $('#connect').addEventListener('click', async () => {
   const candidate = $('#capability').value;
   $('#capability').value = '';
   $('#connect').disabled = true;
   try {
+    if (credentialLike(candidate)) throw new Error('Enter an advanced capability, not a model API key or bearer header. Nothing was sent.');
+    if (!candidate) throw new Error('An operator-enabled legacy capability is required.');
     client?.disconnect();
     client = new LiveClient({backend: $('#backend').value, capability: candidate});
-    const health = await client.health();
-    if (health.version !== 'matryoshka-live-api/1') throw new Error('This backend does not implement the Live contract.');
-    $('#disconnect').disabled = false;
-    $('#question-fields').disabled = !health.ready;
-    $('#limits').textContent = `Model: ${health.model}. One worker; ${health.limits.max_seconds}s/job; ${health.limits.max_rss_mib} MiB; $${health.limits.job_spend_usd.toFixed(2)}/job; up to $${health.limits.max_session_spend_usd.toFixed(2)} new spend against the shared $50 ledger. Session expires in ${health.session_expires_in_seconds}s.`;
-    availability(health.mode === 'fixture' ? 'Connected to a synthetic API0 fixture. This is NOT inference and does not use the historical corpus.' : health.ready ? 'Authenticated Live ready. New queries use the actual server-side pipeline; no saved replay is substituted.' : 'Backend connected but Live execution is unavailable. The operator must configure a server API key and explicitly launch with --execute-paid.', !health.ready);
-    if (health.ready) $('#connection').open = false;
+    await connected();
+    $('#login-submit').disabled = true; $('#login-submit').textContent = 'Logged in';
   } catch (error) {
-    client?.disconnect(); client = null;
-    $('#question-fields').disabled = true;
-    $('#connect').disabled = false;
-    availability(error.message, true);
+    loginError(error);
   }
 });
 $('#task').addEventListener('change', () => { $('#focal-field').hidden = $('#task').value !== 'redaction'; });
@@ -158,4 +222,4 @@ $('#download').addEventListener('click', () => {
   const link = document.createElement('a'); link.href = url; link.download = `${result.run_id}.json`; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
-addEventListener('pagehide', () => { pollEpoch++; client?.disconnect(); handoffCleanup?.(); });
+addEventListener('pagehide', () => { pollEpoch++; client?.disconnect(); handoffCleanup?.(); clearTimeout(expiryTimer); clearInterval(retryTimer); });

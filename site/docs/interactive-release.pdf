@@ -12,7 +12,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
 endobj
 5 0 obj
-<< /Length 1556 >>
+<< /Length 1844 >>
 stream
 0.97 0.98 0.96 rg 0 0 612 792 re f
 0.09 0.28 0.29 rg 0 694 612 98 re f
@@ -24,10 +24,12 @@ stream
 0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 588 Tm (same evidence-oriented presentation.) Tj ET
 0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 542 Tm (The Corpus Map) Tj ET
 0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 514 Tm (Redactions Show/Hide controls source-visible redacted-slot markers. Ineligible) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 498 Tm (Dim/Hide controls evidence outside the active access/date view. They are) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 482 Tm (independent. In paired mode, the shared Back and Fit controls affect both) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 466 Tm (releases; the controls beside a map affect only that map. Search applies to both) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 450 Tm (until a map is individually explored.) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 498 Tm (Show/Dim/Hide controls the appearance of evidence outside the active access/date) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 482 Tm (view. Show uses full color without making an object eligible. They are independent) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 466 Tm (controls. In paired mode, shared Back and Fit affect both releases; the controls) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 450 Tm (beside a map affect only that map. Search applies to both until a map is) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 434 Tm (individually explored. The date field states the available range and uses its) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (nearest boundary for an out-of-range entry.) Tj ET
 0.10 0.23 0.25 rg BT /F1 9 Tf 1 0 0 1 44 32 Tm (Source-first analysis / 22 November 2026) Tj ET
 0.10 0.23 0.25 rg BT /F2 9 Tf 1 0 0 1 540 32 Tm (1) Tj ET
 endstream
@@ -36,7 +38,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
 endobj
 7 0 obj
-<< /Length 2328 >>
+<< /Length 2791 >>
 stream
 0.97 0.98 0.96 rg 0 0 612 792 re f
 0.09 0.28 0.29 rg 0 694 612 98 re f
@@ -53,11 +55,14 @@ stream
 0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 466 Tm (Node radius is normalized within the displayed view. With t equal to the) Tj ET
 0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 450 Tm (normalized log\(1 + mass\), evidence radius is 9 + 22 t^0.8 pixels before zoom;) Tj ET
 0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 434 Tm (communities use 13 + 24 t^0.8, higher groups 16 + 26 t^0.8. Slot markers use a) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (fixed base radius of 10. The renderer applies zoom, density and overlap caps.) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 402 Tm (Ordinary edge width is 0.55 + 1.1 sqrt\(w / maximum displayed w\) pixels. These are) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 386 Tm (orientation encodings, not probabilities. After dragging, zooming or deselecting,) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 370 Tm (a bounded relaxation draws nodes toward compact homes and separates overlapping) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 354 Tm (circles.) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (fixed base radius of 10. Zoom, density and overlap caps apply. Edge width is 0.55) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 402 Tm (+ 1.1 sqrt\(w / maximum displayed w\) pixels. These are orientation encodings, not) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 386 Tm (probabilities. Stored aggregate weight is optional under Technical fields, not) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 370 Tm (independent corroboration or date-recomputed support. Nominal orbit is 0.024) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 354 Tm (radians/second, twice the previous rate, with slower outer bands. Orbit and return) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 338 Tm (share a 30-Hz scheduler. Smoothstep return targets 720-2400 milliseconds; a) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 322 Tm (24-pixel step cap can extend completion. Dense layouts use precomputed packing,) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 306 Tm (not an endless fit/repulsion loop. Motion adds no factual edges.) Tj ET
 0.10 0.23 0.25 rg BT /F1 9 Tf 1 0 0 1 44 32 Tm (Source-first analysis / 22 November 2026) Tj ET
 0.10 0.23 0.25 rg BT /F2 9 Tf 1 0 0 1 540 32 Tm (2) Tj ET
 endstream
@@ -152,28 +157,30 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 13 0 R >>
 endobj
 15 0 obj
-<< /Length 2373 >>
+<< /Length 2631 >>
 stream
 0.97 0.98 0.96 rg 0 0 612 792 re f
 0.09 0.28 0.29 rg 0 694 612 98 re f
 0.95 0.98 0.94 rg BT /F2 11 Tf 1 0 0 1 44 755 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
 1 1 1 rg BT /F2 23 Tf 1 0 0 1 44 718 Tm (Live Execution) Tj ET
 0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 648 Tm (Live Execution) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 620 Tm (The Live page requires an authenticated backend. The OpenAI API key stays in the) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 604 Tm (server environment; the browser receives only a short-lived session capability.) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 588 Tm (Query-only model planning and redaction readings precede local deterministic) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 572 Tm (retrieval, construction and verdicts. Progress reports stage names, not model) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 556 Tm (reasoning. Cancellation stops the worker but cannot undo already incurred provider) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 540 Tm (charges. The shared spending ceiling, bounded runtime, source cutoff and whole-) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 524 Tm (origin exclusion remain enforced.) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 478 Tm (Hosting And Source Boundaries) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 450 Tm (GitHub Pages hosts the saved casebook and Live frontend, not Python inference. Run) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 434 Tm (the local companion or connect an independently hosted authenticated backend with) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (explicit origin permissions. The source-only CIB resource is unchanged. Iran and) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 402 Tm (Vietnam retain their existing resource exports; no new source-only alias) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 386 Tm (certification is implied. Additional document pages are provenance context, not) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 370 Tm (extra inspected evidence. The richer experimental questions remain outside the) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 354 Tm (presentation until their native results qualify.) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 620 Tm (Log in with a private backend password. The server verifies it and issues a) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 604 Tm (random, origin-bound session held only in browser memory. The OpenAI API key stays) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 588 Tm (in the server environment; it is never split into public fragments or) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 572 Tm (reconstructed in the browser. No shared public demo word is configured as a) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 556 Tm (password. Query-only model planning and redaction readings precede local) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 540 Tm (deterministic retrieval, construction and verdicts. Progress reports stage names,) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 524 Tm (not model reasoning. Logout revokes the session; cancellation cannot undo incurred) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 508 Tm (charges. The retained spending ceiling, runtime limit, source cutoff and whole-) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 492 Tm (origin exclusion remain enforced.) Tj ET
+0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 446 Tm (Hosting And Source Boundaries) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (GitHub Pages hosts the saved casebook and Live frontend, not Python inference. Run) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 402 Tm (the local companion or connect an independently hosted authenticated backend with) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 386 Tm (explicit origin permissions. The source-only CIB resource is unchanged. Iran and) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 370 Tm (Vietnam retain their existing resource exports; no new source-only alias) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 354 Tm (certification is implied. Additional document pages are provenance context, not) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 338 Tm (extra inspected evidence. The richer experimental questions remain outside the) Tj ET
+0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 322 Tm (presentation until their native results qualify.) Tj ET
 0.10 0.23 0.25 rg BT /F1 9 Tf 1 0 0 1 44 32 Tm (Source-first analysis / 22 November 2026) Tj ET
 0.10 0.23 0.25 rg BT /F2 9 Tf 1 0 0 1 540 32 Tm (6) Tj ET
 endstream
@@ -189,19 +196,19 @@ xref
 0000000149 00000 n 
 0000000219 00000 n 
 0000000294 00000 n 
-0000001901 00000 n 
-0000002037 00000 n 
-0000004416 00000 n 
-0000004552 00000 n 
-0000006567 00000 n 
-0000006704 00000 n 
-0000009119 00000 n 
-0000009257 00000 n 
-0000011574 00000 n 
-0000011712 00000 n 
-0000014137 00000 n 
+0000002189 00000 n 
+0000002325 00000 n 
+0000005167 00000 n 
+0000005303 00000 n 
+0000007318 00000 n 
+0000007455 00000 n 
+0000009870 00000 n 
+0000010008 00000 n 
+0000012325 00000 n 
+0000012463 00000 n 
+0000015146 00000 n 
 trailer
 << /Size 17 /Root 1 0 R >>
 startxref
-14275
+15284
 %%EOF

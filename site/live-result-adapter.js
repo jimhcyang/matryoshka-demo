@@ -5,6 +5,17 @@ const ordered = v => Array.isArray(v) ? v.map(ordered) : v && typeof v === 'obje
   Object.fromEntries(Object.keys(v).sort().map(k => [k, ordered(v[k])])) : v;
 const same = (a, b) => JSON.stringify(ordered(a)) === JSON.stringify(ordered(b));
 const fail = message => { throw new Error(message); };
+export const credentialLike = value => typeof value === 'string' && /\bsk-[A-Za-z0-9_-]+|\bOPENAI_API_KEY\s*=|\bBearer\s+\S+|\bAuthorization\s*:/i.test(value);
+const loginFetch = !globalThis.PublicReplay && typeof globalThis.fetch === 'function' ? globalThis.fetch.bind(globalThis) : null;
+function requestError(code, status, retryAfter = 0) {
+  const safe = /^[A-Z0-9_]{1,80}$/.test(code || '') ? code : 'REQUEST_REJECTED';
+  const error = new Error(safe === 'LOGIN_FAILED' ? 'Password not accepted.' :
+    `Live request unavailable (${safe}). No saved replay was substituted.`);
+  error.code = safe;
+  error.status = status;
+  error.retryAfter = Math.max(0, Math.min(60, Number(retryAfter) || 0));
+  return error;
+}
 
 function backendURL(input) {
   const url = new URL(input, location.href);
@@ -19,15 +30,59 @@ function backendURL(input) {
 export class LiveClient {
   #backend;
   #capability;
-  constructor({backend, capability}) {
+  #expires = 0;
+  constructor({backend, capability = ''}) {
     this.#backend = backendURL(backend);
-    if (!/^[A-Za-z0-9_-]{32,256}$/.test(capability || '') || capability.startsWith('sk-')) fail('A session capability is required, not a model API key.');
+    if (capability && (!/^[A-Za-z0-9_-]{32,256}$/.test(capability) || credentialLike(capability))) fail('A session capability is required, not a model API key.');
     this.#capability = capability;
   }
-  disconnect() { this.#capability = ''; }
+  disconnect() { this.#capability = ''; this.#expires = 0; }
+  async login(password) {
+    if (!loginFetch) fail('Open the Live page to log in; saved replay cannot transport a password.');
+    if (typeof password !== 'string' || !password || new TextEncoder().encode(password).length > 256) fail('Enter a private access password of at most 256 UTF-8 bytes.');
+    if (credentialLike(password)) fail('Enter an access password, not a model API key or bearer token.');
+    this.disconnect();
+    const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 15000);
+    try {
+      // Unlike XHR, native fetch can prohibit redirects BEFORE a password body
+      // is forwarded. Live does not load the saved replay shim.
+      const response = await loginFetch(new URL('session/login', this.#backend), {method: 'POST', mode: 'cors',
+        credentials: 'omit', redirect: 'error', referrerPolicy: 'no-referrer', signal: controller.signal,
+        headers: {'Content-Type': 'application/json', 'X-Live-Request': '1'}, body: JSON.stringify({password})});
+      const reader = response.body.getReader(), chunks = [];
+      let length = 0;
+      try {
+        for (;;) {
+          const {done, value} = await reader.read();
+          if (done) break;
+          length += value.length;
+          if (length > 4096) { await reader.cancel(); fail('Invalid login response size.'); }
+          chunks.push(value);
+        }
+      } finally { reader.releaseLock(); }
+      const raw = new Uint8Array(length);
+      let at = 0; for (const chunk of chunks) { raw.set(chunk, at); at += chunk.length; }
+      let value;
+      try { value = JSON.parse(new TextDecoder().decode(raw)); } catch { fail('The backend did not return login JSON.'); }
+      if (!response.ok) throw requestError(value.error, response.status, response.headers.get('Retry-After'));
+      if (value.version !== 'matryoshka-live-session/1' || value.token_type !== 'Bearer' ||
+          typeof value.access_token !== 'string' || credentialLike(value.access_token) ||
+          !/^[A-Za-z0-9_-]{43,256}$/.test(value.access_token) ||
+          !Number.isInteger(value.expires_in_seconds) || value.expires_in_seconds < 1 || value.expires_in_seconds > 900) {
+        fail('The backend returned an invalid short-lived session.');
+      }
+      this.#capability = value.access_token;
+      this.#expires = Date.now() + value.expires_in_seconds * 1000;
+      return {authenticated: true, expires_in_seconds: value.expires_in_seconds};
+    } catch (error) {
+      if (error instanceof TypeError || error.name === 'AbortError') fail('Login backend unreachable or redirect blocked. Check HTTPS, exact CORS/CSP origins, and local companion settings.');
+      throw error;
+    } finally { clearTimeout(timer); }
+  }
   request(path, {method = 'GET', body, signal} = {}) {
+    if (this.#expires && Date.now() >= this.#expires) this.disconnect();
     if (!this.#capability) return Promise.reject(new Error('The Live session is disconnected.'));
-    if (!/^(health|jobs(?:\/[a-f0-9]{32}(?:\/(result|cancel|retry))?)?)$/.test(path)) {
+    if (!/^(health|session(?:\/logout)?|jobs(?:\/[a-f0-9]{32}(?:\/(result|cancel|retry))?)?)$/.test(path)) {
       return Promise.reject(new Error('Invalid Live endpoint.'));
     }
     const url = new URL(path, this.#backend);
@@ -49,8 +104,8 @@ export class LiveClient {
           if (xhr.responseText.length > 24 * 1024 * 1024) fail('Live result exceeded its size limit.');
           const value = JSON.parse(xhr.responseText);
           if (xhr.status < 200 || xhr.status >= 300) {
-            const code = /^[A-Z0-9_]{1,80}$/.test(value.error || '') ? value.error : 'REQUEST_REJECTED';
-            fail(`Live request unavailable (${code}). No saved replay was substituted.`);
+            if (xhr.status === 401) this.disconnect();
+            throw requestError(value.error, xhr.status, xhr.getResponseHeader('Retry-After'));
           }
           resolve(value);
         } catch (error) { reject(error instanceof SyntaxError ? new Error('The backend did not return Live JSON.') : error); }
@@ -63,6 +118,10 @@ export class LiveClient {
     });
   }
   health() { return this.request('health'); }
+  async logout() {
+    try { return this.#capability ? await this.request('session/logout', {method: 'POST', body: {}}) : {authenticated: false}; }
+    finally { this.disconnect(); }
+  }
   submit(request) { return this.request('jobs', {method: 'POST', body: request}); }
   status(id) { return this.request(`jobs/${id}`); }
   cancel(id) { return this.request(`jobs/${id}/cancel`, {method: 'POST', body: {}}); }
