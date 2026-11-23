@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta name="live-backend" content="">
+  <meta name="live-corpus-scopes" content="data/live-corpus-scopes.json" data-content-sha256="9fc1d47fb4d957f80298a81f09bb9495c2958a228568faebbf1ec0ccb008dbec">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' http://127.0.0.1:8977; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'">
   <title>Matryoshka | Live</title>
   <link rel="icon" href="data:,">
@@ -55,8 +56,9 @@
             <label for="query">Analyst clause</label>
             <textarea id="query" rows="5" required maxlength="2000" placeholder="Enter a declarative clause, not an instruction or question."></textarea>
             <p class="hint">Mosaic and Hypothesis need complete claims. Redaction needs one unique focal mask, such as [MASK]. No saved case or answer is used as an input.</p>
-            <div class="pair"><div><label for="as-of">As-of date</label><input id="as-of" type="date" required min="1900-01-01"></div><div><label for="excluded-origin">Excluded whole-origin ID</label><input id="excluded-origin" required maxlength="160" autocomplete="off" placeholder="Exact source document ID"></div></div>
-            <p class="hint">Only permitted earlier-release sources strictly before this date are eligible. Every page of the declared origin is excluded. For a new analyst-authored claim, explicitly declare a new origin ID; it is not a verified historical original.</p>
+            <div class="pair"><div><label for="as-of">Evidence through</label><input id="as-of" type="date" min="1900-01-01" aria-describedby="scope-date-hint"></div><div><label for="excluded-origin">Exclude document (optional)</label><input id="excluded-origin" maxlength="160" autocomplete="off" placeholder="Leave blank for your own question"></div></div>
+            <p id="scope-date-hint" class="hint">The default includes the full eligible corpus. Leave the date blank to use that default.</p>
+            <p class="hint">Writing your own question? No document ID is needed. If your input comes from a source document, enter its ID to exclude all its pages. Access and release restrictions still apply.</p>
             <div id="focal-field" hidden><label for="focal-marker">Unique focal mask</label><input id="focal-marker" value="[MASK]" maxlength="90" autocomplete="off"></div>
             <div class="actions"><button id="run" type="submit">Run live pipeline</button></div>
           </fieldset>

@@ -1,4 +1,5 @@
 import {LiveClient, credentialLike, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js';
+import {displayedScope, loadCorpusScopes, requestScope, validateCorpusScopes} from './live-scope-controls.js';
 
 const $ = selector => document.querySelector(selector);
 const terminal = new Set(['completed', 'failed', 'cancelled', 'timed_out', 'resource_limited']);
@@ -10,7 +11,28 @@ const stageLabels = {queued: 'Queued', validating: 'Validating request', plannin
 let client = null, job = null, result = null, pollEpoch = 0, handoffCleanup = null, expiryTimer = null, retryTimer = null;
 const configuredBackend = $('meta[name="live-backend"]')?.content || '';
 $('#backend').value = configuredBackend || (['127.0.0.1', 'localhost'].includes(location.hostname) ? `${location.origin}/live-api/` : '');
-$('#as-of').max = new Date().toLocaleDateString('en-CA');
+let scopeMetadata = null;
+function updateCorpusDate(reset = false) {
+  if (!scopeMetadata) return;
+  const bounds = scopeMetadata.corpora[$('#corpus').value];
+  $('#as-of').min = bounds.first_date;
+  $('#as-of').max = bounds.last_date;
+  if (reset) $('#as-of').value = bounds.last_date;
+  $('#scope-date-hint').textContent = `Available ${bounds.first_date} to ${bounds.last_date}. The selected day is included; a blank date uses the full eligible corpus.`;
+}
+function applyCorpusScopes(value) {
+  const first = !scopeMetadata;
+  const checked = validateCorpusScopes(value);
+  if (scopeMetadata && checked.execution_refs_sha256 !== scopeMetadata.execution_refs_sha256) {
+    throw Error('The backend uses different corpus resources. Reload its current local interface.');
+  }
+  scopeMetadata = checked;
+  updateCorpusDate(first);
+}
+loadCorpusScopes().then(applyCorpusScopes).catch(() => {
+  if (!scopeMetadata) $('#scope-date-hint').textContent = 'Leave the date blank to use the backend\'s full eligible corpus, or choose an evidence date.';
+});
+$('#corpus').addEventListener('change', () => updateCorpusDate(true));
 
 function availability(message, error = false) {
   $('#availability').textContent = message;
@@ -55,6 +77,7 @@ $('#logout').addEventListener('click', async () => {
 async function connected() {
   const health = await client.health();
   if (health.version !== 'matryoshka-live-api/1') throw new Error('This backend does not implement the Live contract.');
+  if (health.corpus_scopes) applyCorpusScopes(health.corpus_scopes);
   $('#logout').disabled = false;
   $('#connect').disabled = true;
   $('#backend').disabled = true;
@@ -155,11 +178,13 @@ $('#question-form').addEventListener('submit', async event => {
   if (!client) return;
   const query = $('#query').value.trim();
   if (new TextEncoder().encode(query).length > 2000) { availability('The analyst clause must be at most 2000 UTF-8 bytes.', true); return; }
-  const request = {task: $('#task').value, corpus: $('#corpus').value, query,
-    as_of: $('#as-of').value, excluded_origin: $('#excluded-origin').value.trim(),
-    focal_marker: $('#task').value === 'redaction' ? $('#focal-marker').value : ''};
   $('#run').disabled = true;
-  try { await follow(await client.submit(request)); }
+  try {
+    const request = {task: $('#task').value, corpus: $('#corpus').value, query,
+      ...requestScope($('#as-of').value, $('#excluded-origin').value),
+      focal_marker: $('#task').value === 'redaction' ? $('#focal-marker').value : ''};
+    await follow(await client.submit(request));
+  }
   catch (error) { availability(error.message, true); $('#run').disabled = false; }
 });
 $('#cancel').addEventListener('click', async () => {
@@ -176,6 +201,7 @@ $('#retry').addEventListener('click', async () => {
 
 async function renderResult(value) {
   await verifyEnvelope(value);
+  const scope = displayedScope(value.request, value.source_scope);
   result = value;
   $('#result').hidden = false;
   $('#result-status').textContent = value.native.result.status || 'Completed';
@@ -195,7 +221,11 @@ async function renderResult(value) {
     }
   }
   $('#decisions').replaceChildren(...decisions);
-  $('#source-scope').replaceChildren(...Object.entries(value.source_scope).flatMap(([key, val]) => [node('dt', key.replaceAll('_', ' ')), node('dd', Array.isArray(val) ? val.join(', ') : val)]));
+  const visibleScope = {Corpus: {cib: 'Central Intelligence Bulletins', iran: 'Iran cables', vietnam: 'Vietnam cables'}[value.request.corpus],
+    'Evidence through': scope.through,
+    'Excluded document': scope.excludedDocument === null ? 'None (analyst-written question)' : scope.excludedDocument,
+    'Source view': value.request.corpus === 'cib' ? 'Permitted earlier-release evidence' : 'Permitted CONFIDENTIAL evidence'};
+  $('#source-scope').replaceChildren(...Object.entries(visibleScope).flatMap(([key, val]) => [node('dt', key), node('dd', val)]));
   const evidence = [];
   for (const item of value.selected_evidence) for (const ref of item.source_refs || []) {
     const card = node('article', null, 'evidence-card');
@@ -205,7 +235,7 @@ async function renderResult(value) {
   }
   $('#evidence').replaceChildren(...(evidence.length ? evidence : [node('p', 'No selected source evidence. Missing evidence is not opposition.')]));
   $('#paths').textContent = JSON.stringify(value.trace.paths, null, 2);
-  $('#receipt').textContent = JSON.stringify({receipt: value.receipt, artifacts: value.artifacts}, null, 2);
+  $('#receipt').textContent = JSON.stringify({receipt: value.receipt, artifacts: value.artifacts, source_scope: value.source_scope}, null, 2);
 }
 $('#open-workbench').addEventListener('click', () => {
   if (!result) return;

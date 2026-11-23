@@ -1,0 +1,20 @@
+{
+  "version": "live-analyst-scope-qa/1",
+  "date": "2026-11-23",
+  "status": "PASS_DIAGNOSTIC_PRESENTATION_DATA",
+  "candidate_manifest_sha256": "b4d97d471515808eae94589c25683877459ee0441faba73b283a6e079bf9f459",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "independent_review_sha256": "938c78e1f98d1bbd9ed2db7de984dc12b693577d29adec65184d30dedcf2acb7",
+  "integrity_sha256": "7e69dc0c38317924419996526a9777ac2b273694642cce71dacdc1cba57ad8d3",
+  "browser_sha256": "0d3e7062ec13003c174de29e1680ba3cc579f4c0215197c5f49ce4bc14aa00fc",
+  "feature_browser_sha256": "969c71bd4d8b5ef2f37815ac76c6c470b71a71cb74f420280ef1cf169400c626",
+  "corpus_bounds_sha256": "9fc1d47fb4d957f80298a81f09bb9495c2958a228568faebbf1ec0ccb008dbec",
+  "ordinary_native_packets_replayed": 14,
+  "browser_release_cells": 25,
+  "empty_document_means_no_document_exclusion": true,
+  "inclusive_display_exclusive_native_cutoff": true,
+  "saved_case_policies_and_results_unchanged": true,
+  "native_verifier_unchanged": true,
+  "new_model_api_calls": 0,
+  "new_scientific_performance_claimed": false
+}

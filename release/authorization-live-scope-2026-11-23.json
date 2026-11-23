@@ -1,0 +1,23 @@
+{
+  "version": "source-bound-release-authorization/1",
+  "date": "2026-11-23",
+  "candidate_manifest_sha256": "b4d97d471515808eae94589c25683877459ee0441faba73b283a6e079bf9f459",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "backend_code_sha256": "ceb29c09ce6705a896ff7dc842bda42d1cf4e2d6dd1f6389b77e033fc5dceb34",
+  "publish_authorized": true,
+  "new_data_qa_accepted": true,
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "qualified_data_qa_ref": {
+    "path": "data-qa-live-scope-2026-11-23.json",
+    "sha256": "fe1949045571b4a21364720ef010c6e241f78bbabf548dd06193aab7a6fc7ebf"
+  },
+  "privacy_and_rights_ref": {
+    "path": "privacy-and-rights-live-scope-2026-11-23.json",
+    "sha256": "18690b3e1d6c94ee4356244d4f59e96404ad3c9961458a3ca6f67b4d13e14917"
+  },
+  "ordinary_inference_preserved": true,
+  "optional_live_scope_inputs": true,
+  "new_scientific_performance_claimed": false
+}

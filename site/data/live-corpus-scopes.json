@@ -1,0 +1,33 @@
+{
+  "corpora": {
+    "cib": {
+      "default_before": "1961-06-14",
+      "eligible_document_count": 2994,
+      "eligible_page_count": 22574,
+      "first_date": "1951-02-28",
+      "index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+      "last_date": "1961-06-13",
+      "source_binding_sha256": "d8485f08b4cc3461c28d02572eff355e3316dec16e94e03d8e97d8d77d06f238"
+    },
+    "iran": {
+      "default_before": "1979-11-23",
+      "eligible_document_count": 1748,
+      "eligible_page_count": 2164,
+      "first_date": "1977-06-08",
+      "index_sha256": "2c32af1c71e5b33a6da1648794e6bc1a65f449a918758f8a025c8b2d8ea47c45",
+      "last_date": "1979-11-22",
+      "source_binding_sha256": "614781791018084e7e7cecd6f6a3fbddc221305b3e5b9b260499f417eeb52f36"
+    },
+    "vietnam": {
+      "default_before": "1978-07-27",
+      "eligible_document_count": 3831,
+      "eligible_page_count": 4750,
+      "first_date": "1973-01-09",
+      "index_sha256": "f7804524bb0a12ca3a858ba74fd8a731f052da808c8ffdd521056c7cbffa5050",
+      "last_date": "1978-07-26",
+      "source_binding_sha256": "8660803d68fecffed2a8a61fd5f2134497361a3a8e5c828320c34c8d29a37050"
+    }
+  },
+  "execution_refs_sha256": "8c6fce4cfc84d4bfa47aa3ef7a70be1e029ce7d831444a6b62fdc0847434c374",
+  "version": "matryoshka-live-corpus-scopes/1"
+}
