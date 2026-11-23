@@ -1,0 +1,22 @@
+{
+  "version": "source-navigation-reader-qa/1",
+  "date": "2026-11-22",
+  "status": "PASS_DIAGNOSTIC_PRESENTATION_DATA",
+  "candidate_manifest_sha256": "cefdb16dd8786ea5271c4bd1789fc129d520cecd7eefe8376ee03657baa8d93f",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "integrity_sha256": "369895ba00c7a9118aedeb48fa2a4af3956df265dd546a863689b1c5cf89175b",
+  "browser_sha256": "bd8c12e953dfa68592840040332924f04b67610ab8c0569f595ff746c2165fa4",
+  "independent_review_sha256": "909df044ca14765c2532f137015cee853219ff4d2dc5f3b6a010d924bf319d47",
+  "logical_roots_reconstructed": 10041,
+  "ordinary_native_packets_replayed": 14,
+  "browser_release_cells": 25,
+  "reader_case_only_editions": 44,
+  "page_lookup_rows": 179,
+  "page_lookup_readings": 16,
+  "native_outputs_or_source_bindings_changed": false,
+  "new_iran_trials_promoted": false,
+  "scientific_case_qualification_inferred": false,
+  "source_search_not_entailment_or_original_execution_chronology": true,
+  "ordinary_engine_code_modified": false,
+  "new_model_api_calls_by_release_checks": 0
+}

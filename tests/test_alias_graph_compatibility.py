@@ -32,9 +32,14 @@ def run_js(checks, *, query="", timeout=30):
     script = script[:start] + script[end:]
     assert script.endswith("if (!redirectCibRoute) init();\n")
     script = script.removesuffix("if (!redirectCibRoute) init();\n")
+    # These assertions exercise the real source/identity loaders below, not
+    # mounted page chrome. Guide-specific tests explicitly invoke initialize.
+    script = script.replace("\nbindMapToolbar();\n", "\n", 1)
+    script = script.replace("if(hasSavedGuide(pageParams))renderGuideLoading();\n", "", 1)
     harness = r"""
 const assert=require('node:assert/strict'),fs=require('node:fs'),zlib=require('node:zlib');
 global.crypto=require('node:crypto').webcrypto;
+global.GraphKG=require(GRAPH_HELPER_PATH);
 const elements=new Map();
 function element(){return {innerHTML:'',textContent:'',hidden:false,scrollTop:0,
   classList:{toggle(){},remove(){}},querySelector(){return null;},querySelectorAll(){return [];},
@@ -90,7 +95,7 @@ function fixtureFor(mode){
   };
   return {graph,view,assets,edge};
 }
-""".replace("QUERY", json.dumps(query))
+""".replace("QUERY", json.dumps(query)).replace("GRAPH_HELPER_PATH", json.dumps(str(VIEWER.with_name("graph-kg-v1.js"))))
     result = subprocess.run(
         [node, "-"], input=harness + script + "\n" + checks,
         text=True, capture_output=True, cwd=ROOT, timeout=timeout,
@@ -128,8 +133,10 @@ def test_all_authority_surfaces_and_cache_merges(mode):
   state.data.views.current_earlier={label:'Earlier'};renderSearchResults();
   for(const row of state.searchViews[view.key]){
     const panel={selected:row,inspector,view,visibilityPolicy:()=> 'show',canEnter:()=>false,
-      claimTopologyLabels:()=>[],incidentConnections:()=>''};
-    GraphPanel.prototype.renderInspector.call(panel);
+      claimTopologyLabels:()=>[],incidentConnections:()=>'',bindNodeInspector(){}};
+    // Exercise authoritative content generation; the compact wrapper moves DOM
+    // children and is covered by the managed-browser inspector checks.
+    GraphPanel.prototype.renderInspectorContent.call(panel);
     assert.ok(inspector.innerHTML.includes(esc(identityScopeLabel(row))));
     assert.ok(results.innerHTML.includes(esc(identityScopeLabel(row))));
     assert.ok(!inspector.innerHTML.includes('corpus-resolved canonical cluster'));

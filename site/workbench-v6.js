@@ -5,6 +5,9 @@ import {decisionLabel,packetFor,unitFor,overviewFor,reviewDisclosure,guideDisclo
 import {preparePostrunReview,verifyPostrunReview} from "./postrun-review-v74.js";
 import {mountSavedRoutes,uniqueProofs,decisionProofs,digestProofs,renderScoreChart,renderEndingScoreChart,recordedAtomLinks,guideRoutes,groupDuplicateFills} from "./workbench-visuals.js";
 import {mountEvidenceMap} from './evidence-map.js';
+import {loadSourceLookups} from './source-lookups-v1.js';
+import {loadReaderCasing,readerText} from './reader-casing.js';
+await loadReaderCasing();
 const $ = selector => document.querySelector(selector);
 const list = value => Array.isArray(value) ? value : [];
 const CORPORA = {cib:"Central Intelligence Bulletins",iran:"Iran",vietnam:"Vietnam"};
@@ -203,6 +206,7 @@ function button(text,fn,className="",attrs={}) { const node=el("button",text,{ty
 function note(text,className="note") { return el("p",text,{class:className}); }
 function badge(text,kind="") { return el("span",text,{class:"badge "+kind}); }
 function heading(text) { return el("h3",text,{class:"section-title"}); }
+function readable(text) { return readerText(text,state.row?.case?.corpus); }
 function short(text,n=12) { const words=String(text||"").trim().split(/\s+/);return words.slice(0,n).join(" ")+(words.length>n?"...":""); }
 function title(row) { return typeof row.presentation_title==="string"&&row.presentation_title.trim()?presentationTitle(row):row.display_title || row.case.title || short(row.case.query.replace(/^(?:\s*\[REDACTED\]\s*)+/i,"").replace(/\[(?:REDACTED|REDACTION[^\]]*)\]/gi,"masked passage"),11); }
 let livePacket=null;
@@ -600,8 +604,9 @@ function renderQuestion() {
   const key=c.task==="redaction"?(sourceReference?originFocalReferences.get(context.key):state.row.reference_answer):null;
   const canReveal=c.task==="redaction"&&(key!=null||sourceReference&&attachment.refs?.revealed!=null);
   const awaitingReference=canReveal&&state.reference&&key==null;
-  if(at>=0){query.append(document.createTextNode(c.query.slice(0,at)),button(state.reference&&key!=null?String(key):c.focal_marker,toggleReference,"focal-mask",{"aria-pressed":state.reference,"aria-busy":awaitingReference,"data-testid":"focal-mask",...(!canReveal?{disabled:""}:{})}),document.createTextNode(c.query.slice(at+c.focal_marker.length)));}
-  else query.textContent=c.query;
+  const queryDisplay=readable(c.query);
+  if(at>=0){query.append(document.createTextNode(queryDisplay.slice(0,at)),button(state.reference&&key!=null?readable(String(key)):c.focal_marker,toggleReference,"focal-mask",{"aria-pressed":state.reference,"aria-busy":awaitingReference,"data-testid":"focal-mask",...(!canReveal?{disabled:""}:{})}),document.createTextNode(queryDisplay.slice(at+c.focal_marker.length)));}
+  else query.textContent=queryDisplay;
   const questionKind=queryKindBadge(state.row);if(questionKind)s.body.append(questionKind);s.body.append(query);
   if(awaitingReference)s.body.append(el("p","Loading the verified reference. Click the redaction again to keep it hidden.",{class:"note",role:"status","aria-live":"polite","data-testid":"reference-loading"}));
   const actions=el("div",null,{class:"actions"});
@@ -721,12 +726,29 @@ function independentReviewPanel(){
 }
 
 function highlightedText(text,anchors,attrs={}) {
-  const host=el("div",null,{class:"source-document",...attrs}),chars=Array.from(text);let cursor=0;
+  const host=el("div",null,{class:"source-document",...attrs}),chars=Array.from(text),display=Array.from(readable(text));let cursor=0;
+  host.dataset.originalText=text;
   for(const a of [...anchors].sort((a,b)=>a.start-b.start)){
     if(!Number.isInteger(a.start)||!Number.isInteger(a.end)||a.start<cursor||a.end<=a.start||a.end>chars.length||chars.slice(a.start,a.end).join("")!==a.text)throw Error("The exact source quotation does not replay.");
-    host.append(document.createTextNode(chars.slice(cursor,a.start).join("")),el("mark",a.text));cursor=a.end;
+    const mark=el("mark",display.slice(a.start,a.end).join(""));mark.dataset.originalText=a.text;
+    host.append(document.createTextNode(display.slice(cursor,a.start).join("")),mark);cursor=a.end;
   }
-  host.append(document.createTextNode(chars.slice(cursor).join("")));return host;
+  host.append(document.createTextNode(display.slice(cursor).join("")));return host;
+}
+function originalCaseControl(body) {
+  if(!['iran','vietnam'].includes(state.row.case.corpus))return null;
+  const label=el('label',null,{class:'original-case-control'}),input=el('input',null,{type:'checkbox'});
+  label.append(input,document.createTextNode('Original capitalization'));
+  input.onchange=()=>{
+    for(const source of body.querySelectorAll('.source-document[data-original-text]')){
+      const original=source.dataset.originalText,chars=Array.from(input.checked?original:readable(original));let cursor=0;
+      for(const child of source.childNodes){
+        const size=Array.from(child.nodeType===Node.TEXT_NODE?child.textContent:child.dataset.originalText||child.textContent).length;
+        child.textContent=chars.slice(cursor,cursor+size).join('');cursor+=size;
+      }
+    }
+  };
+  return label;
 }
 async function textDigest(text) {
   const serialized=JSON.stringify(text).replace(/[\u007f-\uffff]/g,char=>"\\u"+char.charCodeAt(0).toString(16).padStart(4,"0"));
@@ -858,7 +880,8 @@ function originDrawer(data) {
   const transcription=data.full_transcription||data;
   const body=box(note(data.notice,"notice"),fields([["Document",data.document_id,true],["Source",data.source_id,true],["Recorded classification",data.classification],["Source category",data.source_category,true],["Display scope",transcription.scope]]),note(isNarrativePublication()?"Original transcript hashes and exact recorded offsets verified. The origin is excluded from evidence; this does not independently certify historical claims or source classification.":"Verified sealed source proof and transcription hash. Highlights use exact Unicode character offsets; the origin is excluded from every evidence count.","verified"));
   if(data.warning)body.append(note(data.warning,"origin-category-warning"));
-  const scope=el('details');scope.append(el('summary','Question scope and saved inventory'),fields([['Collection',CORPORA[state.row.case.corpus]],['Task',TASKS[state.row.case.task]],['Published case inventory',`${catalogCases().length} cases`,true]]),note(queryKindNotice(state.row)||'Original query provenance; not eligible result evidence.'),note(GRAPH_SCOPE),note(`Evidence strictly before ${state.row.case.date}; the entire origin document is excluded.`));if(state.saved)scope.append(button('Saved prompts',promptDrawer));body.append(scope);
+  const scope=el('details');scope.append(el('summary','Question scope and saved inventory'),fields([['Collection',CORPORA[state.row.case.corpus]],['Task',TASKS[state.row.case.task]],['Published case inventory',`${catalogCases().length} cases`,true]]),note(queryKindNotice(state.row)||'Original query provenance; not eligible result evidence.'),note(GRAPH_SCOPE),note(`Evidence strictly before ${state.row.case.date}; the entire origin document is excluded.`));if(state.saved)scope.append(button('Saved prompts',promptDrawer));
+  const caseControl=originalCaseControl(body);if(caseControl)scope.append(caseControl);body.append(scope);
   if(data.pdf)body.append(originPDF(data));
   const mapping=originMappingDetails(data);if(mapping)body.append(mapping);
   const anchors=exactOriginAnchors(data);
@@ -925,8 +948,9 @@ function renderPlan(){
     const focal=at>=0,card=el("article",null,{class:"fact-card"+(focal?" is-focal":""),"data-testid":"plan-atom","data-atom-id":atom.id});
     card.append(el("span",atom.id,{class:"eyebrow"}));
     const copy=el("p");
-    if(focal){copy.append(document.createTextNode(text.slice(0,at)),button(marker,openReadingThoughts,"atom-mask",{"data-testid":"atom-focal-mask","aria-expanded":"false","aria-controls":"reading-thoughts",disabled:readingRows().length?null:""}),document.createTextNode(text.slice(at+marker.length)));}
-    else copy.textContent=text;
+    const display=readable(text);
+    if(focal){copy.append(document.createTextNode(display.slice(0,at)),button(marker,openReadingThoughts,"atom-mask",{"data-testid":"atom-focal-mask","aria-expanded":"false","aria-controls":"reading-thoughts",disabled:readingRows().length?null:""}),document.createTextNode(display.slice(at+marker.length)));}
+    else copy.textContent=display;
     card.append(copy,button("i",()=>atomDetail(atom),"fact-inspect",{"aria-label":"Inspect fact "+atom.id,title:"Inspect fact "+atom.id}));cards.append(card);
   }
   s.body.append(note("Query assertions, not established facts."),cards);
@@ -944,14 +968,17 @@ function quoteCard(proof){
   const refs=proof.digest_ids?.join(', ')||(/^S\d+$/.test(proof.id||'')?proof.id:'');
   const b=el('article',null,{class:'exact-quote'}),bar=el('header',null,{class:'quote-toolbar'});
   bar.append(el("small",[refs,...list(proof.atom_ids)].filter(Boolean).join(' / ')||'Selected evidence'));
-  const path=list(state.trace?.paths).find(path=>list(path.decision_source_refs?.length?path.decision_source_refs:path.source_refs).some(p=>typeof p==='object'&&p.canonical_page_id===proof.canonical_page_id&&p.start===proof.start&&p.end===proof.end&&p.text===proof.text));
+  const matchingPaths=list(state.trace?.paths).filter(path=>
+    (!proof.atom_ids?.length||proof.atom_ids.includes(path.query_atom_id)||proof.atom_ids.includes(path.candidate_or_atom_id))&&
+    list(path.decision_source_refs?.length?path.decision_source_refs:path.source_refs).some(p=>typeof p==='object'&&p.canonical_page_id===proof.canonical_page_id&&p.page_sha256===proof.page_sha256&&p.start===proof.start&&p.end===proof.end&&p.text===proof.text));
+  const path=matchingPaths.find(path=>path.graph_hops>0)||matchingPaths[0];
   if(path){
     const index=state.trace.paths.filter(p=>p.candidate_or_atom_id===path.candidate_or_atom_id).findIndex(p=>p.id===path.id);
     bar.append(button('View on KG',()=>guidePath({candidate:{id:path.candidate_or_atom_id},route:path,route_index:index,proof}),'quote-kg',{'data-testid':'quote-view-on-kg'}));
     b.dataset.tone=/^(FOR|SUPPORT|SUPPORTED)$/.test(path.direction)?'support':/^(AGAINST|OPPOSE|OPPOSED|COUNTER|COUNTEREVIDENCE)$/.test(path.direction)?'oppose':'context';
   }
   const text=button('',()=>sourceDrawer(proof),'excerpt-text',{"data-testid":"used-source-quote","data-source-id":proof.canonical_page_id,"data-document-id":proof.document_id,"data-digest-ids":proof.digest_ids?.join(' '),'aria-label':'Inspect source'});
-  text.append(el('blockquote',proof.text),el('footer',[proof.date,proof.earlier_page?'Page '+proof.earlier_page:''].filter(Boolean).join(' / ')));
+  text.append(el('blockquote',readable(proof.text),{'data-original-text':proof.text}),el('footer',[proof.date,proof.earlier_page?'Page '+proof.earlier_page:''].filter(Boolean).join(' / ')));
   b.append(bar,text);return b;
 }
 function renderDiffusion(){
@@ -975,14 +1002,35 @@ async function hydrateNarrativeTrace(epoch){
       state.trace=null;host.dataset.status='unavailable';host.replaceChildren(note('No saved trace or graph route is published for this execution.','empty'));renderPaths();return;
     }
     const trace=livePacket?{...livePacket.trace,reading_id:state.reading}:narrativeUI.validateTrace(envelope,expected);state.trace=trace;host.dataset.status='available';host.dataset.readingId=state.reading;
+    const pageLookups=!livePacket&&state.row.case.task==='redaction'?await loadSourceLookups({
+      row:catalogCases().find(row=>row.case.case_id===state.row.case.case_id),record:state.saved,trace,
+      reportSHA:publicationByteHashes.get(state.report),config:ARMS[state.arm].key,reading:state.reading}):null;
+    if(epoch!==state.epoch||!host.isConnected)return;
     const safe=fn=>(...args)=>{if(epoch===state.epoch)fn(...args);};
     state.flow?.destroy();state.paths?.destroy();
-    state.flow=mountEvidenceMap(host,{trace,plan:state.saved.plan,items:flowItems(),onSource:safe(sourceDrawer),onNode:safe(value=>{
-      if(value.is_graph_node===true){void nodeDrawer(value);return;}
+    state.flow=mountEvidenceMap(host,{trace,plan:state.saved.plan,items:flowItems(),task:state.row.case.task,pageLookups,
+      nativeCandidates:currentReading()?.candidates||[],formatText:readable,onSource:safe(sourceDrawer),onNode:safe(value=>{
+      if(value.is_graph_node===true){void nodeDrawer(value,{navigation:false});return;}
       if(value.id&&list(state.saved.plan?.atoms).some(atom=>atom.id===value.id)){atomDetail(value);return;}
       const body=box(note(value.label||value.text||value.name||'Query lookup'));
       if(value.citation)body.append(sourceButton(value.citation));openDrawer('Saved trace object','Recorded query or source readout',body);
     }),onEdge:safe(edge=>{
+      if(edge.kind==='SOURCE_PAGE_LOOKUP'){
+        const body=box(note('The fact search matched this source page.'));
+        const seen=new Set();
+        for(const record of list(edge.records?.length?edge.records:[edge.record])){
+          if(!record)continue;
+          const key=canonicalGateJSON([record.atom_id,record.search?.id,record.basis,record.witness?.bm25]);
+          if(seen.has(key))continue;seen.add(key);
+          const index=list(state.saved.plan?.atoms).findIndex(atom=>atom.id===record.atom_id);
+          body.append(heading((index>=0?'F'+(index+1)+' / ':'')+readable(record.search?.query||'')),
+            fields([['Match',record.basis==='SEARCH_TOP_NODE_SAME_PAGE'?'Extracted node on this page':'Source page'],
+              ['BM25',formatNumber(record.witness?.bm25)]]));
+        }
+        body.append(note('Search relevance, not a support verdict.'));
+        if(edge.citation)body.append(sourceButton(edge.citation));
+        openDrawer('Page match','Saved search',body);return;
+      }
       const body=box(note((edge.record?.relation||edge.kind||'Source connection').replaceAll('_',' ')));
       if(edge.inspectionOnly)body.append(note('A source-inspection route, recorded after evidence selection.'));
       const lookup=trace.sources||trace.source_refs_by_id||{};
@@ -1055,7 +1103,7 @@ function renderPaths(){
   if(state.row.case.task!=='redaction'){
     for(const [index,item]of items.entries()){
       const section=el('section',null,{class:'fact-evidence-group','data-atom-id':item.id});
-      section.append(el('h3','F'+(index+1)+' / '+(item.text||item.source_quote||item.id)));
+      section.append(el('h3','F'+(index+1)+' / '+readable(item.text||item.source_quote||item.id)));
       const proofs=uniqueProofs(usedProofs(item)).map(proof=>({...proof,atom_ids:[item.id]})),grid=el('div',null,{class:'matched-quotation-grid'});
       for(const proof of proofs)grid.append(quoteCard(proof));
       section.append(grid);if(!proofs.length)section.append(note('No selected source establishes this fact.','empty'));
@@ -1085,7 +1133,7 @@ function renderResultBody(){
   for(const [index,item] of items.entries()){
     const unit=newDecision(item),readout=task==='redaction'?{kind:unit?.status==='evidence_backed_suggestion'?'supported':unit?.status==='incompatible_not_viable'?'opposed':'context',label:decisionLabel(unit)}:assertionDecision(unit,task);
     const card=el("article",null,{class:"construction-card","data-testid":task==='redaction'?"candidate-card":"result-atom","data-proposal-id":item.id,"data-atom-id":task==='redaction'?null:item.id,"data-kind":readout.kind});
-    card.append(el("span",task==='redaction'?String(index+1).padStart(2,"0"):item.id,{class:"eyebrow"}),el("h3",item.fill||item.text||item.source_quote||item.id),badge(readout.label));
+    card.append(el("span",task==='redaction'?String(index+1).padStart(2,"0"):item.id,{class:"eyebrow"}),el("h3",readable(item.fill||item.text||item.source_quote||item.id)),badge(readout.label));
     if(task!=='redaction'){
       const evidence=[...list(unit?.evidence),...list(unit?.requirements).flatMap(r=>list(r.evidence))],directions=new Set(evidence.map(e=>String(e.direction||'').toLowerCase()).filter(Boolean).map(d=>['support','for'].includes(d)?'Support':['counterevidence','against','oppose'].includes(d)?'Oppose':['partial','context','contextual'].includes(d)?'Context':null).filter(Boolean));
       if(task==='hypothesis'){const scopes=el("div",null,{class:"evidence-directions","aria-label":"Saved evidence directions"});for(const direction of ['Support','Oppose','Context'])scopes.append(el("span",direction,{"data-direction":direction,"data-active":directions.has(direction)}));card.append(scopes);}
@@ -2005,7 +2053,7 @@ async function citationContext(proof,c) {
 function sourceButton(value,{back}={}) {
   const proof=proofOf(value);if(!proof?.canonical_page_id)return note("No source-bound quotation was supplied.");
   const b=button("",()=>sourceDrawer(proof,{back}),"source-card",{"data-testid":"source-proof","data-anchor-key":JSON.stringify([proof.canonical_page_id,proof.start,proof.end,proof.page_sha256])});
-  const copy=el("span",proof.text||"Inspect source"),status=el("small",proof.date||'',{class:"context-status"});
+  const copy=el("span",readable(proof.text||"Inspect source")),status=el("small",proof.date||'',{class:"context-status"});
   b.append(copy,status);
   const c={...state.row.case};
   b.loadContext=async()=>{
@@ -2050,6 +2098,7 @@ async function sourceDrawer(value,{back}={}) {
     if(epoch!==state.drawerEpoch||!$("#detail-drawer").open)return;
     const body=box(el('p',`${page.document_id} / ${page.date}`,{class:'source-document-meta'}));
     const technical=el('details',null,{class:'source-technical'});technical.append(el('summary','Source details'),fields([["Document",page.document_id,true],["Source date",page.date],["View",c.corpus==="cib"?"Earlier-visible CIB":"Bound CONFIDENTIAL evidence"],["Canonical page",proof.canonical_page_id,true]]),note(verified?'Exact quotation and source hash verified.':'Source hash verified; no localized quotation was supplied.'));
+    const caseControl=originalCaseControl(body);if(caseControl)technical.append(caseControl);
     if(c.corpus==="cib"){
       const earlierPage=proof.earlier_page??page.earlier_page;
       body.append(link("Open earlier-release PDF"+(Number.isInteger(earlierPage)?" / page "+earlierPage:""),"/api/cib-pdf?"+new URLSearchParams({doc_id:page.document_id,release:"earlier"})+(Number.isInteger(earlierPage)&&earlierPage>0?"#page="+earlierPage:""),"button"));
@@ -2086,7 +2135,7 @@ async function verifySourcePage(page,c) {
   return hash;
 }
 
-async function nodeDrawer(value) {
+async function nodeDrawer(value,{navigation=true}={}) {
   const supplied=typeof value==="string"?{id:value}:value||{},id=supplied.id||supplied.node_id;
   if(!id)return;
   const node={...supplied,...state.projection?.nodes?.find(n=>n.id===id)},type=String(node.type||"").toLowerCase();
@@ -2124,7 +2173,8 @@ async function nodeDrawer(value) {
     const data=await getJSON("/api/node-v6?"+new URLSearchParams({case_id:c.case_id,node_id:id}));
     if(epoch!==state.drawerEpoch||!$("#detail-drawer").open)return;
     if(data.cutoff&&data.cutoff!==c.date||data.whole_origin_excluded&&data.whole_origin_excluded!==c.document_id)throw Error("The node view belongs to another source boundary.");
-    const body=box(link("View on KG",graphURL({node_id:id}),"button"));
+    const body=box();
+    if(navigation)body.append(link("View on KG",graphURL({node_id:id}),"button"));
     if(data.scope==="SAVED_DISPLAY_PROJECTION_ONLY"&&typeof data.note==="string"&&data.note.trim())body.append(note(data.note,"notice"));
     const edges=list(data.edges);let count=0;
     const addConnections=()=>{const end=Math.min(count+6,edges.length);for(;count<end;count++){const edge=edges[count],item=el('section',null,{class:'path-card'});item.append(heading(edge.relation||primitive(edge.kind)));for(const proof of uniqueProofs(list(edge.citations)).slice(0,3))item.append(sourceButton(proof));body.append(item);}more.hidden=count>=edges.length;more.textContent=`More connections / ${edges.length-count}`;body.append(more);};

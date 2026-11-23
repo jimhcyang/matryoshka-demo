@@ -1,0 +1,13 @@
+/* Scoped source-map readability; original document/inspection styles stay intact. */
+.evidence-map .evidence-map-note{margin:0 0 15px;font-size:14px;line-height:1.4;color:#4e6863}
+.evidence-map .evidence-map-column{width:208px}
+.evidence-map .evidence-map-node{box-sizing:border-box;min-height:104px;max-height:104px;gap:4px;padding:9px 12px}
+.evidence-map .evidence-map-node>span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px;line-height:1.3}
+.evidence-map .evidence-map-node small{font-size:14px;line-height:1.2}
+.evidence-map .evidence-map-node[data-node-kind="raw phrase"]{background:#f4f1e8;border-color:#bfb599}
+.evidence-map .evidence-map-node[data-node-kind="raw phrase"]>span{white-space:pre-wrap}
+.evidence-map .evidence-map-edge{stroke-width:2.5}
+.evidence-map .evidence-map-edge[data-kind=NATIVE_SOURCE_PHRASE]{stroke:#9d9271;stroke-dasharray:3 5}
+.evidence-map .evidence-map-node:focus-visible{outline:3px solid #246d6d;outline-offset:3px}
+.evidence-map .evidence-map-viewport:focus-visible{outline:3px solid #246d6d;outline-offset:3px}
+.evidence-map .evidence-map-edge:focus-visible{stroke:#a14f36;stroke-width:5}

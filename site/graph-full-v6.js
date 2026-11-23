@@ -1546,11 +1546,13 @@ class GraphPanel {
 
   mapLabelNodes(){
     const focus=this.graph?.focusMode?this.nodeMap.get(this.graph.focusNodeId):null;
+    const walkIds=new Set(this.savedWalkLabelIds||[]);
     const automatic=focus?this.nodes.filter(node=>node===focus||Math.cos(node.ringHomeAngle)>0&&Math.sin(node.ringHomeAngle)<0):this.nodes;
-    const defaults=[...automatic].sort((a,b)=>Number(b===focus)-Number(a===focus)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||b.document_count||0)-Number(a.mass||a.document_count||0)||a.id.localeCompare(b.id)).slice(0,5);
+    const defaults=[...automatic].sort((a,b)=>Number(walkIds.has(b.id))-Number(walkIds.has(a.id))||Number(b===focus)-Number(a===focus)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||b.document_count||0)-Number(a.mass||a.document_count||0)||a.id.localeCompare(b.id)).slice(0,5);
     const ids=new Set(defaults.map(node=>node.id));
+    for(const id of walkIds)if(this.nodeMap.has(id))ids.add(id);
     for(const [id,shown] of this.labelOverrides)if(shown)ids.add(id);else ids.delete(id);
-    return this.nodes.filter(node=>ids.has(node.id)).sort((a,b)=>Number(b===focus)-Number(a===focus)||Number(this.labelOverrides.get(b.id)===true)-Number(this.labelOverrides.get(a.id)===true)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||0)-Number(a.mass||0));
+    return this.nodes.filter(node=>ids.has(node.id)).sort((a,b)=>Number(walkIds.has(b.id))-Number(walkIds.has(a.id))||Number(b===focus)-Number(a===focus)||Number(this.labelOverrides.get(b.id)===true)-Number(this.labelOverrides.get(a.id)===true)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||0)-Number(a.mass||0));
   }
 
   mapLabelSize(node){
@@ -1584,7 +1586,7 @@ class GraphPanel {
       candidates.push({x:p.x+r+8,y:p.y-wrapped.height/2,placement:'side'},
         {x:p.x-wrapped.width/2,y:p.y-r-wrapped.height-8,placement:'above'},
         {x:p.x-r-wrapped.width-8,y:p.y-wrapped.height/2,placement:'side'});
-      if(node===requested[0]||this.labelOverrides.get(node.id)===true){
+      if(node===requested[0]||this.labelOverrides.get(node.id)===true||this.savedWalkLabelIds?.has(node.id)){
         // Explicitly requested labels must remain readable when the local ring is crowded.
         for(const gap of [16,28,44,64,88,112,144,184,232,288])candidates.push(
           {x:p.x-wrapped.width/2,y:p.y+r+gap,placement:'focus-caption'},
@@ -2966,6 +2968,7 @@ async function openSavedWalkSource(proof,{caseInfo,config,resourceBinding}={}){
     const params=new URLSearchParams({case_id:caseInfo.case_id,config,source_id:proof.canonical_page_id});
     for(const key of ['resource_id','registry_sha256','index_sha256'])if(resourceBinding?.[key])params.set(key,resourceBinding[key]);
     const data=await currentGraphJSON('/api/source-v6?'+params),page=data.page||data;
+    const reader=await import('./reader-casing.js');await reader.loadReaderCasing();
     const digest=async text=>{const canonical=JSON.stringify(text).replace(/[\u007f-\uffff]/g,c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0'));return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonical)))].map(v=>v.toString(16).padStart(2,'0')).join('');};
     const eligible=p=>p.document_id===proof.document_id&&p.date===proof.date&&p.date<caseInfo.date&&p.document_id!==caseInfo.document_id&&p.permitted!==false&&p.visibility!=='later'&&!(p.handling||[]).includes('NOFORN')&&(caseInfo.corpus==='cib'||p.classification==='CONFIDENTIAL');
     if(!eligible(page)||(page.id||page.canonical_page_id)!==proof.canonical_page_id||await digest(page.text)!==proof.page_sha256||!Number.isInteger(proof.start)||!Number.isInteger(proof.end)||proof.start<0||proof.end<=proof.start||Array.from(page.text).slice(proof.start,proof.end).join('')!==proof.text)throw Error('The exact source proof or eligibility check failed.');
@@ -2973,8 +2976,8 @@ async function openSavedWalkSource(proof,{caseInfo,config,resourceBinding}={}){
     for(const p of pages){
       const id=p.id||p.canonical_page_id;if(seen.has(id))continue;seen.add(id);
       if(!eligible(p)||await digest(p.text)!==(p.source_sha256||p.page_sha256))throw Error('An additional source segment failed verification.');
-      const selected=id===proof.canonical_page_id,chars=Array.from(p.text),number=p.earlier_page||p.physical_page;
-      html+='<h3>'+(number?'Page '+esc(number):'Source segment')+'</h3><pre>'+(selected?esc(chars.slice(0,proof.start).join(''))+'<mark class="source-quotation">'+esc(proof.text)+'</mark>'+esc(chars.slice(proof.end).join('')):esc(p.text))+'</pre>';
+      const selected=id===proof.canonical_page_id,chars=Array.from(reader.readerText(p.text,caseInfo.corpus)),number=p.earlier_page||p.physical_page;
+      html+='<h3>'+(number?'Page '+esc(number):'Source segment')+'</h3><pre>'+(selected?esc(chars.slice(0,proof.start).join(''))+'<mark class="source-quotation" data-original-text="'+esc(proof.text)+'">'+esc(chars.slice(proof.start,proof.end).join(''))+'</mark>'+esc(chars.slice(proof.end).join('')):esc(chars.join('')))+'</pre>';
     }
     if(!seen.has(proof.canonical_page_id))throw Error('The selected source is missing from its document inventory.');
     if(epoch!==guideSourceEpoch)return;
@@ -2999,8 +3002,43 @@ async function savedWalkGraphReady(signal){
   aborted();
 }
 
-async function navigateSavedWalkNode(node,{resourceBinding,signal}={}){
+const savedNavigationContexts=new Map();
+async function verifySavedNavigationContext(context,node,previousNode,connection,resourceBinding){
+  if(context?.version!=='saved-walk-navigation/2')throw Error('The saved connection requires its exact navigation context.');
+  const [{canonicalGateJSON},{validateTrace}]=await Promise.all([import('./local-decisions-v65.js'),import('./narrative-trace-v1.js')]);
+  const access=await savedStorySourceAccess(context.caseInfo?.case_id),row=access?.row,saved=row?.configurations?.[context.config];
+  const same=(a,b)=>canonicalGateJSON(a)===canonicalGateJSON(b);
+  if(!row||!saved||!same(row.case,context.caseInfo)||!same(row.resource_binding,resourceBinding)||
+      !same(saved.native_checkpoint,context.native_checkpoint)||context.strictly_before!==row.case.date||
+      context.whole_origin_excluded!==row.case.document_id||context.reading_id!==(pageParams.get('walk_reading')||'')||
+      context.config!==(pageParams.get('walk_config')||'llm_readings')||context.path_id!==pageParams.get('walk_path'))
+    throw Error('The navigation context changes the released question, execution, reading or source boundary.');
+  const serialized=new TextEncoder().encode(canonicalGateJSON(row.case.query));
+  const queryHash=[...new Uint8Array(await crypto.subtle.digest('SHA-256',serialized))].map(n=>n.toString(16).padStart(2,'0')).join('');
+  if(queryHash!==context.query_sha256)throw Error('The saved navigation query hash differs.');
+  const key=canonicalGateJSON([row.case.case_id,context.config,context.reading_id,resourceBinding,saved.native_checkpoint]);
+  if(!savedNavigationContexts.has(key)){
+    const params=new URLSearchParams({case_id:row.case.case_id,config:context.config,reading:context.reading_id});
+    for(const k of ['resource_id','registry_sha256','index_sha256'])params.set(k,resourceBinding[k]);
+    const pending=currentGraphJSON('/api/narrative-v1/trace?'+params).then(envelope=>validateTrace(envelope,{
+      case_id:row.case.case_id,config:context.config,reading_id:context.reading_id,query_sha256:queryHash,
+      native_checkpoint:saved.native_checkpoint,resource_binding:resourceBinding,task:row.case.task,
+      strictly_before:row.case.date,whole_origin_excluded:row.case.document_id}));
+    savedNavigationContexts.set(key,pending);
+    pending.catch(()=>savedNavigationContexts.delete(key));
+  }
+  const trace=await savedNavigationContexts.get(key),path=trace.paths.find(p=>p.id===context.path_id),step=trace.steps.find(s=>s.id===context.step_id);
+  if(!path||!step||!path.steps.includes(step.id)||path.route_mode!==context.route_mode||context.trace&&!same(context.trace,trace))
+    throw Error('The saved navigation step or trace is not in the selected path.');
+  const actual=id=>step.nodes.some(n=>n.id===id&&n.is_graph_node===true);
+  if(!actual(node.id)||previousNode&&!actual(previousNode.id)||connection&&!step.edges.some(e=>same(e,connection)))
+    throw Error('The saved navigation node or edge is not an exact selected-step object.');
+  return {path,step};
+}
+
+async function navigateSavedWalkNode(node,{resourceBinding,signal,previousNode=null,connection=null,transition='community',context=null}={}){
   if(node?.is_graph_node!==true||typeof node.id!=='string'||!node.id)throw Error('Only an actual saved graph-node ID can be navigated.');
+  if(context||connection)await verifySavedNavigationContext(context,node,previousNode,connection,resourceBinding);
   await savedWalkGraphReady(signal);
   const aborted=()=>{if(signal?.aborted)throw new DOMException('Saved walk cancelled','AbortError');};
   const binding=currentGraphResource();
@@ -3015,9 +3053,71 @@ async function navigateSavedWalkNode(node,{resourceBinding,signal}={}){
   const record=state.searchEvidenceIndexes[view.key]?.get(node.id);
   if(!record)return {status:'unavailable',id:node.id,message:'This saved ID is absent from the current map. No label-based substitute is used.'};
   if(panel.v64Busy)return {status:'busy',id:node.id,message:'The map is finishing another navigation. Select this stage again.'};
-  panel.stopPhysics();panel.closeInspector(false);
-  // Reuse the installed cancellable hierarchy/community navigator, not a new graph.
-  const pending=panel.openLocalCommunity(record,{scroll:false,remember:false}),token=panel.v64Token;
+  panel.stopPhysics();panel.stopOrbit();panel.closeInspector(false);
+  const previous=previousNode?.is_graph_node===true?state.searchEvidenceIndexes[view.key]?.get(previousNode.id):null;
+  if(previousNode&&!previous)throw Error('The preceding saved graph node is unavailable; no label substitute is used.');
+  if(connection){
+    const from=connection.traversal_from||connection.source,to=connection.traversal_to||connection.target;
+    if(!previous||from!==previous.id||to!==record.id||!guidePairV64(connection,previous.id,record.id))throw Error('The saved connection does not bind the ordered navigation endpoints.');
+  }
+  const phases=[];let previousCommunity=null,browserEdgeIds=[];
+  const phase=name=>{aborted();phases.push(name);panel.canvas.dataset.savedWalkPhase=name;};
+  // Reuse the existing map, hierarchy and direct-neighborhood transitions.
+  // An inspection is never relabelled as original retrieval chronology.
+  const pending=guideRunV64(panel,async motion=>{
+    panel.v64Traversal=null;
+    panel.savedWalkLabelIds=new Set([previous?.id,record.id].filter(Boolean));
+    if(previous&&connection&&transition==='connection'){
+      const fromRoute=await panel.hierarchyRoute(previous),toRoute=await panel.hierarchyRoute(record);guideAssertV64(motion);
+      previousCommunity=fromRoute.community?.id||null;
+      const sameCommunity=Boolean(fromRoute.community&&fromRoute.community.id===toRoute.community?.id);
+      if(!panel.nodeMap.has(previous.id)||panel.neighborhood||panel.trail.at(-1)?.id!==fromRoute.community?.id){
+        phase('starting-community');await guideMoveRecordV64(panel,previous,motion);
+      }
+      if(sameCommunity){
+        panel.pinnedFocusIds=new Set([previous.id,record.id]);panel.refreshGraph(previous.id);
+      }
+      let links=panel.edges.filter(edge=>guidePairV64(edge,previous.id,record.id));
+      if(!sameCommunity||!links.length){
+        const incident=await ensureNodeNeighborhood(view,previous.id);guideAssertV64(motion);
+        if(incident.edges.some(edge=>guidePairV64(edge,previous.id,record.id))){
+          phase('direct-connections');
+          await guideOpenNeighborhoodV64(panel,previous,motion,{remember:false,ids:[previous.id,record.id]});
+          links=panel.edges.filter(edge=>guidePairV64(edge,previous.id,record.id));
+        }
+      }
+      if(links.length&&panel.nodeMap.has(previous.id)&&panel.nodeMap.has(record.id)){
+        browserEdgeIds=links.map(edge=>edge.id).filter(Boolean);
+        phase('origin');await guidePulseV64(panel,previous.id,motion);
+        guideSetTraversalV64(panel,previous.id,record.id,{kind:connection.kind||connection.relation});
+        panel.v64Traversal.progress=0;phase('connection');
+        await guideTweenV64(panel,motion,720,p=>{panel.v64Traversal.progress=p;panel.draw();});
+        phase('destination');await guidePulseV64(panel,record.id,motion);
+        if(!sameCommunity){
+          phase('destination-connections');
+          await guideOpenNeighborhoodV64(panel,record,motion,{remember:false,ids:[previous.id,record.id]});
+          guideSetTraversalV64(panel,previous.id,record.id,{kind:connection.kind||connection.relation});
+          await guideTweenV64(panel,motion,480,()=>{});
+          phase('destination-community');panel.v64Traversal=null;await guideMoveRecordV64(panel,record,motion);
+        }
+      }else{
+        // A different browser graph can lack a native edge. Navigate hierarchy
+        // honestly rather than drawing an invented connection between them.
+        phase('hierarchy-navigation');await guideMoveRecordV64(panel,record,motion);
+      }
+    }else{
+      phase('community');await guideMoveRecordV64(panel,record,motion);
+    }
+    guideAssertV64(motion);aborted();
+    panel.closeInspector(false);
+    const selected=panel.nodeMap.get(record.id);
+    if(!selected)throw Error('The exact saved node is absent after navigation.');
+    panel.selected=selected;
+    const area=panel.usableBounds(),point=panel.screen(selected);
+    await guideCameraV64(panel,motion,{...panel.transform,x:panel.transform.x+area.left+area.width/2-point.x,
+      y:panel.transform.y+area.top+area.height/2-point.y},380);
+    phase('arrived');panel.draw();
+  }),token=panel.v64Token;
   const cancel=()=>{if(panel.v64Token===token)guideCancelMotionV64(panel);};
   signal?.addEventListener('abort',cancel,{once:true});
   if(signal?.aborted)cancel();
@@ -3025,12 +3125,14 @@ async function navigateSavedWalkNode(node,{resourceBinding,signal}={}){
     await pending;aborted();
     const selected=panel.nodeMap.get(node.id);
     if(!selected||panel.selected?.id!==node.id)throw Error('The exact saved node did not settle in the existing map.');
-    const area=panel.usableBounds(),point=panel.screen(selected);
-    panel.transform.x+=area.left+area.width/2-point.x;panel.transform.y+=area.top+area.height/2-point.y;
     panel.pulseIds([node.id]);panel.draw();
     return {status:'focused',id:node.id,label:record.label||node.id,level:panel.level,
       community_id:panel.trail.at(-1)?.id||null,view_key:view.key,
-      browser_graph_id:refreshBinding.graph_run_id,source_graph_id:resourceBinding.graph_id};
+      browser_graph_id:refreshBinding.graph_run_id,source_graph_id:resourceBinding.graph_id,
+      phases,existing_map_only:true,original_traversal_claimed:false,
+      navigation_contract:'saved-walk-navigation/2',transition,previous_community_id:previousCommunity,
+      connection:connection?{trace_edge_id:connection.id,browser_edge_ids:browserEdgeIds,
+        verification:browserEdgeIds.length?'context-only':'unmatched'}:null};
   }finally{signal?.removeEventListener('abort',cancel);}
 }
 
@@ -3579,7 +3681,9 @@ function guideDrawV64(panel) {
   if(t){
     for(const id of t.context_edge_ids||[]){
       const edge=panel.edges.find(e=>e.id===id);if(!edge)continue;
-      const a=panel.screen(panel.nodeMap.get(edge.source)),b=panel.screen(panel.nodeMap.get(edge.target));
+      const first=panel.nodeMap.get(t.source_id),last=panel.nodeMap.get(t.target_id);if(!first||!last)continue;
+      const a=panel.screen(first),end=panel.screen(last),progress=Number.isFinite(t.progress)?Math.max(0,Math.min(1,t.progress)):1,
+        b={x:a.x+(end.x-a.x)*progress,y:a.y+(end.y-a.y)*progress};
       ctx.save();ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(255,253,248,.86)';ctx.lineWidth=7;ctx.stroke();ctx.strokeStyle='rgba(159,63,47,.92)';ctx.lineWidth=3.6;ctx.stroke();ctx.restore();
     }
     for(const id of t.edge_ids){
@@ -3687,7 +3791,7 @@ async function guideTransitionV64(panel,{direction='crossfade',anchor_id=null},c
 async function guideRunV64(panel,work,{manual=false}={}) {
   if(panel.v64Busy)return;
   const g=state.guidePath,owns=Boolean(g&&!g.busy);
-  if(manual)pauseGuide();
+  if(manual){pauseGuide();panel.savedWalkLabelIds=null;}
   if(owns){g.busy=true;clearTimeout(g.timer);renderGuideStatus();}
   const token=guideTokenV64(panel);panel.v64Busy=true;panel.canvas.setAttribute('aria-busy','true');guideUpdateLevelV64(panel);
   try{return await work(token);}catch(e){if(e.name!=='AbortError'){if(g&&state.guidePath===g)g.error=e.message;throw e;}}
@@ -4097,6 +4201,7 @@ renderPathGuide=function(){guideOriginalRenderV65();guideRenderRouteBadgeV65();}
 
 function bindMapToolbar(){
   const toolbar=$('.map-toolbar'),search=$('#graph-search'),dropdown=$('#map-search-dropdown');
+  if(!toolbar||!search||!dropdown)return;
   const resize=()=>{const bottom=Math.ceil(toolbar.getBoundingClientRect().bottom),origin=$('main').getBoundingClientRect().top;document.documentElement.style.setProperty('--toolbar-height',Math.max(0,bottom-origin)+'px');document.documentElement.style.setProperty('--toolbar-bottom',bottom+'px');for(const panel of Object.values(state.panels))panel.fit();};
   new ResizeObserver(resize).observe(toolbar);
   const closePopovers=except=>$$('.toolbar-popover[open]').forEach(d=>{if(d!==except)d.open=false;});

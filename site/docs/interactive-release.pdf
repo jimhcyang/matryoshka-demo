@@ -3,7 +3,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Count 6 /Kids [6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R] >>
+<< /Type /Pages /Count 4 /Kids [6 0 R 8 0 R 10 0 R 12 0 R] >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
@@ -12,203 +12,139 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
 endobj
 5 0 obj
-<< /Length 1844 >>
+<< /Length 1744 >>
 stream
-0.97 0.98 0.96 rg 0 0 612 792 re f
-0.09 0.28 0.29 rg 0 694 612 98 re f
-0.95 0.98 0.94 rg BT /F2 11 Tf 1 0 0 1 44 755 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
-1 1 1 rg BT /F2 23 Tf 1 0 0 1 44 718 Tm (Matryoshka / Interactive Guide) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 648 Tm (Matryoshka / Interactive Guide) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 620 Tm (Explore the corpus map, inspect the selected evidence, and distinguish a promising) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 604 Tm (candidate from an established claim. The saved casebook and Live execution use the) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 588 Tm (same evidence-oriented presentation.) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 542 Tm (The Corpus Map) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 514 Tm (Redactions Show/Hide controls source-visible redacted-slot markers. Ineligible) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 498 Tm (Show/Dim/Hide controls the appearance of evidence outside the active access/date) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 482 Tm (view. Show uses full color without making an object eligible. They are independent) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 466 Tm (controls. In paired mode, shared Back and Fit affect both releases; the controls) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 450 Tm (beside a map affect only that map. Search applies to both until a map is) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 434 Tm (individually explored. The date field states the available range and uses its) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (nearest boundary for an out-of-range entry.) Tj ET
-0.10 0.23 0.25 rg BT /F1 9 Tf 1 0 0 1 44 32 Tm (Source-first analysis / 22 November 2026) Tj ET
-0.10 0.23 0.25 rg BT /F2 9 Tf 1 0 0 1 540 32 Tm (1) Tj ET
+0.96 0.98 0.97 rg 0 0 612 792 re f
+0.09 0.31 0.32 rg 0 694 612 98 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 42 753 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
+1 1 1 rg BT /F2 21 Tf 1 0 0 1 42 718 Tm (Matryoshka / Interactive Guide) Tj ET
+0.08 0.25 0.26 rg BT /F2 15 Tf 1 0 0 1 42 650 Tm (Matryoshka / Interactive Guide) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 622 Tm (Begin with a question, inspect its facts, follow the selected sources and compare the) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 605 Tm (local verdict with the source passages. A promising answer is not necessarily) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 588 Tm (established by the corpus. Saved results remain inspectable without a model call.) Tj ET
+0.08 0.25 0.26 rg BT /F2 15 Tf 1 0 0 1 42 539 Tm (The Corpus Map) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 511 Tm (Redactions Show/Hide controls redacted-slot markers. Ineligible Show/Dim/Hide changes) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 494 Tm (appearance, not evidence eligibility. Paired maps share Back, Fit and search controls) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 477 Tm (until individually explored. Date guidance states the available range and applies the) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 460 Tm (nearest boundary to an out-of-range date. Click a node to inspect it, or open its) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 443 Tm (direct connections. Concentric rings distinguish the same community, theme, domain and) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 426 Tm (other domains.) Tj ET
+0.08 0.25 0.26 rg BT /F1 9 Tf 1 0 0 1 42 30 Tm (Source-first analysis / 22 November 2026) Tj ET
+0.08 0.25 0.26 rg BT /F2 9 Tf 1 0 0 1 550 30 Tm (1) Tj ET
 endstream
 endobj
 6 0 obj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
 endobj
 7 0 obj
-<< /Length 2791 >>
+<< /Length 2237 >>
 stream
-0.97 0.98 0.96 rg 0 0 612 792 re f
-0.09 0.28 0.29 rg 0 694 612 98 re f
-0.95 0.98 0.94 rg BT /F2 11 Tf 1 0 0 1 44 755 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
-1 1 1 rg BT /F2 23 Tf 1 0 0 1 44 718 Tm (Why These Nodes?) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 648 Tm (Why These Nodes?) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 620 Tm (The display ceiling is not a source filter. Pinned selections are retained first.) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 604 Tm (Additional nodes greedily add previously uncovered semantic neighbors, represent) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 588 Tm (new hierarchy/type facets, and expose source-backed connections to the current) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 572 Tm (selection. Context-only slot links do not count as semantic evidence, and unpinned) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 556 Tm (context markers have a separate small display quota. The node-selection audit is) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 540 Tm (available under More.) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 494 Tm (Size, Strength And Movement) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 466 Tm (Node radius is normalized within the displayed view. With t equal to the) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 450 Tm (normalized log\(1 + mass\), evidence radius is 9 + 22 t^0.8 pixels before zoom;) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 434 Tm (communities use 13 + 24 t^0.8, higher groups 16 + 26 t^0.8. Slot markers use a) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (fixed base radius of 10. Zoom, density and overlap caps apply. Edge width is 0.55) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 402 Tm (+ 1.1 sqrt\(w / maximum displayed w\) pixels. These are orientation encodings, not) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 386 Tm (probabilities. Stored aggregate weight is optional under Technical fields, not) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 370 Tm (independent corroboration or date-recomputed support. Nominal orbit is 0.024) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 354 Tm (radians/second, twice the previous rate, with slower outer bands. Orbit and return) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 338 Tm (share a 30-Hz scheduler. Smoothstep return targets 720-2400 milliseconds; a) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 322 Tm (24-pixel step cap can extend completion. Dense layouts use precomputed packing,) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 306 Tm (not an endless fit/repulsion loop. Motion adds no factual edges.) Tj ET
-0.10 0.23 0.25 rg BT /F1 9 Tf 1 0 0 1 44 32 Tm (Source-first analysis / 22 November 2026) Tj ET
-0.10 0.23 0.25 rg BT /F2 9 Tf 1 0 0 1 540 32 Tm (2) Tj ET
+0.96 0.98 0.97 rg 0 0 612 792 re f
+0.09 0.31 0.32 rg 0 694 612 98 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 42 753 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
+1 1 1 rg BT /F2 21 Tf 1 0 0 1 42 718 Tm (Size And Movement) Tj ET
+0.08 0.25 0.26 rg BT /F2 15 Tf 1 0 0 1 42 650 Tm (Size And Movement) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 622 Tm (Node size is normalized within the displayed view. Dense views retain their selected) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 605 Tm (nodes and use finite packing rather than endless repulsion. Neighborhood orbit is) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 588 Tm (0.024 radians per second before outer-band adjustment. Orbit and return share a) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 571 Tm (bounded 30-Hz scheduler; return easing targets 720-2400 milliseconds. Edge width) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 554 Tm (represents stored connection weight. Aggregate weight is available in technical) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 537 Tm (details, not a correctness probability or an independent corroboration count. None of) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 520 Tm (these display encodings changes the underlying evidence.) Tj ET
+0.08 0.25 0.26 rg BT /F2 15 Tf 1 0 0 1 42 471 Tm (Input And Facts) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 443 Tm (A redaction marker toggles a supplied reference on a second click. Unknown reference) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 426 Tm (words remain unknown. Facts are the parsed requirements of the question, not) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 409 Tm (historical findings. Iran and Vietnam cables use a letter-case-only reader edition for) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 392 Tm (clarity. Original wording, punctuation, whitespace, source offsets and hashes remain) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 375 Tm (unchanged. Original capitalization is available in source details. CIB wording is) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 358 Tm (unchanged.) Tj ET
+0.08 0.25 0.26 rg BT /F1 9 Tf 1 0 0 1 42 30 Tm (Source-first analysis / 22 November 2026) Tj ET
+0.08 0.25 0.26 rg BT /F2 9 Tf 1 0 0 1 550 30 Tm (2) Tj ET
 endstream
 endobj
 8 0 obj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
 endobj
 9 0 obj
-<< /Length 1964 >>
+<< /Length 2623 >>
 stream
-0.97 0.98 0.96 rg 0 0 612 792 re f
-0.09 0.28 0.29 rg 0 694 612 98 re f
-0.95 0.98 0.94 rg BT /F2 11 Tf 1 0 0 1 44 755 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
-1 1 1 rg BT /F2 23 Tf 1 0 0 1 44 718 Tm (Input, Facts And Sources) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 648 Tm (Input, Facts And Sources) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 620 Tm (Opening an example loads its completed result immediately. A redaction marker) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 604 Tm (toggles its reference on a second click. Unknown references remain unknown. The) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 588 Tm (initial grammatical reading is chosen from readings that contain saved candidates) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 572 Tm (when available; an explicitly selected empty reading stays empty. Facts are query) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 556 Tm (assertions, not established historical facts.) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 510 Tm (Reading The Source Map) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 482 Tm (The directed diagram begins with the input facts and ends only at quotations) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 466 Tm (retained for the displayed decisions. Shared sources merge visually. Dotted) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 450 Tm (lookup/readout links are not historical KG assertions. Where the saved trace does) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 434 Tm (not assign a match to one particular fact, the diagram uses Combined facts rather) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (than inventing attribution. Green means support, red opposition, and amber context) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 402 Tm (or partial evidence.) Tj ET
-0.10 0.23 0.25 rg BT /F1 9 Tf 1 0 0 1 44 32 Tm (Source-first analysis / 22 November 2026) Tj ET
-0.10 0.23 0.25 rg BT /F2 9 Tf 1 0 0 1 540 32 Tm (3) Tj ET
+0.96 0.98 0.97 rg 0 0 612 792 re f
+0.09 0.31 0.32 rg 0 694 612 98 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 42 753 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
+1 1 1 rg BT /F2 21 Tf 1 0 0 1 42 718 Tm (Facts To Evidence) Tj ET
+0.08 0.25 0.26 rg BT /F2 15 Tf 1 0 0 1 42 650 Tm (Facts To Evidence) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 622 Tm (Facts connect directly to recorded matches. Where an atomic search demonstrably) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 605 Tm (matched the selected page, a dashed page-lookup link identifies that fact. Such a link) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 588 Tm (does not assert that the excerpt supports it or that this search alone caused the) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 571 Tm (document to be selected. Missing per-fact records remain query matches. Shared graph) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 554 Tm (states and documents merge visually. Green identifies support, red opposition and) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 537 Tm (amber context or partial evidence. Raw source phrases, when supplied, follow their) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 520 Tm (exact quotations before grammatical processing; they are not additional evidence) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 503 Tm (votes.) Tj ET
+0.08 0.25 0.26 rg BT /F2 15 Tf 1 0 0 1 42 454 Tm (Follow The Existing Graph) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 426 Tm (View on KG opens the actual corpus canvas. The guide selects the starting node in its) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 409 Tm (mother community and highlights the saved connection toward the next node. Connected) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 392 Tm (nodes in the same community stay there. When needed, a cross-community step uses) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 375 Tm (existing direct connections before opening the destination community. Missing browser) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 358 Tm (edges are not drawn. A source handoff with no recorded graph hop remains a source) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 341 Tm (handoff. The final document opens at the exact selected quotation. Post-run inspection) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 324 Tm (paths are not represented as original retrieval chronology or factual entailment) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 307 Tm (chains.) Tj ET
+0.08 0.25 0.26 rg BT /F1 9 Tf 1 0 0 1 42 30 Tm (Source-first analysis / 22 November 2026) Tj ET
+0.08 0.25 0.26 rg BT /F2 9 Tf 1 0 0 1 550 30 Tm (3) Tj ET
 endstream
 endobj
 10 0 obj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 9 0 R >>
 endobj
 11 0 obj
-<< /Length 2363 >>
+<< /Length 2546 >>
 stream
-0.97 0.98 0.96 rg 0 0 612 792 re f
-0.09 0.28 0.29 rg 0 694 612 98 re f
-0.95 0.98 0.94 rg BT /F2 11 Tf 1 0 0 1 44 755 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
-1 1 1 rg BT /F2 23 Tf 1 0 0 1 44 718 Tm (Follow A Result On The KG) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 648 Tm (Follow A Result On The KG) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 620 Tm (View on KG opens the existing corpus canvas and plays the exact saved inspection) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 604 Tm (stages. It does not build a second graph. Source-bound node IDs and actual stored) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 588 Tm (edges are retained. The final handoff binds the selected quotation by page,) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 572 Tm (character interval and text hash. Clicking an excerpt opens its supplied document) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 556 Tm (pages with that exact span highlighted. Some saved paths are post-run inspection) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 540 Tm (routes; they must not be read as the original retrieval execution or as a chain of) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 524 Tm (factual entailment.) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 478 Tm (Ranks, Evidence And Repeated Wording) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 450 Tm (Candidate rank and the evidence verdict are separate. Existing ordered criteria) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 434 Tm (and source-priority arithmetic remain unchanged. The score chart identifies its) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (basis; a ranking-position index is not calibrated confidence and is not comparable) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 402 Tm (as a correctness probability across questions. Identical completed fill surfaces) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 386 Tm (appear once, preserving the first native-ranked occurrence and separate source) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 370 Tm (assessments. Repeated page observations from one document are not independent) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 354 Tm (corroboration.) Tj ET
-0.10 0.23 0.25 rg BT /F1 9 Tf 1 0 0 1 44 32 Tm (Source-first analysis / 22 November 2026) Tj ET
-0.10 0.23 0.25 rg BT /F2 9 Tf 1 0 0 1 540 32 Tm (4) Tj ET
+0.96 0.98 0.97 rg 0 0 612 792 re f
+0.09 0.31 0.32 rg 0 694 612 98 re f
+1 1 1 rg BT /F2 12 Tf 1 0 0 1 42 753 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
+1 1 1 rg BT /F2 21 Tf 1 0 0 1 42 718 Tm (Verdicts And Reported Views) Tj ET
+0.08 0.25 0.26 rg BT /F2 15 Tf 1 0 0 1 42 650 Tm (Verdicts And Reported Views) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 622 Tm (Redaction rank is separate from corpus support. Mosaic asks which requested components) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 605 Tm (can be assembled from eligible sources. Hypothesis distinguishes support, opposition,) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 588 Tm (partial evidence and unresolved requirements. A person's conditional endorsement,) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 571 Tm (warning or forecast is their attributed view, not proof of the eventual political) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 554 Tm (outcome. Missing support is not opposition. Repeated passages from one document are) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 537 Tm (not independent corroboration. Scores and ranking-position indices are not calibrated) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 520 Tm (correctness probabilities.) Tj ET
+0.08 0.25 0.26 rg BT /F2 15 Tf 1 0 0 1 42 471 Tm (Source Boundaries And Live Access) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 443 Tm (Ordinary evidence predates the originating question and excludes its entire origin) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 426 Tm (document. The unknown-delegation study retains its declared input windows and source) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 409 Tm (scope; its visible Swedes clue is not an independent evidence vote. The current CIB) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 392 Tm (source-only alias resource is preserved. Iran and Vietnam retain their existing) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 375 Tm (resources. Live uses a private backend password and short-lived session; the OpenAI) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 358 Tm (key stays on the server. GitHub Pages hosts the frontend, not the Python engine. A) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 341 Tm (separately operated backend is needed for live inference, with its spending and source) Tj ET
+0.08 0.25 0.26 rg BT /F1 11 Tf 1 0 0 1 42 324 Tm (limits intact.) Tj ET
+0.08 0.25 0.26 rg BT /F1 9 Tf 1 0 0 1 42 30 Tm (Source-first analysis / 22 November 2026) Tj ET
+0.08 0.25 0.26 rg BT /F2 9 Tf 1 0 0 1 550 30 Tm (4) Tj ET
 endstream
 endobj
 12 0 obj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 11 0 R >>
 endobj
-13 0 obj
-<< /Length 2265 >>
-stream
-0.97 0.98 0.96 rg 0 0 612 792 re f
-0.09 0.28 0.29 rg 0 694 612 98 re f
-0.95 0.98 0.94 rg BT /F2 11 Tf 1 0 0 1 44 755 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
-1 1 1 rg BT /F2 23 Tf 1 0 0 1 44 718 Tm (A Concrete Saved Example) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 648 Tm (A Concrete Saved Example) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 620 Tm (For the Salvadoran-peasants redaction, the earlier report says the peasants can) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 604 Tm (easily be manipulated politically. The displayed fill easily politically) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 588 Tm (manipulated remains rank one and evidence-backed for that focal description. Two) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 572 Tm (saved observations of the same wording now occupy one row, not two. Arias remains) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 556 Tm (a high-ranking contextual candidate: a source identifying a powerful opposition) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 540 Tm (organizer is not by itself proof of every action in the masked report.) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 494 Tm (Unknown Delegation) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 466 Tm (The study offers two gaps and four retained input windows, including a window with) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 450 Tm (the visible Swedes sentence. That sentence is an explicit input clue, never an) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 434 Tm (independent evidence vote. The entire originating report is excluded from) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (retrieved evidence. Seven primary executions completed and one planning failure is) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 402 Tm (retained. The reference words are not given, and these trials do not establish) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 386 Tm (recovery. A source mention of a nationality elsewhere does not establish the) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 370 Tm (identity of this visiting delegation.) Tj ET
-0.10 0.23 0.25 rg BT /F1 9 Tf 1 0 0 1 44 32 Tm (Source-first analysis / 22 November 2026) Tj ET
-0.10 0.23 0.25 rg BT /F2 9 Tf 1 0 0 1 540 32 Tm (5) Tj ET
-endstream
-endobj
-14 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 13 0 R >>
-endobj
-15 0 obj
-<< /Length 2631 >>
-stream
-0.97 0.98 0.96 rg 0 0 612 792 re f
-0.09 0.28 0.29 rg 0 694 612 98 re f
-0.95 0.98 0.94 rg BT /F2 11 Tf 1 0 0 1 44 755 Tm (MATRYOSHKA / INTERACTIVE GUIDE) Tj ET
-1 1 1 rg BT /F2 23 Tf 1 0 0 1 44 718 Tm (Live Execution) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 648 Tm (Live Execution) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 620 Tm (Log in with a private backend password. The server verifies it and issues a) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 604 Tm (random, origin-bound session held only in browser memory. The OpenAI API key stays) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 588 Tm (in the server environment; it is never split into public fragments or) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 572 Tm (reconstructed in the browser. No shared public demo word is configured as a) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 556 Tm (password. Query-only model planning and redaction readings precede local) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 540 Tm (deterministic retrieval, construction and verdicts. Progress reports stage names,) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 524 Tm (not model reasoning. Logout revokes the session; cancellation cannot undo incurred) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 508 Tm (charges. The retained spending ceiling, runtime limit, source cutoff and whole-) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 492 Tm (origin exclusion remain enforced.) Tj ET
-0.10 0.23 0.25 rg BT /F2 15 Tf 1 0 0 1 44 446 Tm (Hosting And Source Boundaries) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 418 Tm (GitHub Pages hosts the saved casebook and Live frontend, not Python inference. Run) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 402 Tm (the local companion or connect an independently hosted authenticated backend with) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 386 Tm (explicit origin permissions. The source-only CIB resource is unchanged. Iran and) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 370 Tm (Vietnam retain their existing resource exports; no new source-only alias) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 354 Tm (certification is implied. Additional document pages are provenance context, not) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 338 Tm (extra inspected evidence. The richer experimental questions remain outside the) Tj ET
-0.10 0.23 0.25 rg BT /F1 11 Tf 1 0 0 1 44 322 Tm (presentation until their native results qualify.) Tj ET
-0.10 0.23 0.25 rg BT /F1 9 Tf 1 0 0 1 44 32 Tm (Source-first analysis / 22 November 2026) Tj ET
-0.10 0.23 0.25 rg BT /F2 9 Tf 1 0 0 1 540 32 Tm (6) Tj ET
-endstream
-endobj
-16 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 15 0 R >>
-endobj
 xref
-0 17
+0 13
 0000000000 65535 f 
 0000000009 00000 n 
 0000000058 00000 n 
-0000000149 00000 n 
-0000000219 00000 n 
-0000000294 00000 n 
-0000002189 00000 n 
-0000002325 00000 n 
-0000005167 00000 n 
-0000005303 00000 n 
-0000007318 00000 n 
-0000007455 00000 n 
-0000009870 00000 n 
-0000010008 00000 n 
-0000012325 00000 n 
-0000012463 00000 n 
-0000015146 00000 n 
+0000000135 00000 n 
+0000000205 00000 n 
+0000000280 00000 n 
+0000002075 00000 n 
+0000002211 00000 n 
+0000004499 00000 n 
+0000004635 00000 n 
+0000007309 00000 n 
+0000007446 00000 n 
+0000010044 00000 n 
 trailer
-<< /Size 17 /Root 1 0 R >>
+<< /Size 13 /Root 1 0 R >>
 startxref
-15284
+10182
 %%EOF

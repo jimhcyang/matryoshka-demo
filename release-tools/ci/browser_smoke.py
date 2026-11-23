@@ -224,6 +224,8 @@ def main():
     selected = set(args.only.split(',')) if args.only else {'archive', 'study', 'graph', 'walk', 'workbench', 'live'}
     assert selected <= {'archive', 'study', 'graph', 'walk', 'workbench', 'live'} and selected
     site, out = args.site.resolve(), args.output.absolute()
+    manifest_pin = hashlib.sha256((site / 'release-manifest.json').read_bytes()).hexdigest()
+    harness_pin = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     assert shutil.disk_usage(out.parent).free >= args.minimum_free_gib * 1024**3, 'Disk reserve exhausted'
     out.mkdir(parents=True, exist_ok=False)
     entries = json.loads((site / 'data/api-index.json').read_bytes())['entries']
@@ -304,33 +306,135 @@ def main():
                         steps = [next(s for s in trace['steps'] if s['id'] == identity) for identity in path['steps']]
                         true = [(i, n) for i, s in enumerate(steps) for n in s['nodes'] if n.get('is_graph_node') is True]
                         label = saved['case']['corpus'] + ('-graph' if true else '-source')
-                        fixtures.setdefault(label, (params, saved, path, steps, true))
+                        fixtures.setdefault(label, (params, saved, path, steps, true, trace))
 
             def walk(fixture):
-                params, saved, path, steps, true = fixture
+                params, saved, path, steps, true, trace = fixture
+                actual = {node['id']: node for step in steps for node in step['nodes'] if node.get('is_graph_node') is True}
+                actions, last = [], None
+                # Raw query/match records are not navigation actions. Derive the
+                # expected action sequence from actual saved graph endpoints.
+                for step in steps:
+                    used = set()
+                    for edge in step['edges']:
+                        if edge['source'] not in actual or edge['target'] not in actual:
+                            assert step['kind'] != 'SOURCE_GRAPH_NAVIGATION'
+                            continue
+                        origin = edge.get('traversal_from') or edge['source']
+                        target = edge.get('traversal_to') or edge['target']
+                        assert origin != target and {origin, target} == {edge['source'], edge['target']}
+                        if last != origin:
+                            actions.append(dict(kind='community', node=origin, step=step['id']))
+                        actions.append(dict(kind='connection', node=target, previous=origin, edge=edge['id'], edge_record=edge, step=step['id']))
+                        last = target
+                        used.update((origin, target))
+                    for node in step['nodes']:
+                        if node.get('is_graph_node') is True and node['id'] not in used and last != node['id']:
+                            actions.append(dict(kind='community', node=node['id'], step=step['id']))
+                            last = node['id']
+                    if step['kind'] == 'SOURCE_READOUT':
+                        actions.append(dict(kind='source', step=step['id']))
+                assert actions and actions[-1]['kind'] == 'source'
+                if actual:
+                    assert path['route_mode'] == 'POSTRUN_GRAPH_VIEW'
+                    assert actions[0]['kind'] == 'community' and any(a['kind'] == 'connection' for a in actions)
+                else:
+                    assert path['route_mode'] == 'DIRECT_SOURCE_HANDOFF'
+                    assert all(a['kind'] == 'source' for a in actions)
+                proof = (path.get('decision_source_refs') or path['source_refs'])[0]
+                if isinstance(proof, str):
+                    proof = (trace.get('sources') or trace['source_refs_by_id'])[proof]
+                assert proof['date'] < saved['case']['date'] and proof['document_id'] != saved['case']['document_id']
+                ascii_lower = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')
                 def check(page, row):
                     query = dict(corpus=saved['case']['corpus'], walk_case=params['case_id'], walk_config=params['config'],
-                        walk_reading=params['reading'], walk_path=path['id'], **{k: params[k] for k in ('resource_id', 'registry_sha256', 'index_sha256')})
+                        walk_reading=params['reading'], walk_path=path['id'], walk_source=proof['canonical_page_id'],
+                        walk_start=proof['start'], walk_end=proof['end'], walk_hash=proof['page_sha256'],
+                        **{k: params[k] for k in ('resource_id', 'registry_sha256', 'index_sha256')})
                     page.goto(base + 'graph-full-v6.html?' + urlencode(query), wait_until='domcontentloaded')
                     expect(page.get_by_test_id('kg-walk-reveal')).to_have_count(0)
                     page.wait_for_function("()=>document.querySelector('#saved-kg-walk')?.dataset.status==='ready'&&document.body.dataset.graphReady==='true'", timeout=120000)
+                    page.evaluate("""()=>{
+                        window.releaseWalkCanvas=state.panels.current.canvas;
+                        window.releaseWalkCalls=[];
+                        const native=window.navigateSavedWalkNode;
+                        window.navigateSavedWalkNode=async function(node,options){
+                            const call={node:node.id,previous:options.previousNode?.id||null,
+                                transition:options.transition,edge:options.connection?JSON.parse(JSON.stringify(options.connection)):null,
+                                step:options.context?.step_id,path:options.context?.path_id};
+                            window.releaseWalkCalls.push(call);
+                            const result=await native(node,options);
+                            call.result=JSON.parse(JSON.stringify(result));
+                            return result;
+                        };
+                    }""")
                     boxes = page.locator('[data-walk-stage]')
-                    assert boxes.count() == len(steps)
-                    if true:
-                        i, node = true[0]
-                        boxes.nth(i).click()
+                    assert boxes.count() == len(actions)
+                    assert page.locator('.walk-nodes, [data-walk-node]').count() == 0
+                    assert page.locator('#saved-kg-walk .guide-actions button:not([hidden])').count() <= 1
+                    initial_source = page.locator('#study-guide-drawer')
+                    if initial_source.count():
+                        assert actions[0]['kind'] == 'source'
+                        assert initial_source.get_attribute('data-proof-page') == proof['canonical_page_id']
+                        assert initial_source.get_attribute('data-proof-hash') == proof['page_sha256']
+                        initial_source.locator('[data-study-close]').click()
+                        expect(initial_source).to_have_count(0)
+                    graph_calls = 0
+                    for index, action in enumerate(actions):
+                        assert boxes.nth(index).get_attribute('data-walk-action') == action['kind']
+                        boxes.nth(index).click()
                         page.wait_for_function("()=>document.querySelector('#saved-kg-walk')?.getAttribute('aria-busy')==='false'", timeout=120000)
-                        page.locator('.walk-nodes > summary').click()
-                        button = page.locator('[data-walk-node="' + node['id'] + '"]')
-                        assert button.text_content() == node['label']
-                        button.click()
-                        page.wait_for_function("id=>state.panels.current.selected?.id===id&&state.panels.current.nodeMap.has(id)", arg=node['id'], timeout=120000)
-                        assert page.locator('.walk-nodes').evaluate('n=>n.open')
-                        row['actual_selected_id'] = node['id']
-                    boxes.last.click()
-                    expect(page.locator('.walk-current blockquote')).to_have_text([p['text'] for p in steps[-1]['source_refs']])
-                    assert not page.locator('#study-guide-drawer').count()
-                    row.update(source_only=not bool(true), opens_immediately=True)
+                        state = page.evaluate("""()=>{const h=document.querySelector('#saved-kg-walk'),p=state.panels.current;return {
+                            step:h.dataset.traceStep,transition:h.dataset.transition,edge:h.dataset.traceEdge,
+                            status:h.dataset.mapStatus,focused:h.dataset.focusedNode||null,selected:p.selected?.id||null,
+                            sameCanvas:p.canvas===window.releaseWalkCanvas,study:!!p.studyContext};}""")
+                        assert state['step'] == action['step'] and state['transition'] == action['kind']
+                        assert state['sameCanvas'] and not state['study']
+                        if action['kind'] != 'source':
+                            graph_calls += 1
+                            assert state['status'] == 'focused' and state['focused'] == state['selected'] == action['node']
+                            page.wait_for_function("id=>state.panels.current.nodeMap.has(id)", arg=action['node'], timeout=120000)
+                            calls = page.evaluate('()=>window.releaseWalkCalls')
+                            assert len(calls) == graph_calls
+                            call = calls[-1]
+                            assert call['node'] == action['node'] and call['transition'] == action['kind']
+                            assert call['step'] == action['step'] and call['path'] == path['id']
+                            result = call['result']
+                            assert result['status'] == 'focused' and result['id'] == action['node']
+                            assert result['navigation_contract'] == 'saved-walk-navigation/2'
+                            assert result['existing_map_only'] is True and result['original_traversal_claimed'] is False
+                        if action['kind'] == 'connection':
+                            assert call['previous'] == action['previous'] and call['edge'] == action['edge_record']
+                            assert 'connection' in result['phases']
+                            assert result['connection']['trace_edge_id'] == action['edge']
+                            assert result['connection']['browser_edge_ids']
+                            assert result['connection']['verification'] in {'context-only', 'exact-source'}
+                            assert state['edge'] == action['edge']
+                            assert page.locator('[data-walk-origin]').text_content()
+                            assert page.locator('[data-walk-target]').text_content()
+                    assert page.evaluate('()=>window.releaseWalkCalls.length') == graph_calls
+                    quotes = page.locator('.walk-current blockquote')
+                    assert quotes.count() == 1
+                    quote = quotes.first
+                    assert quote.get_attribute('data-proof-raw-text') == proof['text']
+                    assert quote.text_content().translate(ascii_lower) == proof['text'].translate(ascii_lower)
+                    if saved['case']['corpus'] == 'cib':
+                        assert quote.text_content() == proof['text']
+                    for key, value in [('page', proof['canonical_page_id']), ('hash', proof['page_sha256']), ('start', proof['start']), ('end', proof['end'])]:
+                        assert quote.get_attribute('data-proof-' + key) == str(value)
+                    drawer = page.locator('#study-guide-drawer')
+                    expect(drawer).to_be_visible()
+                    for key in ('page', 'hash', 'start', 'end'):
+                        assert drawer.get_attribute('data-proof-' + key) == quote.get_attribute('data-proof-' + key)
+                    source_quote = drawer.locator('.source-quotation')
+                    assert source_quote.get_attribute('data-original-text') == proof['text']
+                    assert source_quote.text_content().translate(ascii_lower) == proof['text'].translate(ascii_lower)
+                    if saved['case']['corpus'] == 'cib':
+                        assert source_quote.text_content() == proof['text']
+                    row.update(source_only=not bool(true), opens_immediately=True, raw_records=len(steps),
+                        presentation_actions=len(actions), actual_saved_node_ids_checked=list(actual),
+                        actual_graph_connection_calls=graph_calls, unchanged_edge_call_arguments=True,
+                        same_existing_canvas=True, exact_final_source_highlight=True)
                 return check
             if 'walk' in selected:
                 for label in ('iran-graph', 'cib-graph', 'cib-source', 'vietnam-source'):
@@ -446,7 +550,15 @@ def main():
                     fills = page.locator('[data-testid="candidate-card"] h3').all_text_contents()
                     assert len(fills) == len({text.casefold().strip() for text in fills}), 'Duplicate visible surfaces'
                     quotes = page.get_by_test_id('used-source-quote')
-                    quote_rows = [(q.get_attribute('data-source-id'), q.locator('blockquote').text_content()) for q in quotes.all()]
+                    ascii_lower = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')
+                    quote_rows = []
+                    for q in quotes.all():
+                        visible=q.locator('blockquote').text_content()
+                        original=q.locator('blockquote').get_attribute('data-original-text')
+                        assert isinstance(original,str) and original
+                        assert original.translate(ascii_lower)==visible.translate(ascii_lower), 'Reader changed source content beyond ASCII letter case'
+                        if case['corpus']=='cib':assert original==visible, 'CIB quotations must remain unchanged'
+                        quote_rows.append((q.get_attribute('data-source-id'), original))
                     witnesses = [*known_refs, *(ref for trace in traces.get(case['case_id'], []) for step in trace['steps'] for ref in step['source_refs'])]
                     for page_id, text in quote_rows:
                         assert any(ref['canonical_page_id'] == page_id and text in ref['text'] for ref in witnesses), 'UI quotation is outside saved native/decision/trace evidence'
@@ -459,11 +571,20 @@ def main():
                         assert digest(source_page['text']) == source_page.get('source_sha256', source_page.get('page_sha256'))
                         quotes.first.click()
                         page.locator('#detail-drawer[open] [data-testid="source-document"]').wait_for(state='visible', timeout=60000)
-                        assert page.get_by_test_id('source-document').text_content() == source_page['text']
+                        source_view=page.get_by_test_id('source-document')
+                        assert source_view.get_attribute('data-original-text')==source_page['text']
+                        assert source_view.text_content().translate(ascii_lower)==source_page['text'].translate(ascii_lower)
+                        if case['corpus']=='cib':assert source_view.text_content()==source_page['text']
                         assert page.locator('#detail-drawer .transcript-segment').count() >= 1
                         if quoted != source_page['text']:
                             expect(page.locator('#detail-drawer .source-document mark')).not_to_have_count(0)
-                            assert quoted in ''.join(page.locator('#detail-drawer .source-document mark').all_text_contents())
+                            marks=page.locator('#detail-drawer .source-document mark').all()
+                            raw_marks=[]
+                            for mark in marks:
+                                raw=mark.get_attribute('data-original-text')
+                                assert isinstance(raw,str) and raw.translate(ascii_lower)==mark.text_content().translate(ascii_lower)
+                                raw_marks.append(raw)
+                            assert quoted in ''.join(raw_marks)
                         else:
                             expect(page.locator('#detail-drawer')).to_contain_text('entire segment')
                         page.locator('#detail-close').click()
@@ -516,9 +637,12 @@ def main():
         http.shutdown()
         http.server_close()
         thread.join()
+    assert hashlib.sha256((site / 'release-manifest.json').read_bytes()).hexdigest() == manifest_pin
+    assert hashlib.sha256(Path(__file__).read_bytes()).hexdigest() == harness_pin
     result = dict(success=all(r['pass'] for r in rows) and not leaked and not external, cells=rows,
         leaked_api_requests=leaked, external_requests=external, managed_chromium_headless_shell=True,
         model_api_calls=0, native_executions=0, browser_closed=True,
+        candidate_manifest_sha256=manifest_pin, harness_sha256=harness_pin, frozen_during_checks=True,
         full_release_matrix=args.only is None, selected_groups=sorted(selected), expected_cases=args.expected_cases,
         installed_source_sha256='8b3d032043af69ec80e9a2033b789f80baec3a0ff1bdcb6f3610cb35a70dcc16')
     (out / 'receipt.json').write_text(json.dumps(result, indent=2) + '\n')

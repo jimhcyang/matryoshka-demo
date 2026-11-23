@@ -1,0 +1,25 @@
+{
+  "version": "source-bound-release-authorization/1",
+  "date": "2026-11-22",
+  "candidate_manifest_sha256": "cefdb16dd8786ea5271c4bd1789fc129d520cecd7eefe8376ee03657baa8d93f",
+  "source_report_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
+  "backend_code_sha256": "02142eac8426045df9479b2fed1aabeb10b5bba625e3521b698cffcfa3dc2ee4",
+  "publish_authorized": true,
+  "new_data_qa_accepted": true,
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "qualified_data_qa_ref": {
+    "path": "data-qa-source-navigation-2026-11-22.json",
+    "sha256": "76e642d758c44e29a2acaf65b2a930496d8e7f94ba625d85d383d2d5dc2ea928"
+  },
+  "privacy_and_rights_ref": {
+    "path": "privacy-and-rights-source-navigation-2026-11-22.json",
+    "sha256": "ff3b5d50db16890727cbf425b8ac7ec02f78847a2003703b0d797a3739bc9de9"
+  },
+  "ordinary_inference_preserved": true,
+  "api_key_server_only": true,
+  "client_key_reconstruction": false,
+  "new_scientific_performance_claimed": false,
+  "new_iran_trio_completed": false
+}
