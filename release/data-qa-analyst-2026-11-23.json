@@ -1,0 +1,33 @@
+{
+  "version": "analyst-native-release-data-qa/1",
+  "date": "2026-11-23",
+  "candidate_manifest_sha256": "62606349356b4ad4424b25924aff6e581a8d1b9d9205e2c14b02a2bef1b22d82",
+  "source_report_sha256": "fc3e6349ee0e84f3a8042781b7153891fe07654738c768ab552d8632a447ecd2",
+  "status": "PASS_DIAGNOSTIC_PRESENTATION_DATA",
+  "native_ref": {
+    "path": "phase/analyst_release_20261123/qa/native-19965d866e597e586b3da8ec.json",
+    "sha256": "ca935a9df53a0251159208f25abe8d9b18ffffc5cb2bb9c8348b4cd5a6ed991f"
+  },
+  "browser_sha256": "dd4df30ca268617c9dcd5653bf82613764c8d16885a182476c15dcb58a2a87af",
+  "integrity_sha256": "a94800a02db2878be01c6addc1ac2d32e0132d160eb9acd25ee48ceef0b4e287",
+  "feature_ref": {
+    "version": "independent-final16-feature-review-ref/1",
+    "status": "PASS",
+    "candidate_manifest_sha256": "62606349356b4ad4424b25924aff6e581a8d1b9d9205e2c14b02a2bef1b22d82",
+    "path": "phase/analyst_release_20261123/live_kg/final_features/final16-v06-62606349356b/receipt.json",
+    "sha256": "e4609c00ff7eb482c98442d328cfbb0007a131206f27ab41da067312c1c4a35b",
+    "desktop_cases": 16,
+    "representative_mobile_cases": 5,
+    "desktop_cib_pdf_pairs_verified": 10,
+    "model_or_real_backend_calls": 0,
+    "production_files_edited": false,
+    "curation_complete_claimed": false,
+    "scope": "Independent saved-candidate feature checks only; not full CI or a new research-performance claim. Repack or case changes require a fresh exact-pin review."
+  },
+  "native_packets": 16,
+  "historical_packets_modified": false,
+  "terminal_stage_reuse_explicit": true,
+  "delegation_reference_unknown": true,
+  "delegation_advisory_swedish_recovered": false,
+  "scientific_case_qualification": false
+}

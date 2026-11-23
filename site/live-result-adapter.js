@@ -1,4 +1,5 @@
 /* Live never installs an /api/ replay hook and never persists a capability. */
+import {verifyLiveSourcePolicy} from './source-policy-contract.js';
 const RUN = /^live_[a-f0-9]{32}$/;
 const HASH = /^[a-f0-9]{64}$/;
 const ordered = v => Array.isArray(v) ? v.map(ordered) : v && typeof v === 'object' ?
@@ -150,9 +151,10 @@ export async function verifyEnvelope(value, expectedRun) {
       typeof q.query !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(q.as_of || '') || !q.excluded_origin ||
       !native?.result || !condition?.result || !trace || !Array.isArray(trace.paths) || !Array.isArray(trace.steps) ||
       !Array.isArray(value.selected_evidence) || !sources || !receipt ||
-      scope?.corpus !== q.corpus || scope.strict_before !== q.as_of || scope.excluded_whole_origin !== q.excluded_origin) {
+      scope?.corpus !== q.corpus || scope.strict_before !== q.as_of) {
     fail('The Live result is missing its exact task, source scope or decision artifacts.');
   }
+  const admission = verifyLiveSourcePolicy(scope, native, q, value.execution_kind === 'fixture');
   const c = native.public_case;
   if (!c || c.query !== q.query || c.corpus !== q.corpus || c.task !== q.task || c.date !== q.as_of ||
       c.document_id !== q.excluded_origin || c.focal_marker !== q.focal_marker || !same(c, condition.case)) {
@@ -193,7 +195,7 @@ export async function verifyEnvelope(value, expectedRun) {
   for (const [id, page] of Object.entries(sources)) {
     if (page.id !== id || page.corpus !== q.corpus || page.permitted !== true ||
         !['earlier', 'both'].includes(page.visibility) || !(page.date < q.as_of) ||
-        page.document_id === q.excluded_origin || !inspected.has(id) || typeof page.text !== 'string' ||
+        admission.excludeOrigin && page.document_id === q.excluded_origin || !inspected.has(id) || typeof page.text !== 'string' ||
         q.corpus !== 'cib' && page.classification !== 'CONFIDENTIAL' || handlingVeto(page) ||
         await textDigest(page.text) !== page.source_sha256) fail('A selected source failed scope or hash verification.');
   }
@@ -205,7 +207,7 @@ export async function verifyEnvelope(value, expectedRun) {
     for (const page of pages) {
       if (++documentPageCount > 1024 || page.document_id !== documentId || page.corpus !== q.corpus ||
           page.permitted !== true || !['earlier', 'both'].includes(page.visibility) || !(page.date < q.as_of) ||
-          documentId === q.excluded_origin || page.provenance_only !== true || page.inspection_not_implied !== true ||
+          admission.excludeOrigin && documentId === q.excluded_origin || page.provenance_only !== true || page.inspection_not_implied !== true ||
           typeof page.text !== 'string' || q.corpus !== 'cib' && page.classification !== 'CONFIDENTIAL' || handlingVeto(page) ||
           await textDigest(page.text) !== page.source_sha256) fail('A document provenance page failed admission or hash verification.');
       const selected = sources[page.id];
@@ -429,6 +431,16 @@ export async function verifyEnvelope(value, expectedRun) {
       fail('An unbound or orphan graph step was added to the Live trace.');
     }
   }
+  const summary = value.analyst_digest;
+  if (summary?.available === true) {
+    const words = typeof summary.text === 'string' ? summary.text.trim().split(/\s+/).length : 0;
+    if (summary.version !== 'source-bound-postrun-digest/1' || summary.used_for_inference !== false ||
+        summary.native_checksum !== native.native_checksum || summary.query_sha256 !== native.query_sha256 ||
+        !same(summary.resource_binding, condition.resource_binding) || words < 50 || words > 100 ||
+        !Array.isArray(summary.sources) || summary.source_count !== summary.sources.length) fail('The separate digest is not bound to this result.');
+    summary.sources.forEach((ref, i) => { if (ref.id !== 'S' + (i + 1)) fail('Invalid digest source labels.'); replay(ref); });
+    for (const match of summary.text.matchAll(/\bS(\d+)\b/g)) if (+match[1] < 1 || +match[1] > summary.sources.length) fail('Unknown digest citation.');
+  }
   return value;
 }
 
@@ -445,6 +457,7 @@ export async function toWorkbenchPacket(envelope, expectedRun) {
   return {report, row, condition, trace: envelope.trace, sources: envelope.sources,
     document_pages: envelope.document_pages || {}, origins: null,
     receipt: envelope.receipt, source_scope: envelope.source_scope, selected_evidence: envelope.selected_evidence,
+    analyst_digest: envelope.analyst_digest,
     run_id: envelope.run_id, execution_kind: envelope.execution_kind};
 }
 
@@ -464,11 +477,15 @@ export function sendToWorkbench(target, envelope, {timeout = 90000} = {}) {
 }
 
 export function receiveFromLive(callback, {runId = new URLSearchParams(location.search).get('live_run'), timeout = 15000, onError = () => {}} = {}) {
-  if (!RUN.test(runId || '') || !window.opener) {
+  let source = window.opener;
+  if (!source && new URLSearchParams(location.search).get('live_embed') === '1' && window.parent !== window) {
+    try { if (window.parent.location.origin === location.origin) source = window.parent; } catch { /* Cross-origin parents cannot provide a run. */ }
+  }
+  if (!RUN.test(runId || '') || !source) {
     onError(new Error('Open this run from the authenticated Live page, or connect explicitly to its backend.'));
     return () => {};
   }
-  const source = window.opener, expectedOrigin = location.origin;
+  const expectedOrigin = location.origin;
   let interval, timer;
   const cleanup = () => { clearInterval(interval); clearTimeout(timer); removeEventListener('message', listen); };
   const listen = async event => {
@@ -492,4 +509,133 @@ export async function loadWorkbenchRun(runId, options = {}) {
     finally { client.disconnect(); }
   }
   return new Promise((resolve, reject) => receiveFromLive(resolve, {...options, runId, onError: reject}));
+}
+
+export const LIVE_HISTORY_LIMITS = Object.freeze({key: 'matryoshka.live.results.v1', entries: 6,
+  storageBytes: 3 * 1024 * 1024, entryBytes: 8 * 1024 * 1024,
+  totalRawBytes: 24 * 1024 * 1024, maxAgeMs: 24 * 60 * 60 * 1000});
+const publicEnvelopeKeys = ['version', 'run_id', 'execution_kind', 'request', 'native', 'condition', 'trace',
+  'selected_evidence', 'sources', 'document_pages', 'source_scope', 'receipt', 'artifacts', 'analyst_digest'];
+const credentialFields = new Set(['password', 'passphrase', 'capability', 'authorization', 'apikey',
+  'openaiapikey', 'providerkey', 'accesstoken', 'refreshtoken', 'sessiontoken', 'sessioncapability',
+  'bearertoken', 'auth', 'authentication', 'passwordhash', 'passwordverifier', 'credentials']);
+function publicHistoryEnvelope(value) {
+  const copy = JSON.parse(JSON.stringify(Object.fromEntries(publicEnvelopeKeys.filter(key => key in value).map(key => [key, value[key]]))));
+  let visited = 0;
+  const visit = (item, depth = 0) => {
+    if (++visited > 500000 || depth > 100) fail('This result exceeds local history limits.');
+    if (typeof item === 'string' && credentialLike(item)) fail('Credential-shaped content cannot be saved in local history.');
+    if (!item || typeof item !== 'object') return;
+    for (const [key, child] of Object.entries(item)) {
+      if (credentialFields.has(key.replace(/[^a-z]/gi, '').toLowerCase())) fail('Credential fields cannot be saved in local history.');
+      visit(child, depth + 1);
+    }
+  };
+  visit(copy);
+  return copy;
+}
+function base64(bytes) {
+  let text = '';
+  for (let at = 0; at < bytes.length; at += 32768) text += String.fromCharCode(...bytes.subarray(at, at + 32768));
+  return btoa(text);
+}
+async function limitedBytes(stream, limit) {
+  const reader = stream.getReader(), chunks = [];
+  let length = 0;
+  try {
+    for (;;) {
+      const {value, done} = await reader.read(); if (done) break;
+      length += value.length;
+      if (length > limit) { await reader.cancel(); fail('This result exceeds local history limits.'); }
+      chunks.push(value);
+    }
+  } finally { reader.releaseLock(); }
+  const bytes = new Uint8Array(length);
+  let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
+  return bytes;
+}
+
+// Only public, revalidated result envelopes enter this store. Authentication is never an input.
+export class LiveResultHistory {
+  #storage;
+  #rows = [];
+  #loaded = false;
+  #loading;
+  #revision = 0;
+  constructor(storage) {
+    try { this.#storage = storage === undefined ? globalThis.sessionStorage : storage; } catch { this.#storage = null; }
+  }
+  entries() { return this.#rows.map(row => ({runId: row.id, savedAt: row.saved_at, envelope: row.envelope})); }
+  get(id) { return this.#rows.find(row => row.id === id)?.envelope || null; }
+  load() { return this.#loading ||= this.#read(); }
+  async #read() {
+    if (this.#loaded) return {entries: this.entries(), removed: 0};
+    this.#loaded = true;
+    const revision = this.#revision;
+    let data, removed = 0;
+    try {
+      const raw = this.#storage?.getItem(LIVE_HISTORY_LIMITS.key);
+      if (!raw) return {entries: [], removed};
+      if (raw.length * 2 > LIVE_HISTORY_LIMITS.storageBytes) throw Error('History size');
+      data = JSON.parse(raw);
+      if (data?.version !== 'matryoshka-live-history/1' || Object.keys(data).some(key => !['version', 'entries'].includes(key)) ||
+          !Array.isArray(data.entries) || data.entries.length > LIVE_HISTORY_LIMITS.entries) throw Error('History format');
+    } catch {
+      try { this.#storage?.removeItem(LIVE_HISTORY_LIMITS.key); } catch { /* Storage may be disabled. */ }
+      return {entries: [], removed: 1};
+    }
+    let total = 0;
+    for (const row of data.entries) {
+      try {
+        if (Object.keys(row).some(key => !['id', 'saved_at', 'codec', 'payload', 'raw_bytes'].includes(key)) ||
+            !RUN.test(row.id) || this.#rows.some(item => item.id === row.id) || !Number.isSafeInteger(row.saved_at) ||
+            row.saved_at > Date.now() + 60000 || Date.now() - row.saved_at > LIVE_HISTORY_LIMITS.maxAgeMs ||
+            !Number.isSafeInteger(row.raw_bytes) || row.raw_bytes <= 0 || row.raw_bytes > LIVE_HISTORY_LIMITS.entryBytes ||
+            !['gzip', 'json'].includes(row.codec) || typeof row.payload !== 'string' || !/^[A-Za-z0-9+/]*={0,2}$/.test(row.payload)) throw Error('History entry');
+        const wire = Uint8Array.from(atob(row.payload), char => char.charCodeAt(0));
+        const bytes = row.codec === 'gzip' ? await limitedBytes(new Blob([wire]).stream().pipeThrough(new DecompressionStream('gzip')), LIVE_HISTORY_LIMITS.entryBytes) : wire;
+        total += bytes.length;
+        if (bytes.length !== row.raw_bytes || bytes.length > LIVE_HISTORY_LIMITS.entryBytes || total > LIVE_HISTORY_LIMITS.totalRawBytes) throw Error('History bytes');
+        const envelope = publicHistoryEnvelope(JSON.parse(new TextDecoder('utf-8', {fatal: true}).decode(bytes)));
+        await verifyEnvelope(envelope, row.id);
+        if (revision !== this.#revision) return {entries: this.entries(), removed: 0};
+        this.#rows.push({...row, raw_bytes: bytes.length, envelope});
+      } catch { removed++; }
+    }
+    if (removed) this.#persist();
+    return {entries: this.entries(), removed};
+  }
+  #persist() {
+    const data = {version: 'matryoshka-live-history/1', entries: this.#rows.map(({envelope, ...row}) => row)};
+    const text = JSON.stringify(data);
+    try {
+      if (!this.#storage) return false;
+      this.#storage.setItem(LIVE_HISTORY_LIMITS.key, text);
+      return true;
+    } catch { return false; }
+  }
+  async remember(value) {
+    const revision = this.#revision;
+    await this.load();
+    const envelope = publicHistoryEnvelope(value);
+    await verifyEnvelope(envelope);
+    const bytes = new TextEncoder().encode(JSON.stringify(envelope));
+    if (bytes.length > LIVE_HISTORY_LIMITS.entryBytes) return {stored: false, reason: 'Result too large for local history.'};
+    const compressed = typeof CompressionStream === 'function';
+    const wire = compressed ? await limitedBytes(new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip')), LIVE_HISTORY_LIMITS.storageBytes) : bytes;
+    if (revision !== this.#revision) return {stored: false, reason: 'History was cleared.'};
+    const row = {id: envelope.run_id, saved_at: Date.now(), codec: compressed ? 'gzip' : 'json',
+      payload: base64(wire), raw_bytes: bytes.length, envelope};
+    const rows = [row, ...this.#rows.filter(item => item.id !== row.id)].slice(0, LIVE_HISTORY_LIMITS.entries);
+    while (rows.length && (JSON.stringify({version: 'matryoshka-live-history/1', entries: rows.map(({envelope, ...item}) => item)}).length * 2 > LIVE_HISTORY_LIMITS.storageBytes ||
+        rows.reduce((sum, item) => sum + item.raw_bytes, 0) > LIVE_HISTORY_LIMITS.totalRawBytes)) rows.pop();
+    if (!rows.length) return {stored: false, reason: 'Result too large for local history.'};
+    this.#rows = rows;
+    return {stored: this.#persist(), memory: true};
+  }
+  clear() {
+    this.#revision++;
+    this.#rows = []; this.#loaded = true;
+    try { this.#storage?.removeItem(LIVE_HISTORY_LIMITS.key); } catch { /* The in-memory history is still cleared. */ }
+  }
 }

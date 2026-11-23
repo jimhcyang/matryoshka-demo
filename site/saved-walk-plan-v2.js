@@ -1,4 +1,5 @@
 /* Presentation actions reference saved objects; they never extend native topology. */
+import {traceSourceScope} from './saved-source-policy.js';
 export const NAVIGATION_CONTRACT='saved-walk-navigation/2';
 
 export function buildSavedWalkPlan(trace,path){
@@ -38,5 +39,5 @@ export function savedWalkNavigationContext({row,saved,config,reading,query_sha25
   return {version:NAVIGATION_CONTRACT,caseInfo:row.case,config,reading_id:reading,query_sha256,
     native_checkpoint:saved.native_checkpoint,trace_ref:saved.trace_refs?.[reading],trace,
     path_id:path.id,step_id:step.id,route_mode:path.route_mode,
-    strictly_before:row.case.date,whole_origin_excluded:row.case.document_id};
+    ...traceSourceScope(row.case,saved,trace)};
 }

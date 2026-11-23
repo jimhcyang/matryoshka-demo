@@ -1,4 +1,5 @@
 /* Saved stages navigate only their explicit graph nodes. Display links stay display links. */
+let savedWalkPolicyTools;
 function savedWalkProofs(trace,values){
   if(!Array.isArray(values))throw Error('The saved quotation inventory is incomplete.');
   const lookup=trace.sources||trace.source_refs_by_id||{};
@@ -12,11 +13,12 @@ function savedWalkStepProofs(trace,step){
   for(const proof of savedWalkProofs(trace,values))unique.set(JSON.stringify([proof.document_id,proof.date,proof.canonical_page_id,proof.page_sha256,proof.start,proof.end,proof.text]),proof);
   return [...unique.values()];
 }
-function validateSavedWalkScope(trace,record){
+function validateSavedWalkScope(trace,record,saved){
+  const scope=savedWalkPolicyTools.traceSourceScope(record,saved,trace);
   const proofs=trace.steps.flatMap(step=>savedWalkStepProofs(trace,step));
   for(const path of trace.paths)proofs.push(...savedWalkProofs(trace,path.source_refs),...savedWalkProofs(trace,path.decision_source_refs||[]));
   for(const proof of proofs)if(!proof.canonical_page_id||!proof.document_id||!/^\d{4}-\d{2}-\d{2}$/.test(proof.date||'')||
-      !(proof.date<record.date)||proof.document_id===record.document_id||!/^[a-f0-9]{64}$/.test(proof.page_sha256||'')||
+      !savedWalkPolicyTools.sourceScopeAllows(proof,scope)||!/^[a-f0-9]{64}$/.test(proof.page_sha256||'')||
       !Number.isInteger(proof.start)||!Number.isInteger(proof.end)||proof.start<0||proof.end<=proof.start||
       typeof proof.text!=='string'||Array.from(proof.text).length!==proof.end-proof.start)throw Error('A saved quotation is outside the complete case source scope.');
   return trace;
@@ -56,8 +58,9 @@ function savedWalkMapNames(action,lookup,display){
   const style=make('style');style.textContent='#saved-kg-walk{display:flex;flex-direction:column;overflow:hidden}#saved-kg-walk>header,#saved-kg-walk .walk-stages,#saved-kg-walk .guide-actions,#saved-kg-walk .walk-status{flex-shrink:0}#saved-kg-walk>header{margin-bottom:0;gap:8px}#saved-kg-walk>header .walk-mode{margin:0;text-align:right}#saved-kg-walk .walk-stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:6px 0}#saved-kg-walk .walk-stages button{min-width:0;width:100%;min-height:44px;padding:6px;text-align:left;white-space:normal;overflow-wrap:anywhere;font-size:14px;line-height:1.3}#saved-kg-walk .walk-stages span{display:block;font-size:14px;color:var(--ink-soft)}#saved-kg-walk .walk-stages [aria-current="step"]{background:var(--teal-light);border-color:var(--teal)}#saved-kg-walk .guide-actions{display:flex;align-items:center;gap:8px;margin:0;max-width:100%}#saved-kg-walk .guide-actions button,#saved-kg-walk [data-walk-source]{min-height:36px;font-size:14px}#saved-kg-walk .walk-mode,#saved-kg-walk .walk-status,#saved-kg-walk .walk-proof-meta{font-size:14px;line-height:1.5;overflow-wrap:anywhere;margin:6px 0}#saved-kg-walk .walk-current{flex:1 1 auto;min-height:61px;overflow:auto;border-top:1px solid var(--line);margin-top:6px;padding-top:8px}#saved-kg-walk .walk-current h3{font-size:16px;line-height:1.5;margin:0 0 8px;overflow-wrap:anywhere}#saved-kg-walk blockquote{white-space:pre-wrap;overflow-wrap:anywhere;margin:8px 0;padding:8px;border-left:3px solid #347d78;font-size:16px;line-height:1.6}#saved-kg-walk .walk-record{margin-top:14px;font-size:14px}#saved-kg-walk .walk-record pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}@media(max-width:600px){#saved-kg-walk{max-height:min(calc(100dvh - var(--toolbar-bottom,190px) - 20px),max(36dvh,300px))}}';
   host.append(style,make('h2','KG Navigator'),make('p','Loading saved stages...'));
   try{
-    const [{loadSavedCatalog},{validateTrace},{canonicalGateJSON},{buildSavedWalkPlan,savedWalkNavigationContext,NAVIGATION_CONTRACT},{loadReaderCasing,readerText}]=await Promise.all([
-      import('./narrative-catalog-v1.js'),import('./narrative-trace-v1.js'),import('./local-decisions-v65.js'),import('./saved-walk-plan-v2.js'),import('./reader-casing.js')]);
+    const [{loadSavedCatalog},{validateTrace},{canonicalGateJSON},{buildSavedWalkPlan,savedWalkNavigationContext,NAVIGATION_CONTRACT},{loadReaderCasing,readerText},sourcePolicy]=await Promise.all([
+      import('./narrative-catalog-v1.js'),import('./narrative-trace-v1.js'),import('./local-decisions-v65.js'),import('./saved-walk-plan-v2.js'),import('./reader-casing.js'),import('./saved-source-policy.js')]);
+    savedWalkPolicyTools=sourcePolicy;
     await loadReaderCasing();
     const {report}=await loadSavedCatalog(),row=report.cases.find(r=>r.case.case_id===id),config=params.get('walk_config')||'llm_readings',reading=params.get('walk_reading')||'';
     if(!row||row.case.corpus!==params.get('corpus')||!row.configurations[config])throw Error('This walkthrough does not match a released case.');
@@ -69,7 +72,7 @@ function savedWalkMapNames(action,lookup,display){
     const envelope=await response.json(),query_sha256=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonicalGateJSON(row.case.query))))].map(value=>value.toString(16).padStart(2,'0')).join('');
     const trace=validateSavedWalkScope(validateTrace(envelope,{case_id:id,config,reading_id:reading,query_sha256,
       native_checkpoint:saved.native_checkpoint,resource_binding:row.resource_binding,task:row.case.task,
-      strictly_before:row.case.date,whole_origin_excluded:row.case.document_id}),row.case);
+      ...sourcePolicy.traceSourceScope(row.case,saved,envelope.trace||envelope)}),row.case,saved);
     const path=trace.paths.find(value=>value.id===params.get('walk_path'));if(!path)throw Error('The selected saved path is unavailable.');
     const proofKeys=['walk_source','walk_start','walk_end','walk_hash'];let handoff=null;
     if(proofKeys.some(key=>params.has(key))){

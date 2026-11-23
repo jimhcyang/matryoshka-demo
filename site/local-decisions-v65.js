@@ -1,4 +1,5 @@
 // The V6.5 reporting supplement never substitutes for the frozen native record.
+import {savedSourcePolicy,sourceScopeAllows,sourceScopesEqual} from './saved-source-policy.js';
 export const labels={evidence_backed_suggestion:"Evidence-backed suggestion",partial_grounding:"Partial grounding",
   exploratory_contextual:"Exploratory / contextual",incompatible_not_viable:"Incompatible / not viable"};
 const mosaicTask=task=>task==='mosaic'||task==='reconstruction';
@@ -92,8 +93,10 @@ function currentGuideEnvelope(value,guide,resourceBinding){
       !equal(value.resource_binding,packet?.resource_binding)||!equal(value.browser_binding,value.resource_binding)||
       !equal(value.study_binding,packet?.graph_binding)||!equal(value.binding,value.study_binding)||
       !equal(value.scope?.binding,value.study_binding))fail('resource pins or selected context differ');
-  if(value.case_id!==packet.case_id||value.corpus!==packet.corpus||value.scope?.strictly_before!==scope?.strictly_before||
-      value.scope?.whole_origin_excluded!==scope?.whole_origin_excluded||!scope?.strictly_before||!scope?.whole_origin_excluded)fail('case or strict source boundary differs');
+  const policy=savedSourcePolicy(scope?.source_view_policy),date=scope?.on_or_before||(policy.date_relation==='<='?scope?.cutoff:scope?.strictly_before);
+  if(value.case_id!==packet.case_id||value.corpus!==packet.corpus||!sourceScopesEqual(value.scope,scope)||
+      !/^\d{4}-\d{2}-\d{2}$/.test(date||'')||
+      (packet.corpus!=='cib'||policy.id==='strict_prior')&&!scope?.whole_origin_excluded)fail('case or bound source boundary differs');
   if(value.topology_replaced!==false||value.browser_export_verified!==false||value.layout_coordinates_reused!==false||
       value.browser_layout_comparison!=='NOT_PERFORMED'||value.native_source_graph_matches_selected_context!==true||
       value.membership_is_factual!==false||value.guidance_is_entailment!==false||value.saved_kernel_walk_reverified!==false||
@@ -103,7 +106,7 @@ function currentGuideEnvelope(value,guide,resourceBinding){
       !Array.isArray(value.connections)||value.connections.length!==(guide.lexical?0:guide.hops.length))fail('invalid source/mapping inventory');
   const eligible=new Set(value.eligible_ids),groups=new Set(value.eligible_group_ids),documents=new Set(value.eligible_document_ids);
   function proof(p){
-    if(!p?.canonical_page_id||!documents.has(p.document_id)||!(p.date<scope.strictly_before)||p.document_id===scope.whole_origin_excluded||
+    if(!p?.canonical_page_id||!documents.has(p.document_id)||!sourceScopeAllows(p,scope)||
         !/^[a-f0-9]{64}$/.test(p.page_sha256||'')||!Number.isInteger(p.start)||!Number.isInteger(p.end)||p.start<0||p.end<=p.start||
         typeof p.text!=='string'||Array.from(p.text).length!==p.end-p.start)fail('source quotation lacks exact eligible bounds');
   }
@@ -174,8 +177,7 @@ export function verifyCurrentCaseGuideView(value,guide){
   if(!guide.caseContext||value?.version!=='current-context-inspection/1'||value.lens!=='current_resource_case'||
       canonicalGateJSON(value.resource_binding)!==canonicalGateJSON(guide.packet.resource_binding)||
       canonicalGateJSON(value.binding)!==canonicalGateJSON(guide.packet.graph_binding)||
-      value.scope?.strictly_before!==guide.packet.scope.strictly_before||
-      value.scope?.whole_origin_excluded!==guide.packet.scope.whole_origin_excluded||
+      !sourceScopesEqual(value.scope,guide.packet.scope)||
       value.membership_is_factual!==false||value.saved_kernel_walk_reverified!==false)fail('source graph or case scope differs');
   if(!Array.isArray(value.nodes)||!Array.isArray(value.edges)||!Number.isInteger(value.drawing_limit)||
       value.drawing_limit<2||value.drawing_limit>2048||value.nodes.length>value.drawing_limit||
@@ -191,8 +193,8 @@ export function verifyCurrentCaseGuideView(value,guide){
     if(!ids.has(edge.source)||!ids.has(edge.target)||!['SOURCE','NAVIGATION','SOURCE_AGGREGATE'].includes(edge.kind))fail('edge escaped the displayed source view');
     if(edge.kind==='SOURCE'&&(!Array.isArray(edge.citations)||!edge.citations.length))fail('source edge has no original quotation');
     for(const p of edge.citations||[]){
-      if(!p.canonical_page_id||!guide.overlay.documents.has(p.document_id)||p.document_id===guide.packet.scope.whole_origin_excluded||
-          !(p.date<guide.packet.scope.strictly_before)||!/^[a-f0-9]{64}$/.test(p.page_sha256||'')||
+      if(!p.canonical_page_id||!guide.overlay.documents.has(p.document_id)||!sourceScopeAllows(p,guide.packet.scope)||
+          !/^[a-f0-9]{64}$/.test(p.page_sha256||'')||
           !Number.isInteger(p.start)||!Number.isInteger(p.end)||p.start<0||p.end<=p.start||
           typeof p.text!=='string'||Array.from(p.text).length!==p.end-p.start)fail('edge quotation lacks exact eligible bounds');
     }

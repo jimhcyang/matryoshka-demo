@@ -82,7 +82,17 @@ main{inset:var(--app-nav-height,64px) 0 0}main>.graph-grid{position:absolute;ins
 .toolbar-main>*{flex-shrink:0}
 .segmented>span{align-self:center;padding:0 7px;font-size:12px;color:var(--ink-soft)}
 .map-detail-content{border-top:1px solid var(--line);padding-top:10px;margin-top:12px}
-.map-technical{border-top:1px solid var(--line);margin-top:16px;padding-top:10px;font-size:12px}
+.inspector .inspector-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+.inspector .inspector-stats span,.inspector .type-pill,.inspector-close-row{font-size:14px}
+.map-technical{border-top:1px solid var(--line);margin-top:16px;padding-top:12px;font-size:14px}
+.map-technical>summary{font-size:14px;font-weight:600;cursor:pointer}
+.map-technical .inspector-stat-audit{padding:10px 0;color:var(--ink-soft)}
+.map-technical .inspector-stat-audit b,.map-technical .inspector-stat-audit span{display:block;font-size:14px}
+.map-technical .technical-id{font-size:14px}
+.source-pdf-pair{margin-top:20px;border-top:1px solid var(--line);padding-top:12px}
+.source-pdf-pair .button{display:inline-block;margin:4px 8px 4px 0;padding:9px 12px;border:1px solid var(--line-dark);border-radius:6px;font-size:14px}
+.source-pdf-pair .note{font-size:14px}
+.map-technical{border-top:1px solid var(--line);margin-top:16px;padding-top:10px;font-size:14px}
 .map-primary-sources,.association-list,.bridge-list{max-height:390px;overflow:auto;overscroll-behavior:contain}
 .list-cap-note{font-size:12px!important}
 #selection-audit pre{white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.5 monospace;max-height:340px;overflow:auto;padding:10px;background:#f4f8f5}

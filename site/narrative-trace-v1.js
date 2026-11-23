@@ -1,5 +1,6 @@
 import {validateAdditionalCollection} from './narrative-collections-v1.js';
 import {scenePhases,scenePhase,renderScene} from './narrative-scene-v2.js';
+import {savedSourcePolicy,sourceScopeAllows} from './saved-source-policy.js';
 
 const rows = value => Array.isArray(value) ? value : [];
 const hash = value => /^[a-f0-9]{64}$/.test(value || "");
@@ -150,6 +151,8 @@ export function decisionTerms(){
 
 export function validateTrace(envelope,expected) {
   const trace=envelope?.trace||envelope;
+  if(!same(savedSourcePolicy(trace.source_view_policy),savedSourcePolicy(expected.source_view_policy)))
+    throw Error('The trace uses another native evidence policy.');
   const binding={...envelope,...trace};
   if(!["narrative-selected-evidence-trace/1","narrative-selected-evidence-trace/2","narrative-selected-evidence-trace/3","narrative-selected-evidence-trace/4","narrative-selected-evidence-trace/5"].includes(trace?.version)||binding.case_id!==expected.case_id||
       binding.config!==expected.config||binding.reading_id!==expected.reading_id||!hash(binding.query_sha256)||
@@ -213,8 +216,8 @@ export function validateTrace(envelope,expected) {
     if(!proof?.canonical_page_id||!proof.document_id||!proof.date||!hash(proof.page_sha256)||!Number.isInteger(proof.start)||!Number.isInteger(proof.end)||
         proof.start<0||proof.end<=proof.start||typeof proof.text!=="string"||Array.from(proof.text).length!==proof.end-proof.start)
       throw Error("A trace source reference has no exact quotation bounds. No whole-page fallback is invented.");
-    if(expected.strictly_before&&!(proof.date<expected.strictly_before)||expected.whole_origin_excluded&&proof.document_id===expected.whole_origin_excluded)
-      throw Error("A trace quotation is outside the strict date or whole-origin source boundary.");
+    if((expected.strictly_before||expected.on_or_before)&&!sourceScopeAllows(proof,expected))
+      throw Error("A trace quotation is outside the bound date or source-document boundary.");
   }
   return trace;
 }

@@ -1,145 +1,123 @@
 {
-  "version": "evidence-field-guide/1",
-  "implementation_under_review": true,
-  "mode": "saved_report_snapshot",
-  "report_byte_sha256": "c832585b07e9b5947eaece0b0584b6e646d0127cc4999a770204ee90e5c2d089",
-  "saved_report_status": "PARTIAL",
-  "release_qualification_inferred": false,
   "cases": [
     {
       "case_id": "narrative_cib_revision_ac39b62cbc7070a340c5d62d",
-      "task": "redaction",
       "corpus": "cib",
+      "local_status": "CANDIDATE_SUGGESTIONS",
       "query_utf8_sha256": "43ad9d3a64bee57cfa5e23769dc476653658ca053096a1ec2602c0296052c6bf",
-      "arm": "llm_readings",
-      "saved_status": "CANDIDATE_SUGGESTIONS",
-      "citation_count": 2
+      "task": "redaction"
     },
     {
       "case_id": "narrative_cib_revision_3eea5176c0eab4abfb6452a4",
-      "task": "redaction",
       "corpus": "cib",
+      "local_status": "CANDIDATE_SUGGESTIONS",
       "query_utf8_sha256": "0838b8c56ce7789eb956bd83398fde211e6be37672ec945674d22b75c1394fef",
-      "arm": "llm_readings",
-      "saved_status": "CANDIDATE_SUGGESTIONS",
-      "citation_count": 1
+      "task": "redaction"
     },
     {
       "case_id": "cloze_132dbc991d56c1c3ff66331a",
-      "task": "redaction",
       "corpus": "cib",
+      "local_status": "CANDIDATE_SUGGESTIONS",
       "query_utf8_sha256": "3709f2c0989d1c20a64c626b21484be707327c9831e36b1909c61366bf63ce28",
-      "arm": "llm_readings",
-      "saved_status": "CANDIDATE_SUGGESTIONS",
-      "citation_count": 1
+      "task": "redaction"
     },
     {
       "case_id": "cloze_225a750400eb38718fa5bb9b",
-      "task": "redaction",
       "corpus": "cib",
+      "local_status": "CANDIDATE_SUGGESTIONS",
       "query_utf8_sha256": "49f7da832730bf1f5a9a68904783cb7b140597a68c75cb9b3b4304e70714a36d",
-      "arm": "llm_readings",
-      "saved_status": "CANDIDATE_SUGGESTIONS",
-      "citation_count": 1
+      "task": "redaction"
     },
     {
       "case_id": "narrative_cib_revision_ac4fb499beb4b345b5384ae6",
-      "task": "redaction",
       "corpus": "cib",
+      "local_status": "CANDIDATE_SUGGESTIONS",
       "query_utf8_sha256": "f19983fbfa965263e0f0cca6240b7818a269b0172332c7367f94bcafdbff6738",
-      "arm": "llm_readings",
-      "saved_status": "CANDIDATE_SUGGESTIONS",
-      "citation_count": 1
+      "task": "redaction"
     },
     {
       "case_id": "narrative_cib_alt_h_3af565c9ad6e532e16c9264b",
-      "task": "hypothesis",
       "corpus": "cib",
+      "local_status": "SUPPORTED",
       "query_utf8_sha256": "8a84e30e36bc6ba127bc89596ef4cfc7c062d6af6d8038016e638729db395c31",
-      "arm": "llm_readings",
-      "saved_status": "SUPPORTED",
-      "citation_count": 1
+      "task": "hypothesis"
     },
     {
       "case_id": "narrative_cib_revision_ab8506d47badd3718e892a7e",
-      "task": "mosaic",
       "corpus": "cib",
+      "local_status": "EVIDENCE_BACKED_RECONSTRUCTION",
       "query_utf8_sha256": "913a29aff426fd25b7ab3416f5ebe12fcf376d5756784603d5b7140b17c0de27",
-      "arm": "llm_readings",
-      "saved_status": "EVIDENCE_BACKED_RECONSTRUCTION",
-      "citation_count": 2
+      "task": "mosaic"
     },
     {
       "case_id": "narrative_cib_revision_50e63144067940b5debe3fea",
-      "task": "redaction",
       "corpus": "cib",
+      "local_status": "CANDIDATE_SUGGESTIONS",
       "query_utf8_sha256": "25efa075c9a410c0cc6b4480f550d426d517083a4bcf39e8ab036087bbbd92f0",
-      "arm": "llm_readings",
-      "saved_status": "CANDIDATE_SUGGESTIONS",
-      "citation_count": 2
+      "task": "redaction"
     },
     {
       "case_id": "iran_factual_h_9b61144cb419baafa343",
-      "task": "hypothesis",
       "corpus": "iran",
+      "local_status": "SUPPORTED",
       "query_utf8_sha256": "285a5b49220a1c5985894006cecbc3ba32616c8d533590628856ae68b6a08ddf",
-      "arm": "llm_readings",
-      "saved_status": "SUPPORTED",
-      "citation_count": 1
+      "task": "hypothesis"
     },
     {
       "case_id": "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
-      "task": "mosaic",
       "corpus": "iran",
+      "local_status": "EVIDENCE_BACKED_RECONSTRUCTION",
       "query_utf8_sha256": "6b16f8aaa014d700b4fdd034c9dfa79f224ad4acc4cbb51922770fa907ada794",
-      "arm": "llm_readings",
-      "saved_status": "EVIDENCE_BACKED_RECONSTRUCTION",
-      "citation_count": 4
+      "task": "mosaic"
     },
     {
       "case_id": "source_window_9c77b0239a74f169bcf84785",
-      "task": "redaction",
       "corpus": "iran",
+      "local_status": "CANDIDATE_SUGGESTIONS",
       "query_utf8_sha256": "afa0eca6595a3a1d6c56445825c8c8b36ce98c60523a96dd2f99a31cf539910e",
-      "arm": "llm_readings",
-      "saved_status": "CANDIDATE_SUGGESTIONS",
-      "citation_count": 18
+      "task": "redaction"
     },
     {
       "case_id": "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
-      "task": "hypothesis",
       "corpus": "vietnam",
+      "local_status": "SUPPORTED",
       "query_utf8_sha256": "1631e37342c362ac109be47b50d61e4035993feab71c6517793388d50d592084",
-      "arm": "llm_readings",
-      "saved_status": "SUPPORTED",
-      "citation_count": 1
+      "task": "hypothesis"
     },
     {
       "case_id": "fullresume_vietnam_command_m_a7a37cb69a0f4505",
-      "task": "mosaic",
       "corpus": "vietnam",
+      "local_status": "EVIDENCE_BACKED_RECONSTRUCTION",
       "query_utf8_sha256": "9b9f1b002af8bc800e2f10b8184c8f4d27d4334317f21b1381dc76a371b86934",
-      "arm": "llm_readings",
-      "saved_status": "EVIDENCE_BACKED_RECONSTRUCTION",
-      "citation_count": 2
+      "task": "mosaic"
     },
     {
       "case_id": "narrative_vietnam_a111c4d6f8af8b100825ae07",
-      "task": "redaction",
       "corpus": "vietnam",
+      "local_status": "CANDIDATE_SUGGESTIONS",
       "query_utf8_sha256": "264aff1401fbf7377a887b4ea7593e9d098596ac607c41822446d3f2a6e850eb",
-      "arm": "llm_readings",
-      "saved_status": "CANDIDATE_SUGGESTIONS",
-      "citation_count": 1
+      "task": "redaction"
+    },
+    {
+      "case_id": "analyst_delegation_01_first_588eaa87728f94a6",
+      "corpus": "cib",
+      "local_status": "CANDIDATE_SUGGESTIONS",
+      "query_utf8_sha256": "afa5698d7a1b80ff88dfafea34e32a6fdc8a91246ff50b3aacc6526045c3d810",
+      "task": "redaction"
+    },
+    {
+      "case_id": "analyst_delegation_01_last_fe5df6ceca0d45e8",
+      "corpus": "cib",
+      "local_status": "CANDIDATE_SUGGESTIONS",
+      "query_utf8_sha256": "692eff053947f5990626631db9578cd18b655cb467356c37579b3468da08c9c4",
+      "task": "redaction"
     }
   ],
-  "source_replay_performed": false,
-  "api_calls": 0,
-  "native_runs": 0,
-  "case_inputs": "PINNED_PUBLIC_CONDITIONS_ONLY",
-  "pdf_pages": 36,
   "files": {
-    "field-guide.pdf": "9af581ad77e4b446016b5b6e52fe6d0b755f59ed874c0444b79ed9c9ce0b8457",
-    "field-guide.txt": "685ec11688c78fac749891230aa96f29692704ef9cffffa08db7a04509eba0c1"
-  }
+    "field-guide.pdf": "4b6e3e614a3ad3c491d6bdca705f7824a0cd8c7bb58ba77223e50f24a3cc8374",
+    "field-guide.txt": "05e1f34ed220257142a93737f836bb2a629a88ea05fab4c37c98aef501487daa"
+  },
+  "mode": "saved_report_snapshot",
+  "report_byte_sha256": "fc3e6349ee0e84f3a8042781b7153891fe07654738c768ab552d8632a447ecd2",
+  "version": "evidence-field-guide/1"
 }

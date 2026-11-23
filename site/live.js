@@ -1,18 +1,27 @@
-import {LiveClient, credentialLike, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js';
+import {LiveClient, LiveResultHistory, credentialLike, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js';
 import {displayedScope, loadCorpusScopes, requestScope, validateCorpusScopes} from './live-scope-controls.js';
+import {computeDecisionScores, formatDecisionScore} from './decision-scores.js';
 
 const $ = selector => document.querySelector(selector);
 const terminal = new Set(['completed', 'failed', 'cancelled', 'timed_out', 'resource_limited']);
-const stageLabels = {queued: 'Queued', validating: 'Validating request', planning: 'Query-only planning and atomization',
-  model_readings: 'Query-only Redaction model readings', opening_resources: 'Verifying fixed source resources',
-  retrieval: 'Deterministic eligible-source retrieval', construction: 'Deterministic Redaction construction',
-  task_decisions: 'Deterministic task decisions', projection: 'Verifying display and source evidence', saving: 'Saving output and receipt',
-  completed: 'Completed', failed: 'Failed closed', cancelled: 'Cancelled', timed_out: 'Runtime limit reached', resource_limited: 'Resource limit reached'};
+const stageLabels = {queued: 'Queued', validating: 'Checking question', planning: 'Planning search',
+  model_readings: 'Reading mask syntax', opening_resources: 'Opening sources',
+  retrieval: 'Finding source passages', construction: 'Constructing candidates',
+  task_decisions: 'Assessing evidence', projection: 'Checking result', digest: 'Writing analyst digest', saving: 'Saving result',
+  completed: 'Result ready', failed: 'Analysis failed', cancelled: 'Cancelled', timed_out: 'Time limit reached', resource_limited: 'Resource limit reached'};
+const progressGroups = [['Prepare', ['queued', 'validating', 'planning', 'model_readings', 'opening_resources']],
+  ['Find sources', ['retrieval', 'construction']], ['Decide', ['task_decisions', 'projection', 'digest', 'saving', 'completed']]];
 let client = null, job = null, result = null, pollEpoch = 0, handoffCleanup = null, expiryTimer = null, retryTimer = null;
+let inlineCleanup = null, inlineEpoch = 0, busy = false;
+const localHistory = new LiveResultHistory();
 const configuredBackend = $('meta[name="live-backend"]')?.content || '';
 $('#backend').value = configuredBackend || (['127.0.0.1', 'localhost'].includes(location.hostname) ? `${location.origin}/live-api/` : '');
 let scopeMetadata = null;
 function updateCorpusDate(reset = false) {
+  const cib = $('#corpus').value === 'cib';
+  $('#origin-label').textContent = cib ? 'Source document (optional)' : 'Exclude document (optional)';
+  $('#origin-hint').textContent = cib ? 'Leave blank for your own question. Enter an ID when quoting a source document.' :
+    'Leave blank for your own question. For a source quotation, exclude its document.';
   if (!scopeMetadata) return;
   const bounds = scopeMetadata.corpora[$('#corpus').value];
   $('#as-of').min = bounds.first_date;
@@ -44,10 +53,150 @@ function node(tag, text, className) {
   if (className) n.className = className;
   return n;
 }
+function setBusy(value) {
+  busy = value;
+  $('#run').disabled = value;
+  for (const link of $('#history-list').querySelectorAll('a')) link.setAttribute('aria-disabled', String(value));
+}
+function historyURL(id) {
+  const url = new URL('live.html', location.href);
+  url.searchParams.set('live_run', id);
+  return url;
+}
+function renderHistory() {
+  const entries = localHistory.entries();
+  $('#clear-history').disabled = !entries.length;
+  $('#history-list').replaceChildren(...entries.map(entry => {
+    const item = node('li'), link = node('a');
+    link.href = historyURL(entry.runId).href;
+    link.dataset.runId = entry.runId;
+    link.setAttribute('aria-current', String(result?.run_id === entry.runId));
+    link.setAttribute('aria-disabled', String(busy));
+    link.append(node('strong', entry.envelope.request.query.slice(0, 150)), node('small',
+      `${entry.envelope.execution_kind === 'fixture' ? 'Fixture / ' : ''}${entry.envelope.request.corpus.toUpperCase()} / ${entry.envelope.request.task} / Saved ${new Date(entry.savedAt).toLocaleString()}`));
+    link.addEventListener('click', async event => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      if (busy) { $('#history-status').textContent = 'Wait for this run, or cancel it before opening history.'; return; }
+      await openHistory(entry.runId);
+    });
+    item.append(link); return item;
+  }));
+}
+async function openHistory(id) {
+  const saved = localHistory.get(id);
+  if (!saved) { $('#history-status').textContent = 'This run is not saved in this tab. No backend request was made.'; return; }
+  const epoch = ++pollEpoch;
+  try {
+    await verifyEnvelope(saved, id);
+    if (epoch !== pollEpoch) return;
+    const scope = displayedScope(saved.request, saved.source_scope);
+    $('#task').value = saved.request.task; $('#corpus').value = saved.request.corpus; updateCorpusDate();
+    $('#query').value = saved.request.query; $('#as-of').value = scope.through;
+    $('#excluded-origin').value = /^live-analyst-origin:/.test(saved.request.excluded_origin) ? '' : saved.request.excluded_origin;
+    $('#focal-marker').value = saved.request.focal_marker || '[MASK]';
+    $('#focal-field').hidden = saved.request.task !== 'redaction';
+    $('#run-title').textContent = 'Stored result'; $('#job-status').textContent = 'No new analysis';
+    $('#run-heading').hidden = true;
+    $('#progress').hidden = true; $('#cancel').hidden = true; $('#retry').hidden = true;
+    await renderResult(saved, {stored: true, expectedEpoch: epoch});
+  } catch {
+    $('#history-status').textContent = 'This local result could not be verified. No substitute was opened.';
+  }
+}
+$('#clear-history').addEventListener('click', () => {
+  localHistory.clear(); renderHistory();
+  const url = new URL(location.href); url.searchParams.delete('live_run'); history.replaceState(null, '', url);
+  $('#history-status').textContent = 'Local history cleared. The open result, if any, remains in memory until you leave.';
+});
+function openInlineWorkbench(value) {
+  inlineCleanup?.();
+  const epoch = ++inlineEpoch, frame = document.createElement('iframe');
+  frame.title = `Complete Live workbench / ${value.request.task} / ${value.request.corpus}`;
+  frame.width = '100%'; frame.height = String(Math.max(780, Math.round(innerHeight * .9)));
+  frame.referrerPolicy = 'no-referrer'; frame.dataset.liveRun = value.run_id;
+  $('#workbench-frame-host').replaceChildren(frame);
+  $('#inline-status').textContent = 'Opening the complete verified workbench...';
+  $('#inline-status').classList.remove('error'); $('#retry-view').hidden = true;
+  const target = new URL('workbench-v6.html', location.href);
+  target.searchParams.set('live_run', value.run_id); target.searchParams.set('live_embed', '1');
+  const stopTransfer = sendToWorkbench(frame.contentWindow, value);
+  let interval, timeout, drawerObserver;
+  const stop = () => { clearInterval(interval); clearTimeout(timeout); stopTransfer(); };
+  const failed = () => {
+    if (epoch !== inlineEpoch) return;
+    stop(); $('#inline-status').textContent = 'The full reader could not open. Reload this result view; no model call is needed.';
+    $('#inline-status').classList.add('error'); $('#retry-view').hidden = false;
+    $('#compact-result').open = true;
+  };
+  const inspect = () => {
+    if (epoch !== inlineEpoch) return;
+    try {
+      const doc = frame.contentDocument;
+      if (!doc || frame.contentWindow.location.origin !== location.origin) return;
+      if (doc.querySelector('#page-error:not([hidden])')) { failed(); return; }
+      if (doc.querySelector('#case-view[aria-busy="false"] [data-testid="compact-verdict"]') && doc.querySelectorAll('.workflow > .stage').length === 6) {
+        stop();
+        for (const id of ['app-navigation', 'examples-toggle']) {
+          const element = doc.getElementById(id); if (element) { element.hidden = true; element.style.display = 'none'; }
+        }
+        doc.body.style.paddingTop = '0';
+        const stageBar = doc.querySelector('.workflow-nav');
+        if (stageBar) stageBar.style.position = 'static';
+        doc.querySelector('.workbench-shell')?.classList.remove('examples-open');
+        doc.querySelector('#examples-rail')?.classList.remove('is-open');
+        doc.documentElement.dataset.liveEmbedded = 'true';
+        doc.querySelector('[data-testid="compact-verdict"]')?.scrollIntoView({block: 'start'});
+        const drawer = doc.getElementById('detail-drawer');
+        if (drawer) {
+          // An embedded modal must remain below the outer page's fixed navigation.
+          drawerObserver = new MutationObserver(() => {
+            if (drawer.open && epoch === inlineEpoch) frame.scrollIntoView({block: 'start', behavior: 'instant'});
+          });
+          drawerObserver.observe(drawer, {attributes: true, attributeFilter: ['open']});
+        }
+        $('#inline-status').textContent = 'Scroll inside the result to inspect facts, sources and scores.';
+        frame.dataset.ready = 'true';
+      }
+    } catch { failed(); }
+  };
+  frame.addEventListener('load', inspect);
+  frame.src = target.href;
+  interval = setInterval(inspect, 200); timeout = setTimeout(failed, 45000);
+  inlineCleanup = () => { stop(); drawerObserver?.disconnect(); frame.removeEventListener('load', inspect); frame.remove(); };
+}
+$('#retry-view').addEventListener('click', () => { if (result) openInlineWorkbench(result); });
+localHistory.load().then(async ({removed}) => {
+  renderHistory();
+  if (removed) $('#history-status').textContent = 'Unverified or expired local results were removed.';
+  const id = new URLSearchParams(location.search).get('live_run');
+  if (id && !busy && !result) await openHistory(id);
+});
+async function digestBytes(bytes) {
+  return [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(x => x.toString(16).padStart(2, '0')).join('');
+}
+// The parent verifies the envelope; replay the exact page again on inspection.
+export async function mountLiveSourcePage(host, page, proof) {
+  if ((page.id || page.canonical_page_id) !== proof.canonical_page_id || page.document_id !== proof.document_id || page.date !== proof.date) throw Error('Source identity changed.');
+  const text = JSON.stringify(page.text).replace(/[\u007f-\uffff]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
+  if (await digestBytes(new TextEncoder().encode(text)) !== proof.page_sha256) throw Error('Source page hash changed.');
+  const {exactSourceAnchor, appendCIBPDFPair} = await import('./source-inspection.js');
+  const anchor = exactSourceAnchor(page.text, proof), chars = Array.from(page.text), pre = node('pre', null, 'full-source-text');
+  const mark = node('mark', anchor.text);
+  pre.append(document.createTextNode(chars.slice(0, anchor.start).join('')), mark, document.createTextNode(chars.slice(anchor.end).join('')));
+  if (!host.isConnected) return;
+  host.replaceChildren(pre);
+  if (page.corpus === 'cib') {
+    try {
+      await appendCIBPDFPair(host, {page: {...page, page_sha256: proof.page_sha256}, proof, base: new URL('.', location.href).href});
+    } catch { host.append(node('p', 'Original PDFs are unavailable in this export.', 'hint')); }
+  }
+}
 function disconnect(message = 'Logged out. Log in again to obtain a new short-lived session.') {
   pollEpoch++;
   clearTimeout(expiryTimer);
   handoffCleanup?.(); handoffCleanup = null;
+  inlineEpoch++; inlineCleanup?.(); inlineCleanup = null;
   client?.disconnect(); client = null;
   $('#capability').value = ''; $('#login-password').value = '';
   $('#question-fields').disabled = true;
@@ -58,20 +207,27 @@ function disconnect(message = 'Logged out. Log in again to obtain a new short-li
   $('#login-submit').textContent = 'Log in';
   $('#cancel').hidden = true; $('#retry').hidden = true;
   $('#result').hidden = true;
+  $('#run-panel').hidden = true; $('#local-verdict').hidden = true; $('#score-section').hidden = true;
+  $('#run').disabled = false;
   $('#decisions').replaceChildren(); $('#evidence').replaceChildren();
+  $('#decision-scores').replaceChildren(); $('#progress').replaceChildren(); $('#progress-receipt').textContent = '';
+  $('#verdict-title').textContent = ''; $('#verdict-detail').textContent = '';
+  $('#local-verdict').querySelectorAll('.score-overview').forEach(item => item.remove());
   $('#paths').textContent = ''; $('#receipt').textContent = ''; $('#source-scope').replaceChildren();
+  $('#postrun-digest').hidden = true; $('#digest-text').textContent = '';
   result = null; job = null;
+  setBusy(false); renderHistory();
   $('#session-status').textContent = message;
-  availability(message + ' GitHub Pages still requires a separately operated backend; it cannot run the engine.');
+  availability(message);
 }
 $('#logout').addEventListener('click', async () => {
   const active = client;
   pollEpoch++;
   try {
     await active?.logout();
-    disconnect('Logged out; the server session was revoked and unfinished jobs were cancelled. Incurred charges remain in the shared ledger.');
+    disconnect('Logged out. The session was revoked and unfinished jobs were cancelled.');
   } catch {
-    disconnect('Disconnected locally, but server revocation could not be confirmed. The short expiry and job limits still apply.');
+    disconnect('Disconnected. Server revocation could not be confirmed; the session will expire.');
   }
 });
 async function connected() {
@@ -84,12 +240,11 @@ async function connected() {
   $('#question-fields').disabled = !health.ready;
   $('#limits').textContent = `Model: ${health.model}. One worker; ${health.limits.max_seconds}s/job; ${health.limits.max_rss_mib} MiB; $${health.limits.job_spend_usd.toFixed(2)}/job; up to $${health.limits.max_session_spend_usd.toFixed(2)} retained Live envelope against the shared $50 ledger.`;
   const seconds = health.session_expires_in_seconds;
-  $('#session-status').textContent = `Logged in. Session expires in ${seconds}s; no credentials are stored.`;
+  $('#session-status').textContent = 'Logged in. Your session is held in memory only.';
   clearTimeout(expiryTimer);
   expiryTimer = setTimeout(() => disconnect('Session expired. Log in again; no password or bearer was retained.'), Math.max(0, seconds) * 1000);
-  availability(health.mode === 'fixture' ? 'Connected to a synthetic API0 fixture. This is NOT inference and does not use the historical corpus.' : health.ready ?
-    'Authenticated Live ready. The server holds the model key; the browser holds only a short-lived session.' :
-    'Logged in, but execution is disabled. The operator must configure a server-side model key and explicitly enable paid execution.', !health.ready);
+  availability(health.mode === 'fixture' ? 'API0 fixture connected. This is NOT inference.' : health.ready ?
+    'Ready for a new question.' : 'Logged in. Execution is disabled by the backend operator.', !health.ready);
   $('#connection').open = false;
 }
 function loginError(error) {
@@ -144,27 +299,35 @@ $('#task').addEventListener('change', () => { $('#focal-field').hidden = $('#tas
 
 function renderJob(value) {
   job = value;
-  $('#run-title').textContent = `${value.execution_kind === 'fixture' ? 'Fixture' : 'Live'} / ${value.job_id.slice(0, 8)}`;
-  $('#progress').replaceChildren(...value.events.map(event => {
-    const li = node('li', stageLabels[event.stage] || 'Pipeline stage');
-    li.append(node('small', new Date(event.at * 1000).toLocaleTimeString()));
+  $('#run-panel').hidden = false;
+  $('#run-heading').hidden = value.status === 'completed';
+  $('#run-title').textContent = terminal.has(value.status) ? stageLabels[value.status] || 'Analysis' : 'Analyzing your question';
+  const events = Array.isArray(value.events) ? value.events : [];
+  const latest = [...events].reverse().find(event => progressGroups.some(([, stages]) => stages.includes(event.stage)))?.stage || value.stage;
+  const current = Math.max(0, progressGroups.findIndex(([, stages]) => stages.includes(latest)));
+  $('#progress').hidden = terminal.has(value.status);
+  $('#progress').replaceChildren(...progressGroups.map(([label], index) => {
+    const li = node('li', label);
+    if (index === current) li.setAttribute('aria-current', 'step');
     return li;
   }));
-  $('#job-status').textContent = `${stageLabels[value.stage] || value.status}${value.error_code ? ` (${value.error_code})` : ''}. ${value.status === 'cancelled' ? 'Incurred or uncertain provider charges remain in the shared ledger.' : ''}`;
+  const code = /^[A-Z0-9_]{1,80}$/.test(value.error_code || '') ? ` (${value.error_code})` : '';
+  $('#job-status').textContent = `${stageLabels[value.stage] || 'Analysis status'}${code}`;
+  $('#progress-receipt').textContent = JSON.stringify({job_id: value.job_id, status: value.status, attempt: value.attempt, events}, null, 2);
   $('#cancel').hidden = terminal.has(value.status);
   $('#retry').hidden = !terminal.has(value.status) || value.status === 'completed' || value.attempt >= 3;
-  $('#run').disabled = !terminal.has(value.status);
+  $('#run').disabled = busy || !terminal.has(value.status);
 }
 async function follow(value) {
   const epoch = ++pollEpoch;
-  result = null; $('#result').hidden = true;
+  result = null; $('#result').hidden = true; $('#local-verdict').hidden = true; $('#score-section').hidden = true;
   while (client && epoch === pollEpoch) {
     renderJob(value);
     if (terminal.has(value.status)) {
       if (value.status === 'completed') {
         const output = await client.result(value.job_id);
         if (epoch !== pollEpoch) return;
-        await renderResult(output);
+        await renderResult(output, {expectedEpoch: epoch});
       }
       return;
     }
@@ -173,69 +336,189 @@ async function follow(value) {
     value = await client.status(value.job_id);
   }
 }
+function showRunError(error, title = 'Analysis unavailable') {
+  availability(error.message, true);
+  $('#run-panel').hidden = false; $('#run-heading').hidden = false;
+  $('#run-title').textContent = title; $('#job-status').textContent = error.message;
+  $('#progress').hidden = true; $('#cancel').hidden = true;
+}
 $('#question-form').addEventListener('submit', async event => {
   event.preventDefault();
+  $('#input-status').hidden = true;
   if (!client) return;
   const query = $('#query').value.trim();
   if (new TextEncoder().encode(query).length > 2000) { availability('The analyst clause must be at most 2000 UTF-8 bytes.', true); return; }
-  $('#run').disabled = true;
+  if (busy) return;
+  setBusy(true);
+  inlineEpoch++; inlineCleanup?.(); inlineCleanup = null;
+  result = null; job = null;
+  $('#run-panel').hidden = false; $('#result').hidden = true; $('#local-verdict').hidden = true;
+  $('#run-heading').hidden = false;
+  $('#run-title').textContent = 'Starting analysis'; $('#job-status').textContent = 'Submitting question';
+  $('#progress').hidden = true; $('#cancel').hidden = true; $('#retry').hidden = true;
+  $('#run-panel').scrollIntoView({block: 'start'});
   try {
     const request = {task: $('#task').value, corpus: $('#corpus').value, query,
       ...requestScope($('#as-of').value, $('#excluded-origin').value),
       focal_marker: $('#task').value === 'redaction' ? $('#focal-marker').value : ''};
     await follow(await client.submit(request));
   }
-  catch (error) { availability(error.message, true); $('#run').disabled = false; }
+  catch (error) { showRunError(error); }
+  finally { setBusy(false); }
 });
+$('#question-form').addEventListener('invalid', event => {
+  const label = event.target.labels?.[0]?.textContent || 'Input';
+  $('#input-status').textContent = `${label}: ${event.target.validationMessage}`;
+  $('#input-status').hidden = false;
+}, true);
+$('#question-form').addEventListener('input', () => { $('#input-status').hidden = true; });
 $('#cancel').addEventListener('click', async () => {
   if (!client || !job) return;
-  try { renderJob(await client.cancel(job.job_id)); }
+  try { renderJob(await client.cancel(job.job_id)); if (terminal.has(job.status)) setBusy(false); }
   catch (error) { availability(error.message, true); }
 });
 $('#retry').addEventListener('click', async () => {
   if (!client || !job) return;
   $('#retry').hidden = true;
+  setBusy(true);
   try { await follow(await client.retry(job.job_id)); }
-  catch (error) { availability(error.message, true); }
+  catch (error) { showRunError(error, 'Retry unavailable'); }
+  finally { setBusy(false); }
 });
 
-async function renderResult(value) {
+const statusText = value => String(value || 'UNRESOLVED').replaceAll('_', ' ').toLowerCase().replace(/^./, char => char.toUpperCase());
+function renderScores(value) {
+  const record = value.condition, fixture = value.execution_kind === 'fixture';
+  const nativeStatus = record.local_decisions_v65?.overall?.status || record.result?.status || 'UNRESOLVED';
+  let scores = null, invalidScores = false;
+  try { scores = computeDecisionScores(record); } catch { invalidScores = true; }
+  $('#local-verdict').hidden = false;
+  $('#verdict-title').textContent = fixture ? 'Fixture only' : statusText(scores?.overall?.native_status || nativeStatus);
+  const status = String(scores?.overall?.native_status || nativeStatus).toLowerCase();
+  $('#local-verdict').dataset.tone = /^(backed|supported|support|for)$/.test(status) ? 'support' : /^(opposed|against|counter)$/.test(status) ? 'oppose' : 'context';
+  $('#verdict-detail').textContent = fixture ? 'Synthetic UI check. No historical inference or source support.' : scores ?
+    scores.overall.required_atoms > 0 ? `${scores.overall.complete_atoms} of ${scores.overall.required_atoms} required facts complete.` :
+      'Candidate scores retain the recorded evidence and order.' : invalidScores ?
+        'The saved terminal scorecard could not be verified.' : 'Terminal scores were not recorded for this execution.';
+  $('#score-section').hidden = false;
+  const target = $('#decision-scores'); target.replaceChildren();
+  if (!scores) { target.append(node('p', invalidScores ? 'Saved scorecard unavailable: verification failed.' : 'Terminal scores not recorded.', 'hint')); return; }
+  const overview = () => {
+    const row = node('div', null, 'score-overview');
+    const candidate = scores.readings.find(reading => reading.candidates.length)?.candidates[0];
+    if (candidate) {
+      row.append(node('span', `Final score: ${formatDecisionScore(candidate.score)}`));
+      return row;
+    }
+    for (const [label, key] of [['Support', 'support'], ['Opposition', 'oppose'], ['Context', 'context']])
+      row.append(node('span', `${label}: ${formatDecisionScore(scores.overall[key])}`));
+    return row;
+  };
+  $('#local-verdict').append(overview());
+  target.append(overview());
+  const tableFor = (caption, entries, labels, withFit = false) => {
+    if (!entries.length) return;
+    const scroll = node('div', null, 'score-scroll'), table = node('table', null, 'score-table');
+    table.append(node('caption', caption));
+    const head = node('tr');
+    for (const text of ['Item', 'Score', 'Support', 'Opposition', 'Context', 'Coverage', ...(withFit ? ['Fit'] : [])]) {
+      const cell = node('th', text); cell.scope = 'col'; head.append(cell);
+    }
+    const thead = node('thead'); thead.append(head); table.append(thead);
+    const body = node('tbody');
+    for (const entry of entries) {
+      const row = node('tr'); row.append(node('th', labels.get(entry.id) || entry.id)); row.firstChild.scope = 'row';
+      for (const key of ['score', 'support', 'oppose', 'context', 'criteria_coverage', ...(withFit ? ['fit'] : [])]) row.append(node('td', formatDecisionScore(entry[key])));
+      body.append(row);
+    }
+    table.append(body); scroll.append(table); target.append(scroll);
+  };
+  tableFor('Required facts', scores.atoms, new Map((record.result.atoms || []).map(atom => [atom.id, atom.text])));
+  for (const reading of scores.readings) {
+    const native = (record.result.readings || []).find(row => (row.reading_id || row.reading?.id) === reading.id);
+    tableFor(native?.reading?.label || 'Recorded candidates', reading.candidates, new Map((native?.candidates || []).map(candidate => [candidate.id, candidate.fill])), true);
+  }
+  target.append(node('p', 'Recorded indices, not probabilities.', 'hint'));
+}
+
+async function renderResult(value, {stored = false, expectedEpoch = null} = {}) {
   await verifyEnvelope(value);
+  if (expectedEpoch !== null && expectedEpoch !== pollEpoch) return;
   const scope = displayedScope(value.request, value.source_scope);
   result = value;
+  $('#local-verdict').querySelectorAll('.score-overview').forEach(item => item.remove());
+  renderScores(value);
+  $('#run-panel').hidden = false;
   $('#result').hidden = false;
   $('#result-status').textContent = value.native.result.status || 'Completed';
-  $('#result-kind').textContent = value.execution_kind === 'fixture' ? 'FIXTURE ONLY. No historical inference, source support or paid calls.' : value.receipt.execution_cache_hit ? 'Exact current-input execution cache reused. No new deterministic inference was claimed. Query, code and resource bindings were verified.' : 'New live execution completed. Model calls were limited to query-only planning and, for Redaction only, grammatical readings.';
+  $('#result-kind').textContent = value.execution_kind === 'fixture' ? 'FIXTURE ONLY. No historical inference, source support or paid calls.' : stored ? 'Stored local result. No new analysis or model call.' : value.receipt.execution_cache_hit ? 'Verified result reused for the same input and resources.' : 'New Live analysis complete.';
   const decisions = [];
+  const decisionName = value => ({SUPPORT:'Supported',SUPPORTED:'Supported',OPPOSED:'Opposed',
+    COUNTER:'Opposed',PARTIAL:'Partial evidence',UNRESOLVED:'Unresolved',
+    evidence_backed_suggestion:'Evidence-backed suggestion',partial_grounding:'Partial evidence',
+    exploratory_contextual:'Contextual suggestion',incompatible_not_viable:'Not compatible',
+    CONFLICTED:'Mixed evidence'}[value] || String(value || 'Unresolved').replaceAll('_',' ').toLowerCase());
   for (const atom of value.native.result.atoms || []) {
     const item = node('div', null, 'decision');
-    item.append(node('strong', `${atom.criterion_state || atom.status || 'UNRESOLVED'}: `), node('span', atom.text));
+    item.append(node('strong', `${decisionName(atom.status || atom.criterion_state)}: `), node('span', atom.text));
     decisions.push(item);
   }
   for (const reading of value.native.result.readings || []) {
     decisions.push(node('h3', reading.reading?.label || reading.reading?.id || 'Recorded reading'));
     for (const candidate of reading.candidates || []) {
       const item = node('div', null, 'decision');
-      item.append(node('strong', `${candidate.rank}. ${candidate.local_decision?.status || 'UNRESOLVED'}: `), node('span', candidate.fill));
+      item.append(node('strong', `${candidate.rank}. ${decisionName(candidate.local_decision?.status)}: `), node('span', candidate.fill));
       decisions.push(item);
     }
   }
   $('#decisions').replaceChildren(...decisions);
   const visibleScope = {Corpus: {cib: 'Central Intelligence Bulletins', iran: 'Iran cables', vietnam: 'Vietnam cables'}[value.request.corpus],
     'Evidence through': scope.through,
-    'Excluded document': scope.excludedDocument === null ? 'None (analyst-written question)' : scope.excludedDocument,
+    'Source document': scope.originDocument || 'None (analyst-written question)',
+    'Excluded document': scope.excludedDocument === null ? 'None' : scope.excludedDocument,
+    ...(scope.originDocument ? {'Source document text': scope.earlierOriginAllowed ? 'Earlier/both-release text permitted; later-only text excluded' : 'Entire document excluded'} : {}),
     'Source view': value.request.corpus === 'cib' ? 'Permitted earlier-release evidence' : 'Permitted CONFIDENTIAL evidence'};
   $('#source-scope').replaceChildren(...Object.entries(visibleScope).flatMap(([key, val]) => [node('dt', key), node('dd', val)]));
   const evidence = [];
   for (const item of value.selected_evidence) for (const ref of item.source_refs || []) {
     const card = node('article', null, 'evidence-card');
-    card.append(node('p', `${item.direction} / ${item.purpose} / ${ref.document_id} / ${ref.date}`),
-      node('blockquote', ref.text), node('p', `${ref.canonical_page_id} [${ref.start}, ${ref.end}) | ${ref.page_sha256}`));
+    const role = /^(SUPPORT|FOR|SUPPORTED)$/.test(item.direction) ? 'Support' : /^(COUNTER|COUNTEREVIDENCE|AGAINST|OPPOSE|OPPOSED)$/.test(item.direction) ? 'Opposition' : 'Context / partial';
+    card.append(node('p', `${role} / ${ref.document_id} / ${ref.date}`), node('blockquote', ref.text));
+    const proof = node('details'); proof.append(node('summary', 'Citation details'), node('p', `${item.direction} / ${item.purpose}`),
+      node('p', `${ref.canonical_page_id} [${ref.start}, ${ref.end}) | ${ref.page_sha256}`)); card.append(proof);
+    const page = value.sources[ref.canonical_page_id];
+    if (page) {
+      const full = node('details', null, 'full-source'); full.append(node('summary', 'Read full supplied source page'));
+      let opened = false;
+      full.addEventListener('toggle', async () => {
+        if (!full.open || opened) return; opened = true;
+        const host = node('div', null, 'source-reader'); full.append(host);
+        try { await mountLiveSourcePage(host, page, ref); }
+        catch { host.replaceChildren(node('p', 'This source page could not be verified. No alternate text was substituted.')); }
+      });
+      card.append(full);
+    }
     evidence.push(card);
   }
   $('#evidence').replaceChildren(...(evidence.length ? evidence : [node('p', 'No selected source evidence. Missing evidence is not opposition.')]));
   $('#paths').textContent = JSON.stringify(value.trace.paths, null, 2);
   $('#receipt').textContent = JSON.stringify({receipt: value.receipt, artifacts: value.artifacts, source_scope: value.source_scope}, null, 2);
+  const digest = value.analyst_digest;
+  $('#postrun-digest').hidden = value.execution_kind === 'fixture' || digest?.available !== true;
+  $('#digest-text').textContent = value.execution_kind !== 'fixture' && digest?.available === true ? digest.text : '';
+  $('#compact-result').open = false;
+  openInlineWorkbench(value);
+  history.replaceState(null, '', historyURL(value.run_id));
+  renderHistory();
+  $('#inline-result').scrollIntoView({block: 'start'});
+  if (!stored) {
+    try {
+      const saved = await localHistory.remember(value);
+      $('#history-status').textContent = saved.stored ? 'Completed results are saved in this tab for up to 24 hours. No login details are stored.' :
+        saved.memory ? 'History is available in memory only; browser storage is unavailable.' : 'This large result was not retained in tab history. Download it to keep a copy.';
+    } catch { $('#history-status').textContent = 'This result was not saved locally. The open result and download remain available.'; }
+    renderHistory();
+  }
 }
 $('#open-workbench').addEventListener('click', () => {
   if (!result) return;
@@ -252,4 +535,4 @@ $('#download').addEventListener('click', () => {
   const link = document.createElement('a'); link.href = url; link.download = `${result.run_id}.json`; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
-addEventListener('pagehide', () => { pollEpoch++; client?.disconnect(); handoffCleanup?.(); clearTimeout(expiryTimer); clearInterval(retryTimer); });
+addEventListener('pagehide', () => { pollEpoch++; client?.disconnect(); handoffCleanup?.(); inlineCleanup?.(); clearTimeout(expiryTimer); clearInterval(retryTimer); });

@@ -1,4 +1,5 @@
 // Saved atomic page matches only. This module never fetches source pages or alters evidence.
+import {savedSourcePolicy,savedSourceScope,traceSourceScope,sourceScopeAllows} from './saved-source-policy.js';
 const branded=new WeakSet(),payloads=new WeakMap(),artifacts=new Map();
 const rows=value=>Array.isArray(value)?value:[];
 const hash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
@@ -21,7 +22,7 @@ const sameProof=(p,q)=>p?.canonical_page_id===q.canonical_page_id&&p.document_id
 const searchView=search=>({id:search.id,kind:search.kind,query:search.query,atom_ids:search.atom_ids,
   also_serves:rows(search.also_serves).map(s=>({id:s.id,kind:s.kind,query:s.query,atom_ids:s.atom_ids}))});
 export const sourceLookupPolicy=receipt=>Object.fromEntries(['method','query_sha256','cutoff','whole_origin_excluded',
-  'source_policy_version','source_scope','query_only','generated_leads','whole_query_search_executed','api_calls'].map(key=>[key,receipt[key]]));
+  'source_policy_version','source_scope','source_view_policy','query_only','generated_leads','whole_query_search_executed','api_calls'].map(key=>[key,receipt[key]]));
 
 // Public export may omit private plan receipts/audits. Bind only an explicit
 // complete lookup whitelist, including every saved score and source identity.
@@ -52,6 +53,7 @@ function atomsForSearch(search,index,plan){
 // Pure re-derivation is shared by the offline generator and verifier. No branding here.
 export function collectSourceLookupRows({record,trace}){
   const plan=record.plan,receipt=record.result?.retrieval;
+  const scope=savedSourceScope(record.case,receipt?.source_view_policy);
   check(Array.isArray(plan?.atoms)&&plan.atoms.length<=256,'bounded plan atoms required');
   check(new Set(plan.atoms.map(a=>a.id)).size===plan.atoms.length,'duplicate atom');
   check(Array.isArray(receipt?.search_queries)&&receipt.search_queries.length<=512,'bounded executed searches required');
@@ -68,7 +70,7 @@ export function collectSourceLookupRows({record,trace}){
     for(const [refIndex,value]of rows(path.decision_source_refs).entries()){
       const q=typeof value==='string'?lookup[value]:value;
       check(q&&typeof q.canonical_page_id==='string'&&typeof q.document_id==='string'&&hash(q.page_sha256)&&
-        /^\d{4}-\d{2}-\d{2}$/.test(q.date)&&q.date<receipt.cutoff&&q.document_id!==receipt.whole_origin_excluded,
+        /^\d{4}-\d{2}-\d{2}$/.test(q.date)&&sourceScopeAllows(q,scope),
         'selected page violates hash/date/origin policy');
       const common={path_id:path.id,path_pointer:'/paths/'+pathIndex,candidate_or_atom_id:path.candidate_or_atom_id,
         selected_ref_pointer:'/paths/'+pathIndex+'/decision_source_refs/'+refIndex,source:page(q)};
@@ -116,8 +118,10 @@ function contextBinding({row,record,trace,reportSHA,config,reading}){
   check(resource&&hash(resource.registry_sha256)&&hash(resource.index_sha256)&&same(resource,record.resource_binding)&&same(resource,trace.resource_binding),'resource changed');
   const receipt=record.result?.retrieval,querySHA=record.plan?.query_sha256;
   check(hash(querySHA)&&querySHA===record.result?.query_sha256&&querySHA===receipt?.query_sha256&&querySHA===trace.query_sha256,'query binding changed');
-  check(receipt.cutoff===row.case.date&&receipt.whole_origin_excluded===row.case.document_id&&receipt.query_only===true&&
-    receipt.generated_leads===false&&receipt.whole_query_search_executed===false&&receipt.api_calls===0&&
+  const scope=traceSourceScope(row.case,cfg,trace);
+  check(same(scope.source_view_policy,savedSourcePolicy(receipt.source_view_policy)),'receipt/native source policy changed');
+  check(receipt.cutoff===row.case.date&&receipt.whole_origin_excluded===scope.whole_origin_excluded&&receipt.query_only===true&&
+    receipt.generated_leads===false&&typeof receipt.whole_query_search_executed==='boolean'&&receipt.api_calls===0&&
     typeof receipt.source_policy_version==='string'&&receipt.source_policy_version.length>0,'source policy changed');
   check(trace.native_decisions_or_ranks_modified===false&&trace.new_evidence_fetched===false,'trace authority changed');
   return {case_id:row.case.case_id,corpus:row.case.corpus,config,query_sha256:querySHA,

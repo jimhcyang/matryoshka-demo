@@ -15,9 +15,29 @@ generic code can accept their extracted source records, but offline fixture
 coverage is not a full-corpus validation or an effectiveness result.
 
 The active current-workbench CIB examples were separately executed on this
-new resource. Export preserves their native candidates, ranks, decisions and
-quotations. The older CIB map remains an archival compatibility binding for
-older saved runs; it is not substituted underneath the active examples.
+new resource. The analyst release then computes a new, explicitly versioned
+terminal ranking from the sealed viable candidate pools. Its parent execution,
+unchanged construction/assessment code pins and final score arithmetic are
+recorded separately; this is cached-stage reuse, not another model judgment.
+Export preserves each selected execution's actual candidates, ranks, decisions
+and quotations. Historical packets are not rewritten. The older CIB map remains
+an archival compatibility binding for older saved runs; it is not substituted
+underneath the active examples.
+
+## Active Source View
+
+The current saved cases admit evidence dated on or before their source date.
+CIB permits EARLIER/BOTH text from the originating document, never its later
+release. Iran and Vietnam retain CONFIDENTIAL-only evidence, whole-origin
+exclusion and document-wide handling vetoes. Historical strict-prior packets
+remain strict-prior. Every native output, trace and guide carries its own bound
+policy; a browser preference cannot silently change it.
+
+The two visiting-delegation inputs are exploratory authentic withheld slots,
+not scored recoveries. Their historical reference remains unknown. Paragraph
+window experiments and unfulfilled candidate-recovery goals are recorded as
+such, not converted into benchmark accuracy. Later PDF originals are source
+inspection material and do not become eligible evidence by being viewable.
 
 ## Explicit Selection
 

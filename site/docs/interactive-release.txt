@@ -1,23 +1,108 @@
-Matryoshka / Interactive Guide
-Begin with a question, inspect its facts, follow the selected sources and compare the local verdict with the source passages. A promising answer is not necessarily established by the corpus. Saved results remain inspectable without a model call.
+Matryoshka: Source To Decision
+Read the input and its local verdict first. Facts express the requirements of the input, not historical conclusions. Follow a selected source, inspect its exact quotation and original document, then compare the evidence with the final decision. The model digest is a separate summary written after the deterministic local result has been sealed.
 
-The Corpus Map
-Redactions Show/Hide controls redacted-slot markers. Ineligible Show/Dim/Hide changes appearance, not evidence eligibility. Paired maps share Back, Fit and search controls until individually explored. Date guidance states the available range and applies the nearest boundary to an out-of-range date. Click a node to inspect it, or open its direct connections. Concentric rings distinguish the same community, theme, domain and other domains.
+The Evidence Boundary
+The active saved experiments admit eligible documents dated on or before the input source date. CIB admits the earlier release of the originating document, but not its later release. Iran and Vietnam use CONFIDENTIAL evidence and exclude the entire originating SECRET cable; a document-wide NOFORN restriction remains a veto. Later PDFs may be inspected as originals, but inspection does not admit their contents as evidence. Historical results retain their original policy and are not relabeled.
 
-Size And Movement
-Node size is normalized within the displayed view. Dense views retain their selected nodes and use finite packing rather than endless repulsion. Neighborhood orbit is 0.024 radians per second before outer-band adjustment. Orbit and return share a bounded 30-Hz scheduler; return easing targets 720-2400 milliseconds. Edge width represents stored connection weight. Aggregate weight is available in technical details, not a correctness probability or an independent corroboration count. None of these display encodings changes the underlying evidence.
+Facts And Retrieval
+The initial query-only model call extracts the visible input and splits it into facts. Redaction additionally has grammatical slot readings. Local search matches these facts to eligible source pages and source-grounded graph states; there is no whole-query lookup. Each displayed lookup identifies the fact, executed search and selected source it actually matched. A shared document does not prove that every fact matched.
 
-Input And Facts
-A redaction marker toggles a supplied reference on a second click. Unknown reference words remain unknown. Facts are the parsed requirements of the question, not historical findings. Iran and Vietnam cables use a letter-case-only reader edition for clarity. Original wording, punctuation, whitespace, source offsets and hashes remain unchanged. Original capitalization is available in source details. CIB wording is unchanged.
+Graph Navigation
+Facts to evidence shows retained source matches and their exact endpoints. Compact view hides facts without a retained connection; it does not discard evidence. Zoom and pan change the display only. View on KG navigates the existing corpus map, using actual source-backed connections and hierarchy membership. A post-run inspection path is not represented as the original search chronology or as a chain of historical entailment. Community membership is navigation, not evidence that an event occurred.
 
-Facts To Evidence
-Facts connect directly to recorded matches. Where an atomic search demonstrably matched the selected page, a dashed page-lookup link identifies that fact. Such a link does not assert that the excerpt supports it or that this search alone caused the document to be selected. Missing per-fact records remain query matches. Shared graph states and documents merge visually. Green identifies support, red opposition and amber context or partial evidence. Raw source phrases, when supplied, follow their exact quotations before grammatical processing; they are not additional evidence votes.
+Evidence Accumulation
+All three tasks use the same document-deduplicated evidence calculation within each fact or candidate. A page at saved retrieval rank r has weight w(r) = 0.5 + 0.5/(1 + log2(r)); an unrecorded rank receives 0.5. Multiply that weight by the applicable recorded evidence fit. Within each unit and direction, keep the largest contribution per document, then sum distinct-document contributions. Support, opposition and context stay separate. Repeating a passage or citing another page of the same document does not create another contribution to that unit. Overall totals add fact-wise indices, not independent document votes: one document may address several different facts.
 
-Follow The Existing Graph
-View on KG opens the actual corpus canvas. The guide selects the starting node in its mother community and highlights the saved connection toward the next node. Connected nodes in the same community stay there. When needed, a cross-community step uses existing direct connections before opening the destination community. Missing browser edges are not drawn. A source handoff with no recorded graph hop remains a source handoff. The final document opens at the exact selected quotation. Post-run inspection paths are not represented as original retrieval chronology or factual entailment chains.
+Final Redaction Score
+Final redaction ranking preserves evidence sufficiency first and source-owned function priorities next. Nine existing source/function checks form a binary band B: a satisfied check at position i contributes 2^(8-i). A verified visible-role attachment, when the selected constructor declares it, contributes another 512. These are actual source features, not candidate positions. Fit F combines owned relation (0.32), owned role (0.16), source type (0.16), focal overlap (up to 0.16) and a literal visible-context anchor (0.20). With document-deduplicated S, O and C, compute u=(S+F+0.5C)/(1+O) and score=T+(B+u/(1+u))/1024. T is 2 for evidence-backed, 1 for partial grounding with an established requirement, otherwise 0. Evidence quantity cannot outweigh a higher source-function band or create support. Source position breaks exact ties; repeated surface/family alternatives are collapsed. The banded score is not a probability or a confidence margin.
 
-Verdicts And Reported Views
-Redaction rank is separate from corpus support. Mosaic asks which requested components can be assembled from eligible sources. Hypothesis distinguishes support, opposition, partial evidence and unresolved requirements. A person's conditional endorsement, warning or forecast is their attributed view, not proof of the eventual political outcome. Missing support is not opposition. Repeated passages from one document are not independent corroboration. Scores and ranking-position indices are not calibrated correctness probabilities.
+Hypothesis And Mosaic Scores
+Each fact shows its support, opposition and context sums. Hypothesis net evidence is S - O; the signed sums remain visible so conflict is not hidden by cancellation. Mosaic also shows the fraction of applicable recorded criteria that passed. A complete source-owned certificate may establish a fact even with a numerical score below 1. Conversely, a large relevance or context score cannot establish it. These are deterministic evidence indices, not calibrated probabilities or cross-case confidence estimates. The logical decision gates are not relaxed to manufacture a supported answer.
 
-Source Boundaries And Live Access
-Ordinary evidence predates the originating question and excludes its entire origin document. The unknown-delegation study retains its declared input windows and source scope; its visible Swedes clue is not an independent evidence vote. The current CIB source-only alias resource is preserved. Iran and Vietnam retain their existing resources. Live uses a private backend password and short-lived session; the OpenAI key stays on the server. GitHub Pages hosts the frontend, not the Python engine. A separately operated backend is needed for live inference, with its spending and source limits intact.
+Inspecting Sources
+Click a quotation to open the full available transcription at its exact highlighted span. Highlight coordinates replay against the source text and hash; repeated words are not guessed. CIB offers both original PDF releases at recorded physical pages after the text. Click an input redaction to reveal a supplied reference, and click again to remask it. A still-withheld reference remains unknown. Reference reveals and later originals are inspection material, never model answer inputs.
+
+Live Analysis
+Live uses the same query-only planning, local evidence processing and final scoring contract, with a bounded interactive search: 16 documents, 32 passages, 8 construction pages and 12 completed drafts per reading. These limits can yield different results from the larger saved experiments. Leave the source document blank for an analyst-authored input. The date defaults to the last eligible corpus day; its displayed inclusive date is converted to an exclusive next-day engine boundary exactly once. A private authenticated backend holds the OpenAI key and enforces the spending limit. The static website contains no provider credential. The final digest cannot change the saved local decision. Completed public result envelopes can be reopened from the current browser tab without another model call; passwords and session tokens are not stored with them.
+
+Visiting Delegation: Context Comparison
+Five paragraph-window pairs were attempted for the two authentic still-withheld delegation slots. Nine inputs produced valid executions; the last input in the full five-paragraph pair did not pass the visible-text planning contract. The nine completed viable pools did not contain Swedish or Swedes. One shorter first-gap input nominated Swedish, but it did not clear the recorded construction checks. This is a diagnostic of the suggested spelling, not measured correctness: no historical answer key is available. The final workbench uses the preferred P1+P3+P4 context for both gaps, without the final Swedes paragraph. The earlier release of the 17 February 1959 origin is eligible; its later text is not retrieved evidence.
+
+CIB / Arias and the Panama unrest
+Input: The 22 May riots in Panama against President de la Guardia's administration have led him to declare a state of siege and may erupt into full-scale revolution. The strong national guard, whose repression of student demonstrations earlier this week resulted in one death and widespread and violent resentment, has announced that it is slowly re-gaining control of Panama City. The guard has orders to kill. The students have been joined in a general strike against the government by labor unions and other groups, but appear to have lost control of the disturbance to hoodlums. The latter are probably incited by powerful opposition politicians [REDACTION] who are trying to oust the President. Similar riots are occurring in Colon, the northern terminus of the canal.
+Local result: Ranked source-grounded suggestions. Candidates: 1. like Arias (0.27, contextual); 2. like First Vice President Diaz (0.27, contextual); 3. like the disgruntled Diaz (0.27, contextual); 4. like former President Harmodio Arias (0.27, contextual); 5. like President Remon (0.27, contextual). Evidence source date: 1958-05-23.
+
+CIB / The air force commander's doubts
+Input: The government's subsequent mistrust of officers who did not give all-out support to Diem has also had an unsettling effect. Diem's foot-dragging in carrying out a promised government reorganization prompted [REDACTION] to express doubt that Diem intended to do more than replace one group of "yes men" with another; a similar complaint was made recently by [MASKED].
+Local result: Ranked source-grounded suggestions. Candidates: 1. the air force commander (0.13, contextual); 2. doubt (2.21e-03, contextual); 3. reforms (2.21e-03, contextual); 4. reorganization (2.21e-03, contextual); 5. reorganization of the command structure (2.21e-03, contextual). Evidence source date: 1961-03-29.
+
+CIB / Betancourt and the Caribbean crisis
+Input: The Caribbean Crisis
+
+The determination of leftists and liberals led by the Fidel Castro government of Cuba [REDACTION 1] to overthrow the Trujillo dictatorship in the Dominican Republic and the Somoza regime in Nicaragua has brought the contenders close to war. The situation also seriously threatens other governments, particularly the weak unpopular regime in Haiti. Military action has thus far been confined to rebel incursions into Nicaragua and the Dominican Republic, but may extend to counteraction by the beleaguered regimes against governments supporting the insurgents. Generalissimo Trujillo told the American ambassador on 20 June that "defensive military action" against Cuba will become "imperative" in the event of further insurgent landings. The armed forces chief of Nicaragua has also considered action against the hostile governments.
+
+Latin American Communists, who are particularly influential among the Cuban-backed rebel groups, would probably win influence in any postrevolutionary governments.
+Local result: Ranked source-grounded suggestions. Candidates: 1. and Betancourt (0.38, contextual); 2. and Dominican dictator Trujillo (0.25, contextual); 3. and Provisional President Urrutia (0.25, contextual); 4. and Batista (0.25, contextual); 5. and Trujillo (0.25, contextual). Evidence source date: 1959-06-27.
+
+CIB / An assessment of Panama's ruling oligarchy
+Input: LATE ITEM
+
+*Panama: Further anti-American rioting and attempted incursions into the Canal Zone may follow yesterday's outbreaks. The wounding of several Panamanians by US troops, who defended Canal Zone entrances when the Panamanian National Guard failed to do so, may serve as a pretext for extremists to provoke additional disorder during the next few days. Panamanian grievances against the American administration of the Canal Zone are being exploited by nationalist politicians maneuvering in anticipation of next May's presidential election. The [REDACTION 1] ruling oligarchy in Panama appears willing to use anti-American sentiment regarding the Canal Zone in order to divert attention from the underlying social discontent of the lower income groups.[REDACTION]
+Local result: Ranked source-grounded suggestions. Candidates: 1. corrupt (0.09, contextual). Evidence source date: 1959-11-04.
+
+CIB / Aung Gyi and the Burma-China agreement
+Input: The agreement is said to have been drafted at [REDACTION] initiative; he reportedly guaranteed to the Chinese that their military actions would receive no publicity in Burma. Only a handful of Burmese officials know of the agreement, and even Prime Minister Nu professes not to have been officially informed. Nu stated flatly in a press conference on 20 December that there was no agreement, and that if there were Chinese Communist troops in Burma who refused to leave, "they would be driven out." Official acknowledgment of this military cooperation would arouse widespread apprehension in Burma.
+Local result: Ranked source-grounded suggestions. Candidates: 1. Deputy Prime Minister Kyaw Nyein's (0.33, contextual); 2. Turkish prime minister Menderes's (0.33, contextual); 3. Nu's (0.33, contextual); 4. General Ne Win's (0.27, contextual); 5. Chou En-lai's (0.27, contextual). Evidence source date: 1960-12-28.
+
+CIB / A reported interior-ministry appointment
+Input: Colonel Alberto Escamilla was reportedly appointed minister of interior.
+Local result: Supported by eligible evidence. Facts: Colonel Alberto Escamilla was reportedly appointed minister of interior. - support. Evidence source date: 1961-01-17.
+
+CIB / Rural organization and reported journeys
+Input: El Salvador's Communist-dominated labor federation had announced plans to organize peasant committees, and fourteen PRAM leaders were reported to have left or to be about to leave for Cuba.
+Local result: Evidence-backed mosaic. Facts: El Salvador's Communist-dominated labor federation had announced plans to organize peasant committees. - established; Fourteen PRAM leaders were reported to have left or to be about to leave for Cuba. - established. Evidence source date: 1961-01-17.
+
+CIB / Why the Salvadoran military became concerned
+Input: The armed forces, which had been virtually paralyzed by disunity, appear to have been spurred to cooperation by increasingly bold Communist activity in recent weeks. Unrestricted Communist organizational activity among the [REDACTION] Salvadoran peasants and the visit to Cuba earlier this month of a group of Salvadoran extremists have particularly heightened the concern of the military.
+Local result: Ranked source-grounded suggestions. Candidates: 1. easily politically manipulated (2.12, evidence-backed); 2. poorer (0.03, contextual). Evidence source date: 1961-01-17.
+
+IRAN / Haeri's father and Khomeini: a source-ascribed teaching relationship
+Input: Haeri's father taught Khomeini.
+Local result: Supported by eligible evidence. Facts: Haeri's father taught Khomeini. - support. Evidence source date: 1979-06-01.
+
+IRAN / Opposition leaders and their organizations
+Input: Karim Sanjabi led the National Front, and Mohamad Derakhshesh was head of the Teachers Union.
+Local result: Evidence-backed mosaic. Facts: Karim Sanjabi led the National Front. - established; Mohamad Derakhshesh was head of the Teachers Union. - established. Evidence source date: 1979-01-19.
+
+IRAN / Government, committees and political influence
+Input: AS REVOLUTIONARIES, BAZARGAN AND HIS PEOPLE ARE BASICALLY CONSERVATIVES. AMONG BAZARGAN'S CLOSEST COWORKERS, [REDACTION] APPEARS THE MOST RADICAL, BUT THAT PROBABLY STEMS FROM THE ROLE HE IS PLAYING AS A BRIDGE BETWEEN THE GOVERNMENT AND THE COMMITTEES.
+Local result: Ranked source-grounded suggestions. Candidates: 1. YAZDI (0.27, contextual); 2. POL COUNSELOR (0.27, contextual); 3. AMBASSADOR (0.27, contextual); 4. MOHAMMAD REZA MAHDAVI-KANI (0.27, contextual); 5. BAZARGAN (0.27, contextual). Evidence source date: 1979-04-13.
+
+VIETNAM / Ninh's 44 TH Special Tactical Zone command role
+Input: COL HOANG DUC NINH was the 44 TH Special Tactical Zone commander.
+Local result: Supported by eligible evidence. Facts: COL HOANG DUC NINH was the 44 TH Special Tactical Zone commander. - support. Evidence source date: 1973-06-28.
+
+VIETNAM / Command appointments in the Mekong Delta
+Input: MGEN NGUYEN VINH NGHI is identified as MR IV commander. MGEN TRAN BA DI is identified as 9 TH Division commander.
+Local result: Evidence-backed mosaic. Facts: MGEN NGUYEN VINH NGHI is identified as MR IV commander. - established; MGEN TRAN BA DI is identified as 9 TH Division commander. - established. Evidence source date: 1973-05-17.
+
+VIETNAM / A concealed command role
+Input: THE [REDACTION], BGEN HUYNH VAN LAC, CONFIRMED JUNE 25 THAT ON A NUMBER OF OCCASIONS SINCE CF II VC/ NVA HAVE ATTEMPTED VERY LOW LEVEL CONTACTS BETWEEN GUERILLA FORCES AND RF / PF UNITS.
+Local result: Ranked source-grounded suggestions. Candidates: 1. MR IV CHIEF OF STAFF (0.50, contextual); 2. ARVN 5 TH DIV CG BG LICH (0.27, contextual); 3. GVN REP (0.27, contextual); 4. BGEN LE VAN HUNG (0.27, contextual); 5. BGEN NGUYEN
+THANH HOANG (0.27, contextual). Evidence source date: 1973-06-28.
+
+CIB / Visiting delegation
+Input: Soviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength. The defense minister implied that some military leaders had favored preparing a nuclear capability at the expense of conventional forces, but that the government Presidium had decided in favor of simultaneous development, which he personally approved. NATO, Malinovsky noted, had adopted the other course, and he considered this an error.
+
+Malinovsky told the delegation that all agreed that nuclear weapons would be decisive in a general war but that other arms and weapons would continue to play a major role--a line both he and former Defense Minister Zhukov have expounded.
+
+The [REDACTED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense. It was stated that intermediate-range ballistic missiles now cover Western bases in Europe.
+Local result: Ranked source-grounded suggestions. Candidates: 1. Soviet (0.09, partial grounding); 2. Italian (0.09, contextual); 3. Chinese (0.09, contextual); 4. French (0.03, partial grounding); 5. Yugoslav (0.03, contextual). The reference remains withheld; candidate rank is not an exact-recovery measurement. Evidence source date: 1959-02-17.
+
+CIB / Visiting delegation
+Input: Soviet Marshal Malinovsky told a visiting [REDACTED] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength. The defense minister implied that some military leaders had favored preparing a nuclear capability at the expense of conventional forces, but that the government Presidium had decided in favor of simultaneous development, which he personally approved. NATO, Malinovsky noted, had adopted the other course, and he considered this an error.
+
+Malinovsky told the delegation that all agreed that nuclear weapons would be decisive in a general war but that other arms and weapons would continue to play a major role--a line both he and former Defense Minister Zhukov have expounded.
+
+The [MASK] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense. It was stated that intermediate-range ballistic missiles now cover Western bases in Europe.
+Local result: Ranked source-grounded suggestions. Candidates: 1. Soviet (0.12, contextual); 2. Italian (0.12, contextual); 3. Austrian (0.03, partial grounding). The reference remains withheld; candidate rank is not an exact-recovery measurement. Evidence source date: 1959-02-17.

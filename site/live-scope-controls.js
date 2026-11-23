@@ -1,4 +1,5 @@
 /* Inclusive display dates become the engine's unchanged exclusive boundary. */
+import {usesLiveSourcePolicy} from './source-policy-contract.js';
 export function dayAfter(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) throw Error('Choose a valid evidence date.');
   const date = new Date(value + 'T00:00:00Z');
@@ -53,12 +54,14 @@ export function displayedScope(request, metadata = {}) {
   const prefix = 'live-analyst-origin:';
   const analyst = request.excluded_origin.startsWith(prefix);
   if (analyst && !/^live-analyst-origin:[a-f0-9]{32}$/.test(request.excluded_origin)) throw Error('Invalid internal analyst identity.');
-  const excludedDocument = analyst ? null : request.excluded_origin;
-  const kind = analyst ? 'analyst_authored' : 'document_exclusion';
+  const earlierOrigin = usesLiveSourcePolicy(metadata) && request.corpus === 'cib';
+  const excludedDocument = analyst || earlierOrigin ? null : request.excluded_origin;
+  const kind = analyst ? 'analyst_authored' : earlierOrigin ? 'source_document' : 'document_exclusion';
   if (metadata.evidence_through !== undefined && metadata.evidence_through !== through ||
       metadata.document_exclusion !== undefined && metadata.document_exclusion !== excludedDocument ||
       metadata.origin_kind !== undefined && metadata.origin_kind !== kind) {
     throw Error('The source-scope caption disagrees with the verified request.');
   }
-  return {through, excludedDocument};
+  return {through, excludedDocument, originDocument: analyst ? null : request.excluded_origin,
+    earlierOriginAllowed: earlierOrigin};
 }

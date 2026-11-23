@@ -96,7 +96,8 @@ def public_study(site):
         path = matches[0]
     ref = dict(path=path, sha256=expected)
     study = pinned(site, ref)
-    assert study.get('version') in {'swedish-scoped-shared-kernel-ui/3', 'cib-delegation-public-study/1'}, 'Unsupported public study contract'
+    assert study.get('version') in {'swedish-scoped-shared-kernel-ui/3', 'cib-delegation-public-study/1',
+                                   'delegation-native-workbench/1'}, 'Unsupported public study contract'
     return ref, study
 
 
@@ -122,6 +123,25 @@ def validate_archive(site):
 
 
 def public_cases(site, study):
+    if study['version']=='delegation-native-workbench/1':
+        raw=(site/'data/report-v6.json').read_bytes()
+        assert hashlib.sha256(raw).hexdigest()==study['source_report_ref']['sha256']
+        report=json.loads(raw)
+        assert study['gold'] is None and study['native_results_modified'] is False
+        cases=[]
+        for entry in study['cases']:
+            matches=[r for r in report['cases'] if r['case']['case_id']==entry['case_id']]
+            assert len(matches)==1
+            row=matches[0]
+            assert row['study_slot']==entry['position']
+            assert row['reference_answer_kind']=='unknown_still_withheld'
+            assert row['configurations']['llm_readings']['native_checkpoint']==entry['native_checkpoint']
+            assert row['configurations']['llm_readings']['source_view_policy']==study['source_view_policy']
+            cases.append(row)
+        assert len(cases)==2 and {r['study_slot'] for r in cases}=={'first','last'}
+        assert cases[0]['study_companion_case_id']==cases[1]['case']['case_id']
+        assert cases[1]['study_companion_case_id']==cases[0]['case']['case_id']
+        return cases
     if study['version'] == 'swedish-scoped-shared-kernel-ui/3':
         cases = [pinned(site, ref) for ref in study['cases']]
         assert len(study['public_completions']) == len(cases)
@@ -212,13 +232,34 @@ def citation_refs(value):
             yield from citation_refs(item)
 
 
+def assert_saved_source(row, config, source, *, full_page=False):
+    case=row['case']
+    policy=row['configurations'][config].get('source_view_policy')
+    if policy is None or policy.get('id')=='strict_prior':
+        assert source['date'] < case['date'] and source['document_id'] != case['document_id']
+        return
+    assert policy['version']=='trusted-corpus-source-view/1' and policy['id']=='source_day_inclusive'
+    assert policy['date_relation']=='<=' and policy['later_or_secret_version_admitted'] is False
+    assert policy['cib_source_document']=='EARLIER_OR_BOTH_ONLY'
+    assert policy['cable_origin']=='WHOLE_DOCUMENT_EXCLUDED'
+    assert policy['cable_classification']=='CONFIDENTIAL' and policy['cable_document_wide_handling_veto'] is True
+    assert policy['source_dates_or_document_ids_rewritten'] is False
+    assert source['date'] <= case['date']
+    if case['corpus']!='cib':
+        assert source['document_id'] != case['document_id']
+        if full_page:assert source['classification']=='CONFIDENTIAL'
+    elif full_page:
+        assert source['visibility'] in ('earlier','both')
+        assert source.get('native_page',{}).get('view','earlier') in ('earlier','both')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--site', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--datasets-root', type=Path)
     parser.add_argument('--minimum-free-gib', type=int, choices=(3, 8), default=8)
-    parser.add_argument('--expected-cases', type=int, default=14, help='Release workbench count, not study variant count')
+    parser.add_argument('--expected-cases', type=int, default=16, help='Release workbench count, including two delegation inputs')
     parser.add_argument('--only', help='Development subset: archive,study,graph,walk,workbench,live; omitted means ALL')
     args = parser.parse_args()
     selected = set(args.only.split(',')) if args.only else {'archive', 'study', 'graph', 'walk', 'workbench', 'live'}
@@ -344,7 +385,7 @@ def main():
                 proof = (path.get('decision_source_refs') or path['source_refs'])[0]
                 if isinstance(proof, str):
                     proof = (trace.get('sources') or trace['source_refs_by_id'])[proof]
-                assert proof['date'] < saved['case']['date'] and proof['document_id'] != saved['case']['document_id']
+                assert_saved_source(saved,params['config'],proof)
                 ascii_lower = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')
                 def check(page, row):
                     query = dict(corpus=saved['case']['corpus'], walk_case=params['case_id'], walk_config=params['config'],
@@ -455,6 +496,21 @@ def main():
                     page.on('request', lambda request: private_requests.append(request.url)
                         if '/phase/' in request.url or '/attempt0' in request.url or 'execution.json.gz' in request.url else None)
                     page.goto(base + 'swedish-study.html', wait_until='domcontentloaded')
+                    if study['version']=='delegation-native-workbench/1':
+                        page.wait_for_url('**/workbench-v6.html?**',timeout=60000)
+                        row.update(public_study_ref=reference,public_study_version=study['version'],cases=[])
+                        for saved in cases:
+                            page.locator('[data-study-slot="'+saved['study_slot']+'"]').click()
+                            page.wait_for_function("id=>new URLSearchParams(location.search).get('case')===id&&document.querySelector('#case-view')?.getAttribute('aria-busy')==='false'",arg=saved['case']['case_id'],timeout=60000)
+                            expect(page.get_by_test_id('compact-verdict')).to_be_visible()
+                            expect(page.get_by_test_id('evidence-map')).to_have_count(1)
+                            assert page.locator('[data-study-slot]').count()==2
+                            assert page.locator('#query-text').count()==0, 'No separate legacy study renderer'
+                            row['cases'].append(dict(case_id=saved['case']['case_id'],position=saved['study_slot'],gold=None,
+                                ordinary_native_workbench=True))
+                        assert not private_requests,private_requests
+                        row.update(unknown_reference=True,ordinary_pipeline=True)
+                        return
                     page.wait_for_function("()=>document.body.dataset.studyReady==='true'", timeout=60000)
                     expect(page.locator('.study-badge')).to_contain_text('Reference')
                     expect(page.locator('.study-badge')).to_contain_text('Not given')
@@ -567,7 +623,7 @@ def main():
                         source_id, quoted = quote_rows[0]
                         source = packet('/api/current/source-v6', dict(active_params, source_id=source_id))
                         source_page = source.get('page', source)
-                        assert source_page['document_id'] != case['document_id'] and source_page['date'] < case['date']
+                        assert_saved_source(saved,config,source_page,full_page=True)
                         assert digest(source_page['text']) == source_page.get('source_sha256', source_page.get('page_sha256'))
                         quotes.first.click()
                         page.locator('#detail-drawer[open] [data-testid="source-document"]').wait_for(state='visible', timeout=60000)
@@ -603,8 +659,8 @@ def main():
                     requests = []
                     page.on('request', lambda request: requests.append(request.url))
                     page.goto(base + 'live.html', wait_until='networkidle')
-                    expect(page.locator('#availability')).to_contain_text('unavailable')
-                    expect(page.locator('#availability')).to_contain_text('GitHub Pages cannot execute')
+                    expect(page.locator('#availability')).to_contain_text('requires an authenticated backend')
+                    expect(page.locator('#availability')).to_contain_text('GitHub Pages cannot run the pipeline')
                     assert page.locator('#run').is_disabled()
                     assert page.locator('#capability').input_value() == ''
                     assert page.locator('#capability').get_attribute('autocomplete') == 'off'

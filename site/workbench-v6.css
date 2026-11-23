@@ -583,7 +583,7 @@ select,input { padding:.45rem; font-size:.73rem; border-radius:4px; }
 .analyst-digest { max-width:1040px; margin:25px 0 35px; }
 .analyst-digest > p:first-child { font:400 clamp(25px,2.5vw,34px)/1.6 Georgia,serif; }
 .analyst-digest[data-status=pending] > p:first-child { color:var(--muted); }
-.analyst-digest .note { font-size:.68rem; }
+.analyst-digest .note { font-size:.9rem; }
 .detail-drawer { width:min(650px,calc(100vw - 24px)); max-width:none; max-height:96dvh; padding:0; border-radius:7px 0 0 7px; }
 .detail-drawer > header { padding:14px 18px; background:#eef5ef; }
 .detail-drawer h2 { font-size:1.4rem; }
@@ -744,4 +744,41 @@ select,input { padding:.45rem; font-size:.73rem; border-radius:4px; }
 .rail-study:hover{text-decoration:underline}
 .query-block[data-task="redaction"]{text-transform:uppercase}
 .workflow>.stage { min-height:0; padding-block:34px 42px; }
-.workflow>#stage-01 { min-height:calc(100dvh - 170px); }
+.workflow>#stage-01 { min-height:0; padding-bottom:24px; }
+.verdict-strip { align-items:center; column-gap:14px; margin:0 0 16px; padding:10px 18px; border:1px solid var(--line); border-left:5px solid #a78132; border-radius:7px; background:#fbf8ed; }
+.verdict-strip[data-tone=supported] { background:#edf5ef; border-left-color:#34795f; }
+.verdict-strip[data-tone=opposed] { background:#fbefeb; border-left-color:#ac543e; }
+.verdict-strip[data-tone=mixed] { background:#f7f0df; border-left-color:#a78132; }
+.verdict-strip h2 { font-size:1.35rem; margin:0; font-weight:600; color:#775923; }
+.verdict-strip[data-tone=supported] h2 { color:#245f46; }
+.verdict-strip[data-tone=opposed] h2 { color:#983c2c; }
+.verdict-strip .eyebrow { margin:0; }
+.verdict-strip .note { margin:9px 0; font-size:.87rem; }
+.verdict-strip .recommended-fill,.verdict-strip .first-saved-fill { flex:1 1 300px; margin:0; font-size:1.1rem; }
+.verdict-strip .recommended-fill { color:#245f46; }
+.first-saved-fill { margin:8px 0; font-size:.95rem; }
+.verdict-facts { display:flex; flex-wrap:wrap; gap:7px; }
+.verdict-fact { font-size:.82rem; padding:6px 9px; background:#f6f3e8; border-color:#d5c7a5; }
+.verdict-fact[data-kind=supported] { color:#245f46; background:#e1eee4; border-color:#a2c4ab; }
+.verdict-fact[data-kind=opposed],.verdict-fact[data-kind=conflict] { color:#983c2c; background:#f5e3dc; border-color:#d5a699; }
+.source-pdf-pair { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:24px; padding-top:18px; border-top:1px solid var(--line); }
+.source-pdf-pair h3,.source-pdf-pair .note { flex-basis:100%; margin:0; }
+.source-pdf-pair .button { font-size:.88rem; }
+@media(max-width:760px){.verdict-strip{padding:16px 18px}.verdict-strip h2{font-size:1.2rem}}
+.terminal-scorecards { margin:0 0 24px; }
+.terminal-scorecards h3 { margin:0 0 8px; }
+.terminal-reading,.terminal-atom-scores { margin:18px 0; padding:18px; border:1px solid var(--line); border-radius:9px; background:#f8faf7; }
+.terminal-reading h4,.terminal-atom-scores h4 { margin:0 0 14px; }
+.terminal-score-item { padding:12px 0; border-top:1px solid var(--line); }
+.terminal-score-item h5 { font:500 1rem/1.45 var(--font-body,"Avenir Next",sans-serif); margin:0 0 9px; overflow-wrap:anywhere; }
+.terminal-metric { display:grid; grid-template-columns:minmax(70px,1fr) auto; gap:6px 12px; margin:7px 0; font-size:.85rem; }
+.terminal-metric .score-track { grid-column:1/-1; }
+.terminal-metric .score-track[data-tone=oppose]>span { background:#b7604d; }
+.terminal-metric .score-track[data-tone=support]>span { background:#34795f; }
+.terminal-score-summary,.terminal-criteria { font-size:.82rem; color:var(--muted); }
+.terminal-score-summary { margin:8px 0; }
+.terminal-criteria { display:inline-block; margin-right:12px; }
+.terminal-scorecards .quiet { font-size:.82rem; }
+.study-case-tabs { display:flex; gap:4px; margin:0 0 20px; padding:4px; width:fit-content; border:1px solid var(--line); border-radius:7px; background:#f0f4ef; }
+.study-case-tabs a { padding:8px 15px; border-radius:4px; font-size:.9rem; text-decoration:none; color:var(--muted); }
+.study-case-tabs a[aria-current=page] { background:#fffefb; color:var(--teal); box-shadow:0 1px 4px #1a413518; }

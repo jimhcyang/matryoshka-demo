@@ -6,7 +6,8 @@
   <meta name="referrer" content="no-referrer">
   <meta name="live-backend" content="">
   <meta name="live-corpus-scopes" content="data/live-corpus-scopes.json" data-content-sha256="9fc1d47fb4d957f80298a81f09bb9495c2958a228568faebbf1ec0ccb008dbec">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' http://127.0.0.1:8977; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'">
+  <meta name="source-api-index-sha256" content="da1c1a3574fc6b80421a02aa62c3cb121ec17fedfa3b379be15446b198922abf">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' http://127.0.0.1:8977; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'self' blob:">
   <title>Matryoshka | Live</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="app-navigation.css">
@@ -18,22 +19,21 @@
   <script src="app-navigation.js"></script>
   <main>
     <section class="intro">
-      <p class="eyebrow">Analyst workbench / Live execution</p>
-      <h1>A new question.<br><em>The actual pipeline.</em></h1>
-      <p class="lede">Query-only planning, deterministic source retrieval and decisions. Every result retains its source scope, selected evidence and receipt.</p>
-      <p id="availability" class="notice" role="status">Live unavailable until an authenticated backend is configured. GitHub Pages cannot execute the pipeline. A password is access to that backend, not a model API key or browser-side inference.</p>
+      <p class="eyebrow">Live analysis</p>
+      <h1>Ask a new question.</h1>
+      <p class="lede">Check a claim or reconstruct missing wording against the permitted sources.</p>
+      <p id="availability" class="notice" role="status">Live requires an authenticated backend. GitHub Pages cannot run the pipeline.</p>
     </section>
     <div class="workspace">
       <section class="question-panel" aria-labelledby="question-title">
         <section class="login-box" aria-labelledby="login-title">
-          <h2 id="login-title">Log in to Live</h2>
-          <p class="hint">Enter the private password supplied by your backend operator. Neither your password nor the short-lived session is saved by this page.</p>
+          <h2 id="login-title">Access Live</h2>
           <form id="login-form" autocomplete="off">
-            <label for="login-password">Access password</label>
-            <input id="login-password" type="password" required autocomplete="off" spellcheck="false" maxlength="256">
+            <div class="login-field"><label for="login-password">Private access password</label>
+            <input id="login-password" type="password" required autocomplete="off" spellcheck="false" maxlength="256"></div>
             <div class="actions"><button id="login-submit" type="submit">Log in</button><button id="logout" class="secondary" type="button" disabled>Log out</button></div>
           </form>
-          <p id="session-status" class="hint" role="status">Not logged in. No background login or inference requests.</p>
+          <p id="session-status" class="hint" role="status">Your password and session are not saved.</p>
         </section>
         <details id="connection">
           <summary>Connection settings</summary>
@@ -49,37 +49,56 @@
           </details>
           <p class="hint">This page permits self and the explicit default loopback companion only. An external HTTPS backend also needs its exact origin added to this page's CSP, and this frontend's exact origin allowed by the backend. If public-to-local access is blocked, open the local companion page.</p>
         </details>
-        <h2 id="question-title">Declare the question</h2>
+        <h2 id="question-title">Your question</h2>
         <form id="question-form">
           <fieldset id="question-fields" disabled>
-            <div class="pair"><div><label for="task">Task</label><select id="task"><option value="hypothesis">Hypothesis</option><option value="mosaic">Mosaic</option><option value="redaction">Redaction</option></select></div><div><label for="corpus">Corpus</label><select id="corpus"><option value="cib">Central Intelligence Bulletins</option><option value="iran">Iran cables (incumbent)</option><option value="vietnam">Vietnam cables (incumbent)</option></select></div></div>
+            <div class="pair"><div><label for="task">Task</label><select id="task"><option value="hypothesis">Hypothesis</option><option value="mosaic">Mosaic</option><option value="redaction">Redaction</option></select></div><div><label for="corpus">Corpus</label><select id="corpus"><option value="cib">Central Intelligence Bulletins</option><option value="iran">Iran cables</option><option value="vietnam">Vietnam cables</option></select></div></div>
             <label for="query">Analyst clause</label>
             <textarea id="query" rows="5" required maxlength="2000" placeholder="Enter a declarative clause, not an instruction or question."></textarea>
-            <p class="hint">Mosaic and Hypothesis need complete claims. Redaction needs one unique focal mask, such as [MASK]. No saved case or answer is used as an input.</p>
-            <div class="pair"><div><label for="as-of">Evidence through</label><input id="as-of" type="date" min="1900-01-01" aria-describedby="scope-date-hint"></div><div><label for="excluded-origin">Exclude document (optional)</label><input id="excluded-origin" maxlength="160" autocomplete="off" placeholder="Leave blank for your own question"></div></div>
+            <p class="hint">Use a complete claim, or one unique [MASK] for Redaction.</p>
+            <div class="pair"><div><label for="as-of">Evidence through</label><input id="as-of" type="date" min="1900-01-01" aria-describedby="scope-date-hint"></div><div><label id="origin-label" for="excluded-origin">Source document (optional)</label><input id="excluded-origin" maxlength="160" autocomplete="off" placeholder="Leave blank for your own question" aria-describedby="origin-hint"></div></div>
             <p id="scope-date-hint" class="hint">The default includes the full eligible corpus. Leave the date blank to use that default.</p>
-            <p class="hint">Writing your own question? No document ID is needed. If your input comes from a source document, enter its ID to exclude all its pages. Access and release restrictions still apply.</p>
+            <p id="origin-hint" class="hint">Leave blank for your own question. Enter an ID when quoting a source document.</p>
             <div id="focal-field" hidden><label for="focal-marker">Unique focal mask</label><input id="focal-marker" value="[MASK]" maxlength="90" autocomplete="off"></div>
-            <div class="actions"><button id="run" type="submit">Run live pipeline</button></div>
+            <p id="input-status" class="notice error" role="alert" hidden></p>
+            <div class="actions"><button id="run" type="submit">Analyze question</button></div>
           </fieldset>
         </form>
+        <section id="recent-runs" aria-labelledby="recent-title">
+          <div class="history-heading"><h3 id="recent-title">Recent runs</h3><button id="clear-history" class="secondary" type="button" disabled>Clear history</button></div>
+          <p id="history-status" class="hint" role="status">Completed results stay in this tab only. Login details are never saved.</p>
+          <ol id="history-list" aria-label="Completed Live runs"></ol>
+        </section>
       </section>
-      <section class="run-panel" aria-labelledby="run-title">
-        <div class="section-heading"><p class="eyebrow">Execution record</p><h2 id="run-title">No run submitted</h2></div>
-        <p id="limits" class="hint">One worker. Bounded requests, runtime and API spend. Paid stages require an explicit server launch flag.</p>
-        <ol id="progress" aria-label="Public pipeline stages"></ol>
-        <p id="job-status" role="status" aria-live="polite">Connect to begin. No paid requests have been made by this page.</p>
-        <div class="actions"><button id="cancel" class="secondary" type="button" hidden>Cancel job</button><button id="retry" type="button" hidden>Retry explicitly</button></div>
+      <section id="run-panel" class="run-panel" aria-labelledby="run-title" hidden>
+        <section id="local-verdict" class="local-verdict" aria-live="polite" hidden>
+          <p class="eyebrow">Local verdict</p><h2 id="verdict-title"></h2><p id="verdict-detail"></p>
+        </section>
+        <div id="run-heading" class="run-heading"><h2 id="run-title">Analysis</h2><p id="job-status" role="status" aria-live="polite"></p></div>
+        <ol id="progress" aria-label="Analysis progress"></ol>
+        <div id="job-actions" class="actions"><button id="cancel" class="secondary" type="button" hidden>Cancel</button><button id="retry" type="button" hidden>Retry</button></div>
         <div id="result" hidden>
-          <h3 id="result-status"></h3>
           <p id="result-kind" class="notice"></p>
+          <section id="inline-result" aria-labelledby="inline-title">
+            <h3 id="inline-title" class="visually-hidden">Complete workbench</h3>
+            <p id="inline-status" class="hint" role="status">Opening the verified result...</p>
+            <button id="retry-view" class="secondary" type="button" hidden>Reload result view</button>
+            <div id="workbench-frame-host"></div>
+          </section>
+          <details id="compact-result"><summary>Compact result and technical receipt</summary>
           <div id="decisions"></div>
-          <details open><summary>Declared source scope</summary><dl id="source-scope"></dl></details>
-          <details open><summary>Selected source evidence</summary><div id="evidence"></div></details>
-          <details><summary>Actual saved paths</summary><pre id="paths"></pre></details>
-          <details><summary>Execution receipt and artifact hashes</summary><pre id="receipt"></pre></details>
-          <div class="actions"><button id="open-workbench" type="button">Inspect in workbench</button><button id="download" class="secondary" type="button">Download result</button></div>
-          <p class="hint">Results are source-bound suggestions, not world-truth certificates or benchmark accuracy. Missing support is not opposition. No chain-of-thought is shown or retained.</p>
+          <section class="source-section" aria-labelledby="evidence-title"><h3 id="evidence-title">Selected evidence</h3><div id="evidence"></div></section>
+          <section id="score-section" class="score-section" aria-labelledby="scores-title" hidden><h3 id="scores-title">Evidence and fit</h3><div id="decision-scores"></div></section>
+          <details><summary>Source scope</summary><dl id="source-scope"></dl></details>
+          <details id="execution-details"><summary>Execution details</summary>
+            <p id="result-status"></p><p id="limits" class="hint"></p>
+            <details><summary>Progress history</summary><pre id="progress-receipt"></pre></details>
+            <details><summary>Saved paths</summary><pre id="paths"></pre></details>
+            <details><summary>Receipt and artifact hashes</summary><pre id="receipt"></pre></details>
+          </details>
+          <section id="postrun-digest" aria-labelledby="digest-title" hidden><h3 id="digest-title">Analyst digest</h3><p id="digest-text"></p></section>
+          </details>
+          <div class="actions"><button id="open-workbench" type="button">Open workbench in a new tab</button><button id="download" class="secondary" type="button">Download result</button></div>
         </div>
       </section>
     </div>

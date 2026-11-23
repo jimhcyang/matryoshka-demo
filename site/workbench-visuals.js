@@ -1,4 +1,5 @@
 // Presentation only: all identities, paths, quotations and numbers come from saved records.
+import {savedSourcePolicy,savedSourceScope} from './saved-source-policy.js';
 const list=value=>Array.isArray(value)?value:[];
 const short=(text,n=12)=>String(text||"").trim().split(/\s+/).slice(0,n).join(" ");
 function node(tag,text,attrs={}){
@@ -9,6 +10,24 @@ function node(tag,text,attrs={}){
 }
 function action(text,fn,attrs={}){const b=node("button",text,{type:"button",...attrs});b.onclick=fn;return b;}
 const proofKey=p=>JSON.stringify([p.document_id,p.canonical_page_id,p.start,p.end,p.text,p.page_sha256,p.date]);
+export function workbenchSourceScope(caseInfo,{reportItem,condition,liveScope}={}){
+  const declarations=[reportItem?.source_view_policy,condition?.source_view_policy,
+    condition?.configuration?.source_view_policy,condition?.result?.source_view_policy,liveScope?.source_view_policy].filter(value=>value!=null);
+  const policy=savedSourcePolicy(declarations[0]);
+  if(declarations.some(value=>JSON.stringify(savedSourcePolicy(value))!==JSON.stringify(policy)))
+    throw Error('The selected report and native condition evidence policies disagree.');
+  return savedSourceScope(caseInfo,policy);
+}
+export function studyCompanionCases(row,inventory){
+  if(!['first','last'].includes(row?.study_slot)||typeof row.study_companion_case_id!=='string')return [];
+  const companion=list(inventory).filter(other=>other.case?.case_id===row.study_companion_case_id);
+  if(companion.length!==1)return [];
+  const other=companion[0];
+  if(other.study_slot!==(row.study_slot==='first'?'last':'first')||other.study_companion_case_id!==row.case?.case_id||
+      row.case.task!=='redaction'||other.case?.task!=='redaction'||
+      ['corpus','document_id','date'].some(key=>other.case[key]!==row.case[key]))return [];
+  return [row,other].sort((a,b)=>a.study_slot==='first'?-1:b.study_slot==='first'?1:0);
+}
 export function uniqueProofs(values){
   const found=new Map();
   for(const value of list(values)){
@@ -111,6 +130,49 @@ export function renderScoreChart(items){
   }
   select.onchange=draw;draw();
   host.append(node("p","Scale: zero to the displayed maximum for this metric. Saved inputs, not an additive score or confidence.",{class:"note"}));return host;
+}
+export function renderTerminalScoreCards(record,scores,{formatScore=String,formatText=String,readingTitle=reading=>reading.id,onExplain}={}){
+  const host=node('section',null,{class:'terminal-scorecards','data-testid':'terminal-scorecards'});
+  if(!scores){host.append(node('p','No terminal evidence/fit score was saved for this historical result.',{class:'note','data-testid':'terminal-score-unavailable'}));return host;}
+  host.dataset.scoreVersion=scores.version;host.dataset.rankingApplied=String(scores.ranking_applied===true);
+  host.append(node('h3','Evidence and fit'),node('p',scores.ranking_applied===true?
+    'Saved final ranking scores. Native evidence judgments remain separate.':'Saved diagnostic scores, not applied to ranking. Native evidence judgments remain separate.',{class:'note'}));
+  const nativeReadings=list((record.result?.redaction||record.result)?.readings);
+  function metric(label,value,maximum,tone,attrs={}){
+    const row=node('div',null,{class:'terminal-metric',...attrs}),track=node('div',null,{class:'score-track','data-tone':tone}),fill=node('span');
+    fill.style.width=(maximum>0?Math.min(100,Math.max(0,value)/maximum*100):0)+'%';track.append(fill);
+    row.append(node('span',label),node('strong',formatScore(value),{title:String(value)}),track);return row;
+  }
+  function criteria(item){return node('span','Criteria met '+(item.criteria_coverage*100).toFixed(0)+'%',{class:'terminal-criteria','data-criteria-coverage':item.criteria_coverage});}
+  for(const reading of list(scores.readings)){
+    const source=nativeReadings.find(value=>value.reading?.id===reading.id),byId=new Map(list(source?.candidates).map(item=>[item.id,item]));
+    const section=node('section',null,{class:'terminal-reading','data-reading-id':reading.id});
+    section.append(node('h4',readingTitle(source?.reading||reading)));
+    const maximum=Math.max(0,...reading.candidates.map(item=>item.score));
+    for(const [index,item]of reading.candidates.entries()){
+      const saved=byId.get(item.id),row=node('article',null,{class:'terminal-score-item','data-score-candidate':item.id,'data-native-status':item.native_status});
+      row.append(node('h5',(index+1)+'. '+formatText(saved?.fill||item.id)),
+        metric('Final score',item.score,maximum,'score',{'data-score-value':item.score}),
+        node('p','Fit '+formatScore(item.fit)+' / support '+formatScore(item.support)+' / oppose '+formatScore(item.oppose)+' / context '+formatScore(item.context),{class:'terminal-score-summary'}),criteria(item));
+      if(onExplain)row.append(action('Source contributions',()=>onExplain(item),{class:'quiet'}));section.append(row);
+    }
+    section.append(node('p','Bars use this reading\'s maximum score; values are indices, not probabilities.',{class:'note'}));host.append(section);
+  }
+  if(list(scores.atoms).length){
+    const section=node('section',null,{class:'terminal-atom-scores'}),maximum=Math.max(0,...scores.atoms.flatMap(item=>[item.support,item.oppose]));
+    section.append(node('h4','Evidence by fact'));
+    for(const item of scores.atoms){
+      const index=list(record.plan?.atoms).findIndex(atom=>atom.id===item.id),atom=list(record.plan?.atoms).find(atom=>atom.id===item.id);
+      const row=node('article',null,{class:'terminal-score-item','data-score-atom':item.id,'data-native-status':item.native_status});
+      row.append(node('h5',(index>=0?'F'+(index+1)+' / ':'')+formatText(atom?.text||item.id)),
+        metric('Support',item.support,maximum,'support',{'data-direction':'support','data-contribution-sum':item.support}),
+        metric('Oppose',item.oppose,maximum,'oppose',{'data-direction':'oppose','data-contribution-sum':item.oppose}),
+        node('p','Context '+formatScore(item.context),{class:'terminal-score-summary'}),criteria(item));
+      if(onExplain)row.append(action('Source contributions',()=>onExplain(item),{class:'quiet'}));section.append(row);
+    }
+    section.append(node('p','Support and oppose bars share one scale. Criteria coverage is not confidence.',{class:'note'}));host.append(section);
+  }
+  return host;
 }
 export function renderScoreBars(item,peers){
   const host=node("div",null,{class:"score-composition","data-testid":"score-composition"});
