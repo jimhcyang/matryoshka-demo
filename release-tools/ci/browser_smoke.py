@@ -276,6 +276,8 @@ def main():
             dataset(key, entry)
     report = json.loads((site / 'data/report-v6.json').read_bytes())
     assert len(report['cases']) == args.expected_cases
+    current_cases = {row['case']['case_id']: row for row in report['cases']}
+    assert len(current_cases) == args.expected_cases
     leaked, external, rows = [], [], []
     http = server(site, prefix='/nested/matryoshka-demo/', logs=leaked, datasets_root=args.datasets_root)
     thread = threading.Thread(target=http.serve_forever, daemon=True)
@@ -325,6 +327,16 @@ def main():
                     box.check()
                     row['node_count'] = page.evaluate('()=>state.panels.current.nodes.length')
                     assert row['node_count'] > 0
+                    row['canvas_pixels'] = page.evaluate('''async()=>{
+                        await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+                        const panel=state.panels.current, canvas=panel.canvas;
+                        const count=()=>{const pixels=panel.ctx.getImageData(0,0,canvas.width,canvas.height).data;
+                            let total=0;for(let i=3;i<pixels.length;i+=4)if(pixels[i])total++;return total;};
+                        const before=count();panel.resize();const after=count();
+                        return {before,after,width:canvas.width,height:canvas.height};
+                    }''')
+                    assert row['canvas_pixels']['before'] > 500, 'Loaded graph must paint visible bubbles'
+                    assert row['canvas_pixels']['after'] == row['canvas_pixels']['before'], 'Same-size resize erased graph'
                     row['slots'] = value['coverage']['total_slots']
                 return check
             if 'graph' in selected:
@@ -337,8 +349,11 @@ def main():
                     if not key.startswith('/api/narrative-v1/trace?'):
                         continue
                     params = {k: v[0] for k, v in parse_qs(urlsplit(key).query, keep_blank_values=True).items()}
+                    # The index also retains immutable traces for replaced cases.
+                    if params['case_id'] not in current_cases:
+                        continue
                     trace = json.loads(reader.read(entry))
-                    saved = next(r for r in report['cases'] if r['case']['case_id'] == params['case_id'])
+                    saved = current_cases[params['case_id']]
                     if trace['reading_id'] != params['reading']:
                         assert params['reading'] == '' and saved['case']['task'] == 'redaction'
                         continue

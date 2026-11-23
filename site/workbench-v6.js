@@ -460,6 +460,7 @@ async function chooseCase(row,{push=true,reading,candidate,scroll=false}={}) {
   const epoch=++state.epoch;request?.abort();request=new AbortController();destroyVisuals();state.projection=null;state.trace=null;clearIndependentReview();
   state.home=false;state.row=row;state.saved=null;state.gateReview=null;state.loading=true;state.pending="";state.reference=false;state.originalPath=0;state.reading=reading??"";state.candidate=candidate??"";state.compareReadings=false;state.reviewReading="";
   for(const option of $("#arm-select").options){const available=!isCurrentPublication()||!!row.configurations?.[ARMS[option.value]?.key];option.disabled=!available;option.textContent=ARMS[option.value].name+(available?"":" / not published");}
+  $('.workspace-toolbar').hidden=Array.from($('#arm-select').options).filter(option=>!option.disabled).length<2;
   clearError();renderRail();renderWorkspace();savePosition({push});
   $("#page-state").textContent=`Loading saved evidence for method ${state.arm}.`;
   const arm=state.arm,key=ARMS[arm].key,cacheKey=state.report.run_id+"/"+row.case.case_id+"/"+key;
@@ -548,7 +549,7 @@ function renderWorkspace() {
   destroyVisuals();
   const host=$("#case-view");host.replaceChildren();host.setAttribute("aria-busy",String(state.loading));
   host.dataset.reading=state.reading;
-  $(".workspace-toolbar").hidden=state.home||state.readySingleMethod===true;
+  $(".workspace-toolbar").hidden=state.home||state.readySingleMethod===true||Array.from($('#arm-select').options).filter(option=>!option.disabled).length<2;
   if(state.home){renderHome();return;}
   if(!state.row){host.append(note(state.casebookPending||"Choose a saved question from the catalog.","empty"));return;}
   const c=state.row.case;
@@ -1007,7 +1008,8 @@ function quoteCard(proof){
   const path=matchingPaths.find(path=>path.graph_hops>0)||matchingPaths[0];
   if(path){
     const index=state.trace.paths.filter(p=>p.candidate_or_atom_id===path.candidate_or_atom_id).findIndex(p=>p.id===path.id);
-    bar.append(button('View on KG',()=>guidePath({candidate:{id:path.candidate_or_atom_id},route:path,route_index:index,proof}),'quote-kg',{'data-testid':'quote-view-on-kg'}));
+    if(livePacket)bar.append(link('Open corpus map',fullGraphURL(state.row.case.corpus),'quote-kg'));
+    else bar.append(button('View on KG',()=>guidePath({candidate:{id:path.candidate_or_atom_id},route:path,route_index:index,proof}),'quote-kg',{'data-testid':'quote-view-on-kg'}));
     b.dataset.tone=/^(FOR|SUPPORT|SUPPORTED)$/.test(path.direction)?'support':/^(AGAINST|OPPOSE|OPPOSED|COUNTER|COUNTEREVIDENCE)$/.test(path.direction)?'oppose':'context';
   }
   const text=button('',()=>sourceDrawer(proof),'excerpt-text',{"data-testid":"used-source-quote","data-source-id":proof.canonical_page_id,"data-document-id":proof.document_id,"data-digest-ids":proof.digest_ids?.join(' '),'aria-label':'Inspect source'});
@@ -1457,6 +1459,7 @@ function renderDocuments() {
 
 function guidePath({candidate,route,route_index,proof}={}) {
   if(!candidate?.id||!route)return;
+  if(livePacket){if(proof)void sourceDrawer(proof);return;}
   if(!allowPrivileged(()=>guidePath({candidate,route,route_index,proof})))return;
   const params=new URLSearchParams({corpus:state.row.case.corpus,guide_case:state.row.case.case_id,guide_arm:ARMS[state.arm].key,
     guide_reading:state.reading,guide_candidate:candidate.id,guide_route:String(route_index),guide_autoplay:'1',return_to:location.pathname+location.search});

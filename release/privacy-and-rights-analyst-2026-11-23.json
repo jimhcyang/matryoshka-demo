@@ -1,20 +1,20 @@
 {
   "version": "analyst-release-privacy-notices/1",
   "date": "2026-11-23",
-  "candidate_manifest_sha256": "62606349356b4ad4424b25924aff6e581a8d1b9d9205e2c14b02a2bef1b22d82",
+  "candidate_manifest_sha256": "da9ce230498268011fde7e0bb66199e1a30860b7af4c7f0bc2b67c10e1c3b2a8",
   "status": "PASS_SCOPED_INDICATOR_AND_SOURCE_REVIEW",
   "independent_review_ref": {
-    "path": "phase/analyst_release_20261123/delegation/privacy/candidate-b-626-final/SCAN_REVIEW.json",
-    "sha256": "10a1892982b30b22a21aac0d7be09dc585f29b4ad0c4d1b4cb7c55353c3df114"
+    "path": "phase/analyst_release_20261123/delegation/privacy/candidate-c3-da9c-final/SCAN_REVIEW.json",
+    "sha256": "438882643c83673dd26a37f86c034672ad149a7ba4f5af46959a606f2b802b0f"
   },
   "scan_counts": {
-    "exact_byte_cached_files": 19308,
-    "site_files_hashed": 19313,
-    "fresh_content_files": 5,
-    "content_blobs": 818,
-    "text_views": 943,
-    "zip_members": 813,
-    "pdf_documents": 2
+    "fresh_content_files": 19489,
+    "content_blobs": 38974,
+    "text_views": 53925,
+    "site_files_hashed": 19489,
+    "gzip_members": 18627,
+    "pdf_documents": 759,
+    "zip_members": 858
   },
   "unresolved_indicator_findings": [],
   "broad_exclusions_used": false,

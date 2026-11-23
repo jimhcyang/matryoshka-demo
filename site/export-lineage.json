@@ -1,27 +1,27 @@
 {
-  "backend_code_sha256": "9b7c8b15155d3c04ba65a0674d5e5c914cfc2168e74d0df604d00082dc881298",
+  "backend_code_sha256": "c60c4884d5b5a0966d7e133bcfc72b148f5bdf7dec0157d54d827719da175424",
   "casebook_ref": {
-    "path": "phase/analyst_release_20261123/publication/analyst_release_8a0b24b25492c5a87b162c33/casebook.json",
-    "sha256": "0bbfb0b27c6e79d59f5b02b063c2470283e4b833acb191379dd22cb1399e81d8"
+    "path": "phase/analyst_release_20261123/publication/analyst_resume_9a0b8889f93ee3f9718db26f/casebook.json",
+    "sha256": "1366a0ab5287f13139ea45af509113c0f80a2cdec81409f67eed083956416598"
   },
   "code_bundle": {
-    "bytes": 5842535,
+    "bytes": 6158326,
     "code_only": true,
     "manifest_path": "downloads/matryoshka-code-manifest.json",
-    "manifest_sha256": "359a1a73159c2d1762f14ddaaaae8c3f25dbe0c9fae245fabcb7a6b1dc6f7aae",
+    "manifest_sha256": "481b9bd5b79f7727da77912d1abc9792aaf4d0828da9e21823314525fcd1acf2",
     "path": "downloads/matryoshka-code.zip",
-    "sha256": "8eb419d1774f3714277c7d22191252c896ed2a56f5a0edf7f34b2b69fcee14ae",
-    "source_backend_tree_sha256": "9b7c8b15155d3c04ba65a0674d5e5c914cfc2168e74d0df604d00082dc881298"
+    "sha256": "287c0ff5d04ce25237fc2295de3e1f37561a1ab3a8f33d6a0cd61a1f7094b98d",
+    "source_backend_tree_sha256": "c60c4884d5b5a0966d7e133bcfc72b148f5bdf7dec0157d54d827719da175424"
   },
   "coverage": [
     {
       "case_id": "narrative_cib_revision_ac39b62cbc7070a340c5d62d",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/b12cc9971fc583a7024b07d0a4c3155f2a0d86ab05d9d48287af029d0c33b1a7/native.json.gz",
-        "sha256": "b5989f9abb7d3e62f18e8403a3c78359cdd2fb499bd92f4efd2dba26843a00ca"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/5c2001fcc562e1784b535acb848b32cd1e744a2f824847f83ee83c879fde1eb9/native.json.gz",
+        "sha256": "c43010f77ddb3fa002db8843849380f6e4af340a6cd1e52d050839d7b25aceb3"
       },
-      "native_result_sha256": "fe5daaeb4e1bf558a492509ac382330e1f43dd4f9152a04c4dc1717f493a2b43",
+      "native_result_sha256": "bc626d6375cfbe2291ed7847777c9b929aec70526ada47a8e37b6f6eefc99187",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_03644138c70e2c5151d8",
@@ -106,10 +106,10 @@
       "case_id": "narrative_cib_revision_3eea5176c0eab4abfb6452a4",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/1e55b7b41567a411d6ff769c5e1e30a1b794a801cd6a12c128d977e99af9f06b/native.json.gz",
-        "sha256": "3694368e9a10e9c982b5204000f7b16e27aba5eefc3eb5c5fb652ea748785bf0"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/7b60de5616de8033c08c80c12b908acf8f5765aa72d2a505f061ae5f602f9f3b/native.json.gz",
+        "sha256": "054386ba39faebf3c6e5ed4ecb18c05afd319e35d9b5a01ce27b0bdef19681a9"
       },
-      "native_result_sha256": "4906c0526b38345e56757709263be201c7716f7926bd1a4f6bc433bae35654ee",
+      "native_result_sha256": "fa9bbf0208215bfa8ecc81773bbfad738fb8b9503317112f3ec55bfb1747d2e5",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_05445dbc83ce23f52342",
@@ -195,10 +195,10 @@
       "case_id": "cloze_132dbc991d56c1c3ff66331a",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fdfb3385641d5f49394616567b913af18173caf25b05fdd07cf8264a3b2223dd/native.json.gz",
-        "sha256": "2dfed65ae8ec4edb0d54eac14dcb61f39eec6b5400d28a0e8e62d70f15f8ad7a"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/d31ccec6d98f015b94abff8a635b59fa3e890b97ce1b753285a3648e5f65a995/native.json.gz",
+        "sha256": "53e4790cf6b74478d782570898312093307d356dbd0f315fe2a4cfb6122deb9e"
       },
-      "native_result_sha256": "04ac82aba870dfcafea790cfc081f95b454f10092e51bc8db967998b5959defa",
+      "native_result_sha256": "27b8d9e4ad9af0d5e42d140fb58cf7818fefa5a98bdec99e81e637a67acf34fb",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_02e421ebfb1ab0f19a23",
@@ -305,10 +305,10 @@
       "case_id": "cloze_225a750400eb38718fa5bb9b",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/34288d25d31c0152c3e166e017afef0bf24589df9ac494b42756fdd31844e895/native.json.gz",
-        "sha256": "ddee7a555967ab776403a217b134e0d095fd3ed12723931ea83a090e66405afe"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c51ff5963074c74e6088abc94a9e8187ff3e8e08fbabc406e221942d8ed79df5/native.json.gz",
+        "sha256": "defa0a2e8197964cc4a0b0684aabd19d7198f50bd8d3832f2233c5df898cfd90"
       },
-      "native_result_sha256": "7901be3e733010e7b31befd3e5276c7cb19f3d886ec713f91e679d689bb45570",
+      "native_result_sha256": "3cb60264743ceb3e6ba22038cbe8c8f173d18109a299b89ed0018a558d2c63f5",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_004d36183e6d629a9924",
@@ -374,10 +374,10 @@
       "case_id": "narrative_cib_revision_ac4fb499beb4b345b5384ae6",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/561706334b6a925323b896544d8891c94978a8d049063e1ce19fe33308ebcda8/native.json.gz",
-        "sha256": "1d157845c9467a31c941c79099fbb1218b1b3a2e4ab852eb2f15ee8da32af87c"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/690fcee3686a739abe9dfe00bd00964311bf22574079d0da07cfde4ae0e0cbd2/native.json.gz",
+        "sha256": "0db85ecf2d712021d928ba3fa1c00cd92cfc1e54117aa323718788a1c37c0991"
       },
-      "native_result_sha256": "9b90b4eaec529540949b0a7c8d0824114753f4a25ad5bfe47d2634734e8748a8",
+      "native_result_sha256": "0f5878d8638aea20033b4c25b0a2a8da0974dec9ab285dddc597bf26ef110932",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_0095e401e82a0335e994",
@@ -559,10 +559,10 @@
       "case_id": "narrative_cib_alt_h_3af565c9ad6e532e16c9264b",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5fe207892075485145e1444cb82e69c5dcb1f283c25368ebf27f8ec7f0544644/native.json.gz",
-        "sha256": "e28a02bc28dc2ee398c04a652f6ff7ce12d1217cc9a1a680d64936daa8901967"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/b68510e059d2e9ce4a6ebe934702c580eb1e0054ff495ff26477703f325332b4/native.json.gz",
+        "sha256": "1a6da4054b0379b89a8234540b4390e9824e44b09c6a12bbfc3240ecd67f23da"
       },
-      "native_result_sha256": "23ed7c90c7f40c793ce9c14c658f176a8468c7961bc671192a11a1dff5f5c7df",
+      "native_result_sha256": "174eb628853dfac88d448da54db52a4ccf24c5528a62a9bba52b06b0f322febc",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_01a106fbc14d18fefc3d",
@@ -616,10 +616,10 @@
       "case_id": "narrative_cib_revision_ab8506d47badd3718e892a7e",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fd00637f9520ce2986c40bccca28a18b0b8ed5d361cccc28de64439c3d91dbdf/native.json.gz",
-        "sha256": "d0351e68281074bd3de0ca14005a6c19ca53bdc005eecbf9a5efa66ecec432b9"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/a247d182648a33fe95b82c7c64809df93e9cd462d3074d195bdcb43ec7621f3a/native.json.gz",
+        "sha256": "7cee0fbd3f661beee12004e5aac9d371f7a04413da6fcfa7529715a0fd8fbff3"
       },
-      "native_result_sha256": "617b671bbeb00ac64e57115abe87244abf8c41b76a9314fd1759d6ec30a92a01",
+      "native_result_sha256": "43cc3dbef21f02489ea67a5e7371531c070f630b3d88ddc5b592f2560ee6aaeb",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_0d687e9f7eeddc4a63ea",
@@ -659,10 +659,10 @@
       "case_id": "narrative_cib_revision_50e63144067940b5debe3fea",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/f8627fa2e682b49c9b2b0be64bb665c0770efa11e05374823a1807fefa70baaf/native.json.gz",
-        "sha256": "bac88f0feb1f905f1e44324234c42226d2eca01e2779b923b9d84539cd921f38"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c6439361cd964bc2e3dbf5ae3e81f8adbf7a4fb68595d214a92aa2da01d6f59b/native.json.gz",
+        "sha256": "58ac96f167e638928691a30143efc40a085d566d0dc2cf15feafbeeb595277ca"
       },
-      "native_result_sha256": "2b3253dbaab6a6a5b8db8f53833878eca23d337e376884bb448b8e11bd8cc553",
+      "native_result_sha256": "a9235560b8dabe3097221615c55786651fb282c88f5d7c972ba058c8da3eb6ef",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_014b39120d5f3d9b7aa7",
@@ -745,98 +745,84 @@
       ]
     },
     {
-      "case_id": "iran_factual_h_9b61144cb419baafa343",
+      "case_id": "iran_majlis_approval_h_7d166b5a0b68",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/d33d9011bb2f91565623442622145703f9ca95796704e57b2aec2a1f956a5a70/native.json.gz",
-        "sha256": "f117a712f3e73b3e55e2531c0098b7cac32fccf60b102adf0b76e1d0d80bfb8b"
+        "path": "phase/analyst_release_20261123/iran_resume/analysis4_majlis/native.json.gz",
+        "sha256": "f932823b3956e09383cd9ba333d66e2e9a1a543c3a84b04978b2bc4272c7aa83"
       },
-      "native_result_sha256": "7186bae098b3e8acfa17fb43a97b8c380d614325acadb7613c4d3ae054af53fd",
+      "native_result_sha256": "c782c7f36a0013730fd45b132a734411cb231cc8ad669659fd9b80efc21938d6",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
-        "segment_01df84a5842e5420ea19",
+        "segment_03cd9c980e5cca2fd550",
         "segment_087a9ad95d6b92d924c3",
-        "segment_16a2c22e898576feefa2",
-        "segment_23f17a78c28861fb37bf",
-        "segment_329d8e437144d80e0a8b",
-        "segment_439861e5c15c5ae172a8",
-        "segment_4670808cad5e67ebaf02",
-        "segment_47e61e381e47d2c96f82",
-        "segment_4e64ad1bfd812f6278de",
-        "segment_5c8d4c381ce64e3e596e",
-        "segment_6123ce3c3db3d4215430",
-        "segment_661f32c4d75de584e3eb",
-        "segment_6cbdb5edd130ab8b9e88",
-        "segment_756d514f393f37ea9a50",
-        "segment_7b131f478ab785a51033",
-        "segment_7c0a95fa5fd63808f921",
-        "segment_8ef81a122e4172a00318",
-        "segment_8f04a6c752f7002fc6f1",
-        "segment_a0bd6c8bd944bd50db5d",
-        "segment_b61be411fdbfe38ad0ee",
-        "segment_bc9184e57bc760d2cc21",
-        "segment_bce9c498690a85bfc040",
-        "segment_ca3559ce27226c3a884b",
-        "segment_d6177aa7408a3c43b3b4",
-        "segment_e9dd21de11a4ce32a4cc",
-        "segment_e9ee4ed45ea39671f9fc"
+        "segment_11e92a5adb22c0899a9f",
+        "segment_3bb57f357d12d93cb575",
+        "segment_4714509cbeae5c0db663",
+        "segment_5e4affacb2a9faeda60f",
+        "segment_64199dda1962638898e4",
+        "segment_69ce6194fe1416edcaaa",
+        "segment_75276c0c76fd54859cf6",
+        "segment_80c55af62a7ace95d782",
+        "segment_86c4795b9e86d827cb8b",
+        "segment_8b378b6aee257f76b3d7",
+        "segment_9fd647e5f78f7f9cc231",
+        "segment_a371436bb3c60f551182",
+        "segment_a3b76dd0deb3fc0e9109",
+        "segment_aadc621277868e07b34a",
+        "segment_c3540998e5990f282bc5",
+        "segment_c3fa147bd170902ca836",
+        "segment_c5cef94dafea2e83f95a",
+        "segment_c827213aff02af0bc489",
+        "segment_d8cbaaf6187744b44a6c",
+        "segment_e32ff6183dfc8a695e48",
+        "segment_e889405953c819a2429a",
+        "segment_eb12459ab94bb5e44aed",
+        "segment_f26a9a2887fb6310aaf2",
+        "segment_f3d3f3b6de2c205c7db7"
       ]
     },
     {
-      "case_id": "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
+      "case_id": "iran_resume_m_tehrani_340a479d6fa4",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/71a795cdbe5c0b02e7145b7dc4d98da30d5cf25e37ec937146525b8a5660dc0f/native.json.gz",
-        "sha256": "2f1c8a7464b82b2b3a85ae9f9bb4b7f4ee5b52a1c1a8ed0eb38cb7f92a7d60e3"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/tehrani_analysis4/runs/82541217eebd1c25d17d820acd746d042eec0857bb941f2a5688e0f7579facb7/native.json.gz",
+        "sha256": "1c6fe1bd6f984f4d026fbeefae669e96158a2c7a8af060b83558190fbc349c3e"
       },
-      "native_result_sha256": "095d06a6998f09fe4260a294fededa72a04c2763ff99f40aa8e0cf4d4356e2a3",
+      "native_result_sha256": "86678385c5557043b11aef34ecfc8c5a32d993248ddcfd7f6fb1695ef6fc947c",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
-        "segment_041431c9d1e5cb1f58a5",
-        "segment_07318800b29ee54b59fd",
-        "segment_115557e7845196ab3772",
-        "segment_11722d9a0f204fc6f35e",
-        "segment_13113ca5f4759e19c6a9",
-        "segment_142a55c4385c9865a805",
-        "segment_1c8db02b7beb90695e83",
-        "segment_20c0370685713038e34d",
-        "segment_2e8fcb0ccf32b51df256",
-        "segment_348b40d4be8139d9d4fa",
-        "segment_3c5c0f54412e38adea3c",
-        "segment_4081ba313b35026579b7",
-        "segment_58712864ffa61488981a",
-        "segment_63db220cdf580b461d17",
-        "segment_6673eb459baf4a0a4127",
-        "segment_862e4c059c32cdfe0aa2",
-        "segment_92e5eaa15b8049d48297",
-        "segment_94461c0c9d5b3c858858",
-        "segment_a63605af2252245b2c8f",
-        "segment_a95aa58e0ba3e9e7254f",
-        "segment_ab67f45ff618b848e0dd",
+        "segment_039c2297b32d5f015ae5",
+        "segment_0f61bdb7177323477021",
+        "segment_16ae3ba72daae18a333a",
+        "segment_28add2e512a59a32bb61",
+        "segment_6ad215ee6b04271ce22f",
+        "segment_72338ab7a49079f9b398",
+        "segment_788aad5305775cac7851",
+        "segment_817b974e754c4ad0a098",
+        "segment_8492f33cd10a34a3b031",
+        "segment_88acb82163ef3e8dddc4",
+        "segment_8adc9cc385b3e55a7c86",
+        "segment_8e09f3e3b2446cde317d",
+        "segment_91b4e9494fff7afc60fd",
+        "segment_9451e434c16347640caf",
+        "segment_977447179ed51aa3bcbc",
+        "segment_9fd647e5f78f7f9cc231",
+        "segment_a60447dc35e006e0b26a",
+        "segment_aadc621277868e07b34a",
         "segment_b0b2d9fda0e59d682d23",
-        "segment_b1a9c121cb6576fb9359",
-        "segment_b98758c164e26499abe2",
-        "segment_c4ee17a27a214d4d290d",
-        "segment_c7916dae0145b29ad822",
-        "segment_cf11d906ab563459ac40",
-        "segment_d0d9a5a53140ea5daa01",
-        "segment_dad4a35a69fcd7b13d9f",
-        "segment_dc583e973f1ab5b004e4",
-        "segment_e889405953c819a2429a",
-        "segment_eb17e7cadbfd6fde6e9f",
-        "segment_ec1d5d263f06ffd233e8",
-        "segment_ef6c109ee88fe9899b37",
-        "segment_f2cb146bade35689aefc"
+        "segment_c827213aff02af0bc489",
+        "segment_da5bd5e6e133e7a96818"
       ]
     },
     {
       "case_id": "source_window_9c77b0239a74f169bcf84785",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/47596eea3653833aba3dcc6851b0ea1ee0998dfefbe8b4b2ee65303fc8c211ae/native.json.gz",
-        "sha256": "e538c645c3460de18bf5c42a0f28cabb76fbcdad278f958fac553a79f1b930f4"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/iran/runs/064db89b94c63d18a210e5abe90d1f6a16ad01016e9494af1affd46568460aa5/native.json.gz",
+        "sha256": "effe1feed7a6c9d61a9dc58c5efba7d31dea8f15678fbe27efa653f0c57cd840"
       },
-      "native_result_sha256": "9929ea0a54ec4d3ca27c8a884154791e67307d341455750f6dc476c815cfda5d",
+      "native_result_sha256": "7c3d737dadb22f38ecdf74bf5f416ca7e9d7c9a5e86f40771223637f4db24d28",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "segment_00389820ff09fce02897",
@@ -965,80 +951,128 @@
       ]
     },
     {
-      "case_id": "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
+      "case_id": "resume3_vn_mr3_eastern_attacks_h_fefb4219a9c492b1",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/762dac1aa9829d64e0d81c62471844581fe7feaae07223284639f6b4507419b7/native.json.gz",
-        "sha256": "b223ec3485234958ed3f5a72f4930bd9063622e528a771583d28580c393d6eb6"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/d6c0a34e69eef608fa0e9b7823a491c20b5ced328b90cd1bfd50bddd3b1dbe01/native.json.gz",
+        "sha256": "0b2647fe676570fcfd9c8c70b18023b66f9ab9d992007d4016576bf5a8e8b7e9"
       },
-      "native_result_sha256": "9568cdbc30df7961ea99efca9340fc2d7e5bceeca9cc52ab7bcb0231aa389ad0",
+      "native_result_sha256": "0e25216f554fb2b2fe9ebfaebb1a05b880145c0e11a555f0d141ea292de5dfee",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
-        "segment_0c8b708648db2d8a8862",
-        "segment_15607db82a8119a58429",
-        "segment_19380854038dfeb83036",
-        "segment_2fe135cfb55c6530535a",
-        "segment_358b50e56ce0fd294862",
-        "segment_45406f137a58ba227529",
-        "segment_45a45c34f1b9b37b14c4",
+        "segment_0c86d2db0f1a4f2506db",
+        "segment_0d59c0fb1a22f6ddfb6d",
+        "segment_11ec1fc2c5057e04e63a",
+        "segment_17e34a3b763c1ad21c2e",
+        "segment_24b49d65ba165d983c5d",
+        "segment_28869845b5167cedf00e",
+        "segment_33b35cdaaa67d0b2423d",
+        "segment_342cff824f6f8b0c0a79",
+        "segment_3456d119d49ee06df2f9",
+        "segment_467b5f6ed2d3791d7ae2",
         "segment_4b972759ffde178798de",
-        "segment_5a3d5f73a388fa29f332",
-        "segment_5fa3574ca834962e3858",
-        "segment_602d4b3eb25f2fbaf063",
-        "segment_7a5b70764a289535c473",
-        "segment_93208abf9bc112230979",
-        "segment_a0cffca611e457f49dda",
-        "segment_a7c1863929bdc6aaf58a",
-        "segment_b21642850174bc64df57",
-        "segment_ce443ef9500edc8cb538",
-        "segment_d0991fa11c5e46bce030",
+        "segment_4c70439a078be047614a",
+        "segment_5935ea63494e4cc4e5ed",
+        "segment_5c36648ced40742c6737",
+        "segment_61d04694d6c8f8e7c78e",
+        "segment_6b193aa6c33a9252ab6f",
+        "segment_6e217ea5866e8abd6365",
+        "segment_6eb47b40079ea0187612",
+        "segment_73315ec9d4dcc54c72c4",
+        "segment_74f61d94e1fa526b4140",
+        "segment_76ed94dac2d88cb16fb8",
+        "segment_7c468b6b7679cc00b539",
+        "segment_82f9c481f7d9208c1499",
+        "segment_97aa9fbb6462a37432c0",
+        "segment_9a1e8349067f613bc418",
+        "segment_9c1f6d2cf1f32d923a3a",
+        "segment_a13c23aba4d6e2347f09",
+        "segment_af95e633af89189e72c5",
+        "segment_b6c8f9347a2105ae44e9",
+        "segment_c0ef156527d0f726f96b",
+        "segment_c5b12e299b3bcc5d21ed",
+        "segment_c936fd68cee9d61c31db",
+        "segment_ca3679cacf42b6977324",
+        "segment_ce0a49b02c63af43701c",
+        "segment_cf62a0642136d120070f",
+        "segment_d02607aa27773d910441",
+        "segment_d28de07905b393e2d7f2",
         "segment_d4dea96a874d44cdbc64",
-        "segment_d598ddb527d4df9dfb27",
-        "segment_e5506d779397dd98bd55"
+        "segment_e2a752427081854af0a8",
+        "segment_e81bdf97a566d021fd3c",
+        "segment_ee45d7b6aeefc030970f",
+        "segment_f70c40e6c9cd33af8763",
+        "segment_fde1f7d4c2858cec1fe3"
       ]
     },
     {
-      "case_id": "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+      "case_id": "resume5_vn_two_facts_m_9435a3298b1c9a70",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/70180eb7c603e5006363ad325f3ec206f88e8d7234b9cbdbad850f34adadd205/native.json.gz",
-        "sha256": "a491997ed321ad04735e90e1a4f73ed7b155f125f131f40a2f3078f0e7bdad61"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/bc66e74fedef9e5c19416d2425537700ae37658e2a7ea87d7321c5d5c354453a/native.json.gz",
+        "sha256": "1dd4b16fec727aef60d5509805d89a49e197eb25ab960d7a2293f0f066266f1f"
       },
-      "native_result_sha256": "65031dbc6df133afb8376592b93f068670f73c307ab711b0459d7b411adfe224",
+      "native_result_sha256": "094343acbe1708db9f17cf926ed25c9d8ac3d4c538db3d2eedcbd1f29aff56bb",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
-        "segment_1109938b3bdea4b64bf7",
-        "segment_1425cbe5593abbcee593",
-        "segment_158f7624c59a98d689ab",
-        "segment_2a9fc5333061f70983c5",
-        "segment_2b01b1eac14015f865bf",
-        "segment_358b50e56ce0fd294862",
-        "segment_492bd426698ca6548eb1",
-        "segment_4fabe16da7a80a4e9b43",
-        "segment_5b88e5a1bfb4b46562ac",
-        "segment_5d4d16c98d50d925af63",
-        "segment_6749080747e30816a539",
+        "segment_0c86d2db0f1a4f2506db",
+        "segment_0d59c0fb1a22f6ddfb6d",
+        "segment_11ec1fc2c5057e04e63a",
+        "segment_15680aca2122393e09e7",
+        "segment_183866cea8e967f12904",
+        "segment_24b49d65ba165d983c5d",
+        "segment_28869845b5167cedf00e",
+        "segment_33b35cdaaa67d0b2423d",
+        "segment_342cff824f6f8b0c0a79",
+        "segment_3456d119d49ee06df2f9",
+        "segment_34d5ef290935a27609de",
+        "segment_443df00b3894ac96a14a",
+        "segment_467b5f6ed2d3791d7ae2",
+        "segment_495ba987ae6f3f7c2be8",
+        "segment_49bc85c6c96b7d322310",
+        "segment_4b972759ffde178798de",
+        "segment_4c70439a078be047614a",
+        "segment_50b32fb8214712b995dd",
+        "segment_531abcfe3dc1602f1c3b",
+        "segment_5935ea63494e4cc4e5ed",
+        "segment_5c36648ced40742c6737",
+        "segment_61d04694d6c8f8e7c78e",
+        "segment_61de6f1f004ca16ac802",
+        "segment_64c0745d9198cc552d6b",
+        "segment_6b193aa6c33a9252ab6f",
+        "segment_722b699f7d733e92198c",
         "segment_74f61d94e1fa526b4140",
-        "segment_7a5b70764a289535c473",
+        "segment_7566e1df9936d3a899f2",
+        "segment_76ed94dac2d88cb16fb8",
+        "segment_7c468b6b7679cc00b539",
         "segment_84110045f638d8e681c0",
-        "segment_85fc307387739542d092",
-        "segment_8abb071657160b68f601",
-        "segment_c5bd1fe283a35fa3b743",
-        "segment_c9df3bc8021cf0ec7102",
-        "segment_e397e9159dd1d710c59d",
-        "segment_e5506d779397dd98bd55",
-        "segment_e92f5a679b8f3fa5e512",
-        "segment_f679a34f84b5d174e81d"
+        "segment_843c45d942b7f2b8ea14",
+        "segment_9a1e8349067f613bc418",
+        "segment_9c1f6d2cf1f32d923a3a",
+        "segment_a13c23aba4d6e2347f09",
+        "segment_af95e633af89189e72c5",
+        "segment_b0d31ba9401789037cdf",
+        "segment_b13963af57745a599cc8",
+        "segment_c0ef156527d0f726f96b",
+        "segment_c5b12e299b3bcc5d21ed",
+        "segment_ca3679cacf42b6977324",
+        "segment_ce0a49b02c63af43701c",
+        "segment_cf62a0642136d120070f",
+        "segment_d00869b89cda89a3f591",
+        "segment_e2a752427081854af0a8",
+        "segment_e81bdf97a566d021fd3c",
+        "segment_ee45d7b6aeefc030970f",
+        "segment_fde1f7d4c2858cec1fe3"
       ]
     },
     {
       "case_id": "narrative_vietnam_a111c4d6f8af8b100825ae07",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/4b45ee83c874ca9566c2cb35b309e5509570e6e5e5f33913568b50cae9065875/native.json.gz",
-        "sha256": "fb466d997789528322cad8fce19a3df2b86211739f9a742105540c139438ffe7"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/fd38c0b9be4f017f5a434563b8909a474cba951dbe494461f705c342eff35141/native.json.gz",
+        "sha256": "2a6e7ce82c358b6216710f75681df408ebf98e21ff76230204b8978a119fe824"
       },
-      "native_result_sha256": "4ac18ccd5ccb4fc91473ee970e019e5da65ef7e06cad1f0892d784ffdfa371ae",
+      "native_result_sha256": "4b8d463eddbed1ee057760c14322370b814dc4399215e38fcfa6bfd5780b61c0",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "segment_06b2104fa3190485e06a",
@@ -1104,10 +1138,10 @@
       "case_id": "analyst_delegation_01_first_588eaa87728f94a6",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/8ef4b94fb2342d7cae63d070a44fc7390b2540200fdfcde7aa6bb2465d764cf7/native.json.gz",
-        "sha256": "06b5d218021dc7fcdc9892aec088ede8ff61ff05ab13151ffedaf338b0d7d9b8"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/4909fffd21f3ea0c59d3267d30e719d1b9c30fa3a55aea0948a4fc0cec132d07/native.json.gz",
+        "sha256": "05c3fd14a4fc0d04474493f4bdfdd7ff9e3feed9ff4520a32ed01b996e625828"
       },
-      "native_result_sha256": "631fd08aeb2bff138396d86aa69728199a1ac1fc6f4494320795975f7e59358a",
+      "native_result_sha256": "7751a260916482d6f054843809015621e5c3ba03dbfa3ab4c78ac75006a06596",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_02cd332305daf9d342cf",
@@ -1218,10 +1252,10 @@
       "case_id": "analyst_delegation_01_last_fe5df6ceca0d45e8",
       "config": "llm_readings",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5b6204d908d398c59d11bf5cc5920eeba2db167d187084a543ce49be907168f4/native.json.gz",
-        "sha256": "d476c60cd374efb942eeacc9f2679c8faf6b9a8db4ea3dc4598116f543cd74f8"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/3df84807240cec02d5801a0248e0cefcc8770bb276c2fce3032454e1ddfa3365/native.json.gz",
+        "sha256": "bb87117f0f0ebe9c1c50509ef0052c78296e772d79e32e8ccad5f505043efcc7"
       },
-      "native_result_sha256": "52588a4d4e9d52974822b2b11235daf9bb62cfe3b09067e164a296ef45407c83",
+      "native_result_sha256": "04f29c9c1933fc99973fe4160a5545b9e83cb74e08187d0bc2616e625921e6c0",
       "native_version": "narrative-local-execution/3",
       "source_ids": [
         "page_00306ce248536cefa438",
@@ -1400,26 +1434,26 @@
   "field_guide": {
     "assets": [
       {
-        "public_sha256": "4b6e3e614a3ad3c491d6bdca705f7824a0cd8c7bb58ba77223e50f24a3cc8374",
+        "public_sha256": "8a712c49da848eef2732e88d77339290b5d3eed80cf85e2ccc4cb35e1f5dcc05",
         "source_ref": {
-          "path": "phase/analyst_release_20261123/guide/97ca9b15efdc889d45ad1e5b/field-guide.pdf",
-          "sha256": "4b6e3e614a3ad3c491d6bdca705f7824a0cd8c7bb58ba77223e50f24a3cc8374"
+          "path": "phase/analyst_release_20261123/guide/f8402a8c151a1e8fd4adcc76/field-guide.pdf",
+          "sha256": "8a712c49da848eef2732e88d77339290b5d3eed80cf85e2ccc4cb35e1f5dcc05"
         },
         "target": "docs/matryoshka-guide.pdf"
       },
       {
-        "public_sha256": "05e1f34ed220257142a93737f836bb2a629a88ea05fab4c37c98aef501487daa",
+        "public_sha256": "be8d628c08dcc36f593f1762a9fc313d1861f03f0793e930c5735f7b51cc6e8b",
         "source_ref": {
-          "path": "phase/analyst_release_20261123/guide/97ca9b15efdc889d45ad1e5b/field-guide.txt",
-          "sha256": "05e1f34ed220257142a93737f836bb2a629a88ea05fab4c37c98aef501487daa"
+          "path": "phase/analyst_release_20261123/guide/f8402a8c151a1e8fd4adcc76/field-guide.txt",
+          "sha256": "be8d628c08dcc36f593f1762a9fc313d1861f03f0793e930c5735f7b51cc6e8b"
         },
         "target": "docs/matryoshka-guide.txt"
       },
       {
-        "public_sha256": "94935bd530965ae735c39e8742af08577e3ae4cee4275d4159021b4c9127cb30",
+        "public_sha256": "8b51ae9e774722113e3f8564673f11b5ce43df93010034d69f84251170319dcd",
         "source_ref": {
-          "path": "phase/analyst_release_20261123/guide/97ca9b15efdc889d45ad1e5b/guide-public.json",
-          "sha256": "94935bd530965ae735c39e8742af08577e3ae4cee4275d4159021b4c9127cb30"
+          "path": "phase/analyst_release_20261123/guide/f8402a8c151a1e8fd4adcc76/guide-public.json",
+          "sha256": "8b51ae9e774722113e3f8564673f11b5ce43df93010034d69f84251170319dcd"
         },
         "target": "docs/guide-public.json"
       }
@@ -1434,25 +1468,25 @@
       "narrative_cib_alt_h_3af565c9ad6e532e16c9264b",
       "narrative_cib_revision_ab8506d47badd3718e892a7e",
       "narrative_cib_revision_50e63144067940b5debe3fea",
-      "iran_factual_h_9b61144cb419baafa343",
-      "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
+      "iran_majlis_approval_h_7d166b5a0b68",
+      "iran_resume_m_tehrani_340a479d6fa4",
       "source_window_9c77b0239a74f169bcf84785",
-      "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
-      "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+      "resume3_vn_mr3_eastern_attacks_h_fefb4219a9c492b1",
+      "resume5_vn_two_facts_m_9435a3298b1c9a70",
       "narrative_vietnam_a111c4d6f8af8b100825ae07",
       "analyst_delegation_01_first_588eaa87728f94a6",
       "analyst_delegation_01_last_fe5df6ceca0d45e8"
     ],
     "guide_public_ref": {
-      "path": "phase/analyst_release_20261123/guide/97ca9b15efdc889d45ad1e5b/guide-public.json",
-      "sha256": "94935bd530965ae735c39e8742af08577e3ae4cee4275d4159021b4c9127cb30"
+      "path": "phase/analyst_release_20261123/guide/f8402a8c151a1e8fd4adcc76/guide-public.json",
+      "sha256": "8b51ae9e774722113e3f8564673f11b5ce43df93010034d69f84251170319dcd"
     },
-    "pdf_pages": 8,
+    "pdf_pages": 10,
     "publication_qualification_inferred": false,
     "source_mode": "saved_report_snapshot",
     "source_report_ref": {
-      "path": "phase/analyst_release_20261123/publication/analyst_release_8a0b24b25492c5a87b162c33/report.json",
-      "sha256": "fc3e6349ee0e84f3a8042781b7153891fe07654738c768ab552d8632a447ecd2"
+      "path": "phase/analyst_release_20261123/publication/analyst_resume_9a0b8889f93ee3f9718db26f/report.json",
+      "sha256": "273e3ed148ee798baf2822189cb25541e2ffb404215ea26197cb669d83a0e0c2"
     },
     "version": "source-bound-field-guide/1"
   },
@@ -1472,21 +1506,21 @@
   "source_day_and_terminal_release": {
     "case_qualification_inherited": false,
     "delegation_reference_unknown": true,
-    "full_native_executions": 0,
+    "full_native_executions": 16,
     "historical_results_unchanged": true,
-    "old_plans_conservatively_rebound": 1,
-    "ordinary_query_plans_reused": 13,
+    "old_plans_conservatively_rebound": 15,
+    "ordinary_query_plans_reused": 1,
     "research_accuracy_claimed": false,
     "scoring": "terminal-evidence-fit/3",
     "selected_native_executions": 16,
     "source_policy": "source_day_inclusive",
-    "terminal_stage_replay": true,
-    "terminal_stage_replays": 16,
+    "terminal_stage_replay": false,
+    "terminal_stage_replays": 0,
     "version": "analyst-release/1"
   },
   "source_report_ref": {
-    "path": "phase/analyst_release_20261123/publication/analyst_release_8a0b24b25492c5a87b162c33/report.json",
-    "sha256": "fc3e6349ee0e84f3a8042781b7153891fe07654738c768ab552d8632a447ecd2"
+    "path": "phase/analyst_release_20261123/publication/analyst_resume_9a0b8889f93ee3f9718db26f/report.json",
+    "sha256": "273e3ed148ee798baf2822189cb25541e2ffb404215ea26197cb669d83a0e0c2"
   },
   "static_export_API_calls": 0,
   "version": "analyst-native-static-export/1"

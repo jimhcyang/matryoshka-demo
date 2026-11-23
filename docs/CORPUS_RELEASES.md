@@ -14,15 +14,15 @@ not labeled as having completed the newer source-only identity review. The
 generic code can accept their extracted source records, but offline fixture
 coverage is not a full-corpus validation or an effectiveness result.
 
-The active current-workbench CIB examples were separately executed on this
-new resource. The analyst release then computes a new, explicitly versioned
-terminal ranking from the sealed viable candidate pools. Its parent execution,
-unchanged construction/assessment code pins and final score arithmetic are
-recorded separately; this is cached-stage reuse, not another model judgment.
-Export preserves each selected execution's actual candidates, ranks, decisions
-and quotations. Historical packets are not rewritten. The older CIB map remains
-an archival compatibility binding for older saved runs; it is not substituted
-underneath the active examples.
+The active current-workbench examples have full native executions under one
+pinned backend. Query-literal name and cable-layout parsing preserve original
+source offsets; the terminal evidence-and-fit ranking is explicitly versioned.
+No answer-name dictionary, source-scope shortcut or model-assigned support label
+is introduced. Earlier terminal-only replay packets remain archived and are not
+presented as these fresh executions. Export preserves the selected candidates,
+ranks, decisions and quotations. The older CIB map remains an archival
+compatibility binding for older saved runs; it is not substituted underneath
+the active examples.
 
 ## Active Source View
 

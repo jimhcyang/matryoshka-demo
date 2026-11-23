@@ -1,9 +1,9 @@
 {
   "version": "source-bound-release-authorization/1",
   "date": "2026-11-23",
-  "candidate_manifest_sha256": "62606349356b4ad4424b25924aff6e581a8d1b9d9205e2c14b02a2bef1b22d82",
-  "source_report_sha256": "fc3e6349ee0e84f3a8042781b7153891fe07654738c768ab552d8632a447ecd2",
-  "backend_code_sha256": "9b7c8b15155d3c04ba65a0674d5e5c914cfc2168e74d0df604d00082dc881298",
+  "candidate_manifest_sha256": "da9ce230498268011fde7e0bb66199e1a30860b7af4c7f0bc2b67c10e1c3b2a8",
+  "source_report_sha256": "273e3ed148ee798baf2822189cb25541e2ffb404215ea26197cb669d83a0e0c2",
+  "backend_code_sha256": "c60c4884d5b5a0966d7e133bcfc72b148f5bdf7dec0157d54d827719da175424",
   "publish_authorized": true,
   "new_data_qa_accepted": true,
   "privacy_review_accepted": true,
@@ -11,11 +11,11 @@
   "scope": "diagnostic_demo_with_declared_limitations",
   "qualified_data_qa_ref": {
     "path": "data-qa-analyst-2026-11-23.json",
-    "sha256": "dd30ad04192440947b03a8f2b5875821d7a32cf233521965c64fe071d4ea8a8b"
+    "sha256": "8fd9131107ace0a31dec67a574f00747d5424a5951bdd9376011a4e05fbba883"
   },
   "privacy_and_rights_ref": {
     "path": "privacy-and-rights-analyst-2026-11-23.json",
-    "sha256": "b4f24f707817e896e49bb74ecb019d25b5982d91d39404ce17665faad6f44b53"
+    "sha256": "b05f7d3636fbc9f983ee62b8979288768c0c57dfea4aba2c57c157fd6b5b4f80"
   },
   "new_scientific_performance_claimed": false
 }

@@ -16,16 +16,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/b12cc9971fc583a7024b07d0a4c3155f2a0d86ab05d9d48287af029d0c33b1a7/condition.json.gz",
-            "sha256": "813ce21349e1de85029835829b24518b18d435f96acd9b0fb08f54c63db1074e"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/5c2001fcc562e1784b535acb848b32cd1e744a2f824847f83ee83c879fde1eb9/condition.json.gz",
+            "sha256": "75a580b54140d617cd7a7af7ff69fad96440fd3e009a1d98fbe5d27336e23b45"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/b12cc9971fc583a7024b07d0a4c3155f2a0d86ab05d9d48287af029d0c33b1a7/native.json.gz",
-            "sha256": "b5989f9abb7d3e62f18e8403a3c78359cdd2fb499bd92f4efd2dba26843a00ca"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/5c2001fcc562e1784b535acb848b32cd1e744a2f824847f83ee83c879fde1eb9/native.json.gz",
+            "sha256": "c43010f77ddb3fa002db8843849380f6e4af340a6cd1e52d050839d7b25aceb3"
           },
-          "run_id": "narrative_8421ca352fcdfa7befbcc4d4",
+          "run_id": "narrative_046e32143d35557746f320b6",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -40,16 +40,16 @@
           },
           "trace_refs": {
             "next_reading_1a005fb20ea90c8bede96ba7": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/b12cc9971fc583a7024b07d0a4c3155f2a0d86ab05d9d48287af029d0c33b1a7/trace_next_reading_1a005fb20ea90c8bede96ba7.json.gz",
-              "sha256": "cdef87779662f1d848b4dec336344fa4582810bb96ec94c26c8591669edaeb32"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/5c2001fcc562e1784b535acb848b32cd1e744a2f824847f83ee83c879fde1eb9/trace_next_reading_1a005fb20ea90c8bede96ba7.json.gz",
+              "sha256": "96ca4a350aa62c91c3e3f79ddc67792d006e2d56b67436a0c49e0b41014c78e3"
             },
             "next_reading_d05a2b3d020d8f566482c1e9": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/b12cc9971fc583a7024b07d0a4c3155f2a0d86ab05d9d48287af029d0c33b1a7/trace_next_reading_d05a2b3d020d8f566482c1e9.json.gz",
-              "sha256": "b4cf1f9e134ea802f46d78dd100569745998ce528f3ce20fa6e917b9ff3afdf4"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/5c2001fcc562e1784b535acb848b32cd1e744a2f824847f83ee83c879fde1eb9/trace_next_reading_d05a2b3d020d8f566482c1e9.json.gz",
+              "sha256": "70acd280ff4c21706715d57680897a64a9ea1851f51464d50c3c1177ae6e51e5"
             },
             "next_reading_fa2b9f6ac0c608a3525d0515": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/b12cc9971fc583a7024b07d0a4c3155f2a0d86ab05d9d48287af029d0c33b1a7/trace_next_reading_fa2b9f6ac0c608a3525d0515.json.gz",
-              "sha256": "726b56ea83f96b2e657a2d76c5682eb584c3a5894c6b4b565d56e22af7dec8a8"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/5c2001fcc562e1784b535acb848b32cd1e744a2f824847f83ee83c879fde1eb9/trace_next_reading_fa2b9f6ac0c608a3525d0515.json.gz",
+              "sha256": "01f1a3d0bb702454d565c171ba134605074842f1a7f16dcc8ce7f7d12b5fcad7"
             }
           }
         }
@@ -60,9 +60,9 @@
           "case_id": "narrative_cib_revision_ac39b62cbc7070a340c5d62d",
           "config": "llm_readings",
           "default_reading_id": "next_reading_d05a2b3d020d8f566482c1e9",
-          "gate_sha256": "cc00bbeb6203d45d1d04d85c3987fd54cadad33d4bc3cdedff0ed9ff8d5fce53",
-          "native_checksum": "fe5daaeb4e1bf558a492509ac382330e1f43dd4f9152a04c4dc1717f493a2b43",
-          "native_run_id": "narrative_8421ca352fcdfa7befbcc4d4",
+          "gate_sha256": "c58f690370e02b9c11c7aab36a76cd5fd07bdd05e2a98e79a9cd522c1fe45520",
+          "native_checksum": "bc626d6375cfbe2291ed7847777c9b929aec70526ada47a8e37b6f6eefc99187",
+          "native_run_id": "narrative_046e32143d35557746f320b6",
           "overall_status": "exploratory_contextual",
           "query_sha256": "bf3ecbec61d49c453808787b28ec9af15e1769ecc3c7beb90c2a918d6af93217",
           "reading_order": [
@@ -106,8 +106,12 @@
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
       "family_id": "pa_1958_may_opposition_role_in_unrest",
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_additional_narrative_cib_revision_ac39b62cbc7070a340c5d62d",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -122,12 +126,12 @@
         "issues": [],
         "native_case_sha256": "076cc4ce6dfb1849e2c010eda41122db764b977c603475e3aae0768f9e20efec",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/b12cc9971fc583a7024b07d0a4c3155f2a0d86ab05d9d48287af029d0c33b1a7/native.json.gz",
-          "sha256": "b5989f9abb7d3e62f18e8403a3c78359cdd2fb499bd92f4efd2dba26843a00ca"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/5c2001fcc562e1784b535acb848b32cd1e744a2f824847f83ee83c879fde1eb9/native.json.gz",
+          "sha256": "c43010f77ddb3fa002db8843849380f6e4af340a6cd1e52d050839d7b25aceb3"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "076cc4ce6dfb1849e2c010eda41122db764b977c603475e3aae0768f9e20efec",
-        "native_result_checksum": "fe5daaeb4e1bf558a492509ac382330e1f43dd4f9152a04c4dc1717f493a2b43",
+        "native_result_checksum": "bc626d6375cfbe2291ed7847777c9b929aec70526ada47a8e37b6f6eefc99187",
         "public_case_sha256": "076cc4ce6dfb1849e2c010eda41122db764b977c603475e3aae0768f9e20efec",
         "query_sha256": "bf3ecbec61d49c453808787b28ec9af15e1769ecc3c7beb90c2a918d6af93217",
         "source_admission_scope_bound_not_recomputed": true,
@@ -135,6 +139,7 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_ac39b62cbc7070a340c5d62d/origin_masked.json.gz",
@@ -145,6 +150,14 @@
           "sha256": "1593dceecf2db81a80b1af8db7834aaba022c3a8251612c5cb1f018164751a15"
         }
       },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/b12cc9971fc583a7024b07d0a4c3155f2a0d86ab05d9d48287af029d0c33b1a7/native.json.gz",
+        "sha256": "b5989f9abb7d3e62f18e8403a3c78359cdd2fb499bd92f4efd2dba26843a00ca"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/5c2001fcc562e1784b535acb848b32cd1e744a2f824847f83ee83c879fde1eb9/plan_rebind.json",
+        "sha256": "d336681d030918db6a035a70f901a12fa8b8abe7f95b6aaf62dcf59ab66b211f"
+      },
       "presentation_caveats": [],
       "presentation_title": "Arias and the Panama unrest",
       "query_kind": "authentic_paired_redaction",
@@ -152,7 +165,7 @@
       "reference_answer_kind": "paired_release_reveal",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -193,6 +206,10 @@
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": true,
       "selected_bench": false,
       "selected_demo": false,
@@ -213,16 +230,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/1e55b7b41567a411d6ff769c5e1e30a1b794a801cd6a12c128d977e99af9f06b/condition.json.gz",
-            "sha256": "a559fafc728baa6507f1c9605cbbce0d846ee347fb66d9171605e791c5d98946"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/7b60de5616de8033c08c80c12b908acf8f5765aa72d2a505f061ae5f602f9f3b/condition.json.gz",
+            "sha256": "ab67cc7328c8bce8efc63a734ac38ab4aa064c90539349a7c6eaff7e83cb2ab1"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/1e55b7b41567a411d6ff769c5e1e30a1b794a801cd6a12c128d977e99af9f06b/native.json.gz",
-            "sha256": "3694368e9a10e9c982b5204000f7b16e27aba5eefc3eb5c5fb652ea748785bf0"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/7b60de5616de8033c08c80c12b908acf8f5765aa72d2a505f061ae5f602f9f3b/native.json.gz",
+            "sha256": "054386ba39faebf3c6e5ed4ecb18c05afd319e35d9b5a01ce27b0bdef19681a9"
           },
-          "run_id": "narrative_696680ff4782166973a60637",
+          "run_id": "narrative_6dc761b1840b62c4365e27ab",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -237,8 +254,8 @@
           },
           "trace_refs": {
             "next_reading_31ff17e95b0c05ea69654db3": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/1e55b7b41567a411d6ff769c5e1e30a1b794a801cd6a12c128d977e99af9f06b/trace_next_reading_31ff17e95b0c05ea69654db3.json.gz",
-              "sha256": "ca74a5c1e4e94f4353f7ee931ababff846fbaa9a6120131d71fdc69c5c495c3f"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/7b60de5616de8033c08c80c12b908acf8f5765aa72d2a505f061ae5f602f9f3b/trace_next_reading_31ff17e95b0c05ea69654db3.json.gz",
+              "sha256": "09c7ccf0559ed6b3cd28842c790de9fc44792ef2a9e23d99c3c9ed7023b746b1"
             }
           }
         }
@@ -249,9 +266,9 @@
           "case_id": "narrative_cib_revision_3eea5176c0eab4abfb6452a4",
           "config": "llm_readings",
           "default_reading_id": "next_reading_31ff17e95b0c05ea69654db3",
-          "gate_sha256": "b06e52f6dbd934b22468aca8732f64591ce66b6ab60485936b9f0736ae7fdfa7",
-          "native_checksum": "4906c0526b38345e56757709263be201c7716f7926bd1a4f6bc433bae35654ee",
-          "native_run_id": "narrative_696680ff4782166973a60637",
+          "gate_sha256": "81cb0bee3f3bf55ea6bde536bcb1479e1cf6a4858a1bc37818e18d23b1e851ec",
+          "native_checksum": "fa9bbf0208215bfa8ecc81773bbfad738fb8b9503317112f3ec55bfb1747d2e5",
+          "native_run_id": "narrative_6dc761b1840b62c4365e27ab",
           "overall_status": "exploratory_contextual",
           "query_sha256": "ca509fdffa2be636338327f8b0c604be95cc5a92e4a82f75ac3adc6771227de1",
           "reading_order": [
@@ -275,6 +292,10 @@
       },
       "exact_saved_plan_replication": false,
       "family_id": "vn_1961_military_reorganization_dissent",
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_additional_narrative_cib_revision_3eea5176c0eab4abfb6452a4",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -289,12 +310,12 @@
         "issues": [],
         "native_case_sha256": "7fbc67a60c033fe04f1cd58f209da145719709ce04abfce7ad3fbcbc489f64e3",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/1e55b7b41567a411d6ff769c5e1e30a1b794a801cd6a12c128d977e99af9f06b/native.json.gz",
-          "sha256": "3694368e9a10e9c982b5204000f7b16e27aba5eefc3eb5c5fb652ea748785bf0"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/7b60de5616de8033c08c80c12b908acf8f5765aa72d2a505f061ae5f602f9f3b/native.json.gz",
+          "sha256": "054386ba39faebf3c6e5ed4ecb18c05afd319e35d9b5a01ce27b0bdef19681a9"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "7fbc67a60c033fe04f1cd58f209da145719709ce04abfce7ad3fbcbc489f64e3",
-        "native_result_checksum": "4906c0526b38345e56757709263be201c7716f7926bd1a4f6bc433bae35654ee",
+        "native_result_checksum": "fa9bbf0208215bfa8ecc81773bbfad738fb8b9503317112f3ec55bfb1747d2e5",
         "public_case_sha256": "7fbc67a60c033fe04f1cd58f209da145719709ce04abfce7ad3fbcbc489f64e3",
         "query_sha256": "ca509fdffa2be636338327f8b0c604be95cc5a92e4a82f75ac3adc6771227de1",
         "source_admission_scope_bound_not_recomputed": true,
@@ -302,6 +323,7 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_3eea5176c0eab4abfb6452a4/origin_masked.json.gz",
@@ -312,9 +334,13 @@
           "sha256": "8c44f6c5d3497d4cec938d3c0baf399b7118fee37f516921f172f948871f3eac"
         }
       },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/1e55b7b41567a411d6ff769c5e1e30a1b794a801cd6a12c128d977e99af9f06b/native.json.gz",
+        "sha256": "3694368e9a10e9c982b5204000f7b16e27aba5eefc3eb5c5fb652ea748785bf0"
+      },
       "plan_rebind_ref": {
-        "path": "phase/analyst_release_20261123/backend/epoch2/runs/5496f8ed38e749232a746eda210aaa9ee496d23c81d009f6e8fde335041c8f8e/plan_rebind.json",
-        "sha256": "7c5157bfbb86809fec9e3cfcf3fa1641d91ec70e71b83464c601c6693ffcbedb"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/7b60de5616de8033c08c80c12b908acf8f5765aa72d2a505f061ae5f602f9f3b/plan_rebind.json",
+        "sha256": "32e91cdb6f48cf45c877dc562648444bf880502401caaabe64f3514447d4e43b"
       },
       "presentation_caveats": [],
       "presentation_title": "The air force commander's doubts",
@@ -323,7 +349,7 @@
       "reference_answer_kind": "paired_release_reveal",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -364,6 +390,10 @@
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": true,
       "selected_bench": false,
       "selected_demo": false,
@@ -384,16 +414,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fdfb3385641d5f49394616567b913af18173caf25b05fdd07cf8264a3b2223dd/condition.json.gz",
-            "sha256": "e48c4d0c4c17ebf775fd2ada861140505aabb1f08e139942046b0f8b4106bc35"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/d31ccec6d98f015b94abff8a635b59fa3e890b97ce1b753285a3648e5f65a995/condition.json.gz",
+            "sha256": "e82da6b6abc3237533e2b16cafa2786faa99510df535aa44d11e56619e90c80c"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fdfb3385641d5f49394616567b913af18173caf25b05fdd07cf8264a3b2223dd/native.json.gz",
-            "sha256": "2dfed65ae8ec4edb0d54eac14dcb61f39eec6b5400d28a0e8e62d70f15f8ad7a"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/d31ccec6d98f015b94abff8a635b59fa3e890b97ce1b753285a3648e5f65a995/native.json.gz",
+            "sha256": "53e4790cf6b74478d782570898312093307d356dbd0f315fe2a4cfb6122deb9e"
           },
-          "run_id": "narrative_1cd5849a3b5956bcc06cabcd",
+          "run_id": "narrative_5d59264bcf8d26c35f1134dc",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -408,16 +438,16 @@
           },
           "trace_refs": {
             "next_reading_36678042d2f4e8631eedd462": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fdfb3385641d5f49394616567b913af18173caf25b05fdd07cf8264a3b2223dd/trace_next_reading_36678042d2f4e8631eedd462.json.gz",
-              "sha256": "1c8279d693e2a9335962cae7bc4db684b6b255ca301eff2564275ab6a592a413"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/d31ccec6d98f015b94abff8a635b59fa3e890b97ce1b753285a3648e5f65a995/trace_next_reading_36678042d2f4e8631eedd462.json.gz",
+              "sha256": "6a35641ed33716760d38f453a7432c01052483c9388cc21787b1446a8d019385"
             },
             "next_reading_81479663ec4b40f19fa30fdf": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fdfb3385641d5f49394616567b913af18173caf25b05fdd07cf8264a3b2223dd/trace_next_reading_81479663ec4b40f19fa30fdf.json.gz",
-              "sha256": "c5b2afdebe8fa0a3004056b131b660e2d7948b21c32470bf5af62d8ec022f39a"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/d31ccec6d98f015b94abff8a635b59fa3e890b97ce1b753285a3648e5f65a995/trace_next_reading_81479663ec4b40f19fa30fdf.json.gz",
+              "sha256": "5bc71cb9d6ebfc91b527130ddf02d41f30ef8d94482d81f42d8d269ffd4996ea"
             },
             "next_reading_b65ff678cbd646fa5e2147ef": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fdfb3385641d5f49394616567b913af18173caf25b05fdd07cf8264a3b2223dd/trace_next_reading_b65ff678cbd646fa5e2147ef.json.gz",
-              "sha256": "f5ce6d6df2b590fc5eede69e3083734933c14a6c52f80438c6d7a81bdbfe5844"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/d31ccec6d98f015b94abff8a635b59fa3e890b97ce1b753285a3648e5f65a995/trace_next_reading_b65ff678cbd646fa5e2147ef.json.gz",
+              "sha256": "52f92f53de34178f323210a33d0f5008f2b14a11999f50a7e348ee77576c0ecc"
             }
           }
         }
@@ -428,9 +458,9 @@
           "case_id": "cloze_132dbc991d56c1c3ff66331a",
           "config": "llm_readings",
           "default_reading_id": "next_reading_81479663ec4b40f19fa30fdf",
-          "gate_sha256": "638e0324feb3e9a398e41bccbbe736f8cc9be89a69959a6cf434ee78a64eb59a",
-          "native_checksum": "04ac82aba870dfcafea790cfc081f95b454f10092e51bc8db967998b5959defa",
-          "native_run_id": "narrative_1cd5849a3b5956bcc06cabcd",
+          "gate_sha256": "00adec7435a9966ea8084dfa672f45ed25606604d96a0db45902197a15decd25",
+          "native_checksum": "27b8d9e4ad9af0d5e42d140fb58cf7818fefa5a98bdec99e81e637a67acf34fb",
+          "native_run_id": "narrative_5d59264bcf8d26c35f1134dc",
           "overall_status": "exploratory_contextual",
           "query_sha256": "78aa2df2c56dcf8d651e0c8b931047a801aeba41eb9e671a124e8a465b1d8e36",
           "reading_order": [
@@ -474,8 +504,12 @@
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
       "family_id": "caribbean_1959_crossborder_insurgent_backing",
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_additional_cloze_132dbc991d56c1c3ff66331a",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -490,12 +524,12 @@
         "issues": [],
         "native_case_sha256": "a2147e311ec43e0a3e99646aa85f461ff7caa7e024b960d31f837ba890b2ced2",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fdfb3385641d5f49394616567b913af18173caf25b05fdd07cf8264a3b2223dd/native.json.gz",
-          "sha256": "2dfed65ae8ec4edb0d54eac14dcb61f39eec6b5400d28a0e8e62d70f15f8ad7a"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/d31ccec6d98f015b94abff8a635b59fa3e890b97ce1b753285a3648e5f65a995/native.json.gz",
+          "sha256": "53e4790cf6b74478d782570898312093307d356dbd0f315fe2a4cfb6122deb9e"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "a2147e311ec43e0a3e99646aa85f461ff7caa7e024b960d31f837ba890b2ced2",
-        "native_result_checksum": "04ac82aba870dfcafea790cfc081f95b454f10092e51bc8db967998b5959defa",
+        "native_result_checksum": "27b8d9e4ad9af0d5e42d140fb58cf7818fefa5a98bdec99e81e637a67acf34fb",
         "public_case_sha256": "a2147e311ec43e0a3e99646aa85f461ff7caa7e024b960d31f837ba890b2ced2",
         "query_sha256": "78aa2df2c56dcf8d651e0c8b931047a801aeba41eb9e671a124e8a465b1d8e36",
         "source_admission_scope_bound_not_recomputed": true,
@@ -503,6 +537,7 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "experiments/full_resume_20261120/publication_preview_v01/cases/cloze_132dbc991d56c1c3ff66331a/origin_masked.json.gz",
@@ -513,6 +548,14 @@
           "sha256": "a4fc112a77b0ceadb5fa7601825b0376f729a2c5b9bb1229fae20a73ef8401cb"
         }
       },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fdfb3385641d5f49394616567b913af18173caf25b05fdd07cf8264a3b2223dd/native.json.gz",
+        "sha256": "2dfed65ae8ec4edb0d54eac14dcb61f39eec6b5400d28a0e8e62d70f15f8ad7a"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/d31ccec6d98f015b94abff8a635b59fa3e890b97ce1b753285a3648e5f65a995/plan_rebind.json",
+        "sha256": "83b9b5399b79ecf075e60b5b5fdb6518a18f43ed96a9a9909a5f1eeaeab35a80"
+      },
       "presentation_caveats": [],
       "presentation_title": "Betancourt and the Caribbean crisis",
       "query_kind": "authentic_paired_redaction",
@@ -520,7 +563,7 @@
       "reference_answer_kind": "paired_release_reveal",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -561,6 +604,10 @@
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": true,
       "selected_bench": false,
       "selected_demo": false,
@@ -581,16 +628,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/34288d25d31c0152c3e166e017afef0bf24589df9ac494b42756fdd31844e895/condition.json.gz",
-            "sha256": "38625dacce21c96566833484da9f13438a60ed2edce24efbf32c48c0bbe87557"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c51ff5963074c74e6088abc94a9e8187ff3e8e08fbabc406e221942d8ed79df5/condition.json.gz",
+            "sha256": "382fb20ff38dc2b9a87796a1992637e7e753bb15d54e7b78d8a0b3d80af98032"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/34288d25d31c0152c3e166e017afef0bf24589df9ac494b42756fdd31844e895/native.json.gz",
-            "sha256": "ddee7a555967ab776403a217b134e0d095fd3ed12723931ea83a090e66405afe"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c51ff5963074c74e6088abc94a9e8187ff3e8e08fbabc406e221942d8ed79df5/native.json.gz",
+            "sha256": "defa0a2e8197964cc4a0b0684aabd19d7198f50bd8d3832f2233c5df898cfd90"
           },
-          "run_id": "narrative_41aeec008a998d84c8270f23",
+          "run_id": "narrative_c1c1a7cabe1f5e00e88bacae",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -605,16 +652,16 @@
           },
           "trace_refs": {
             "next_reading_0a6efaba6c01d35e92165159": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/34288d25d31c0152c3e166e017afef0bf24589df9ac494b42756fdd31844e895/trace_next_reading_0a6efaba6c01d35e92165159.json.gz",
-              "sha256": "522cff863e61071ac640bc7a13bc86b4565d27bdbe0ae98577722e0bf9c554ba"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c51ff5963074c74e6088abc94a9e8187ff3e8e08fbabc406e221942d8ed79df5/trace_next_reading_0a6efaba6c01d35e92165159.json.gz",
+              "sha256": "75c6448c0c53ce6a48127180e8e4509695312986a05486c87880375801270c11"
             },
             "next_reading_509c4499ef4d1596e833f8a2": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/34288d25d31c0152c3e166e017afef0bf24589df9ac494b42756fdd31844e895/trace_next_reading_509c4499ef4d1596e833f8a2.json.gz",
-              "sha256": "95b48f71596b6425298e5acb186c35fab3b41cae32a43fb2ef666babe1d147e4"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c51ff5963074c74e6088abc94a9e8187ff3e8e08fbabc406e221942d8ed79df5/trace_next_reading_509c4499ef4d1596e833f8a2.json.gz",
+              "sha256": "522d6a10a359b24f9895a4b5618b92c96a82f413e5bc7d0d9b1c4b84fed45181"
             },
             "next_reading_aa7f5df05a5d114dfab067e6": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/34288d25d31c0152c3e166e017afef0bf24589df9ac494b42756fdd31844e895/trace_next_reading_aa7f5df05a5d114dfab067e6.json.gz",
-              "sha256": "bc581a0007b529d7a55458e04b5b717c05298509c8ddfa9c0266c5e2c69c089c"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c51ff5963074c74e6088abc94a9e8187ff3e8e08fbabc406e221942d8ed79df5/trace_next_reading_aa7f5df05a5d114dfab067e6.json.gz",
+              "sha256": "361051164c922890f227b3ee6d22697502b699412f8f39b32cf630c1c0753246"
             }
           }
         }
@@ -625,9 +672,9 @@
           "case_id": "cloze_225a750400eb38718fa5bb9b",
           "config": "llm_readings",
           "default_reading_id": "next_reading_aa7f5df05a5d114dfab067e6",
-          "gate_sha256": "1a3a97257f9c0e8be8027da84660eeff69b4267c4086a548acbc5fbcecb7f5cd",
-          "native_checksum": "7901be3e733010e7b31befd3e5276c7cb19f3d886ec713f91e679d689bb45570",
-          "native_run_id": "narrative_41aeec008a998d84c8270f23",
+          "gate_sha256": "e789ca844651e4d7ef49c975bec1f035458162673b074f04a03a570f0aa306ad",
+          "native_checksum": "3cb60264743ceb3e6ba22038cbe8c8f173d18109a299b89ed0018a558d2c63f5",
+          "native_run_id": "narrative_c1c1a7cabe1f5e00e88bacae",
           "overall_status": "exploratory_contextual",
           "query_sha256": "474e68892f436fd3a9d3ddd5a705ad4a816d72fadd86f84d6723dade89503017",
           "reading_order": [
@@ -671,8 +718,12 @@
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
       "family_id": "pa_1959_november_canal_zone_agitation_assessment",
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_additional_cloze_225a750400eb38718fa5bb9b",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -687,12 +738,12 @@
         "issues": [],
         "native_case_sha256": "6edbddf3e2307820e3f7e45d4bfa13358d4849f489d2ca97018d8780834f4f42",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/34288d25d31c0152c3e166e017afef0bf24589df9ac494b42756fdd31844e895/native.json.gz",
-          "sha256": "ddee7a555967ab776403a217b134e0d095fd3ed12723931ea83a090e66405afe"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c51ff5963074c74e6088abc94a9e8187ff3e8e08fbabc406e221942d8ed79df5/native.json.gz",
+          "sha256": "defa0a2e8197964cc4a0b0684aabd19d7198f50bd8d3832f2233c5df898cfd90"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "6edbddf3e2307820e3f7e45d4bfa13358d4849f489d2ca97018d8780834f4f42",
-        "native_result_checksum": "7901be3e733010e7b31befd3e5276c7cb19f3d886ec713f91e679d689bb45570",
+        "native_result_checksum": "3cb60264743ceb3e6ba22038cbe8c8f173d18109a299b89ed0018a558d2c63f5",
         "public_case_sha256": "6edbddf3e2307820e3f7e45d4bfa13358d4849f489d2ca97018d8780834f4f42",
         "query_sha256": "474e68892f436fd3a9d3ddd5a705ad4a816d72fadd86f84d6723dade89503017",
         "source_admission_scope_bound_not_recomputed": true,
@@ -700,6 +751,7 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "experiments/full_resume_20261120/publication_preview_v01/cases/cloze_225a750400eb38718fa5bb9b/origin_masked.json.gz",
@@ -710,6 +762,14 @@
           "sha256": "a56b5ed7231aeab3b2f40eeeccb517014e6ebbefff1afedba7fde50afeeb9233"
         }
       },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/34288d25d31c0152c3e166e017afef0bf24589df9ac494b42756fdd31844e895/native.json.gz",
+        "sha256": "ddee7a555967ab776403a217b134e0d095fd3ed12723931ea83a090e66405afe"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c51ff5963074c74e6088abc94a9e8187ff3e8e08fbabc406e221942d8ed79df5/plan_rebind.json",
+        "sha256": "8507eb0781fa3058a47a5daa85927cb3bab81c6d8de7fd677c1cf3b85fdabd9f"
+      },
       "presentation_caveats": [],
       "presentation_title": "An assessment of Panama's ruling oligarchy",
       "query_kind": "authentic_paired_redaction",
@@ -717,7 +777,7 @@
       "reference_answer_kind": "paired_release_reveal",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -758,6 +818,10 @@
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": true,
       "selected_bench": false,
       "selected_demo": false,
@@ -778,16 +842,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/561706334b6a925323b896544d8891c94978a8d049063e1ce19fe33308ebcda8/condition.json.gz",
-            "sha256": "d89c39a71377d2a08ed907611c7864e8f6817039377fda10d25b1e8a561be94d"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/690fcee3686a739abe9dfe00bd00964311bf22574079d0da07cfde4ae0e0cbd2/condition.json.gz",
+            "sha256": "294bb042b45afabcf513685a73cbf1272e36b76ac7ec72fbeba9a6e0c61dd4af"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/561706334b6a925323b896544d8891c94978a8d049063e1ce19fe33308ebcda8/native.json.gz",
-            "sha256": "1d157845c9467a31c941c79099fbb1218b1b3a2e4ab852eb2f15ee8da32af87c"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/690fcee3686a739abe9dfe00bd00964311bf22574079d0da07cfde4ae0e0cbd2/native.json.gz",
+            "sha256": "0db85ecf2d712021d928ba3fa1c00cd92cfc1e54117aa323718788a1c37c0991"
           },
-          "run_id": "narrative_5e1feb14e820c35d51fb2870",
+          "run_id": "narrative_4cdc056ae5de1804024ab070",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -802,8 +866,8 @@
           },
           "trace_refs": {
             "next_reading_fdb35a08c26c96dc605d8d97": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/561706334b6a925323b896544d8891c94978a8d049063e1ce19fe33308ebcda8/trace_next_reading_fdb35a08c26c96dc605d8d97.json.gz",
-              "sha256": "8e1e16ce4cf85937b3265249b16129d3a35b0257e5909aef0a5210d821ff7b8e"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/690fcee3686a739abe9dfe00bd00964311bf22574079d0da07cfde4ae0e0cbd2/trace_next_reading_fdb35a08c26c96dc605d8d97.json.gz",
+              "sha256": "1624d11e4ad15ceeb2df462a2aacbcd599e220931ea3cd3470d1281c128d93d7"
             }
           }
         }
@@ -814,9 +878,9 @@
           "case_id": "narrative_cib_revision_ac4fb499beb4b345b5384ae6",
           "config": "llm_readings",
           "default_reading_id": "next_reading_fdb35a08c26c96dc605d8d97",
-          "gate_sha256": "2bac27da72f8e69282be4c2bcdd42c3778cb08c9097a31cb8245a64369f08be3",
-          "native_checksum": "9b90b4eaec529540949b0a7c8d0824114753f4a25ad5bfe47d2634734e8748a8",
-          "native_run_id": "narrative_5e1feb14e820c35d51fb2870",
+          "gate_sha256": "e013f4074e45acbcb61d7d1ec091059a10a446d9d36ae3627bc00200b0537787",
+          "native_checksum": "0f5878d8638aea20033b4c25b0a2a8da0974dec9ab285dddc597bf26ef110932",
+          "native_run_id": "narrative_4cdc056ae5de1804024ab070",
           "overall_status": "exploratory_contextual",
           "query_sha256": "a6988bbd921880dbdb499f0b5a12447fc0b37b27a9531ae675a6e8314318837e",
           "reading_order": [
@@ -838,8 +902,12 @@
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
       "family_id": "mm_cn_1960_border_military_cooperation_initiative",
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_additional_narrative_cib_revision_ac4fb499beb4b345b5384ae6",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -854,12 +922,12 @@
         "issues": [],
         "native_case_sha256": "e6621bce6b27be062c210399ae9fd2bab5f2a179f2b814938b0f5fa5a95b89be",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/561706334b6a925323b896544d8891c94978a8d049063e1ce19fe33308ebcda8/native.json.gz",
-          "sha256": "1d157845c9467a31c941c79099fbb1218b1b3a2e4ab852eb2f15ee8da32af87c"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/690fcee3686a739abe9dfe00bd00964311bf22574079d0da07cfde4ae0e0cbd2/native.json.gz",
+          "sha256": "0db85ecf2d712021d928ba3fa1c00cd92cfc1e54117aa323718788a1c37c0991"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "e6621bce6b27be062c210399ae9fd2bab5f2a179f2b814938b0f5fa5a95b89be",
-        "native_result_checksum": "9b90b4eaec529540949b0a7c8d0824114753f4a25ad5bfe47d2634734e8748a8",
+        "native_result_checksum": "0f5878d8638aea20033b4c25b0a2a8da0974dec9ab285dddc597bf26ef110932",
         "public_case_sha256": "e6621bce6b27be062c210399ae9fd2bab5f2a179f2b814938b0f5fa5a95b89be",
         "query_sha256": "a6988bbd921880dbdb499f0b5a12447fc0b37b27a9531ae675a6e8314318837e",
         "source_admission_scope_bound_not_recomputed": true,
@@ -867,6 +935,7 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_ac4fb499beb4b345b5384ae6/origin_masked.json.gz",
@@ -877,6 +946,14 @@
           "sha256": "58ac50177c1d6f5083c4d6600764bdf0d3538b434ab745e09d7438a0b961af42"
         }
       },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/561706334b6a925323b896544d8891c94978a8d049063e1ce19fe33308ebcda8/native.json.gz",
+        "sha256": "1d157845c9467a31c941c79099fbb1218b1b3a2e4ab852eb2f15ee8da32af87c"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/690fcee3686a739abe9dfe00bd00964311bf22574079d0da07cfde4ae0e0cbd2/plan_rebind.json",
+        "sha256": "79d26ebc5de6804eb95927b650db8808e932a1c74826997975fc7fff4636d223"
+      },
       "presentation_caveats": [],
       "presentation_title": "Aung Gyi and the Burma-China agreement",
       "query_kind": "authentic_paired_redaction",
@@ -884,7 +961,7 @@
       "reference_answer_kind": "paired_release_reveal",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 24,
           "construction_pages": 16,
@@ -919,6 +996,10 @@
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": true,
       "selected_bench": false,
       "selected_demo": false,
@@ -939,16 +1020,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5fe207892075485145e1444cb82e69c5dcb1f283c25368ebf27f8ec7f0544644/condition.json.gz",
-            "sha256": "d760f324cf80a2da741b82f27a785067c97360186e68c8927910f98a911f6d6f"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/b68510e059d2e9ce4a6ebe934702c580eb1e0054ff495ff26477703f325332b4/condition.json.gz",
+            "sha256": "d280d817521bb34bd6be482568406d763dea5d8ad3cc9832cedf9ead7b8f138d"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5fe207892075485145e1444cb82e69c5dcb1f283c25368ebf27f8ec7f0544644/native.json.gz",
-            "sha256": "e28a02bc28dc2ee398c04a652f6ff7ce12d1217cc9a1a680d64936daa8901967"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/b68510e059d2e9ce4a6ebe934702c580eb1e0054ff495ff26477703f325332b4/native.json.gz",
+            "sha256": "1a6da4054b0379b89a8234540b4390e9824e44b09c6a12bbfc3240ecd67f23da"
           },
-          "run_id": "narrative_b6654790ee6f94129f36d5d8",
+          "run_id": "narrative_5b223ad2c0aa01c8c0461ec2",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -963,8 +1044,8 @@
           },
           "trace_refs": {
             "": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5fe207892075485145e1444cb82e69c5dcb1f283c25368ebf27f8ec7f0544644/trace_assertions.json.gz",
-              "sha256": "ff00bfe0f5f70a029a84440ca2eaa34c835d5115563d20a9e78d3b723ef46cc3"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/b68510e059d2e9ce4a6ebe934702c580eb1e0054ff495ff26477703f325332b4/trace_assertions.json.gz",
+              "sha256": "111d03b13d91c1320c466523a6823753e07f63d42f2d3b20f88653ee2f4b3f53"
             }
           }
         }
@@ -984,16 +1065,20 @@
             "supported": 1,
             "unresolved": 0
           },
-          "gate_sha256": "9fd5ecb372c192c29d5b27998ec42ca7021a78c09389def6843c224635062062",
-          "native_checksum": "23ed7c90c7f40c793ce9c14c658f176a8468c7961bc671192a11a1dff5f5c7df",
-          "native_run_id": "narrative_b6654790ee6f94129f36d5d8",
+          "gate_sha256": "0be11a1a8c5ded3620f038a835745acbff057d980279df2cd0f684256cae0e3e",
+          "native_checksum": "174eb628853dfac88d448da54db52a4ccf24c5528a62a9bba52b06b0f322febc",
+          "native_run_id": "narrative_5b223ad2c0aa01c8c0461ec2",
           "overall_status": "evidence_backed_suggestion",
           "query_sha256": "995c2c0eea3a1dd0a2d2d66fbb00eebaf144f9d31c40592372391ea96453ee16",
           "task": "hypothesis",
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_salvador_authority",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -1008,12 +1093,12 @@
         "issues": [],
         "native_case_sha256": "369e05a070a391a7d185f1aa9f1aefce9d7c157514fd56350f5cdf99674be0ff",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5fe207892075485145e1444cb82e69c5dcb1f283c25368ebf27f8ec7f0544644/native.json.gz",
-          "sha256": "e28a02bc28dc2ee398c04a652f6ff7ce12d1217cc9a1a680d64936daa8901967"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/b68510e059d2e9ce4a6ebe934702c580eb1e0054ff495ff26477703f325332b4/native.json.gz",
+          "sha256": "1a6da4054b0379b89a8234540b4390e9824e44b09c6a12bbfc3240ecd67f23da"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "369e05a070a391a7d185f1aa9f1aefce9d7c157514fd56350f5cdf99674be0ff",
-        "native_result_checksum": "23ed7c90c7f40c793ce9c14c658f176a8468c7961bc671192a11a1dff5f5c7df",
+        "native_result_checksum": "174eb628853dfac88d448da54db52a4ccf24c5528a62a9bba52b06b0f322febc",
         "public_case_sha256": "369e05a070a391a7d185f1aa9f1aefce9d7c157514fd56350f5cdf99674be0ff",
         "query_sha256": "995c2c0eea3a1dd0a2d2d66fbb00eebaf144f9d31c40592372391ea96453ee16",
         "source_admission_scope_bound_not_recomputed": true,
@@ -1021,11 +1106,20 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_alt_h_3af565c9ad6e532e16c9264b/origin_masked.json.gz",
           "sha256": "7436222febd13cdecf9b72b0c267946402c8eb6e5c6ad7342445986fe77cd847"
         }
+      },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5fe207892075485145e1444cb82e69c5dcb1f283c25368ebf27f8ec7f0544644/native.json.gz",
+        "sha256": "e28a02bc28dc2ee398c04a652f6ff7ce12d1217cc9a1a680d64936daa8901967"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/b68510e059d2e9ce4a6ebe934702c580eb1e0054ff495ff26477703f325332b4/plan_rebind.json",
+        "sha256": "3c5212310a43a33620ed2784d2d460d91bdf7b296c78e8edb02dafe934be6c91"
       },
       "presentation_caveats": [],
       "presentation_title": "A reported interior-ministry appointment",
@@ -1034,7 +1128,7 @@
       "reference_answer_kind": null,
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -1078,6 +1172,10 @@
         "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
+      },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
       },
       "selected_additional": false,
       "selected_bench": false,
@@ -1098,16 +1196,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fd00637f9520ce2986c40bccca28a18b0b8ed5d361cccc28de64439c3d91dbdf/condition.json.gz",
-            "sha256": "18088866a233bc740932d41779d97f0aa3b29ac1c7bbcf946ccbb1c6ae8609c1"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/a247d182648a33fe95b82c7c64809df93e9cd462d3074d195bdcb43ec7621f3a/condition.json.gz",
+            "sha256": "1c14a8015cebfc1a052af9ede49c31bb527fe92567e3b3831d3d4bb8338805da"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fd00637f9520ce2986c40bccca28a18b0b8ed5d361cccc28de64439c3d91dbdf/native.json.gz",
-            "sha256": "d0351e68281074bd3de0ca14005a6c19ca53bdc005eecbf9a5efa66ecec432b9"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/a247d182648a33fe95b82c7c64809df93e9cd462d3074d195bdcb43ec7621f3a/native.json.gz",
+            "sha256": "7cee0fbd3f661beee12004e5aac9d371f7a04413da6fcfa7529715a0fd8fbff3"
           },
-          "run_id": "narrative_a5e03285df006b0035dad15a",
+          "run_id": "narrative_63840f63427030b2fff85988",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -1122,8 +1220,8 @@
           },
           "trace_refs": {
             "": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fd00637f9520ce2986c40bccca28a18b0b8ed5d361cccc28de64439c3d91dbdf/trace_assertions.json.gz",
-              "sha256": "e5a91a1d9ee965fef9459475727d8ba49126d0b7e654690e50037814fde1aa2f"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/a247d182648a33fe95b82c7c64809df93e9cd462d3074d195bdcb43ec7621f3a/trace_assertions.json.gz",
+              "sha256": "750c266a2ab11ad7a83993259088fa4e8c359f395483340b9a0ddcb37325338a"
             }
           }
         }
@@ -1143,16 +1241,20 @@
             "supported": 2,
             "unresolved": 0
           },
-          "gate_sha256": "22ff28820b18db4d111f806a56cabbc79367441b8cdc475360c51c303205ffc8",
-          "native_checksum": "617b671bbeb00ac64e57115abe87244abf8c41b76a9314fd1759d6ec30a92a01",
-          "native_run_id": "narrative_a5e03285df006b0035dad15a",
+          "gate_sha256": "7dfa0c0dbba6f2ce6dd01b702d06a7fba45650c7382a2548913f676bd5b4ce7a",
+          "native_checksum": "43cc3dbef21f02489ea67a5e7371531c070f630b3d88ddc5b592f2560ee6aaeb",
+          "native_run_id": "narrative_63840f63427030b2fff85988",
           "overall_status": "evidence_backed_suggestion",
           "query_sha256": "b32a4e54e16379cd42726aa2b919848cc4595c2fbec9b08c9e862e2d8a2c45ff",
           "task": "mosaic",
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_salvador_authority",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -1167,12 +1269,12 @@
         "issues": [],
         "native_case_sha256": "6b91bb93e8dffd294486eb356088f06bc3b4147eaeb236f7e986beeb2d02c107",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fd00637f9520ce2986c40bccca28a18b0b8ed5d361cccc28de64439c3d91dbdf/native.json.gz",
-          "sha256": "d0351e68281074bd3de0ca14005a6c19ca53bdc005eecbf9a5efa66ecec432b9"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/a247d182648a33fe95b82c7c64809df93e9cd462d3074d195bdcb43ec7621f3a/native.json.gz",
+          "sha256": "7cee0fbd3f661beee12004e5aac9d371f7a04413da6fcfa7529715a0fd8fbff3"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "2428ed1f73d3dc1f72aca171f257249deebd9f406edb57a6d1be0fb01c8d2634",
-        "native_result_checksum": "617b671bbeb00ac64e57115abe87244abf8c41b76a9314fd1759d6ec30a92a01",
+        "native_result_checksum": "43cc3dbef21f02489ea67a5e7371531c070f630b3d88ddc5b592f2560ee6aaeb",
         "public_case_sha256": "2428ed1f73d3dc1f72aca171f257249deebd9f406edb57a6d1be0fb01c8d2634",
         "query_sha256": "b32a4e54e16379cd42726aa2b919848cc4595c2fbec9b08c9e862e2d8a2c45ff",
         "source_admission_scope_bound_not_recomputed": true,
@@ -1180,11 +1282,20 @@
         "task_binding": "EXPLICIT_PUBLIC_MOSAIC_LEGACY_ENGINE_BRIDGE",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_cib_revision_ab8506d47badd3718e892a7e/origin_masked.json.gz",
           "sha256": "9840f9369bee83a0e54bb4dbc2ec50f946231cc4b7b931a483a9042b937f3672"
         }
+      },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/fd00637f9520ce2986c40bccca28a18b0b8ed5d361cccc28de64439c3d91dbdf/native.json.gz",
+        "sha256": "d0351e68281074bd3de0ca14005a6c19ca53bdc005eecbf9a5efa66ecec432b9"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/a247d182648a33fe95b82c7c64809df93e9cd462d3074d195bdcb43ec7621f3a/plan_rebind.json",
+        "sha256": "9a4d67829f8d445d03df817e387e1ba5e3124fe0c6200f1bc52526f7cf1bb4b3"
       },
       "presentation_caveats": [],
       "presentation_title": "Rural organization and reported journeys",
@@ -1193,7 +1304,7 @@
       "reference_answer_kind": null,
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -1238,6 +1349,10 @@
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": false,
       "selected_bench": false,
       "selected_demo": true
@@ -1257,16 +1372,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/f8627fa2e682b49c9b2b0be64bb665c0770efa11e05374823a1807fefa70baaf/condition.json.gz",
-            "sha256": "66769ece8334e69e6c2d28c90dd6ba0435f68363ad1373193759d4407ef6384f"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c6439361cd964bc2e3dbf5ae3e81f8adbf7a4fb68595d214a92aa2da01d6f59b/condition.json.gz",
+            "sha256": "11a5b5bcdbbd34eb11f978b29d460b700c3003c989fc8b08b8fc32e92e086cfa"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/f8627fa2e682b49c9b2b0be64bb665c0770efa11e05374823a1807fefa70baaf/native.json.gz",
-            "sha256": "bac88f0feb1f905f1e44324234c42226d2eca01e2779b923b9d84539cd921f38"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c6439361cd964bc2e3dbf5ae3e81f8adbf7a4fb68595d214a92aa2da01d6f59b/native.json.gz",
+            "sha256": "58ac96f167e638928691a30143efc40a085d566d0dc2cf15feafbeeb595277ca"
           },
-          "run_id": "narrative_a2575d27f8b3f34889ffa793",
+          "run_id": "narrative_9083fdfd28bcdbc20d9e1adc",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -1281,16 +1396,16 @@
           },
           "trace_refs": {
             "next_reading_21af61fd862e9bf524fcb8e4": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/f8627fa2e682b49c9b2b0be64bb665c0770efa11e05374823a1807fefa70baaf/trace_next_reading_21af61fd862e9bf524fcb8e4.json.gz",
-              "sha256": "1418df167967d1bbdb34268efbfad91f51f16d40b759d2afbd5ec80cd6b894d3"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c6439361cd964bc2e3dbf5ae3e81f8adbf7a4fb68595d214a92aa2da01d6f59b/trace_next_reading_21af61fd862e9bf524fcb8e4.json.gz",
+              "sha256": "9ef1a60a4c9890b1d9260518b6dc877a119d920a4a1893d300513ff9c9a6eb80"
             },
             "next_reading_5143cdac9ef38f3e18911c42": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/f8627fa2e682b49c9b2b0be64bb665c0770efa11e05374823a1807fefa70baaf/trace_next_reading_5143cdac9ef38f3e18911c42.json.gz",
-              "sha256": "1d430b7fd2bf5527071dd2907036af6bc63c6117ff339ddc0cf7daefeb07d7cb"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c6439361cd964bc2e3dbf5ae3e81f8adbf7a4fb68595d214a92aa2da01d6f59b/trace_next_reading_5143cdac9ef38f3e18911c42.json.gz",
+              "sha256": "577e842107483fb0ec19daf6e126c8fc0611a6980c0cf5ad8d7cee63de9c931c"
             },
             "next_reading_9844017f8398a69db9667dbe": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/f8627fa2e682b49c9b2b0be64bb665c0770efa11e05374823a1807fefa70baaf/trace_next_reading_9844017f8398a69db9667dbe.json.gz",
-              "sha256": "739ffb39126f3d0e433d118fcb34ec3b11f1779570ac6bedd7bebf3f6d0226b7"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c6439361cd964bc2e3dbf5ae3e81f8adbf7a4fb68595d214a92aa2da01d6f59b/trace_next_reading_9844017f8398a69db9667dbe.json.gz",
+              "sha256": "d5d524f31809024f24870f0351618cd24db3c2f8166d8d7a2c5b5e17756bd247"
             }
           }
         }
@@ -1301,9 +1416,9 @@
           "case_id": "narrative_cib_revision_50e63144067940b5debe3fea",
           "config": "llm_readings",
           "default_reading_id": "next_reading_5143cdac9ef38f3e18911c42",
-          "gate_sha256": "ad4336858f1f08ab6b0f5ce4ba1db4f8d8b7002769cb2aa7de81c0cb7f218e00",
-          "native_checksum": "2b3253dbaab6a6a5b8db8f53833878eca23d337e376884bb448b8e11bd8cc553",
-          "native_run_id": "narrative_a2575d27f8b3f34889ffa793",
+          "gate_sha256": "5ad07abe2b694f27dee371a81dc38335e0205e1e208b063382ec72ab3f16e6a0",
+          "native_checksum": "a9235560b8dabe3097221615c55786651fb282c88f5d7c972ba058c8da3eb6ef",
+          "native_run_id": "narrative_9083fdfd28bcdbc20d9e1adc",
           "overall_status": "evidence_backed_suggestion",
           "query_sha256": "165fe99e4cce9dd7ba8d4826f1aea8627dd42f2dba12b3df3f3de8f5c74c5d23",
           "reading_order": [
@@ -1347,8 +1462,12 @@
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
       "family_id": "sv_1961_peasant_vulnerability_characterization",
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_salvador_authority",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -1363,12 +1482,12 @@
         "issues": [],
         "native_case_sha256": "641979e5e398412ed53389a6cfbfe91ec5ba5383d969a917164c73dc68f500b2",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/f8627fa2e682b49c9b2b0be64bb665c0770efa11e05374823a1807fefa70baaf/native.json.gz",
-          "sha256": "bac88f0feb1f905f1e44324234c42226d2eca01e2779b923b9d84539cd921f38"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c6439361cd964bc2e3dbf5ae3e81f8adbf7a4fb68595d214a92aa2da01d6f59b/native.json.gz",
+          "sha256": "58ac96f167e638928691a30143efc40a085d566d0dc2cf15feafbeeb595277ca"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "641979e5e398412ed53389a6cfbfe91ec5ba5383d969a917164c73dc68f500b2",
-        "native_result_checksum": "2b3253dbaab6a6a5b8db8f53833878eca23d337e376884bb448b8e11bd8cc553",
+        "native_result_checksum": "a9235560b8dabe3097221615c55786651fb282c88f5d7c972ba058c8da3eb6ef",
         "public_case_sha256": "641979e5e398412ed53389a6cfbfe91ec5ba5383d969a917164c73dc68f500b2",
         "query_sha256": "165fe99e4cce9dd7ba8d4826f1aea8627dd42f2dba12b3df3f3de8f5c74c5d23",
         "source_admission_scope_bound_not_recomputed": true,
@@ -1376,6 +1495,7 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "experiments/full_resume_20261120/publication_preview_v01/cases/narrative_cib_revision_50e63144067940b5debe3fea/origin_masked.json.gz",
@@ -1386,6 +1506,14 @@
           "sha256": "f58f8e2ebf4e7e1286d25e84733586af967aafbd1133df07a9f8c3bdae7e78a1"
         }
       },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/f8627fa2e682b49c9b2b0be64bb665c0770efa11e05374823a1807fefa70baaf/native.json.gz",
+        "sha256": "bac88f0feb1f905f1e44324234c42226d2eca01e2779b923b9d84539cd921f38"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/c6439361cd964bc2e3dbf5ae3e81f8adbf7a4fb68595d214a92aa2da01d6f59b/plan_rebind.json",
+        "sha256": "c921d3ed77a0d64e6ca705e9b6ead983e73383bce22e91f73aec29f05807d48e"
+      },
       "presentation_caveats": [],
       "presentation_title": "Why the Salvadoran military became concerned",
       "query_kind": "authentic_paired_redaction",
@@ -1393,7 +1521,7 @@
       "reference_answer_kind": null,
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -1438,6 +1566,10 @@
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": false,
       "selected_bench": false,
       "selected_demo": true,
@@ -1445,12 +1577,12 @@
     },
     {
       "case": {
-        "case_id": "iran_factual_h_9b61144cb419baafa343",
+        "case_id": "iran_majlis_approval_h_7d166b5a0b68",
         "corpus": "iran",
-        "date": "1979-06-01",
-        "document_id": "1979STATE139731",
-        "focal_marker": "",
-        "query": "Haeri's father taught Khomeini.",
+        "date": "1979-02-06",
+        "document_id": "1979TEHRAN01870",
+        "focal_marker": null,
+        "query": "Majlis approved Bakhtiar's government.",
         "task": "hypothesis"
       },
       "collection": "starter",
@@ -1458,16 +1590,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/d33d9011bb2f91565623442622145703f9ca95796704e57b2aec2a1f956a5a70/condition.json.gz",
-            "sha256": "bbe2a7a77c08091fa8356ef4236334cc1ba5252fce26dc5f0075b000b92e6a2f"
+            "path": "phase/analyst_release_20261123/iran_resume/analysis4_majlis/condition.json.gz",
+            "sha256": "2a38a2d37222ab997655a62498450cdcbda58731043d6aad01ed2d1f71093f8c"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/d33d9011bb2f91565623442622145703f9ca95796704e57b2aec2a1f956a5a70/native.json.gz",
-            "sha256": "f117a712f3e73b3e55e2531c0098b7cac32fccf60b102adf0b76e1d0d80bfb8b"
+            "path": "phase/analyst_release_20261123/iran_resume/analysis4_majlis/native.json.gz",
+            "sha256": "f932823b3956e09383cd9ba333d66e2e9a1a543c3a84b04978b2bc4272c7aa83"
           },
-          "run_id": "narrative_f47bbca87c70974cdb6524c7",
+          "run_id": "narrative_9264b883023fe3dcb0478ec6",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -1482,8 +1614,8 @@
           },
           "trace_refs": {
             "": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/d33d9011bb2f91565623442622145703f9ca95796704e57b2aec2a1f956a5a70/trace_assertions.json.gz",
-              "sha256": "d5909695a1437211cd337807d18015f3b13ec01d733c3171bfd7f9ee22974ca9"
+              "path": "phase/analyst_release_20261123/iran_resume/analysis4_majlis/trace_assertions.json.gz",
+              "sha256": "f559688f931f0fccaea90bc04c1c7569b239496193281402933d653611904ef4"
             }
           }
         }
@@ -1491,7 +1623,7 @@
       "current_resource_execution": true,
       "decision_summary_by_arm": {
         "llm_readings": {
-          "case_id": "iran_factual_h_9b61144cb419baafa343",
+          "case_id": "iran_majlis_approval_h_7d166b5a0b68",
           "config": "llm_readings",
           "counts": {
             "conflict": 0,
@@ -1503,16 +1635,19 @@
             "supported": 1,
             "unresolved": 0
           },
-          "gate_sha256": "c03ae0f564c62d8b585808e1d796cbee1c9805dafa98db5e57a144202314452a",
-          "native_checksum": "7186bae098b3e8acfa17fb43a97b8c380d614325acadb7613c4d3ae054af53fd",
-          "native_run_id": "narrative_f47bbca87c70974cdb6524c7",
+          "gate_sha256": "ca4c018aa11359392f867332da302d9c7d8565def40a0ba15bcc1cf9eae318fd",
+          "native_checksum": "c782c7f36a0013730fd45b132a734411cb231cc8ad669659fd9b80efc21938d6",
+          "native_run_id": "narrative_9264b883023fe3dcb0478ec6",
           "overall_status": "evidence_backed_suggestion",
-          "query_sha256": "fc46a927f3f090d3178700473cac3403b078e047910826a026822ca9816e88a2",
+          "query_sha256": "81c66ffea854d6b857a576c7b352ee77ddd6024a9031f0247d8cd71cef549bdd",
           "task": "hypothesis",
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "iran_transition_authority",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -1525,40 +1660,194 @@
           "focal_marker"
         ],
         "issues": [],
-        "native_case_sha256": "a681c662fea3d36a945866faaeb4cf6ee0390bea9822afbd01981006f0a44f6d",
+        "native_case_sha256": "52c19e5e1b31f50ce0a58e415cdbf35918408e5589ced86b311077751f62ff17",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/d33d9011bb2f91565623442622145703f9ca95796704e57b2aec2a1f956a5a70/native.json.gz",
-          "sha256": "f117a712f3e73b3e55e2531c0098b7cac32fccf60b102adf0b76e1d0d80bfb8b"
+          "path": "phase/analyst_release_20261123/iran_resume/analysis4_majlis/native.json.gz",
+          "sha256": "f932823b3956e09383cd9ba333d66e2e9a1a543c3a84b04978b2bc4272c7aa83"
         },
         "native_packet_modified": false,
-        "native_public_case_sha256": "a681c662fea3d36a945866faaeb4cf6ee0390bea9822afbd01981006f0a44f6d",
-        "native_result_checksum": "7186bae098b3e8acfa17fb43a97b8c380d614325acadb7613c4d3ae054af53fd",
-        "public_case_sha256": "a681c662fea3d36a945866faaeb4cf6ee0390bea9822afbd01981006f0a44f6d",
-        "query_sha256": "fc46a927f3f090d3178700473cac3403b078e047910826a026822ca9816e88a2",
+        "native_public_case_sha256": "52c19e5e1b31f50ce0a58e415cdbf35918408e5589ced86b311077751f62ff17",
+        "native_result_checksum": "c782c7f36a0013730fd45b132a734411cb231cc8ad669659fd9b80efc21938d6",
+        "public_case_sha256": "52c19e5e1b31f50ce0a58e415cdbf35918408e5589ced86b311077751f62ff17",
+        "query_sha256": "81c66ffea854d6b857a576c7b352ee77ddd6024a9031f0247d8cd71cef549bdd",
         "source_admission_scope_bound_not_recomputed": true,
         "state": "PASS",
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
-          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/iran_factual_h_9b61144cb419baafa343/origin_masked.json.gz",
-          "sha256": "9a9775ae8fe727147ad0f524f329b37b42d7bf247e09532e89393d83c6c56ce6"
+          "path": "phase/analyst_release_20261123/iran_resume/analysis4_majlis/origin_masked.json.gz",
+          "sha256": "d3f6e96e0a17261794240bf0b06afbf06430b2f1779993c629aecb9acdb3482c"
         }
       },
-      "presentation_caveats": [
-        {
-          "text": "The January 15 CONF cable forwards Armin Meyer's unhedged statement that Haeri's father taught Khomeini at Qum; this is source-ascribed support, not independently verified world truth.",
-          "title": "Source-Ascribed Support"
-        }
-      ],
-      "presentation_title": "Haeri's father and Khomeini: a source-ascribed teaching relationship",
-      "query_kind": "source_derived",
-      "query_version": null,
-      "reference_answer_kind": null,
+      "presentation_caveats": [],
+      "presentation_title": "Parliament Approves Bakhtiar's Government",
+      "query_kind": "source_derived_proposition",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
+        "native_configuration": {
+          "completed_drafts_per_reading": 64,
+          "construction_pages": 32,
+          "method": "current_hierarchy",
+          "retrieval_document_budget": 40,
+          "retrieval_passage_budget": 80,
+          "source_view_policy": {
+            "cable_classification": "CONFIDENTIAL",
+            "cable_document_wide_handling_veto": true,
+            "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+            "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+            "cutoff_role": "source_document_date",
+            "date_relation": "<=",
+            "id": "source_day_inclusive",
+            "later_or_secret_version_admitted": false,
+            "source_dates_or_document_ids_rewritten": false,
+            "version": "trusted-corpus-source-view/1"
+          },
+          "terminal_ranking": "evidence_fit_v3",
+          "top_k": 5
+        },
+        "native_version": "narrative-local-execution/3",
+        "original_native_unchanged": true,
+        "version": "analyst-native-display/1"
+      },
+      "resource_binding": {
+        "corpus": "iran",
+        "graph_id": "graph_d56668bc40bce616",
+        "hierarchy_id": "hierarchy_abd502047c8824ae",
+        "index_sha256": "2c32af1c71e5b33a6da1648794e6bc1a65f449a918758f8a025c8b2d8ea47c45",
+        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
+        "resource_id": "graph_d56668bc40bce616",
+        "source_status": "INCUMBENT_NOT_MIGRATED"
+      },
+      "selected_additional": false,
+      "selected_bench": false,
+      "selected_demo": true
+    },
+    {
+      "case": {
+        "case_id": "iran_resume_m_tehrani_340a479d6fa4",
+        "corpus": "iran",
+        "date": "1979-01-25",
+        "document_id": "1979STATE019649",
+        "focal_marker": null,
+        "query": "Tehrani resigned from the Regency Council and stated that the Regency Council was illegal.",
+        "task": "mosaic"
+      },
+      "collection": "starter",
+      "configurations": {
+        "llm_readings": {
+          "compact_flow_refs": {},
+          "condition_ref": {
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/tehrani_analysis4/runs/82541217eebd1c25d17d820acd746d042eec0857bb941f2a5688e0f7579facb7/condition.json.gz",
+            "sha256": "e87d6343c162573086402510f98935093803f6090015f0a3956916c5752aaea7"
+          },
+          "config": "llm_readings",
+          "flow_refs": {},
+          "native_checkpoint": {
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/tehrani_analysis4/runs/82541217eebd1c25d17d820acd746d042eec0857bb941f2a5688e0f7579facb7/native.json.gz",
+            "sha256": "1c6fe1bd6f984f4d026fbeefae669e96158a2c7a8af060b83558190fbc349c3e"
+          },
+          "run_id": "narrative_d7b2bc2c1db098fb721704a4",
+          "source_view_policy": {
+            "cable_classification": "CONFIDENTIAL",
+            "cable_document_wide_handling_veto": true,
+            "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+            "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+            "cutoff_role": "source_document_date",
+            "date_relation": "<=",
+            "id": "source_day_inclusive",
+            "later_or_secret_version_admitted": false,
+            "source_dates_or_document_ids_rewritten": false,
+            "version": "trusted-corpus-source-view/1"
+          },
+          "trace_refs": {
+            "": {
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/tehrani_analysis4/runs/82541217eebd1c25d17d820acd746d042eec0857bb941f2a5688e0f7579facb7/trace_assertions.json.gz",
+              "sha256": "46a4cda1ff728d6a86125ca08ad3a319bfeab35600867edb61b5bb266786c554"
+            }
+          }
+        }
+      },
+      "current_resource_execution": true,
+      "decision_summary_by_arm": {
+        "llm_readings": {
+          "case_id": "iran_resume_m_tehrani_340a479d6fa4",
+          "config": "llm_readings",
+          "counts": {
+            "conflict": 0,
+            "context": 0,
+            "mixed": 0,
+            "opposed": 0,
+            "partial": 1,
+            "required": 2,
+            "supported": 0,
+            "unresolved": 1
+          },
+          "gate_sha256": "4afde07ee30426976e6453ca052e373f3284dd369cc04b30675f0b51567f36cf",
+          "native_checksum": "86678385c5557043b11aef34ecfc8c5a32d993248ddcfd7f6fb1695ef6fc947c",
+          "native_run_id": "narrative_d7b2bc2c1db098fb721704a4",
+          "overall_status": "partial_grounding",
+          "query_sha256": "f32f18978f89684f80ec1d444d69729c2de3679b31543636f2fb004c83cfc48b",
+          "task": "mosaic",
+          "version": "workbench-decision-summary/1"
+        }
+      },
+      "exact_saved_plan_replication": false,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
+      "narrative_id": "iran_transition_authority",
+      "native_public_case_binding": {
+        "checked_public_fields": [
+          "case_id",
+          "corpus",
+          "task",
+          "query",
+          "date",
+          "document_id",
+          "focal_marker"
+        ],
+        "issues": [],
+        "native_case_sha256": "068c9d2feb0e655b9d5b3301e827925f0d40b3dbb2af736b72e7bed540b7c0cb",
+        "native_checkpoint": {
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/tehrani_analysis4/runs/82541217eebd1c25d17d820acd746d042eec0857bb941f2a5688e0f7579facb7/native.json.gz",
+          "sha256": "1c6fe1bd6f984f4d026fbeefae669e96158a2c7a8af060b83558190fbc349c3e"
+        },
+        "native_packet_modified": false,
+        "native_public_case_sha256": "1f0a9e131ba1d204f8c87c1964e66fc796f596608e80d96bd8dff4453b5b9c80",
+        "native_result_checksum": "86678385c5557043b11aef34ecfc8c5a32d993248ddcfd7f6fb1695ef6fc947c",
+        "public_case_sha256": "1f0a9e131ba1d204f8c87c1964e66fc796f596608e80d96bd8dff4453b5b9c80",
+        "query_sha256": "f32f18978f89684f80ec1d444d69729c2de3679b31543636f2fb004c83cfc48b",
+        "source_admission_scope_bound_not_recomputed": true,
+        "state": "PASS",
+        "task_binding": "EXPLICIT_PUBLIC_MOSAIC_LEGACY_ENGINE_BRIDGE",
+        "version": "narrative-native-public-case-binding/1"
+      },
+      "new_full_native_execution": true,
+      "origin_refs": {
+        "masked": {
+          "path": "phase/analyst_release_20261123/iran_resume/runs/da344019f1ebafecfc80432bb986e6928142c23bfb319ebe618fbc1e57b99c78/origin_masked.json.gz",
+          "sha256": "8783f0f45961ff036751b47f04d448cf7622b4f44ede043d8d43bb30882e388e"
+        }
+      },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/runs/da344019f1ebafecfc80432bb986e6928142c23bfb319ebe618fbc1e57b99c78/native.json.gz",
+        "sha256": "70a5ae76260fc8d653253fcb36bff483d0558bd05b5d5518a7cdbc3b08bdf7ea"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/tehrani_analysis4/runs/82541217eebd1c25d17d820acd746d042eec0857bb941f2a5688e0f7579facb7/plan_rebind.json",
+        "sha256": "00638a5675939ad1a370eb050f2b8dae3958348da26f9d0b7dca5bba802f5182"
+      },
+      "presentation_caveats": [],
+      "presentation_title": "Tehrani Resigns and Challenges the Regency Council",
+      "query_kind": "source_derived_proposition",
+      "reporting_profile": {
+        "graph_inspection_is_postrun": true,
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -1567,8 +1856,8 @@
           "retrieval_passage_budget": 80,
           "selection_profile": {
             "candidate_focal_fraction": 0.5,
-            "context_kind_mode": "same_page_reference",
-            "context_ordering_mode": "focal_visible_owner",
+            "context_kind_mode": "visible_role_context",
+            "context_ordering_mode": "focal_visible_attachment",
             "coordinate_boundary_mode": "visible_boundary",
             "counter_policy": "positive_support",
             "cue_order_mode": "focal_sentence",
@@ -1606,154 +1895,9 @@
         "resource_id": "graph_d56668bc40bce616",
         "source_status": "INCUMBENT_NOT_MIGRATED"
       },
-      "selected_additional": false,
-      "selected_bench": false,
-      "selected_demo": true
-    },
-    {
-      "case": {
-        "case_id": "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
-        "corpus": "iran",
-        "date": "1979-01-19",
-        "document_id": "1979TEHRAN00936",
-        "focal_marker": "",
-        "query": "Karim Sanjabi led the National Front, and Mohamad Derakhshesh was head of the Teachers Union.",
-        "task": "mosaic"
-      },
-      "collection": "starter",
-      "configurations": {
-        "llm_readings": {
-          "compact_flow_refs": {},
-          "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/71a795cdbe5c0b02e7145b7dc4d98da30d5cf25e37ec937146525b8a5660dc0f/condition.json.gz",
-            "sha256": "b5ef6262b01670ea1a2bd2e534f12dbcb76d6998631350ef9571f6d9e5c59bd4"
-          },
-          "config": "llm_readings",
-          "flow_refs": {},
-          "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/71a795cdbe5c0b02e7145b7dc4d98da30d5cf25e37ec937146525b8a5660dc0f/native.json.gz",
-            "sha256": "2f1c8a7464b82b2b3a85ae9f9bb4b7f4ee5b52a1c1a8ed0eb38cb7f92a7d60e3"
-          },
-          "run_id": "narrative_bff08f6f530d59abd324c5ae",
-          "source_view_policy": {
-            "cable_classification": "CONFIDENTIAL",
-            "cable_document_wide_handling_veto": true,
-            "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
-            "cib_source_document": "EARLIER_OR_BOTH_ONLY",
-            "cutoff_role": "source_document_date",
-            "date_relation": "<=",
-            "id": "source_day_inclusive",
-            "later_or_secret_version_admitted": false,
-            "source_dates_or_document_ids_rewritten": false,
-            "version": "trusted-corpus-source-view/1"
-          },
-          "trace_refs": {
-            "": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/71a795cdbe5c0b02e7145b7dc4d98da30d5cf25e37ec937146525b8a5660dc0f/trace_assertions.json.gz",
-              "sha256": "52c48b43eeb6880e0816e403021bd8b3b6f4e7b366329f3d72f6d418e8be5a24"
-            }
-          }
-        }
-      },
-      "current_resource_execution": true,
-      "decision_summary_by_arm": {
-        "llm_readings": {
-          "case_id": "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
-          "config": "llm_readings",
-          "counts": {
-            "conflict": 0,
-            "context": 0,
-            "mixed": 0,
-            "opposed": 0,
-            "partial": 0,
-            "required": 2,
-            "supported": 2,
-            "unresolved": 0
-          },
-          "gate_sha256": "13dc7b48b5d9a976920f24fec4b7cf69307cc0e86c5890b9703dc75ecdc2fa2c",
-          "native_checksum": "095d06a6998f09fe4260a294fededa72a04c2763ff99f40aa8e0cf4d4356e2a3",
-          "native_run_id": "narrative_bff08f6f530d59abd324c5ae",
-          "overall_status": "evidence_backed_suggestion",
-          "query_sha256": "e51b40d8265237f1024749ece72a10d9a5445ce47b6ab54643d94198d2421721",
-          "task": "mosaic",
-          "version": "workbench-decision-summary/1"
-        }
-      },
-      "exact_saved_plan_replication": true,
-      "narrative_id": "iran_transition_authority",
-      "native_public_case_binding": {
-        "checked_public_fields": [
-          "case_id",
-          "corpus",
-          "task",
-          "query",
-          "date",
-          "document_id",
-          "focal_marker"
-        ],
-        "issues": [],
-        "native_case_sha256": "8ac3d9f59912a492e45b40f8449d1962bba431e1ccbab1748531dea1cec469e4",
-        "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/71a795cdbe5c0b02e7145b7dc4d98da30d5cf25e37ec937146525b8a5660dc0f/native.json.gz",
-          "sha256": "2f1c8a7464b82b2b3a85ae9f9bb4b7f4ee5b52a1c1a8ed0eb38cb7f92a7d60e3"
-        },
-        "native_packet_modified": false,
-        "native_public_case_sha256": "92f28fce9057ff9c6bfd3f72921e08fac29dbf8b18b7f3a9b779e3902dc4dcfd",
-        "native_result_checksum": "095d06a6998f09fe4260a294fededa72a04c2763ff99f40aa8e0cf4d4356e2a3",
-        "public_case_sha256": "92f28fce9057ff9c6bfd3f72921e08fac29dbf8b18b7f3a9b779e3902dc4dcfd",
-        "query_sha256": "e51b40d8265237f1024749ece72a10d9a5445ce47b6ab54643d94198d2421721",
-        "source_admission_scope_bound_not_recomputed": true,
-        "state": "PASS",
-        "task_binding": "EXPLICIT_PUBLIC_MOSAIC_LEGACY_ENGINE_BRIDGE",
-        "version": "narrative-native-public-case-binding/1"
-      },
-      "origin_refs": {
-        "masked": {
-          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/fullresume_iran_two_roles_m_v03_e51b40d8265237f1/origin_masked.json.gz",
-          "sha256": "96ff1dbd94a867975a9084e867a6aa9d5773f10a9f3c0897f99711fd4dbd0429"
-        }
-      },
-      "presentation_caveats": [],
-      "presentation_title": "Opposition leaders and their organizations",
-      "query_kind": "source_derived",
-      "query_version": null,
-      "reference_answer_kind": null,
-      "reporting_profile": {
-        "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
-        "native_configuration": {
-          "completed_drafts_per_reading": 24,
-          "construction_pages": 16,
-          "method": "current_hierarchy",
-          "retrieval_document_budget": 40,
-          "retrieval_passage_budget": 80,
-          "source_view_policy": {
-            "cable_classification": "CONFIDENTIAL",
-            "cable_document_wide_handling_veto": true,
-            "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
-            "cib_source_document": "EARLIER_OR_BOTH_ONLY",
-            "cutoff_role": "source_document_date",
-            "date_relation": "<=",
-            "id": "source_day_inclusive",
-            "later_or_secret_version_admitted": false,
-            "source_dates_or_document_ids_rewritten": false,
-            "version": "trusted-corpus-source-view/1"
-          },
-          "terminal_ranking": "evidence_fit_v3",
-          "top_k": 5
-        },
-        "native_version": "narrative-local-execution/3",
-        "original_native_unchanged": true,
-        "version": "analyst-native-display/1"
-      },
-      "resource_binding": {
-        "corpus": "iran",
-        "graph_id": "graph_d56668bc40bce616",
-        "hierarchy_id": "hierarchy_abd502047c8824ae",
-        "index_sha256": "2c32af1c71e5b33a6da1648794e6bc1a65f449a918758f8a025c8b2d8ea47c45",
-        "registry_sha256": "d5e309bd31a6227efad87de20181598f6a288b518af7e7a71052dfc086e79ca7",
-        "resource_id": "graph_d56668bc40bce616",
-        "source_status": "INCUMBENT_NOT_MIGRATED"
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
       },
       "selected_additional": false,
       "selected_bench": false,
@@ -1774,16 +1918,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/47596eea3653833aba3dcc6851b0ea1ee0998dfefbe8b4b2ee65303fc8c211ae/condition.json.gz",
-            "sha256": "576da1976c4f9bd7791eeb52871e39cd448daad0014aec74cbf110322309f171"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/iran/runs/064db89b94c63d18a210e5abe90d1f6a16ad01016e9494af1affd46568460aa5/condition.json.gz",
+            "sha256": "a94ddfdf21fa0f0ad51957391c9658c18bc96054d43cb66de5d1517114c23ac3"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/47596eea3653833aba3dcc6851b0ea1ee0998dfefbe8b4b2ee65303fc8c211ae/native.json.gz",
-            "sha256": "e538c645c3460de18bf5c42a0f28cabb76fbcdad278f958fac553a79f1b930f4"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/iran/runs/064db89b94c63d18a210e5abe90d1f6a16ad01016e9494af1affd46568460aa5/native.json.gz",
+            "sha256": "effe1feed7a6c9d61a9dc58c5efba7d31dea8f15678fbe27efa653f0c57cd840"
           },
-          "run_id": "narrative_381ebb5be57dd9b94f1c51b4",
+          "run_id": "narrative_52e64300e05c5d57e3f64e7a",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -1798,8 +1942,8 @@
           },
           "trace_refs": {
             "next_reading_97598a5d5d37d881ce6f4c78": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/47596eea3653833aba3dcc6851b0ea1ee0998dfefbe8b4b2ee65303fc8c211ae/trace_next_reading_97598a5d5d37d881ce6f4c78.json.gz",
-              "sha256": "95dbd22d3dfca6e62261f2dace85ae6f9d1105c42fa75ceb78fd0f3c64205a70"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/iran/runs/064db89b94c63d18a210e5abe90d1f6a16ad01016e9494af1affd46568460aa5/trace_next_reading_97598a5d5d37d881ce6f4c78.json.gz",
+              "sha256": "d02418ee0c2edafdb3e8c95216554cf5a6f4ad1dba9e28c71bcfe24ab9b200e2"
             }
           }
         }
@@ -1810,9 +1954,9 @@
           "case_id": "source_window_9c77b0239a74f169bcf84785",
           "config": "llm_readings",
           "default_reading_id": "next_reading_97598a5d5d37d881ce6f4c78",
-          "gate_sha256": "1c091a168eba11cbd9d2523517ec6801170b63d67c9bf17b946cc13108348ff9",
-          "native_checksum": "9929ea0a54ec4d3ca27c8a884154791e67307d341455750f6dc476c815cfda5d",
-          "native_run_id": "narrative_381ebb5be57dd9b94f1c51b4",
+          "gate_sha256": "81cd00e2e728ab966ea754d39fafa00cc5fedfecff60edbe0fe6bd6681f0ce4b",
+          "native_checksum": "7c3d737dadb22f38ecdf74bf5f416ca7e9d7c9a5e86f40771223637f4db24d28",
+          "native_run_id": "narrative_52e64300e05c5d57e3f64e7a",
           "overall_status": "exploratory_contextual",
           "query_sha256": "9c77b0239a74f169bcf847859cb4095a6f890f3ccf0f6a44f9cdca54cb6eb042",
           "reading_order": [
@@ -1834,7 +1978,11 @@
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "iran_transition_authority",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -1849,12 +1997,12 @@
         "issues": [],
         "native_case_sha256": "18996d7e7ab56f1099ecbe8375fd4fe171ee55af1646220ce5703b99682ecec9",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/47596eea3653833aba3dcc6851b0ea1ee0998dfefbe8b4b2ee65303fc8c211ae/native.json.gz",
-          "sha256": "e538c645c3460de18bf5c42a0f28cabb76fbcdad278f958fac553a79f1b930f4"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/iran/runs/064db89b94c63d18a210e5abe90d1f6a16ad01016e9494af1affd46568460aa5/native.json.gz",
+          "sha256": "effe1feed7a6c9d61a9dc58c5efba7d31dea8f15678fbe27efa653f0c57cd840"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "18996d7e7ab56f1099ecbe8375fd4fe171ee55af1646220ce5703b99682ecec9",
-        "native_result_checksum": "9929ea0a54ec4d3ca27c8a884154791e67307d341455750f6dc476c815cfda5d",
+        "native_result_checksum": "7c3d737dadb22f38ecdf74bf5f416ca7e9d7c9a5e86f40771223637f4db24d28",
         "public_case_sha256": "18996d7e7ab56f1099ecbe8375fd4fe171ee55af1646220ce5703b99682ecec9",
         "query_sha256": "9c77b0239a74f169bcf847859cb4095a6f890f3ccf0f6a44f9cdca54cb6eb042",
         "source_admission_scope_bound_not_recomputed": true,
@@ -1862,6 +2010,7 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "phase/release_finish_20261121/publication_final_update_v02/cases/source_window_9c77b0239a74f169bcf84785/origin_masked.json.gz",
@@ -1872,6 +2021,14 @@
           "sha256": "04bc99336447b5de9a3b7dadcd3d5ba51ab197e41926412c72520a920cdf5930"
         }
       },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/47596eea3653833aba3dcc6851b0ea1ee0998dfefbe8b4b2ee65303fc8c211ae/native.json.gz",
+        "sha256": "e538c645c3460de18bf5c42a0f28cabb76fbcdad278f958fac553a79f1b930f4"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/iran/runs/064db89b94c63d18a210e5abe90d1f6a16ad01016e9494af1affd46568460aa5/plan_rebind.json",
+        "sha256": "adbe2df9c8faf7f21f0977cab418f1bf3cbb4ab8205d5ac515c9f0c3cb6d44c3"
+      },
       "presentation_caveats": [],
       "presentation_title": "Government, committees and political influence",
       "query_kind": "synthetic_source_deletion",
@@ -1879,7 +2036,7 @@
       "reference_answer_kind": null,
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -1924,18 +2081,22 @@
         "resource_id": "graph_d56668bc40bce616",
         "source_status": "INCUMBENT_NOT_MIGRATED"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": false,
       "selected_bench": false,
       "selected_demo": true
     },
     {
       "case": {
-        "case_id": "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
+        "case_id": "resume3_vn_mr3_eastern_attacks_h_fefb4219a9c492b1",
         "corpus": "vietnam",
-        "date": "1973-06-28",
-        "document_id": "1973SAIGON11664",
+        "date": "1975-03-19",
+        "document_id": "1975SAIGON03129",
         "focal_marker": "",
-        "query": "COL HOANG DUC NINH was the 44 TH Special Tactical Zone commander.",
+        "query": "The NVA mounted stiff attacks in the eastern sections of MR-3.",
         "task": "hypothesis"
       },
       "collection": "starter",
@@ -1943,16 +2104,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/762dac1aa9829d64e0d81c62471844581fe7feaae07223284639f6b4507419b7/condition.json.gz",
-            "sha256": "651d97beaa33388193f177732fd01cf08a1afff8579697110a907bc990a85381"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/d6c0a34e69eef608fa0e9b7823a491c20b5ced328b90cd1bfd50bddd3b1dbe01/condition.json.gz",
+            "sha256": "5da8b7f34cffe2eb662a6b5a5b501120da7a3ca4be098706a324be6bdc0c6869"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/762dac1aa9829d64e0d81c62471844581fe7feaae07223284639f6b4507419b7/native.json.gz",
-            "sha256": "b223ec3485234958ed3f5a72f4930bd9063622e528a771583d28580c393d6eb6"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/d6c0a34e69eef608fa0e9b7823a491c20b5ced328b90cd1bfd50bddd3b1dbe01/native.json.gz",
+            "sha256": "0b2647fe676570fcfd9c8c70b18023b66f9ab9d992007d4016576bf5a8e8b7e9"
           },
-          "run_id": "narrative_967c31aacd496953817fb27e",
+          "run_id": "narrative_3335781f39f3f8896beec267",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -1967,8 +2128,8 @@
           },
           "trace_refs": {
             "": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/762dac1aa9829d64e0d81c62471844581fe7feaae07223284639f6b4507419b7/trace_assertions.json.gz",
-              "sha256": "9876987ca33f063451a4e918e909f3a960acf7aab4b1082538542f1bc6e96869"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/d6c0a34e69eef608fa0e9b7823a491c20b5ced328b90cd1bfd50bddd3b1dbe01/trace_assertions.json.gz",
+              "sha256": "14347e1e82161cec4a260fc73658c7b502f8c149a0ea32329078ecd575ac7301"
             }
           }
         }
@@ -1976,7 +2137,7 @@
       "current_resource_execution": true,
       "decision_summary_by_arm": {
         "llm_readings": {
-          "case_id": "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
+          "case_id": "resume3_vn_mr3_eastern_attacks_h_fefb4219a9c492b1",
           "config": "llm_readings",
           "counts": {
             "conflict": 0,
@@ -1988,16 +2149,20 @@
             "supported": 1,
             "unresolved": 0
           },
-          "gate_sha256": "9f37ef05366186e96df2016cc62dfcd04e80f21033f46786b2bbe86823f33b6d",
-          "native_checksum": "9568cdbc30df7961ea99efca9340fc2d7e5bceeca9cc52ab7bcb0231aa389ad0",
-          "native_run_id": "narrative_967c31aacd496953817fb27e",
+          "gate_sha256": "a3d76a5e6eb70ab2ab29a27afac94357ad898fd7d11407d46cc6638c8d6f5c54",
+          "native_checksum": "0e25216f554fb2b2fe9ebfaebb1a05b880145c0e11a555f0d141ea292de5dfee",
+          "native_run_id": "narrative_3335781f39f3f8896beec267",
           "overall_status": "evidence_backed_suggestion",
-          "query_sha256": "e5ab2f5602f75839b8fb641eada51e540865e5a7750a795c50b82886058e7a35",
+          "query_sha256": "fefb4219a9c492b13feb41ac79472a32339f167dc69b5b6c924947eb19736df0",
           "task": "hypothesis",
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "vietnam_delta_command",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -2010,40 +2175,42 @@
           "focal_marker"
         ],
         "issues": [],
-        "native_case_sha256": "26ffcbf168197ab202dbf1798d887ef9b0980987b18d968b886b89c5a118df23",
+        "native_case_sha256": "b16d0730d16d6dfce1ae0da9676171fad8188af4dfde1f47fbc6c6311d2f750b",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/762dac1aa9829d64e0d81c62471844581fe7feaae07223284639f6b4507419b7/native.json.gz",
-          "sha256": "b223ec3485234958ed3f5a72f4930bd9063622e528a771583d28580c393d6eb6"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/d6c0a34e69eef608fa0e9b7823a491c20b5ced328b90cd1bfd50bddd3b1dbe01/native.json.gz",
+          "sha256": "0b2647fe676570fcfd9c8c70b18023b66f9ab9d992007d4016576bf5a8e8b7e9"
         },
         "native_packet_modified": false,
-        "native_public_case_sha256": "26ffcbf168197ab202dbf1798d887ef9b0980987b18d968b886b89c5a118df23",
-        "native_result_checksum": "9568cdbc30df7961ea99efca9340fc2d7e5bceeca9cc52ab7bcb0231aa389ad0",
-        "public_case_sha256": "26ffcbf168197ab202dbf1798d887ef9b0980987b18d968b886b89c5a118df23",
-        "query_sha256": "e5ab2f5602f75839b8fb641eada51e540865e5a7750a795c50b82886058e7a35",
+        "native_public_case_sha256": "b16d0730d16d6dfce1ae0da9676171fad8188af4dfde1f47fbc6c6311d2f750b",
+        "native_result_checksum": "0e25216f554fb2b2fe9ebfaebb1a05b880145c0e11a555f0d141ea292de5dfee",
+        "public_case_sha256": "b16d0730d16d6dfce1ae0da9676171fad8188af4dfde1f47fbc6c6311d2f750b",
+        "query_sha256": "fefb4219a9c492b13feb41ac79472a32339f167dc69b5b6c924947eb19736df0",
         "source_admission_scope_bound_not_recomputed": true,
         "state": "PASS",
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
-          "path": "phase/release_finish_20261121/publication_final_update_v02/cases/releasefinish_vn_command_h_v02_6ad030fa5a105fa2/origin_masked.json.gz",
-          "sha256": "c866b59665863cf4704d5ae2d616db237dd44e65b95b98cce3bfd1bb8dea6f2a"
+          "path": "phase/analyst_release_20261123/vn_cib_resume/pass03/trials/mr3_eastern_attacks_h/origin_masked.json.gz",
+          "sha256": "acfc47ed92f3f75ae49de7bd73f5c33671c340bdc5a35eb325e7160baa87c2f2"
         }
       },
-      "presentation_caveats": [
-        {
-          "text": "Source-qualified historical role ascription only; not a claim of tenure on June 28 or of any action.",
-          "title": "Historical Role"
-        }
-      ],
-      "presentation_title": "Ninh's 44 TH Special Tactical Zone command role",
-      "query_kind": "source_derived",
-      "query_version": null,
-      "reference_answer_kind": null,
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/vn_cib_resume/pass03/trials/mr3_eastern_attacks_h/native.json.gz",
+        "sha256": "fe0eed77b8b06eaddec968886e2b666b91b7d4296df9b7588dc00d9a448faa6c"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/d6c0a34e69eef608fa0e9b7823a491c20b5ced328b90cd1bfd50bddd3b1dbe01/plan_rebind.json",
+        "sha256": "5524f82fb758273aa8d40e297045b54ddeb94ca0209315e8012c41ba01e6a608"
+      },
+      "presentation_caveats": [],
+      "presentation_title": "NVA Attacks in Eastern Military Region 3",
+      "query_kind": "source_derived_proposition",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -2097,18 +2264,22 @@
         "resource_id": "graph_bd607c32ec72d106",
         "source_status": "INCUMBENT_NOT_MIGRATED"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": false,
       "selected_bench": false,
       "selected_demo": true
     },
     {
       "case": {
-        "case_id": "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+        "case_id": "resume5_vn_two_facts_m_9435a3298b1c9a70",
         "corpus": "vietnam",
-        "date": "1973-05-17",
-        "document_id": "1973CANTH00325",
+        "date": "1975-03-19",
+        "document_id": "1975SAIGON03129",
         "focal_marker": "",
-        "query": "MGEN NGUYEN VINH NGHI is identified as MR IV commander. MGEN TRAN BA DI is identified as 9 TH Division commander.",
+        "query": "The NVA mounted stiff attacks in the eastern sections of MR-3, and the Delta experienced the highest level of activity since the ceasefire.",
         "task": "mosaic"
       },
       "collection": "starter",
@@ -2116,16 +2287,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/70180eb7c603e5006363ad325f3ec206f88e8d7234b9cbdbad850f34adadd205/condition.json.gz",
-            "sha256": "edeb7e2c49a9ad0d2fe2aaff79b81830f12672df98cedd7ed7d6c3baabf83fca"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/bc66e74fedef9e5c19416d2425537700ae37658e2a7ea87d7321c5d5c354453a/condition.json.gz",
+            "sha256": "1d99d80b8ecde2d8269d845719cbd82381f81f6cbfb530c2a70e0824761b1f1d"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/70180eb7c603e5006363ad325f3ec206f88e8d7234b9cbdbad850f34adadd205/native.json.gz",
-            "sha256": "a491997ed321ad04735e90e1a4f73ed7b155f125f131f40a2f3078f0e7bdad61"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/bc66e74fedef9e5c19416d2425537700ae37658e2a7ea87d7321c5d5c354453a/native.json.gz",
+            "sha256": "1dd4b16fec727aef60d5509805d89a49e197eb25ab960d7a2293f0f066266f1f"
           },
-          "run_id": "narrative_b940610b29f61f79af29d46e",
+          "run_id": "narrative_6bf2fb3f3d00d7ce4065cc99",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -2140,8 +2311,8 @@
           },
           "trace_refs": {
             "": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/70180eb7c603e5006363ad325f3ec206f88e8d7234b9cbdbad850f34adadd205/trace_assertions.json.gz",
-              "sha256": "908476197cdd67bd5ead7f7eed30bb1c1b5df97c3c94462a1ad03fe3dac66071"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/bc66e74fedef9e5c19416d2425537700ae37658e2a7ea87d7321c5d5c354453a/trace_assertions.json.gz",
+              "sha256": "6ac42ca9c344083034cc93f2dee4248c49e67dc83ee3153e623afbc644b5436a"
             }
           }
         }
@@ -2149,7 +2320,7 @@
       "current_resource_execution": true,
       "decision_summary_by_arm": {
         "llm_readings": {
-          "case_id": "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+          "case_id": "resume5_vn_two_facts_m_9435a3298b1c9a70",
           "config": "llm_readings",
           "counts": {
             "conflict": 0,
@@ -2158,19 +2329,23 @@
             "opposed": 0,
             "partial": 0,
             "required": 2,
-            "supported": 2,
-            "unresolved": 0
+            "supported": 1,
+            "unresolved": 1
           },
-          "gate_sha256": "181f251aa33d6ed9ec81316d06e0a96075236e26276a1067f03696718e1e5d82",
-          "native_checksum": "65031dbc6df133afb8376592b93f068670f73c307ab711b0459d7b411adfe224",
-          "native_run_id": "narrative_b940610b29f61f79af29d46e",
-          "overall_status": "evidence_backed_suggestion",
-          "query_sha256": "a7a37cb69a0f450535d3e750dcb77111155419c5f3fe8e2e870e74a0cc774488",
+          "gate_sha256": "76e806ab587a557f4d5b5299229ee1409ec1a7d464b96405bf8a5f2a3e56bec9",
+          "native_checksum": "094343acbe1708db9f17cf926ed25c9d8ac3d4c538db3d2eedcbd1f29aff56bb",
+          "native_run_id": "narrative_6bf2fb3f3d00d7ce4065cc99",
+          "overall_status": "partial_grounding",
+          "query_sha256": "9435a3298b1c9a7070e94fd05bd11a3c6648bff3d43b9c71968ea71bd60c5313",
           "task": "mosaic",
           "version": "workbench-decision-summary/1"
         }
       },
       "exact_saved_plan_replication": true,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "vietnam_delta_command",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -2183,35 +2358,42 @@
           "focal_marker"
         ],
         "issues": [],
-        "native_case_sha256": "e7c3a418f84bee79535590a6c7f7d3aaab5a93dd2e51c9c51c03b403bbfea9d6",
+        "native_case_sha256": "46c5213e54b8a09928337aa5da42f5a6147ff957e952e20883344b7f9cbf496e",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/70180eb7c603e5006363ad325f3ec206f88e8d7234b9cbdbad850f34adadd205/native.json.gz",
-          "sha256": "a491997ed321ad04735e90e1a4f73ed7b155f125f131f40a2f3078f0e7bdad61"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/bc66e74fedef9e5c19416d2425537700ae37658e2a7ea87d7321c5d5c354453a/native.json.gz",
+          "sha256": "1dd4b16fec727aef60d5509805d89a49e197eb25ab960d7a2293f0f066266f1f"
         },
         "native_packet_modified": false,
-        "native_public_case_sha256": "1076614984adf3c3c6b12a4ab29947e005811d405fa12d37435570fd47abce72",
-        "native_result_checksum": "65031dbc6df133afb8376592b93f068670f73c307ab711b0459d7b411adfe224",
-        "public_case_sha256": "1076614984adf3c3c6b12a4ab29947e005811d405fa12d37435570fd47abce72",
-        "query_sha256": "a7a37cb69a0f450535d3e750dcb77111155419c5f3fe8e2e870e74a0cc774488",
+        "native_public_case_sha256": "f68535c20cb09dd57e1bf5fd83c9285a78103dbcd3fe5cce2b46e82399717080",
+        "native_result_checksum": "094343acbe1708db9f17cf926ed25c9d8ac3d4c538db3d2eedcbd1f29aff56bb",
+        "public_case_sha256": "f68535c20cb09dd57e1bf5fd83c9285a78103dbcd3fe5cce2b46e82399717080",
+        "query_sha256": "9435a3298b1c9a7070e94fd05bd11a3c6648bff3d43b9c71968ea71bd60c5313",
         "source_admission_scope_bound_not_recomputed": true,
         "state": "PASS",
         "task_binding": "EXPLICIT_PUBLIC_MOSAIC_LEGACY_ENGINE_BRIDGE",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
-          "path": "experiments/full_resume_20261120/publication_preview_v01/cases/fullresume_vietnam_command_m_a7a37cb69a0f4505/origin_masked.json.gz",
-          "sha256": "f7d1b9cd0995eaf4991e9b59501d8345bd852cc828f8e7bce79ccfd757dc952c"
+          "path": "phase/analyst_release_20261123/vn_cib_resume/pass05_freeze3/two_facts/origin_masked.json.gz",
+          "sha256": "768e17f067c3e6b1bff1b822bd74db52293a05424e770151e5e1d50c9f9194af"
         }
       },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/vn_cib_resume/pass05_freeze3/two_facts/native_attempt01/native.json.gz",
+        "sha256": "e9b31e8c1c275f0c4f1d225500f1ad1f797cf46f89ed313d130d0e7de5bd5259"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/bc66e74fedef9e5c19416d2425537700ae37658e2a7ea87d7321c5d5c354453a/plan_rebind.json",
+        "sha256": "13a546ca52c08eaf357b7cd150635c5356bba1fea007a018b877f056b688605a"
+      },
       "presentation_caveats": [],
-      "presentation_title": "Command appointments in the Mekong Delta",
-      "query_kind": "source_derived",
-      "query_version": null,
-      "reference_answer_kind": null,
+      "presentation_title": "NVA Attacks and Delta Activity",
+      "query_kind": "source_derived_proposition",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -2256,6 +2438,10 @@
         "resource_id": "graph_bd607c32ec72d106",
         "source_status": "INCUMBENT_NOT_MIGRATED"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": false,
       "selected_bench": false,
       "selected_demo": true
@@ -2275,16 +2461,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/4b45ee83c874ca9566c2cb35b309e5509570e6e5e5f33913568b50cae9065875/condition.json.gz",
-            "sha256": "f019092f87415a39ea5bfffc80a3a9788337fab1961dab4fe929bd32dbadce61"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/fd38c0b9be4f017f5a434563b8909a474cba951dbe494461f705c342eff35141/condition.json.gz",
+            "sha256": "230aa41d51a626e373bd1ed8bef86ad2e6bd094478dd1dbc7d1cf9853d857873"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/4b45ee83c874ca9566c2cb35b309e5509570e6e5e5f33913568b50cae9065875/native.json.gz",
-            "sha256": "fb466d997789528322cad8fce19a3df2b86211739f9a742105540c139438ffe7"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/fd38c0b9be4f017f5a434563b8909a474cba951dbe494461f705c342eff35141/native.json.gz",
+            "sha256": "2a6e7ce82c358b6216710f75681df408ebf98e21ff76230204b8978a119fe824"
           },
-          "run_id": "narrative_b9c6ce4c5e4fa01d18c4508a",
+          "run_id": "narrative_9812cd6aca2a45924480de73",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -2299,8 +2485,8 @@
           },
           "trace_refs": {
             "next_reading_8bf7d163a376fc320bf42bd0": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/4b45ee83c874ca9566c2cb35b309e5509570e6e5e5f33913568b50cae9065875/trace_next_reading_8bf7d163a376fc320bf42bd0.json.gz",
-              "sha256": "458206ed67ef38aee24c4b0e317c15a43bc9c38056ba8716d695603742106857"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/fd38c0b9be4f017f5a434563b8909a474cba951dbe494461f705c342eff35141/trace_next_reading_8bf7d163a376fc320bf42bd0.json.gz",
+              "sha256": "1a50009b9c98aaaa6aeaad0d5676135efec2c2ad35c8d522a5abfa14e459d2cb"
             }
           }
         }
@@ -2311,9 +2497,9 @@
           "case_id": "narrative_vietnam_a111c4d6f8af8b100825ae07",
           "config": "llm_readings",
           "default_reading_id": "next_reading_8bf7d163a376fc320bf42bd0",
-          "gate_sha256": "928c79b5378c7e320b4e96ad92dcae50a2eb2541894c3c4bfdf0c42f271b83a5",
-          "native_checksum": "4ac18ccd5ccb4fc91473ee970e019e5da65ef7e06cad1f0892d784ffdfa371ae",
-          "native_run_id": "narrative_b9c6ce4c5e4fa01d18c4508a",
+          "gate_sha256": "4872adde9d0c10aca5d67253598a07f9bfee43cc8f97baaf83b0f7f09b949f32",
+          "native_checksum": "4b8d463eddbed1ee057760c14322370b814dc4399215e38fcfa6bfd5780b61c0",
+          "native_run_id": "narrative_9812cd6aca2a45924480de73",
           "overall_status": "exploratory_contextual",
           "query_sha256": "c77b52274609cee2d86419b486bbb1c1021fa041a0499371aca774de04d3f0d7",
           "reading_order": [
@@ -2335,7 +2521,11 @@
           "version": "workbench-decision-summary/1"
         }
       },
-      "exact_saved_plan_replication": true,
+      "exact_saved_plan_replication": false,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "vietnam_delta_command",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -2350,12 +2540,12 @@
         "issues": [],
         "native_case_sha256": "242e94ebbf14f6044ab40bded2f0974a87093265a20a024142ddad3f012da769",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/4b45ee83c874ca9566c2cb35b309e5509570e6e5e5f33913568b50cae9065875/native.json.gz",
-          "sha256": "fb466d997789528322cad8fce19a3df2b86211739f9a742105540c139438ffe7"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/fd38c0b9be4f017f5a434563b8909a474cba951dbe494461f705c342eff35141/native.json.gz",
+          "sha256": "2a6e7ce82c358b6216710f75681df408ebf98e21ff76230204b8978a119fe824"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "242e94ebbf14f6044ab40bded2f0974a87093265a20a024142ddad3f012da769",
-        "native_result_checksum": "4ac18ccd5ccb4fc91473ee970e019e5da65ef7e06cad1f0892d784ffdfa371ae",
+        "native_result_checksum": "4b8d463eddbed1ee057760c14322370b814dc4399215e38fcfa6bfd5780b61c0",
         "public_case_sha256": "242e94ebbf14f6044ab40bded2f0974a87093265a20a024142ddad3f012da769",
         "query_sha256": "c77b52274609cee2d86419b486bbb1c1021fa041a0499371aca774de04d3f0d7",
         "source_admission_scope_bound_not_recomputed": true,
@@ -2363,6 +2553,7 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_vietnam_a111c4d6f8af8b100825ae07/origin_masked.json.gz",
@@ -2372,6 +2563,14 @@
           "path": "phase/release_finish_20261121/publication_final_update_v02/cases/narrative_vietnam_a111c4d6f8af8b100825ae07/origin_revealed.json.gz",
           "sha256": "d57b6f5db561c3f60a976beee23b40405b8539d55a98b0d5d322298db1cf636b"
         }
+      },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/4b45ee83c874ca9566c2cb35b309e5509570e6e5e5f33913568b50cae9065875/native.json.gz",
+        "sha256": "fb466d997789528322cad8fce19a3df2b86211739f9a742105540c139438ffe7"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/vietnam/runs/fd38c0b9be4f017f5a434563b8909a474cba951dbe494461f705c342eff35141/plan_rebind.json",
+        "sha256": "67b76778554e7606ede7bb4d2d432d07a29d82bddaf3bbed63378c39895f3c30"
       },
       "presentation_caveats": [
         {
@@ -2385,7 +2584,7 @@
       "reference_answer_kind": null,
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -2439,6 +2638,10 @@
         "resource_id": "graph_bd607c32ec72d106",
         "source_status": "INCUMBENT_NOT_MIGRATED"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": false,
       "selected_bench": false,
       "selected_demo": true
@@ -2458,16 +2661,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/8ef4b94fb2342d7cae63d070a44fc7390b2540200fdfcde7aa6bb2465d764cf7/condition.json.gz",
-            "sha256": "78edc56e6c76535af341e8e2f306e930de00cf5f4b843126493866fb6c34e8e0"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/4909fffd21f3ea0c59d3267d30e719d1b9c30fa3a55aea0948a4fc0cec132d07/condition.json.gz",
+            "sha256": "35ce9175b5f061dabb28ad46d22100d7a086e84a7e91fb23ef5b2058b9ede79d"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/8ef4b94fb2342d7cae63d070a44fc7390b2540200fdfcde7aa6bb2465d764cf7/native.json.gz",
-            "sha256": "06b5d218021dc7fcdc9892aec088ede8ff61ff05ab13151ffedaf338b0d7d9b8"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/4909fffd21f3ea0c59d3267d30e719d1b9c30fa3a55aea0948a4fc0cec132d07/native.json.gz",
+            "sha256": "05c3fd14a4fc0d04474493f4bdfdd7ff9e3feed9ff4520a32ed01b996e625828"
           },
-          "run_id": "narrative_8c5a02aa97b5256274f8ae49",
+          "run_id": "narrative_24a2dce580965b8fb9de8d01",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -2482,12 +2685,12 @@
           },
           "trace_refs": {
             "next_reading_4f2b1269713c2a4c58219620": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/8ef4b94fb2342d7cae63d070a44fc7390b2540200fdfcde7aa6bb2465d764cf7/trace_next_reading_4f2b1269713c2a4c58219620.json.gz",
-              "sha256": "172411d199df9f200071fcd4310b67d4dd59ff037dd527ff107074d66a38cb11"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/4909fffd21f3ea0c59d3267d30e719d1b9c30fa3a55aea0948a4fc0cec132d07/trace_next_reading_4f2b1269713c2a4c58219620.json.gz",
+              "sha256": "a50dea723df1bfed88167a8a44aab265af6d2c670403c426c41261b06cf6baf2"
             },
             "next_reading_aede031ae95a21376da53f69": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/8ef4b94fb2342d7cae63d070a44fc7390b2540200fdfcde7aa6bb2465d764cf7/trace_next_reading_aede031ae95a21376da53f69.json.gz",
-              "sha256": "c85b04e79523bc13e2bfaac942e8085f0769e8a8a2c5c1f0da94cd1dc7f51118"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/4909fffd21f3ea0c59d3267d30e719d1b9c30fa3a55aea0948a4fc0cec132d07/trace_next_reading_aede031ae95a21376da53f69.json.gz",
+              "sha256": "df4a224fde7b37424424dc864e1fa883d10b329bbe21447d3d6e7b4520b58e6d"
             }
           }
         }
@@ -2498,9 +2701,9 @@
           "case_id": "analyst_delegation_01_first_588eaa87728f94a6",
           "config": "llm_readings",
           "default_reading_id": "next_reading_4f2b1269713c2a4c58219620",
-          "gate_sha256": "cc892632052d651cc2e673096b74d9eb6d489d0c3c41a73884444535df1d26cf",
-          "native_checksum": "631fd08aeb2bff138396d86aa69728199a1ac1fc6f4494320795975f7e59358a",
-          "native_run_id": "narrative_8c5a02aa97b5256274f8ae49",
+          "gate_sha256": "82e07b04deed48e12e4c2c91d88bc1fb812830d0e6db1327b8c6080f4eb45b61",
+          "native_checksum": "7751a260916482d6f054843809015621e5c3ba03dbfa3ab4c78ac75006a06596",
+          "native_run_id": "narrative_24a2dce580965b8fb9de8d01",
           "overall_status": "exploratory_contextual",
           "query_sha256": "6163cde58f62ff7a615ef694f617cfba0051d68fd0d54c631f6f1287cedc7c73",
           "reading_order": [
@@ -2533,6 +2736,11 @@
           "version": "workbench-decision-summary/1"
         }
       },
+      "exact_saved_plan_replication": false,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_withheld_delegation",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -2547,12 +2755,12 @@
         "issues": [],
         "native_case_sha256": "9ba455bc3bd12a289ebe8cb1c45c707a794624fd054709aca323bc32285b90a7",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/8ef4b94fb2342d7cae63d070a44fc7390b2540200fdfcde7aa6bb2465d764cf7/native.json.gz",
-          "sha256": "06b5d218021dc7fcdc9892aec088ede8ff61ff05ab13151ffedaf338b0d7d9b8"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/4909fffd21f3ea0c59d3267d30e719d1b9c30fa3a55aea0948a4fc0cec132d07/native.json.gz",
+          "sha256": "05c3fd14a4fc0d04474493f4bdfdd7ff9e3feed9ff4520a32ed01b996e625828"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "9ba455bc3bd12a289ebe8cb1c45c707a794624fd054709aca323bc32285b90a7",
-        "native_result_checksum": "631fd08aeb2bff138396d86aa69728199a1ac1fc6f4494320795975f7e59358a",
+        "native_result_checksum": "7751a260916482d6f054843809015621e5c3ba03dbfa3ab4c78ac75006a06596",
         "public_case_sha256": "9ba455bc3bd12a289ebe8cb1c45c707a794624fd054709aca323bc32285b90a7",
         "query_sha256": "6163cde58f62ff7a615ef694f617cfba0051d68fd0d54c631f6f1287cedc7c73",
         "source_admission_scope_bound_not_recomputed": true,
@@ -2560,11 +2768,20 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "phase/analyst_release_20261123/delegation/origin_artifacts/analyst_delegation_01_first_588eaa87728f94a6/origin_masked.json.gz",
           "sha256": "6bb3dd0d4855d013e360b6a0d9e1d1f694c35453286a82ef5857da36552ac524"
         }
+      },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/8ef4b94fb2342d7cae63d070a44fc7390b2540200fdfcde7aa6bb2465d764cf7/native.json.gz",
+        "sha256": "06b5d218021dc7fcdc9892aec088ede8ff61ff05ab13151ffedaf338b0d7d9b8"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/4909fffd21f3ea0c59d3267d30e719d1b9c30fa3a55aea0948a4fc0cec132d07/plan_rebind.json",
+        "sha256": "b09e2a2715c1e6b2083891b4eea278026a63085b2bb91bf300ce19cfd1063d55"
       },
       "presentation_caveats": [],
       "presentation_title": "Visiting delegation",
@@ -2572,7 +2789,7 @@
       "reference_answer_kind": "unknown_still_withheld",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -2613,6 +2830,10 @@
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": false,
       "selected_bench": false,
       "selected_demo": false,
@@ -2634,16 +2855,16 @@
         "llm_readings": {
           "compact_flow_refs": {},
           "condition_ref": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5b6204d908d398c59d11bf5cc5920eeba2db167d187084a543ce49be907168f4/condition.json.gz",
-            "sha256": "ad8d4f9272e566552c3aff4f49e7df209f8f61b1204a288d8754d5bbb6278520"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/3df84807240cec02d5801a0248e0cefcc8770bb276c2fce3032454e1ddfa3365/condition.json.gz",
+            "sha256": "85d6e29333914f3b64c55ab3111f280ade5bb10495063d7bdc5606df1da1bcd7"
           },
           "config": "llm_readings",
           "flow_refs": {},
           "native_checkpoint": {
-            "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5b6204d908d398c59d11bf5cc5920eeba2db167d187084a543ce49be907168f4/native.json.gz",
-            "sha256": "d476c60cd374efb942eeacc9f2679c8faf6b9a8db4ea3dc4598116f543cd74f8"
+            "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/3df84807240cec02d5801a0248e0cefcc8770bb276c2fce3032454e1ddfa3365/native.json.gz",
+            "sha256": "bb87117f0f0ebe9c1c50509ef0052c78296e772d79e32e8ccad5f505043efcc7"
           },
-          "run_id": "narrative_191b2b130b29816272e0c8e8",
+          "run_id": "narrative_1b2827286be6f989a630b5fa",
           "source_view_policy": {
             "cable_classification": "CONFIDENTIAL",
             "cable_document_wide_handling_veto": true,
@@ -2658,12 +2879,12 @@
           },
           "trace_refs": {
             "next_reading_02cf0649885913192a7b739a": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5b6204d908d398c59d11bf5cc5920eeba2db167d187084a543ce49be907168f4/trace_next_reading_02cf0649885913192a7b739a.json.gz",
-              "sha256": "36f60cb6852689ff50b4cb351562f47f3eb06a9eed5c1022580f0d546a10b8fe"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/3df84807240cec02d5801a0248e0cefcc8770bb276c2fce3032454e1ddfa3365/trace_next_reading_02cf0649885913192a7b739a.json.gz",
+              "sha256": "04832e2924bcfc945b0c4e2cc3e0a0a759b7c125c3621728c732b3b7d39978a0"
             },
             "next_reading_837895376298916855c4dcb0": {
-              "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5b6204d908d398c59d11bf5cc5920eeba2db167d187084a543ce49be907168f4/trace_next_reading_837895376298916855c4dcb0.json.gz",
-              "sha256": "9dbe5ef4b76c11a3cc8853b46974b712baffa74fc5778f2958289fd7ff4f6063"
+              "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/3df84807240cec02d5801a0248e0cefcc8770bb276c2fce3032454e1ddfa3365/trace_next_reading_837895376298916855c4dcb0.json.gz",
+              "sha256": "a97a1c95efb888146244fd330d6569884e616707f284c5c5f6a2dd0323b323b2"
             }
           }
         }
@@ -2674,9 +2895,9 @@
           "case_id": "analyst_delegation_01_last_fe5df6ceca0d45e8",
           "config": "llm_readings",
           "default_reading_id": "next_reading_837895376298916855c4dcb0",
-          "gate_sha256": "c3f497ded9368548e109b84427d4ae80aabe93e53a63e6226747fb40db2402e1",
-          "native_checksum": "52588a4d4e9d52974822b2b11235daf9bb62cfe3b09067e164a296ef45407c83",
-          "native_run_id": "narrative_191b2b130b29816272e0c8e8",
+          "gate_sha256": "168c322a1ea143253e4826988643a4f37dbf2fed5bdf53df6ec3bed4dc531c88",
+          "native_checksum": "04f29c9c1933fc99973fe4160a5545b9e83cb74e08187d0bc2616e625921e6c0",
+          "native_run_id": "narrative_1b2827286be6f989a630b5fa",
           "overall_status": "exploratory_contextual",
           "query_sha256": "89b02820fedf608147d2c0e8e82e039718809039c43acdc9ab064137197412ba",
           "reading_order": [
@@ -2709,6 +2930,11 @@
           "version": "workbench-decision-summary/1"
         }
       },
+      "exact_saved_plan_replication": false,
+      "frozen_backend": {
+        "path": "phase/analyst_release_20261123/backend/BACKEND_FROZEN_ANALYSIS4.json",
+        "sha256": "27ef233ea646626ff17717fc466ae9bbb82093650ab4ead47e96a5847e8afd33"
+      },
       "narrative_id": "cib_withheld_delegation",
       "native_public_case_binding": {
         "checked_public_fields": [
@@ -2723,12 +2949,12 @@
         "issues": [],
         "native_case_sha256": "02a262bd7143019238e057c734646b790c030b34bc9840c04b3e53c6a96215cd",
         "native_checkpoint": {
-          "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5b6204d908d398c59d11bf5cc5920eeba2db167d187084a543ce49be907168f4/native.json.gz",
-          "sha256": "d476c60cd374efb942eeacc9f2679c8faf6b9a8db4ea3dc4598116f543cd74f8"
+          "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/3df84807240cec02d5801a0248e0cefcc8770bb276c2fce3032454e1ddfa3365/native.json.gz",
+          "sha256": "bb87117f0f0ebe9c1c50509ef0052c78296e772d79e32e8ccad5f505043efcc7"
         },
         "native_packet_modified": false,
         "native_public_case_sha256": "02a262bd7143019238e057c734646b790c030b34bc9840c04b3e53c6a96215cd",
-        "native_result_checksum": "52588a4d4e9d52974822b2b11235daf9bb62cfe3b09067e164a296ef45407c83",
+        "native_result_checksum": "04f29c9c1933fc99973fe4160a5545b9e83cb74e08187d0bc2616e625921e6c0",
         "public_case_sha256": "02a262bd7143019238e057c734646b790c030b34bc9840c04b3e53c6a96215cd",
         "query_sha256": "89b02820fedf608147d2c0e8e82e039718809039c43acdc9ab064137197412ba",
         "source_admission_scope_bound_not_recomputed": true,
@@ -2736,11 +2962,20 @@
         "task_binding": "EXACT_SAME_PUBLIC_TASK",
         "version": "narrative-native-public-case-binding/1"
       },
+      "new_full_native_execution": true,
       "origin_refs": {
         "masked": {
           "path": "phase/analyst_release_20261123/delegation/origin_artifacts/analyst_delegation_01_last_fe5df6ceca0d45e8/origin_masked.json.gz",
           "sha256": "dc7ce20523fab6b376ceb8b5bdd33c54f2d97655b5821494a7c9fbc55a299604"
         }
+      },
+      "parent_native_ref": {
+        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5b6204d908d398c59d11bf5cc5920eeba2db167d187084a543ce49be907168f4/native.json.gz",
+        "sha256": "d476c60cd374efb942eeacc9f2679c8faf6b9a8db4ea3dc4598116f543cd74f8"
+      },
+      "plan_rebind_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/3df84807240cec02d5801a0248e0cefcc8770bb276c2fce3032454e1ddfa3365/plan_rebind.json",
+        "sha256": "a5d240be421a0e235e6e6fd73f2edb821d38f47e984c94368ded1ff6dd3795ea"
       },
       "presentation_caveats": [],
       "presentation_title": "Visiting delegation",
@@ -2748,7 +2983,7 @@
       "reference_answer_kind": "unknown_still_withheld",
       "reporting_profile": {
         "graph_inspection_is_postrun": true,
-        "native_code_epoch_sha256": "4e21b4d26c1f3f8c1b196ad3139471276e4ca5338dfa71acd37835e95f27de2a",
+        "native_code_epoch_sha256": "2a214e1f7e89cc27d0139580702969084b20c8b7e52e74d860db2bab5b15c7e7",
         "native_configuration": {
           "completed_drafts_per_reading": 64,
           "construction_pages": 32,
@@ -2789,6 +3024,10 @@
         "resource_id": "cib_resource_623c60e1e128944377f0",
         "source_status": "CURRENT_NATIVE_RESOURCE_EXPLICIT"
       },
+      "runner_contract_ref": {
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/runner_contract.json",
+        "sha256": "da2b4c79d68e7b27391b0eee4c92cf14a29836abcd678d8f88ab9d1f3b0e5dfc"
+      },
       "selected_additional": false,
       "selected_bench": false,
       "selected_demo": false,
@@ -2818,18 +3057,18 @@
       "corpus": "cib",
       "id": "cib_salvador_authority",
       "narrative_id": "cib_salvador_authority",
-      "qualified_case_count": 3,
-      "status": "EXACT_CASE_REVIEWS_NOT_GLOBAL_PUBLICATION_CLEARANCE",
+      "qualified_case_count": 0,
+      "status": "SOURCE_BOUND_DEMONSTRATION_NOT_BENCHMARK",
       "title": "Political Organization and Military Concern",
-      "trio_qualified": true
+      "trio_qualified": false
     },
     {
       "collection": "starter",
       "corpus": "iran",
       "id": "iran_transition_authority",
       "narrative_id": "iran_transition_authority",
-      "qualified_case_count": 2,
-      "status": "EXACT_CASE_REVIEWS_NOT_GLOBAL_PUBLICATION_CLEARANCE",
+      "qualified_case_count": 0,
+      "status": "SOURCE_BOUND_DEMONSTRATION_NOT_BENCHMARK",
       "title": "Political Networks and Competing Authority",
       "trio_qualified": false
     },
@@ -2838,8 +3077,8 @@
       "corpus": "vietnam",
       "id": "vietnam_delta_command",
       "narrative_id": "vietnam_delta_command",
-      "qualified_case_count": 2,
-      "status": "EXACT_CASE_REVIEWS_NOT_GLOBAL_PUBLICATION_CLEARANCE",
+      "qualified_case_count": 0,
+      "status": "SOURCE_BOUND_DEMONSTRATION_NOT_BENCHMARK",
       "title": "Command Relationships and Reported Personnel Disputes",
       "trio_qualified": false
     }
@@ -2948,13 +3187,13 @@
         "analyst_delegation_01_last_fe5df6ceca0d45e8"
       ],
       "iran_transition_authority": [
-        "iran_factual_h_9b61144cb419baafa343",
-        "fullresume_iran_two_roles_m_v03_e51b40d8265237f1",
+        "iran_majlis_approval_h_7d166b5a0b68",
+        "iran_resume_m_tehrani_340a479d6fa4",
         "source_window_9c77b0239a74f169bcf84785"
       ],
       "vietnam_delta_command": [
-        "releasefinish_vn_command_h_v02_6ad030fa5a105fa2",
-        "fullresume_vietnam_command_m_a7a37cb69a0f4505",
+        "resume3_vn_mr3_eastern_attacks_h_fefb4219a9c492b1",
+        "resume5_vn_two_facts_m_9435a3298b1c9a70",
         "narrative_vietnam_a111c4d6f8af8b100825ae07"
       ]
     },
@@ -2965,9 +3204,9 @@
   "quality_blockers": [],
   "release_profile": "SOURCE_DAY_INCLUSIVE_ATOMIC_RETRIEVAL_TERMINAL_EVIDENCE_FIT",
   "release_scope": "Nine primary cases, five additional real redactions, two unknown-delegation inputs",
-  "run_id": "analyst_release_8a0b24b25492c5a87b162c33",
-  "selection_rule": "Original fourteen questions retained; delegation paragraph selection is an explicitly exploratory context experiment.",
-  "sha256": "6b553453de0febd77748725f8fbda890e4b6b7714ecaa0c4cb61630c526a18be",
+  "run_id": "analyst_resume_9a0b8889f93ee3f9718db26f",
+  "selection_rule": "Source-bound outcome-informed narrative curation; superseded cases and all native outputs retained.",
+  "sha256": "778fb41c958edf16ede9fbefa34fdb63791b92cc460e58483273c648449c993e",
   "showcase_ready": false,
   "status": "SAVED_NATIVE_EXPERIMENTS",
   "version": "narrative-workbench-publication/1"

@@ -3,16 +3,16 @@
     {
       "case_id": "analyst_delegation_01_first_588eaa87728f94a6",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/8ef4b94fb2342d7cae63d070a44fc7390b2540200fdfcde7aa6bb2465d764cf7/native.json.gz",
-        "sha256": "06b5d218021dc7fcdc9892aec088ede8ff61ff05ab13151ffedaf338b0d7d9b8"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/4909fffd21f3ea0c59d3267d30e719d1b9c30fa3a55aea0948a4fc0cec132d07/native.json.gz",
+        "sha256": "05c3fd14a4fc0d04474493f4bdfdd7ff9e3feed9ff4520a32ed01b996e625828"
       },
       "position": "first"
     },
     {
       "case_id": "analyst_delegation_01_last_fe5df6ceca0d45e8",
       "native_checkpoint": {
-        "path": "phase/analyst_release_20261123/backend/final_retry1/runs/5b6204d908d398c59d11bf5cc5920eeba2db167d187084a543ce49be907168f4/native.json.gz",
-        "sha256": "d476c60cd374efb942eeacc9f2679c8faf6b9a8db4ea3dc4598116f543cd74f8"
+        "path": "phase/analyst_release_20261123/iran_resume/uniform_epoch_v2/epochs/27ef233ea646626ff177/cib/runs/3df84807240cec02d5801a0248e0cefcc8770bb276c2fce3032454e1ddfa3365/native.json.gz",
+        "sha256": "bb87117f0f0ebe9c1c50509ef0052c78296e772d79e32e8ccad5f505043efcc7"
       },
       "position": "last"
     }
@@ -20,8 +20,8 @@
   "gold": null,
   "native_results_modified": false,
   "source_report_ref": {
-    "path": "phase/analyst_release_20261123/publication/analyst_release_8a0b24b25492c5a87b162c33/report.json",
-    "sha256": "fc3e6349ee0e84f3a8042781b7153891fe07654738c768ab552d8632a447ecd2"
+    "path": "phase/analyst_release_20261123/publication/analyst_resume_9a0b8889f93ee3f9718db26f/report.json",
+    "sha256": "273e3ed148ee798baf2822189cb25541e2ffb404215ea26197cb669d83a0e0c2"
   },
   "source_view_policy": {
     "cable_classification": "CONFIDENTIAL",

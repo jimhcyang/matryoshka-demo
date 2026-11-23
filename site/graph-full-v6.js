@@ -511,7 +511,7 @@ class GraphPanel {
     this.ringLegend.addEventListener('pointerenter',()=>clearTimeout(this.legendTimer));
     this.ringLegend.addEventListener('pointerleave',()=>this.hideRingLegendSoon());
     this.bind(); this.resize();
-    new ResizeObserver(()=>{const width=this.width,height=this.height;this.resize();if(width!==this.width||height!==this.height){this.fit();this.startOrbit();}}).observe(this.canvas.parentElement);
+    new ResizeObserver(()=>this.observeResize()).observe(this.canvas.parentElement);
     document.addEventListener('visibilitychange',()=>{if(!document.hidden){this.compactLayout();this.startOrbit();}});
     matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',()=>{if(guideReducedMotion()){this.compactLayout({immediate:true});this.stopOrbit();}else this.startOrbit();});
   }
@@ -529,8 +529,21 @@ class GraphPanel {
 
   resize() {
     const rect=this.canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2);
-    this.canvas.width=Math.max(1,Math.round(rect.width*dpr)); this.canvas.height=Math.max(1,Math.round(rect.height*dpr));
-    this.ctx.setTransform(dpr,0,0,dpr,0,0); this.width=rect.width; this.height=rect.height; this.dpr=dpr;
+    const width=Math.max(1,Math.round(rect.width*dpr)),height=Math.max(1,Math.round(rect.height*dpr));
+    // Assigning even an unchanged backing size clears the canvas. A repeated
+    // observer notification must not erase a settled, reduced-motion graph.
+    if(this.canvas.width!==width||this.canvas.height!==height||this.dpr!==dpr){
+      this.canvas.width=width;this.canvas.height=height;
+      this.ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    this.width=rect.width;this.height=rect.height;this.dpr=dpr;
+  }
+
+  observeResize() {
+    const width=this.width,height=this.height,dpr=this.dpr;
+    this.resize();
+    if(width!==this.width||height!==this.height){this.fit();this.startOrbit();}
+    else if(dpr!==this.dpr)this.draw();
   }
 
   setGraph(view) {

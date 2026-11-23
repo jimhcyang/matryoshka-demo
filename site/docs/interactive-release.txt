@@ -7,8 +7,17 @@ The active saved experiments admit eligible documents dated on or before the inp
 Facts And Retrieval
 The initial query-only model call extracts the visible input and splits it into facts. Redaction additionally has grammatical slot readings. Local search matches these facts to eligible source pages and source-grounded graph states; there is no whole-query lookup. Each displayed lookup identifies the fact, executed search and selected source it actually matched. A shared document does not prove that every fact matched.
 
+Combining Search Results
+BM25 ranks eligible pages separately for each factual search. Reciprocal rank fusion combines lists using weight/(60 + rank), with rank starting at 1. Within a redaction, searches serving the fact containing the selected blank form the focal group; other facts form the background group. The saved focal/background shares are applied to those groups, not to a known answer. A group absent from the input receives no allocation. Source-grounded node matches also seed graph navigation. The saved graph share combines the resulting page ranking with the lexical ranking through the same rank-fusion rule. These choices affect which evidence is inspected; they do not certify it.
+
+The Local Graph Calculation
+Navigation starts with normalized query-match weights p. At each iteration, x(next) = (1 - alpha)p + alpha P-transpose x; alpha = 0.85 means 15 percent restart and 85 percent transport. P is the eligible graph transition matrix. Each node divides its outgoing allocation equally between nonempty edge-kind and destination-type groups; within a group, source support determines the split. Membership links have unit weight. Communities, themes and domains add navigation states, not new historical claims. Semantic-node mass is shared among eligible source occurrences to rank pages. This deterministic calculation stops at a numerical error bound, not when an answer looks persuasive. Its parameters are engineering choices, not calibrated truth probabilities.
+
 Graph Navigation
 Facts to evidence shows retained source matches and their exact endpoints. Compact view hides facts without a retained connection; it does not discard evidence. Zoom and pan change the display only. View on KG navigates the existing corpus map, using actual source-backed connections and hierarchy membership. A post-run inspection path is not represented as the original search chronology or as a chain of historical entailment. Community membership is navigation, not evidence that an event occurred.
+
+Reading Cable Layout
+The ordinary structured matcher uses proper-name spellings already visible in the input to analyze matching uppercase source words. It does not supply a missing name or assert a new identity. A whitespace-only analysis view can repair grammar disrupted by line breaks; every lexical token must map back to the same original text span. If normalization would solely change an already recognized both-and coordination into a numeric qualifier, the complete original parse is retained after checking that the other lexical attributes agree. Source quotations, dates and character positions are retained. A nominal object complement can preserve a person and an office together in a parsed fact. These parsing controls do not relax negation, attribution, time or source eligibility.
 
 Evidence Accumulation
 All three tasks use the same document-deduplicated evidence calculation within each fact or candidate. A page at saved retrieval rank r has weight w(r) = 0.5 + 0.5/(1 + log2(r)); an unrecorded rank receives 0.5. Multiply that weight by the applicable recorded evidence fit. Within each unit and direction, keep the largest contribution per document, then sum distinct-document contributions. Support, opposition and context stay separate. Repeating a passage or citing another page of the same document does not create another contribution to that unit. Overall totals add fact-wise indices, not independent document votes: one document may address several different facts.
@@ -19,11 +28,14 @@ Final redaction ranking preserves evidence sufficiency first and source-owned fu
 Hypothesis And Mosaic Scores
 Each fact shows its support, opposition and context sums. Hypothesis net evidence is S - O; the signed sums remain visible so conflict is not hidden by cancellation. Mosaic also shows the fraction of applicable recorded criteria that passed. A complete source-owned certificate may establish a fact even with a numerical score below 1. Conversely, a large relevance or context score cannot establish it. These are deterministic evidence indices, not calibrated probabilities or cross-case confidence estimates. The logical decision gates are not relaxed to manufacture a supported answer.
 
+Scope Limitations
+The local matcher is not a general entailment oracle. Tests found cases where adjective-level either-or or neither-nor wording incorrectly received support for a narrower component. The layout fix does not repair those pre-existing scope errors. Selected positive examples are screened for dependence on that failure; other Live questions can still expose it. Inspect the full source wording, especially disjunction, attribution and temporal qualifications, rather than treating a support label or numerical score as independent verification.
+
 Inspecting Sources
 Click a quotation to open the full available transcription at its exact highlighted span. Highlight coordinates replay against the source text and hash; repeated words are not guessed. CIB offers both original PDF releases at recorded physical pages after the text. Click an input redaction to reveal a supplied reference, and click again to remask it. A still-withheld reference remains unknown. Reference reveals and later originals are inspection material, never model answer inputs.
 
 Live Analysis
-Live uses the same query-only planning, local evidence processing and final scoring contract, with a bounded interactive search: 16 documents, 32 passages, 8 construction pages and 12 completed drafts per reading. These limits can yield different results from the larger saved experiments. Leave the source document blank for an analyst-authored input. The date defaults to the last eligible corpus day; its displayed inclusive date is converted to an exclusive next-day engine boundary exactly once. A private authenticated backend holds the OpenAI key and enforces the spending limit. The static website contains no provider credential. The final digest cannot change the saved local decision. Completed public result envelopes can be reopened from the current browser tab without another model call; passwords and session tokens are not stored with them.
+Live uses the same query-only planning, local evidence processing and final scoring contract, with a bounded interactive search: 16 documents, 32 passages, 8 construction pages and 12 completed drafts per reading. These limits can yield different results from the larger saved experiments. Leave the source document blank for an analyst-authored input. The date defaults to the last eligible corpus day; its displayed inclusive date is converted to an exclusive next-day engine boundary exactly once. A private authenticated backend holds the OpenAI key and enforces the spending limit. The static website contains no provider credential. Live source handoffs remain inspectable; its corpus-map link is independent exploration, not a replay of an unsaved graph walk. The final digest cannot change the saved local decision. Completed public result envelopes can be reopened from the current browser tab without another model call; passwords and session tokens are not stored with them.
 
 Visiting Delegation: Context Comparison
 Five paragraph-window pairs were attempted for the two authentic still-withheld delegation slots. Nine inputs produced valid executions; the last input in the full five-paragraph pair did not pass the visible-text planning contract. The nine completed viable pools did not contain Swedish or Swedes. One shorter first-gap input nominated Swedish, but it did not clear the recorded construction checks. This is a diagnostic of the suggested spelling, not measured correctness: no historical answer key is available. The final workbench uses the preferred P1+P3+P4 context for both gaps, without the final Swedes paragraph. The earlier release of the 17 February 1959 origin is eligible; its later text is not retrieved evidence.
@@ -66,25 +78,25 @@ CIB / Why the Salvadoran military became concerned
 Input: The armed forces, which had been virtually paralyzed by disunity, appear to have been spurred to cooperation by increasingly bold Communist activity in recent weeks. Unrestricted Communist organizational activity among the [REDACTION] Salvadoran peasants and the visit to Cuba earlier this month of a group of Salvadoran extremists have particularly heightened the concern of the military.
 Local result: Ranked source-grounded suggestions. Candidates: 1. easily politically manipulated (2.12, evidence-backed); 2. poorer (0.03, contextual). Evidence source date: 1961-01-17.
 
-IRAN / Haeri's father and Khomeini: a source-ascribed teaching relationship
-Input: Haeri's father taught Khomeini.
-Local result: Supported by eligible evidence. Facts: Haeri's father taught Khomeini. - support. Evidence source date: 1979-06-01.
+IRAN / Parliament Approves Bakhtiar's Government
+Input: Majlis approved Bakhtiar's government.
+Local result: Supported by eligible evidence. Facts: Majlis approved Bakhtiar's government. - support. Evidence source date: 1979-02-06.
 
-IRAN / Opposition leaders and their organizations
-Input: Karim Sanjabi led the National Front, and Mohamad Derakhshesh was head of the Teachers Union.
-Local result: Evidence-backed mosaic. Facts: Karim Sanjabi led the National Front. - established; Mohamad Derakhshesh was head of the Teachers Union. - established. Evidence source date: 1979-01-19.
+IRAN / Tehrani Resigns and Challenges the Regency Council
+Input: Tehrani resigned from the Regency Council and stated that the Regency Council was illegal.
+Local result: partial reconstruction. Facts: Tehrani resigned from the Regency Council. - partial; Tehrani stated that the Regency Council was illegal. - insufficient. Evidence source date: 1979-01-25.
 
 IRAN / Government, committees and political influence
 Input: AS REVOLUTIONARIES, BAZARGAN AND HIS PEOPLE ARE BASICALLY CONSERVATIVES. AMONG BAZARGAN'S CLOSEST COWORKERS, [REDACTION] APPEARS THE MOST RADICAL, BUT THAT PROBABLY STEMS FROM THE ROLE HE IS PLAYING AS A BRIDGE BETWEEN THE GOVERNMENT AND THE COMMITTEES.
 Local result: Ranked source-grounded suggestions. Candidates: 1. YAZDI (0.27, contextual); 2. POL COUNSELOR (0.27, contextual); 3. AMBASSADOR (0.27, contextual); 4. MOHAMMAD REZA MAHDAVI-KANI (0.27, contextual); 5. BAZARGAN (0.27, contextual). Evidence source date: 1979-04-13.
 
-VIETNAM / Ninh's 44 TH Special Tactical Zone command role
-Input: COL HOANG DUC NINH was the 44 TH Special Tactical Zone commander.
-Local result: Supported by eligible evidence. Facts: COL HOANG DUC NINH was the 44 TH Special Tactical Zone commander. - support. Evidence source date: 1973-06-28.
+VIETNAM / NVA Attacks in Eastern Military Region 3
+Input: The NVA mounted stiff attacks in the eastern sections of MR-3.
+Local result: Supported by eligible evidence. Facts: The NVA mounted stiff attacks in the eastern sections of MR-3. - support. Evidence source date: 1975-03-19.
 
-VIETNAM / Command appointments in the Mekong Delta
-Input: MGEN NGUYEN VINH NGHI is identified as MR IV commander. MGEN TRAN BA DI is identified as 9 TH Division commander.
-Local result: Evidence-backed mosaic. Facts: MGEN NGUYEN VINH NGHI is identified as MR IV commander. - established; MGEN TRAN BA DI is identified as 9 TH Division commander. - established. Evidence source date: 1973-05-17.
+VIETNAM / NVA Attacks and Delta Activity
+Input: The NVA mounted stiff attacks in the eastern sections of MR-3, and the Delta experienced the highest level of activity since the ceasefire.
+Local result: partial reconstruction. Facts: The NVA mounted stiff attacks in the eastern sections of MR-3. - established; The Delta experienced the highest level of activity since the ceasefire. - insufficient. Evidence source date: 1975-03-19.
 
 VIETNAM / A concealed command role
 Input: THE [REDACTION], BGEN HUYNH VAN LAC, CONFIRMED JUNE 25 THAT ON A NUMBER OF OCCASIONS SINCE CF II VC/ NVA HAVE ATTEMPTED VERY LOW LEVEL CONTACTS BETWEEN GUERILLA FORCES AND RF / PF UNITS.

@@ -3,7 +3,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Count 8 /Kids [6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R 20 0 R] >>
+<< /Type /Pages /Count 10 /Kids [6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R 20 0 R 22 0 R 24 0 R] >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
@@ -12,7 +12,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
 endobj
 5 0 obj
-<< /Length 4029 >>
+<< /Length 4331 >>
 stream
 0.97 0.98 0.97 rg 0 0 612 792 re f
 0.10 0.28 0.30 rg 0 714 612 78 re f
@@ -41,15 +41,17 @@ stream
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 390 Tm (displayed lookup identifies the fact, executed search and selected source it actually) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 376 Tm (matched. A shared document does not prove that every fact matched.) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 348 Tm (Graph Navigation) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 348 Tm (Combining Search Results) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm (Facts to evidence shows retained source matches and their exact endpoints. Compact view) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 306 Tm (hides facts without a retained connection; it does not discard evidence. Zoom and pan change) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 292 Tm (the display only. View on KG navigates the existing corpus map, using actual source-backed) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 278 Tm (connections and hierarchy membership. A post-run inspection path is not represented as the) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (original search chronology or as a chain of historical entailment. Community membership is) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm (navigation, not evidence that an event occurred.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm (BM25 ranks eligible pages separately for each factual search. Reciprocal rank fusion) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 306 Tm (combines lists using weight/\(60 + rank\), with rank starting at 1. Within a redaction,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 292 Tm (searches serving the fact containing the selected blank form the focal group; other facts) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 278 Tm (form the background group. The saved focal/background shares are applied to those groups,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (not to a known answer. A group absent from the input receives no allocation. Source-grounded) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm (node matches also seed graph navigation. The saved graph share combines the resulting page) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm (ranking with the lexical ranking through the same rank-fusion rule. These choices affect) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 222 Tm (which evidence is inspected; they do not certify it.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 208 Tm () Tj ET
 0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 1) Tj ET
 endstream
 endobj
@@ -57,6 +59,51 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
 endobj
 7 0 obj
+<< /Length 4283 >>
+stream
+0.97 0.98 0.97 rg 0 0 612 792 re f
+0.10 0.28 0.30 rg 0 714 612 78 re f
+1 1 1 rg BT /F2 20 Tf 1 0 0 1 42 747 Tm (Matryoshka / Evidence Guide) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (The Local Graph Calculation) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 670 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (Navigation starts with normalized query-match weights p. At each iteration, x\(next\) = \(1 -) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (alpha\)p + alpha P-transpose x; alpha = 0.85 means 15 percent restart and 85 percent) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 628 Tm (transport. P is the eligible graph transition matrix. Each node divides its outgoing) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 614 Tm (allocation equally between nonempty edge-kind and destination-type groups; within a group,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 600 Tm (source support determines the split. Membership links have unit weight. Communities, themes) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (and domains add navigation states, not new historical claims. Semantic-node mass is shared) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm (among eligible source occurrences to rank pages. This deterministic calculation stops at a) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 558 Tm (numerical error bound, not when an answer looks persuasive. Its parameters are engineering) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 544 Tm (choices, not calibrated truth probabilities.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 530 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 516 Tm (Graph Navigation) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 502 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 488 Tm (Facts to evidence shows retained source matches and their exact endpoints. Compact view) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 474 Tm (hides facts without a retained connection; it does not discard evidence. Zoom and pan change) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 460 Tm (the display only. View on KG navigates the existing corpus map, using actual source-backed) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 446 Tm (connections and hierarchy membership. A post-run inspection path is not represented as the) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 432 Tm (original search chronology or as a chain of historical entailment. Community membership is) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 418 Tm (navigation, not evidence that an event occurred.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 404 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 390 Tm (Reading Cable Layout) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 376 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm (The ordinary structured matcher uses proper-name spellings already visible in the input to) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 348 Tm (analyze matching uppercase source words. It does not supply a missing name or assert a new) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm (identity. A whitespace-only analysis view can repair grammar disrupted by line breaks; every) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm (lexical token must map back to the same original text span. If normalization would solely) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 306 Tm (change an already recognized both-and coordination into a numeric qualifier, the complete) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 292 Tm (original parse is retained after checking that the other lexical attributes agree. Source) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 278 Tm (quotations, dates and character positions are retained. A nominal object complement can) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (preserve a person and an office together in a parsed fact. These parsing controls do not) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm (relax negation, attribution, time or source eligibility.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm () Tj ET
+0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 2) Tj ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
+endobj
+9 0 obj
 << /Length 4604 >>
 stream
 0.97 0.98 0.97 rg 0 0 612 792 re f
@@ -97,52 +144,6 @@ stream
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm (not calibrated probabilities or cross-case confidence estimates. The logical decision gates) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 222 Tm (are not relaxed to manufacture a supported answer.) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 208 Tm () Tj ET
-0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 2) Tj ET
-endstream
-endobj
-8 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
-endobj
-9 0 obj
-<< /Length 4375 >>
-stream
-0.97 0.98 0.97 rg 0 0 612 792 re f
-0.10 0.28 0.30 rg 0 714 612 78 re f
-1 1 1 rg BT /F2 20 Tf 1 0 0 1 42 747 Tm (Matryoshka / Evidence Guide) Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (Inspecting Sources) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 670 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (Click a quotation to open the full available transcription at its exact highlighted span.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (Highlight coordinates replay against the source text and hash; repeated words are not) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 628 Tm (guessed. CIB offers both original PDF releases at recorded physical pages after the text.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 614 Tm (Click an input redaction to reveal a supplied reference, and click again to remask it. A) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 600 Tm (still-withheld reference remains unknown. Reference reveals and later originals are) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (inspection material, never model answer inputs.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 558 Tm (Live Analysis) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 544 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 530 Tm (Live uses the same query-only planning, local evidence processing and final scoring) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 516 Tm (contract, with a bounded interactive search: 16 documents, 32 passages, 8 construction pages) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 502 Tm (and 12 completed drafts per reading. These limits can yield different results from the) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 488 Tm (larger saved experiments. Leave the source document blank for an analyst-authored input. The) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 474 Tm (date defaults to the last eligible corpus day; its displayed inclusive date is converted to) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 460 Tm (an exclusive next-day engine boundary exactly once. A private authenticated backend holds) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 446 Tm (the OpenAI key and enforces the spending limit. The static website contains no provider) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 432 Tm (credential. The final digest cannot change the saved local decision. Completed public result) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 418 Tm (envelopes can be reopened from the current browser tab without another model call; passwords) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 404 Tm (and session tokens are not stored with them.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 390 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 376 Tm (Visiting Delegation: Context Comparison) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 348 Tm (Five paragraph-window pairs were attempted for the two authentic still-withheld delegation) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm (slots. Nine inputs produced valid executions; the last input in the full five-paragraph pair) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm (did not pass the visible-text planning contract. The nine completed viable pools did not) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 306 Tm (contain Swedish or Swedes. One shorter first-gap input nominated Swedish, but it did not) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 292 Tm (clear the recorded construction checks. This is a diagnostic of the suggested spelling, not) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 278 Tm (measured correctness: no historical answer key is available. The final workbench uses the) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (preferred P1+P3+P4 context for both gaps, without the final Swedes paragraph. The earlier) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm (release of the 17 February 1959 origin is eligible; its later text is not retrieved) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm (evidence.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 222 Tm () Tj ET
 0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 3) Tj ET
 endstream
 endobj
@@ -150,40 +151,44 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 9 0 R >>
 endobj
 11 0 obj
-<< /Length 3715 >>
+<< /Length 4238 >>
 stream
 0.97 0.98 0.97 rg 0 0 612 792 re f
 0.10 0.28 0.30 rg 0 714 612 78 re f
 1 1 1 rg BT /F2 20 Tf 1 0 0 1 42 747 Tm (Matryoshka / Evidence Guide) Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (CIB / Arias and the Panama unrest) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (Scope Limitations) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 670 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (Input: The 22 May riots in Panama against President de la Guardia's administration have led) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (him to declare a state of siege and may erupt into full-scale revolution. The strong) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 628 Tm (national guard, whose repression of student demonstrations earlier this week resulted in one) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 614 Tm (death and widespread and violent resentment, has announced that it is slowly re-gaining) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 600 Tm (control of Panama City. The guard has orders to kill. The students have been joined in a) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (general strike against the government by labor unions and other groups, but appear to have) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm (lost control of the disturbance to hoodlums. The latter are probably incited by powerful) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 558 Tm (opposition politicians [REDACTION] who are trying to oust the President. Similar riots are) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 544 Tm (occurring in Colon, the northern terminus of the canal.
-Local result: Ranked source-grounded) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 530 Tm (suggestions. Candidates: 1. like Arias \(0.27, contextual\); 2. like First Vice President Diaz) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 516 Tm (\(0.27, contextual\); 3. like the disgruntled Diaz \(0.27, contextual\); 4. like former) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 502 Tm (President Harmodio Arias \(0.27, contextual\); 5. like President Remon \(0.27, contextual\).) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 488 Tm (Evidence source date: 1958-05-23.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 474 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 460 Tm (CIB / The air force commander's doubts) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 446 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 432 Tm (Input: The government's subsequent mistrust of officers who did not give all-out support to) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 418 Tm (Diem has also had an unsettling effect. Diem's foot-dragging in carrying out a promised) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 404 Tm (government reorganization prompted [REDACTION] to express doubt that Diem intended to do) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 390 Tm (more than replace one group of "yes men" with another; a similar complaint was made recently) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 376 Tm (by [MASKED].
-Local result: Ranked source-grounded suggestions. Candidates: 1. the air force) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm (commander \(0.13, contextual\); 2. doubt \(2.21e-03, contextual\); 3. reforms \(2.21e-03,) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 348 Tm (contextual\); 4. reorganization \(2.21e-03, contextual\); 5. reorganization of the command) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm (structure \(2.21e-03, contextual\). Evidence source date: 1961-03-29.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (The local matcher is not a general entailment oracle. Tests found cases where adjective-) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (level either-or or neither-nor wording incorrectly received support for a narrower) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 628 Tm (component. The layout fix does not repair those pre-existing scope errors. Selected positive) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 614 Tm (examples are screened for dependence on that failure; other Live questions can still expose) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 600 Tm (it. Inspect the full source wording, especially disjunction, attribution and temporal) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (qualifications, rather than treating a support label or numerical score as independent) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm (verification.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 558 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 544 Tm (Inspecting Sources) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 530 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 516 Tm (Click a quotation to open the full available transcription at its exact highlighted span.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 502 Tm (Highlight coordinates replay against the source text and hash; repeated words are not) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 488 Tm (guessed. CIB offers both original PDF releases at recorded physical pages after the text.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 474 Tm (Click an input redaction to reveal a supplied reference, and click again to remask it. A) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 460 Tm (still-withheld reference remains unknown. Reference reveals and later originals are) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 446 Tm (inspection material, never model answer inputs.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 432 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 418 Tm (Live Analysis) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 404 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 390 Tm (Live uses the same query-only planning, local evidence processing and final scoring) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 376 Tm (contract, with a bounded interactive search: 16 documents, 32 passages, 8 construction pages) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm (and 12 completed drafts per reading. These limits can yield different results from the) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 348 Tm (larger saved experiments. Leave the source document blank for an analyst-authored input. The) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm (date defaults to the last eligible corpus day; its displayed inclusive date is converted to) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm (an exclusive next-day engine boundary exactly once. A private authenticated backend holds) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 306 Tm (the OpenAI key and enforces the spending limit. The static website contains no provider) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 292 Tm (credential. Live source handoffs remain inspectable; its corpus-map link is independent) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 278 Tm (exploration, not a replay of an unsaved graph walk. The final digest cannot change the saved) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (local decision. Completed public result envelopes can be reopened from the current browser) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm (tab without another model call; passwords and session tokens are not stored with them.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm () Tj ET
 0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 4) Tj ET
 endstream
 endobj
@@ -191,6 +196,59 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 11 0 R >>
 endobj
 13 0 obj
+<< /Length 5191 >>
+stream
+0.97 0.98 0.97 rg 0 0 612 792 re f
+0.10 0.28 0.30 rg 0 714 612 78 re f
+1 1 1 rg BT /F2 20 Tf 1 0 0 1 42 747 Tm (Matryoshka / Evidence Guide) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (Visiting Delegation: Context Comparison) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 670 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (Five paragraph-window pairs were attempted for the two authentic still-withheld delegation) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (slots. Nine inputs produced valid executions; the last input in the full five-paragraph pair) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 628 Tm (did not pass the visible-text planning contract. The nine completed viable pools did not) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 614 Tm (contain Swedish or Swedes. One shorter first-gap input nominated Swedish, but it did not) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 600 Tm (clear the recorded construction checks. This is a diagnostic of the suggested spelling, not) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (measured correctness: no historical answer key is available. The final workbench uses the) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm (preferred P1+P3+P4 context for both gaps, without the final Swedes paragraph. The earlier) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 558 Tm (release of the 17 February 1959 origin is eligible; its later text is not retrieved) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 544 Tm (evidence.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 530 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 516 Tm (CIB / Arias and the Panama unrest) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 502 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 488 Tm (Input: The 22 May riots in Panama against President de la Guardia's administration have led) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 474 Tm (him to declare a state of siege and may erupt into full-scale revolution. The strong) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 460 Tm (national guard, whose repression of student demonstrations earlier this week resulted in one) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 446 Tm (death and widespread and violent resentment, has announced that it is slowly re-gaining) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 432 Tm (control of Panama City. The guard has orders to kill. The students have been joined in a) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 418 Tm (general strike against the government by labor unions and other groups, but appear to have) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 404 Tm (lost control of the disturbance to hoodlums. The latter are probably incited by powerful) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 390 Tm (opposition politicians [REDACTION] who are trying to oust the President. Similar riots are) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 376 Tm (occurring in Colon, the northern terminus of the canal.
+Local result: Ranked source-grounded) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm (suggestions. Candidates: 1. like Arias \(0.27, contextual\); 2. like First Vice President Diaz) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 348 Tm (\(0.27, contextual\); 3. like the disgruntled Diaz \(0.27, contextual\); 4. like former) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm (President Harmodio Arias \(0.27, contextual\); 5. like President Remon \(0.27, contextual\).) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm (Evidence source date: 1958-05-23.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 306 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 292 Tm (CIB / The air force commander's doubts) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 278 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (Input: The government's subsequent mistrust of officers who did not give all-out support to) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm (Diem has also had an unsettling effect. Diem's foot-dragging in carrying out a promised) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm (government reorganization prompted [REDACTION] to express doubt that Diem intended to do) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 222 Tm (more than replace one group of "yes men" with another; a similar complaint was made recently) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 208 Tm (by [MASKED].
+Local result: Ranked source-grounded suggestions. Candidates: 1. the air force) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 194 Tm (commander \(0.13, contextual\); 2. doubt \(2.21e-03, contextual\); 3. reforms \(2.21e-03,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 180 Tm (contextual\); 4. reorganization \(2.21e-03, contextual\); 5. reorganization of the command) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 166 Tm (structure \(2.21e-03, contextual\). Evidence source date: 1961-03-29.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 152 Tm () Tj ET
+0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 5) Tj ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 13 0 R >>
+endobj
+15 0 obj
 << /Length 4465 >>
 stream
 0.97 0.98 0.97 rg 0 0 612 792 re f
@@ -236,13 +294,13 @@ Local result: Ranked source-) Tj ET
 Local result: Ranked source-grounded) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (suggestions. Candidates: 1. corrupt \(0.09, contextual\). Evidence source date: 1959-11-04.) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm () Tj ET
-0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 5) Tj ET
+0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 6) Tj ET
 endstream
 endobj
-14 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 13 0 R >>
+16 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 15 0 R >>
 endobj
-15 0 obj
+17 0 obj
 << /Length 4976 >>
 stream
 0.97 0.98 0.97 rg 0 0 612 792 re f
@@ -291,31 +349,31 @@ Local result: Ranked source-grounded suggestions. Candidates: 1.) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 180 Tm (easily politically manipulated \(2.12, evidence-backed\); 2. poorer \(0.03, contextual\).) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 166 Tm (Evidence source date: 1961-01-17.) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 152 Tm () Tj ET
-0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 6) Tj ET
+0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 7) Tj ET
 endstream
 endobj
-16 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 15 0 R >>
+18 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 17 0 R >>
 endobj
-17 0 obj
-<< /Length 5193 >>
+19 0 obj
+<< /Length 4198 >>
 stream
 0.97 0.98 0.97 rg 0 0 612 792 re f
 0.10 0.28 0.30 rg 0 714 612 78 re f
 1 1 1 rg BT /F2 20 Tf 1 0 0 1 42 747 Tm (Matryoshka / Evidence Guide) Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (IRAN / Haeri's father and Khomeini: a source-ascribed teaching relationship) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (IRAN / Parliament Approves Bakhtiar's Government) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 670 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (Input: Haeri's father taught Khomeini.
-Local result: Supported by eligible evidence. Facts:) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (Haeri's father taught Khomeini. - support. Evidence source date: 1979-06-01.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (Input: Majlis approved Bakhtiar's government.
+Local result: Supported by eligible evidence.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (Facts: Majlis approved Bakhtiar's government. - support. Evidence source date: 1979-02-06.) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 628 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 614 Tm (IRAN / Opposition leaders and their organizations) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 614 Tm (IRAN / Tehrani Resigns and Challenges the Regency Council) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 600 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (Input: Karim Sanjabi led the National Front, and Mohamad Derakhshesh was head of the) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm (Teachers Union.
-Local result: Evidence-backed mosaic. Facts: Karim Sanjabi led the National) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 558 Tm (Front. - established; Mohamad Derakhshesh was head of the Teachers Union. - established.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 544 Tm (Evidence source date: 1979-01-19.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (Input: Tehrani resigned from the Regency Council and stated that the Regency Council was) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm (illegal.
+Local result: partial reconstruction. Facts: Tehrani resigned from the Regency) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 558 Tm (Council. - partial; Tehrani stated that the Regency Council was illegal. - insufficient.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 544 Tm (Evidence source date: 1979-01-25.) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 530 Tm () Tj ET
 0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 516 Tm (IRAN / Government, committees and political influence) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 502 Tm () Tj ET
@@ -327,122 +385,139 @@ Local) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 432 Tm (COUNSELOR \(0.27, contextual\); 3. AMBASSADOR \(0.27, contextual\); 4. MOHAMMAD REZA MAHDAVI-) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 418 Tm (KANI \(0.27, contextual\); 5. BAZARGAN \(0.27, contextual\). Evidence source date: 1979-04-13.) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 404 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 390 Tm (VIETNAM / Ninh's 44 TH Special Tactical Zone command role) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 390 Tm (VIETNAM / NVA Attacks in Eastern Military Region 3) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 376 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm (Input: COL HOANG DUC NINH was the 44 TH Special Tactical Zone commander.
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm (Input: The NVA mounted stiff attacks in the eastern sections of MR-3.
 Local result:) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 348 Tm (Supported by eligible evidence. Facts: COL HOANG DUC NINH was the 44 TH Special Tactical) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm (Zone commander. - support. Evidence source date: 1973-06-28.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 348 Tm (Supported by eligible evidence. Facts: The NVA mounted stiff attacks in the eastern sections) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm (of MR-3. - support. Evidence source date: 1975-03-19.) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 306 Tm (VIETNAM / Command appointments in the Mekong Delta) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 306 Tm (VIETNAM / NVA Attacks and Delta Activity) Tj ET
 0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 292 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 278 Tm (Input: MGEN NGUYEN VINH NGHI is identified as MR IV commander. MGEN TRAN BA DI is identified) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (as 9 TH Division commander.
-Local result: Evidence-backed mosaic. Facts: MGEN NGUYEN VINH) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm (NGHI is identified as MR IV commander. - established; MGEN TRAN BA DI is identified as 9 TH) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm (Division commander. - established. Evidence source date: 1973-05-17.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 222 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 208 Tm (VIETNAM / A concealed command role) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 194 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 180 Tm (Input: THE [REDACTION], BGEN HUYNH VAN LAC, CONFIRMED JUNE 25 THAT ON A NUMBER OF OCCASIONS) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 166 Tm (SINCE CF II VC/ NVA HAVE ATTEMPTED VERY LOW LEVEL CONTACTS BETWEEN GUERILLA FORCES AND RF /) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 152 Tm (PF UNITS.
-Local result: Ranked source-grounded suggestions. Candidates: 1. MR IV CHIEF OF) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 138 Tm (STAFF \(0.50, contextual\); 2. ARVN 5 TH DIV CG BG LICH \(0.27, contextual\); 3. GVN REP \(0.27,) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 124 Tm (contextual\); 4. BGEN LE VAN HUNG \(0.27, contextual\); 5. BGEN NGUYEN
-THANH HOANG \(0.27,) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 110 Tm (contextual\). Evidence source date: 1973-06-28.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 96 Tm () Tj ET
-0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 7) Tj ET
-endstream
-endobj
-18 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 17 0 R >>
-endobj
-19 0 obj
-<< /Length 5156 >>
-stream
-0.97 0.98 0.97 rg 0 0 612 792 re f
-0.10 0.28 0.30 rg 0 714 612 78 re f
-1 1 1 rg BT /F2 20 Tf 1 0 0 1 42 747 Tm (Matryoshka / Evidence Guide) Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (CIB / Visiting delegation) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 670 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (Input: Soviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (the USSR intends to retain a modern conventional capability while building up its nuclear) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 628 Tm (strength. The defense minister implied that some military leaders had favored preparing a) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 614 Tm (nuclear capability at the expense of conventional forces, but that the government Presidium) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 600 Tm (had decided in favor of simultaneous development, which he personally approved. NATO,) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (Malinovsky noted, had adopted the other course, and he considered this an error.
-
-Malinovsky) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm (told the delegation that all agreed that nuclear weapons would be decisive in a general war) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 558 Tm (but that other arms and weapons would continue to play a major role--a line both he and) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 544 Tm (former Defense Minister Zhukov have expounded.
-
-The [REDACTED] delegation apparently learned) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 530 Tm (nothing about the present state of the Soviet ICBM program, except that ICBMs were referred) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 516 Tm (to in the present tense. It was stated that intermediate-range ballistic missiles now cover) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 502 Tm (Western bases in Europe.
-Local result: Ranked source-grounded suggestions. Candidates: 1.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 488 Tm (Soviet \(0.09, partial grounding\); 2. Italian \(0.09, contextual\); 3. Chinese \(0.09,) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 474 Tm (contextual\); 4. French \(0.03, partial grounding\); 5. Yugoslav \(0.03, contextual\). The) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 460 Tm (reference remains withheld; candidate rank is not an exact-recovery measurement. Evidence) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 446 Tm (source date: 1959-02-17.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 432 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 418 Tm (CIB / Visiting delegation) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 404 Tm () Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 390 Tm (Input: Soviet Marshal Malinovsky told a visiting [REDACTED] military delegation [REDACTED]) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 376 Tm (that the USSR intends to retain a modern conventional capability while building up its) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm (nuclear strength. The defense minister implied that some military leaders had favored) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 348 Tm (preparing a nuclear capability at the expense of conventional forces, but that the) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm (government Presidium had decided in favor of simultaneous development, which he personally) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm (approved. NATO, Malinovsky noted, had adopted the other course, and he considered this an) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 306 Tm (error.
-
-Malinovsky told the delegation that all agreed that nuclear weapons would be) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 292 Tm (decisive in a general war but that other arms and weapons would continue to play a major) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 278 Tm (role--a line both he and former Defense Minister Zhukov have expounded.
-
-The [MASK]) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (delegation apparently learned nothing about the present state of the Soviet ICBM program,) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm (except that ICBMs were referred to in the present tense. It was stated that intermediate-) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm (range ballistic missiles now cover Western bases in Europe.
-Local result: Ranked source-) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 222 Tm (grounded suggestions. Candidates: 1. Soviet \(0.12, contextual\); 2. Italian \(0.12,) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 208 Tm (contextual\); 3. Austrian \(0.03, partial grounding\). The reference remains withheld;) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 194 Tm (candidate rank is not an exact-recovery measurement. Evidence source date: 1959-02-17.) Tj ET
-0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 180 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 278 Tm (Input: The NVA mounted stiff attacks in the eastern sections of MR-3, and the Delta) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 264 Tm (experienced the highest level of activity since the ceasefire.
+Local result: partial) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 250 Tm (reconstruction. Facts: The NVA mounted stiff attacks in the eastern sections of MR-3. -) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 236 Tm (established; The Delta experienced the highest level of activity since the ceasefire. -) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 222 Tm (insufficient. Evidence source date: 1975-03-19.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 208 Tm () Tj ET
 0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 8) Tj ET
 endstream
 endobj
 20 0 obj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 19 0 R >>
 endobj
+21 0 obj
+<< /Length 3830 >>
+stream
+0.97 0.98 0.97 rg 0 0 612 792 re f
+0.10 0.28 0.30 rg 0 714 612 78 re f
+1 1 1 rg BT /F2 20 Tf 1 0 0 1 42 747 Tm (Matryoshka / Evidence Guide) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (VIETNAM / A concealed command role) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 670 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (Input: THE [REDACTION], BGEN HUYNH VAN LAC, CONFIRMED JUNE 25 THAT ON A NUMBER OF OCCASIONS) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (SINCE CF II VC/ NVA HAVE ATTEMPTED VERY LOW LEVEL CONTACTS BETWEEN GUERILLA FORCES AND RF /) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 628 Tm (PF UNITS.
+Local result: Ranked source-grounded suggestions. Candidates: 1. MR IV CHIEF OF) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 614 Tm (STAFF \(0.50, contextual\); 2. ARVN 5 TH DIV CG BG LICH \(0.27, contextual\); 3. GVN REP \(0.27,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 600 Tm (contextual\); 4. BGEN LE VAN HUNG \(0.27, contextual\); 5. BGEN NGUYEN
+THANH HOANG \(0.27,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (contextual\). Evidence source date: 1973-06-28.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 558 Tm (CIB / Visiting delegation) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 544 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 530 Tm (Input: Soviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 516 Tm (the USSR intends to retain a modern conventional capability while building up its nuclear) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 502 Tm (strength. The defense minister implied that some military leaders had favored preparing a) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 488 Tm (nuclear capability at the expense of conventional forces, but that the government Presidium) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 474 Tm (had decided in favor of simultaneous development, which he personally approved. NATO,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 460 Tm (Malinovsky noted, had adopted the other course, and he considered this an error.
+
+Malinovsky) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 446 Tm (told the delegation that all agreed that nuclear weapons would be decisive in a general war) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 432 Tm (but that other arms and weapons would continue to play a major role--a line both he and) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 418 Tm (former Defense Minister Zhukov have expounded.
+
+The [REDACTED] delegation apparently learned) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 404 Tm (nothing about the present state of the Soviet ICBM program, except that ICBMs were referred) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 390 Tm (to in the present tense. It was stated that intermediate-range ballistic missiles now cover) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 376 Tm (Western bases in Europe.
+Local result: Ranked source-grounded suggestions. Candidates: 1.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 362 Tm (Soviet \(0.09, partial grounding\); 2. Italian \(0.09, contextual\); 3. Chinese \(0.09,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 348 Tm (contextual\); 4. French \(0.03, partial grounding\); 5. Yugoslav \(0.03, contextual\). The) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 334 Tm (reference remains withheld; candidate rank is not an exact-recovery measurement. Evidence) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 320 Tm (source date: 1959-02-17.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 306 Tm () Tj ET
+0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 9) Tj ET
+endstream
+endobj
+22 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 21 0 R >>
+endobj
+23 0 obj
+<< /Length 2626 >>
+stream
+0.97 0.98 0.97 rg 0 0 612 792 re f
+0.10 0.28 0.30 rg 0 714 612 78 re f
+1 1 1 rg BT /F2 20 Tf 1 0 0 1 42 747 Tm (Matryoshka / Evidence Guide) Tj ET
+0.10 0.20 0.23 rg BT /F2 13 Tf 1 0 0 1 42 684 Tm (CIB / Visiting delegation) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 670 Tm () Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 656 Tm (Input: Soviet Marshal Malinovsky told a visiting [REDACTED] military delegation [REDACTED]) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 642 Tm (that the USSR intends to retain a modern conventional capability while building up its) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 628 Tm (nuclear strength. The defense minister implied that some military leaders had favored) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 614 Tm (preparing a nuclear capability at the expense of conventional forces, but that the) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 600 Tm (government Presidium had decided in favor of simultaneous development, which he personally) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 586 Tm (approved. NATO, Malinovsky noted, had adopted the other course, and he considered this an) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 572 Tm (error.
+
+Malinovsky told the delegation that all agreed that nuclear weapons would be) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 558 Tm (decisive in a general war but that other arms and weapons would continue to play a major) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 544 Tm (role--a line both he and former Defense Minister Zhukov have expounded.
+
+The [MASK]) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 530 Tm (delegation apparently learned nothing about the present state of the Soviet ICBM program,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 516 Tm (except that ICBMs were referred to in the present tense. It was stated that intermediate-) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 502 Tm (range ballistic missiles now cover Western bases in Europe.
+Local result: Ranked source-) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 488 Tm (grounded suggestions. Candidates: 1. Soviet \(0.12, contextual\); 2. Italian \(0.12,) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 474 Tm (contextual\); 3. Austrian \(0.03, partial grounding\). The reference remains withheld;) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 460 Tm (candidate rank is not an exact-recovery measurement. Evidence source date: 1959-02-17.) Tj ET
+0.10 0.20 0.23 rg BT /F1 10.5 Tf 1 0 0 1 42 446 Tm () Tj ET
+0.30 0.40 0.42 rg BT /F1 9 Tf 1 0 0 1 42 28 Tm (23 November 2026 / 10) Tj ET
+endstream
+endobj
+24 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 23 0 R >>
+endobj
 xref
-0 21
+0 25
 0000000000 65535 f 
 0000000009 00000 n 
 0000000058 00000 n 
-0000000163 00000 n 
-0000000260 00000 n 
-0000000362 00000 n 
-0000004442 00000 n 
-0000004578 00000 n 
-0000009233 00000 n 
-0000009369 00000 n 
-0000013795 00000 n 
-0000013932 00000 n 
-0000017699 00000 n 
-0000017837 00000 n 
-0000022354 00000 n 
-0000022492 00000 n 
-0000027520 00000 n 
-0000027658 00000 n 
-0000032903 00000 n 
-0000033041 00000 n 
-0000038249 00000 n 
+0000000178 00000 n 
+0000000275 00000 n 
+0000000377 00000 n 
+0000004759 00000 n 
+0000004895 00000 n 
+0000009229 00000 n 
+0000009365 00000 n 
+0000014020 00000 n 
+0000014157 00000 n 
+0000018447 00000 n 
+0000018585 00000 n 
+0000023828 00000 n 
+0000023966 00000 n 
+0000028483 00000 n 
+0000028621 00000 n 
+0000033649 00000 n 
+0000033787 00000 n 
+0000038037 00000 n 
+0000038175 00000 n 
+0000042057 00000 n 
+0000042195 00000 n 
+0000044873 00000 n 
 trailer
-<< /Size 21 /Root 1 0 R >>
+<< /Size 25 /Root 1 0 R >>
 startxref
-38387
+45011
 %%EOF
