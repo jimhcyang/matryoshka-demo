@@ -3,6 +3,20 @@ import {CORPORA,TASKS,loadSavedCatalog,savedInvestigation,savedStoryQuestion,sav
 import {contextSections} from './narrative-context-v1.js';
 import {hasOpenedResult} from './narrative-attempts-v1.js';
 import {gateWalkthrough} from './narrative-guide-access-v1.js';
+// Keep the older Home bookmark on the same reader copy without changing its data.
+document.title='Matryoshka | Home';
+const welcome=document.querySelector('.welcome');
+if(welcome){
+  welcome.querySelector('.eyebrow').textContent='Historical records and source-based analysis';
+  const title=welcome.querySelector('#welcome-title'),emphasis=document.createElement('em');
+  emphasis.textContent='with Matryoshka.';
+  title.replaceChildren('Explore historical records',document.createElement('br'),emphasis);
+  welcome.querySelector('.lede').textContent='Matryoshka connects people, events and claims in intelligence bulletins and diplomatic cables. Explore those connections, then inspect the original passages behind a saved analysis.';
+  welcome.querySelector('.destination.graph p').textContent='Browse people, organizations, events and claims extracted from each collection. Open a connection to inspect its source passages.';
+  welcome.querySelector('.destination.workbench p').textContent='Follow saved analyses of missing text, historical claims and multi-part questions. Compare candidates and check the evidence behind each result.';
+  welcome.querySelector('.graph .destination-action').textContent='Open the knowledge graph';
+  welcome.querySelector('.workbench .destination-action').textContent='Open the analyst workbench';
+}
 function element(tag,text,className){
   const value=document.createElement(tag);if(text!=null)value.textContent=text;
   if(className)value.className=className;return value;

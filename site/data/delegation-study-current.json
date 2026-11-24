@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "case_id": "delegation_window_0a778cbe9fe92251c0a2fa5a",
+      "native_checkpoint": {
+        "path": "phase/refinement_20261124/controls_final_cib_v4/delegation_window_0a778cbe9fe92251c0a2fa5a/native.json.gz",
+        "sha256": "f7357805b3585a94c185ee6c0a085d682259db906c2a7ba05d7c542e00dad82b"
+      },
+      "position": "first"
+    },
+    {
+      "case_id": "delegation_window_ad3f98e8db456d199146b68c",
+      "native_checkpoint": {
+        "path": "phase/refinement_20261124/controls_final_cib_v4/delegation_window_ad3f98e8db456d199146b68c/native.json.gz",
+        "sha256": "74985b83291ae22373e358c6b36839bc84fb9b73bd12c09f7a5ad26b5d589248"
+      },
+      "position": "last"
+    }
+  ],
+  "context_suggestion_is_independent_corpus_recovery": false,
+  "gold": null,
+  "native_results_modified": false,
+  "source_report_ref": {
+    "path": "phase/refinement_20261124/publication_v4/refinement_b5be9861b5fb1237cada8574/report.json",
+    "sha256": "cc6b518745c153485e6d8f5db75ae7ffd0e859757d519ea102ba04dc2e206314"
+  },
+  "source_view_policy": {
+    "cable_classification": "CONFIDENTIAL",
+    "cable_document_wide_handling_veto": true,
+    "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+    "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+    "cutoff_role": "source_document_date",
+    "date_relation": "<=",
+    "id": "source_day_inclusive",
+    "later_or_secret_version_admitted": false,
+    "source_dates_or_document_ids_rewritten": false,
+    "version": "trusted-corpus-source-view/1"
+  },
+  "version": "delegation-native-workbench/1"
+}

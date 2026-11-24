@@ -1,5 +1,8 @@
 "use strict";
 
+let kgSearch;
+const kgSearchReady=import('./kg-search-v1.js').then(module=>{kgSearch=module;return module;});
+const relatedIndexes=new WeakMap();
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[char]);
@@ -124,7 +127,7 @@ const state = {
   searchEvidencePromises:{},searchPromises:{},hierarchyPromises:{},communityDetailPromises:{},communityDetailShards:{},
   neighborhoodPromises:{},neighborhoodShards:{},adjacencyPromises:{},adjacencyShards:{},sourcePromises:{},sourceShards:{},
   renderRevision:0,release:"earlier",displayMode:"single",visibilityMode:"dim",showIneligible:true,level:"domain",
-  hideIsolates:true,query:"",searchScope:"evidence",autoOpenSearch:false,autoOpenDirect:false,neighborhoodMotion:true,
+  hideIsolates:true,query:"",searchScope:"evidence",relatedSearch:false,autoOpenSearch:false,autoOpenDirect:false,neighborhoodMotion:true,
   activePanelName:"current",pdfApiAvailable:false,redactionResolutionApiAvailable:false,redactionProjection:null,
   redactionCategory:"entity_value",redactionIndex:0,redactionResolutionCache:{},guidePath:null,guideStep:0,guideBusy:false,
   panels:{},searchResults:{legacy:[],current:[]},
@@ -143,8 +146,8 @@ function cacheSlotRows(rows) {
   for(const row of rows){
     if(row.type!=="RedactionSlot"||row.semantic!==false||row.eligible_evidence!==false||row.context_links.some(edge=>edge.semantic!==false||edge.eligible_evidence!==false||edge.slot_navigation!==true||edge.weight!==0||edge.layout_weight!==0))throw Error('Malformed opaque-source navigation boundary.');
     row.node_subtype="OpaqueRedactionSlot";
-    row._surfaces=[row.id,row.slot_id,row.label,row.document_id].filter(Boolean).map(normalize);
-    row._search=normalize([row.id,row.slot_id,row.label,row.document_id,row.context_preview].join(' '));
+    row._surfaces=[row.id,row.slot_id,row.label,row.document_id].filter(Boolean).map(kgSearch.normalizeSearchText);
+    row._search=kgSearch.normalizeSearchText([row.id,row.slot_id,row.label,row.document_id,row.context_preview].join(' '));
     slotOverlayState.rows.delete(row.id);slotOverlayState.rows.set(row.id,row);
   }
   const protectedIds=new Set(Object.values(state.panels).flatMap(p=>[p.slotFocusId,p.selected?.id,p.external?.id,p.neighborhood?.node?.id]));
@@ -1977,6 +1980,9 @@ class GraphPanel {
       const note=document.createElement('p');note.className='list-cap-note';note.textContent=`Showing 12 of ${rows.length} retained entries. Open a source or direct connections for the bounded inventory.`;list.after(note);
     }
     hydrateMapBrief(this,item,description);
+    const sourceRecord=[this.localIncidentNeighborhood?.node,this.neighborhood?.node]
+      .find(node=>node?.id===item.id);
+    hydrateMapSource(this,sourceRecord||item,description);
   }
 
   renderInspectorContent() {
@@ -2251,12 +2257,50 @@ async function ensureCibSource(view,documentId) {
   return source;
 }
 
+async function hydrateMapSource(panel,item,renderAnchor) {
+  // Compact semantic records can retain a document without excerpt examples.
+  // Inspect that recorded document; this does not certify an evidence span.
+  const documentId=sourceDocumentId(item?.document_id);
+  if(!documentId||item.source||item.aggregate_kind||item.evidence_examples?.length
+      ||!isDocumentAvailableAsOf(documentId)
+      ||panel.inspector.querySelector('[data-cib-document]'))return;
+  try{
+    const source=await ensureCibSource(panel.view,documentId);
+    if(!renderAnchor.isConnected||!panel.drawerOpen
+        ||(panel.external||panel.selected)?.id!==item.id
+        ||panel.inspector.querySelector('[data-cib-document]')
+        ||!isDocumentAvailableAsOf(documentId,String(source.document_date_iso||'')))return;
+    const pages=[...(source.pages||[])].filter(page=>page.canonical_page_id&&typeof page.text==='string');
+    pages.sort((a,b)=>sourceMatchScore(b,[item.label||''])-sourceMatchScore(a,[item.label||''])
+        ||Number(a.sequence_in_document||0)-Number(b.sequence_in_document||0));
+    if(!pages.length)return;
+    const page=pages[0],section=document.createElement('section');
+    section.className='source-buttons evidence-list map-primary-sources';
+    const button=document.createElement('button');button.type='button';
+    button.dataset.cibDocument=documentId;button.dataset.cibPage=page.canonical_page_id;
+    button.dataset.cibHighlight=item.label||'';
+    button.dataset.sourceActionKind='recorded-document-inspection';
+    const heading=document.createElement('b');heading.textContent='Inspect source';
+    const caption=document.createElement('span');caption.textContent=documentId;
+    button.append(heading,caption);section.append(button);
+    renderAnchor.after(section);bindCibSourceButtons(section,panel);
+  }catch(error){
+    // Keep the graph usable if its independently bound transcript is unavailable.
+    if(renderAnchor.isConnected)renderAnchor.dataset.sourceInspectionUnavailable='true';
+  }
+}
+
 async function appendGraphPDFPair(host,page,proof={}){
   if(corpusId!=='cib'||!host?.isConnected)return;
   const {appendCIBPDFPair}=await import('./source-inspection.js');
+  if(!page.source_sha256&&typeof page.text==='string'&&page.canonical_page_id){
+    const ascii=JSON.stringify(page.text).replace(/[\u007f-\uffff]/g,c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0'));
+    const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(ascii));
+    page={...page,source_sha256:[...new Uint8Array(bytes)].map(n=>n.toString(16).padStart(2,'0')).join('')};
+  }
   if(!host.isConnected)return;
   const selection=guideSelection(pageParams);
-  const section=await appendCIBPDFPair(host,{page,proof,binding:currentGraphResource()||undefined,
+  const section=await appendCIBPDFPair(host,{page,proof,binding:selection?(currentGraphResource()||undefined):undefined,
     caseId:selection?.case_id,config:selection?.config,base:location.href});
   for(const link of section?.querySelectorAll('a')||[]){link.target='_blank';link.rel='noopener';}
 }
@@ -2365,7 +2409,7 @@ async function openCibSource(panel,documentId,{canonicalPageId="",highlights=[],
     }));
     if(paired&&state.pdfApiAvailable&&active){
       const host=document.createElement('section');host.className='source-pdf-pair-host';$('#cib-source-body').append(host);
-      await appendGraphPDFPair(host,{document_id:documentId,source_page:{release,page:active.source_page}},
+      await appendGraphPDFPair(host,{...active,document_id:documentId,source_page:{release,page:active.source_page}},
         {document_id:documentId,canonical_page_id:active.canonical_page_id}).catch(()=>{});
     }
   }catch(error){if(revision===state.sourceRequestRevision)$("#cib-source-body").innerHTML=`<p>${esc(error.message)}</p>`;}
@@ -2442,6 +2486,13 @@ async function ensurePublishedNodeNeighborhood(view,nodeId) {
   await state.neighborhoodPromises[key];
   const detail=state.neighborhoodShards[key]?.[nodeId];
   if(!detail){const error=new Error(`Node ${nodeId} is absent from ${filename}`);error.missingExactNode=true;throw error;}
+  for(const node of [detail.node,...(detail.neighbors||[])])for(const [records,indexes] of [
+    [state.searchEvidenceViews,state.searchEvidenceIndexes],[state.searchViews,state.searchIndexes]]){
+    const record=indexes[view.key]?.get(node.id);
+    if(!record)continue;
+    const fields=kgSearch.additionalObservedFields(record,node);
+    if(fields){Object.assign(record,fields);relatedIndexes.delete(records[view.key]);}
+  }
   return detail;
 }
 
@@ -2582,7 +2633,7 @@ async function ensureSearchCatalog(keys) {
         const mode=identityAuthorityMode(payload.schema_version,"search",state.data?._identity_authority_mode);
         adaptIdentityRecords(payload.records,mode);
         if (payload.records.some((row)=>(row.type||row.node_type)!=="Entity")) throw new Error(`Unexpected non-Entity in ${key} entity search`);
-        payload.records.forEach((row)=>{ row.kind="node";row._surfaces=[row.label,row.canonical_label,...(row.aliases||[])].map(normalize).filter(Boolean); row._search=normalize(`${row.label} ${row.canonical_label||""} ${(row.aliases||[]).join(" ")} ${row.summary||""}`); });
+        payload.records.forEach((row)=>{row.kind="node";Object.assign(row,kgSearch.searchFields(row));});
         state.searchViews[key]=payload.records;
         state.searchIndexes[key]=new Map(payload.records.map((row)=>[row.id,row]));
       });
@@ -2606,8 +2657,7 @@ async function ensureEvidenceSearchCatalog(keys) {
         adaptIdentityRecords(payload.records,identityAuthorityMode(payload.schema_version,"search",state.data?._identity_authority_mode));
         payload.records.forEach((row)=>{
           row.kind="node";
-          row._surfaces=[row.label,row.search_context,...(row.aliases||[])].map(normalize).filter(Boolean);
-          row._search=normalize(`${row.label} ${row.search_context||""} ${(row.aliases||[]).join(" ")} ${row.summary||""} ${row.type||""}`);
+          Object.assign(row,kgSearch.searchFields(row));
         });
         state.searchEvidenceViews[key]=payload.records;
         state.searchEvidenceIndexes[key]=new Map(payload.records.map((row)=>[row.id,row]));
@@ -2630,9 +2680,9 @@ async function relationshipRecordsForQuery(view,query) {
       const source=localNodes.get(raw.source),target=localNodes.get(raw.target);
       if(!source||!target)return;
       const row={...raw,kind:"edge",source_record:source,target_record:target,source_label:source.label,target_label:target.label,label:`${source.label} ↔ ${target.label}`,document_count:Number(raw.supporting_document_count||raw.evidence_count||0)};
-      const matchedAliases=[match.label,...(match.aliases||[])];
-      row._surfaces=[row.label,row.source_label,row.target_label,row.edge_type,...Object.keys(row.channel_counts||{}),...matchedAliases].map(normalize).filter(Boolean);
-      row._search=normalize(`${row.label} ${row.edge_type||""} ${Object.keys(row.channel_counts||{}).join(" ")} ${matchedAliases.join(" ")}`);
+      const matchedAliases=[match.label,...(match._observedForms||kgSearch.observedForms(match))];
+      row._surfaces=[row.label,row.source_label,row.target_label,row.edge_type,...Object.keys(row.channel_counts||{}),...matchedAliases].map(kgSearch.normalizeSearchText).filter(Boolean);
+      row._search=kgSearch.normalizeSearchText(`${row.label} ${row.edge_type||""} ${Object.keys(row.channel_counts||{}).join(" ")} ${matchedAliases.join(" ")}`);
       edges.set(row.id,row);
     });
   }));
@@ -2649,8 +2699,8 @@ function hierarchySearchRecord(row,level) {
     theme_id:level==="theme"?row.id:row.theme_id,
     community_id:level==="community"?row.id:null,
   };
-  record._surfaces=[normalize(row.label)];
-  record._search=normalize(`${row.label} ${row.summary||""} ${row.description||""}`);
+  record._surfaces=[kgSearch.normalizeSearchText(row.label)];
+  record._search=kgSearch.normalizeSearchText(`${row.label} ${row.summary||""} ${row.description||""}`);
   return record;
 }
 
@@ -2677,23 +2727,23 @@ async function searchRecordsForScope(view,scope,query) {
     const filtered=scope==="evidence"?records:records.filter((row)=>scope==="redaction"?normalize(row.type)==="redactionslot":normalize(row.type)===scope);
     if(scope==='evidence'&&slotOverlayState.enabled&&query.length>=3){
       const page=await slotPage({q:query,limit:16});
-      return {records:[...filtered,...page.slots],count:filtered.length+page.matched_count};
+      return {records:[...filtered,...page.slots],relatedRecords:records,count:filtered.length+page.matched_count};
     }
     if(scope==="redaction"){
       const enriched=filtered.map((row)=>{
         const redactionCase=redactionCaseForRecord(row);
         if(!redactionCase)return row;
-        const slotSearch=normalize(redactionCase.slot_id);
+        const slotSearch=kgSearch.normalizeSearchText(redactionCase.slot_id);
         return {
           ...row,
           slot_id:redactionCase.slot_id,
           _surfaces:[...new Set([...(row._surfaces||[]),slotSearch])],
-          _search:`${row._search||""} ${slotSearch} ${normalize(redactionCase.context_preview||"")}`.trim(),
+          _search:`${row._search||""} ${slotSearch} ${kgSearch.normalizeSearchText(redactionCase.context_preview||"")}`.trim(),
         };
       });
       return {records:enriched,count:enriched.length};
     }
-    return {records:filtered,count:filtered.length};
+    return {records:filtered,relatedRecords:records,count:filtered.length};
   }
   if(["domain","theme","community"].includes(scope)){
     await ensureHierarchyCatalog(view,scope);
@@ -2717,6 +2767,33 @@ function topMatches(records, query, limit=8) {
   const top=[];
   records.forEach((record)=>{ if (state.hideIsolates&&(record.hierarchy_status==="unassigned_isolate"||record.kind==="edge"&&[record.source_record,record.target_record].some((row)=>row.hierarchy_status==="unassigned_isolate"))) return; let score=searchScore(record,query); if (!score) return; if(record.kind==="edge")score-=5000; const item={record,score}; let index=top.findIndex((entry)=>score>entry.score||(score===entry.score&&record.label.localeCompare(entry.record.label)<0)); if (index<0) index=top.length; top.splice(index,0,item); if (top.length>limit) top.pop(); });
   return top.map((entry)=>entry.record);
+}
+
+async function rankedSearchMatches(catalog,panelName,query,scope,related) {
+  const exact=topMatches(searchableRecords(catalog.records,panelName),query);
+  const annotate=record=>({...record,_kgSearchNotice:kgSearch.exactMatchNotice(record,query)});
+  if(!related||!['entity','evidence','claim','event'].includes(scope)||exact.length>=8)return exact.map(annotate);
+  const source=catalog.relatedRecords||catalog.records;
+  if(!relatedIndexes.has(source))relatedIndexes.set(source,kgSearch.createRelatedIndex(source));
+  const index=await relatedIndexes.get(source),ids=new Set(exact.map(row=>row.id));
+  const view=currentViews()[panelName];
+  const visible=record=>!record.overlay_slot&&
+    (!state.hideIsolates||record.hierarchy_status!=='unassigned_isolate')&&
+    (state.showIneligible||eligibilityReasons(record,{includeRelease:releaseFilterApplies(view)}).length===0);
+  const hits=index.search(query,{limit:8-exact.length,accept:record=>
+    !ids.has(record.id)&&visible(record)&&(!['claim','event'].includes(scope)||normalize(record.type)===scope),anchorAccept:visible});
+  return [...exact.map(annotate),...hits.map(hit=>({...hit.record,_kgSearchNotice:
+    `Related wording, not verification.${hit.anchor?` Observed-form anchor: ${hit.anchor}.`:''} Shared: ${hit.matched.join(', ')}.${hit.unmatched.length?` Unmatched: ${hit.unmatched.join(', ')}.`:''}`}))];
+}
+
+function initializeLocalSearch() {
+  const host=$('#map-search-dropdown'),control=document.createElement('label');
+  control.className='isolate-toggle';control.htmlFor='kg-related-search';
+  control.innerHTML='<input id="kg-related-search" type="checkbox" aria-describedby="kg-search-method"> Include related wording';
+  const note=document.createElement('p');note.id='kg-search-method';note.className='metric-caveat';
+  note.textContent='Exact text and observed forms first. Related wording keeps an observed entity-form anchor when available, then uses local word/character similarity. Navigation only, not identity, support or fact verification. No model, dictionary or extra source is queried.';
+  host.querySelector('.search-dropdown-heading').after(control,note);
+  control.querySelector('input').addEventListener('change',event=>{state.relatedSearch=event.target.checked;state.autoOpenSearch=false;applySearch();});
 }
 
 function searchableRecords(records,panelName) {
@@ -2744,9 +2821,10 @@ function renderSearchResults() {
   if (!state.query) { container.hidden=true; container.innerHTML=""; return; }
   const column=(name,label)=>`<section class="search-column"><h3>${esc(label)}</h3>${state.searchResults[name].length?state.searchResults[name].map((row,index)=>{
     const edge=row.kind==="edge",hierarchy=row.kind==="hierarchy";
-    const detail=row.overlay_slot?`${row.document_id} / earlier page ${row.source_page} / opaque, context navigation only`:edge?`${fmt(row.evidence_count)} supporting documents / ${row.edge_type}`:hierarchy?`${row.type} / ${fmt(row.mass)} assigned evidence nodes`:`${row.type||"Entity"} / ${fmt(row.document_count)} documents${row.visibility?` / ${visibilityLabel(row.visibility)}`:""}${identityScopeLabel(row)?` / ${identityScopeLabel(row)}`:""}${row.aliases?.length?` / observed forms: ${compact(row.aliases.join(", "),90)}`:""}`;
+    const forms=row._observedForms||[];
+    const detail=row.overlay_slot?`${row.document_id} / earlier page ${row.source_page} / opaque, context navigation only`:edge?`${fmt(row.evidence_count)} supporting documents / ${row.edge_type}`:hierarchy?`${row.type} / ${fmt(row.mass)} assigned evidence nodes`:`${row.type||"Entity"} / ${fmt(row.document_count)} documents${row.visibility?` / ${visibilityLabel(row.visibility)}`:""}${identityScopeLabel(row)?` / ${identityScopeLabel(row)}`:""}${forms.length?` / observed forms: ${compact(forms.join(", "),90)}`:""}`;
     const action=row.overlay_slot?'Inspect Redacted Slot':edge?"Inspect edge":hierarchy?`Open ${row.hierarchy_level}`:"Inspect node";
-    return `<button class="search-hit" type="button" data-search-panel="${name}" data-search-index="${index}"><span><b>${esc(row.label)}</b><small>${esc(detail)}</small></span><span>${esc(action)}</span></button>`;
+    return `<button class="search-hit" type="button" data-search-panel="${name}" data-search-index="${index}"><span><b>${esc(row.label)}</b><small>${esc(detail)}</small>${row._kgSearchNotice?`<small data-kg-search-match>${esc(row._kgSearchNotice)}</small>`:''}</span><span>${esc(action)}</span></button>`;
   }).join(""):`<p class="metric-caveat">No match in the complete selected object index.</p>`}</section>`;
   const {legacy,current}=currentViews(),visible=new Set(visiblePanelNames()); container.innerHTML=(visible.has("legacy")?column("legacy",legacy.label):"")+(visible.has("current")?column("current",current.label):""); container.hidden=false;
   $$('[data-search-panel]',container).forEach((button)=>button.addEventListener("click",async()=>{
@@ -2757,18 +2835,22 @@ function renderSearchResults() {
   }));
 }
 
-let searchTimer=null;
+let searchTimer=null,searchSequence=0;
 function applySearch(resetSlotOffset=true) {
+  const sequence=++searchSequence;
   if(resetSlotOffset!==false)slotOverlayState.searchOffset=0;
-  clearTimeout(searchTimer); const raw=$("#graph-search").value.trim(); state.query=normalize(raw);state.searchScope=$("#search-scope").value;
+  clearTimeout(searchTimer); const raw=$("#graph-search").value.trim(); state.query=kgSearch.normalizeSearchText(raw);state.searchScope=$("#search-scope").value;
   if (!state.query) { $('#slot-search-pagination').hidden=true;$("#search-status").textContent=""; state.panels.legacy.setPreviewSearch(""); state.panels.current.setPreviewSearch(""); renderSearchResults(); return; }
   state.panels.legacy.setPreviewSearch(raw); state.panels.current.setPreviewSearch(raw); $("#search-status").textContent=`Loading complete ${state.searchScope} indexes...`;
   searchTimer=setTimeout(async()=>{
     try {
-      const {legacy,current}=currentViews(),query=state.query,scope=state.searchScope;
+      const {legacy,current}=currentViews(),query=state.query,scope=state.searchScope,related=state.relatedSearch,revision=state.renderRevision;
       const [legacyCatalog,currentCatalog]=await Promise.all([searchRecordsForScope(legacy,scope,query),searchRecordsForScope(current,scope,query)]);
-      if (query!==normalize($("#graph-search").value)||scope!==$("#search-scope").value) return;
-      state.searchResults.legacy=scope==='slot'?searchableRecords(legacyCatalog.records,"legacy"):topMatches(searchableRecords(legacyCatalog.records,"legacy"),query); state.searchResults.current=scope==='slot'?searchableRecords(currentCatalog.records,"current"):topMatches(searchableRecords(currentCatalog.records,"current"),query);
+      const [legacyMatches,currentMatches]=await Promise.all([
+        scope==='slot'?searchableRecords(legacyCatalog.records,'legacy'):rankedSearchMatches(legacyCatalog,'legacy',query,scope,related),
+        scope==='slot'?searchableRecords(currentCatalog.records,'current'):rankedSearchMatches(currentCatalog,'current',query,scope,related)]);
+      if(sequence!==searchSequence||query!==kgSearch.normalizeSearchText($('#graph-search').value)||scope!==$('#search-scope').value||related!==state.relatedSearch||revision!==state.renderRevision)return;
+      state.searchResults.legacy=legacyMatches;state.searchResults.current=currentMatches;
       state.panels.legacy.setMatchIds(matchHierarchyIds(state.searchResults.legacy,state.panels.legacy)); state.panels.current.setMatchIds(matchHierarchyIds(state.searchResults.current,state.panels.current));
       const filterNote=state.hideIsolates?" Analyst-projection isolates are hidden.":" Isolates are included.";
       const pairLabels=singleCorpusMode?(state.data.corpus_metadata?.name||"single corpus"):redactionOnlyMode?"redaction-aware earlier":currentOnlyMode?"earlier and later":"legacy and current";
@@ -2784,7 +2866,8 @@ function applySearch(resetSlotOffset=true) {
           ? ` Complete incident edges were read for ${fmt(legacyCatalog.matchedEndpointCount)} and ${fmt(currentCatalog.matchedEndpointCount)} matching entity endpoints in the ${pairLabels} views; those views contain ${fmt(legacyCatalog.count)} and ${fmt(currentCatalog.count)} published relationships.`
           : ` Matches were ranked across ${fmt(legacyCatalog.count)} and ${fmt(currentCatalog.count)} indexed ${state.searchScope} objects in the ${pairLabels} views.`;
       const matchSummary=singleCorpusMode?`${state.searchResults.current.length} corpus`:redactionOnlyMode?`${state.searchResults.current.length} redaction-graph`:currentOnlyMode?visiblePanelNames().map((name)=>`${state.searchResults[name].length} ${name==="legacy"?"earlier":"later"}`).join(" and "):`${state.searchResults.legacy.length} legacy and ${state.searchResults.current.length} current`;
-      $("#search-status").textContent=scope==='slot'?`${fmt(currentCatalog.count)} Redacted Slots matched; ${state.searchResults.current.length} displayed on this page. Base-visible context and source IDs only; hidden names and lengths are not indexed. Navigation, not semantic evidence.`:`${matchSummary} matches shown.${basis}${filterNote}`; renderSearchResults();
+      const relatedNote=related?(['entity','evidence','claim','event'].includes(scope)?' Related wording enabled: deterministic local word/character similarity, not a verified statement. Exact matches stay first.':' Related wording applies only to evidence, entities, claims and events; this scope uses exact search.') : '';
+      $("#search-status").textContent=scope==='slot'?`${fmt(currentCatalog.count)} Redacted Slots matched; ${state.searchResults.current.length} displayed on this page. Base-visible context and source IDs only; hidden names and lengths are not indexed. Navigation, not semantic evidence.`:`${matchSummary} matches shown.${basis}${filterNote}${relatedNote}`; renderSearchResults();
       const slotPager=$('#slot-search-pagination');slotPager.hidden=scope!=='slot';
       if(scope==='slot'){
         const page=slotOverlayState.searchPage;
@@ -2802,7 +2885,7 @@ function applySearch(resetSlotOffset=true) {
           await navigateSharedSearch(panelName,row,{direct:openDirect});
         }
       }
-    } catch (error) { $("#search-status").textContent=`Full search unavailable: ${error.message}`; }
+    } catch (error) { if(sequence===searchSequence)$("#search-status").textContent=`Full search unavailable: ${error.message}`; }
   },180);
 }
 
@@ -4149,6 +4232,7 @@ function renderExplorationBinding(params=pageParams) {
 
 async function init() {
   try {
+    await kgSearchReady;
     const bindingResponse=await fetch(viewerBindingURL(),{cache:"no-store"});
     if(!bindingResponse.ok)throw new Error("The frozen full-corpus viewer binding is unavailable");
     refreshBinding=await bindingResponse.json();
@@ -4163,7 +4247,7 @@ async function init() {
     document.title="Matryoshka | "+(state.data.corpus_metadata?.name||"Paired corpus graph");
     $("#document-count").textContent=`${fmt(state.data.corpus_metadata?.document_count)} ${singleCorpusMode?"prepared documents":"paired Central Intelligence Bulletins"}`;
     renderExplorationBinding();
-    const params=new URLSearchParams(window.location.search); if (["earlier","later"].includes(params.get("release"))) state.release=params.get("release"); if (["single","pair"].includes(params.get("view"))) state.displayMode=params.get("view"); const requestedVisibility=params.get('ineligible')||params.get('visibility');state.visibilityMode=visibilityModes.includes(requestedVisibility)?requestedVisibility:'dim';state.showIneligible=params.get("show_ineligible")!=="0"&&requestedVisibility!=='hide'; if (["domain","theme","community","evidence"].includes(params.get("level"))) state.level=params.get("level"); state.guidePath=null;state.autoOpenSearch=params.get("inspect")==="1"&&!params.has("guide_case");state.autoOpenDirect=params.get("connections")==="1"&&!params.has("guide_case");
+    const params=new URLSearchParams(window.location.search); if (["earlier","later"].includes(params.get("release"))) state.release=params.get("release"); if (["single","pair"].includes(params.get("view"))) state.displayMode=params.get("view"); const requestedVisibility=params.get('ineligible')||params.get('visibility');state.visibilityMode=visibilityModes.includes(requestedVisibility)?requestedVisibility:'dim';state.showIneligible=params.get("show_ineligible")!=="0"&&requestedVisibility!=='hide'; if (["domain","theme","community","evidence"].includes(params.get("level"))) state.level=params.get("level"); state.guidePath=null;state.autoOpenSearch=params.get("inspect")==="1"&&!params.has("guide_case")&&!params.has('node_id')&&!params.has('node');state.autoOpenDirect=params.get("connections")==="1"&&!params.has("guide_case");
     $("#purpose").textContent=singleCorpusMode?state.data.comparison_contract.purpose:"Start from the fixed earlier-release hierarchy. Later-only, post-cutoff and undated evidence can remain dimmed or hidden without refitting assignments. Pair compares the two release-visibility projections, not source classification labels.";
     if(singleCorpusMode){
       $(".visibility-note").textContent="Eligibility display: the fixed Confidential taxonomy is retained when the permitted SECRET projection is added. Added, post-date or undated context may be dimmed or hidden. These are classification projections, not paired redactions; no workbench case cutoff or document exclusion is inherited.";
@@ -4182,7 +4266,7 @@ async function init() {
     }
     if($("#comparison-notes"))$("#comparison-notes").innerHTML=state.data.comparison_contract.comparability.map((note)=>`<p>${esc(note)}</p>`).join(""); $("#build-label").textContent=`${state.data.graph_run_id} / ${state.data.hierarchy_run_id} / built ${new Date(state.data.generated_at_utc).toLocaleString()}`;
     state.searchScope=$("#search-scope")?.value||state.searchScope;configureTemporalControl(params);
-    state.panels.legacy=new GraphPanel("legacy"); state.panels.current=new GraphPanel("current");bindRedactionNavigator();
+    state.panels.legacy=new GraphPanel("legacy"); state.panels.current=new GraphPanel("current");initializeLocalSearch();bindRedactionNavigator();
     $$('[data-release]').forEach((button)=>button.classList.toggle("active",button.dataset.release===state.release)); $$('[data-level]').forEach((button)=>button.classList.toggle("active",button.dataset.level===state.level)); $("#level-explanation").textContent=levelCopy[state.level]; syncVisibilityControl(); await renderRelease();await loadRedactionNavigatorData();
     $$('[data-release]').forEach((button)=>button.addEventListener("click",async()=>{ state.release=button.dataset.release; $$('[data-release]').forEach((item)=>item.classList.toggle("active",item===button)); const url=new URL(window.location.href); url.searchParams.set("release",state.release); history.replaceState(null,"",url); await renderRelease(); }));
     $$('[data-display-mode]').forEach((button)=>{button.classList.toggle("active",button.dataset.displayMode===state.displayMode);button.addEventListener("click",async()=>{state.displayMode=button.dataset.displayMode;$$('[data-display-mode]').forEach((item)=>item.classList.toggle("active",item===button));const url=new URL(window.location.href);url.searchParams.set("view",state.displayMode);history.replaceState(null,"",url);await renderRelease();});});
@@ -4215,10 +4299,11 @@ async function init() {
     $("#cib-source-close")?.addEventListener("click",closeCibSource);$("#cib-drawer-scrim")?.addEventListener("click",closeCibSource);window.addEventListener("keydown",(event)=>{if(event.key==="Escape")closeCibSource();});
     const focusId=params.get("node_id")||params.get("node");
     if(focusId&&!state.guidePath&&!state.guideError){
-      const view=currentViews().current;
-      await ensureEvidenceSearchCatalog([view.key]);
-      const record=opaqueSlot(focusId)||state.searchEvidenceIndexes[view.key]?.get(focusId);
-      if(record)await navigateSharedSearch('current',record);
+      const views=currentViews(),names=visiblePanelNames().includes('legacy')?['current','legacy']:['current'];
+      await ensureEvidenceSearchCatalog(names.map(name=>views[name].key));
+      const name=names.find(name=>opaqueSlot(focusId)||state.searchEvidenceIndexes[views[name].key]?.has(focusId));
+      const record=name&&(opaqueSlot(focusId)||state.searchEvidenceIndexes[views[name].key].get(focusId));
+      if(record)await navigateSharedSearch(name,record);
       else $("#search-status").textContent="The requested semantic ID is not in this separately bound exploration catalog. No substitute identity or route was invented.";
     }
     document.body.dataset.graphReady="true";

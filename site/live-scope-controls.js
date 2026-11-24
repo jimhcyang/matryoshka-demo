@@ -1,4 +1,4 @@
-/* Inclusive display dates become the engine's unchanged exclusive boundary. */
+/* New submissions use inclusive dates; old result captions retain their policy. */
 import {usesLiveSourcePolicy} from './source-policy-contract.js';
 export function dayAfter(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) throw Error('Choose a valid evidence date.');
@@ -41,14 +41,15 @@ export async function loadCorpusScopes() {
 }
 
 export function requestScope(through, excludedDocument) {
-  return {as_of: through ? dayAfter(through) : '', excluded_origin: excludedDocument.trim()};
+  if (through) dayAfter(through);
+  return {as_of: through || '', excluded_origin: excludedDocument.trim()};
 }
 
 export function displayedScope(request, metadata = {}) {
   // The verified canonical request is authoritative, not auxiliary captions.
   dayAfter(request.as_of);
   const date = new Date(request.as_of + 'T00:00:00Z');
-  date.setUTCDate(date.getUTCDate() - 1);
+  if (metadata.source_view_policy?.id !== 'live_through_with_earlier_origin') date.setUTCDate(date.getUTCDate() - 1);
   const through = date.toISOString().slice(0, 10);
   if (!/^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$/.test(request.excluded_origin || '')) throw Error('Invalid canonical document scope.');
   const prefix = 'live-analyst-origin:';

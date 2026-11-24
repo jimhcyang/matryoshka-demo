@@ -151,7 +151,7 @@ export function decisionTerms(){
 export function validateTrace(envelope,expected) {
   const trace=envelope?.trace||envelope;
   const binding={...envelope,...trace};
-  if(!["narrative-selected-evidence-trace/1","narrative-selected-evidence-trace/2","narrative-selected-evidence-trace/3","narrative-selected-evidence-trace/4","narrative-selected-evidence-trace/5"].includes(trace?.version)||binding.case_id!==expected.case_id||
+  if(!["narrative-selected-evidence-trace/1","narrative-selected-evidence-trace/2","narrative-selected-evidence-trace/3","narrative-selected-evidence-trace/4","narrative-selected-evidence-trace/5","narrative-selected-evidence-trace/6"].includes(trace?.version)||binding.case_id!==expected.case_id||
       binding.config!==expected.config||binding.reading_id!==expected.reading_id||!hash(binding.query_sha256)||
       binding.query_sha256!==expected.query_sha256||!same(binding.native_checkpoint,expected.native_checkpoint)||
       !hash(binding.native_checkpoint?.sha256)||!same(binding.resource_binding,expected.resource_binding))
@@ -181,7 +181,7 @@ export function validateTrace(envelope,expected) {
   for(const path of trace.paths)if(typeof path.candidate_or_atom_id!=="string"||!Array.isArray(path.steps)||
       path.steps.some(id=>!stepIds.has(id))||!Array.isArray(path.source_refs)||!path.endpoint_kind)
     throw Error("A selected evidence path is not bound to saved steps and its actual endpoint.");
-  if(["narrative-selected-evidence-trace/3","narrative-selected-evidence-trace/4","narrative-selected-evidence-trace/5"].includes(trace.version)){
+  if(["narrative-selected-evidence-trace/3","narrative-selected-evidence-trace/4","narrative-selected-evidence-trace/5","narrative-selected-evidence-trace/6"].includes(trace.version)){
     const maximum=trace.selection?.max_hops,byId=new Map(trace.steps.map(step=>[step.id,step]));
     if(!Number.isInteger(maximum)||maximum<0||maximum>6||typeof trace.postrun_graph_enabled!=="boolean"||
         trace.community_membership_is_evidence!==false||trace.new_evidence_fetched!==false)

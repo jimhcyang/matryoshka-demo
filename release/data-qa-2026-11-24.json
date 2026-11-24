@@ -1,0 +1,31 @@
+{
+  "all_cases_recoverable_claimed": false,
+  "benchmark_accuracy_claimed": false,
+  "candidate_manifest_sha256": "9b4b46f5c926df66ca1dbaf2a3a596c60d1f540f0a638706ee763052de6d4bc5",
+  "date": "2026-11-24",
+  "historical_outputs_modified": false,
+  "independently_replayed_cases": 28,
+  "native_displayed_cases": 16,
+  "reviews": {
+    "browser": {
+      "path": "src-demo-day/phase/refinement_20261124/publication_v4/qa/browser_v2/receipt.json",
+      "sha256": "a82d43c07b976be355fa73a273515cb857c64bbb49412434f39f2eb4eed1d54c"
+    },
+    "independent": {
+      "path": "src-demo-day/phase/refinement_20261124/review_v2/FINAL_RELEASE_REVIEW_9b4b46f5c926df66ca1dbaf2a3a596c60d1f540f0a638706ee763052de6d4bc5.json",
+      "sha256": "d8097453084b03c7fd258249998008285cce498e6cc9201d055b6b10f2985908"
+    },
+    "integrity": {
+      "path": "src-demo-day/phase/refinement_20261124/publication_v4/qa/integrity_v2.json",
+      "sha256": "ea3688e3f39fc53da6c78641b8eaf4a4127d186d37cb642239d561b2cdf65bef"
+    },
+    "native": {
+      "path": "src-demo-day/phase/refinement_20261124/review_v2/final_v4_all28_replay_v2/RESULT.json",
+      "sha256": "44a36ea77c67639d231a30b4dd40a2a75af67506820b41c863ccec3aef91da49"
+    }
+  },
+  "source_report_sha256": "cc6b518745c153485e6d8f5db75ae7ffd0e859757d519ea102ba04dc2e206314",
+  "status": "PASS_DIAGNOSTIC_PRESENTATION_DATA",
+  "unknown_delegation_has_revealed_gold": false,
+  "version": "refinement-data-qa/1"
+}

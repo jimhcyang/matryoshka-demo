@@ -1,4 +1,5 @@
 // Source-owned saved endpoints only. Never infer an endpoint from a fill or label.
+import {savedSourceScope, sourceScopeAllows, sourceScopesEqual} from './saved-source-policy.js';
 const rows=value=>Array.isArray(value)?value:[];
 const hash=value=>/^[a-f0-9]{64}$/.test(value||'');
 const samePage=(a,b)=>a?.canonical_page_id===b?.canonical_page_id&&a?.page_sha256===b?.page_sha256;
@@ -33,7 +34,7 @@ function sourceContributorEndpoint(value,item,caseInfo,selected){
       proof.native_name_span_claimed!==false||proof.bound_node_kind!==kind||proof.source_type!==sourceType||
       !hash(proof.occurrence_sha256)||!['source_row_id','source_edge_id','source_edge_row_id'].every(k=>typeof proof[k]==='string'&&proof[k])||
       !quoteWithin(quote,quote?.start,quote?.end,quote?.text)||!quote.document_id||!quote.date||
-      !(quote.date<caseInfo.date)||quote.document_id===caseInfo.document_id||value.originating_document_id!==quote.document_id)
+      !sourceScopeAllows(quote,savedSourceScope(caseInfo,caseInfo.source_view_policy))||value.originating_document_id!==quote.document_id)
     return null;
   const contains=(parent,child)=>Boolean(parent&&child&&samePage(parent,child)&&parent.document_id===child.document_id&&parent.date===child.date&&
     quoteWithin(parent,child.start,child.end,child.text));
@@ -60,7 +61,7 @@ function explicitEndpoint(value,item,caseInfo,selected){
       value.postrun_provenance_inspection!==true||value.original_traversal_claimed!==false||
       value.factual_support_implied===true||value.identity_or_event_certified===true)return null;
   const proof=value.citation,quote=quoteWithin(proof,proof?.start,proof?.end,value.label);
-  if(!quote||!quote.document_id||!quote.date||!(quote.date<caseInfo.date)||quote.document_id===caseInfo.document_id||
+  if(!quote||!quote.document_id||!quote.date||!sourceScopeAllows(quote,savedSourceScope(caseInfo,caseInfo.source_view_policy))||
       value.originating_document_id!=null&&value.originating_document_id!==quote.document_id)return null;
   const selectedQuote=selected.find(p=>samePage(p,quote)&&p.document_id===quote.document_id&&p.date===quote.date&&
     quoteWithin(p,quote.start,quote.end,quote.text));
@@ -91,6 +92,7 @@ function explicitEndpoint(value,item,caseInfo,selected){
     expected_community_id:mother?.community_id||null,...(labelProof?{source_label_proof:labelProof}:{})};
 }
 export function savedEndpointForPath(record,caseInfo,reading,path){
+  caseInfo={...caseInfo,source_view_policy:record.result?.source_view_policy||record.source_view_policy};
   const result=record.result||{},key=path.candidate_or_atom_id;
   const items=caseInfo.task==='redaction'?rows((result.redaction||result).readings).find(r=>r.reading?.id===reading)?.candidates:
     rows(result.atoms);
@@ -123,7 +125,9 @@ export function savedEndpointForPath(record,caseInfo,reading,path){
 export function verifyEndpointPacket(packet,saved,caseInfo,binding){
   const fail=()=>{throw Error('The saved extracted endpoint is unavailable or does not match its exact source resource.');};
   if(packet?.version!=='current-context-inspection/1'||packet.node_id!==saved.node_id||packet.node?.id!==saved.node_id||
-      packet.cutoff!==caseInfo.date||packet.whole_origin_excluded!==caseInfo.document_id||packet.task_support_assessed!==false)fail();
+      packet.cutoff!==caseInfo.date||packet.whole_origin_excluded!==savedSourceScope(caseInfo,caseInfo.source_view_policy).whole_origin_excluded||packet.task_support_assessed!==false)fail();
+  if(!sourceScopesEqual(savedSourceScope(caseInfo,caseInfo.source_view_policy),
+      savedSourceScope(caseInfo,packet.source_view_policy||packet.scope?.source_view_policy)))fail();
   for(const key of ['resource_id','registry_sha256','index_sha256','graph_id','hierarchy_id'])
     if(!binding?.[key]||packet.resource_binding?.[key]!==binding[key])fail();
   if(packet.node.node_id!=null&&packet.node.node_id!==saved.node_id)fail();
@@ -144,7 +148,7 @@ export function verifyEndpointSource(page,quote,caseInfo,actualHash){
   if(!Number.isInteger(quote.start)||!Number.isInteger(quote.end)||quote.start<0||quote.end<=quote.start||
       typeof quote.text!=='string'||Array.from(quote.text).length!==quote.end-quote.start||!hash(quote.page_sha256)||
       (page?.canonical_page_id||page?.id)!==quote.canonical_page_id||page.document_id!==quote.document_id||page.date!==quote.date||
-      !(page.date<caseInfo.date)||page.document_id===caseInfo.document_id||actualHash!==quote.page_sha256||
+      !sourceScopeAllows(page,savedSourceScope(caseInfo,caseInfo.source_view_policy))||actualHash!==quote.page_sha256||
       typeof page.text!=='string'||Array.from(page.text).slice(quote.start,quote.end).join('')!==quote.text)
     throw Error('The endpoint occurrence does not replay in the selected original source.');
   return quote;

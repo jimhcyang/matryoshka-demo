@@ -1,10 +1,12 @@
-import {LiveClient, LiveResultHistory, credentialLike, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js';
+import {LiveClient, credentialLike, liveRetrievalSummary, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js';
+import {LiveResultHistory} from './live-history.js';
 import {displayedScope, loadCorpusScopes, requestScope, validateCorpusScopes} from './live-scope-controls.js';
-import {computeDecisionScores, formatDecisionScore} from './decision-scores.js';
+import {computeDecisionScores, formatDecisionScore, EVIDENCE_SCORE_VERSION, POINTS_SCORE_VERSION, SOURCE_POINTS_VERSION} from './decision-scores.js';
+import {renderTerminalScoreCards, terminalDocumentCounts} from './workbench-visuals.js';
 
 const $ = selector => document.querySelector(selector);
 const terminal = new Set(['completed', 'failed', 'cancelled', 'timed_out', 'resource_limited']);
-const stageLabels = {queued: 'Queued', validating: 'Checking question', planning: 'Planning search',
+const stageLabels = {queued: 'Queued', validating: 'Checking input', planning: 'Planning search',
   model_readings: 'Reading mask syntax', opening_resources: 'Opening sources',
   retrieval: 'Finding source passages', construction: 'Constructing candidates',
   task_decisions: 'Assessing evidence', projection: 'Checking result', digest: 'Writing analyst digest', saving: 'Saving result',
@@ -20,8 +22,8 @@ let scopeMetadata = null;
 function updateCorpusDate(reset = false) {
   const cib = $('#corpus').value === 'cib';
   $('#origin-label').textContent = cib ? 'Source document (optional)' : 'Exclude document (optional)';
-  $('#origin-hint').textContent = cib ? 'Leave blank for your own question. Enter an ID when quoting a source document.' :
-    'Leave blank for your own question. For a source quotation, exclude its document.';
+  $('#origin-hint').textContent = cib ? 'Leave blank for your own input. Enter an ID when quoting a source document.' :
+    'Leave blank for your own input. For a source quotation, exclude its document.';
   if (!scopeMetadata) return;
   const bounds = scopeMetadata.corpora[$('#corpus').value];
   $('#as-of').min = bounds.first_date;
@@ -72,8 +74,8 @@ function renderHistory() {
     link.dataset.runId = entry.runId;
     link.setAttribute('aria-current', String(result?.run_id === entry.runId));
     link.setAttribute('aria-disabled', String(busy));
-    link.append(node('strong', entry.envelope.request.query.slice(0, 150)), node('small',
-      `${entry.envelope.execution_kind === 'fixture' ? 'Fixture / ' : ''}${entry.envelope.request.corpus.toUpperCase()} / ${entry.envelope.request.task} / Saved ${new Date(entry.savedAt).toLocaleString()}`));
+    link.append(node('strong', entry.summary.query), node('small',
+      `${entry.summary.execution_kind === 'fixture' ? 'Fixture / ' : ''}${entry.summary.corpus.toUpperCase()} / ${entry.summary.task} / Saved ${new Date(entry.savedAt).toLocaleString()}${entry.kind === 'reference' ? ' / backend reference' : ' / stored legacy result'}`));
     link.addEventListener('click', async event => {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
@@ -84,27 +86,36 @@ function renderHistory() {
   }));
 }
 async function openHistory(id) {
-  const saved = localHistory.get(id);
-  if (!saved) { $('#history-status').textContent = 'This run is not saved in this tab. No backend request was made.'; return; }
+  const entry = localHistory.entry(id);
+  if (!entry) { $('#history-status').textContent = 'This run is not saved in this tab, or its history has expired. No backend request was made.'; return; }
   const epoch = ++pollEpoch;
   try {
+    $('#history-status').textContent = localHistory.get(id) ? 'Opening the retained result...' : 'Opening the saved backend run; no new analysis will be submitted.';
+    const saved = await localHistory.recover(id, {backend: $('#backend').value,
+      fetchResult: client ? identity => client.result(identity) : null});
     await verifyEnvelope(saved, id);
     if (epoch !== pollEpoch) return;
     const scope = displayedScope(saved.request, saved.source_scope);
     $('#task').value = saved.request.task; $('#corpus').value = saved.request.corpus; updateCorpusDate();
     $('#query').value = saved.request.query; $('#as-of').value = scope.through;
     $('#excluded-origin').value = /^live-analyst-origin:/.test(saved.request.excluded_origin) ? '' : saved.request.excluded_origin;
-    $('#focal-marker').value = saved.request.focal_marker || '[MASK]';
+    $('#focal-marker').value = saved.request.focal_marker || '[REDACTION]';
     $('#focal-field').hidden = saved.request.task !== 'redaction';
     $('#run-title').textContent = 'Stored result'; $('#job-status').textContent = 'No new analysis';
     $('#run-heading').hidden = true;
     $('#progress').hidden = true; $('#cancel').hidden = true; $('#retry').hidden = true;
     await renderResult(saved, {stored: true, expectedEpoch: epoch});
-  } catch {
-    $('#history-status').textContent = 'This local result could not be verified. No substitute was opened.';
+    $('#history-status').textContent = entry.kind === 'reference' ? 'Saved backend result reopened. No new analysis or model call.' : 'Legacy local result reopened and verified. No backend request or new analysis.';
+  } catch (error) {
+    if (epoch !== pollEpoch) return;
+    $('#history-status').textContent = error.code === 'HISTORY_RECONNECT' || error.code === 'HISTORY_BACKEND' ? error.message :
+      error.code === 'JOB_NOT_FOUND' ? 'Saved run unavailable to this session. The backend may require its original session owner. No new analysis was started. The current result, if any, is unchanged.' :
+      'The saved result could not be retrieved or verified. Reconnect and select it again; it may be unavailable to a new session. No new analysis or substitute result was opened. The current result, if any, is unchanged.';
+    if (!client) { $('#connection').open = true; $('#login-password').focus({preventScroll: true}); }
   }
 }
 $('#clear-history').addEventListener('click', () => {
+  if (!busy) pollEpoch++;
   localHistory.clear(); renderHistory();
   const url = new URL(location.href); url.searchParams.delete('live_run'); history.replaceState(null, '', url);
   $('#history-status').textContent = 'Local history cleared. The open result, if any, remains in memory until you leave.';
@@ -180,16 +191,30 @@ export async function mountLiveSourcePage(host, page, proof) {
   if ((page.id || page.canonical_page_id) !== proof.canonical_page_id || page.document_id !== proof.document_id || page.date !== proof.date) throw Error('Source identity changed.');
   const text = JSON.stringify(page.text).replace(/[\u007f-\uffff]/g, c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
   if (await digestBytes(new TextEncoder().encode(text)) !== proof.page_sha256) throw Error('Source page hash changed.');
-  const {exactSourceAnchor, appendCIBPDFPair} = await import('./source-inspection.js');
+  const {exactSourceAnchor, appendCIBPDFPair, cibPDFPair} = await import('./source-inspection.js');
   const anchor = exactSourceAnchor(page.text, proof), chars = Array.from(page.text), pre = node('pre', null, 'full-source-text');
   const mark = node('mark', anchor.text);
   pre.append(document.createTextNode(chars.slice(0, anchor.start).join('')), mark, document.createTextNode(chars.slice(anchor.end).join('')));
   if (!host.isConnected) return;
-  host.replaceChildren(pre);
+  const context = node('section', null, 'source-quote-context');
+  context.dataset.testid = 'live-source-context';
+  const quotation = node('blockquote'); quotation.dataset.testid = 'live-source-highlight';
+  quotation.append(node('mark', anchor.text)); context.append(quotation);
+  host.replaceChildren(context, pre);
   if (page.corpus === 'cib') {
     try {
-      await appendCIBPDFPair(host, {page: {...page, page_sha256: proof.page_sha256}, proof, base: new URL('.', location.href).href});
-    } catch { host.append(node('p', 'Original PDFs are unavailable in this export.', 'hint')); }
+      const options = {page: {...page, page_sha256: proof.page_sha256}, proof, base: new URL('.', location.href).href};
+      const section = await appendCIBPDFPair(context, options);
+      if (section) for (const item of await cibPDFPair(options)) {
+        if (!item.page) continue;
+        const url = new URL(item.asset_url); url.hash = 'page=' + item.page;
+        const link = node('a', `${item.release === 'earlier' ? 'Earlier' : 'Later'} PDF / page ${item.page}`, 'button');
+        link.href = url.href; link.target = '_blank'; link.rel = 'noopener noreferrer';
+        link.dataset.testid = 'live-source-pdf'; link.dataset.release = item.release;
+        link.dataset.pdfPage = String(item.page); link.dataset.pdfSha256 = item.sha256;
+        section.insertBefore(link, section.querySelector('[data-testid=source-pdf-open]'));
+      }
+    } catch { context.append(node('p', 'Original PDFs are unavailable in this export.', 'hint')); }
   }
 }
 function disconnect(message = 'Logged out. Log in again to obtain a new short-lived session.') {
@@ -244,7 +269,7 @@ async function connected() {
   clearTimeout(expiryTimer);
   expiryTimer = setTimeout(() => disconnect('Session expired. Log in again; no password or bearer was retained.'), Math.max(0, seconds) * 1000);
   availability(health.mode === 'fixture' ? 'API0 fixture connected. This is NOT inference.' : health.ready ?
-    'Ready for a new question.' : 'Logged in. Execution is disabled by the backend operator.', !health.ready);
+    'Ready for a new input.' : 'Logged in. Execution is disabled by the backend operator.', !health.ready);
   $('#connection').open = false;
 }
 function loginError(error) {
@@ -301,7 +326,7 @@ function renderJob(value) {
   job = value;
   $('#run-panel').hidden = false;
   $('#run-heading').hidden = value.status === 'completed';
-  $('#run-title').textContent = terminal.has(value.status) ? stageLabels[value.status] || 'Analysis' : 'Analyzing your question';
+  $('#run-title').textContent = terminal.has(value.status) ? stageLabels[value.status] || 'Analysis' : 'Analyzing your input';
   const events = Array.isArray(value.events) ? value.events : [];
   const latest = [...events].reverse().find(event => progressGroups.some(([, stages]) => stages.includes(event.stage)))?.stage || value.stage;
   const current = Math.max(0, progressGroups.findIndex(([, stages]) => stages.includes(latest)));
@@ -347,14 +372,14 @@ $('#question-form').addEventListener('submit', async event => {
   $('#input-status').hidden = true;
   if (!client) return;
   const query = $('#query').value.trim();
-  if (new TextEncoder().encode(query).length > 2000) { availability('The analyst clause must be at most 2000 UTF-8 bytes.', true); return; }
+  if (new TextEncoder().encode(query).length > 2000) { availability('The input must be at most 2000 UTF-8 bytes.', true); return; }
   if (busy) return;
   setBusy(true);
   inlineEpoch++; inlineCleanup?.(); inlineCleanup = null;
   result = null; job = null;
   $('#run-panel').hidden = false; $('#result').hidden = true; $('#local-verdict').hidden = true;
   $('#run-heading').hidden = false;
-  $('#run-title').textContent = 'Starting analysis'; $('#job-status').textContent = 'Submitting question';
+  $('#run-title').textContent = 'Starting analysis'; $('#job-status').textContent = 'Submitting input';
   $('#progress').hidden = true; $('#cancel').hidden = true; $('#retry').hidden = true;
   $('#run-panel').scrollIntoView({block: 'start'});
   try {
@@ -387,58 +412,102 @@ $('#retry').addEventListener('click', async () => {
 });
 
 const statusText = value => String(value || 'UNRESOLVED').replaceAll('_', ' ').toLowerCase().replace(/^./, char => char.toUpperCase());
-function renderScores(value) {
+export function compactScoreOverview(record, scores = computeDecisionScores(record)) {
+  if (!scores) return null;
+  if ((record.case?.task || record.result?.task) !== 'redaction') return {scope: 'overall', values: scores.overall};
+  const index = scores.readings.findIndex(reading => reading.candidates.length);
+  if (index < 0) return {scope: 'top-candidate', values: null};
+  const reading = scores.readings[index], saved = reading.candidates[0];
+  const candidate = record.result.readings.find(row => row.reading?.id === reading.id)?.candidates[0];
+  const card = candidate?.terminal_scorecard;
+  if (card && ['id', 'native_status', 'score', 'support', 'oppose', 'context', 'fit', 'criteria_coverage'].some(key => card[key] !== saved[key])) {
+    throw Error('The top candidate scorecard differs from its recorded terminal scores.');
+  }
+  return {scope: 'top-candidate', readingId: reading.id, readingNumber: index + 1,
+    candidateId: candidate?.id, fill: candidate?.fill, values: card || null};
+}
+export function renderScores(value) {
   const record = value.condition, fixture = value.execution_kind === 'fixture';
   const nativeStatus = record.local_decisions_v65?.overall?.status || record.result?.status || 'UNRESOLVED';
-  let scores = null, invalidScores = false;
-  try { scores = computeDecisionScores(record); } catch { invalidScores = true; }
+  const retrieval = liveRetrievalSummary(value);
+  let scores = null, summary = null, invalidScores = false;
+  try { scores = computeDecisionScores(record); summary = compactScoreOverview(record, scores); }
+  catch { scores = null; invalidScores = true; }
   $('#local-verdict').hidden = false;
-  $('#verdict-title').textContent = fixture ? 'Fixture only' : statusText(scores?.overall?.native_status || nativeStatus);
+  $('#verdict-title').textContent = fixture ? 'Fixture only' : retrieval.noCandidate ? 'No candidate passed' : statusText(scores?.overall?.native_status || nativeStatus);
   const status = String(scores?.overall?.native_status || nativeStatus).toLowerCase();
   $('#local-verdict').dataset.tone = /^(backed|supported|support|for)$/.test(status) ? 'support' : /^(opposed|against|counter)$/.test(status) ? 'oppose' : 'context';
-  $('#verdict-detail').textContent = fixture ? 'Synthetic UI check. No historical inference or source support.' : scores ?
+  $('#verdict-detail').textContent = fixture ? 'Synthetic UI check. No historical inference or source support.' : retrieval.noCandidate ?
+    `${retrieval.text} Retrieval and inspection do not establish factual support.` : scores ?
     scores.overall.required_atoms > 0 ? `${scores.overall.complete_atoms} of ${scores.overall.required_atoms} required facts complete.` :
       'Candidate scores retain the recorded evidence and order.' : invalidScores ?
         'The saved terminal scorecard could not be verified.' : 'Terminal scores were not recorded for this execution.';
   $('#score-section').hidden = false;
   const target = $('#decision-scores'); target.replaceChildren();
   if (!scores) { target.append(node('p', invalidScores ? 'Saved scorecard unavailable: verification failed.' : 'Terminal scores not recorded.', 'hint')); return; }
+  const points = [EVIDENCE_SCORE_VERSION, POINTS_SCORE_VERSION, SOURCE_POINTS_VERSION].includes(scores.version);
   const overview = () => {
     const row = node('div', null, 'score-overview');
-    const candidate = scores.readings.find(reading => reading.candidates.length)?.candidates[0];
-    if (candidate) {
-      row.append(node('span', `Final score: ${formatDecisionScore(candidate.score)}`));
-      return row;
+    const metric = (label, value) => {
+      const item = node('span', `${label}: ${formatDecisionScore(value)}`);
+      item.title = String(value); item.dataset.scoreValue = String(value);
+      return item;
+    };
+    row.dataset.scoreScope = summary.scope;
+    if (summary.scope === 'top-candidate') {
+      row.dataset.readingId = summary.readingId || '';
+      row.dataset.candidateId = summary.candidateId || '';
+      const label = node('div', summary.candidateId ?
+        `Top candidate / reading ${summary.readingNumber}: ${summary.fill}. Scores are not summed across candidates; rank is not acceptance.` :
+        'No candidate scorecard to summarize.', 'hint');
+      label.style.flexBasis = '100%'; label.style.overflowWrap = 'anywhere';
+      row.append(label);
+      if (!summary.values) {
+        if (summary.candidateId) row.append(node('span', 'Top candidate scorecard not recorded.'));
+        return row;
+      }
+      if (points) row.append(metric('Ranking points (not confidence)', summary.values.score));
+      row.append(metric('Source fit', summary.values.fit), metric('Criteria coverage / 1', summary.values.criteria_coverage));
+      const counts = terminalDocumentCounts(summary.values);
+      if (counts) row.append(node('span', `${counts.total} distinct contributing documents`));
     }
     for (const [label, key] of [['Support', 'support'], ['Opposition', 'oppose'], ['Context', 'context']])
-      row.append(node('span', `${label}: ${formatDecisionScore(scores.overall[key])}`));
+      row.append(metric(label, summary.values[key]));
     return row;
   };
   $('#local-verdict').append(overview());
-  target.append(overview());
+  target.append(renderTerminalScoreCards(record, scores, {formatScore: formatDecisionScore, nativeBars: true, showTitle: false,
+    readingTitle: reading => reading.label || reading.id}));
+  const raw = node('details'); raw.append(node('summary', 'Raw saved score table / original units'));
+  target.append(raw);
   const tableFor = (caption, entries, labels, withFit = false) => {
     if (!entries.length) return;
     const scroll = node('div', null, 'score-scroll'), table = node('table', null, 'score-table');
     table.append(node('caption', caption));
     const head = node('tr');
-    for (const text of ['Item', 'Score', 'Support', 'Opposition', 'Context', 'Coverage', ...(withFit ? ['Fit'] : [])]) {
+    for (const text of ['Item', withFit && points ? 'Ranking points' : withFit ? 'Priority index' : 'Signed evidence index', 'Support', 'Opposition', 'Context', 'Criteria / 1', ...(withFit ? ['Fit'] : [])]) {
       const cell = node('th', text); cell.scope = 'col'; head.append(cell);
     }
     const thead = node('thead'); thead.append(head); table.append(thead);
     const body = node('tbody');
     for (const entry of entries) {
       const row = node('tr'); row.append(node('th', labels.get(entry.id) || entry.id)); row.firstChild.scope = 'row';
-      for (const key of ['score', 'support', 'oppose', 'context', 'criteria_coverage', ...(withFit ? ['fit'] : [])]) row.append(node('td', formatDecisionScore(entry[key])));
+      for (const key of ['score', 'support', 'oppose', 'context', 'criteria_coverage', ...(withFit ? ['fit'] : [])]) {
+        const cell = node('td', formatDecisionScore(entry[key]));
+        cell.title = String(entry[key]); cell.dataset.scoreValue = String(entry[key]); cell.dataset.scoreField = key;
+        row.append(cell);
+      }
       body.append(row);
     }
-    table.append(body); scroll.append(table); target.append(scroll);
+    table.append(body); scroll.append(table); raw.append(scroll);
   };
   tableFor('Required facts', scores.atoms, new Map((record.result.atoms || []).map(atom => [atom.id, atom.text])));
   for (const reading of scores.readings) {
     const native = (record.result.readings || []).find(row => (row.reading_id || row.reading?.id) === reading.id);
     tableFor(native?.reading?.label || 'Recorded candidates', reading.candidates, new Map((native?.candidates || []).map(candidate => [candidate.id, candidate.fill])), true);
   }
-  target.append(node('p', 'Recorded indices, not probabilities.', 'hint'));
+  raw.append(node('p', points ? 'Candidate ranking points and fact-wise evidence indices retain their native units. Neither is a correctness probability.' :
+    'Historical priority and evidence indices, not points or probabilities.', 'hint'));
 }
 
 async function renderResult(value, {stored = false, expectedEpoch = null} = {}) {
@@ -450,8 +519,10 @@ async function renderResult(value, {stored = false, expectedEpoch = null} = {}) 
   renderScores(value);
   $('#run-panel').hidden = false;
   $('#result').hidden = false;
-  $('#result-status').textContent = value.native.result.status || 'Completed';
-  $('#result-kind').textContent = value.execution_kind === 'fixture' ? 'FIXTURE ONLY. No historical inference, source support or paid calls.' : stored ? 'Stored local result. No new analysis or model call.' : value.receipt.execution_cache_hit ? 'Verified result reused for the same input and resources.' : 'New Live analysis complete.';
+  const retrieval = liveRetrievalSummary(value);
+  $('#result-status').textContent = retrieval.noCandidate ? 'No candidate passed' : value.native.result.status || 'Completed';
+  $('#result-kind').textContent = value.execution_kind === 'fixture' ? 'FIXTURE ONLY. No historical inference, source support or paid calls.' : stored ? 'Reopened verified result. No new analysis or model call.' : value.receipt.execution_cache_hit ? 'Verified result reused for the same input and resources.' : 'New Live analysis complete.';
+  if (value.execution_kind !== 'fixture') $('#result-kind').textContent += ` ${retrieval.text}`;
   const decisions = [];
   const decisionName = value => ({SUPPORT:'Supported',SUPPORTED:'Supported',OPPOSED:'Opposed',
     COUNTER:'Opposed',PARTIAL:'Partial evidence',UNRESOLVED:'Unresolved',
@@ -474,7 +545,7 @@ async function renderResult(value, {stored = false, expectedEpoch = null} = {}) 
   $('#decisions').replaceChildren(...decisions);
   const visibleScope = {Corpus: {cib: 'Central Intelligence Bulletins', iran: 'Iran cables', vietnam: 'Vietnam cables'}[value.request.corpus],
     'Evidence through': scope.through,
-    'Source document': scope.originDocument || 'None (analyst-written question)',
+    'Source document': scope.originDocument || 'None (analyst-written input)',
     'Excluded document': scope.excludedDocument === null ? 'None' : scope.excludedDocument,
     ...(scope.originDocument ? {'Source document text': scope.earlierOriginAllowed ? 'Earlier/both-release text permitted; later-only text excluded' : 'Entire document excluded'} : {}),
     'Source view': value.request.corpus === 'cib' ? 'Permitted earlier-release evidence' : 'Permitted CONFIDENTIAL evidence'};
@@ -513,9 +584,9 @@ async function renderResult(value, {stored = false, expectedEpoch = null} = {}) 
   $('#inline-result').scrollIntoView({block: 'start'});
   if (!stored) {
     try {
-      const saved = await localHistory.remember(value);
-      $('#history-status').textContent = saved.stored ? 'Completed results are saved in this tab for up to 24 hours. No login details are stored.' :
-        saved.memory ? 'History is available in memory only; browser storage is unavailable.' : 'This large result was not retained in tab history. Download it to keep a copy.';
+      const saved = await localHistory.remember(value, {backend: $('#backend').value});
+      $('#history-status').textContent = saved.stored ? saved.reference ? 'A compact run reference is saved in this tab for up to 24 hours. The full open result remains in memory; revisiting requires the original backend and an authorized session. No login details are stored.' : 'The verified legacy local result remains saved with its original history lifetime. No login details are stored.' :
+        saved.memory ? 'History is available in memory only; browser storage is unavailable.' : saved.reason || 'This result was not retained in tab history. Download it to keep a copy.';
     } catch { $('#history-status').textContent = 'This result was not saved locally. The open result and download remain available.'; }
     renderHistory();
   }

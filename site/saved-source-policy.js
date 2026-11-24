@@ -2,9 +2,9 @@
 const same = (a,b) => a && b && Object.keys(a).length===Object.keys(b).length && Object.keys(b).every(k=>a[k]===b[k]);
 export function savedSourcePolicy(value) {
   const id = value?.id || 'strict_prior';
-  if (!['strict_prior','source_day_inclusive','live_before_with_earlier_origin'].includes(id)) throw Error('Unknown saved evidence policy.');
-  const expected = {version:'trusted-corpus-source-view/1',id,date_relation:id==='source_day_inclusive'?'<=':'<',
-    cutoff_role:id==='live_before_with_earlier_origin'?'exclusive_live_as_of':'source_document_date',
+  if (!['strict_prior','source_day_inclusive','live_before_with_earlier_origin','live_through_with_earlier_origin'].includes(id)) throw Error('Unknown saved evidence policy.');
+  const expected = {version:'trusted-corpus-source-view/1',id,date_relation:['source_day_inclusive','live_through_with_earlier_origin'].includes(id)?'<=':'<',
+    cutoff_role:id==='live_before_with_earlier_origin'?'exclusive_live_as_of':id==='live_through_with_earlier_origin'?'inclusive_live_as_of':'source_document_date',
     cib_source_document:id==='strict_prior'?'EXCLUDED':'EARLIER_OR_BOTH_ONLY',
     cable_origin:'WHOLE_DOCUMENT_EXCLUDED',cable_classification:'CONFIDENTIAL',cable_document_wide_handling_veto:true,
     later_or_secret_version_admitted:false,source_dates_or_document_ids_rewritten:false};

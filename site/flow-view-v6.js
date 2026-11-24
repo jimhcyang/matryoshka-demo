@@ -685,7 +685,7 @@ export function mountPaths(container, options) {
       const card=document.createElement("article");card.className="flow-path-card-v6";
       const row=document.createElement("div");row.className="flow-path-pipeline-v6";
       const lexical=route.route_kind==="LEXICAL_SOURCE_READOUT",inputs=lexical?(route.query_inputs||[]):routeInputs(projection,route);
-      const input=column(lexical?"Executed search receipts":"Query inputs");
+      const input=column(lexical?"Executed search receipts":"Inputs");
       if(inputs.length)for(const s of inputs.slice(0,3))input.append(button(short(s.label||s.text,12),()=>options.onNode?.({...s,label:s.label||s.text,type:"query",...(lexical?{explanation:"Saved executed lexical search, not a graph restart or historical assertion."}:{})})));
       else input.append(paragraph("No individual starter-to-first-state link was retained; no atom attribution is guessed."));
       const path=column(lexical?"Saved source readout":route.route_kind==="DISPLAYED_INFLUENCE_CORRIDOR"?"High-influence corridor":"Recorded graph route");

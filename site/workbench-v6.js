@@ -3,13 +3,18 @@ import {formatNumber,formatTargetText} from "./flow-layout-v4.js";
 import {direction as humanDirection,displayText,coverage as recordedCoverage,localTaskVerdict,factual,feasibility,localDecisions,selectionSummary,llmReview} from "./verdict-v64.js";
 import {decisionLabel,packetFor,unitFor,overviewFor,reviewDisclosure,guideDisclosure,routeProvenance,exactGateReview,verdictSummary,exactOriginAnchors,sidebarDecisionSummary,decisionSummaryFor,preferredReading,canonicalGateJSON,isCounterhypothesis,presentationDecisionReview,presentationTitle,hasRequestedAnalystDigest,hypothesisReadout,assertionDecision,currentResourceURL,verifyCurrentResourceResponse,readingExplanation,currentPDFURL,currentReportStatusBadge,publishedConditionStatus,readingLabel} from "./local-decisions-v65.js";
 import {preparePostrunReview,verifyPostrunReview} from "./postrun-review-v74.js";
-import {mountSavedRoutes,uniqueProofs,decisionProofs,digestProofs,renderScoreChart,renderTerminalScoreCards,studyCompanionCases,workbenchSourceScope,recordedAtomLinks,guideRoutes,groupDuplicateFills} from "./workbench-visuals.js";
+import {mountSavedRoutes,uniqueProofs,decisionProofs,factPresentationProofs,digestProofs,renderScoreChart,renderTerminalScoreCards,renderIdentityConsolidation,studyCompanionCases,workbenchSourceScope,recordedAtomLinks,guideRoutes,groupDuplicateFills} from "./workbench-visuals.js";
 import {computeDecisionScores,formatDecisionScore} from './decision-scores.js';
+import {studyInputPrimary,studyInspection} from './delegation-entry.js';
+import {counterPolicyNotice} from './counter-policy-ui.js';
 import {sourceScopeAllows} from './saved-source-policy.js';
 import {mountEvidenceMap} from './evidence-map.js';
 import {loadSourceLookups} from './source-lookups-v1.js';
 import {loadReaderCasing,readerText} from './reader-casing.js';
-import {exactSourceAnchor,focalReferenceFromOrigin,appendCIBPDFPair} from './source-inspection.js';
+import {exactSourceAnchor,focalReferenceFromOrigin,appendCIBPDFPair,cibPDFPair} from './source-inspection.js';
+import originPageLocators from './source-pdf-locators.js';
+import {inputOriginPDFLocators} from './input-origin-locators.js';
+import {nativeControllerWithholdingViews,controllerWithholdingEmptyText,renderControllerWithholding,renderControllerWithheldAudit} from './controller-withholding-ui.js';
 await loadReaderCasing();
 const $ = selector => document.querySelector(selector);
 const list = value => Array.isArray(value) ? value : [];
@@ -33,7 +38,7 @@ export function bindCasebook(manifest,rows,{reportSHA,reportRun}={}){
   const resolve=entry=>{
     const row=byId.get(entry?.case_id),c=row?.case;
     if(!c||!corpora.includes(c.corpus)||!tasks.includes(casebookTask(c.task))||entry.corpus!==c.corpus||entry.task!==c.task)throw Error("An examples entry is not an exact active case.");
-    if(entry.case&&["case_id","corpus","task","query","document_id","date","focal_marker"].some(key=>entry.case[key]!==c[key]))throw Error("An examples entry changes the saved question.");
+    if(entry.case&&["case_id","corpus","task","query","document_id","date","focal_marker"].some(key=>entry.case[key]!==c[key]))throw Error("An examples entry changes the saved input.");
     if(entry.resource_binding&&["resource_id","registry_sha256","index_sha256"].some(key=>entry.resource_binding[key]!==row.resource_binding?.[key]))throw Error("An examples entry changes the active resource.");
     return {case_id:c.case_id,corpus:c.corpus,task:c.task,row,source_label:typeof entry.source_label==='string'?entry.source_label:''};
   };
@@ -83,7 +88,7 @@ export function bindCasebook(manifest,rows,{reportSHA,reportRun}={}){
     const seen=new Set();backgrounds[corpus]=entries.map(entry=>{
       const row=primary.find(value=>value.case_id===entry.case_id&&value.corpus===corpus);
       if(!row||seen.has(entry.case_id)||typeof entry.background!=="string"&&typeof entry.historical_setup!=="string")throw Error("A corpus background is not bound to its primary case.");
-      if(entry.citation&&(entry.citation.document_id!==row.row.case.document_id||entry.citation.date!==row.row.case.date||entry.citation.eligible_evidence!==false))throw Error("A corpus background changes its query-origin provenance.");
+      if(entry.citation&&(entry.citation.document_id!==row.row.case.document_id||entry.citation.date!==row.row.case.date||entry.citation.eligible_evidence!==false))throw Error("A corpus background changes its input-origin provenance.");
       seen.add(entry.case_id);return entry;
     });
   }
@@ -99,13 +104,13 @@ export function caseBackgroundSetup(entry){
 }
 // END_CASEBOOK_FILTERS
 const ARMS = {
-  A:{key:"llm_readings",name:"LLM readings",origin:"Visible-query atoms and model grammatical readings"},
+  A:{key:"llm_readings",name:"LLM readings",origin:"Visible-input atoms and model grammatical readings"},
   B:{key:"llm_atoms",name:"Atoms only",origin:"Required assertions without additional readings"},
   C:{key:"llm_local",name:"Local readings",origin:"Required assertions and local grammatical readings"}
 };
 for(const option of $("#arm-select").options)if(ARMS[option.value])option.textContent=ARMS[option.value].name;
 const STAGES = [["01","Input"],["02","Facts"],["03","Routes"],["04","Sources"],["05","Construction"],["06","Review"]];
-const GRAPH_SCOPE = "The full Corpus Map is separate from this question's evidence view. Ordinary map lookup does not inherit the strict cutoff or whole-origin exclusion; a saved Guide Path carries its own case scope. Map context is not automatically eligible proof.";
+const GRAPH_SCOPE = "The full Corpus Map is separate from this input's evidence view. Ordinary map lookup does not inherit the input's date boundary or origin policy; a saved Guide Path carries its own case scope. Map context is not automatically eligible proof.";
 const state = {report:null,sourceReport:null,manifest:null,trace:null,catalog:null,casebook:null,casebookPending:"Loading the source-bound examples catalog...",filters:{corpus:"",task:""},row:null,saved:null,gateReview:null,home:false,arm:"A",reading:"",candidate:"",originalPath:0,stage:"01",reference:false,loading:false,pending:"",epoch:0,drawerEpoch:0,flow:null,paths:null,projection:null,compareReadings:false,reviewReading:"",independentReview:null,reviewEpoch:0};
 const conditionCache = new Map();
 const projectionCache = new Map();
@@ -211,9 +216,49 @@ function note(text,className="note") { return el("p",text,{class:className}); }
 function badge(text,kind="") { return el("span",text,{class:"badge "+kind}); }
 function heading(text) { return el("h3",text,{class:"section-title"}); }
 function readable(text) { return readerText(text,state.row?.case?.corpus); }
+// BEGIN_INPUT_MARKER_VIEW
+function inputMarkerTokens(text,focalMarker=''){
+  const raw=String(text),chars=Array.from(raw),tokens=[];
+  const focal=focalMarker&&raw.indexOf(focalMarker)===raw.lastIndexOf(focalMarker)?raw.indexOf(focalMarker):-1;
+  let at=0;
+  for(const match of raw.matchAll(/\[\[REDACTION_SLOT:[^\]]+\]\]|\[(?:REDACTION(?:[ _]\d+)?|REDACTED|STILL REDACTED|MASKED|MASK)\]/gi)){
+    const start=Array.from(raw.slice(0,match.index)).length,end=start+Array.from(match[0]).length;
+    if(start>at)tokens.push({start:at,end:start,raw:chars.slice(at,start).join(''),kind:'text'});
+    const selected=match.index===focal&&match[0]===focalMarker;
+    tokens.push({start,end,raw:match[0],kind:selected?'focal':'masked',label:selected?'[REDACTION]':'[MASKED]'});at=end;
+  }
+  if(at<chars.length)tokens.push({start:at,end:chars.length,raw:chars.slice(at).join(''),kind:'text'});
+  return tokens;
+}
+// END_INPUT_MARKER_VIEW
+function appendInputView(host,text,{focalMarker='',focalNode=null}={}){
+  const display=Array.from(readable(text));
+  for(const token of inputMarkerTokens(text,focalMarker)){
+    if(token.kind==='text'){host.append(document.createTextNode(display.slice(token.start,token.end).join('')));continue;}
+    const node=token.kind==='focal'&&focalNode?focalNode(token):el('span',token.label);
+    node.dataset.nativeMarker=token.raw;node.dataset.nativeStart=String(token.start);node.dataset.nativeEnd=String(token.end);
+    node.dataset.markerView=token.kind;host.append(node);
+  }
+  return host;
+}
 function short(text,n=12) { const words=String(text||"").trim().split(/\s+/);return words.slice(0,n).join(" ")+(words.length>n?"...":""); }
 function title(row) { return typeof row.presentation_title==="string"&&row.presentation_title.trim()?presentationTitle(row):row.display_title || row.case.title || short(row.case.query.replace(/^(?:\s*\[REDACTED\]\s*)+/i,"").replace(/\[(?:REDACTED|REDACTION[^\]]*)\]/gi,"masked passage"),11); }
 let livePacket=null;
+const controllerAuditCache=new WeakMap();
+const inputContextCache=new WeakMap();
+async function prepareInputContext(record,caseInfo){
+  if(!record||inputContextCache.has(record))return;
+  try{inputContextCache.set(record,{view:await nativeInputContextView(record,caseInfo)});}
+  catch{inputContextCache.set(record,{error:'The recorded supplied-context suggestions could not be verified against this input and its declared readings. No suggestion is substituted.'});}
+}
+async function prepareControllerAudit(record,caseInfo){
+  if(!record||controllerAuditCache.has(record))return;
+  try{controllerAuditCache.set(record,{views:await nativeControllerWithholdingViews(record,caseInfo)});}
+  catch(error){controllerAuditCache.set(record,{error:error.message});}
+}
+function currentControllerAudit(){return controllerAuditCache.get(state.saved);}
+function currentControllerView(){return currentControllerAudit()?.views?.get(state.reading)||null;}
+function emptyControllerShortlist(){const view=currentControllerView();return view?.candidates.length&&view.displayedCount===0?view:null;}
 function isLivePublication(){return state.report?.version==='matryoshka-live-report/1';}
 function isNarrativePublication(){return isLivePublication()||state.report?.version==='narrative-workbench-publication/1';}
 function isCurrentPublication(){return isNarrativePublication()||state.report?.version==='current-workbench-publication/1';}
@@ -231,10 +276,10 @@ function queryKind(row) { return row.presentation_selection?.query_kind||row.que
 function analystAlternativeKind(kind) { return typeof kind==="string"&&kind.startsWith("ANALYST_ALTERNATIVE_"); }
 function syntheticMaskKind(kind) { return typeof kind==="string"&&/^SYNTHETIC_LITERAL_(?:CABLE|SOURCE)_MASK/.test(kind); }
 function queryKindNotice(row) {
-  if(isCounterhypothesis(row.case?.task||row.task,queryKind(row)))return "Analyst-authored counterhypothesis: the source assertion was deliberately altered, not quoted verbatim. The saved question is unchanged.";
-  if(syntheticMaskKind(queryKind(row)))return "Synthetic literal source-span mask, not an observed release redaction. The saved question is unchanged; its input-origin attachment is not evidence.";
-  if(analystAlternativeKind(queryKind(row)))return "Analyst-authored alteration of the origin assertion, not verbatim source wording. The saved query is unchanged.";
-  return "Synthetic analyst counterhypothesis: analyst-authored, not natural source wording. The saved query is unchanged.";
+  if(isCounterhypothesis(row.case?.task||row.task,queryKind(row)))return "Analyst-authored counterhypothesis: the source assertion was deliberately altered, not quoted verbatim. The saved input is unchanged.";
+  if(syntheticMaskKind(queryKind(row)))return "Synthetic literal source-span mask, not an observed release redaction. The saved input is unchanged; its input-origin attachment is not evidence.";
+  if(analystAlternativeKind(queryKind(row)))return "Analyst-authored alteration of the origin assertion, not verbatim source wording. The saved input is unchanged.";
+  return "Synthetic analyst counterhypothesis: analyst-authored, not natural source wording. The saved input is unchanged.";
 }
 function queryKindBadge(row) {
   const kind=queryKind(row),alternative=analystAlternativeKind(kind),mask=syntheticMaskKind(kind),counter=isCounterhypothesis(row.case?.task||row.task,kind);
@@ -368,7 +413,7 @@ function visibleCases() {
 function renderRail() {
   for(const b of document.querySelectorAll('.filter-buttons [data-corpus]'))b.setAttribute('aria-pressed',String(b.dataset.corpus===state.filters.corpus));
   for(const b of document.querySelectorAll('.filter-buttons [data-task]'))b.setAttribute('aria-pressed',String(casebookTask(b.dataset.task)===casebookTask(state.filters.task)));
-  const rows=visibleCases();$("#case-count").textContent=rows.length+" questions";
+  const rows=visibleCases();$("#case-count").textContent=rows.length+" inputs";
   const notice=$("#casebook-notice"),special=state.filters.task==='redaction'&&['','cib'].includes(state.filters.corpus);
   const available=state.casebook?.special_redactions.length??0;
   const shortage=special&&state.casebook&&available<5?`${available} of 5 CIB redactions are compatible with this saved viewer. No substitutes.`:'';
@@ -380,14 +425,14 @@ function renderRail() {
     b.append(el("small",`${row.case.corpus==='cib'?'CIB':CORPORA[row.case.corpus]} / ${TASKS[row.case.task]}`,{class:"case-kind"}),el("strong",presentationTitle(row),{"data-testid":"case-presentation-title",title:row.case.query}),el("span",status?.badge||"NOT LOADED",{id:'case-status-'+row.case.case_id,class:"case-evidence-status","data-testid":"case-evidence-status","data-tone":status?.tone||"unresolved",'data-status-basis':status?.basis||'not-loaded',title:status?.detail||'This method has not been loaded.'}),el("small",`${row.case.document_id} / ${row.case.date}`));const kind=queryKindBadge(row);if(kind)b.append(kind);
     const source=[...list(state.casebook?.primary),...list(state.casebook?.special_redactions)].find(entry=>entry.case_id===row.case.case_id&&entry.source_label);
     if(source)b.append(el('small',source.source_label,{class:'case-engine-label','data-testid':'case-engine-label'}));
-    if(presentationCaveatEntries(row).length){const caveat=badge("Scope caveat","scope-caveat");caveat.dataset.testid="case-scope-caveat";caveat.title="Open this question to read its published scope limit beside the local verdict.";b.append(caveat);}return b;
+    if(presentationCaveatEntries(row).length){const caveat=badge("Scope caveat","scope-caveat");caveat.dataset.testid="case-scope-caveat";caveat.title="Open this input to read its published scope limit beside the local verdict.";b.append(caveat);}return b;
   }));
-  if(!rows.length)$("#case-list").append(note(state.casebookPending?"The curated examples catalog is not available yet. Pinned case links still open their saved records.":"No published questions match these filters.","empty"));
+  if(!rows.length)$("#case-list").append(note(state.casebookPending?"The curated examples catalog is not available yet. Pinned case links still open their saved records.":"No published inputs match these filters.","empty"));
   queueMicrotask(()=>loadRailMetadata(rows,state.arm));
 }
 function railKey(row,arm=state.arm){return `${state.report?.run_id}/${row.case.case_id}/${ARMS[arm].key}`;}
 function railStatus(row,arm=state.arm){
-  if(!hasOpenedResult(row))return publishedConditionStatus(row,ARMS[arm].key,state.report.version)||{badge:'SAVED QUESTION',tone:'unresolved',basis:'unopened-saved-task',detail:'Open this saved result to inspect its actual decision.'};
+  if(!hasOpenedResult(row))return publishedConditionStatus(row,ARMS[arm].key,state.report.version)||{badge:'SAVED INPUT',tone:'unresolved',basis:'unopened-saved-task',detail:'Open this saved result to inspect its actual decision.'};
   if(isCurrentPublication()&&!row.configurations?.[ARMS[arm].key])return {badge:'PENDING',tone:'unresolved',basis:'unpublished-method',detail:'This method is not published in the pinned report.'};
   const cached=railDecisionCache.get(railKey(row,arm));if(!cached)return currentReportStatusBadge(row,ARMS[arm].key,verifiedCurrentPublications.has(state.report)?state.report.version:null);
   const reading=state.arm===arm&&state.row?.case.case_id===row.case.case_id?state.reading:"";
@@ -414,7 +459,7 @@ async function loadRailMetadata(rows,arm){
     const pending=(async()=>{
       try{
         sidebarDecisionSummary(dto,row.case,config);
-        if(dto.query_sha256!==await textDigest(row.case.query))throw Error("Sidebar query binding changed.");
+        if(dto.query_sha256!==await textDigest(row.case.query))throw Error("Sidebar input binding changed.");
         const native=row.configurations?.[config];
         if(native?.native_run_id&&dto.native_run_id!==native.native_run_id||native?.native_checksum!=null&&canonicalGateJSON(dto.native_checksum)!==canonicalGateJSON(native.native_checksum))throw Error("Sidebar native binding changed.");
         if(!railDecisionCache.has(cacheKey))railDecisionCache.set(cacheKey,{dto});
@@ -436,12 +481,32 @@ async function bindCurrentRail(row,arm,record){
   }catch{unavailableRail(row,arm);}
 }
 function readingRows() { return list((state.saved?.result?.redaction||state.saved?.result)?.readings); }
-function initialDisplayReading(record,caseInfo){
-  const rows=list((record?.result?.redaction||record?.result)?.readings),preferred=preferredReading(record||{},caseInfo);
-  return rows.find(row=>row.reading?.id===preferred&&list(row.candidates).length)?.reading.id||rows.find(row=>list(row.candidates).length)?.reading?.id||preferred||rows[0]?.reading?.id||'';
+// BEGIN_READER_READING_CHOICE
+function curatedDisplayReading(record,caseInfo,row,{live=false}={}){
+  const choice=row?.presentation_selection?.reading_choice,gate=record?.local_decisions_v65;
+  const rows=list((record?.result?.redaction||record?.result)?.readings);
+  if(live||caseInfo?.task!=='redaction'||!choice||choice.version!=='curated-reading-choice/1'||
+    choice.presentation_only!==true||choice.answer_aware!==true||choice.benchmark!==false||choice.reference_verified!==true||
+    choice.case_id!==caseInfo.case_id||choice.config!==record?.config||choice.query_sha256!==gate?.query_sha256||
+    !/^[a-f0-9]{64}$/.test(choice.query_sha256||'')||choice.native_run_id!==record?.run_id||
+    choice.native_checksum!==record?.native_checksum||!/^[a-f0-9]{64}$/.test(choice.native_checksum||'')||
+    row.reference_answer_available===false||/unknown|unavailable|withheld/i.test(row.reference_answer_kind||'')||
+    rows.filter(value=>value.reading?.id===choice.reading_id).length!==1||
+    list(record?.plan?.slot_readings).filter(value=>value.id===choice.reading_id).length!==1)return '';
+  return choice.reading_id;
 }
+function initialDisplayReading(record,caseInfo,row,options={}){
+  const rows=list((record?.result?.redaction||record?.result)?.readings);
+  // No reference, grade, support count or candidate identity participates in fallback.
+  return curatedDisplayReading(record,caseInfo,row,options)||rows.find(row=>row.reading?.id&&list(row.candidates).length)?.reading.id||rows[0]?.reading?.id||'';
+}
+// END_READER_READING_CHOICE
 function currentReading() { const rows=readingRows();return rows.find(r=>r.reading?.id===state.reading)||rows[0]; }
-function candidates() { return groupDuplicateFills(currentReading()?.candidates).slice(0,5); }
+function candidates() {
+  const rows=list(currentReading()?.candidates);
+  const version=(state.saved?.result?.terminal_scores??state.saved?.terminal_scores)?.version;
+  return (['terminal-evidence-fit/5','terminal-evidence-fit/6'].includes(version)?rows:groupDuplicateFills(rows)).slice(0,5);
+}
 function flowItems() {
   if(state.row.case.task==="redaction")return candidates();
   if(isNarrativePublication())return list(state.saved?.result?.atoms).map(atom=>({...atom,fill:atom.text||atom.id,atom_id:atom.id}));
@@ -470,7 +535,7 @@ async function chooseCase(row,{push=true,reading,candidate,scroll=false}={}) {
     if(!detail){
       detail=await getJSON("/api/condition-v6?"+new URLSearchParams({case_id:row.case.case_id,config:key}),{signal:request.signal});
       if(pendingRecord(detail)&&!detail.case){if(epoch!==state.epoch)return;state.pending=publicationNote(detail)||"The selected v6 condition is not published yet.";state.loading=false;renderWorkspace();$("#page-state").textContent=state.pending;return;}
-      for(const field of ["case_id","corpus","task","query","date","document_id","focal_marker"])if(detail.case?.[field]!==row.case[field])throw Error("The saved condition belongs to a different question.");
+      for(const field of ["case_id","corpus","task","query","date","document_id","focal_marker"])if(detail.case?.[field]!==row.case[field])throw Error("The saved condition belongs to a different input.");
       const saved=detail.configurations?.[key]??detail.configurations?.[arm];
       if(saved){
         if(isNarrativePublication()&&saved.version!=='narrative-condition-projection/1')throw Error('A saved narrative condition must retain its explicit projection version.');
@@ -489,16 +554,22 @@ async function chooseCase(row,{push=true,reading,candidate,scroll=false}={}) {
       const packet=packetFor(state.saved,state.row.case),serialized=JSON.stringify(state.row.case.query).replace(/[\u007f-\uffff]/g,char=>"\\u"+char.charCodeAt(0).toString(16).padStart(4,"0"));
       const queryHash=await sha256(new TextEncoder().encode(serialized));
       if(epoch!==state.epoch)return;
-      if(packet.query_sha256!==queryHash||packet.binding.query_sha256!==queryHash)throw Error("The V6.5 decision supplement has another public-query binding.");
+      if(packet.query_sha256!==queryHash||packet.binding.query_sha256!==queryHash)throw Error("The V6.5 decision supplement has another public-input binding.");
       state.gateReview=await exactGateReview(state.saved,packet);
       if(epoch!==state.epoch)return;
     }
     if(!state.saved?.result&&!recordedFailure(state.saved)||pendingRecord(state.saved)||pendingRecord(state.saved?.result)||pendingRecord(detail)){state.pending=publicationNote(state.saved)||publicationNote(detail)||`No completed v6 arm ${arm} execution is published. No older run or other arm is substituted.`;state.saved=null;}
     const rows=readingRows();
     if(!rows.some(r=>r.reading?.id===state.reading)){
-      const ordinal=/^reading_(\d+)$/.exec(state.reading);state.reading=(ordinal?rows[Number(ordinal[1])-1]?.reading?.id:null)||initialDisplayReading(state.saved,state.row.case);
+      const ordinal=/^reading_(\d+)$/.exec(state.reading);state.reading=(ordinal?rows[Number(ordinal[1])-1]?.reading?.id:null)||initialDisplayReading(state.saved,state.row.case,state.row);
     }
     if(!flowItems().some(c=>c.id===state.candidate))state.candidate=flowItems()[0]?.id||"";
+    if(state.saved)await prepareControllerAudit(state.saved,state.row.case);
+    if(state.saved)await prepareInputContext(state.saved,state.row.case);
+    if(state.saved&&!rows.some(row=>row.reading?.id===reading)){
+      const primary=studyInputPrimary(state.saved,state.row.case,state.row,inputContextCache.get(state.saved)?.view);
+      if(primary?.available){state.reading=primary.readingId;state.candidate=flowItems()[0]?.id||'';}
+    }
     if(state.saved)await bindCurrentRail(state.row,arm,state.saved);
     if(state.saved)await initializeIndependentReview();
     if(epoch!==state.epoch)return;
@@ -538,7 +609,7 @@ function corpusBackground(corpus){
   for(const value of rows){
     const row=value.row,background=state.casebook.backgrounds[corpus]?.find(entry=>entry.case_id===value.case_id),card=el('section',null,{class:'corpus-background-case','data-testid':'corpus-background-case','data-case':value.case_id});
     card.append(heading(TASKS[value.task]),note(caseBackgroundSetup(background)||'Background not attached.'));
-    if(background?.citation){const p=background.citation;const inspect=()=>{const source=box(note('Query-origin provenance, not eligible evidence or a new decision.'),fields([['Document',p.document_id,true],['Date',p.date,true]]));if(typeof p.text==='string')source.append(el('blockquote',p.text,{class:'cue'}));openDrawer('Source context',CORPORA[corpus],source,()=>corpusBackground(corpus));};card.append(button('Source context',()=>{if(allowPrivileged(inspect,row))inspect();},'quiet'));}
+    if(background?.citation){const p=background.citation;const inspect=()=>{const source=box(note('Input-origin provenance, not eligible evidence or a new decision.'),fields([['Document',p.document_id,true],['Date',p.date,true]]));if(typeof p.text==='string')source.append(el('blockquote',p.text,{class:'cue'}));openDrawer('Source context',CORPORA[corpus],source,()=>corpusBackground(corpus));};card.append(button('Source context',()=>{if(allowPrivileged(inspect,row))inspect();},'quiet'));}
     card.append(button('Open saved case',()=>chooseCase(row)));body.append(card);
   }
   openDrawer(CORPORA[corpus]+' / three examples','Collection background',body);
@@ -551,7 +622,7 @@ function renderWorkspace() {
   host.dataset.reading=state.reading;
   $(".workspace-toolbar").hidden=state.home||state.readySingleMethod===true||Array.from($('#arm-select').options).filter(option=>!option.disabled).length<2;
   if(state.home){renderHome();return;}
-  if(!state.row){host.append(note(state.casebookPending||"Choose a saved question from the catalog.","empty"));return;}
+  if(!state.row){host.append(note(state.casebookPending||"Choose a saved input from the catalog.","empty"));return;}
   const c=state.row.case;
   const nav=el("nav",null,{class:"workflow-nav","aria-label":"Pipeline stages"});
   for(const [number,name] of STAGES){const a=el("a",null,{href:"#stage-"+number,"data-stage":number});a.append(el("strong",number,{class:"workflow-step-number"}),el("span",name));if(number===state.stage)a.setAttribute("aria-current","step");a.onclick=e=>{e.preventDefault();stagePosition(number);};nav.append(a);}host.append(nav);
@@ -561,24 +632,26 @@ function renderWorkspace() {
   if(!state.saved){workflow.append(note(state.pending||"No completed result is currently loaded for this selected arm. No archived result is substituted.","empty"));return;}
   if(state.saved.frozen_control===true||state.saved.fallback===true||state.row.fallback===true)workflow.append(note(publicationNote(state.saved)||"Explicit frozen control / fallback record. This is not a new v6 execution.","notice"));
   else if(publicationNote(state.saved))workflow.append(note(publicationNote(state.saved),"notice"));
-  workflow.append(renderVerdictStrip(),renderPlan(),renderDiffusion(),renderPathsStage(),renderResultsStage(),renderFindings());
+  const inputContext=renderSuppliedContext();if(inputContext)workflow.append(inputContext);
+  workflow.append(renderVerdictStrip());
+  workflow.append(renderPlan(),renderDiffusion(),renderPathsStage(),renderResultsStage(),renderFindings());
   host.setAttribute("aria-busy","false");
 }
 
 function renderHome() {
   const host=$("#case-view");host.replaceChildren();host.setAttribute("aria-busy","false");
-  const hero=el("header",null,{class:"case-hero"});hero.append(el("p","The source collections",{class:"eyebrow"}),el("h1","Explore a corpus"),note("Open the full reference graph, or return to the saved analyst questions for a source-bound task."));host.append(hero);
-  host.append(note("Full corpus graphs do not inherit a question's cutoff or whole-origin exclusion. Saved Guide Paths carry explicit case bindings; ordinary map lookup remains context, not eligible proof.","notice"));
+  const hero=el("header",null,{class:"case-hero"});hero.append(el("p","The source collections",{class:"eyebrow"}),el("h1","Explore a corpus"),note("Open the full reference graph, or return to the saved analyst inputs for a source-bound task."));host.append(hero);
+  host.append(note("Full corpus graphs do not inherit an input's cutoff or whole-origin exclusion. Saved Guide Paths carry explicit case bindings; ordinary map lookup remains context, not eligible proof.","notice"));
   const cards=el("div",null,{class:"corpus-cards"});
   const descriptions={iran:"Diplomatic cables / Iran collection",vietnam:"Diplomatic cables / Vietnam collection",cib:"Paired-release Central Intelligence Bulletins"};
   for(const corpus of ["iran","vietnam","cib"]){
     const rows=catalogCases().filter(row=>row.case.corpus===corpus),card=el("section",null,{class:"corpus-card","data-testid":"corpus-card","data-corpus":corpus});
     const selected=rows.filter(row=>presentationGroup(row)==="presentation").length,bench=rows.filter(row=>presentationGroup(row)==="bench").length,archived=rows.filter(row=>presentationGroup(row)==="archive").length;
-    const counts=state.catalog?`${selected} presentation / ${bench} bench / ${rows.length} current public questions`:`${selected} presentation / ${bench} bench / ${archived} archive / ${rows.length} evaluated questions`;
+    const counts=state.catalog?`${selected} presentation / ${bench} bench / ${rows.length} current public inputs`:`${selected} presentation / ${bench} bench / ${archived} archive / ${rows.length} evaluated inputs`;
     card.append(el("span",corpus==="cib"?"CIB":corpus==="iran"?"IR":"VN",{class:"corpus-mark","aria-hidden":"true"}),el("h2",CORPORA[corpus]),note(descriptions[corpus]),el("p",counts,{class:"note","data-testid":"corpus-selection-counts","data-presentation-count":selected,"data-bench-count":bench,"data-archive-count":archived}));
-    const actions=el("div",null,{class:"actions"});actions.append(link("Open full knowledge graph",fullGraphURL(corpus),"button primary"),el("a","Open saved questions",{href:"workbench-v6.html?"+new URLSearchParams({corpus}),class:"button"}));card.append(actions);cards.append(card);
+    const actions=el("div",null,{class:"actions"});actions.append(link("Open full knowledge graph",fullGraphURL(corpus),"button primary"),el("a","Open saved inputs",{href:"workbench-v6.html?"+new URLSearchParams({corpus}),class:"button"}));card.append(actions);cards.append(card);
   }
-  host.append(cards);renderReserveCatalogue(host);$("#page-state").textContent="Corpus home / published sources and saved questions only.";updateNavigation();
+  host.append(cards);renderReserveCatalogue(host);$("#page-state").textContent="Home / published sources and saved inputs only.";updateNavigation();
 }
 
 function renderReserveCatalogue(host) {
@@ -592,8 +665,8 @@ function renderReserveCatalogue(host) {
     card.append(el("p",`${CORPORA[proposal.corpus]||"Collection not supplied"} / ${TASKS[proposal.task]||"Task not supplied"}`,{class:"eyebrow"}),el("h3",short(proposal.query||proposal.name||"Source/legacy proposal",18)));
     const synthetic=queryKindBadge({task:proposal.task,query_kind:proposal.kind});if(synthetic)card.append(synthetic);
     card.append(note(proposal.scope||"Scope not supplied."),fields([["Fixed/legacy status / not current execution",proposal.current_fixed_status,true],["Proposal kind",primitive(proposal.kind).toLowerCase()],["Origin source",proposal.origin||proposal.origin_page_id,true],["Source documents",list(proposal.documents).join(", ")||"Not supplied",true],["Source pages",list(proposal.evidence_page_ids).join(", ")||"Not supplied",true]]));
-    if(proposal.query){const query=el("details");query.append(el("summary","Proposed analyst question / unchanged"),el("p",proposal.query,{class:"cue"}));card.append(query);}
-    else card.append(note("Query text is not supplied in this public catalogue."));
+    if(proposal.query){const query=el("details");query.append(el("summary","Proposed analyst input / unchanged"),el("p",proposal.query,{class:"cue"}));card.append(query);}
+    else card.append(note("Input text is not supplied in this public catalogue."));
     const saved=list(state.report.cases).find(row=>row.case.case_id===proposal.id);
     if(saved)card.append(el("a","Open saved case",{class:"button",href:"workbench-v6.html?"+new URLSearchParams({case:saved.case.case_id,show:presentationGroup(saved)})}));
     return card;
@@ -612,35 +685,30 @@ function renderQuestion() {
       'aria-current':row.case.case_id===c.case_id?'page':null,'data-study-slot':row.study_slot}));
     s.body.append(tabs);
   }
-  const query=el("div",null,{class:"query-block","data-testid":"query-text","data-task":c.task}),at=c.focal_marker?c.query.indexOf(c.focal_marker):-1;
+  const query=el("div",null,{class:"query-block","data-testid":"query-text","data-task":c.task});
+  // Override the old redaction-only uppercase style, not the source characters.
+  query.style.textTransform='none';
   const attachment=currentOriginAttachment(c),context=originContext(c),sourceReference=attachment.refs?.masked!=null;
   const key=c.task==="redaction"?(sourceReference?originFocalReferences.get(context.key):state.row.reference_answer):null;
   const canReveal=c.task==="redaction"&&(key!=null||sourceReference&&attachment.refs?.revealed!=null);
   const awaitingReference=canReveal&&state.reference&&key==null;
-  const queryDisplay=readable(c.query);
-  if(at>=0){query.append(document.createTextNode(queryDisplay.slice(0,at)),button(state.reference&&key!=null?readable(String(key)):c.focal_marker,toggleReference,"focal-mask",{"aria-pressed":state.reference,"aria-busy":awaitingReference,"data-testid":"focal-mask","data-reference-ready":key!=null,...(!canReveal?{disabled:""}:{})}),document.createTextNode(queryDisplay.slice(at+c.focal_marker.length)));}
-  else query.textContent=queryDisplay;
+  query.dataset.nativeText=c.query;
+  appendInputView(query,c.query,{focalMarker:c.focal_marker,focalNode:()=>button(state.reference&&key!=null?readable(String(key)):'[REDACTION]',toggleReference,"focal-mask",{"aria-pressed":state.reference,"aria-busy":awaitingReference,"data-testid":"focal-mask","data-reference-ready":key!=null,...(!canReveal?{disabled:""}:{})})});
   const questionKind=queryKindBadge(state.row);if(questionKind)s.body.append(questionKind);s.body.append(query);
   if(awaitingReference)s.body.append(el("p","Loading the verified reference. Click the redaction again to keep it hidden.",{class:"note",role:"status","aria-live":"polite","data-testid":"reference-loading"}));
   const actions=el("div",null,{class:"actions"});
   actions.append(button("Origin",async()=>{
-    if(livePacket){openDrawer('Analyst input','Live query provenance',box(note(c.query,'cue'),fields([['As of',c.date],['Excluded origin',c.document_id,true]]),note('Entered in the Live form. No historical origin transcription or hidden answer was supplied.')));return;}
+    if(livePacket){openDrawer('Origin','Live input provenance',box(appendInputView(el('p',null,{class:'cue','data-testid':'live-input-origin'}),c.query,{focalMarker:c.focal_marker}),fields([['As of',c.date],['Declared origin',c.document_id,true]]),note('Entered in the Live form. No historical origin transcription or hidden answer was supplied.')));return;}
     if(!allowPrivileged(()=>$('#stage-01 [data-testid=origin-open]')?.click()))return;
-    if(attachment.missing){openDrawer("Origin not attached","Question provenance",box(note("No verified origin attachment is published. No source is substituted."),note(c.query)));return;}
-    openDrawer("Origin","Question provenance / excluded from evidence",note("Verifying the saved origin..."));
+    if(attachment.missing){openDrawer("Origin not attached","Input provenance",box(note("No verified origin attachment is published. No source is substituted."),note(c.query)));return;}
+    openDrawer("Origin","Input provenance / excluded from evidence",note("Verifying the saved origin..."));
     const epoch=state.drawerEpoch;
     try{const data=await auditedOrigin(c,state.reference,context);if(epoch===state.drawerEpoch&&$("#detail-drawer").open)originDrawer(data);}catch(error){if(epoch===state.drawerEpoch)$("#detail-body").replaceChildren(note(error.message,"error-card"));}
   },"",{"data-testid":"origin-open"}));
   s.outer.querySelector('.stage-card > header').append(actions);
-  if(state.reference&&key!=null){const ref=el("p","Post-run reference only; the saved question is unchanged.",{class:"reference-box","data-testid":"reference-key"});s.body.append(ref);}
-  const kind=state.row.reference_answer_kind;
-  const kindNote=note(questionKind?queryKindNotice(state.row):kind==="synthetic_source_span"?"Synthetic source-span mask, not an observed release redaction.":kind==="paired_earlier_redacted_later_revealed"?"Paired-release redaction. The later reference is not eligible evidence.":"Source-derived complete question; its presence is not proof of its truth.");kindNote.dataset.testid="query-kind-note";
-  const provenance=el("section",null,{class:"origin-panel","data-testid":"origin-panel",hidden:""});
-  provenance.append(heading("Where this query came from"),note(attachment.missing?"Original-source transcription is not attached in this temporary preview. The saved question and eligible evidence remain inspectable.":"Loading the audited source proof. This privileged origin is not evidence for the result."));
-  s.body.append(provenance);
-  if(sourceReference&&attachment.refs?.revealed!=null)void prepareFocalReference({...c},context);
-  const reveal=state.reference;
-  if(!livePacket&&!attachment.missing&&(!isNarrativePublication()||state.reference))queueMicrotask(()=>loadOrigin(provenance,{...c},reveal,context));return s.outer;
+  if(state.reference&&key!=null){const ref=el("p","Post-run reference only; the saved input is unchanged.",{class:"reference-box","data-testid":"reference-key"});s.body.append(ref);}
+  if(state.reference&&sourceReference&&attachment.refs?.revealed!=null)void prepareFocalReference({...c},context);
+  return s.outer;
 }
 function syncFocalReference(c,context){
   if(state.row?.case.case_id!==c.case_id||context&&originContext(c)?.key!==context.key)return;
@@ -649,11 +717,11 @@ function syncFocalReference(c,context){
   mask.dataset.referenceReady=String(reference!=null);
   mask.setAttribute('aria-pressed',String(state.reference));
   mask.setAttribute('aria-busy',String(state.reference&&reference==null));
-  mask.textContent=state.reference&&reference!=null?readable(String(reference)):c.focal_marker;
+  mask.textContent=state.reference&&reference!=null?readable(String(reference)):'[REDACTION]';
   if(reference!=null){
     $('#stage-01 [data-testid=reference-loading]')?.remove();
     if(state.reference&&!$('#stage-01 [data-testid=reference-key]'))
-      $('#stage-01 .stage-body').append(el('p','Post-run reference only; the saved question is unchanged.',{class:'reference-box','data-testid':'reference-key'}));
+      $('#stage-01 .stage-body').append(el('p','Post-run reference only; the saved input is unchanged.',{class:'reference-box','data-testid':'reference-key'}));
   }
 }
 async function prepareFocalReference(c,context){
@@ -663,7 +731,10 @@ async function prepareFocalReference(c,context){
     originFocalReferences.set(context.key,focalReferenceFromOrigin(c,masked,revealed));
   })());
   const pending=referenceRequests.get(context.key);
-  try{await pending;syncFocalReference(c,context);}
+  try{
+    await pending;syncFocalReference(c,context);
+    if(state.row?.case.case_id===c.case_id&&state.reference&&originContext(c).key===context.key)void loadIndependentReview();
+  }
   catch(error){
     if(state.row?.case.case_id===c.case_id&&state.reference){
       const status=$('#stage-01 [data-testid=reference-loading]');
@@ -826,16 +897,22 @@ async function auditedOrigin(c,reveal,context){
   if(!pending){
     pending=(async()=>{
       const data=await getJSON("/api/origin-v63?"+new URLSearchParams({case_id:c.case_id,reveal_focal:reveal?"1":"0",...(context?{config:context.config}:{})}));
-      if(data.case_id!==c.case_id||data.query!==c.query||data.document_id!==c.document_id||data.date!==c.date||data.eligible_evidence!==false||data.focal_revealed!==(c.task==="redaction"&&reveal)||await textDigest(data.text)!==data.text_sha256||await textDigest(c.query)!==data.query_sha256)throw Error("Origin provenance does not match the saved query or text binding.");
+      if(data.case_id!==c.case_id||data.query!==c.query||data.document_id!==c.document_id||data.date!==c.date||data.eligible_evidence!==false||data.focal_revealed!==(c.task==="redaction"&&reveal)||await textDigest(data.text)!==data.text_sha256||await textDigest(c.query)!==data.query_sha256)throw Error("Origin provenance does not match the saved input or text binding.");
       if(data.full_transcription&&await textDigest(data.full_transcription.text)!==data.full_transcription.text_sha256)throw Error("Full original transcription failed its body hash check.");
       if(isNarrativePublication()&&data.full_transcription){
         const full=data.full_transcription,mapping=full.display_segment_mapping;
         if(mapping){
           if(reveal||c.task!=='redaction'||mapping.marker!==c.focal_marker)throw Error('Unsupported masked origin mapping.');
-          const original=await auditedOrigin(c,true,context),raw=original.full_transcription;
-          if(!raw||raw.display_segment_mapping||canonicalGateJSON(raw.segments)!==canonicalGateJSON(full.segments)||canonicalGateJSON(raw.separator_spans)!==canonicalGateJSON(full.separator_spans)||raw.segment_separator_contract!==full.segment_separator_contract||canonicalGateJSON(original.source_proof_ref)!==canonicalGateJSON(data.source_proof_ref)||await sha256(new TextEncoder().encode(raw.text))!==mapping.source_text_utf8_sha256||await sha256(new TextEncoder().encode(full.text))!==mapping.display_text_utf8_sha256)throw Error('The masked origin does not replay its original text binding.');
-          const chars=Array.from(raw.text),a=mapping.source_focal_start,b=mapping.source_focal_end;
-          if(chars.length!==mapping.source_length||list(original.anchors).filter(anchor=>anchor.start===a&&anchor.end===b&&chars.slice(a,b).join('')===anchor.text).length!==1||chars.slice(0,a).join('')+mapping.marker+chars.slice(b).join('')!==full.text)throw Error('The masked origin changes more than its exact focal span.');
+          const opaque=data.focal_still_withheld===true&&data.reveal_available===false&&data.reference_answer_available===false&&data.reference_answer===null&&data.focal_reference===null&&currentOriginAttachment(c).refs?.revealed==null;
+          if(await sha256(new TextEncoder().encode(full.text))!==mapping.display_text_utf8_sha256)throw Error('The masked origin failed its display-text hash.');
+          // Still-withheld origins have no revealed branch. Verify the pinned display
+          // and its segment mapping below without inventing or requesting a reference.
+          if(!opaque){
+            const original=await auditedOrigin(c,true,context),raw=original.full_transcription;
+            if(!raw||raw.display_segment_mapping||canonicalGateJSON(raw.segments)!==canonicalGateJSON(full.segments)||canonicalGateJSON(raw.separator_spans)!==canonicalGateJSON(full.separator_spans)||raw.segment_separator_contract!==full.segment_separator_contract||canonicalGateJSON(original.source_proof_ref)!==canonicalGateJSON(data.source_proof_ref)||await sha256(new TextEncoder().encode(raw.text))!==mapping.source_text_utf8_sha256)throw Error('The masked origin does not replay its original text binding.');
+            const chars=Array.from(raw.text),a=mapping.source_focal_start,b=mapping.source_focal_end;
+            if(chars.length!==mapping.source_length||list(original.anchors).filter(anchor=>anchor.start===a&&anchor.end===b&&chars.slice(a,b).join('')===anchor.text).length!==1||chars.slice(0,a).join('')+mapping.marker+chars.slice(b).join('')!==full.text)throw Error('The masked origin changes more than its exact focal span.');
+          }
         }
         const chars=Array.from(full.text);
         for(const segment of narrativeUI.originTranscriptSegments(full)){
@@ -849,53 +926,92 @@ async function auditedOrigin(c,reveal,context){
   }
   try{return await pending;}finally{if(originRequests.get(key)===pending)originRequests.delete(key);}
 }
-async function loadOrigin(host,c,reveal,context) {
-  try{
-    const data=await auditedOrigin(c,reveal,context);
-    const reference=reveal&&c.task==='redaction'&&currentOriginAttachment(c).refs?.masked!=null?focalReferenceFromOrigin(c,await auditedOrigin(c,false,context),data):null;
-    if(!host.isConnected||state.row.case.case_id!==c.case_id||state.reference!==reveal||context?.config&&context.config!==ARMS[state.arm].key)return;
-    if(reference!=null){
-      originFocalReferences.set(context.key,reference);
-      syncFocalReference(c,context);
-    }
-    if(data.query_kind)originKinds.set(c.case_id,data.query_kind);
-    const kindBadge=queryKindBadge(state.row);
-    refreshRailQuestionKind(state.row);
-    if(kindBadge){
-      const body=host.closest(".stage-body"),previous=body.querySelector(":scope > [data-testid=synthetic-question-kind]");
-      if(previous)previous.replaceWith(kindBadge);else body.insertBefore(kindBadge,body.querySelector("[data-testid=query-text]"));
-      const kindNote=body.querySelector("[data-testid=query-kind-note]");if(kindNote)kindNote.textContent=queryKindNotice(state.row);
-    }
-    const category=({CIB_SHARED_VISIBLE_TEXT:"Shared-visible / not a secret reveal",CIB_VERIFIED_REVEAL:"Verified CIB reveal",SECRET_CABLE_RAW_BODY_VERIFIED:"Audited SECRET cable",CABLE_CLASSIFICATION_IN_SEALED_PROOF:"Recorded SECRET source / segment",CIB_UNIT_UNVERIFIED:"CIB unit unverified",CIB_MIXED_OR_UNVERIFIED_UNITS:"CIB origin not fully certified"})[data.source_category]||"Source category not supplied";
-    const summary=el("div",null,{class:"origin-summary"});summary.append(badge(category,"review"),el("span",data.derivation));
-    const body=box(heading("Query origin"),summary,note("Provenance only, not eligible evidence. The executed question above is unchanged."));
-    if(data.warning&&data.source_category?.startsWith("CIB_"))body.append(note(data.warning,"origin-category-warning"));
-    const birthAnchors=exactOriginAnchors({...data,full_transcription:null});
-    if(birthAnchors.length){
-      const excerpt=highlightedText(data.text,birthAnchors,{"data-testid":"origin-paragraph"});
-      const details=el("details",null,{class:"origin-paragraph-expand"});details.append(el("summary","Original source paragraph / exact anchor"),excerpt);
-      body.append(details);
-    }else body.append(note("Precise birth-of-question quotations are not supplied. The audited transcript is available below; a whole-page highlight or a match to a rewritten hypothesis is not invented.","origin-category-warning"));
-    const actions=el("div",null,{class:"actions"});actions.append(button(data.full_transcription?"Open full original cable transcription":"Open audited origin page / segment",()=>originDrawer(data),"",{"data-testid":"origin-transcription"}));
-    if(data.pdf)actions.append(originPDF(data));
-    if(c.task==="redaction")actions.append(button(reveal?"Hide focal origin reference":"Explicitly reveal focal origin reference",toggleReference,"",{"data-testid":"origin-reveal"}));
-    const audit=el("details",null,{class:"origin-audit-details"});audit.append(el("summary","Provenance details / source verification"),fields([["Origin",`${data.document_id} / ${data.date}`,true],["Recorded classification / not proof of reveal",data.classification],["Verified source category",data.source_category,true],["Canonical unit / raw-body audit verified",data.unit_verified],["Secret-derived query certified by this source audit",data.secret_derived],["Recorded construction",data.query_kind,true]]),note(data.source_review||"Source mapping is not independent historical validation."),note(data.scope),note("Source proof SHA-256: "+data.proof_sha256,"proof-hash"));
-    const mapping=originMappingDetails(data);if(mapping)audit.append(mapping);
-    if(data.warning&&!data.source_category?.startsWith("CIB_"))audit.append(note(data.warning));
-    body.append(actions,audit);host.replaceChildren(body);
-  }catch(error){if(host.isConnected){
-    host.replaceChildren(heading("Origin provenance unavailable"),note(error.message+" No evidence API or arbitrary private file is used as a fallback.","error-card"));
-    const stage=host.closest('#stage-01');stage?.querySelector('[data-testid=focal-mask]')?.setAttribute('aria-busy','false');
-    const status=stage?.querySelector('[data-testid=reference-loading]');if(status)status.textContent="The verified reference could not be loaded. Hide and reveal the redaction to retry.";
-  }}
+function originPDF(data,{segment=null}={}) {
+  const host=el('section',null,{'data-testid':'origin-pdf-pair'}),c={...state.row.case};
+  const binding=currentBinding(c.case_id,c.corpus),config=ARMS[state.arm].key;
+  const context=originContext(c),maskedOriginRef=currentOriginAttachment(c).refs?.masked;
+  host.append(note('Checking the original PDF page mappings...'));
+  void (async()=>{
+    try{
+      const full=data.full_transcription||data,anchors=exactOriginAnchors(data);
+      const segments=segment?[segment]:isNarrativePublication()?narrativeUI.originTranscriptSegments(full):list(full.segments);
+      const sources=originPDFSources(data,segments,anchors),links=[];
+      let supplement=null;
+      if(!sources.length){
+        const masked=data.focal_revealed===true?await auditedOrigin(c,false,context):data;
+        const catalogSHA256=document.querySelector('meta[name="source-api-index-sha256"]')?.content;
+        supplement=await inputOriginPDFLocators({caseInfo:c,origin:masked,maskedOriginRef,catalogSHA256});
+        if(supplement)sources.push({document_id:supplement.document_id,canonical_page_id:supplement.canonical_page_id,
+          ...Object.fromEntries(supplement.pdfs.map(item=>[item.release+'_page',item.page]))});
+      }
+      for(const page of sources){
+        const pair=await cibPDFPair({page,binding,caseId:c.case_id,config});
+        for(const item of pair){
+          if(!item.page)continue;
+          const physical=data.physical_source_pair?.[item.release];
+          if(item.wire_sha256!==item.sha256||physical&&(physical.sha256!==item.sha256||item.page>physical.physical_page_count))throw Error('The PDF differs from the recorded physical source.');
+          if(supplement){
+            const expected=supplement.pdfs.find(value=>value.release===item.release);
+            if(!expected||item.sha256!==expected.sha256||item.page!==expected.page)throw Error('The PDF differs from the audited input-provenance supplement.');
+          }
+          if(!links.some(previous=>previous.release===item.release&&previous.page===item.page))links.push(item);
+        }
+      }
+      host.replaceChildren();
+      for(const item of links.sort((a,b)=>Number(a.release==='later')-Number(b.release==='later')||a.page-b.page)){
+        const proxy=data.source_mapping?.kind==='withholding_notice_block'&&item.release==='earlier';
+        const url=new URL(item.asset_url);url.hash='page='+item.page;
+        const pdf=link(`${item.release==='earlier'?'Earlier':'Later'} PDF${proxy?' / withholding notice':''} / page ${item.page}`,url.href,'button');
+        pdf.dataset.release=item.release;pdf.dataset.pdfPage=String(item.page);pdf.dataset.documentId=item.document_id;pdf.dataset.pdfSha256=item.sha256;
+        host.append(pdf);
+      }
+      host.append(note(links.length?'Original-document provenance only. Opening the later PDF does not admit it as evidence.':'No verified PDF page mapping is published. No page or document is substituted.'));
+      if(supplement&&links.length){host.dataset.locatorVersion=supplement.version;host.dataset.locatorAuditSha256=supplement.audit_sha256;host.dataset.sourceTargetId=supplement.source_target_id;}
+      if(data.source_mapping?.kind==='withholding_notice_block')host.append(note('The earlier page is a withholding notice, not a same-content page.'));
+    }catch(error){host.replaceChildren(note(error.message+' No PDF is substituted.','notice'));}
+  })();
+  return host;
 }
-function originPDF(data) {
-  const mapping=data.source_mapping?.kind==="withholding_notice_block"?data.source_mapping:null;
-  const label=mapping?(data.pdf.release==="later"?"Origin PDF / later content":"Origin PDF / earlier withholding notice"):`Origin PDF / ${data.pdf.release} release`;
-  const pdf=link(label+(data.pdf.page?` / page ${data.pdf.page}`:" / page not recorded"),"/api/cib-pdf?"+new URLSearchParams({doc_id:data.document_id,release:data.pdf.release})+(Number.isInteger(data.pdf.page)&&data.pdf.page>0?"#page="+data.pdf.page:""),"button");
-  if(!mapping)return pdf;
-  const host=el("div",null,{"data-testid":"origin-pdf-proxy"});host.append(pdf,note(`Earlier page ${mapping.earlier_notice_page??"not recorded"} is a withholding-notice proxy, not the same-content page. See provenance details for the whole-region mapping.`));return host;
+// BEGIN_ORIGIN_PDF_SOURCES
+function originPDFSources(data,segments,anchors){
+  const positive=value=>Number.isSafeInteger(value)&&value>0?value:null;
+  const pages=[],mapping=data.source_mapping;
+  if(data.physical_document_id&&data.physical_document_id!==data.document_id)throw Error('The original PDF belongs to another document.');
+  for(const segment of segments.filter(segment=>anchors.some(anchor=>anchor.start<segment.end&&anchor.end>segment.start))){
+    const locator=segment.locator||{},id=segment.canonical_page_id||segment.source_id;
+    if(locator.document_id&&locator.document_id!==data.document_id)throw Error('The origin segment belongs to another document.');
+    const page={document_id:data.document_id,canonical_page_id:id};
+    if(['CANONICAL_EARLIER_PROJECTION_WITH_ONE_PRIVATE_FOCAL_REVEAL','CANONICAL_EARLIER_PDF_PROJECTION'].includes(locator.kind)){
+      page.earlier_page=positive(locator.physical_page_1based);page.later_page=positive(locator.paired_later_page_1based);
+    }else if(['earlier','later'].includes(locator.release))page[locator.release+'_page']=positive(locator.physical_pdf_page);
+    const paired=originPageLocators[id];
+    if(paired&&paired.document_id!==data.document_id)throw Error('The paired PDF locator belongs to another document.');
+    if(paired&&['earlier','later'].some(release=>page[release+'_page']&&paired[release+'_page']&&page[release+'_page']!==paired[release+'_page']))throw Error('Conflicting original PDF page mappings.');
+    // Join exact source/document identities only when a recorded release page agrees.
+    if(paired?.document_id===data.document_id&&['earlier','later'].some(release=>page[release+'_page']&&page[release+'_page']===paired[release+'_page'])){
+      for(const release of ['earlier','later']){
+        const field=release+'_page';
+        if(page[field]&&paired[field]&&page[field]!==paired[field])throw Error('Conflicting original PDF page mappings.');
+        page[field]??=positive(paired[field]);
+      }
+    }
+    if(page.earlier_page||page.later_page)pages.push(page);
+  }
+  if(!pages.length&&data.pdf){
+    const page={document_id:data.document_id};
+    if(['earlier','later'].includes(data.pdf.release))page[data.pdf.release+'_page']=positive(data.pdf.page);
+    if(mapping?.kind==='withholding_notice_block'){
+      for(const [release,value]of [['earlier',mapping.earlier_notice_page],['later',mapping.later_content_page]]){
+        const field=release+'_page',number=positive(value);
+        if(page[field]&&number&&page[field]!==number)throw Error('Conflicting original PDF page mappings.');
+        page[field]=number;
+      }
+    }
+    if(page.earlier_page||page.later_page)pages.push(page);
+  }
+  return pages;
 }
+// END_ORIGIN_PDF_SOURCES
 function originMappingDetails(data) {
   const m=data.source_mapping;if(m?.kind!=="withholding_notice_block")return null;
   const boundary=side=>{const a=m.boundary_anchors?.[side]||{};return `earlier ${a.earlier_page??"unrecorded"} / later ${a.later_page??"unrecorded"}; accepted: ${primitive(a.accepted)}`;};
@@ -907,22 +1023,37 @@ function originMappingDetails(data) {
     ["Source annotation pending",m.source_annotation_pending]]),note("The earlier locator is a notice for a withheld region, not a surviving copy of this later content page. This mapping alone does not certify absence across the whole earlier release."));
   if(m.notice_quote)panel.append(el("blockquote",m.notice_quote,{class:"cue"}));
   if(m.source_annotation_pending)panel.append(note("Source annotation remains pending; the recorded mapping is not final source annotation."));
-  if(Number.isInteger(m.earlier_notice_page)&&m.earlier_notice_page>0)panel.append(link(`Earlier withholding notice / page ${m.earlier_notice_page}`,"/api/cib-pdf?"+new URLSearchParams({doc_id:data.document_id,release:"earlier"})+"#page="+m.earlier_notice_page,"button"));
   return panel;
 }
 function originDrawer(data) {
   const transcription=data.full_transcription||data;
-  const body=box(note(data.notice,"notice"),fields([["Document",data.document_id,true],["Source",data.source_id,true],["Recorded classification",data.classification],["Source category",data.source_category,true],["Display scope",transcription.scope]]),note("Original transcript hashes and exact recorded offsets verified. This input-origin attachment is provenance, not evidence or independent historical confirmation.","verified"));
+  if(data.query_kind){originKinds.set(state.row.case.case_id,data.query_kind);refreshRailQuestionKind(state.row);}
+  const body=box(note(data.notice,"notice"),fields([["Document",data.document_id,true],["Source",data.source_id,true],["Recorded classification",data.classification],["Source category",data.source_category,true],["Display scope",transcription.scope]]),note(data.focal_still_withheld===true?"Pinned masked projection and display-segment hashes verified; raw-source coordinates remain separately recorded. No hidden answer or revealed transcription is supplied. This is input provenance, not evidence.":"Original transcript hashes and exact recorded offsets verified. This input-origin attachment is provenance, not evidence or independent historical confirmation.","verified"));
   if(data.warning)body.append(note(data.warning,"origin-category-warning"));
-  const scope=el('details');scope.append(el('summary','Question scope and saved inventory'),fields([['Collection',CORPORA[state.row.case.corpus]],['Task',TASKS[state.row.case.task]],['Published case inventory',`${catalogCases().length} cases`,true]]),note(queryKindNotice(state.row)||'Original query provenance; not eligible result evidence.'),note(GRAPH_SCOPE),note(sourceScopeText()));if(state.saved)scope.append(button('Saved prompts',promptDrawer));
+  const audit=el('details',null,{class:'origin-audit-details'});audit.append(el('summary','Provenance details / source verification'),
+    fields([['Derivation',data.derivation],['Canonical unit / raw-body audit verified',data.unit_verified],['Secret-derived input certified by this source audit',data.secret_derived],['Recorded construction',data.query_kind,true]]),
+    note(data.source_review||'Source mapping is not independent historical validation.'),note(data.scope),note('Source proof SHA-256: '+data.proof_sha256,'proof-hash'));body.append(audit);
+  const scope=el('details');scope.append(el('summary','Input scope and saved inventory'),fields([['Collection',CORPORA[state.row.case.corpus]],['Task',TASKS[state.row.case.task]],['Published case inventory',`${catalogCases().length} cases`,true]]),note(queryKindNotice(state.row)||'Original input provenance; not eligible result evidence.'),note(GRAPH_SCOPE),note(sourceScopeText()));if(state.saved)scope.append(button('Saved prompts',promptDrawer));
   const caseControl=originalCaseControl(body);if(caseControl)scope.append(caseControl);body.append(scope);
-  if(data.pdf)body.append(originPDF(data));
   const mapping=originMappingDetails(data);if(mapping)body.append(mapping);
   const anchors=exactOriginAnchors(data);
-  if(!anchors.length)body.append(note("No precise birth-quote spans were recorded. This document is not highlighted as if its whole text were the query.","notice"));
+  if(!anchors.length)body.append(note("No precise birth-quote spans were recorded. This document is not highlighted as if its whole text were the input.","notice"));
   const segments=isNarrativePublication()?narrativeUI.originTranscriptSegments(transcription):list(transcription.segments);
-  body.append(transcriptDocument(transcription.text,anchors,segments,{testid:"origin-document",sourceId:data.source_id,documentId:data.document_id,separators:isNarrativePublication()?list(transcription.display_segment_mapping?.separator_spans||transcription.separator_spans):[]}));
-  openDrawer("Original document","Question provenance / excluded from evidence",body);
+  const document=transcriptDocument(transcription.text,anchors,segments,{testid:"origin-document",sourceId:data.source_id,documentId:data.document_id,separators:isNarrativePublication()?list(transcription.display_segment_mapping?.separator_spans||transcription.separator_spans):[]});
+  if(state.row.case.corpus==='cib'){
+    let attached=false;
+    for(const [index,section] of [...document.children].entries())if(section.querySelector('mark')){
+      section.insertBefore(originPDF(data,{segment:segments[index]||null}),section.querySelector('[data-testid=transcript-text]'));
+      attached=true;
+    }
+    if(!attached)document.prepend(originPDF(data));
+  }
+  const context=box(heading('Original source context'),document);context.dataset.testid='origin-context';body.append(context);
+  const mask=$('#stage-01 [data-testid=focal-mask]');
+  if(mask&&!mask.disabled&&data.reveal_available!==false)body.append(button(state.reference?'Hide focal origin reference':'Explicitly reveal focal origin reference',()=>{
+    toggleReference();$('#stage-01 [data-testid=origin-open]')?.click();
+  },'',{'data-testid':'origin-reveal'}));
+  openDrawer("Origin","Input provenance / excluded from evidence",body);
   scrollToSource();
 }
 function transcriptDocument(text,anchors,segments,{testid,sourceId,documentId,separators=[]}={}){
@@ -950,22 +1081,38 @@ function scrollToSource(){
 }
 
 function inspectRow(id,text,meta,fn,attrs={}) { const b=button("",fn,"inspect-row",attrs);b.append(el("span",id,{class:"row-id"}),el("span",text,{class:"row-copy"}));if(meta)b.append(el("span",meta,{class:"row-meta"}));return b; }
-function readingText(r) { return readingExplanation(r,{local:state.arm==='C'}); }
+// BEGIN_PLAIN_READING_TEXT
+function plainReadingText(r={}, {local=false}={}){
+  if(local)return readingExplanation(r,{local:true});
+  const attachment=r.attachment_quote||list(r.attachment_spans).find(span=>typeof span.text==='string')?.text;
+  const near=attachment?' near '+JSON.stringify(attachment):'';
+  const descriptions={adjectival:'A description could fit here',modifier:'A description could fit here',
+    nominal:'A noun phrase could fit here',noun_phrase:'A noun phrase could fit here',possessive:'A possessive phrase could show whose or which',
+    nominal_specifier:'A word or phrase could specify which or how many',quantity:'A quantity could fit here',
+    verbal:'A verb phrase could complete the action',finite_clause:'A clause with its own subject and verb could fit here',
+    clausal:'A clause could fit here',nonfinite_clause:'A clause without a finite verb could fit here',
+    adverbial:'A phrase could describe how, when or where',prepositional:'A prepositional phrase could fit here'};
+  return (descriptions[r.form||r.outer_family]||'The visible grammar allows this possible reading')+near+'. This describes the missing text, not an identified answer or evidence for the claim.';
+}
+// END_PLAIN_READING_TEXT
+function readingText(r) { return plainReadingText(r,{local:state.arm==='C'}); }
 function readingControl(testid) {
   const panel=el("section",null,{class:"reading-master","data-testid":"reading-master",id:"reading-thoughts",hidden:"",tabindex:"-1"});
   panel.append(heading(state.arm==='B'?"Source-phrase branches":"What could fit here?"),note(state.arm==='B'?"Mechanical branches, not model interpretations.":"Grammatical possibilities, not answers. One selection carries through every later stage."));
   for(const row of readingRows()){
     const r=list(state.saved.plan?.slot_readings).find(r=>r.id===row.reading.id)||row.reading;
     const b=button("",async()=>{state.reading=row.reading.id;state.candidate="";await changeReading();const chooser=$("#reading-thoughts");if(chooser){chooser.hidden=false;$("[data-testid=reading-choice][aria-pressed=true]")?.focus({preventScroll:true});}},"reading-thought",{"data-testid":"reading-choice","data-reading-id":row.reading.id,"aria-pressed":state.reading===row.reading.id});
-    b.append(el("span",isNarrativePublication()?readingLabel(r,readingRows().indexOf(row)+1):`${row.reading.id} / ${primitive(r.form)}`,{class:"eyebrow"}),el("p",state.arm==='B'?(r.explanation||r.notes||"Saved source-phrase branch; no grammatical reading was authored."):readingText(r)));
+    b.append(el("span",readingLabel(r,readingRows().indexOf(row)+1,{branch:state.arm==='B'}),{class:"eyebrow"}),el("p",state.arm==='B'?"A saved source-phrase branch, not a model interpretation.":readingText(r)));
+    if(livePacket)b.append(el('small',`${list(row.candidates).length} recorded candidates / rank is not acceptance`,{'data-testid':'reading-candidate-count'}));
     panel.append(b);
   }
   panel.append(button("Reading details",()=>{const r=list(state.saved.plan?.slot_readings).find(r=>r.id===state.reading)||currentReading()?.reading;if(r)readingDetail(r);},"quiet"));return panel;
 }
 function readingDetail(r) {
-  const body=box(note(readingText(r)),note(`${ARMS[state.arm].origin}. This is an interpretation of visible query text, not an answer or a support verdict.`,"notice"),fields([["Form",r.form],["Role",r.role],["Referent kind",r.target_kind||r.referent_kind],["Number",r.grammatical_number],["Finite clause",r.finite]]));
+  const body=box(note(readingText(r)),note(`${ARMS[state.arm].origin}. This is an interpretation of visible input text, not an answer or a support verdict.`,"notice"),fields([["Form",r.form],["Role",r.role],["Referent kind",r.target_kind||r.referent_kind],["Number",r.grammatical_number],["Finite clause",r.finite]]));
   for(const [label,text] of [["Left boundary",r.left_quote],["Right boundary",r.right_quote],["Attachment cue",r.attachment_quote],["Kind cue",r.kind_cue_quote]])if(text)body.append(heading(label),el("blockquote",text,{class:"cue"}));
   if(r.notes){const provenance=el('details');provenance.append(el('summary','Technical provenance'),el('pre',r.notes,{class:'raw-record'}));body.append(provenance);}
+  if(r.explanation){const original=el('details');original.append(el('summary','Original reading explanation / technical audit'),el('pre',r.explanation,{class:'raw-record'}));body.append(original);}
   openDrawer("Reading "+r.id,ARMS[state.arm].name,body);
 }
 function openReadingThoughts(){
@@ -982,20 +1129,19 @@ function renderPlan(){
     const focal=at>=0,card=el("article",null,{class:"fact-card"+(focal?" is-focal":""),"data-testid":"plan-atom","data-atom-id":atom.id});
     card.append(el("span",'F'+(index+1),{class:"eyebrow",title:atom.id}));
     const copy=el("p");
-    const display=readable(text);
-    if(focal){copy.append(document.createTextNode(display.slice(0,at)),button(marker,openReadingThoughts,"atom-mask",{"data-testid":"atom-focal-mask","aria-expanded":"false","aria-controls":"reading-thoughts",disabled:readingRows().length?null:""}),document.createTextNode(display.slice(at+marker.length)));}
-    else copy.textContent=display;
+    appendInputView(copy,text,{focalMarker:marker,focalNode:()=>button('[REDACTION]',openReadingThoughts,"atom-mask",{"data-testid":"atom-focal-mask","aria-expanded":"false","aria-controls":"reading-thoughts",disabled:readingRows().length?null:""})});
     card.append(copy,button("i",()=>atomDetail(atom),"fact-inspect",{"aria-label":"Inspect fact "+atom.id,title:"Inspect fact "+atom.id}));cards.append(card);
   }
-  s.body.append(note("Query assertions, not established facts."),cards);
+  s.body.append(note("Input assertions, not established facts."),cards);
   if(!list(plan.atoms).length)s.body.append(note("No saved atoms published.","empty"));
   if(readingRows().length){
     const r=list(plan.slot_readings).find(r=>r.id===state.reading)||currentReading()?.reading;
     const summary=button("",openReadingThoughts,"active-reading-thought",{"data-testid":"plan-reading-select","aria-controls":"reading-thoughts"});
     summary.append(el("small",`Active ${state.arm==='B'?"branch":"reading"}`),el("span",state.arm==='B'?"Inspect the saved source-phrase branch":readingText(r)));
     s.body.append(summary,readingControl("plan-reading-select"));
+    if(curatedDisplayReading(state.saved,state.row.case,state.row,{live:!!livePacket}))s.body.append(note('The initial reading is a recorded, answer-aware demo presentation choice. Other readings remain available. This choice did not change planning, retrieval, ranking or the saved evidence decisions.','notice'));
   }
-  const details=button("Search questions and plan",()=>{const audit=renderPlanAudit();openDrawer("Saved search plan",ARMS[state.arm].origin,audit.querySelector(".stage-body"));},"quiet");s.body.append(details);return s.outer;
+  const details=button("Search plan details",()=>{const audit=renderPlanAudit();openDrawer("Saved search plan",ARMS[state.arm].origin,audit.querySelector(".stage-body"));},"quiet");s.body.append(details);return s.outer;
 }
 function usedProofs(item){return decisionProofs(item,newDecision(item));}
 function quoteCard(proof){
@@ -1007,19 +1153,102 @@ function quoteCard(proof){
     list(path.decision_source_refs?.length?path.decision_source_refs:path.source_refs).some(p=>typeof p==='object'&&p.canonical_page_id===proof.canonical_page_id&&p.page_sha256===proof.page_sha256&&p.start===proof.start&&p.end===proof.end&&p.text===proof.text));
   const path=matchingPaths.find(path=>path.graph_hops>0)||matchingPaths[0];
   if(path){
-    const index=state.trace.paths.filter(p=>p.candidate_or_atom_id===path.candidate_or_atom_id).findIndex(p=>p.id===path.id);
-    if(livePacket)bar.append(link('Open corpus map',fullGraphURL(state.row.case.corpus),'quote-kg'));
-    else bar.append(button('View on KG',()=>guidePath({candidate:{id:path.candidate_or_atom_id},route:path,route_index:index,proof}),'quote-kg',{'data-testid':'quote-view-on-kg'}));
+    if(livePacket)bar.append(link('Open source page on KG / context only',graphURL({source_id:proof.canonical_page_id}),'quote-kg'));
+    else bar.append(button('View on KG',()=>openSelectedEvidenceKG(proof,matchingPaths),'quote-kg',{'data-testid':'quote-view-on-kg'}));
     b.dataset.tone=/^(FOR|SUPPORT|SUPPORTED)$/.test(path.direction)?'support':/^(AGAINST|OPPOSE|OPPOSED|COUNTER|COUNTEREVIDENCE)$/.test(path.direction)?'oppose':'context';
   }
   const text=button('',()=>sourceDrawer(proof),'excerpt-text',{"data-testid":"used-source-quote","data-source-id":proof.canonical_page_id,"data-document-id":proof.document_id,"data-digest-ids":proof.digest_ids?.join(' '),'aria-label':'Inspect source'});
   text.append(el('blockquote',readable(proof.text),{'data-original-text':proof.text}),el('footer',[proof.date,proof.earlier_page?'Page '+proof.earlier_page:''].filter(Boolean).join(' / ')));
   b.append(bar,text);return b;
 }
+// BEGIN_SELECTED_EVIDENCE_KG
+async function openSelectedEvidenceKG(proof,paths){
+  const epoch=state.epoch;
+  for(const path of paths){
+    try{
+      const endpoint=narrativeEndpoints?await verifiedNarrativeEndpoint(path,epoch):null;
+      if(epoch!==state.epoch)return;
+      if(endpoint){location.assign(endpoint.href);return;}
+    }catch{
+      // Unavailable exact endpoints never fall back to label-based node lookup.
+      if(epoch!==state.epoch)return;
+    }
+  }
+  const savedPath=paths.find(path=>state.trace?.paths?.includes(path));
+  if(savedPath){
+    const siblings=state.trace.paths.filter(path=>path.candidate_or_atom_id===savedPath.candidate_or_atom_id);
+    guidePath({candidate:{id:savedPath.candidate_or_atom_id},route:{...savedPath,nodes:[]},
+      route_index:siblings.findIndex(path=>path.id===savedPath.id),proof});
+    return;
+  }
+  openDrawer('Source-only graph handoff','No verified extracted endpoint',box(
+    note('No extracted node with this exact saved source binding is available. The source-page view is context only, not a substitute evidence node.'),
+    link('Open source page on KG / context only',graphURL({source_id:proof.canonical_page_id}),'button'),
+    sourceButton(proof)));
+}
+// END_SELECTED_EVIDENCE_KG
 function renderDiffusion(){
   const s=stage("03","Facts to evidence","Source map");
   s.body.append(el("div",null,{id:"diffusion-v6","data-testid":"flow-host"}));
   return s.outer;
+}
+function liveRetrievalNote(){
+  return note(livePacket.retrieval_summary.text+' Relevance and inspection are not factual support. Diffusion is retrieval influence, not a candidate score.','notice');
+}
+function renderLiveSearchMap(){
+  const host=el('div',null,{'data-testid':'live-search-map'}),data=livePacket.retrieved_sources;
+  host.append(heading('Recorded atom searches'),note('Recorded search-to-inspected-page matches only; these are not graph edges or support votes.'));
+  if(!data.pages.length){host.append(note('This envelope contains no verified inspected source text. Only retrieval counts can be shown.','empty'));return host;}
+  for(const [index,search] of data.searches.entries()){
+    const row=el('details',null,{'data-search-id':search.id});
+    row.open=index===0;
+    row.append(el('summary',(search.atom_ids.join(', ')||search.id)+' / '+search.query));
+    const pages=data.pages.filter(page=>page.matches.some(match=>match.search_id===search.id));
+    for(const page of pages){
+      const label=[page.document_id,page.date,page.earlier_page?'Page '+page.earlier_page:page.id].join(' / ');
+      row.append(page.citation?button(label,()=>sourceDrawer(page.citation),'quiet'):note(label));
+    }
+    if(!pages.length)row.append(note('No matching inspected page is retained for this search. Other search hits are not presented as inspected.'));
+    host.append(row);
+  }
+  if(!data.searches.length)host.append(note('Exact atom search records were not supplied. No associations are inferred.'));
+  return host;
+}
+function renderLiveRetrievedSources(){
+  const host=el('section',null,{'data-testid':'live-retrieved-sources'}),data=livePacket.retrieved_sources;
+  host.append(heading('Retrieved sources'),liveRetrievalNote(),note('Run-wide inspected pages, not evidence for a selected reading. Exact unmasked excerpts from hash-verified pages; a match is search relevance, not a claim or candidate decision. Open an excerpt for the supplied source document.'));
+  if(!data.pages.length){
+    host.append(note('This older envelope supplies no inspected source text to verify. Retrieval counts above do not imply that no search occurred.','empty'));return host;
+  }
+  const grid=el('div',null,{class:'matched-quotation-grid'});host.append(grid);
+  let shown=0;
+  const more=button('More inspected pages',()=>append(),'quiet');
+  const append=()=>{
+    const end=Math.min(shown+8,data.pages.length);
+    for(;shown<end;shown++){
+      const page=data.pages[shown],card=el('article',null,{class:'exact-quote','data-testid':'retrieved-source','data-source-id':page.id});
+      card.style.overflowWrap='anywhere';card.style.padding='12px';card.style.gap='8px';
+      const title=el('h4',[page.document_id,page.date,page.earlier_page?'Page '+page.earlier_page:null].filter(Boolean).join(' / '));title.style.margin='0';card.append(title);
+      const atomIds=[...new Set(page.matches.flatMap(match=>match.atom_ids))];
+      const matches=el('details');matches.append(el('summary',page.matches.length?`${atomIds.join(', ')} / ${page.matches.length} recorded atom searches / relevance only`:'Inspected page / no retained atom match'));
+      for(const match of page.matches){
+        const item=el('p',null,{'data-search-id':match.search_id});
+        item.append(el('strong',match.atom_ids.join(', ')+' / '),document.createTextNode(match.query),
+          el('small',` ${match.basis}; BM25 ${formatNumber(match.bm25)} (relevance, not support).`));matches.append(item);
+      }
+      card.append(matches);
+      if(page.citation){
+        const open=button('',()=>sourceDrawer(page.citation),'excerpt-text',{'data-testid':'retrieved-source-quote','aria-label':'Inspect retrieved source / not selected evidence'});
+        open.style.height='auto';
+        // Do not apply reader casing or paragraph expansion to an exact preview.
+        open.append(el('blockquote',page.citation.text,{'data-original-text':page.citation.text}),el('footer','Open full supplied source'));card.append(open);
+      }else card.append(note('No nonempty unmasked excerpt is available.'));
+      grid.append(card);
+    }
+    more.hidden=shown>=data.pages.length;
+    more.textContent=`More inspected pages / ${data.pages.length-shown}`;
+  };
+  append();host.append(more);return host;
 }
 function narrativeFlowExpected(){
   return {case_id:state.row.case.case_id,config:ARMS[state.arm].key,reading_id:state.reading,query_sha256:decisionPacket()?.query_sha256,native_checkpoint:state.saved.native_checkpoint,resource_binding:state.row.resource_binding||state.saved.resource_binding,task:state.row.case.task,
@@ -1032,24 +1261,31 @@ async function hydrateNarrativeTrace(epoch){
     const envelope=livePacket?null:await getJSON('/api/flow-v6?'+caseQuery({reading:state.reading,limit:'256'}),{signal:request?.signal});
     if(epoch!==state.epoch||!host.isConnected)return;
     const expected=narrativeFlowExpected();
-    if(!livePacket&&(envelope.version!=='narrative-saved-flow/1'||envelope.case_id!==expected.case_id||envelope.config!==expected.config||envelope.reading_id!==expected.reading_id||envelope.query_sha256!==expected.query_sha256||canonicalGateJSON(envelope.native_checkpoint)!==canonicalGateJSON(expected.native_checkpoint)||canonicalGateJSON(envelope.resource_binding)!==canonicalGateJSON(expected.resource_binding)||!['narrative-local-execution/2','narrative-local-execution/3'].includes(envelope.native_version)||envelope.execution_kind!=='saved_narrative'||envelope.current_native_execution!==false||envelope.numerical_projection_available!==false||envelope.native_decisions_or_ranks_modified!==false||envelope.frames!=null||envelope.projection!=null))throw Error('The narrative flow envelope changed its exact saved execution or source binding.');
+    if(!livePacket&&(envelope.version!=='narrative-saved-flow/1'||envelope.case_id!==expected.case_id||envelope.config!==expected.config||envelope.reading_id!==expected.reading_id||envelope.query_sha256!==expected.query_sha256||canonicalGateJSON(envelope.native_checkpoint)!==canonicalGateJSON(expected.native_checkpoint)||canonicalGateJSON(envelope.resource_binding)!==canonicalGateJSON(expected.resource_binding)||!['narrative-local-execution/2','narrative-local-execution/3','narrative-local-execution/4'].includes(envelope.native_version)||envelope.execution_kind!=='saved_narrative'||envelope.current_native_execution!==false||envelope.numerical_projection_available!==false||envelope.native_decisions_or_ranks_modified!==false||envelope.frames!=null||envelope.projection!=null))throw Error('The narrative flow envelope changed its exact saved execution or source binding.');
     if(!livePacket&&envelope.available!==true){
       if(envelope.trace!=null)throw Error('An unavailable narrative trace must not include substituted steps.');
       state.trace=null;host.dataset.status='unavailable';host.replaceChildren(note('No saved trace or graph route is published for this execution.','empty'));renderPaths();return;
     }
     const trace=livePacket?{...livePacket.trace,reading_id:state.reading}:narrativeUI.validateTrace(envelope,expected);state.trace=trace;host.dataset.status='available';host.dataset.readingId=state.reading;
+    if(livePacket&&(!trace.paths.length||state.row.case.task==='redaction'&&!candidates().length)){
+      state.flow?.destroy();state.paths?.destroy();
+      host.replaceChildren(liveRetrievalNote(),renderLiveSearchMap(),note('No final evidence path is shown for this selection. The recorded searches above are not a reconstructed graph.'));
+      paths.replaceChildren();state.paths=null;renderPaths();renderNarrativeScores();viewportAnchor.schedule();return;
+    }
     const pageLookups=!livePacket&&state.row.case.task==='redaction'?await loadSourceLookups({
       row:catalogCases().find(row=>row.case.case_id===state.row.case.case_id),record:state.saved,trace,
       reportSHA:publicationByteHashes.get(state.report),config:ARMS[state.arm].key,reading:state.reading}):null;
     if(epoch!==state.epoch||!host.isConnected)return;
     const safe=fn=>(...args)=>{if(epoch===state.epoch)fn(...args);};
     state.flow?.destroy();state.paths?.destroy();
-    state.flow=mountEvidenceMap(host,{trace,plan:state.saved.plan,items:flowItems(),task:state.row.case.task,pageLookups,
+    let mapHost=host;
+    if(livePacket){mapHost=el('div');host.replaceChildren(liveRetrievalNote(),mapHost);}
+    state.flow=mountEvidenceMap(mapHost,{trace,plan:state.saved.plan,items:flowItems(),task:state.row.case.task,pageLookups,
       nativeCandidates:currentReading()?.candidates||[],formatText:readable,onSource:safe(sourceDrawer),onNode:safe(value=>{
       if(value.is_graph_node===true){void nodeDrawer(value,{navigation:false});return;}
       if(value.id&&list(state.saved.plan?.atoms).some(atom=>atom.id===value.id)){atomDetail(value);return;}
-      const body=box(note(value.label||value.text||value.name||'Query lookup'));
-      if(value.citation)body.append(sourceButton(value.citation));openDrawer('Saved trace object','Recorded query or source readout',body);
+      const body=box(note(value.label||value.text||value.name||'Input lookup'));
+      if(value.citation)body.append(sourceButton(value.citation));openDrawer('Saved trace object','Recorded input or source readout',body);
     }),onEdge:safe(edge=>{
       if(edge.kind==='SOURCE_PAGE_LOOKUP'){
         const body=box(note('The fact search matched this source page.'));
@@ -1085,7 +1321,7 @@ async function hydrateNarrativeTrace(epoch){
   }
 }
 async function verifiedNarrativeEndpoint(path,epoch){
-  const record=state.saved,c={...state.row.case},reading=state.reading,binding=state.row.resource_binding||record.resource_binding;
+  const record=state.saved,c={...state.row.case,source_view_policy:state.saved.result?.source_view_policy||state.saved.source_view_policy},reading=state.reading,binding=state.row.resource_binding||record.resource_binding;
   const saved=narrativeEndpoints.savedEndpointForPath(record,c,reading,path);if(!saved)return null;
   const key=canonicalGateJSON([c.case_id,record.config,record.native_checkpoint,reading,saved]);
   let pending=endpointCache.get(key);
@@ -1099,7 +1335,7 @@ async function verifiedNarrativeEndpoint(path,epoch){
   })();endpointCache.set(key,pending);pending.catch(()=>{if(endpointCache.get(key)===pending)endpointCache.delete(key);});}
   const endpoint=await pending;if(epoch!==state.epoch||record!==state.saved)return null;
   if(['iran','vietnam'].includes(c.corpus)&&path.source_endpoint){const choices=state.trace.paths.filter(p=>p.candidate_or_atom_id===path.candidate_or_atom_id),routeIndex=path.guide_route_index??path.route_index??choices.findIndex(p=>p.id===path.id);return {...endpoint,href:narrativeEndpoints.endpointInspectionURL({caseInfo:c,config:record.config,reading,path,endpoint,routeIndex,binding}),href_label:'Inspect saved endpoint in case source graph',source_endpoint_inspection_only:true};}
-  return {...endpoint,href:graphURL({node_id:endpoint.node_id,focus_graph_id:endpoint.graph_id,focus_hierarchy_id:endpoint.hierarchy_id})};
+  return {...endpoint,href:graphURL({node_id:endpoint.node_id,source_id:endpoint.quote.canonical_page_id,focus_graph_id:endpoint.graph_id,focus_hierarchy_id:endpoint.hierarchy_id})};
 }
 function renderNarrativeScores(host=$('#narrative-scorecards-v1')){
   if(host&&state.trace?.scorecards)narrativeUI.renderScorecards(host,state.trace.scorecards,{readingId:state.reading,onSource:sourceDrawer});
@@ -1130,18 +1366,21 @@ async function hydrateFlow(epoch){
   }
 }
 function renderPathsStage(){
-  const s=stage("04","Selected evidence","Sources");s.outer.dataset.testid="paths-stage";
+  const s=stage("04",livePacket?"Retrieved sources and selected evidence":"Selected evidence","Sources");s.outer.dataset.testid="paths-stage";
+  s.outer.dataset.readingId=state.reading;
   s.body.append(el("div",null,{id:"retrieval-paths-v6"}));queueMicrotask(renderPaths);return s.outer;
 }
 function renderPaths(){
   const host=$("#retrieval-paths-v6");if(!host)return;host.replaceChildren();
+  host.dataset.readingId=state.reading;
+  if(livePacket)host.append(renderLiveRetrievedSources(),heading('Selected evidence'),note('Only evidence retained for native decisions appears below. Retrieved pages above are not added to this inventory.'));
   const items=state.row.case.task==='redaction'?candidates():list(state.saved.result?.atoms).filter(a=>verdictSummary(state.saved,state.row.case,state.reading).units.some(u=>u.id===a.id));
   if(state.row.case.task!=='redaction'){
     for(const item of items){
       const section=el('section',null,{class:'fact-evidence-group','data-atom-id':item.id});
       const index=list(state.saved.plan?.atoms).findIndex(atom=>atom.id===item.id);
       section.append(el('h3',(index>=0?'F'+(index+1)+' / ':'')+readable(item.text||item.source_quote||item.id)));
-      const proofs=uniqueProofs(usedProofs(item)).map(proof=>({...proof,atom_ids:[item.id]})),grid=el('div',null,{class:'matched-quotation-grid'});
+      const proofs=factPresentationProofs(item,newDecision(item)).map(proof=>({...proof,atom_ids:[item.id]})),grid=el('div',null,{class:'matched-quotation-grid'});
       for(const proof of proofs)grid.append(quoteCard(proof));
       section.append(grid);if(!proofs.length)section.append(note('No selected source establishes this fact.','empty'));
       host.append(section);
@@ -1156,13 +1395,30 @@ function renderPaths(){
 }
 function renderVerdictStrip(){
   const summary=verdictSummary(state.saved,state.row.case,state.reading),task=state.row.case.task;
-  const hero=el('section',null,{class:'construction-verdict verdict-strip','data-tone':summary.tone,'data-testid':'compact-verdict','aria-label':'Verdict'});
-  hero.append(el('p','Verdict',{class:'eyebrow'}),el('h2',summary.title,{'data-testid':'local-verdict-title'}));
-  if(summary.recommendation)hero.append(el('p',readable(summary.recommendation.text),{class:'recommended-fill','data-testid':'recommended-fill'}));
-  else if(task==='redaction'){
+  const primary=studyInputPrimary(state.saved,state.row.case,state.row,inputContextCache.get(state.saved)?.view,state.reading);
+  const hero=el('section',null,{class:'construction-verdict verdict-strip','data-tone':primary?'context':summary.tone,'data-testid':'compact-verdict','aria-label':'Verdict','data-primary-channel':primary?.channel});
+  const compatibilityEmpty=emptyControllerShortlist();
+  if(primary){
+    hero.append(el('p','From supplied context',{class:'eyebrow','data-testid':'study-primary-channel'}),
+      el('h2',primary.available?'Exploratory suggestion: '+primary.fill:'Exploratory suggestion unavailable',{'data-testid':'local-verdict-title'}),
+      note('Input-derived only. Truth remains unknown and still withheld; this is not independent corpus recovery. Corpus candidates, evidence decisions and scores remain separate below.'));
+    const inspection=studyInspection(primary,state.saved,state.row.case,state.row);
+    if(inspection){
+      const target=new URL(graphURL(inspection),location.href);target.searchParams.set('release',inspection.release);
+      const inspect=link('Inspect source connection',target.href,'button');inspect.dataset.testid='study-source-inspection';
+      inspect.dataset.sourceDocument=inspection.document_id;inspect.dataset.sourcePage=inspection.source_id;
+      inspect.dataset.pageSha256=inspection.page_sha256;hero.append(inspect,
+        note('Retrospective inspection of the origin document in the separate later-release Corpus Map. Not ordinary retrieval proof, an identity join or a confidence score.'));
+    }
+  }else hero.append(el('p','Verdict',{class:'eyebrow'}),el('h2',compatibilityEmpty?'Compatibility unresolved':livePacket?.retrieval_summary.noCandidate?'No candidate passed':summary.title,{'data-testid':'local-verdict-title'}));
+  if(compatibilityEmpty)hero.append(note(controllerWithholdingEmptyText(compatibilityEmpty)));
+  if(livePacket)hero.append(liveRetrievalNote());
+  if(!primary&&summary.recommendation)hero.append(el('p',readable(summary.recommendation.text),{class:'recommended-fill','data-testid':'recommended-fill'}));
+  else if(!primary&&task==='redaction'){
     const first=candidates()[0];
     if(first)hero.append(el('p','Top candidate: '+readable(first.fill)+' / '+decisionLabel(newDecision(first)),{class:'first-saved-fill','data-testid':'first-saved-fill'}));
   }
+  if(task==='redaction'){const scope=counterPolicyScopeNote();if(scope)hero.append(scope);}
   if(task!=='redaction'){
     const mosaic=el('div',null,{class:'verdict-facts','aria-label':'Native fact judgments'});
     for(const unit of summary.units){
@@ -1176,11 +1432,160 @@ function renderVerdictStrip(){
     hero.append(mosaic);
   }
   const caveats=presentationCaveats(state.row);if(caveats)hero.append(caveats);
-  hero.append(button('Why this verdict',()=>openDrawer('Recorded evidence decision','Saved evidence checks',localVerdictPanel()),'quiet'));
+  hero.append(button(primary?'Corpus evidence decision':'Why this verdict',()=>openDrawer('Recorded evidence decision','Saved evidence checks',localVerdictPanel()),'quiet'));
   return hero;
 }
+// BEGIN_NATIVE_INPUT_CONTEXT
+async function nativeInputContextView(record,caseInfo){
+  const value=record?.result?.input_nomination;
+  if(value==null)return null;
+  const check=ok=>{if(!ok)throw Error('The supplied-context record has another input, reading or provenance binding.');};
+  const hash=object=>sha256(new TextEncoder().encode(canonicalGateJSON(object)));
+  const same=(a,b)=>canonicalGateJSON(a)===canonicalGateJSON(b);
+  const object=value=>value&&typeof value==='object'&&!Array.isArray(value);
+  const provenance='ANALYST_INPUT_NOT_INDEPENDENT_CORPUS_EVIDENCE';
+  const noEvidence=value=>object(value)&&value.independent_corpus_evidence===false&&value.independent_evidence_votes===0&&
+    value.substantive_support===false&&value.same_actor_or_event_certified===false&&value.same_delegation_identity_certified===false;
+  check(value.version==='public-input-noun-adjective-nomination/1'&&value.provenance_kind===provenance&&noEvidence(value)&&
+    value.output_contract==='ASSIGN_ONLY_TO_RESULT_INPUT_NOMINATION_NOT_CORPUS_CANDIDATES_OR_SCORES'&&
+    value.input_sentence_policy==='COMPLETE_VISIBLE_SENTENCE_NO_OPAQUE_MASKS'&&
+    value.ranking_policy==='LEXICOGRAPHIC_SENTENCE_DISTANCE_CHARACTER_DISTANCE_RAW_SPAN_STABLE_FORM'&&
+    value.ranking_is_confidence===false&&value.ranking_is_semantic_identity===false&&value.empty_readings_are_not_padded===true&&
+    value.corpus_retrieval_or_admission_performed===false&&value.source_policy_modified===false&&
+    value.native_corpus_recovery_claimed===false&&value.corpus_candidates_or_scores_modified===false&&value.api_calls===0);
+  const c=Object.fromEntries(['case_id','corpus','task','query','document_id','date','focal_marker'].map(key=>[key,caseInfo?.[key]]));
+  check(c.task==='redaction'&&typeof c.query==='string'&&typeof c.focal_marker==='string'&&c.focal_marker);
+  const parts=c.query.split(c.focal_marker);check(parts.length===2);
+  const querySHA=await hash(c.query),binding=value.binding,packet=record.plan?.readings_packet;
+  const nativePins=[record.result.provided_plan_sha256,record.result.reading_adapter?.source_plan_sha256].filter(pin=>pin!=null);
+  check(nativePins.every(pin=>/^[a-f0-9]{64}$/.test(pin)&&pin===nativePins[0]));
+  const planSHA=nativePins[0]||await hash(record.plan);
+  check(object(binding)&&binding.query_sha256===querySHA&&binding.case_sha256===await hash(c)&&binding.plan_sha256===planSHA&&
+    packet&&binding.readings_packet_sha256===await hash(packet)&&
+    binding.lexical_policy_version==='source-noun-slot-adjective-realization/2'&&binding.final_form_version==='narrative-completed-outer-form/2');
+  const declared=packet.readings,rows=value.readings,chars=Array.from(c.query);
+  check(Array.isArray(declared)&&Array.isArray(rows)&&rows.length===declared.length&&new Set(declared.map(r=>r.id)).size===declared.length);
+  const span=raw=>{
+    check(object(raw)&&raw.query_sha256===querySHA&&raw.provenance_kind===provenance&&
+      Number.isSafeInteger(raw.start)&&Number.isSafeInteger(raw.end)&&raw.start>=0&&raw.end>raw.start&&raw.end<=chars.length&&
+      typeof raw.text==='string'&&chars.slice(raw.start,raw.end).join('')===raw.text);return raw;
+  };
+  const contains=(outer,inner)=>outer.start<=inner.start&&inner.end<=outer.end;
+  const observation=raw=>{
+    check(object(raw));const noun=span(raw.input_noun_span),part=span(raw.input_constituent_span),sentence=span(raw.input_sentence_span);
+    check(contains(sentence,part)&&contains(part,noun));
+    const cls=raw.input_class_observation;
+    check(object(cls)&&cls.basis==='INPUT_PARSER_NORP_OR_EXACT_PERSON_SPAN_NOT_PLANNER_TYPE_HINT'&&
+      cls.lexical_resource_does_not_certify_ner===true&&cls.ambiguity_resolved===false&&cls.identity_certified===false&&cls.factual_support_certified===false&&
+      Array.isArray(cls.norp_observations)&&Array.isArray(cls.person_observations)&&cls.norp_observations.length+cls.person_observations.length>0);
+    for(const witness of [...cls.norp_observations,...cls.person_observations])check(contains(sentence,span(witness))&&contains(witness,noun));
+    return noun;
+  };
+  const corpusRows=list((record.result.redaction||record.result).readings),seen=new Set(),view=[];
+  let count=0;
+  for(let index=0;index<rows.length;index++){
+    const row=rows[index],reading=declared[index],readingSHA=await hash(reading);
+    check(typeof reading.id==='string'&&reading.id&&row.reading_id===reading.id&&row.declared_reading_sha256===readingSHA&&
+      typeof row.applicable==='boolean'&&Array.isArray(row.nominations));
+    check(row.status===(row.nominations.length?'INPUT_CONTEXT_NOMINATIONS':row.applicable?'NO_INPUT_DERIVED_NOMINATIONS':'NOT_APPLICABLE'));
+    const items=[];
+    for(const [ordinal,item]of row.nominations.entries()){
+      check(row.applicable&&object(item)&&typeof item.id==='string'&&item.id&&!seen.has(item.id)&&
+        item.reading_id===reading.id&&item.declared_reading_sha256===readingSHA&&typeof item.fill==='string'&&item.fill.trim()&&
+        item.provenance_kind===provenance&&item.status==='INPUT_DERIVED_GRAMMATICAL_CONTEXT_ONLY'&&noEvidence(item)&&
+        item.coreference_inference_performed===false&&item.corpus_citation===null&&item.corpus_score===null&&item.factual_decision===null);
+      seen.add(item.id);const noun=observation(item),lex=item.lexical_realization,rank=item.ranking,fit=item.surface_fit;
+      check(object(rank)&&rank.scope==='INPUT_CONTEXT_ONLY_NOT_CORPUS_RANK_OR_CONFIDENCE'&&rank.input_context_ordinal===ordinal+1&&
+        ['sentence_distance','character_distance'].every(key=>Number.isSafeInteger(rank[key])&&rank[key]>=0));
+      check(object(lex)&&lex.version===binding.lexical_policy_version&&lex.context_only===true&&lex.identity_or_event_certified===false&&
+        lex.factual_support_certified===false&&same(lex.resource,value.lexical_resource)&&lex.resource?.resource==='WordNet'&&
+        lex.resource.version==='3.0'&&lex.resource.availability==='AVAILABLE'&&/^[a-f0-9]{64}$/.test(lex.resource.sha256||'')&&
+        lex.resource.named_entity_identity_lookup===false&&lex.resource.relation_scope==='LEXICAL_CLASS_MEMBERSHIP_AND_PERTAINYM_ONLY');
+      const form=lex.selected_form,edit=lex.transformations?.[0];
+      check(object(form)&&typeof form.fill==='string'&&Array.isArray(form.derivations)&&form.derivations.length>0&&
+        form.operation==='PERSON_NOUN_MEMBER_HOLONYM_TO_ADJECTIVE_PERTAINYM'&&edit?.kind===form.operation&&
+        edit.before===noun.text&&edit.after===form.fill&&same(edit.derivations,form.derivations)&&edit.grammar_only===true&&
+        edit.input_text_modified===false&&edit.source_evidence_credit===false&&edit.identity_or_event_certified===false);
+      check(Array.isArray(item.input_occurrences)&&item.input_occurrences.length>0&&same(item.input_occurrences[0].input_noun_span,noun));
+      for(const occurrence of item.input_occurrences)observation(occurrence);
+      check(fit?.version===binding.final_form_version&&fit.state==='pass'&&fit.outer_family===reading.outer_family&&
+        fit.reading_modified===false&&fit.pos_coercion===false&&fit.factual_support_certified===false&&
+        fit.unlicensed_form_is_counterevidence===false&&fit.full_english_grammar_certified===false&&
+        same(fit.inserted_span,[Array.from(parts[0]).length,Array.from(parts[0]+item.fill).length])&&
+        fit.completed_query_sha256===await hash(parts[0]+item.fill+parts[1]));
+      items.push({id:item.id,fill:item.fill,source:noun,inputRank:rank.input_context_ordinal,proof:item});count++;
+    }
+    view.push({id:reading.id,label:readingLabel(reading,index+1),explanation:plainReadingText(reading),
+      corpusAvailable:corpusRows.filter(row=>row.reading?.id===reading.id).length===1,candidates:items});
+  }
+  check(value.status===(count?'INPUT_CONTEXT_NOMINATIONS':'NO_INPUT_DERIVED_NOMINATIONS'));
+  return {version:'input-context-view/1',query:c.query,readings:view};
+}
+// END_NATIVE_INPUT_CONTEXT
+function renderSuppliedContext(){
+  const cached=inputContextCache.get(state.saved);
+  if(cached?.error)return note(cached.error,'notice');
+  const record=state.saved;
+  return renderInputContextView(cached?.view,{activeReadingId:state.reading,onReading:async id=>{
+    if(record!==state.saved||!readingRows().some(row=>row.reading?.id===id))return;
+    state.reading=id;state.candidate='';await changeReading();stagePosition('05');
+  }});
+}
+// BEGIN_INPUT_CONTEXT_VIEW
+// Private presentation view, not the native input_nomination serialization.
+function renderInputContextView(view,{activeReadingId,onReading}={}){
+  if(view==null)return null;
+  const check=value=>{if(!value)throw Error('A complete, bound supplied-context presentation is required.');};
+  check(view.version==='input-context-view/1'&&typeof view.query==='string'&&Array.isArray(view.readings));
+  const chars=Array.from(view.query),seen=new Set();
+  for(const reading of view.readings){
+    check(typeof reading.id==='string'&&reading.id&&!seen.has(reading.id)&&typeof reading.label==='string'&&
+      typeof reading.explanation==='string'&&typeof reading.corpusAvailable==='boolean'&&Array.isArray(reading.candidates));seen.add(reading.id);
+    const ids=new Set();
+    for(const item of reading.candidates){
+      const source=item.source;
+      check(typeof item.id==='string'&&item.id&&!ids.has(item.id)&&typeof item.fill==='string'&&item.fill.trim()&&
+        source&&Number.isSafeInteger(source.start)&&Number.isSafeInteger(source.end)&&source.start>=0&&source.end>source.start&&
+        source.end<=chars.length&&typeof source.text==='string'&&chars.slice(source.start,source.end).join('')===source.text&&
+        (item.inputRank==null||Number.isSafeInteger(item.inputRank)&&item.inputRank>0)&&item.proof&&typeof item.proof==='object');
+      ids.add(item.id);
+    }
+  }
+  if(!view.readings.some(reading=>reading.candidates.length))return null;
+  const host=el('section',null,{class:'method-audit','data-testid':'input-context-nominations','aria-label':'From the supplied context'});
+  host.append(heading('From the supplied context'),note('These suggestions come from the text you supplied, not independent corpus evidence. They are separate from corpus candidates, rankings, scores and evidence decisions. A grammar fit does not establish identity or verify the input claim.'));
+  for(const reading of view.readings.filter(reading=>reading.candidates.length)){
+    const group=el('section',null,{'data-testid':'input-context-reading','data-reading-id':reading.id,'data-current-reading':String(reading.id===activeReadingId)});
+    group.append(el('h4',reading.label),note(reading.explanation));
+    if(reading.id===activeReadingId)group.append(note('This is the currently selected corpus reading.','scope-line'));
+    else if(reading.corpusAvailable&&typeof onReading==='function')group.append(button('Open this reading in corpus results',()=>onReading(reading.id),'quiet',{'data-testid':'input-context-open-reading','data-reading-id':reading.id}));
+    else group.append(note('No matching corpus-reading view is available. No other reading is substituted.','scope-line'));
+    for(const item of reading.candidates){
+      const card=el('article',null,{class:'method-audit','data-testid':'input-context-candidate','data-input-nominee-id':item.id,'data-reading-id':reading.id});
+      card.append(el('strong',item.fill),badge('Input-derived exploratory / truth unknown','review'));
+      if(item.inputRank!=null)card.append(note('Input-only order: '+item.inputRank+'. This is not a corpus rank.','scope-line'));
+      card.append(note('Supplied wording: "'+item.source.text+'".'));
+      const start=Math.max(0,item.source.start-100),end=Math.min(chars.length,item.source.end+140);
+      const quote=el('blockquote',null,{class:'cue','data-testid':'input-context-snippet','data-input-start':start,'data-input-end':end});
+      quote.style.whiteSpace='pre-wrap';quote.style.overflowWrap='anywhere';
+      const mark=el('mark',item.source.text,{'data-input-start':item.source.start,'data-input-end':item.source.end});
+      quote.append(document.createTextNode((start?'...':'')+chars.slice(start,item.source.start).join('')),mark,
+        document.createTextNode(chars.slice(item.source.end,end).join('')+(end<chars.length?'...':'')));
+      card.append(quote);
+      const details=el('details');details.append(el('summary','Recorded form derivation / input only'));
+      let rendered=false;details.addEventListener('toggle',()=>{
+        if(rendered||!details.open)return;rendered=true;
+        const raw=el('pre',JSON.stringify(item.proof,null,2),{class:'raw-record'});raw.style.whiteSpace='pre-wrap';raw.style.overflowWrap='anywhere';details.append(raw);
+      });card.append(details);group.append(card);
+    }
+    host.append(group);
+  }
+  return host;
+}
+// END_INPUT_CONTEXT_VIEW
 function renderResultBody(){
   const host=$("#result-body");if(!host||!state.saved)return;host.replaceChildren();
+  host.dataset.readingId=state.reading;
   const summary=verdictSummary(state.saved,state.row.case,state.reading),task=state.row.case.task;
   const items=task==='redaction'?candidates():list(state.saved.result?.atoms).filter(a=>summary.units.some(u=>u.id===a.id));
   host.append(el('div',null,{id:'terminal-decision-scores','data-testid':'terminal-decision-scores'}));
@@ -1192,6 +1597,7 @@ function renderResultBody(){
     const unit=newDecision(item),readout=task==='redaction'?{kind:unit?.status==='evidence_backed_suggestion'?'supported':unit?.status==='incompatible_not_viable'?'opposed':'context',label:decisionLabel(unit)}:assertionDecision(unit,task);
     const card=el("article",null,{class:"construction-card","data-testid":task==='redaction'?"candidate-card":"result-atom","data-proposal-id":item.id,"data-atom-id":task==='redaction'?null:item.id,"data-kind":readout.kind});
     card.append(el("span",task==='redaction'?String(index+1).padStart(2,"0"):item.id,{class:"eyebrow"}),el("h3",readable(item.fill||item.text||item.source_quote||item.id)),badge(readout.label));
+    if(task==='redaction'){const identity=renderIdentityConsolidation(item);if(identity)card.append(identity);}
     if(task!=='redaction'){
       const evidence=[...list(unit?.evidence),...list(unit?.requirements).flatMap(r=>list(r.evidence))],directions=new Set(evidence.map(e=>String(e.direction||'').toLowerCase()).filter(Boolean).map(d=>['support','for'].includes(d)?'Support':['counterevidence','against','oppose'].includes(d)?'Oppose':['partial','context','contextual'].includes(d)?'Context':null).filter(Boolean));
       if(task==='hypothesis'){const scopes=el("div",null,{class:"evidence-directions","aria-label":"Saved evidence directions"});for(const direction of ['Support','Oppose','Context'])scopes.append(el("span",direction,{"data-direction":direction,"data-active":directions.has(direction)}));card.append(scopes);}
@@ -1202,7 +1608,17 @@ function renderResultBody(){
     card.append(button(`Sources / ${sources.size}`,()=>task==='redaction'?candidateDetail(item):atomDetail(item),"",{"data-testid":task==='redaction'?"candidate-detail":"atom-detail"}));
     if(task==='redaction')card.append(button("Routes",()=>{selectCandidate(item.id);stagePosition("03");},"quiet"));grid.append(card);
   }
-  host.append(grid);if(!items.length)host.append(note("No saved alternatives for this selection. No other reading or method is substituted.","empty"));
+  host.append(grid);
+  const compatibility=currentControllerView(),audit=currentControllerAudit();
+  if(compatibility?.candidates.length)host.append(controllerWithholdingDisclosure(compatibility));
+  if(audit?.error){
+    host.append(note('The saved compatibility audit could not be verified. No candidate or earlier result is substituted. '+audit.error,'notice'),
+      button('Original shortlist audit record',()=>{
+        const result=state.saved.result.redaction||state.saved.result;
+        openDrawer('Original shortlist audit','Unverified saved metadata / no display decision inferred',el('pre',JSON.stringify({controller_shortlist:result.controller_shortlist,assessed_candidates:result.assessed_candidates},null,2),{class:'raw-record'}));
+      },'quiet',{'data-testid':'controller-audit-unavailable'}));
+  }
+  if(!items.length&&!emptyControllerShortlist()&&!audit?.error)host.append(note(livePacket?.retrieval_summary.noCandidate?'No candidate passed. Retrieved sources remain available above; inspection is not acceptance.':"No saved alternatives for this selection. No other reading or method is substituted.","empty"));
   const groupedOccurrences=task==='redaction'&&items.some(item=>list(item.presentation_variants).length>1);
   if(groupedOccurrences){
     const counts={backed:0,context:0,other:0};
@@ -1219,18 +1635,37 @@ function renderTerminalScores(){
   const host=$('#terminal-decision-scores');if(!host)return;
   try{
     const scores=computeDecisionScores(state.saved);
-    host.replaceChildren(renderTerminalScoreCards(state.saved,scores,{formatScore:formatDecisionScore,formatText:readable,
+    host.replaceChildren(renderTerminalScoreCards(state.saved,scores,{formatScore:formatDecisionScore,formatText:readable,readingId:state.reading,
       readingTitle:r=>readingLabel(r,readingRows().findIndex(row=>row.reading.id===r.id)+1),onExplain:item=>{
         const body=box(note('Saved arithmetic only; source judgments and citations retain their recorded scope.'));
+        const candidate=Number.isFinite(item.evidence_tier),sourcePoints=scores.version==='terminal-evidence-fit/6',points=candidate&&['terminal-evidence-fit/4','terminal-evidence-fit/5','terminal-evidence-fit/6'].includes(scores.version);
+        body.append(fields([[points?'Ranking points':candidate?'Raw priority index':'Signed evidence index',formatDecisionScore(item.score)],['Recorded units',item.score_units||'Index'],['Evidence tier',item.evidence_tier]]));
+        if(item.formula)body.append(heading('Saved formula'),el('pre',item.formula,{class:'raw-record'}));
+        body.append(note(!candidate?'Fact-wise support, opposition and context totals from the saved contributions. These are evidence indices, not candidate points, independent votes or correctness probabilities.':sourcePoints?
+          'Native v6 ranking points: 100 per logical evidence tier, 40 for a source nomination cue, up to 25 from the source-function band and 35 evidence/fit points. A nomination cue is not a factual-support certificate or correctness confidence.':scores.version==='terminal-evidence-fit/5'?
+          'Native v5 ranking points: 100 per logical evidence tier, up to 65 source-priority points and 35 evidence/fit points. Not correctness confidence; rank and pool position add no points.':scores.version==='terminal-evidence-fit/4'?
+          'Evidence/fit points on the saved 0 to 300 scale, not a probability or confidence in the missing words. Evidence tiers are preserved; accumulated evidence and fit order candidates within a tier. No rank rescaling is applied.':
+          'Saved evidence/fit indices, not probabilities or correctness confidence. Candidate rank and the native evidence decision are separate.'));
         if(item.source_function_band){
-          body.append(heading('Final ranking'),fields([
-            ['Final score',formatDecisionScore(item.score)],['Evidence tier',item.evidence_tier],
+          body.append(heading('Saved ranking inputs'),fields([
+            [points?'Ranking points':'Raw priority index',formatDecisionScore(item.score)],['Evidence tier',item.evidence_tier],
             ['Source-function band',item.source_function_band.value],['Source fit',formatDecisionScore(item.fit)]]));
-          body.append(note('Evidence sufficiency comes first, then source-owned function checks, then accumulated evidence and fit. More background context cannot overrule a stronger source-function match.'));
+          body.append(note(sourcePoints?
+            'The 40-point nomination cue excludes the type-only and no-name-penalty bits (16 and 2). Remaining source priority uses 25*B/1023. Evidence/fit retains its 35-point budget; these components do not change the logical evidence class.':scores.version==='terminal-evidence-fit/5'?
+            'Logical evidence tiers remain separate. Within each tier, source priority and accumulated evidence/fit are combined with the saved 65/35 point budgets.':
+            'Evidence sufficiency comes first, then source-owned function checks, then accumulated evidence and fit. More background context cannot overrule a stronger source-function match.'));
           const checks=list(item.source_function_band.source_checks).filter(check=>check.satisfied);
           if(checks.length)body.append(fields(checks.map(check=>[check.name.replaceAll('_',' '),check.contribution])));
-          if(item.source_function_band.declared_visible_attachment)body.append(note('Verified visible-role attachment: 512.'));
+          if(item.source_function_band.declared_visible_attachment)body.append(note('A visible-role attachment contribution is declared in the saved band. This is a ranking input, not an evidence assertion.'));
         }
+        if(sourcePoints&&candidate)body.append(heading('Source nomination cue'),fields([
+          ['Recorded cue',item.source_function_context.matched?'Present':'Not recorded'],['Excluded cue bits','16, 2'],
+          ['Meaning','Positive functional nomination cue, not factual support']]));
+        if(item.ranking_components){const parts=item.ranking_components;body.append(heading('Native point components'),fields([
+          ['Evidence class points',formatDecisionScore(parts.evidence_tier_points)],['Source-priority points / 65',formatDecisionScore(parts.source_function_points)],
+          ['Evidence/fit points / 35',formatDecisionScore(parts.evidence_fit_points)],['Utility',formatDecisionScore(parts.utility)],
+          ['Saturated utility',formatDecisionScore(parts.saturated_utility)]]));}
+        if(item.fit_components)body.append(heading('Source fit components'),fields(Object.entries(item.fit_components).map(([key,value])=>[key.replaceAll('_',' '),formatDecisionScore(value)])));
         for(const contribution of list(item.contributions)){
           body.append(heading(humanDirection(contribution.direction)),fields([['Contribution',formatDecisionScore(contribution.contribution)],['Retrieval weight',formatDecisionScore(contribution.retrieval_weight)],['Page rank',contribution.page_rank],['Fit',formatDecisionScore(contribution.fit)]]));
           if(contribution.citation)body.append(sourceButton(contribution.citation));
@@ -1262,11 +1697,11 @@ async function loadAnalystDigest(host,epoch,reading){
           canonicalGateJSON(data.resource_binding)!==canonicalGateJSON(state.saved.resource_binding)||
           !Array.isArray(data.sources)||data.source_count!==data.sources.length||data.sources.some((source,index)=>source.id!=='S'+(index+1))||
           [...data.text.matchAll(/\bS(\d+)\b/g)].some(match=>+match[1]<1||+match[1]>data.sources.length))throw Error('The digest does not match the native result and sources.');
-    }else if(livePacket||isNarrativePublication()&&(!['narrative-saved-digest/1','narrative-saved-digest/2'].includes(data.version)||data.case_id!==state.row.case.case_id||data.config!==ARMS[state.arm].key||canonicalGateJSON(data.native_checkpoint)!==canonicalGateJSON(state.saved.native_checkpoint)||!['narrative-local-execution/2','narrative-local-execution/3'].includes(data.native_version)||data.current_native_execution!==false))throw Error('No matching saved narrative digest is attached.');
+    }else if(livePacket||isNarrativePublication()&&(!['narrative-saved-digest/1','narrative-saved-digest/2'].includes(data.version)||data.case_id!==state.row.case.case_id||data.config!==ARMS[state.arm].key||canonicalGateJSON(data.native_checkpoint)!==canonicalGateJSON(state.saved.native_checkpoint)||!['narrative-local-execution/2','narrative-local-execution/3','narrative-local-execution/4'].includes(data.native_version)||data.current_native_execution!==false))throw Error('No matching saved narrative digest is attached.');
     const words=typeof data.text==='string'?data.text.trim().split(/\s+/):[];
     if(data.postrun!==true||data.used_for_inference!==false||words.length<50||words.length>100)throw Error("No matching 50-100 word post-run digest is available.");
     const expectedScope=list(state.row.presentation_caveats).map(({title,text})=>({title,text}));
-    if(data.source_scope_notes&&(data.source_scope_notes.postrun_only!==true||data.source_scope_notes.used_for_local_inference!==false||data.source_scope_notes.changes_native_verdict!==false||canonicalGateJSON(data.source_scope_notes.notes)!==canonicalGateJSON(expectedScope)))throw Error("Digest source scope differs from the selected question.");
+    if(data.source_scope_notes&&(data.source_scope_notes.postrun_only!==true||data.source_scope_notes.used_for_local_inference!==false||data.source_scope_notes.changes_native_verdict!==false||canonicalGateJSON(data.source_scope_notes.notes)!==canonicalGateJSON(expectedScope)))throw Error("Digest source scope differs from the selected input.");
     if(epoch!==state.epoch||reading!==state.reading||!host.isConnected)return;
     host.dataset.status="available";host.replaceChildren(el("p",data.text),note("Separate post-run source review. Not an answer-key judgment or a new evidence vote."));
     const scope=presentationCaveats(state.row);if(scope)host.append(scope);
@@ -1275,7 +1710,7 @@ async function loadAnalystDigest(host,epoch,reading){
   }catch{if(host.isConnected&&epoch===state.epoch){host.dataset.status=isNarrativePublication()?'unavailable':'pending';host.replaceChildren(el("p",isNarrativePublication()?'Saved analyst digest unavailable.':"Source-bound analyst digest pending.",{role:"status"}),note("No generated text or historical commentary is substituted."));}}
 }
 function renderPlanAudit() {
-  const s=stage("02","Search clues, readings and questions",ARMS[state.arm].origin,state.arm==="A"?"model":"");
+  const s=stage("02","Search clues, readings and discovery questions",ARMS[state.arm].origin,state.arm==="A"?"model":"");
   const failure=failureReceipt();if(failure)s.body.append(failure);
   const plan=state.saved.plan||{},atoms=list(plan.atoms),reads=list(plan.slot_readings),leads=list(plan.leads);
   if(readingRows().length)s.body.append(note("Active saved reading / branch: "+state.reading));
@@ -1283,7 +1718,7 @@ function renderPlanAudit() {
   const rows=el("div",null,{class:"compact-list"});for(const atom of atoms)rows.append(inspectRow(atom.id,atom.text||atom.source_quote,atom.required===false?"Optional":"Required",()=>atomDetail(atom),{"data-testid":"plan-atom"}));
   s.body.append(rows);if(!atoms.length)s.body.append(note("No shared atoms were published for this condition.","empty"));
   const extraction=plan.extractions||{};const counts=Object.entries(extraction).filter(([,v])=>Array.isArray(v)).map(([k,v])=>`${v.length} ${k}`);
-  if(counts.length)s.body.append(note("Shared query extraction: "+counts.join(" / ")));
+  if(counts.length)s.body.append(note("Shared input extraction: "+counts.join(" / ")));
   s.body.append(heading("Saved interpretation"));
   if(leads.length)s.body.append(note("Discovery questions locate potentially relevant sources. They are search aids, not assertions established by evidence.","notice"));
   if(!reads.length)s.body.append(note("This task searches the recorded assertions without a missing-span interpretation."));
@@ -1293,17 +1728,17 @@ function renderPlanAudit() {
     if(linked.length){const details=el("details"),summary=el("summary",`${linked.length} direct discovery question${linked.length===1?"":"s"} linked to reading ${r.id}`);details.append(summary);for(const l of linked)details.append(inspectRow(l.id,l.question,"Reading IDs: "+list(l.reading_ids).join(", "),()=>leadDetail(l),{"data-testid":"discovery-question"}));card.append(details);}s.body.append(card);
   }
   const unlinked=leads.filter(l=>!list(l.reading_ids).length);
-  if(unlinked.length){s.body.append(heading("Context discovery questions"));for(const lead of unlinked)s.body.append(inspectRow(lead.id,lead.question,"Query-derived",()=>leadDetail(lead),{"data-testid":"discovery-question"}));}
+  if(unlinked.length){s.body.append(heading("Context discovery questions"));for(const lead of unlinked)s.body.append(inspectRow(lead.id,lead.question,"Input-derived",()=>leadDetail(lead),{"data-testid":"discovery-question"}));}
   const methods=el("details",null,{class:"method-audit"});methods.append(el("summary","Search preparation / technical details"),modelStages(),button("Saved prompts and instructions",promptDrawer,"",{"data-testid":"planning-instructions"}));s.body.append(methods);return s.outer;
 }
-function leadDetail(lead) { const body=box(note(lead.question,"notice"),fields([["Question ID / not a score",lead.id,true],["Linked reading IDs",list(lead.reading_ids).join(", ")||"No reading link",true],["Linked atom IDs",list(lead.atom_ids).join(", ")||"No atom link",true]]),note(lead.rationale||lead.reason||"Model-authored direct question from visible query anchors and shared extraction/atoms, not a source-established event."));for(const q of list(lead.anchor_quotes))body.append(el("blockquote",typeof q==="string"?q:q.text,{class:"cue"}));openDrawer("Discovery question "+lead.id,`Arm ${state.arm} / saved plan`,body); }
+function leadDetail(lead) { const body=box(note(lead.question,"notice"),fields([["Discovery question ID / not a score",lead.id,true],["Linked reading IDs",list(lead.reading_ids).join(", ")||"No reading link",true],["Linked atom IDs",list(lead.atom_ids).join(", ")||"No atom link",true]]),note(lead.rationale||lead.reason||"Model-authored discovery question from visible input anchors and shared extraction/atoms, not a source-established event."));for(const q of list(lead.anchor_quotes))body.append(el("blockquote",typeof q==="string"?q:q.text,{class:"cue"}));openDrawer("Discovery question "+lead.id,`Arm ${state.arm} / saved plan`,body); }
 function modelStages() {
   const host=el("section",null,{class:"model-stages","data-testid":"model-stages"});
   if(isNarrativePublication()){
     host.append(heading('Saved narrative execution'),note('This is the saved narrative planner, constructor and evidence decision, not a current-native execution or numerical diffusion replay.'),fields([['Projection',state.saved?.version,true],['Native checkpoint',state.saved?.native_checkpoint?.path,true],['Checkpoint SHA-256',state.saved?.native_checkpoint?.sha256,true]]));return host;
   }
   host.append(heading("What called a model, and when?"),note("Saved requests, never live calls. A/B/C reuse the same model extraction and atoms. The local engine retrieves and decides offline; an independent post-run LLM judge and analyst digest cannot change that result."));
-  const stages=[["1. Shared model extraction","KG 2.32 entities, events, claims and relations from the visible query only."],["2. Shared model atoms","Source-faithful propositions from the visible query and extraction. Any saved repair/retry is listed below."],["3. Arm-specific planning",state.arm==="A"?"Model slot readings for redaction plus direct-context questions; H/R have no slot readings.":state.arm==="B"?"No readings or questions. The local source-derived construction pool is not a model interpretation.":"Local grammatical slot readings for redaction; no model readings/questions. H/R repeats are consistency controls."]];
+  const stages=[["1. Shared model extraction","KG 2.32 entities, events, claims and relations from the visible input only."],["2. Shared model atoms","Source-faithful propositions from the visible input and extraction. Any saved repair/retry is listed below."],["3. Arm-specific planning",state.arm==="A"?"Model slot readings for redaction plus discovery questions; H/R have no slot readings.":state.arm==="B"?"No readings or discovery questions. The local source-derived construction pool is not a model interpretation.":"Local grammatical slot readings for redaction; no model readings or discovery questions. H/R repeats are consistency controls."]];
   for(const [title,text] of stages)host.append(el("h4",title),note(text));
   const prompts=list(state.saved.planning_prompts);
   host.append(note("Published request receipts for this condition: "+(prompts.map(p=>`${p.stage} [${p.model||"model unrecorded"}]`).join("; ")||"None published. No call count inferred.")+". Shared receipts can repeat across arms; they are not independent new calls."));
@@ -1326,7 +1761,7 @@ function renderDiffusionAudit() {
   const aside=el("aside",null,{class:"diffusion-context","aria-label":"Routing and evidence boundaries"});
   const documents=el("section",null,{class:"flow-sidecard document-panel",id:"document-panel-v6"});documents.append(el("h3","Relevant documents"),el("div",null,{id:"flow-documents-v6"}));
   const route=el("section",null,{class:"flow-sidecard"});route.append(el("h3","Relevance is not a verdict"),note("The search clues contribute to the same saved source search. Choosing an interpretation changes the displayed targets, not the recorded calculation."),note("High relevance does not mean that a source supports the assertion or that a proposed fill is correct."));
-  const calculation=el("details");calculation.append(el("summary","How source relevance is calculated"),diffusionFormula(),note("Saved numerical transport combines query matches and graph transitions; it is not a correctness probability."));route.append(calculation);
+  const calculation=el("details");calculation.append(el("summary","How source relevance is calculated"),diffusionFormula(),note("Saved numerical transport combines input matches and graph transitions; it is not a correctness probability."));route.append(calculation);
   const policy=el("section",null,{class:"flow-sidecard"});policy.append(el("h3","One pinned source view"),note(sourceScopeText()),note(state.row.case.corpus==="cib"?"Earlier-visible CIB source material only.":"Bound CONFIDENTIAL cable evidence view only."),note("Identity and hierarchy assignments are retrospective. Display and inspection limits are not corpus completeness."));
   aside.append(documents);grid.append(host,aside);
   s.body.append(note(sourceScopeText()+" Relevance is not factual support."),button("Source scope and display limits",()=>openDrawer("Source scope and relevance","Saved source boundaries, not confidence",box(route,policy))),grid);return s.outer;
@@ -1505,11 +1940,11 @@ function renderResultsStage() {
 }
 function atomVerdict(value) {
   const raw=String(value||"").toUpperCase();
-  return ({SUPPORT:"FOR",SUPPORTED:"FOR",FOR:"FOR",COUNTER:"AGAINST",CONTRADICTED:"AGAINST",AGAINST:"AGAINST",PARTIAL:"SOME",SOME:"SOME",MIXED:"FOR + AGAINST",CONFLICT:"FOR + AGAINST",INSUFFICIENT:"MISSING",UNSUPPORTED:"MISSING",UNRESOLVED:"MISSING",MISSING:"MISSING"})[raw]||"Unreported";
+  return ({ESTABLISHED:"FOR",SUPPORT:"FOR",SUPPORTED:"FOR",FOR:"FOR",COUNTER:"AGAINST",CONTRADICTED:"AGAINST",AGAINST:"AGAINST",PARTIAL:"SOME",SOME:"SOME",MIXED:"FOR + AGAINST",CONFLICT:"FOR + AGAINST",INSUFFICIENT:"MISSING",UNSUPPORTED:"MISSING",UNRESOLVED:"MISSING",MISSING:"MISSING"})[raw]||"Unreported";
 }
 function atomLabel(value) {
   const status=atomVerdict(value);
-  return state.row.case.task==="reconstruction"?recordedCoverage(value)||"Coverage not recorded":humanDirection(status);
+  return state.row.case.task==="reconstruction"?recordedCoverage(status)||"Coverage not recorded":humanDirection(status);
 }
 function contradictionWarning(atom) {
   if(state.row.case.task!=="reconstruction")return null;
@@ -1560,10 +1995,10 @@ function nativeTaskReadout(host,result) {
     host.append(note("Coverage counts supplied requirements established by the native engine. Partial assembly is not complete reconstruction: COMPLETE status and support for every required atom are both required. Narrative order and causal bridges are separate."));
   }
   host.append(note(`Recorded local verdict: ${localTaskVerdict(task,result)}. Unresolved support is not counterevidence.`,"notice"));
-  if(result.query_coverage?.complete===false)host.append(note("The supplied atom plan does not cover every query requirement. Atom coverage is not whole-query certification.","notice"));
+  if(result.query_coverage?.complete===false)host.append(note("The supplied atom plan does not cover every input requirement. Atom coverage is not whole-input certification.","notice"));
   for(const atom of atoms){
     const status=atomVerdict(atom.status),card=el("article",null,{class:"atom-card","data-testid":"result-atom","data-atom-id":atom.id});
-    const header=el("header"),coverageUnknown=task==="reconstruction"&&!recordedCoverage(atom.status);
+    const header=el("header"),coverageUnknown=task==="reconstruction"&&!recordedCoverage(atomVerdict(atom.status));
     header.append(coverageUnknown?note("Coverage not recorded","coverage-unrecorded"):badge(atomLabel(atom.status),status==="FOR"?"supported":status==="AGAINST"?"against":"inferred"),el("h3",atom.text||atom.source_quote),badge(atom.required===false?"Optional atom":"Required atom"));card.append(header);
     card.append(atomEvidence(atom),button("Inspect atom and source checks",()=>atomDetail(atom),"",{"data-testid":"atom-detail"}));
     const contradiction=contradictionWarning(atom);if(contradiction)card.append(contradiction);
@@ -1612,8 +2047,8 @@ function supportDimensions(candidate) {
 }
 function decisionChain(task) {
   const host=el("ol",null,{class:"decision-chain","data-testid":"decision-chain","aria-label":"Decision provenance"});
-  const steps=task==="redaction"?["Question and proposed fills","Check original quotations","Check the missing fact","Independent model summary"]:
-    ["Question and required facts","Check original quotations","Check each requirement","Independent model summary"];
+  const steps=task==="redaction"?["Input and proposed fills","Check original quotations","Check the missing fact","Independent model summary"]:
+    ["Input and required facts","Check original quotations","Check each requirement","Independent model summary"];
   for(const text of steps)host.append(el("li",text));return host;
 }
 function recordedLocalDecisionPanel(candidate) {
@@ -1653,9 +2088,17 @@ function presentationCaveats(row){
   for(const value of entries){const item=el("div",null,{"data-testid":"presentation-caveat"});item.append(el("h4",value.title.trim()),el("p",value.text.trim()));host.append(item);}
   return host;
 }
+function counterPolicyScopeNote(){
+  const scope=counterPolicyNotice(candidates());
+  if(!scope)return null;
+  return el('p',scope.text,{class:'note','data-testid':'counter-policy-scope',role:'note','data-coverage-warning':String(scope.warning)});
+}
 function localVerdictPanel(){
+  const compatibilityEmpty=emptyControllerShortlist();
+  if(compatibilityEmpty)return box(heading('Compatibility unresolved'),note(controllerWithholdingEmptyText(compatibilityEmpty)),controllerWithholdingDisclosure(compatibilityEmpty));
   const summary=verdictSummary(state.saved,state.row.case,state.reading),host=el("section",null,{class:"local-verdict-hero","data-testid":"local-verdict-panel","data-tone":summary.tone,"aria-label":"Local verdict"});
   const title=el("div",null,{class:"local-verdict-heading"});title.append(el("p","Local Verdict",{class:"eyebrow"}),el("h2",summary.title,{"data-testid":"local-verdict-title"}),note(summary.detail));
+  if(summary.task==='redaction'){const scope=counterPolicyScopeNote();if(scope)title.append(scope);}
   const caveats=presentationCaveats(state.row);if(caveats)title.append(caveats);
   if(summary.recommendation){
     title.append(el("p",summary.recommendation.text,{class:"recommended-fill","data-testid":"recommended-fill","data-candidate-id":summary.recommendation.id}),button("Inspect recommended fill",()=>{selectCandidate(summary.recommendation.id);stagePosition("05");}));
@@ -1702,7 +2145,7 @@ function sourceQualificationNotes(value={}){
   const notes=[];
   if(value.scope==='HISTORICAL_ROLE_ASCRIPTION'||value.qualified_scope==='HISTORICAL_ROLE_ASCRIPTION'||
       value.evidence_semantics==='HISTORICAL_SOURCE_ASCRIPTION_NOT_CASE_DATE_ROLE_TRUTH'||value.no_current_tenure===true)
-    notes.push('Historical source ascription only: this does not establish tenure at the question date or certify the role as world truth.');
+    notes.push('Historical source ascription only: this does not establish tenure at the input date or certify the role as world truth.');
   if(value.source_identification_only===true)notes.push('The source identifies a role; this alone does not establish appointment, continuous tenure or unrelated actions.');
   if(value.actual_inner_event_established===false)notes.push('The underlying event is not established by this account. This is not a finding that it did not occur.');
   if(value.continuous_tenure_established===false)notes.push('Continuous tenure is not established.');
@@ -2021,7 +2464,7 @@ function exactGateReviewPanel() {
   const rows=review.grades.filter(row=>task!=="redaction"||row.scope==="overall"||row.reading_id===state.reading);
   for(const row of rows){
     const unit=row.scope==="overall"?packet.overall:packet.atoms?.[row.decision_id]||packet.candidates?.[row.decision_id],grade=row.grade,body=el("details",null,{class:"review-row","data-decision-id":row.decision_id||"overall"});
-    body.append(el("summary",`${row.scope==="overall"?"Whole query":unit?.text||row.decision_id}: ${displayText(grade.judgment)}`),
+    body.append(el("summary",`${row.scope==="overall"?"Whole input":unit?.text||row.decision_id}: ${displayText(grade.judgment)}`),
       fields([["Exact-gate decision review",displayText(grade.judgment)],["Quoted evidence review",displayText(grade.evidence_support)],
         ...(task==="redaction"?[["Key-aware answer correctness",llmReview({assessment:grade},"redaction").correctness],["Insertion grammar",grade.grammatical]]:[])]),
       note(displayText(grade.explanation)||"No explanation supplied."));panel.append(body);
@@ -2044,7 +2487,7 @@ function presentationDecisionOpinionPanel(){
   for(const row of opinions){
     const unit=packet.atoms?.[row.decision_id]||packet.candidates?.[row.decision_id],grade=row.grade;
     const details=el("details",null,{class:"review-row","data-testid":"presentation-opinion-item","data-decision-id":row.decision_id||"overall"});
-    details.append(el("summary",`${row.scope==="overall"?"Whole question":unit?.text||row.decision_id} / reviewer opinion`),
+    details.append(el("summary",`${row.scope==="overall"?"Whole input":unit?.text||row.decision_id} / reviewer opinion`),
       fields([["Reviewer judgment",displayText(grade.judgment)],["Quoted evidence opinion",displayText(grade.evidence_support)]]),
       note(displayText(grade.explanation)||"No explanation supplied."));panel.append(details);
   }
@@ -2076,7 +2519,7 @@ function verdictOverview(result) {
     const total=Number.isInteger(result.required_atoms)?result.required_atoms:required.length,covered=Number.isInteger(result.covered_atoms)?result.covered_atoms:required.filter(a=>atomVerdict(a.status)==="FOR").length;
     native.append(el("strong",`${covered} / ${total} required atoms established`,{class:"verdict-headline"}),note("Recorded local verdict: "+localTaskVerdict(task,result)));
     const strip=el("div",null,{class:"verdict-strip","aria-label":"Requirement coverage"});
-    for(const atom of required){const status=atomLabel(atom.status);strip.append(el("span",`${atom.id}: ${status}`,{class:"verdict-unit","data-coverage":recordedCoverage(atom.status),title:atom.text}));}
+    for(const atom of required){const status=atomLabel(atom.status);strip.append(el("span",`${atom.id}: ${status}`,{class:"verdict-unit","data-coverage":recordedCoverage(atomVerdict(atom.status)),title:atom.text}));}
     native.append(strip,note("Established / Partial / Missing describe coverage, not votes. Ordering or causal bridges require their own evidence."));
     for(const atom of atoms){const warning=contradictionWarning(atom);if(warning)native.append(warning);}
     judge.append(note("The LLM reviews recorded local coverage and its saved evidence packet, not a redaction reference-answer match. It cannot fill a Missing requirement, create a bridge or overwrite local coverage."));
@@ -2150,7 +2593,7 @@ function sourceButton(value,{back}={}) {
 async function sourceDrawer(value,{back}={}) {
   if(!allowPrivileged(()=>sourceDrawer(value,{back})))return;
   const proof=proofOf(value);if(!proof?.canonical_page_id)return;
-  const c={...state.row.case};const epoch=openDrawer("Original source","Pinned evidence / raw text",note("Loading original text and verifying the quotation..."),back);
+  const c={...state.row.case};const epoch=openDrawer("Original source",proof.inspection_only?"Retrieved source / inspection, not factual support":"Pinned evidence / raw text",note("Loading original text and verifying the quotation..."),back);
   sourceRequest=new AbortController();
   try {
     const data=await getJSON("/api/source-v6?"+new URLSearchParams({case_id:c.case_id,source_id:proof.canonical_page_id}),{signal:sourceRequest.signal});
@@ -2177,6 +2620,7 @@ async function sourceDrawer(value,{back}={}) {
     }
     if(epoch!==state.drawerEpoch||!$("#detail-drawer").open)return;
     const body=box(el('p',`${page.title||page.document_id} / ${page.date}`,{class:'source-document-meta'}));
+    if(proof.inspection_only)body.append(note('Retrieved and inspected source. Search relevance and exact quotation verification do not establish factual support or candidate acceptance. Additional supplied pages are provenance only; inspection is not implied.','notice'));
     const technical=el('details',null,{class:'source-technical'});technical.append(el('summary','Source details'),fields([["Document",page.document_id,true],["Source date",page.date],["View",c.corpus==="cib"?"Earlier-visible CIB":"Bound CONFIDENTIAL evidence"],["Canonical page",proof.canonical_page_id,true]]),note(verified?'Exact quotation and source hash verified.':'Source hash verified; no localized quotation was supplied.'));
     const caseControl=originalCaseControl(body);if(caseControl)technical.append(caseControl);
     technical.append(link("View source on KG",graphURL({source_id:proof.canonical_page_id}),"button"),note(Array.isArray(data.document_pages)?`${additional.length+1} independently verified supplied segments. This inventory does not certify original-format completeness.`:'Only one source segment is supplied; other pages are unavailable.'));
@@ -2235,7 +2679,7 @@ async function nodeDrawer(value,{navigation=true}={}) {
   if(!id)return;
   const node={...supplied,...state.projection?.nodes?.find(n=>n.id===id)},type=String(node.type||"").toLowerCase();
   if(type==="query"){
-    openDrawer(node.label||"Query restart input","Planning / not a historical graph node",box(note(node.explanation||"A visible-query restart input; it is not a source assertion.","notice")));return;
+    openDrawer(node.label||"Input restart node","Planning / not a historical graph node",box(note(node.explanation||"A visible-input restart node; it is not a source assertion.","notice")));return;
   }
   if(node.readout_only||node.solver_state===false){
     if(node.citation){sourceDrawer(node.citation);return;}
@@ -2310,7 +2754,7 @@ function modifierCarrierPanel(candidate){
   panel.append(heading(positive?MODIFIER_CARRIER_LABEL:"Noun-match context check"));
   if(positive){
     const wording=el("dl",null,{class:"field-list"});
-    for(const [label,text]of [["Question noun",query.text],["Recorded source noun",source.text]]){
+    for(const [label,text]of [["Input noun",query.text],["Recorded source noun",source.text]]){
       const value=el("dd");value.append(el("q",text));wording.append(el("dt",label),value);
     }
     panel.append(wording,note("Positive context priority only. This saved local noun match is not confidence, factual support, owner identity or title equivalence. It does not certify the missing fact.","notice"),
@@ -2344,6 +2788,16 @@ function candidateDetail(candidate) {
   const auditBody=box(dispositionPanel(candidate));audit.append(auditBody);
   renderCandidateAudit(candidate,support,d,auditBody);
   openDrawer('Candidate',`Recorded local decision`,detailBody);
+}
+// These are original audit snapshots, not selectable shortlist candidates.
+function controllerWithholdingDisclosure(view){
+  return renderControllerWithholding(view,{activeReadingId:state.reading,onInspect:withheldCandidateDrawer});
+}
+function withheldCandidateDrawer(candidate){
+  const body=renderControllerWithheldAudit(candidate,{
+    decisionText:unit=>decisionLabel(unit,state.row.case.task),
+    makeSourceButton:proof=>sourceButton(proof,{back:()=>withheldCandidateDrawer(candidate)})});
+  openDrawer('Compatibility unresolved','Withheld from automatic shortlist / original record',body);
 }
 function renderCandidateAudit(candidate,support,d,body){
   body.append(localDecisionPanel(candidate));
@@ -2386,10 +2840,10 @@ function roleCertificatePanel(evidence,atom,back) {
   if(!supported){const notice=note("A saved role certificate is present but its version, atom binding or scope is not supported here; it is not interpreted. The unchanged native evidence and ordinary source proof remain available.","notice");notice.dataset.testid="role-certificate-notice";return{node:notice,proof:null};}
   const panel=el("section",null,{class:"path-card","data-testid":"role-certificate"});
   panel.append(heading("Source-local role alignment"),fields([
-    ["Query label / local",identity.query_label,true],["Exact label in source",cert.source_actor_label,true],
+    ["Input label / local",identity.query_label,true],["Exact label in source",cert.source_actor_label,true],
     ["Full name in this apposition",raw.raw_person,true],["Source role",raw.raw_role,true],
     ["Source organization",raw.raw_organization,true],["Bound atom",cert.atom_id,true]]),
-    note(`Applies to only this atom (${cert.atom_id}); not whole-query proof. No global alias or canonical identity merge is licensed. This source statement is not a world-truth certification.`,"notice"));
+    note(`Applies to only this atom (${cert.atom_id}); not whole-input proof. No global alias or canonical identity merge is licensed. This source statement is not a world-truth certification.`,"notice"));
   const remaining=list(cert.remaining_query_atom_ids).filter(id=>typeof id==="string");
   if(remaining.length)panel.append(note("Not certified by this certificate: "+remaining.join(", ")+". Their own native evidence must be assessed separately."));
   panel.append(el("h4","Original source apposition"),sourceButton(proof,{back}),note("Saved raw wording. Open the source to replay its character bounds and text hash; a matching quotation does not establish unrelated actions or dates."));
@@ -2398,7 +2852,7 @@ function roleCertificatePanel(evidence,atom,back) {
 function atomDetail(atom) {
   const executed=list(state.saved.result?.atoms).find(a=>a.id===atom.id)||atom;
   const label=atomLabel(executed.status),body=box(el("blockquote",atom.text||atom.source_quote,{class:"cue"}),
-    state.row.case.task==="reconstruction"&&!recordedCoverage(executed.status)?note(label):badge(label),rawInspector({status:executed.status,state:executed.state}),
+    state.row.case.task==="reconstruction"&&!recordedCoverage(atomVerdict(executed.status))?note(label):badge(label),rawInspector({status:executed.status,state:executed.state}),
     note("An input proposition is not established merely by appearing in a plan. These labels present recorded local states; they are not new verdicts.","notice"),advisory(executed));
   const contradiction=contradictionWarning(executed);if(contradiction)body.append(contradiction);
   const qualified=qualifiedAccountsPanel(newDecision(executed));if(qualified)body.append(qualified);
@@ -2435,7 +2889,7 @@ function renderTaskAssembly(host,task) {
   components(items,host);
   if(!items.length)host.append(note(complete?"No established assembly components were published. No narrative bridge is filled in.":"No source-cited account was published.","empty"));
   if(complete&&list(task.exploratory_source_cited_account).length){const details=el("details");details.append(el("summary","Exploratory components / not established assembly"),note("Related source accounts do not become certified components or fill gaps in the narrative."));components(task.exploratory_source_cited_account,details);host.append(details);}
-  if(list(task.retrieved_source_accounts).length){const details=el("details");details.append(el("summary","Retrieved source quotations / not query entailment"),note(task.retrieved_source_account_meaning||"A chronology of source reports, not a certified chronology or causal account of events."));components(task.retrieved_source_accounts,details);host.append(details);}
+  if(list(task.retrieved_source_accounts).length){const details=el("details");details.append(el("summary","Retrieved source quotations / not input entailment"),note(task.retrieved_source_account_meaning||"A chronology of source reports, not a certified chronology or causal account of events."));components(task.retrieved_source_accounts,details);host.append(details);}
   host.append(heading("Unresolved gaps"));if(list(task.gaps).length)host.append(compactEvidence(task.gaps,{label:"gaps",render:gap=>note(gap.proposition||gap.text||gap.reason||gap.required_proposition||"Unresolved requirement","notice")}));
   if(!list(task.gaps).length)host.append(note("No separate gap list was supplied. This does not certify completeness."));
   for(const bridge of list(task.hypothetical_bridges)){host.append(heading("Conditional bridge / not established"),note(bridge.required_proposition||bridge.text||bridge.condition||"Additional source evidence would be required."));}
@@ -2454,7 +2908,7 @@ async function navigateFromURL({push=false,scroll=true}={}) {
   if(params.get("view")==="home"){state.epoch++;request?.abort();destroyVisuals();state.projection=null;state.row=null;state.saved=null;state.home=true;state.loading=false;closeDrawer();clearError();renderRail();renderWorkspace();return;}
   state.home=false;
   const id=params.get("case"),matches=id?catalogCases().filter(r=>r.case.case_id===id||r.case.case_id.endsWith("_"+id)):[];
-  if(id&&matches.length!==1){state.epoch++;request?.abort();destroyVisuals();state.projection=null;closeDrawer();state.row=null;state.saved=null;state.loading=false;renderWorkspace();renderRail();showError(matches.length?"This case alias is ambiguous. Select its full published identity.":"This question is not in the published casebook. No other case has been substituted.");return;}
+  if(id&&matches.length!==1){state.epoch++;request?.abort();destroyVisuals();state.projection=null;closeDrawer();state.row=null;state.saved=null;state.loading=false;renderWorkspace();renderRail();showError(matches.length?"This case alias is ambiguous. Select its full published identity.":"This input is not in the published casebook. No other case has been substituted.");return;}
   const row=matches[0]||visibleCases()[0];
   if(row){
     if(matches.length){
@@ -2464,7 +2918,7 @@ async function navigateFromURL({push=false,scroll=true}={}) {
     await chooseCase(row,{push,reading:params.get("reading")||"",candidate:params.get("candidate")||"",scroll});
   }else{
     state.epoch++;request?.abort();destroyVisuals();state.projection=null;closeDrawer();state.row=null;state.saved=null;state.loading=false;clearError();renderRail();renderWorkspace();savePosition({push});
-    $("#page-state").textContent="No saved questions match these filters. No other case has been substituted.";
+    $("#page-state").textContent="No saved inputs match these filters. No other case has been substituted.";
   }
 }
 window.addEventListener("popstate",()=>{viewportAnchor.cancel();navigateFromURL({scroll:false});});
@@ -2475,12 +2929,14 @@ async function mountLiveWorkbench(packet){
   [narrativeUI,narrativeAccess,narrativeEndpoints]=await Promise.all([import('./narrative-trace-v1.js'),import('./narrative-attempts-v1.js'),import('./narrative-endpoint-v1.js')]);
   state.casebook={primary:[{case_id:packet.row.case.case_id,corpus:packet.row.case.corpus,task:packet.row.case.task,row:packet.row}],special_redactions:[],backgrounds:{},selection_scope:'live',completed_primary_count:1};
   state.readySingleMethod=true;$('.workspace-toolbar').hidden=true;
-  state.reading=initialDisplayReading(state.saved,state.row.case);
+  state.reading=initialDisplayReading(state.saved,state.row.case,state.row,{live:true});
   state.candidate=flowItems()[0]?.id||'';
+  await prepareControllerAudit(state.saved,state.row.case);
+  await prepareInputContext(state.saved,state.row.case);
   railDecisionCache.set(railKey(state.row),{record:state.saved});
   renderWorkspace();renderRail();savePosition();await hydrateFlow(state.epoch);
   $('#casebook-notice').hidden=true;
-  $('#page-state').textContent=packet.execution_kind==='live'?'Live execution / local evidence decisions.':'Transport test fixture / not an inference.';
+  $('#page-state').textContent=packet.execution_kind==='live'?`Live execution. ${packet.retrieval_summary.text}${emptyControllerShortlist()?' Compatibility unresolved; original candidates remain in the audit.':packet.retrieval_summary.noCandidate?' No candidate passed.':''}`:'Transport test fixture / not an inference.';
 }
 window.MatryoshkaLiveWorkbench=Object.freeze({mount:mountLiveWorkbench});
 try{
@@ -2522,8 +2978,8 @@ try{
     state.catalog=selectShowcaseCatalog(state.sourceReport,selection,selection?.source_report_sha256);
   }
   if(state.catalog){const note=$("#showcase-curation-note");if(note){note.hidden=false;note.textContent=selection.curation_note||"Curated, outcome-informed demonstrations: one case per fact family across this public casebook, not benchmark accuracy. Other saved records remain archived locally.";}}
-  if(state.report.status==="PARTIAL"){const scope=$("#publication-scope");scope.hidden=true;scope.textContent=`Preview: ${state.report.completed_cases??0} saved questions; ${state.report.pending_cases??0} declared questions are pending. This is not the final question selection.`;}
+  if(state.report.status==="PARTIAL"){const scope=$("#publication-scope");scope.hidden=true;scope.textContent=`Preview: ${state.report.completed_cases??0} saved inputs; ${state.report.pending_cases??0} declared inputs are pending. This is not the final input selection.`;}
   await loadCasebook();
   await navigateFromURL();
   }
-}catch(error){state.catalog=null;state.report=null;state.sourceReport=null;showError(error.message);$("#page-state").textContent="The bound public casebook is unavailable. No archived data has been substituted.";$("#case-view").setAttribute("aria-busy","false");$("#case-view").replaceChildren(note("The explicitly selected publication, reader and server pins must agree before saved questions can be displayed.","empty"));}
+}catch(error){state.catalog=null;state.report=null;state.sourceReport=null;showError(error.message);$("#page-state").textContent="The bound public casebook is unavailable. No archived data has been substituted.";$("#case-view").setAttribute("aria-busy","false");$("#case-view").replaceChildren(note("The explicitly selected publication, reader and server pins must agree before saved inputs can be displayed.","empty"));}

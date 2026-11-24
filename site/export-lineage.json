@@ -1,17 +1,18 @@
 {
-  "backend_code_sha256": "c60c4884d5b5a0966d7e133bcfc72b148f5bdf7dec0157d54d827719da175424",
+  "archived_code_bundle_is_current_engine": true,
+  "backend_code_sha256": "a4d03f6daeb8427feb777e3536c9f3daabf92d040d51c00a7320512783fb6340",
   "casebook_ref": {
-    "path": "phase/analyst_release_20261123/publication/analyst_resume_9a0b8889f93ee3f9718db26f/casebook.json",
-    "sha256": "1366a0ab5287f13139ea45af509113c0f80a2cdec81409f67eed083956416598"
+    "path": "phase/refinement_20261124/publication_v4/refinement_b5be9861b5fb1237cada8574/casebook.json",
+    "sha256": "5be2070c831b8507f5bc7657f12471cda6c379d385d9125672ac06a23dbee10d"
   },
   "code_bundle": {
-    "bytes": 6158326,
+    "bytes": 6858286,
     "code_only": true,
     "manifest_path": "downloads/matryoshka-code-manifest.json",
-    "manifest_sha256": "481b9bd5b79f7727da77912d1abc9792aaf4d0828da9e21823314525fcd1acf2",
+    "manifest_sha256": "023765e89357e31da9d2df012e64cc1c84bd921380270ff19a9bc588b3ac5932",
     "path": "downloads/matryoshka-code.zip",
-    "sha256": "287c0ff5d04ce25237fc2295de3e1f37561a1ab3a8f33d6a0cd61a1f7094b98d",
-    "source_backend_tree_sha256": "c60c4884d5b5a0966d7e133bcfc72b148f5bdf7dec0157d54d827719da175424"
+    "sha256": "205c0fde66c4962b817eea577c45abd6ba7da09e84e281977f27f9a384dd3a39",
+    "source_backend_tree_sha256": "a4d03f6daeb8427feb777e3536c9f3daabf92d040d51c00a7320512783fb6340"
   },
   "coverage": [
     {
@@ -1434,26 +1435,26 @@
   "field_guide": {
     "assets": [
       {
-        "public_sha256": "8a712c49da848eef2732e88d77339290b5d3eed80cf85e2ccc4cb35e1f5dcc05",
+        "public_sha256": "19860b7cef22ba4c901e379b946d1885bd8e02a113aeaedd75ee974f5d035f76",
         "source_ref": {
-          "path": "phase/analyst_release_20261123/guide/f8402a8c151a1e8fd4adcc76/field-guide.pdf",
-          "sha256": "8a712c49da848eef2732e88d77339290b5d3eed80cf85e2ccc4cb35e1f5dcc05"
+          "path": "phase/refinement_20261124/public_guide/output/final_v4_r2/field-guide.pdf",
+          "sha256": "19860b7cef22ba4c901e379b946d1885bd8e02a113aeaedd75ee974f5d035f76"
         },
         "target": "docs/matryoshka-guide.pdf"
       },
       {
-        "public_sha256": "be8d628c08dcc36f593f1762a9fc313d1861f03f0793e930c5735f7b51cc6e8b",
+        "public_sha256": "e86d785152ff8853041d324ec2d335f35ebaf65b289c353c021dfc2609e597ea",
         "source_ref": {
-          "path": "phase/analyst_release_20261123/guide/f8402a8c151a1e8fd4adcc76/field-guide.txt",
-          "sha256": "be8d628c08dcc36f593f1762a9fc313d1861f03f0793e930c5735f7b51cc6e8b"
+          "path": "phase/refinement_20261124/public_guide/output/final_v4_r2/field-guide.txt",
+          "sha256": "e86d785152ff8853041d324ec2d335f35ebaf65b289c353c021dfc2609e597ea"
         },
         "target": "docs/matryoshka-guide.txt"
       },
       {
-        "public_sha256": "8b51ae9e774722113e3f8564673f11b5ce43df93010034d69f84251170319dcd",
+        "public_sha256": "3e0fbc02a71f3d8865a1338099dd0cdcae741e87206f897decd4124b62562eec",
         "source_ref": {
-          "path": "phase/analyst_release_20261123/guide/f8402a8c151a1e8fd4adcc76/guide-public.json",
-          "sha256": "8b51ae9e774722113e3f8564673f11b5ce43df93010034d69f84251170319dcd"
+          "path": "phase/refinement_20261124/public_guide/output/final_v4_r2/guide-public.json",
+          "sha256": "3e0fbc02a71f3d8865a1338099dd0cdcae741e87206f897decd4124b62562eec"
         },
         "target": "docs/guide-public.json"
       }
@@ -1474,24 +1475,28 @@
       "resume3_vn_mr3_eastern_attacks_h_fefb4219a9c492b1",
       "resume5_vn_two_facts_m_9435a3298b1c9a70",
       "narrative_vietnam_a111c4d6f8af8b100825ae07",
-      "analyst_delegation_01_first_588eaa87728f94a6",
-      "analyst_delegation_01_last_fe5df6ceca0d45e8"
+      "delegation_window_0a778cbe9fe92251c0a2fa5a",
+      "delegation_window_ad3f98e8db456d199146b68c"
     ],
     "guide_public_ref": {
-      "path": "phase/analyst_release_20261123/guide/f8402a8c151a1e8fd4adcc76/guide-public.json",
-      "sha256": "8b51ae9e774722113e3f8564673f11b5ce43df93010034d69f84251170319dcd"
+      "path": "phase/refinement_20261124/public_guide/output/final_v4_r2/guide-public.json",
+      "sha256": "3e0fbc02a71f3d8865a1338099dd0cdcae741e87206f897decd4124b62562eec"
     },
-    "pdf_pages": 10,
+    "pdf_pages": 17,
     "publication_qualification_inferred": false,
     "source_mode": "saved_report_snapshot",
     "source_report_ref": {
-      "path": "phase/analyst_release_20261123/publication/analyst_resume_9a0b8889f93ee3f9718db26f/report.json",
-      "sha256": "273e3ed148ee798baf2822189cb25541e2ffb404215ea26197cb669d83a0e0c2"
+      "path": "phase/refinement_20261124/publication_v4/refinement_b5be9861b5fb1237cada8574/report.json",
+      "sha256": "cc6b518745c153485e6d8f5db75ae7ffd0e859757d519ea102ba04dc2e206314"
     },
     "version": "source-bound-field-guide/1"
   },
   "graph_delivery": "same-repository",
   "historical_source_packets_modified": false,
+  "local_refinement_ref": {
+    "path": "phase/refinement_20261124/publication_v4/publication_refs.json",
+    "sha256": "9b5f61750c2002b79986c64c475f0741660163b0c116741016ceda04c6eb12cd"
+  },
   "pdf_catalog_ref": {
     "path": "experiments/visual_refinement_20261120/pdfs/catalog-resource-bound.json",
     "sha256": "9cff25abf01546029a3fc6060bb0490b07f79424c684f8182770c72afbc9c0ef"
@@ -1519,8 +1524,8 @@
     "version": "analyst-release/1"
   },
   "source_report_ref": {
-    "path": "phase/analyst_release_20261123/publication/analyst_resume_9a0b8889f93ee3f9718db26f/report.json",
-    "sha256": "273e3ed148ee798baf2822189cb25541e2ffb404215ea26197cb669d83a0e0c2"
+    "path": "phase/refinement_20261124/publication_v4/refinement_b5be9861b5fb1237cada8574/report.json",
+    "sha256": "cc6b518745c153485e6d8f5db75ae7ffd0e859757d519ea102ba04dc2e206314"
   },
   "static_export_API_calls": 0,
   "version": "analyst-native-static-export/1"

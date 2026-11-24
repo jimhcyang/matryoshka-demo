@@ -1,120 +1,483 @@
-Matryoshka: Source To Decision
-Read the input and its local verdict first. Facts express the requirements of the input, not historical conclusions. Follow a selected source, inspect its exact quotation and original document, then compare the evidence with the final decision. The model digest is a separate summary written after the deterministic local result has been sealed.
+Matryoshka: Evidence Walkthrough
+Read a question, inspect its sources, and distinguish established evidence from useful context.
 
-The Evidence Boundary
-The active saved experiments admit eligible documents dated on or before the input source date. CIB admits the earlier release of the originating document, but not its later release. Iran and Vietnam use CONFIDENTIAL evidence and exclude the entire originating SECRET cable; a document-wide NOFORN restriction remains a veto. Later PDFs may be inspected as originals, but inspection does not admit their contents as evidence. Historical results retain their original policy and are not relabeled.
+Read The Input First
+Inputs are the supplied questions or passages. Facts state what must be checked, not what history has already established. Redaction readings describe grammatical ways to fill a selected blank. Start with the saved result, then follow its Facts, Routes and Sources. Origin context is available after clicking Origin; it is not silently added to the input.
 
-Facts And Retrieval
-The initial query-only model call extracts the visible input and splits it into facts. Redaction additionally has grammatical slot readings. Local search matches these facts to eligible source pages and source-grounded graph states; there is no whole-query lookup. Each displayed lookup identifies the fact, executed search and selected source it actually matched. A shared document does not prove that every fact matched.
+From Facts To Sources
+BM25 searches the saved non-context Facts against eligible pages and extraction surfaces, rather than issuing the complete input as another search. Reciprocal-rank fusion combines lists using sum(1/(60 + rank)), first within search families and then across lexical and graph page rankings. Source-grounded matches seed graph navigation. Graph edges and hierarchy membership help locate passages; neither navigation nor a large retrieval score proves a Fact. Recorded lookup text and source endpoints below are taken from the saved assessment, not reconstructed as a search chronology.
 
-Combining Search Results
-BM25 ranks eligible pages separately for each factual search. Reciprocal rank fusion combines lists using weight/(60 + rank), with rank starting at 1. Within a redaction, searches serving the fact containing the selected blank form the focal group; other facts form the background group. The saved focal/background shares are applied to those groups, not to a known answer. A group absent from the input receives no allocation. Source-grounded node matches also seed graph navigation. The saved graph share combines the resulting page ranking with the lexical ranking through the same rank-fusion rule. These choices affect which evidence is inspected; they do not certify it.
+Read The Source-Owned Checks
+A passage must establish the required owner, predicate, arguments, time, polarity and attribution in the same relevant scope. A report of an action is not proof of its completion; a related episode is not the queried event. Required joins and qualifiers remain binding. Source fit helps order suggestions but cannot repair a missing requirement. Contextual and partial results remain visible; there is no claim that every case is solved.
 
-The Local Graph Calculation
-Navigation starts with normalized query-match weights p. At each iteration, x(next) = (1 - alpha)p + alpha P-transpose x; alpha = 0.85 means 15 percent restart and 85 percent transport. P is the eligible graph transition matrix. Each node divides its outgoing allocation equally between nonempty edge-kind and destination-type groups; within a group, source support determines the split. Membership links have unit weight. Communities, themes and domains add navigation states, not new historical claims. Semantic-node mass is shared among eligible source occurrences to rank pages. This deterministic calculation stops at a numerical error bound, not when an answer looks persuasive. Its parameters are engineering choices, not calibrated truth probabilities.
+When A Main Clause Is Explicit
+An eligible, already-inspected raw source sentence can be checked even when extraction did not yield a candidate. This bounded check requires the Fact's exact visible wording and matching dependency roles in a positive past-tense main clause, not fuzzy paraphrase. An accepted safe finite concessive qualification remains in the full quotation, including its own negation if present; it is not stripped away. For this narrow check, negated main clauses, reported or nonfactive assertions, conditional framing and unsafe epistemic caveats do not qualify. Passing establishes source ascription only: what the source explicitly states, not independent world truth, canonical identity or an event join. This does not certify other scope-handling paths.
 
-Graph Navigation
-Facts to evidence shows retained source matches and their exact endpoints. Compact view hides facts without a retained connection; it does not discard evidence. Zoom and pan change the display only. View on KG navigates the existing corpus map, using actual source-backed connections and hierarchy membership. A post-run inspection path is not represented as the original search chronology or as a chain of historical entailment. Community membership is navigation, not evidence that an event occurred.
+Known Scope Limitation
+Some unverified-report tails can still receive a support label from existing scope handling. The narrow main-clause check is not the source of that known label and does not repair every scope-handling path. Labels below reproduce the saved assessment; they are not independent historical verification. Read the full source quotation, especially reporting, attribution and uncertainty qualifications. Rank and points cannot cure this limitation. This is a diagnostic workbench, not a universally certified entailment system.
 
-Reading Cable Layout
-The ordinary structured matcher uses proper-name spellings already visible in the input to analyze matching uppercase source words. It does not supply a missing name or assert a new identity. A whitespace-only analysis view can repair grammar disrupted by line breaks; every lexical token must map back to the same original text span. If normalization would solely change an already recognized both-and coordination into a numeric qualifier, the complete original parse is retained after checking that the other lexical attributes agree. Source quotations, dates and character positions are retained. A nominal object complement can preserve a person and an office together in a parsed fact. These parsing controls do not relax negation, attribution, time or source eligibility.
+Understand Evidence And Fit Points
+Evidence class T is assigned by logical checks: 2 for evidence-backed suggestions, 1 for partial grounding with an established requirement, otherwise 0. Let S be support, O opposition, K contextual evidence and f source-owned fit. Then u=(S+f+0.5*K)/(1+O). The nine source/function checks contribute weights 256,128,64,32,16,8,4,2,1 to B; a separately verified contextual role attachment can contribute 512. W is 1 when B contains a positive functional cue other than type compatibility (16) or absence of a visible-name penalty (2), and 0 otherwise. points = 100*T + 40*W + 25*B/1023 + 35*u/(1+u). The three displayed parts are evidence-class points, source-function points (up to 65), and document-evidence/fit points (up to 35). The scale is 0 to 300 points, not a percentage or a correctness probability. The 40/25/35 division is a declared ordering choice, not statistical calibration. Close scores and genuine ties are retained.
 
-Evidence Accumulation
-All three tasks use the same document-deduplicated evidence calculation within each fact or candidate. A page at saved retrieval rank r has weight w(r) = 0.5 + 0.5/(1 + log2(r)); an unrecorded rank receives 0.5. Multiply that weight by the applicable recorded evidence fit. Within each unit and direction, keep the largest contribution per document, then sum distinct-document contributions. Support, opposition and context stay separate. Repeating a passage or citing another page of the same document does not create another contribution to that unit. Overall totals add fact-wise indices, not independent document votes: one document may address several different facts.
+Count Documents, Not Repeated Quotations
+A page at recorded retrieval rank r receives weight 0.5+0.5/(1+log2(r)); an unrecorded rank receives 0.5. Within each candidate or Fact and each direction, only the largest contribution per document counts. Support, opposition and context remain separate. Fit f combines owned relation (.32), owned role (.16), source type (.16), focal-term fraction (up to .16), and visible-anchor cooccurrence (.20). Hypothesis and Mosaic retain Fact-wise support minus opposition; overall totals add Fact-wise indices, not independent-document votes across every Fact.
 
-Final Redaction Score
-Final redaction ranking preserves evidence sufficiency first and source-owned function priorities next. Nine existing source/function checks form a binary band B: a satisfied check at position i contributes 2^(8-i). A verified visible-role attachment, when the selected constructor declares it, contributes another 512. These are actual source features, not candidate positions. Fit F combines owned relation (0.32), owned role (0.16), source type (0.16), focal overlap (up to 0.16) and a literal visible-context anchor (0.20). With document-deduplicated S, O and C, compute u=(S+F+0.5C)/(1+O) and score=T+(B+u/(1+u))/1024. T is 2 for evidence-backed, 1 for partial grounding with an established requirement, otherwise 0. Evidence quantity cannot outweigh a higher source-function band or create support. Source position breaks exact ties; repeated surface/family alternatives are collapsed. The banded score is not a probability or a confidence margin.
+Keep Identity Claims Bounded
+Consolidation keeps the fullest already-checked grammatical wording only for the same exact source head and citation, input, reading and semantic decision. Raw variants and their own scores remain inspectable; alias scores are not added and requirements are not pooled. A common surname or graph allocation family does not identify a person. The May 23 Arias and March 29 Harmodio occurrences remain identity-unresolved and separate; their relationship is not certified by name similarity.
 
-Hypothesis And Mosaic Scores
-Each fact shows its support, opposition and context sums. Hypothesis net evidence is S - O; the signed sums remain visible so conflict is not hidden by cancellation. Mosaic also shows the fraction of applicable recorded criteria that passed. A complete source-owned certificate may establish a fact even with a numerical score below 1. Conversely, a large relevance or context score cannot establish it. These are deterministic evidence indices, not calibrated probabilities or cross-case confidence estimates. The logical decision gates are not relaxed to manufacture a supported answer.
+Inspect Originals Without Changing Evidence
+Use a source quotation to open its exact transcription span and original document. Source IDs, dates, page hashes and character bounds remain attached to the raw wording. Line wrapping in this guide is presentation only. Eligible evidence is dated on or before the input source date. CIB uses the earlier or shared release; later-release inspection does not admit hidden text. Cable evidence retains CONFIDENTIAL and document-wide handling restrictions, and excludes the entire originating cable. Opening Origin or a later original is inspection, not new evidence.
 
-Scope Limitations
-The local matcher is not a general entailment oracle. Tests found cases where adjective-level either-or or neither-nor wording incorrectly received support for a narrower component. The layout fix does not repair those pre-existing scope errors. Selected positive examples are screened for dependence on that failure; other Live questions can still expose it. Inspect the full source wording, especially disjunction, attribution and temporal qualifications, rather than treating a support label or numerical score as independent verification.
+Two Important Qualifications
+For Tehrani, an attested departure from the uniquely stated office does not establish that every Council membership or relationship ended. Wording that he had to make a statement expresses necessity, not a completed utterance; read the individual saved Fact results below. In the delegation comparison, added visible context explicitly supplies the Swedes clue. An input-derived Swedish suggestion has no corpus score or independent evidence vote, and the still-withheld identity remains unknown. A useful suggestion is not verified recovery.
 
-Inspecting Sources
-Click a quotation to open the full available transcription at its exact highlighted span. Highlight coordinates replay against the source text and hash; repeated words are not guessed. CIB offers both original PDF releases at recorded physical pages after the text. Click an input redaction to reveal a supplied reference, and click again to remask it. A still-withheld reference remains unknown. Reference reveals and later originals are inspection material, never model answer inputs.
+1. CIB / Redaction
+Input source: CIA-RDP79T00975A003700200001-8; date: 1958-05-23.
 
-Live Analysis
-Live uses the same query-only planning, local evidence processing and final scoring contract, with a bounded interactive search: 16 documents, 32 passages, 8 construction pages and 12 completed drafts per reading. These limits can yield different results from the larger saved experiments. Leave the source document blank for an analyst-authored input. The date defaults to the last eligible corpus day; its displayed inclusive date is converted to an exclusive next-day engine boundary exactly once. A private authenticated backend holds the OpenAI key and enforces the spending limit. The static website contains no provider credential. Live source handoffs remain inspectable; its corpus-map link is independent exploration, not a replay of an unsaved graph walk. The final digest cannot change the saved local decision. Completed public result envelopes can be reopened from the current browser tab without another model call; passwords and session tokens are not stored with them.
+Input
+The 22 May riots in Panama against President de la Guardia's administration have led him to declare a state of siege and may erupt into full-scale revolution. The strong national guard, whose repression of student demonstrations earlier this week resulted in one death and widespread and violent resentment, has announced that it is slowly re-gaining control of Panama City. The guard has orders to kill. The students have been joined in a general strike against the government by labor unions and other groups, but appear to have lost control of the disturbance to hoodlums. The latter are probably incited by powerful opposition politicians [REDACTION] who are trying to oust the President. Similar riots are occurring in Colon, the northern terminus of the canal.
 
-Visiting Delegation: Context Comparison
-Five paragraph-window pairs were attempted for the two authentic still-withheld delegation slots. Nine inputs produced valid executions; the last input in the full five-paragraph pair did not pass the visible-text planning contract. The nine completed viable pools did not contain Swedish or Swedes. One shorter first-gap input nominated Swedish, but it did not clear the recorded construction checks. This is a diagnostic of the suggested spelling, not measured correctness: no historical answer key is available. The final workbench uses the preferred P1+P3+P4 context for both gaps, without the final Swedes paragraph. The earlier release of the 17 February 1959 origin is eligible; its later text is not retrieved evidence.
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
 
-CIB / Arias and the Panama unrest
-Input: The 22 May riots in Panama against President de la Guardia's administration have led him to declare a state of siege and may erupt into full-scale revolution. The strong national guard, whose repression of student demonstrations earlier this week resulted in one death and widespread and violent resentment, has announced that it is slowly re-gaining control of Panama City. The guard has orders to kill. The students have been joined in a general strike against the government by labor unions and other groups, but appear to have lost control of the disturbance to hoodlums. The latter are probably incited by powerful opposition politicians [REDACTION] who are trying to oust the President. Similar riots are occurring in Colon, the northern terminus of the canal.
-Local result: Ranked source-grounded suggestions. Candidates: 1. like Arias (0.27, contextual); 2. like First Vice President Diaz (0.27, contextual); 3. like the disgruntled Diaz (0.27, contextual); 4. like former President Harmodio Arias (0.27, contextual); 5. like President Remon (0.27, contextual). Evidence source date: 1958-05-23.
+Fact To Check
+The 22 May riots in Panama against President de la Guardia's administration have led him to declare a state of siege.
 
-CIB / The air force commander's doubts
-Input: The government's subsequent mistrust of officers who did not give all-out support to Diem has also had an unsettling effect. Diem's foot-dragging in carrying out a promised government reorganization prompted [REDACTION] to express doubt that Diem intended to do more than replace one group of "yes men" with another; a similar complaint was made recently by [MASKED].
-Local result: Ranked source-grounded suggestions. Candidates: 1. the air force commander (0.13, contextual); 2. doubt (2.21e-03, contextual); 3. reforms (2.21e-03, contextual); 4. reorganization (2.21e-03, contextual); 5. reorganization of the command structure (2.21e-03, contextual). Evidence source date: 1961-03-29.
+Suggestions
+1. like Arias (contextual; 58.9687 points)
+2. like First Vice President Diaz (contextual; 58.8699 points)
+3. like the disgruntled Diaz (contextual; 58.6971 points)
+4. like former President Harmodio Arias (contextual; 58.6075 points)
+5. like President Remon (contextual; 58.5440 points)
 
-CIB / Betancourt and the Caribbean crisis
-Input: The Caribbean Crisis
+Recorded Lookup
+The 22 May riots in Panama against President de la Guardia's administration have led him to declare a state of siege.
+
+One Source Passage
+Although there has been no evidence of anti-US sentiments thus far, Arias and others have led recent agitation for greater US concessions to Panama in the Canal Zone, and may raise the issue to further arouse the mob.
+
+Source Coordinates
+CIA-RDP79T00975A003700200001-8; 1958-05-23; page_ecb0ea5ca13ba08d0d4d; characters [831,1048]; page hash abc23a5e36f8faa01ce5b64ae9e14f30c04dab7098a59df77aa0a06ed8ed0975.
+
+2. CIB / Redaction
+Input source: CIA-RDP79T00975A005600250001-2; date: 1961-03-29.
+
+Input
+The government's subsequent mistrust of officers who did not give all-out support to Diem has also had an unsettling effect. Diem's foot-dragging in carrying out a promised government reorganization prompted [REDACTION] to express doubt that Diem intended to do more than replace one group of "yes men" with another; a similar complaint was made recently by [MASKED].
+
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
+
+Fact To Check
+The government's subsequent mistrust of officers who did not give all-out support to Diem has also had an unsettling effect.
+
+Suggestions
+1. the air force commander (contextual; 50.2358 points)
+2. the military (contextual; 9.1331 points)
+
+Recorded Lookup
+The government's subsequent mistrust of officers who did not give all-out support to Diem has also had an unsettling effect.
+
+One Source Passage
+Continuing dissatisfaction in the armed forces, however, is evident in the statements recently made to the American ambassador by the air force commander.
+
+Source Coordinates
+CIA-RDP79T00975A005500130001-6; 1961-01-16; page_e6af35a1af0148e38ac6; characters [573,727]; page hash 27f253e62061c39d75a3e6ccfe399e9ac2d68e915e5e93fb55c4b606455c80ff.
+
+3. CIB / Redaction
+Input source: CIA-RDP79T00975A004500410001-6; date: 1959-06-27.
+
+Input
+The Caribbean Crisis
 
 The determination of leftists and liberals led by the Fidel Castro government of Cuba [REDACTION 1] to overthrow the Trujillo dictatorship in the Dominican Republic and the Somoza regime in Nicaragua has brought the contenders close to war. The situation also seriously threatens other governments, particularly the weak unpopular regime in Haiti. Military action has thus far been confined to rebel incursions into Nicaragua and the Dominican Republic, but may extend to counteraction by the beleaguered regimes against governments supporting the insurgents. Generalissimo Trujillo told the American ambassador on 20 June that "defensive military action" against Cuba will become "imperative" in the event of further insurgent landings. The armed forces chief of Nicaragua has also considered action against the hostile governments.
 
 Latin American Communists, who are particularly influential among the Cuban-backed rebel groups, would probably win influence in any postrevolutionary governments.
-Local result: Ranked source-grounded suggestions. Candidates: 1. and Betancourt (0.38, contextual); 2. and Dominican dictator Trujillo (0.25, contextual); 3. and Provisional President Urrutia (0.25, contextual); 4. and Batista (0.25, contextual); 5. and Trujillo (0.25, contextual). Evidence source date: 1959-06-27.
 
-CIB / An assessment of Panama's ruling oligarchy
-Input: LATE ITEM
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
+
+Fact To Check
+The determination of leftists and liberals led by the Fidel Castro government of Cuba [REDACTION 1] to overthrow the Trujillo dictatorship in the Dominican Republic and the Somoza regime in Nicaragua has brought the contenders close to war.
+
+Suggestions
+1. and Betancourt (contextual; 64.1525 points)
+2. and Dominican dictator Trujillo (contextual; 58.7734 points)
+3. and Provisional President Urrutia (contextual; 58.3011 points)
+4. and Batista (contextual; 58.1905 points)
+5. and Trujillo (contextual; 58.1905 points)
+
+Recorded Lookup
+The determination of leftists and liberals led by the Fidel Castro government of Cuba [REDACTION 1] to overthrow the Trujillo dictatorship in the Dominican Republic and the Somoza regime in Nicaragua has brought the contenders close to war.
+
+One Source Passage
+(Betancourt--a spokesman for the several leftist-liberal regimes seeking to overthrow the remaining dictatorships in the hemisphere and to oust them from membership in the OAS--stated that collective action to prevent hostilities between Cuba and the Dominican Republic would only serve to strengthen the Dominican dictatorship and discredit the OAS.
+
+Source Coordinates
+CIA-RDP79T00975A004500390001-9; 1959-06-25; page_ce7fdcfc653127036ea2; characters [312,662]; page hash 869bfb9f7efa3c007d15c0b8538af0ec25202bf623430aa42e7b8722c3c7175f.
+
+4. CIB / Redaction
+Input source: CIA-RDP79T00975A004800030001-5; date: 1959-11-04.
+
+Input
+LATE ITEM
 
 *Panama: Further anti-American rioting and attempted incursions into the Canal Zone may follow yesterday's outbreaks. The wounding of several Panamanians by US troops, who defended Canal Zone entrances when the Panamanian National Guard failed to do so, may serve as a pretext for extremists to provoke additional disorder during the next few days. Panamanian grievances against the American administration of the Canal Zone are being exploited by nationalist politicians maneuvering in anticipation of next May's presidential election. The [REDACTION 1] ruling oligarchy in Panama appears willing to use anti-American sentiment regarding the Canal Zone in order to divert attention from the underlying social discontent of the lower income groups.[REDACTION]
-Local result: Ranked source-grounded suggestions. Candidates: 1. corrupt (0.09, contextual). Evidence source date: 1959-11-04.
 
-CIB / Aung Gyi and the Burma-China agreement
-Input: The agreement is said to have been drafted at [REDACTION] initiative; he reportedly guaranteed to the Chinese that their military actions would receive no publicity in Burma. Only a handful of Burmese officials know of the agreement, and even Prime Minister Nu professes not to have been officially informed. Nu stated flatly in a press conference on 20 December that there was no agreement, and that if there were Chinese Communist troops in Burma who refused to leave, "they would be driven out." Official acknowledgment of this military cooperation would arouse widespread apprehension in Burma.
-Local result: Ranked source-grounded suggestions. Candidates: 1. Deputy Prime Minister Kyaw Nyein's (0.33, contextual); 2. Turkish prime minister Menderes's (0.33, contextual); 3. Nu's (0.33, contextual); 4. General Ne Win's (0.27, contextual); 5. Chou En-lai's (0.27, contextual). Evidence source date: 1960-12-28.
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
 
-CIB / A reported interior-ministry appointment
-Input: Colonel Alberto Escamilla was reportedly appointed minister of interior.
-Local result: Supported by eligible evidence. Facts: Colonel Alberto Escamilla was reportedly appointed minister of interior. - support. Evidence source date: 1961-01-17.
+Fact To Check
+Further anti-American rioting and attempted incursions into the Canal Zone may follow yesterday's outbreaks.
 
-CIB / Rural organization and reported journeys
-Input: El Salvador's Communist-dominated labor federation had announced plans to organize peasant committees, and fourteen PRAM leaders were reported to have left or to be about to leave for Cuba.
-Local result: Evidence-backed mosaic. Facts: El Salvador's Communist-dominated labor federation had announced plans to organize peasant committees. - established; Fourteen PRAM leaders were reported to have left or to be about to leave for Cuba. - established. Evidence source date: 1961-01-17.
+Suggestions
+1. corrupt (contextual; 58.8042 points)
+2. Panamanian (contextual; 13.2076 points)
+3. American (contextual; 13.2076 points)
+4. exploited (contextual; 13.2076 points)
+5. nationalist (contextual; 13.2076 points)
 
-CIB / Why the Salvadoran military became concerned
-Input: The armed forces, which had been virtually paralyzed by disunity, appear to have been spurred to cooperation by increasingly bold Communist activity in recent weeks. Unrestricted Communist organizational activity among the [REDACTION] Salvadoran peasants and the visit to Cuba earlier this month of a group of Salvadoran extremists have particularly heightened the concern of the military.
-Local result: Ranked source-grounded suggestions. Candidates: 1. easily politically manipulated (2.12, evidence-backed); 2. poorer (0.03, contextual). Evidence source date: 1961-01-17.
+Recorded Lookup
+Further anti-American rioting and attempted incursions into the Canal Zone may follow yesterday's outbreaks.
 
-IRAN / Parliament Approves Bakhtiar's Government
-Input: Majlis approved Bakhtiar's government.
-Local result: Supported by eligible evidence. Facts: Majlis approved Bakhtiar's government. - support. Evidence source date: 1979-02-06.
+One Source Passage
+His recent calls to rise against the corrupt oligarchy which has ruled the country for many years have probably influenced the thousands of poor and unemployed concentrated in Panama City.
 
-IRAN / Tehrani Resigns and Challenges the Regency Council
-Input: Tehrani resigned from the Regency Council and stated that the Regency Council was illegal.
-Local result: partial reconstruction. Facts: Tehrani resigned from the Regency Council. - partial; Tehrani stated that the Regency Council was illegal. - insufficient. Evidence source date: 1979-01-25.
 
-IRAN / Government, committees and political influence
-Input: AS REVOLUTIONARIES, BAZARGAN AND HIS PEOPLE ARE BASICALLY CONSERVATIVES. AMONG BAZARGAN'S CLOSEST COWORKERS, [REDACTION] APPEARS THE MOST RADICAL, BUT THAT PROBABLY STEMS FROM THE ROLE HE IS PLAYING AS A BRIDGE BETWEEN THE GOVERNMENT AND THE COMMITTEES.
-Local result: Ranked source-grounded suggestions. Candidates: 1. YAZDI (0.27, contextual); 2. POL COUNSELOR (0.27, contextual); 3. AMBASSADOR (0.27, contextual); 4. MOHAMMAD REZA MAHDAVI-KANI (0.27, contextual); 5. BAZARGAN (0.27, contextual). Evidence source date: 1979-04-13.
 
-VIETNAM / NVA Attacks in Eastern Military Region 3
-Input: The NVA mounted stiff attacks in the eastern sections of MR-3.
-Local result: Supported by eligible evidence. Facts: The NVA mounted stiff attacks in the eastern sections of MR-3. - support. Evidence source date: 1975-03-19.
+Source Coordinates
+CIA-RDP79T00975A004300190001-3; 1959-02-20; page_ee8a23bf207dc6bb4e00; characters [775,965]; page hash 633a4da25f1f8304c960bd9a2f28b99c1451656913fca806d12f1f2dde1113ca.
 
-VIETNAM / NVA Attacks and Delta Activity
-Input: The NVA mounted stiff attacks in the eastern sections of MR-3, and the Delta experienced the highest level of activity since the ceasefire.
-Local result: partial reconstruction. Facts: The NVA mounted stiff attacks in the eastern sections of MR-3. - established; The Delta experienced the highest level of activity since the ceasefire. - insufficient. Evidence source date: 1975-03-19.
+5. CIB / Redaction
+Input source: CIA-RDP79T00975A005400500001-6; date: 1960-12-28.
 
-VIETNAM / A concealed command role
-Input: THE [REDACTION], BGEN HUYNH VAN LAC, CONFIRMED JUNE 25 THAT ON A NUMBER OF OCCASIONS SINCE CF II VC/ NVA HAVE ATTEMPTED VERY LOW LEVEL CONTACTS BETWEEN GUERILLA FORCES AND RF / PF UNITS.
-Local result: Ranked source-grounded suggestions. Candidates: 1. MR IV CHIEF OF STAFF (0.50, contextual); 2. ARVN 5 TH DIV CG BG LICH (0.27, contextual); 3. GVN REP (0.27, contextual); 4. BGEN LE VAN HUNG (0.27, contextual); 5. BGEN NGUYEN
-THANH HOANG (0.27, contextual). Evidence source date: 1973-06-28.
+Input
+The agreement is said to have been drafted at [REDACTION] initiative; he reportedly guaranteed to the Chinese that their military actions would receive no publicity in Burma. Only a handful of Burmese officials know of the agreement, and even Prime Minister Nu professes not to have been officially informed. Nu stated flatly in a press conference on 20 December that there was no agreement, and that if there were Chinese Communist troops in Burma who refused to leave, "they would be driven out." Official acknowledgment of this military cooperation would arouse widespread apprehension in Burma.
 
-CIB / Visiting delegation
-Input: Soviet Marshal Malinovsky told a visiting [MASK] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength. The defense minister implied that some military leaders had favored preparing a nuclear capability at the expense of conventional forces, but that the government Presidium had decided in favor of simultaneous development, which he personally approved. NATO, Malinovsky noted, had adopted the other course, and he considered this an error.
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
 
-Malinovsky told the delegation that all agreed that nuclear weapons would be decisive in a general war but that other arms and weapons would continue to play a major role--a line both he and former Defense Minister Zhukov have expounded.
+Fact To Check
+The agreement is said to have been drafted at [REDACTION] initiative.
 
-The [REDACTED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense. It was stated that intermediate-range ballistic missiles now cover Western bases in Europe.
-Local result: Ranked source-grounded suggestions. Candidates: 1. Soviet (0.09, partial grounding); 2. Italian (0.09, contextual); 3. Chinese (0.09, contextual); 4. French (0.03, partial grounding); 5. Yugoslav (0.03, contextual). The reference remains withheld; candidate rank is not an exact-recovery measurement. Evidence source date: 1959-02-17.
+Suggestions
+1. Nu's (contextual; 63.7911 points)
+2. Deputy Prime Minister Kyaw Nyein's (contextual; 63.0921 points)
+3. Deputy Prime Minister U Kyaw Nyein's (contextual; 62.4014 points)
+4. Kyaw Nyein's (contextual; 58.9002 points)
+5. Ba Swe's (contextual; 58.9002 points)
 
-CIB / Visiting delegation
-Input: Soviet Marshal Malinovsky told a visiting [REDACTED] military delegation [REDACTED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength. The defense minister implied that some military leaders had favored preparing a nuclear capability at the expense of conventional forces, but that the government Presidium had decided in favor of simultaneous development, which he personally approved. NATO, Malinovsky noted, had adopted the other course, and he considered this an error.
+Recorded Lookup
+The agreement is said to have been drafted at [REDACTION] initiative.
 
-Malinovsky told the delegation that all agreed that nuclear weapons would be decisive in a general war but that other arms and weapons would continue to play a major role--a line both he and former Defense Minister Zhukov have expounded.
+One Source Passage
+Only a handful of Burmese officials know of the agreement, and even Prime Minister Nu professes not to have been officially informed.
 
-The [MASK] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense. It was stated that intermediate-range ballistic missiles now cover Western bases in Europe.
-Local result: Ranked source-grounded suggestions. Candidates: 1. Soviet (0.12, contextual); 2. Italian (0.12, contextual); 3. Austrian (0.03, partial grounding). The reference remains withheld; candidate rank is not an exact-recovery measurement. Evidence source date: 1959-02-17.
+Source Coordinates
+CIA-RDP79T00975A005400500001-6; 1960-12-28; page_7270f49271faa6a0946d; characters [868,1001]; page hash e547a5a32d9c8efdb7f6a0de31a16fabb79ce91873b69caddaaccb6021cebe1b.
+
+6. CIB / Hypothesis
+Input source: CIA-RDP79T00975A005500140001-5; date: 1961-01-17.
+
+Input
+Colonel Alberto Escamilla was reportedly appointed minister of interior.
+
+Saved Result
+Supported by eligible evidence
+
+Fact
+Colonel Alberto Escamilla was reportedly appointed minister of interior.
+Recorded result: Supported by eligible evidence
+
+Recorded Lookup
+Colonel Alberto Escamilla was reportedly appointed minister of interior.
+
+One Source Passage
+Colonel Alberto Escamilla, who was chief of staff of the army during Osorio's administration, reportedly has been appointed minister of interior in the new government.
+
+Source Coordinates
+CIA-RDP79T00975A005300490001-9; 1960-10-27; page_8343e875112630d1b0ac; characters [748,915]; page hash 1a1e460328066fb9985bcf22ebf6e30ca8a12eeb3e5a710438325ccbca1c730f.
+
+7. CIB / Mosaic
+Input source: CIA-RDP79T00975A005500140001-5; date: 1961-01-17.
+
+Input
+El Salvador's Communist-dominated labor federation had announced plans to organize peasant committees, and fourteen PRAM leaders were reported to have left or to be about to leave for Cuba.
+
+Saved Result
+Evidence-backed mosaic
+
+Fact
+El Salvador's Communist-dominated labor federation had announced plans to organize peasant committees.
+Recorded result: Established
+
+Fact
+Fourteen PRAM leaders were reported to have left or to be about to leave for Cuba.
+Recorded result: Established
+
+Recorded Lookup
+El Salvador's Communist-dominated labor federation had announced plans to organize peasant committees.
+
+One Source Passage
+The Communist-dominated labor federation of El Salvador (CGTS) has announced it is proceeding with plans to organize peasant committees throughout the country.
+
+Source Coordinates
+CIA-RDP79T00975A005400250001-4; 1960-11-29; page_28ac90c60600d0e35b26; characters [54,213]; page hash 2ab72caac849acdfeee8e72c3f8efe5680ef59f4bc8afd9bd770b97a80a14049.
+
+8. CIB / Redaction
+Input source: CIA-RDP79T00975A005500140001-5; date: 1961-01-17.
+
+Input
+The armed forces, which had been virtually paralyzed by disunity, appear to have been spurred to cooperation by increasingly bold Communist activity in recent weeks. Unrestricted Communist organizational activity among the [REDACTION] Salvadoran peasants and the visit to Cuba earlier this month of a group of Salvadoran extremists have particularly heightened the concern of the military.
+
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
+
+Fact To Check
+The armed forces, which had been virtually paralyzed by disunity, appear to have been spurred to cooperation by increasingly bold Communist activity in recent weeks.
+
+Suggestions
+1. easily politically manipulated (evidence-backed; 263.0667 points)
+2. generally depressed (contextual; 47.7099 points)
+3. poorer (contextual; 47.0202 points)
+4. last (contextual; 12.8106 points)
+5. civilian (contextual; 12.8106 points)
+1. 6 (contextual; 8.7989 points)
+2. Fourteen (contextual; 8.2250 points)
+3. 2 (contextual; 8.2250 points)
+4. 25 (contextual; 8.1340 points)
+5. 7 (contextual; 8.1203 points)
+
+Recorded Lookup
+The armed forces, which had been virtually paralyzed by disunity, appear to have been spurred to cooperation by increasingly bold Communist activity in recent weeks.
+
+One Source Passage
+Salvadoran peasants, a generally depressed group with real socio-economic grievances, can easily be manipulated politically.
+
+Source Coordinates
+CIA-RDP79T00975A005400250001-4; 1960-11-29; page_28ac90c60600d0e35b26; characters [389,513]; page hash 2ab72caac849acdfeee8e72c3f8efe5680ef59f4bc8afd9bd770b97a80a14049.
+
+9. IRAN / Hypothesis
+Input source: 1979TEHRAN01870; date: 1979-02-06.
+
+Input
+Majlis approved Bakhtiar's government.
+
+Saved Result
+Supported by eligible evidence
+
+Fact
+Majlis approved Bakhtiar's government.
+Recorded result: Supported by eligible evidence
+
+Recorded Lookup
+Majlis approved Bakhtiar's government.
+
+One Source Passage
+MAJLIS EARLIER
+APPROVED BAKHTIAR GOVERNMENT BY VOTE 149-43-13.
+
+Source Coordinates
+1979TEHRAN00794; 1979-01-16; segment_86c4795b9e86d827cb8b; characters [517,579]; page hash 4e1b83c697e50aac07923fc733ebd2c94c89625855fef73043ac4a4ec4291f4a.
+
+10. IRAN / Mosaic
+Input source: 1979STATE019649; date: 1979-01-25.
+
+Input
+Tehrani resigned from the Regency Council and stated that the Regency Council was illegal.
+
+Saved Result
+Partially reconstructable mosaic
+
+Fact
+Tehrani resigned from the Regency Council.
+Recorded result: Established
+
+Fact
+Tehrani stated that the Regency Council was illegal.
+Recorded result: Partial grounding
+
+Recorded Lookup
+Tehrani resigned from the Regency Council.
+
+One Source Passage
+JALAL TEHRANI, CHAIRMAN OF THE REGENCY COUNCIL, RE-
+SIGNED IN PARIS YESTERDAY IN ORDER TO MEET WITH KHOMEINI.
+
+Source Coordinates
+1979TEHRAN01121; 1979-01-23; segment_788aad5305775cac7851; characters [1460,1569]; page hash 05545b71e2ab7d64410455794f70418b6a4155819ca46c8cc47075687e860963.
+
+11. IRAN / Redaction
+Input source: 1979TEHRAN03881; date: 1979-04-13.
+
+Input
+AS REVOLUTIONARIES, BAZARGAN AND HIS PEOPLE ARE BASICALLY CONSERVATIVES. AMONG BAZARGAN'S CLOSEST COWORKERS, [REDACTION] APPEARS THE MOST RADICAL, BUT THAT PROBABLY STEMS FROM THE ROLE HE IS PLAYING AS A BRIDGE BETWEEN THE GOVERNMENT AND THE COMMITTEES.
+
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
+
+Fact To Check
+As revolutionaries, Bazargan and his people are basically conservatives.
+
+Suggestions
+1. POL COUNSELOR (contextual; 59.2379 points)
+2. AMBASSADOR (contextual; 59.2379 points)
+3. MOHAMMAD REZA MAHDAVI-KANI (contextual; 58.7276 points)
+4. BAZARGAN (contextual; 58.6388 points)
+5. PM BAZARGAN (contextual; 58.6282 points)
+
+Recorded Lookup
+As revolutionaries, Bazargan and his people are basically conservatives.
+
+One Source Passage
+IF BAZARGAN COULD REQUEST UNITED
+NATIONS SUPERVISION.  POL COUNSELOR REPLIED THAT ONCE AN
+AGREEMENT HAD BEEN REACHED BETWEEN THE TWO SIDES ON HOLDING
+A REFERENDUM THEY SHOULD SIT DOWN TOGETHER AND ARRIVE AT
+THE MODALITIES.  
+
+Source Coordinates
+1979TEHRAN01873; 1979-02-06; segment_2d3b1366a0efcd6296be; characters [162,386]; page hash da38feba506d4936e77fe262db3ad3309a552c7d400a394bc7ff7bb7641bcd7e.
+
+12. VIETNAM / Hypothesis
+Input source: 1975SAIGON03129; date: 1975-03-19.
+
+Input
+The NVA mounted stiff attacks in the eastern sections of MR-3.
+
+Saved Result
+Supported by eligible evidence
+
+Fact
+The NVA mounted stiff attacks in the eastern sections of MR-3.
+Recorded result: Supported by eligible evidence
+
+Recorded Lookup
+The NVA mounted stiff attacks in the eastern sections of MR-3.
+
+One Source Passage
+THE NVA HAVE MOUNTED STIFF ATTACKS IN BOTH THE
+EASTERN AND WESTERN SECTIONS OF MR-3.
+
+Source Coordinates
+1975SAIGON03143; 1975-03-19; segment_7c468b6b7679cc00b539; characters [1696,1780]; page hash 0d622467262bd10cadd74cd01bdb6d4712db2bcd70ce144e515af97e2e408a0a.
+
+13. VIETNAM / Mosaic
+Input source: 1975SAIGON03129; date: 1975-03-19.
+
+Input
+The NVA mounted stiff attacks in the eastern sections of MR-3, and the Delta experienced the highest level of activity since the ceasefire.
+
+Saved Result
+Evidence-backed mosaic
+
+Fact
+The NVA mounted stiff attacks in the eastern sections of MR-3.
+Recorded result: Established
+
+Fact
+The Delta experienced the highest level of activity since the ceasefire.
+Recorded result: Established
+
+Recorded Lookup
+The NVA mounted stiff attacks in the eastern sections of MR-3.
+
+One Source Passage
+THE NVA HAVE MOUNTED STIFF ATTACKS IN BOTH THE
+EASTERN AND WESTERN SECTIONS OF MR-3.
+
+Source Coordinates
+1975SAIGON03143; 1975-03-19; segment_7c468b6b7679cc00b539; characters [1696,1780]; page hash 0d622467262bd10cadd74cd01bdb6d4712db2bcd70ce144e515af97e2e408a0a.
+
+14. VIETNAM / Redaction
+Input source: 1973SAIGON11664; date: 1973-06-28.
+
+Input
+THE [REDACTION], BGEN HUYNH VAN LAC, CONFIRMED JUNE 25 THAT ON A NUMBER OF OCCASIONS SINCE CF II VC/ NVA HAVE ATTEMPTED VERY LOW LEVEL CONTACTS BETWEEN GUERILLA FORCES AND RF / PF UNITS.
+
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
+
+Fact To Check
+THE [REDACTION], BGEN HUYNH VAN LAC, confirmed June 25 that on a number of occasions since CF II VC/ NVA have attempted very low level contacts between guerilla forces and RF / PF units.
+
+Suggestions
+1. ARVN 5 TH DIV CG BG LICH (contextual; 54.3417 points)
+2. GVN REP (contextual; 53.9582 points)
+3. BINH DUONG PROVINCE CHIEF NGUYEN VAN CUA (contextual; 53.8099 points)
+4. BGEN LE VAN HUNG (contextual; 53.7929 points)
+5. BGEN NGUYEN
+THANH HOANG (contextual; 53.7929 points)
+
+Recorded Lookup
+THE [REDACTION], BGEN HUYNH VAN LAC, confirmed June 25 that on a number of occasions since CF II VC/ NVA have attempted very low level contacts between guerilla forces and RF / PF units.
+
+One Source Passage
+4.  ARVN 5 TH DIV CG BG LICH TOLD CONSUL JUNE 25  THAT HE  THOUGHT
+CONTINUING VC/ NVA CEASEFIRE VIOLATIONS SINCE CEASEFIRE II RESULTED
+FROM INABILITY OF THE COMMUNISTS TO DISSEMINATE ORDER TO OBSERVE
+STRICTLY THE CF TO ALL COMMUNIST TACTICAL UNITS.  
+
+Source Coordinates
+1973SAIGON11581; 1973-06-27; segment_11832607ed0cb38a1ba1; characters [0,250]; page hash 87c9c9fa01bd4531c83a7e4fe609bb2f65faa24b0614d50462b3898344ab3c6c.
+
+15. CIB / Redaction
+Input source: CIA-RDP79T00975A004300220001-9; date: 1959-02-17.
+
+Input
+Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation [MASKED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.
+
+A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare, including the assignment of nuclear weapons to ground division commanders.
+
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
+
+Fact To Check
+Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation [MASKED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.
+
+Suggestions
+1. Soviet (contextual; 52.3735 points)
+2. limited (contextual; 13.5649 points)
+3. future (contextual; 13.5649 points)
+4. large (contextual; 13.5649 points)
+5. long (contextual; 13.5649 points)
+
+Recorded Lookup
+Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation [MASKED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.
+
+One Source Passage
+While the Soviet delegation still is insisting on the USSR's 10 May proposals, it has not yet emphasized the political aspects of these or even the need for dismantling bases.
+
+Source Coordinates
+CIA-RDP79T00975A002200090001-7; 1955-09-11; page_e4d63808eab733362849; characters [552,727]; page hash e202a0e90f511a2a95221f24cf021798ad0d34d911e8eb97b7e6ed8165134259.
+
+16. CIB / Redaction
+Input source: CIA-RDP79T00975A004300220001-9; date: 1959-02-17.
+
+Input
+The [REDACTION] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense.
+
+A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare, including the assignment of nuclear weapons to ground division commanders.
+
+Saved Result
+Ranked suggestions; inspect each candidate's grounding
+
+Fact To Check
+The [REDACTION] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense.
+
+Suggestions
+1. high-level (contextual; 40.8911 points)
+1. Soviet (contextual; 57.9433 points)
+2. Many (contextual; 56.9706 points)
+3. Western (contextual; 56.9146 points)
+4. disarmament (contextual; 56.1326 points)
+5. European (contextual; 55.6975 points)
+
+Recorded Lookup
+The [REDACTION] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense.
+
+One Source Passage
+The guidelines for the forthcoming talks undoubtedly were laid down in conversations between Tito and Hungarian party first secretary Gero in the Crimea, although Gero reportedly requested an invitation two months ago to send a high-level delegation to Yugoslavia.
+
+Source Coordinates
+CIA-RDP79T00975A002700510001-5; 1956-10-07; page_0d9de456fce300d6bd9b; characters [710,974]; page hash 0f619a84bdfca5ea00de5e229ef38bb30343138e08ff7b49ed346730f643f178.

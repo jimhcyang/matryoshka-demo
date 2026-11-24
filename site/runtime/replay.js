@@ -15,7 +15,10 @@
     const filename = value.entry.path || new URL(value.entry.external_url).pathname;
     download.href = url; download.download = filename.split("/").pop().replace(/\.gz$/, ""); download.hidden = false;
     if (value.entry.mime.startsWith("application/pdf")) {
-      const frame = document.getElementById("replay-pdf"); frame.src = url + (/^#page=\d+$/.test(location.hash) ? location.hash : ""); frame.hidden = false;
+      const fragment = new URLSearchParams(location.hash.slice(1)), pages = fragment.getAll("page");
+      const page = pages.length === 1 && /^[1-9]\d{0,6}$/.test(pages[0]) && Number(pages[0]) <= 1000000
+        ? "#page=" + pages[0] : "";
+      const frame = document.getElementById("replay-pdf"); frame.src = url + page; frame.hidden = false;
     } else {
       const text = new TextDecoder("utf-8", {fatal: true}).decode(value.decoded), pre = document.getElementById("replay-json");
       pre.textContent = value.entry.mime.startsWith("application/json") ? JSON.stringify(JSON.parse(text), null, 2) : text; pre.hidden = false;

@@ -1,0 +1,30 @@
+{
+  "candidate_manifest_sha256": "9b4b46f5c926df66ca1dbaf2a3a596c60d1f540f0a638706ee763052de6d4bc5",
+  "date": "2026-11-24",
+  "independent_review_ref": {
+    "path": "src-demo-day/phase/refinement_20261124/review_v2/FINAL_RELEASE_REVIEW_9b4b46f5c926df66ca1dbaf2a3a596c60d1f540f0a638706ee763052de6d4bc5.json",
+    "sha256": "d8097453084b03c7fd258249998008285cce498e6cc9201d055b6b10f2985908"
+  },
+  "private_credentials_published": false,
+  "scan_counts": {
+    "HTML_runtime_dependency_documents": 8,
+    "active_frontend_files_matched": 74,
+    "authored_site_files": 19807,
+    "backend_native_core_pins_matched": 241,
+    "bytes_scanned": 2081089044,
+    "code_bundle_entries": 926,
+    "decoded_container_bytes": 1452169916,
+    "gzip_members": 18865,
+    "independently_rehashed_resource_artifacts": 38,
+    "native_epoch_files_rehashed": 96,
+    "nested_archive_entries": 926,
+    "pdf_files": 831,
+    "pdf_pages": 9360,
+    "pdf_text_bytes": 6761873,
+    "privacy_occurrences_resolved": 61,
+    "same_repository_dataset_paths_checked": 1576,
+    "unreadable_or_unscanned_files": 0
+  },
+  "scope": "Public historical-source notices and exact source-PDF continuity; authored code and selected source-grounded outputs. Not legal certification or declassification.",
+  "version": "refinement-privacy-and-rights/1"
+}

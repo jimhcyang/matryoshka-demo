@@ -1,9 +1,14 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://raw.githubusercontent.com; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'self'">
-<meta name="study-data-sha256" data-file="swedish-study-native.json" content="796b3628c4e49316710073f71eff2040a586d2626d61a1752c2bf51a2895012a">
-<title>Visiting Delegation | Matryoshka</title><link rel="icon" href="data:,"><link rel="stylesheet" href="app-navigation.css">
-<script src="runtime/public-runtime.js" data-index="data/api-index.json" data-index-sha256="eb01bc2edbc1a8a2720d05c096af565337ba3a074f60dc6abd58ff19fbf25699"></script>
-<script type="module" src="delegation-entry.js"></script><meta name="source-api-index-sha256" content="eb01bc2edbc1a8a2720d05c096af565337ba3a074f60dc6abd58ff19fbf25699"></head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; script-src 'self'; style-src 'self'; frame-src 'self' blob:; object-src 'none'; base-uri 'self'">
+<title>Visiting Delegation | Matryoshka</title><link rel="stylesheet" href="app-navigation.css"><link rel="stylesheet" href="live.css">
+<script type="module" src="delegation-entry.js"></script><meta name="study-data-path" content="data/delegation-study-current.json">
+<meta name="study-data-sha256" content="ccbb78c9961d6998d45d2759b3738e166531600136c776854a2f2b6341f8acf5">
+</head>
 <body><header id="app-navigation" data-view="workbench"></header><script src="app-navigation.js"></script>
-<main><h1>Visiting delegation</h1><p id="study-status" role="status">Opening the saved input...</p><p><a href="workbench-v6.html">Analyst workbench</a></p></main></body></html>
+<main><h1>Visiting delegation</h1>
+<nav class="actions" aria-label="Delegation study inputs"><a class="button" data-study-slot="first" href="?slot=first">First gap</a><a class="button" data-study-slot="last" href="?slot=last">Last gap</a></nav>
+<p class="notice">Nationality remains unknown and still withheld. An input-derived suggestion is not an independent corpus recovery, a reference answer or proof of identity.</p>
+<p id="study-status" class="hint" role="status" aria-live="polite">Checking the two canonical saved study inputs...</p>
+<p class="hint">The saved workbench keeps input provenance in its Origin drawer. Suggestions from supplied context remain separate from corpus evidence and scores.</p>
+</main></body></html>

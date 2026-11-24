@@ -6,7 +6,7 @@
   <meta name="referrer" content="no-referrer">
   <meta name="live-backend" content="">
   <meta name="live-corpus-scopes" content="data/live-corpus-scopes.json" data-content-sha256="9fc1d47fb4d957f80298a81f09bb9495c2958a228568faebbf1ec0ccb008dbec">
-  <meta name="source-api-index-sha256" content="eb01bc2edbc1a8a2720d05c096af565337ba3a074f60dc6abd58ff19fbf25699">
+  <meta name="source-api-index-sha256" content="284953c26c55d2088c9c40ba97a25383164d13e273b1b629f6eae9953e9d9457">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' http://127.0.0.1:8977; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'self' blob:">
   <title>Matryoshka | Live</title>
   <link rel="icon" href="data:,">
@@ -20,7 +20,7 @@
   <main>
     <section class="intro">
       <p class="eyebrow">Live analysis</p>
-      <h1>Ask a new question.</h1>
+      <h1>Analyze a new input.</h1>
       <p class="lede">Check a claim or reconstruct missing wording against the permitted sources.</p>
       <p id="availability" class="notice" role="status">Live requires an authenticated backend. GitHub Pages cannot run the pipeline.</p>
     </section>
@@ -49,24 +49,24 @@
           </details>
           <p class="hint">This page permits self and the explicit default loopback companion only. An external HTTPS backend also needs its exact origin added to this page's CSP, and this frontend's exact origin allowed by the backend. If public-to-local access is blocked, open the local companion page.</p>
         </details>
-        <h2 id="question-title">Your question</h2>
+        <h2 id="question-title">Your input</h2>
         <form id="question-form">
           <fieldset id="question-fields" disabled>
             <div class="pair"><div><label for="task">Task</label><select id="task"><option value="hypothesis">Hypothesis</option><option value="mosaic">Mosaic</option><option value="redaction">Redaction</option></select></div><div><label for="corpus">Corpus</label><select id="corpus"><option value="cib">Central Intelligence Bulletins</option><option value="iran">Iran cables</option><option value="vietnam">Vietnam cables</option></select></div></div>
-            <label for="query">Analyst clause</label>
+            <label for="query">Input</label>
             <textarea id="query" rows="5" required maxlength="2000" placeholder="Enter a declarative clause, not an instruction or question."></textarea>
-            <p class="hint">Use a complete claim, or one unique [MASK] for Redaction.</p>
-            <div class="pair"><div><label for="as-of">Evidence through</label><input id="as-of" type="date" min="1900-01-01" aria-describedby="scope-date-hint"></div><div><label id="origin-label" for="excluded-origin">Source document (optional)</label><input id="excluded-origin" maxlength="160" autocomplete="off" placeholder="Leave blank for your own question" aria-describedby="origin-hint"></div></div>
+            <p class="hint">Use a complete claim, or one unique [REDACTION] for Redaction. Use [MASKED] for other hidden spans. Restored historical inputs keep their original markers; changing them requires an explicit new input and rerun.</p>
+            <div class="pair"><div><label for="as-of">Evidence through</label><input id="as-of" type="date" min="1900-01-01" aria-describedby="scope-date-hint"></div><div><label id="origin-label" for="excluded-origin">Source document (optional)</label><input id="excluded-origin" maxlength="160" autocomplete="off" placeholder="Leave blank for your own input" aria-describedby="origin-hint"></div></div>
             <p id="scope-date-hint" class="hint">The default includes the full eligible corpus. Leave the date blank to use that default.</p>
-            <p id="origin-hint" class="hint">Leave blank for your own question. Enter an ID when quoting a source document.</p>
-            <div id="focal-field" hidden><label for="focal-marker">Unique focal mask</label><input id="focal-marker" value="[MASK]" maxlength="90" autocomplete="off"></div>
+            <p id="origin-hint" class="hint">Leave blank for your own input. Enter an ID when quoting a source document.</p>
+            <div id="focal-field" hidden><label for="focal-marker">Unique focal marker</label><input id="focal-marker" value="[REDACTION]" maxlength="90" autocomplete="off"></div>
             <p id="input-status" class="notice error" role="alert" hidden></p>
-            <div class="actions"><button id="run" type="submit">Analyze question</button></div>
+            <div class="actions"><button id="run" type="submit">Analyze input</button></div>
           </fieldset>
         </form>
         <section id="recent-runs" aria-labelledby="recent-title">
           <div class="history-heading"><h3 id="recent-title">Recent runs</h3><button id="clear-history" class="secondary" type="button" disabled>Clear history</button></div>
-          <p id="history-status" class="hint" role="status">Completed results stay in this tab only. Login details are never saved.</p>
+          <p id="history-status" class="hint" role="status">Recent-run references stay in this tab for up to 24 hours. The open result is held in memory; reopening may require its original authorized session. Login details are never saved.</p>
           <ol id="history-list" aria-label="Completed Live runs"></ol>
         </section>
       </section>

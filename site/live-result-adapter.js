@@ -102,7 +102,8 @@ export class LiveClient {
       xhr.onload = () => {
         cleanup();
         try {
-          if (xhr.responseText.length > 24 * 1024 * 1024) fail('Live result exceeded its size limit.');
+          if (xhr.responseText.length > 24 * 1024 * 1024 ||
+              new TextEncoder().encode(xhr.responseText).length > 24 * 1024 * 1024) fail('Live result exceeded its size limit.');
           const value = JSON.parse(xhr.responseText);
           if (xhr.status < 200 || xhr.status >= 300) {
             if (xhr.status === 401) this.disconnect();
@@ -112,6 +113,7 @@ export class LiveClient {
         } catch (error) { reject(error instanceof SyntaxError ? new Error('The backend did not return Live JSON.') : error); }
       };
       xhr.onerror = xhr.ontimeout = () => { cleanup(); reject(new Error('Live backend unreachable. Check its exact CORS origin, CSP and browser private-network policy.')); };
+      xhr.onprogress = event => { if(event.loaded > 24 * 1024 * 1024) xhr.abort(); };
       xhr.onabort = () => { cleanup(); reject(new DOMException('Live request cancelled', 'AbortError')); };
       signal?.addEventListener('abort', abort, {once: true});
       if (signal?.aborted) { cleanup(); reject(new DOMException('Live request cancelled', 'AbortError')); return; }
@@ -128,10 +130,175 @@ export class LiveClient {
   cancel(id) { return this.request(`jobs/${id}/cancel`, {method: 'POST', body: {}}); }
   retry(id) { return this.request(`jobs/${id}/retry`, {method: 'POST', body: {}}); }
   async result(id) {
-    const envelope = await this.request(`jobs/${id}/result`);
+    const envelope = await unpackLiveResult(await this.request(`jobs/${id}/result`));
     await verifyEnvelope(envelope, `live_${id}`);
     return envelope;
   }
+}
+
+export const LIVE_TRANSPORT_LIMITS = Object.freeze({wireBytes:24*1024*1024, decodedBytes:64*1024*1024});
+const PACKED_VERSION='matryoshka-live-packed/1';
+const packedResults=new WeakMap();
+const bytesHash=async bytes=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))]
+  .map(n=>n.toString(16).padStart(2,'0')).join('');
+const exactKeys=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&
+  Object.keys(value).sort().join(',')===[...keys].sort().join(',');
+
+// Preserve Python's numeric spelling (0.0 versus 0): hash raw JSON slices,
+// not a JavaScript reserialization of the parsed native packet.
+function jsonSlices(text,begin=0,historyScan=false){
+  const canonicalString=value=>JSON.stringify(value).replace(/[\u007f-\uffff]/g,
+    c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0'));
+  const compareKeys=(a,b)=>{
+    let i=0,j=0;
+    while(i<a.length&&j<b.length){
+      const left=a.codePointAt(i),right=b.codePointAt(j);
+      if(left!==right)return left-right;
+      i+=left>0xffff?2:1;j+=right>0xffff?2:1;
+    }
+    return (i<a.length?1:0)-(j<b.length?1:0);
+  };
+  const canonicalFloat=value=>{
+    if(value===0)return Object.is(value,-0)?'-0.0':'0.0';
+    const sign=value<0?'-':'',parts=Math.abs(value).toString().split('e');
+    const mantissa=parts[0],dot=mantissa.indexOf('.');
+    let point=(dot<0?mantissa.length:dot)+Number(parts[1]||0),digits=mantissa.replace('.','');
+    while(digits[0]==='0'){digits=digits.slice(1);point--;}
+    digits=digits.replace(/0+$/,'');
+    const exponent=point-1;
+    // Python uses scientific notation below 1e-4 or at/above 1e16.
+    if(exponent < -4||exponent >= 16)return sign+digits[0]+(digits.length>1?'.'+digits.slice(1):'')+
+      'e'+(exponent<0?'-':'+')+String(Math.abs(exponent)).padStart(2,'0');
+    if(point<=0)return sign+'0.'+'0'.repeat(-point)+digits;
+    if(point>=digits.length)return sign+digits+'0'.repeat(point-digits.length)+'.0';
+    return sign+digits.slice(0,point)+'.'+digits.slice(point);
+  };
+  const stringEnd=at=>{
+    for(let i=at+1;i<text.length;i++){
+      if(text[i]==='\\'){i++;continue;}
+      if(text[i]==='"')return i+1;
+    }
+    fail('Invalid packed JSON string.');
+  };
+  const scan=(at,depth=0,collect=false)=>{
+    if(depth>100)fail('Packed JSON nesting exceeds its limit.');
+    const c=text[at];
+    if(c==='"'){
+      const end=stringEnd(at);
+      const raw=text.slice(at,end),value=JSON.parse(raw);
+      if(canonicalString(value)!==raw)fail('Noncanonical packed JSON string.');
+      if(historyScan&&credentialLike(value))fail('Credential-shaped content cannot be saved in local history.');
+      return end;
+    }
+    if(c==='{'||c==='['){
+      const object=c==='{',end=object?'}':']',keys=new Set(),members=new Map();let i=at+1,previousKey;
+      if(text[i]===end)return collect?{end:i+1,members}:i+1;
+      for(;;){
+        let key;
+        if(object){
+          if(text[i]!=='"')fail('Invalid packed JSON key.');
+          const next=stringEnd(i);key=JSON.parse(text.slice(i,next));
+          if(keys.has(key)||text[next]!==':')fail('Duplicate or invalid packed JSON key.');
+          if(canonicalString(key)!==text.slice(i,next)||previousKey!==undefined&&compareKeys(previousKey,key)>=0)
+            fail('Noncanonical packed JSON key or key order.');
+          if(historyScan&&credentialFields.has(key.replace(/[^a-z]/gi,'').toLowerCase()))fail('Credential fields cannot be saved in local history.');
+          keys.add(key);previousKey=key;i=next+1;
+        }
+        const start=i;i=scan(i,depth+1);
+        if(collect)members.set(key,[start,i]);
+        if(text[i]===end)return collect?{end:i+1,members}:i+1;
+        if(text[i]!==',')fail('Invalid packed JSON separator.');i++;
+      }
+    }
+    let i=at;while(i<text.length&&!/[\],}]/.test(text[i]))i++;
+    const token=text.slice(at,i);
+    if(!/^(?:null|true|false|-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?)$/.test(token))
+      fail('Invalid packed JSON value.');
+    if(!['null','true','false'].includes(token)){
+      const value=Number(token),integer=!/[.eE]/.test(token);
+      if(!Number.isFinite(value)||integer&&(!Number.isSafeInteger(value)||token==='-0')||
+          !integer&&canonicalFloat(value)!==token)fail('Noncanonical or nonrepresentable packed JSON number.');
+    }
+    return i;
+  };
+  const result=scan(begin,0,true);
+  if(!result?.members)fail('A packed result must be an object.');
+  return result;
+}
+
+async function inflateResult(compressed,length){
+  if(typeof DecompressionStream!=='function')fail('This browser cannot decode packed Live results.');
+  if(compressed.length<18||compressed[0]!==31||compressed[1]!==139||compressed[2]!==8||compressed[3]!==0)
+    fail('Invalid packed gzip header.');
+  const trailer=new DataView(compressed.buffer,compressed.byteOffset+compressed.length-8,8);
+  if(trailer.getUint32(4,true)!==length)fail('Invalid packed gzip size.');
+  // Stream into one prebounded buffer, rather than accumulating a second copy.
+  const raw=new Uint8Array(length),reader=new Blob([compressed]).stream()
+    .pipeThrough(new DecompressionStream('gzip')).getReader();let at=0;
+  try{
+    for(;;){
+      const {done,value}=await reader.read();if(done)break;
+      if(at+value.length>length){await reader.cancel();fail('Packed result exceeded its decoded bound.');}
+      raw.set(value,at);at+=value.length;
+    }
+  }finally{reader.releaseLock();}
+  if(at!==length)fail('Packed result length does not match.');
+  let crc=0xffffffff;
+  for(const byte of raw){crc^=byte;for(let k=0;k<8;k++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);}
+  if(((crc^0xffffffff)>>>0)!==trailer.getUint32(0,true))fail('Packed gzip checksum does not match.');
+  return raw;
+}
+
+export async function unpackLiveResult(wire,{historyScan=false}={}){
+  if(wire?.version!==PACKED_VERSION){
+    if(String(wire?.version||'').startsWith('matryoshka-live-packed/')||wire?.payload_sha256||wire?.decoded_sha256)
+      fail('Unknown packed Live transport.');
+    return wire;
+  }
+  const fields=['version','encoding','decoded_bytes','decoded_sha256','components','payload','payload_sha256'];
+  if(!exactKeys(wire,fields)||wire.encoding!=='gzip+base64'||
+      !Number.isSafeInteger(wire.decoded_bytes)||wire.decoded_bytes<1||wire.decoded_bytes>LIVE_TRANSPORT_LIMITS.decodedBytes||
+      typeof wire.payload!=='string'||wire.payload.length>LIVE_TRANSPORT_LIMITS.wireBytes||
+      wire.payload.length%4!==0||/[^A-Za-z0-9+/=]/.test(wire.payload)||
+      !HASH.test(wire.decoded_sha256||'')||!HASH.test(wire.payload_sha256||'')||
+      !wire.components||Array.isArray(wire.components)||typeof wire.components!=='object'||
+      Object.keys(wire.components).length>4096||Object.values(wire.components).some(hash=>!HASH.test(hash))||
+      new TextEncoder().encode(JSON.stringify(wire)).length>LIVE_TRANSPORT_LIMITS.wireBytes)
+    fail('Invalid packed Live transport header.');
+  const binary=atob(wire.payload);
+  if(btoa(binary)!==wire.payload)fail('Noncanonical packed base64.');
+  const compressed=Uint8Array.from(binary,c=>c.charCodeAt(0));
+  if(await bytesHash(compressed)!==wire.payload_sha256)fail('Packed wire payload hash does not match.');
+  const raw=await inflateResult(compressed,wire.decoded_bytes);
+  if(await bytesHash(raw)!==wire.decoded_sha256)fail('Packed logical hash does not match.');
+  const text=new TextDecoder('utf-8',{fatal:true}).decode(raw);
+  if(text.length!==raw.length||raw.some(byte=>byte>127))fail('Packed JSON is not canonical ASCII.');
+  const slices=jsonSlices(text,0,historyScan);
+  if(slices.end!==text.length||!exactKeys(wire.components,[...slices.members.keys()]))fail('Packed component manifest differs.');
+  for(const [key,[a,b]] of slices.members)if(await bytesHash(raw.subarray(a,b))!==wire.components[key])
+    fail('A packed component hash does not match.');
+  const value=JSON.parse(text);
+  if(value.native?.native_checksum){
+    const native=jsonSlices(text,slices.members.get('native')[0]);
+    const result=native.members.get('result');
+    if(!result||await bytesHash(raw.subarray(...result))!==value.native.native_checksum)
+      fail('The packed native checksum does not match.');
+  }
+  const artifactFields={'native.json':'native','condition.json':'condition','trace.json':'trace','sources.json':'sources',
+    'document-pages.json':'document_pages','selected-evidence.json':'selected_evidence','receipt.json':'receipt',
+    'analyst-digest.json':'analyst_digest'};
+  if(!exactKeys(value.artifacts,Object.keys(artifactFields).filter(name=>Object.hasOwn(value,artifactFields[name]))))
+    fail('The packed artifact manifest differs.');
+  for(const [name,ref] of Object.entries(value.artifacts)){
+    const key=artifactFields[name],span=slices.members.get(key),logical=wire.components[key];
+    if(!HASH.test(ref?.sha256||'')||!span||
+        (ref.encoding!==undefined?(ref.encoding!=='gzip+base64'||ref.decoded_sha256!==logical||
+          ref.decoded_bytes!==span[1]-span[0]||!Number.isSafeInteger(ref.wire_bytes)||ref.wire_bytes<1||
+          ref.wire_bytes>LIVE_TRANSPORT_LIMITS.wireBytes):ref.sha256!==logical))
+      fail('A packed artifact logical binding differs.');
+  }
+  packedResults.set(value,{wire,decodedBytes:raw.length,historySafe:historyScan});
+  return value;
 }
 
 async function textDigest(text) {
@@ -151,10 +318,13 @@ export async function verifyEnvelope(value, expectedRun) {
       typeof q.query !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(q.as_of || '') || !q.excluded_origin ||
       !native?.result || !condition?.result || !trace || !Array.isArray(trace.paths) || !Array.isArray(trace.steps) ||
       !Array.isArray(value.selected_evidence) || !sources || !receipt ||
-      scope?.corpus !== q.corpus || scope.strict_before !== q.as_of) {
+      scope?.corpus !== q.corpus || (scope.strict_before ?? scope.on_or_before) !== q.as_of) {
     fail('The Live result is missing its exact task, source scope or decision artifacts.');
   }
   const admission = verifyLiveSourcePolicy(scope, native, q, value.execution_kind === 'fixture');
+  if (admission.inclusive ? scope.on_or_before !== q.as_of || scope.strict_before !== undefined
+      : scope.strict_before !== q.as_of || scope.on_or_before !== undefined) fail('The cutoff boundary differs from its evidence policy.');
+  const dateAllowed = day => admission.inclusive ? day <= q.as_of : day < q.as_of;
   const c = native.public_case;
   if (!c || c.query !== q.query || c.corpus !== q.corpus || c.task !== q.task || c.date !== q.as_of ||
       c.document_id !== q.excluded_origin || c.focal_marker !== q.focal_marker || !same(c, condition.case)) {
@@ -194,7 +364,7 @@ export async function verifyEnvelope(value, expectedRun) {
     [page.text, ...(page.handling || [])].join(' '));
   for (const [id, page] of Object.entries(sources)) {
     if (page.id !== id || page.corpus !== q.corpus || page.permitted !== true ||
-        !['earlier', 'both'].includes(page.visibility) || !(page.date < q.as_of) ||
+        !['earlier', 'both'].includes(page.visibility) || !dateAllowed(page.date) ||
         admission.excludeOrigin && page.document_id === q.excluded_origin || !inspected.has(id) || typeof page.text !== 'string' ||
         q.corpus !== 'cib' && page.classification !== 'CONFIDENTIAL' || handlingVeto(page) ||
         await textDigest(page.text) !== page.source_sha256) fail('A selected source failed scope or hash verification.');
@@ -206,7 +376,7 @@ export async function verifyEnvelope(value, expectedRun) {
         new Set(pages.map(page => page.id)).size !== pages.length) fail('Invalid document provenance inventory.');
     for (const page of pages) {
       if (++documentPageCount > 1024 || page.document_id !== documentId || page.corpus !== q.corpus ||
-          page.permitted !== true || !['earlier', 'both'].includes(page.visibility) || !(page.date < q.as_of) ||
+          page.permitted !== true || !['earlier', 'both'].includes(page.visibility) || !dateAllowed(page.date) ||
           admission.excludeOrigin && documentId === q.excluded_origin || page.provenance_only !== true || page.inspection_not_implied !== true ||
           typeof page.text !== 'string' || q.corpus !== 'cib' && page.classification !== 'CONFIDENTIAL' || handlingVeto(page) ||
           await textDigest(page.text) !== page.source_sha256) fail('A document provenance page failed admission or hash verification.');
@@ -444,6 +614,77 @@ export async function verifyEnvelope(value, expectedRun) {
   return value;
 }
 
+const rows = value => Array.isArray(value) ? value : [];
+const count = value => Number.isSafeInteger(value) && value >= 0 ? value : null;
+const masked = /\[\[REDACTION_SLOT:[^\]]*\]\]|\[(?:REDACTION(?:[ _]\d+)?|REDACTED|STILL REDACTED|MASKED|MASK)\]/gi;
+
+export function liveRetrievalSummary(envelope) {
+  const native = envelope.native || {}, result = native.result || {}, retrieval = native.retrieval || {};
+  const inspected = Array.isArray(result.inspected_page_ids) ? new Set(result.inspected_page_ids).size : count(result.source_pages_inspected);
+  const documents = count(retrieval.documents_admitted);
+  const iterations = count(retrieval.diffusion?.iterations);
+  const candidates = rows(result.readings).length ? rows(result.readings).reduce((n, reading) => n + rows(reading.candidates).length, 0) : rows(result.candidates).length;
+  const noCandidate = envelope.execution_kind !== 'fixture' && envelope.request?.task === 'redaction' && candidates === 0;
+  const text = [documents === null ? 'Document count not recorded' : `${documents} documents retrieved`,
+    inspected === null ? 'inspected page count not recorded' : `${inspected} pages inspected`,
+    iterations === null ? 'diffusion iteration count not recorded' : `${iterations} diffusion iterations`].join('; ') + '.';
+  return {documents, inspected, iterations, candidates, noCandidate, text};
+}
+
+// Called only after verifyEnvelope: inspection is not selected evidence, nor a graph edge.
+function liveRetrievedSources(envelope) {
+  const retrieval = envelope.native.retrieval || {}, inspected = new Set(envelope.native.result.inspected_page_ids || []);
+  const atoms = new Map(rows(envelope.condition.plan?.atoms).map(atom => [atom.id, atom]));
+  const searches = rows(retrieval.search_queries).filter(search => typeof search.id === 'string' && typeof search.query === 'string').map(search => ({
+    id: search.id, query: search.query,
+    atom_ids: [...new Set([search, ...rows(search.also_serves)].flatMap(item => rows(item.atom_ids)
+      .filter(id => atoms.get(id)?.text === item.query)))],
+    raw: search
+  }));
+  const positive = value => typeof value === 'number' && Number.isFinite(value) && value > 0;
+  const replay = (ref, page) => ref?.canonical_page_id === page.id && ref.document_id === page.document_id &&
+    ref.date === page.date && ref.page_sha256 === page.source_sha256 && Number.isInteger(ref.start) &&
+    Number.isInteger(ref.end) && ref.start >= 0 && ref.end > ref.start &&
+    ref.end <= Array.from(page.text).length && Array.from(page.text).slice(ref.start, ref.end).join('') === ref.text;
+  const preview = (page, refs) => {
+    const ref = refs.find(item => replay(item, page) && !new RegExp(masked).test(item.text));
+    let start = ref?.start || 0, text = ref?.text;
+    if (!ref) {
+      // Take a contiguous unmasked interval, never replace a marker with invented text.
+      let at = 0;
+      for (const match of page.text.matchAll(new RegExp(masked))) {
+        const segment = page.text.slice(at, match.index);
+        if (segment.trim()) { text = segment; start = Array.from(page.text.slice(0, at)).length; break; }
+        at = match.index + match[0].length;
+      }
+      if (text === undefined) { text = page.text.slice(at); start = Array.from(page.text.slice(0, at)).length; }
+    }
+    text = Array.from(text).slice(0, 360).join('');
+    return text.trim() ? {canonical_page_id: page.id, document_id: page.document_id, date: page.date,
+      earlier_page: page.earlier_page, start, end: start + Array.from(text).length, text,
+      page_sha256: page.source_sha256, inspection_only: true} : null;
+  };
+  const pages = [...inspected].map(id => envelope.sources[id]).filter(Boolean).map(page => {
+    const matches = [], refs = [];
+    for (const search of searches) {
+      if (!search.atom_ids.length) continue;
+      const pageHit = rows(search.raw.top_pages).find(hit => hit.page_id === page.id && hit.document_id === page.document_id && positive(hit.bm25));
+      const nodeHit = rows(search.raw.top_nodes).find(hit => positive(hit.bm25) && replay(hit.source_proof, page));
+      const seed = rows(retrieval.seeded_documents).find(item => item.page_id === page.id && item.document_id === page.document_id && replay(item.citation, page));
+      const seedHit = rows(seed?.matched_searches).find(hit => hit.search_id === search.id && hit.query === search.query && positive(hit.bm25));
+      if (nodeHit) refs.push(nodeHit.source_proof);
+      if (seedHit) refs.push(seed.citation);
+      const hit = pageHit || nodeHit || seedHit;
+      if (hit) matches.push({search_id: search.id, atom_ids: search.atom_ids, query: search.query, bm25: hit.bm25,
+        basis: pageHit ? 'Page text match' : nodeHit ? 'Extracted node on this page' : 'Seeded page text match'});
+    }
+    for (const seed of rows(retrieval.seeded_documents)) if (replay(seed.citation, page)) refs.push(seed.citation);
+    return {id: page.id, document_id: page.document_id, date: page.date, earlier_page: page.earlier_page,
+      matches, citation: preview(page, refs)};
+  });
+  return {searches: searches.map(({raw, ...search}) => search), pages};
+}
+
 export async function toWorkbenchPacket(envelope, expectedRun) {
   await verifyEnvelope(envelope, expectedRun);
   const condition = envelope.condition;
@@ -458,6 +699,7 @@ export async function toWorkbenchPacket(envelope, expectedRun) {
     document_pages: envelope.document_pages || {}, origins: null,
     receipt: envelope.receipt, source_scope: envelope.source_scope, selected_evidence: envelope.selected_evidence,
     analyst_digest: envelope.analyst_digest,
+    retrieval_summary: liveRetrievalSummary(envelope), retrieved_sources: liveRetrievedSources(envelope),
     run_id: envelope.run_id, execution_kind: envelope.execution_kind};
 }
 
@@ -512,15 +754,19 @@ export async function loadWorkbenchRun(runId, options = {}) {
 }
 
 export const LIVE_HISTORY_LIMITS = Object.freeze({key: 'matryoshka.live.results.v1', entries: 6,
-  storageBytes: 3 * 1024 * 1024, entryBytes: 8 * 1024 * 1024,
-  totalRawBytes: 24 * 1024 * 1024, maxAgeMs: 24 * 60 * 60 * 1000});
+  storageBytes: 16 * 1024 * 1024, entryBytes: 8 * 1024 * 1024,
+  totalRawBytes: 64 * 1024 * 1024, maxAgeMs: 24 * 60 * 60 * 1000});
 const publicEnvelopeKeys = ['version', 'run_id', 'execution_kind', 'request', 'native', 'condition', 'trace',
-  'selected_evidence', 'sources', 'document_pages', 'source_scope', 'receipt', 'artifacts', 'analyst_digest'];
+  'selected_evidence', 'sources', 'document_pages', 'source_scope', 'receipt', 'artifacts', 'analyst_digest', 'origins'];
 const credentialFields = new Set(['password', 'passphrase', 'capability', 'authorization', 'apikey',
   'openaiapikey', 'providerkey', 'accesstoken', 'refreshtoken', 'sessiontoken', 'sessioncapability',
   'bearertoken', 'auth', 'authentication', 'passwordhash', 'passwordverifier', 'credentials']);
 function publicHistoryEnvelope(value) {
-  const copy = JSON.parse(JSON.stringify(Object.fromEntries(publicEnvelopeKeys.filter(key => key in value).map(key => [key, value[key]]))));
+  if(Object.keys(value).some(key=>!publicEnvelopeKeys.includes(key)))fail('Unknown result fields cannot enter local history.');
+  // Packed history was credential-scanned directly from <=64 MiB of decoded
+  // bytes, including every key/string; legacy objects keep their node budget.
+  if(packedResults.get(value)?.historySafe)return value;
+  const copy = value;
   let visited = 0;
   const visit = (item, depth = 0) => {
     if (++visited > 500000 || depth > 100) fail('This result exceeds local history limits.');
@@ -587,19 +833,24 @@ export class LiveResultHistory {
     let total = 0;
     for (const row of data.entries) {
       try {
-        if (Object.keys(row).some(key => !['id', 'saved_at', 'codec', 'payload', 'raw_bytes'].includes(key)) ||
+        if (Object.keys(row).some(key => !['id', 'saved_at', 'codec', 'payload', 'raw_bytes', 'decoded_bytes'].includes(key)) ||
             !RUN.test(row.id) || this.#rows.some(item => item.id === row.id) || !Number.isSafeInteger(row.saved_at) ||
             row.saved_at > Date.now() + 60000 || Date.now() - row.saved_at > LIVE_HISTORY_LIMITS.maxAgeMs ||
             !Number.isSafeInteger(row.raw_bytes) || row.raw_bytes <= 0 || row.raw_bytes > LIVE_HISTORY_LIMITS.entryBytes ||
             !['gzip', 'json'].includes(row.codec) || typeof row.payload !== 'string' || !/^[A-Za-z0-9+/]*={0,2}$/.test(row.payload)) throw Error('History entry');
         const wire = Uint8Array.from(atob(row.payload), char => char.charCodeAt(0));
         const bytes = row.codec === 'gzip' ? await limitedBytes(new Blob([wire]).stream().pipeThrough(new DecompressionStream('gzip')), LIVE_HISTORY_LIMITS.entryBytes) : wire;
-        total += bytes.length;
-        if (bytes.length !== row.raw_bytes || bytes.length > LIVE_HISTORY_LIMITS.entryBytes || total > LIVE_HISTORY_LIMITS.totalRawBytes) throw Error('History bytes');
-        const envelope = publicHistoryEnvelope(JSON.parse(new TextDecoder('utf-8', {fatal: true}).decode(bytes)));
+        if (bytes.length !== row.raw_bytes || bytes.length > LIVE_HISTORY_LIMITS.entryBytes) throw Error('History bytes');
+        const stored=JSON.parse(new TextDecoder('utf-8', {fatal: true}).decode(bytes));
+        if(stored?.version===PACKED_VERSION&&Number.isSafeInteger(stored.decoded_bytes)&&
+            stored.decoded_bytes>LIVE_HISTORY_LIMITS.totalRawBytes-total)throw Error('History decoded total');
+        const envelope = publicHistoryEnvelope(await unpackLiveResult(stored,{historyScan:true}));
+        const decodedBytes=packedResults.get(envelope)?.decodedBytes||bytes.length;
+        total+=decodedBytes;
+        if(total>LIVE_HISTORY_LIMITS.totalRawBytes||row.decoded_bytes!==undefined&&row.decoded_bytes!==decodedBytes)throw Error('History decoded bytes');
         await verifyEnvelope(envelope, row.id);
         if (revision !== this.#revision) return {entries: this.entries(), removed: 0};
-        this.#rows.push({...row, raw_bytes: bytes.length, envelope});
+        this.#rows.push({...row, raw_bytes: bytes.length, decoded_bytes:decodedBytes, envelope});
       } catch { removed++; }
     }
     if (removed) this.#persist();
@@ -617,18 +868,20 @@ export class LiveResultHistory {
   async remember(value) {
     const revision = this.#revision;
     await this.load();
-    const envelope = publicHistoryEnvelope(value);
+    const packed=packedResults.get(value)?.wire;
+    const envelope = publicHistoryEnvelope(packed?await unpackLiveResult(packed,{historyScan:true}):value);
     await verifyEnvelope(envelope);
-    const bytes = new TextEncoder().encode(JSON.stringify(envelope));
+    const bytes = new TextEncoder().encode(JSON.stringify(packed||envelope));
+    const decodedBytes=packedResults.get(envelope)?.decodedBytes||bytes.length;
     if (bytes.length > LIVE_HISTORY_LIMITS.entryBytes) return {stored: false, reason: 'Result too large for local history.'};
     const compressed = typeof CompressionStream === 'function';
     const wire = compressed ? await limitedBytes(new Blob([bytes]).stream().pipeThrough(new CompressionStream('gzip')), LIVE_HISTORY_LIMITS.storageBytes) : bytes;
     if (revision !== this.#revision) return {stored: false, reason: 'History was cleared.'};
     const row = {id: envelope.run_id, saved_at: Date.now(), codec: compressed ? 'gzip' : 'json',
-      payload: base64(wire), raw_bytes: bytes.length, envelope};
+      payload: base64(wire), raw_bytes: bytes.length, decoded_bytes:decodedBytes, envelope};
     const rows = [row, ...this.#rows.filter(item => item.id !== row.id)].slice(0, LIVE_HISTORY_LIMITS.entries);
     while (rows.length && (JSON.stringify({version: 'matryoshka-live-history/1', entries: rows.map(({envelope, ...item}) => item)}).length * 2 > LIVE_HISTORY_LIMITS.storageBytes ||
-        rows.reduce((sum, item) => sum + item.raw_bytes, 0) > LIVE_HISTORY_LIMITS.totalRawBytes)) rows.pop();
+        rows.reduce((sum, item) => sum + (item.decoded_bytes||item.raw_bytes), 0) > LIVE_HISTORY_LIMITS.totalRawBytes)) rows.pop();
     if (!rows.length) return {stored: false, reason: 'Result too large for local history.'};
     this.#rows = rows;
     return {stored: this.#persist(), memory: true};
