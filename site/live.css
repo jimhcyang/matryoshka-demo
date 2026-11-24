@@ -8,6 +8,9 @@
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 #workbench-frame-host iframe{scroll-margin-top:80px}
 .terminal-candidate-status { display:flex; flex-wrap:wrap; gap:4px; }
+.terminal-scorecards .terminal-state[data-reader-tier=backed] { color:#245f46; background:#e1eee4; }
+.terminal-scorecards .terminal-state[data-reader-tier=partial] { color:#75531d; background:#f4ecd8; }
+.terminal-scorecards .terminal-state[data-reader-tier=context] { color:#496775; background:#eaf0f2; }
 @media(max-width:600px){
   .terminal-scorecards .terminal-comparison { padding:8px 10px; }
   .terminal-scorecards .terminal-candidate { padding:8px 0; }

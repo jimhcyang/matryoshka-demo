@@ -1,21 +1,21 @@
 {
-  "backend_code_sha256": "a4d03f6daeb8427feb777e3536c9f3daabf92d040d51c00a7320512783fb6340",
-  "candidate_manifest_sha256": "9b4b46f5c926df66ca1dbaf2a3a596c60d1f540f0a638706ee763052de6d4bc5",
+  "backend_code_sha256": "044463834a550933e7a0364368041b6c08272ec3a0149240efb9482d512cccad",
+  "candidate_manifest_sha256": "1645a6bf439403ad6bd91b72d7abdabfb1eb3d0a28feb471c91d8447ca2d364e",
   "date": "2026-11-24",
   "licensing_review_accepted": true,
   "new_data_qa_accepted": true,
   "new_scientific_performance_claimed": false,
   "privacy_and_rights_ref": {
     "path": "privacy-and-rights-2026-11-24.json",
-    "sha256": "adb90aef407cf83e06425d227783d8453addc8173e1d08f198ae1a40c6053a3a"
+    "sha256": "776c8caef2de54538e8e62e290d9bcc320ee8721af1602a29db05328b8b4b511"
   },
   "privacy_review_accepted": true,
   "publish_authorized": true,
   "qualified_data_qa_ref": {
     "path": "data-qa-2026-11-24.json",
-    "sha256": "8e52b88cdaedd5aad8e846801436df85a54d61842d59e9fe17dc4ffebbd342c7"
+    "sha256": "8c9c1190ad0f74faefd7bc6f4a59e446f9ead51c7d74fd76008cc87dc60c82b9"
   },
   "scope": "diagnostic_demo_with_declared_limitations",
-  "source_report_sha256": "cc6b518745c153485e6d8f5db75ae7ffd0e859757d519ea102ba04dc2e206314",
+  "source_report_sha256": "29b71ea90b9c13a7117607d385fd58f7e4339fd871c85f04c3a05308fcf94c06",
   "version": "source-bound-release-authorization/1"
 }

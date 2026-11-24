@@ -1,6 +1,28 @@
 // Presentation only: all identities, paths, quotations and numbers come from saved records.
 import {savedSourcePolicy,savedSourceScope} from './saved-source-policy.js';
 const list=value=>Array.isArray(value)?value:[];
+export function readerEvidenceState(status){
+  const states={
+    evidence_backed_suggestion:{kind:'supported',tier:'backed',label:'Evidence-backed'},
+    partial_grounding:{kind:'partial',tier:'partial',label:'Partial evidence'},
+    exploratory_contextual:{kind:'context',tier:'context',label:'Contextual suggestion'},
+    incompatible_not_viable:{kind:'incompatible',tier:'incompatible',label:'Not viable'}
+  };
+  return Object.hasOwn(states,status)?{...states[status]}:null;
+}
+export function readerRedactionVerdict(summary={}){
+  if(summary.task!=='redaction')return null;
+  if(!summary.available)return {title:summary.title||'Evidence not recorded',tier:'unavailable'};
+  const counts=summary.counts||{};
+  if(counts.opposed||counts.mixed||counts.conflict)return {title:summary.title,tier:'stance'};
+  if(summary.recommendation&&counts.supported)return {title:'Evidence-backed',tier:'backed'};
+  if(counts.partial||counts.supported)return {title:'Partial evidence',tier:'partial'};
+  if(counts.context)return {title:'Contextual suggestion',tier:'context'};
+  if(summary.total>0&&counts.incompatible===summary.total)return {title:'Not viable',tier:'incompatible'};
+  if(list(summary.units).some(value=>value.kind==='unresolved'&&(!value.unit||!readerEvidenceState(value.unit.status))))
+    return {title:'Evidence not recorded',tier:'unavailable'};
+  return {title:'No evidence',tier:'none'};
+}
 const short=(text,n=12)=>String(text||"").trim().split(/\s+/).slice(0,n).join(" ");
 function node(tag,text,attrs={}){
   const result=document.createElement(tag);
@@ -263,8 +285,8 @@ export function renderTerminalScoreCards(record,scores,{formatScore=String,forma
     for(const [index,item]of reading.candidates.entries()){
       const saved=byId.get(item.id),row=node('article',null,{class:'terminal-score-item terminal-candidate','data-score-candidate':item.id,'data-native-status':item.native_status});
       const head=node('div',null,{class:'terminal-score-heading'}),name=node('div',null,{class:'terminal-candidate-name'}),states=node('div',null,{class:'terminal-candidate-status'});
-      const status={evidence_backed_suggestion:'Evidence-backed',partial_grounding:'Partial',exploratory_contextual:'Contextual',incompatible_not_viable:'Not viable'};
-      states.append(node('span',status[item.native_status]||String(item.native_status).replaceAll('_',' '),{class:'terminal-state'}));
+      const status=readerEvidenceState(item.native_status);
+      states.append(node('span',status?.label||String(item.native_status).replaceAll('_',' '),{class:'terminal-state','data-reader-tier':status?.tier}));
       name.append(node('h5',(index+1)+'. '+formatText(saved?.fill||item.id)),states);head.append(name);
       const audit=node('details',null,{class:'terminal-score-audit',...(!points?{'data-testid':'raw-priority-index'}:{})});
       audit.append(node('summary',points?'Details':'Raw priority index and evidence detail',{title:'Fit, criteria and document contributions'}));

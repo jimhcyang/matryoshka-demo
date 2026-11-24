@@ -3,16 +3,16 @@
     {
       "case_id": "delegation_window_0a778cbe9fe92251c0a2fa5a",
       "native_checkpoint": {
-        "path": "phase/refinement_20261124/controls_final_cib_v4/delegation_window_0a778cbe9fe92251c0a2fa5a/native.json.gz",
-        "sha256": "f7357805b3585a94c185ee6c0a085d682259db906c2a7ba05d7c542e00dad82b"
+        "path": "phase/evidence_completion_20261124/regression_cib_v1/delegation_window_0a778cbe9fe92251c0a2fa5a/native.json.gz",
+        "sha256": "7fde259ffdfa9729388dc1cbb47e6193845eab53505da40518b76d29a528c799"
       },
       "position": "first"
     },
     {
       "case_id": "delegation_window_ad3f98e8db456d199146b68c",
       "native_checkpoint": {
-        "path": "phase/refinement_20261124/controls_final_cib_v4/delegation_window_ad3f98e8db456d199146b68c/native.json.gz",
-        "sha256": "74985b83291ae22373e358c6b36839bc84fb9b73bd12c09f7a5ad26b5d589248"
+        "path": "phase/evidence_completion_20261124/regression_cib_v1/delegation_window_ad3f98e8db456d199146b68c/native.json.gz",
+        "sha256": "91007fa3463e90eea06ad64a5a9b941295f189e161a176e0ba4610276359f5da"
       },
       "position": "last"
     }
@@ -21,8 +21,8 @@
   "gold": null,
   "native_results_modified": false,
   "source_report_ref": {
-    "path": "phase/refinement_20261124/publication_v4/refinement_b5be9861b5fb1237cada8574/report.json",
-    "sha256": "cc6b518745c153485e6d8f5db75ae7ffd0e859757d519ea102ba04dc2e206314"
+    "path": "phase/evidence_completion_20261124/publication_checkpoint_v1/refinement_14931f7f16a12da30763f923/report.json",
+    "sha256": "29b71ea90b9c13a7117607d385fd58f7e4339fd871c85f04c3a05308fcf94c06"
   },
   "source_view_policy": {
     "cable_classification": "CONFIDENTIAL",

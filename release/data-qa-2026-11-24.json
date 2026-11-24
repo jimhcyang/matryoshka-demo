@@ -1,30 +1,30 @@
 {
   "all_cases_recoverable_claimed": false,
   "benchmark_accuracy_claimed": false,
-  "candidate_manifest_sha256": "9b4b46f5c926df66ca1dbaf2a3a596c60d1f540f0a638706ee763052de6d4bc5",
+  "candidate_manifest_sha256": "1645a6bf439403ad6bd91b72d7abdabfb1eb3d0a28feb471c91d8447ca2d364e",
   "date": "2026-11-24",
   "historical_outputs_modified": false,
   "independently_replayed_cases": 28,
   "native_displayed_cases": 16,
   "reviews": {
     "browser": {
-      "path": "src-demo-day/phase/refinement_20261124/publication_v4/qa/browser_v2/receipt.json",
-      "sha256": "a82d43c07b976be355fa73a273515cb857c64bbb49412434f39f2eb4eed1d54c"
+      "path": "src-demo-day/phase/evidence_completion_20261124/qa/browser_v1/receipt.json",
+      "sha256": "10f0c0fb1ce91a14b4651ec398bccb729cb6247397605fd96dfc7cb4767b4bcb"
     },
     "independent": {
-      "path": "src-demo-day/phase/refinement_20261124/review_v2/FINAL_RELEASE_REVIEW_9b4b46f5c926df66ca1dbaf2a3a596c60d1f540f0a638706ee763052de6d4bc5.json",
-      "sha256": "d8097453084b03c7fd258249998008285cce498e6cc9201d055b6b10f2985908"
+      "path": "src-demo-day/phase/evidence_completion_20261124/static_checkpoint_review/FINAL_RELEASE_REVIEW_1645a6bf439403ad6bd91b72d7abdabfb1eb3d0a28feb471c91d8447ca2d364e_V2.json",
+      "sha256": "fc2cc5fee53ba370b5fe892227fa6f7bc581fa65e8d7d7fcbde177675887552f"
     },
     "integrity": {
-      "path": "src-demo-day/phase/refinement_20261124/publication_v4/qa/integrity_v2.json",
-      "sha256": "ea3688e3f39fc53da6c78641b8eaf4a4127d186d37cb642239d561b2cdf65bef"
+      "path": "src-demo-day/phase/evidence_completion_20261124/qa/integrity_v1.json",
+      "sha256": "c2a5cb067ab6b2e123e13c2dc71e40eda35039ed432da3d575c78ff5b3021c5d"
     },
     "native": {
-      "path": "src-demo-day/phase/refinement_20261124/review_v2/final_v4_all28_replay_v2/RESULT.json",
-      "sha256": "44a36ea77c67639d231a30b4dd40a2a75af67506820b41c863ccec3aef91da49"
+      "path": "src-demo-day/phase/evidence_completion_20261124/static_checkpoint_review/NATIVE_APPROVAL_ADAPTER_V2.json",
+      "sha256": "413684d865d19d0a2d76b2c71597ecd1e5265535d57b2a292dd4148536872b57"
     }
   },
-  "source_report_sha256": "cc6b518745c153485e6d8f5db75ae7ffd0e859757d519ea102ba04dc2e206314",
+  "source_report_sha256": "29b71ea90b9c13a7117607d385fd58f7e4339fd871c85f04c3a05308fcf94c06",
   "status": "PASS_DIAGNOSTIC_PRESENTATION_DATA",
   "unknown_delegation_has_revealed_gold": false,
   "version": "refinement-data-qa/1"
