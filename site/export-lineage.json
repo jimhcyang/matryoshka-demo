@@ -1,18 +1,18 @@
 {
   "archived_code_bundle_is_current_engine": true,
-  "backend_code_sha256": "044463834a550933e7a0364368041b6c08272ec3a0149240efb9482d512cccad",
+  "backend_code_sha256": "a4308847e4a65382ef89b56650a93fe2b0b30d4ec404a135b633897b8a18b238",
   "casebook_ref": {
-    "path": "phase/evidence_completion_20261124/publication_checkpoint_v1/refinement_14931f7f16a12da30763f923/casebook.json",
-    "sha256": "32ef0d843f78c029e86a7f23099187239bf47513779e93981cee0b5ab982c55b"
+    "path": "phase/proposal_recovery_20261124/publication_checkpoint_v1/refinement_03875d139508d5123c703e3b/casebook.json",
+    "sha256": "b0f6c14b77284e7f4c9dabad8ff2e5f0a8f76059ba78cf826d066374d5149b06"
   },
   "code_bundle": {
-    "bytes": 7063164,
+    "bytes": 7233274,
     "code_only": true,
     "manifest_path": "downloads/matryoshka-code-manifest.json",
-    "manifest_sha256": "c0c40022eca834fff3294d86e341bc263846a6e5295c5d07cf21795d5d180769",
+    "manifest_sha256": "f5bbcdc9cb52f22efbcee6a60b6b09eebefd55fc3ec24a22304307b80377d390",
     "path": "downloads/matryoshka-code.zip",
-    "sha256": "ccea927e45c4ccf99de581475dc5498617be2b7d0ab5a215ca08ca0b985af51e",
-    "source_backend_tree_sha256": "044463834a550933e7a0364368041b6c08272ec3a0149240efb9482d512cccad"
+    "sha256": "c937c6664e016a5af7104d2ded5e9ebd8d7ae45256ff404047da904ec716adfa",
+    "source_backend_tree_sha256": "a4308847e4a65382ef89b56650a93fe2b0b30d4ec404a135b633897b8a18b238"
   },
   "coverage": [
     {
@@ -1435,26 +1435,26 @@
   "field_guide": {
     "assets": [
       {
-        "public_sha256": "ff7ddf9209ae2a9a99070485722e0c23f753571a7d7522e5c7059093140edb25",
+        "public_sha256": "695db77afcaba98af0e500bbb7abc0dadebf300ff0881141d9a99d0118cafe22",
         "source_ref": {
-          "path": "phase/evidence_completion_20261124/public_guide/output/checkpoint_v1/field-guide.pdf",
-          "sha256": "ff7ddf9209ae2a9a99070485722e0c23f753571a7d7522e5c7059093140edb25"
+          "path": "phase/proposal_recovery_20261124/public_guide/output/checkpoint_v1/field-guide.pdf",
+          "sha256": "695db77afcaba98af0e500bbb7abc0dadebf300ff0881141d9a99d0118cafe22"
         },
         "target": "docs/matryoshka-guide.pdf"
       },
       {
-        "public_sha256": "074a164bb9a6006c6e683a39a066924270f4cfc820101d28f7c5f30c0e34248c",
+        "public_sha256": "d965ac77544bef37a9f2f1fe99e9354f86604c16decd468f47321cef1a0cb3c5",
         "source_ref": {
-          "path": "phase/evidence_completion_20261124/public_guide/output/checkpoint_v1/field-guide.txt",
-          "sha256": "074a164bb9a6006c6e683a39a066924270f4cfc820101d28f7c5f30c0e34248c"
+          "path": "phase/proposal_recovery_20261124/public_guide/output/checkpoint_v1/field-guide.txt",
+          "sha256": "d965ac77544bef37a9f2f1fe99e9354f86604c16decd468f47321cef1a0cb3c5"
         },
         "target": "docs/matryoshka-guide.txt"
       },
       {
-        "public_sha256": "7d6d3e39f6605ceaa19bb0caba734752a80fe9898e450d9bf462ff0720027a91",
+        "public_sha256": "064afe7bd752d1869e495a551da1e38848763d62ba0091ca92b399261eaf579b",
         "source_ref": {
-          "path": "phase/evidence_completion_20261124/public_guide/output/checkpoint_v1/guide-public.json",
-          "sha256": "7d6d3e39f6605ceaa19bb0caba734752a80fe9898e450d9bf462ff0720027a91"
+          "path": "phase/proposal_recovery_20261124/public_guide/output/checkpoint_v1/guide-public.json",
+          "sha256": "064afe7bd752d1869e495a551da1e38848763d62ba0091ca92b399261eaf579b"
         },
         "target": "docs/guide-public.json"
       }
@@ -1479,23 +1479,23 @@
       "delegation_window_ad3f98e8db456d199146b68c"
     ],
     "guide_public_ref": {
-      "path": "phase/evidence_completion_20261124/public_guide/output/checkpoint_v1/guide-public.json",
-      "sha256": "7d6d3e39f6605ceaa19bb0caba734752a80fe9898e450d9bf462ff0720027a91"
+      "path": "phase/proposal_recovery_20261124/public_guide/output/checkpoint_v1/guide-public.json",
+      "sha256": "064afe7bd752d1869e495a551da1e38848763d62ba0091ca92b399261eaf579b"
     },
     "pdf_pages": 17,
     "publication_qualification_inferred": false,
     "source_mode": "saved_report_snapshot",
     "source_report_ref": {
-      "path": "phase/evidence_completion_20261124/publication_checkpoint_v1/refinement_14931f7f16a12da30763f923/report.json",
-      "sha256": "29b71ea90b9c13a7117607d385fd58f7e4339fd871c85f04c3a05308fcf94c06"
+      "path": "phase/proposal_recovery_20261124/publication_checkpoint_v1/refinement_03875d139508d5123c703e3b/report.json",
+      "sha256": "6262b436e1e230f9611f759b7f20ef789305d507d55e4293f0ab8871e090660d"
     },
     "version": "source-bound-field-guide/1"
   },
   "graph_delivery": "same-repository",
   "historical_source_packets_modified": false,
   "local_refinement_ref": {
-    "path": "phase/evidence_completion_20261124/publication_checkpoint_v1/publication_refs.json",
-    "sha256": "fe100434f744e7aaf8533538cc694fe6873580185dbc05e45603b9038e814238"
+    "path": "phase/proposal_recovery_20261124/publication_checkpoint_v1/publication_refs.json",
+    "sha256": "1468035f7348bb211974b5ef026575e7b0fe90b9a538c3836d0418c64a6eebc1"
   },
   "pdf_catalog_ref": {
     "path": "experiments/visual_refinement_20261120/pdfs/catalog-resource-bound.json",
@@ -1524,8 +1524,8 @@
     "version": "analyst-release/1"
   },
   "source_report_ref": {
-    "path": "phase/evidence_completion_20261124/publication_checkpoint_v1/refinement_14931f7f16a12da30763f923/report.json",
-    "sha256": "29b71ea90b9c13a7117607d385fd58f7e4339fd871c85f04c3a05308fcf94c06"
+    "path": "phase/proposal_recovery_20261124/publication_checkpoint_v1/refinement_03875d139508d5123c703e3b/report.json",
+    "sha256": "6262b436e1e230f9611f759b7f20ef789305d507d55e4293f0ab8871e090660d"
   },
   "static_export_API_calls": 0,
   "version": "analyst-native-static-export/1"

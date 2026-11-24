@@ -15,6 +15,7 @@ import {exactSourceAnchor,focalReferenceFromOrigin,appendCIBPDFPair,cibPDFPair} 
 import originPageLocators from './source-pdf-locators.js';
 import {inputOriginPDFLocators} from './input-origin-locators.js';
 import {nativeControllerWithholdingViews,controllerWithholdingEmptyText,renderControllerWithholding,renderControllerWithheldAudit} from './controller-withholding-ui.js';
+import {verifyProposalPool,preferredProposalReading,proposalSourceLabel,renderProposalOrder,renderSuppliedProposalTrace} from './proposal-pool.js';
 await loadReaderCasing();
 const $ = selector => document.querySelector(selector);
 const list = value => Array.isArray(value) ? value : [];
@@ -249,11 +250,21 @@ function title(row) { return typeof row.presentation_title==="string"&&row.prese
 let livePacket=null;
 const controllerAuditCache=new WeakMap();
 const inputContextCache=new WeakMap();
+const proposalPoolCache=new WeakMap();
 async function prepareInputContext(record,caseInfo){
   if(!record||inputContextCache.has(record))return;
   try{inputContextCache.set(record,{view:await nativeInputContextView(record,caseInfo)});}
   catch{inputContextCache.set(record,{error:'The recorded supplied-context suggestions could not be verified against this input and its declared readings. No suggestion is substituted.'});}
 }
+async function prepareProposalPool(record,caseInfo){
+  if(!record||proposalPoolCache.has(record))return;
+  try{
+    const input=inputContextCache.get(record);
+    if(record.result?.proposal_pool!=null&&input?.error)throw Error(input.error);
+    proposalPoolCache.set(record,{view:await verifyProposalPool(record,caseInfo,input?.view)});
+  }catch(error){proposalPoolCache.set(record,{error:error.message});}
+}
+function currentProposalReading(){return proposalPoolCache.get(state.saved)?.view?.readings.find(row=>row.id===state.reading)||null;}
 async function prepareControllerAudit(record,caseInfo){
   if(!record||controllerAuditCache.has(record))return;
   try{controllerAuditCache.set(record,{views:await nativeControllerWithholdingViews(record,caseInfo)});}
@@ -499,9 +510,7 @@ function curatedDisplayReading(record,caseInfo,row,{live=false}={}){
   return choice.reading_id;
 }
 function initialDisplayReading(record,caseInfo,row,options={}){
-  const rows=list((record?.result?.redaction||record?.result)?.readings);
-  // No reference, grade, support count or candidate identity participates in fallback.
-  return curatedDisplayReading(record,caseInfo,row,options)||rows.find(row=>row.reading?.id&&list(row.candidates).length)?.reading.id||rows[0]?.reading?.id||'';
+  return preferredProposalReading(record,caseInfo,{pool:proposalPoolCache.get(record)?.view,inputView:inputContextCache.get(record)?.view});
 }
 // END_READER_READING_CHOICE
 function currentReading() { const rows=readingRows();return rows.find(r=>r.reading?.id===state.reading)||rows[0]; }
@@ -562,17 +571,15 @@ async function chooseCase(row,{push=true,reading,candidate,scroll=false}={}) {
       if(epoch!==state.epoch)return;
     }
     if(!state.saved?.result&&!recordedFailure(state.saved)||pendingRecord(state.saved)||pendingRecord(state.saved?.result)||pendingRecord(detail)){state.pending=publicationNote(state.saved)||publicationNote(detail)||`No completed v6 arm ${arm} execution is published. No older run or other arm is substituted.`;state.saved=null;}
+    if(state.saved)await prepareControllerAudit(state.saved,state.row.case);
+    if(state.saved)await prepareInputContext(state.saved,state.row.case);
+    if(state.saved)await prepareProposalPool(state.saved,state.row.case);
+    if(epoch!==state.epoch)return;
     const rows=readingRows();
     if(!rows.some(r=>r.reading?.id===state.reading)){
       const ordinal=/^reading_(\d+)$/.exec(state.reading);state.reading=(ordinal?rows[Number(ordinal[1])-1]?.reading?.id:null)||initialDisplayReading(state.saved,state.row.case,state.row);
     }
     if(!flowItems().some(c=>c.id===state.candidate))state.candidate=flowItems()[0]?.id||"";
-    if(state.saved)await prepareControllerAudit(state.saved,state.row.case);
-    if(state.saved)await prepareInputContext(state.saved,state.row.case);
-    if(state.saved&&!rows.some(row=>row.reading?.id===reading)){
-      const primary=studyInputPrimary(state.saved,state.row.case,state.row,inputContextCache.get(state.saved)?.view);
-      if(primary?.available){state.reading=primary.readingId;state.candidate=flowItems()[0]?.id||'';}
-    }
     if(state.saved)await bindCurrentRail(state.row,arm,state.saved);
     if(state.saved)await initializeIndependentReview();
     if(epoch!==state.epoch)return;
@@ -635,7 +642,7 @@ function renderWorkspace() {
   if(!state.saved){workflow.append(note(state.pending||"No completed result is currently loaded for this selected arm. No archived result is substituted.","empty"));return;}
   if(state.saved.frozen_control===true||state.saved.fallback===true||state.row.fallback===true)workflow.append(note(publicationNote(state.saved)||"Explicit frozen control / fallback record. This is not a new v6 execution.","notice"));
   else if(publicationNote(state.saved))workflow.append(note(publicationNote(state.saved),"notice"));
-  const inputContext=renderSuppliedContext();if(inputContext)workflow.append(inputContext);
+  const inputContext=state.saved.result?.proposal_pool==null?renderSuppliedContext():null;if(inputContext)workflow.append(inputContext);
   workflow.append(renderVerdictStrip());
   workflow.append(renderPlan(),renderDiffusion(),renderPathsStage(),renderResultsStage(),renderFindings());
   host.setAttribute("aria-busy","false");
@@ -1398,14 +1405,17 @@ function renderPaths(){
 }
 function renderVerdictStrip(){
   const summary=verdictSummary(state.saved,state.row.case,state.reading),task=state.row.case.task;
-  const primary=studyInputPrimary(state.saved,state.row.case,state.row,inputContextCache.get(state.saved)?.view,state.reading);
+  const poolPresent=task==='redaction'&&state.saved.result?.proposal_pool!=null,poolLead=currentProposalReading()?.proposals[0];
+  const legacyPrimary=studyInputPrimary(state.saved,state.row.case,state.row,inputContextCache.get(state.saved)?.view,state.reading);
+  const primary=poolPresent?(poolLead?.proposal.provenance==='INPUT'?{available:true,fill:poolLead.proposal.fill,channel:'input_nomination'}:null):legacyPrimary;
   const hero=el('section',null,{class:'construction-verdict verdict-strip','data-tone':primary?'context':summary.tone,'data-testid':'compact-verdict','aria-label':'Verdict','data-primary-channel':primary?.channel});
   const compatibilityEmpty=emptyControllerShortlist();
   if(primary){
     hero.append(el('p','From supplied context',{class:'eyebrow','data-testid':'study-primary-channel'}),
       el('h2',primary.available?'Exploratory suggestion: '+primary.fill:'Exploratory suggestion unavailable',{'data-testid':'local-verdict-title'}),
-      note('Input-derived only. Truth remains unknown and still withheld; this is not independent corpus recovery. Corpus candidates, evidence decisions and scores remain separate below.'));
-    const inspection=studyInspection(primary,state.saved,state.row.case,state.row);
+      note('Input-derived only, not independent corpus recovery or factual support. Corpus evidence decisions and scores remain separate.'));
+    const inspection=legacyPrimary?.available&&(!poolPresent||legacyPrimary.nomineeId===poolLead?.proposal.input_nomination_id)?
+      studyInspection(legacyPrimary,state.saved,state.row.case,state.row):null;
     if(inspection){
       const target=new URL(graphURL(inspection),location.href);target.searchParams.set('release',inspection.release);
       const inspect=link('Inspect source connection',target.href,'button');inspect.dataset.testid='study-source-inspection';
@@ -1414,16 +1424,18 @@ function renderVerdictStrip(){
         note('Retrospective inspection of the origin document in the separate later-release Corpus Map. Not ordinary retrieval proof, an identity join or a confidence score.'));
     }
   }else{
-    const reader=readerRedactionVerdict(summary);
+    const nativeReader=readerRedactionVerdict(summary),reader=nativeReader?.tier==='stance'?nativeReader:
+      poolLead?(readerEvidenceState(poolLead.proposal.status)||nativeReader):nativeReader;
     hero.dataset.readerTier=compatibilityEmpty?'unavailable':reader?.tier||'';
-    hero.append(el('p','Verdict',{class:'eyebrow'}),el('h2',compatibilityEmpty?'Compatibility unresolved':livePacket?.retrieval_summary.noCandidate?'No candidate passed':reader?.title||summary.title,
+    hero.append(el('p','Verdict',{class:'eyebrow'}),el('h2',compatibilityEmpty?'Compatibility unresolved':livePacket?.retrieval_summary.noCandidate?'No candidate passed':reader?.title||reader?.label||summary.title,
       {'data-testid':'local-verdict-title','data-native-title':summary.title}));
     if(reader?.tier==='none'&&!compatibilityEmpty&&!livePacket?.retrieval_summary.noCandidate)hero.append(note('No supporting or contextual evidence is recorded for a fill in this reading.'));
   }
   if(compatibilityEmpty)hero.append(note(controllerWithholdingEmptyText(compatibilityEmpty)));
   if(livePacket)hero.append(liveRetrievalNote());
-  if(!primary&&summary.recommendation)hero.append(el('p',readable(summary.recommendation.text),{class:'recommended-fill','data-testid':'recommended-fill'}));
-  else if(!primary&&task==='redaction'){
+  if(poolPresent&&!primary&&poolLead)hero.append(el('p','Top proposal: '+readable(poolLead.proposal.fill),{class:'recommended-fill','data-testid':'recommended-fill'}));
+  else if(!poolPresent&&!primary&&summary.recommendation)hero.append(el('p',readable(summary.recommendation.text),{class:'recommended-fill','data-testid':'recommended-fill'}));
+  else if(!poolPresent&&!primary&&task==='redaction'){
     const first=candidates()[0];
     if(first){
       const label=decisionLabel(newDecision(first)),same=label===readerRedactionVerdict(summary)?.title;
@@ -1599,6 +1611,7 @@ function renderResultBody(){
   const host=$("#result-body");if(!host||!state.saved)return;host.replaceChildren();
   host.dataset.readingId=state.reading;
   const summary=verdictSummary(state.saved,state.row.case,state.reading),task=state.row.case.task;
+  if(task==='redaction'&&state.saved.result?.proposal_pool!=null){renderProposalPoolResult(host);return;}
   const items=task==='redaction'?candidates():list(state.saved.result?.atoms).filter(a=>summary.units.some(u=>u.id===a.id));
   host.append(el('div',null,{id:'terminal-decision-scores','data-testid':'terminal-decision-scores'}));
   if(state.reading){const rows=readingRows(),index=rows.findIndex(row=>row.reading.id===state.reading);host.append(el("p",readingLabel(rows[index]?.reading||{},index+1),{class:"scope-line","data-testid":"active-reading"}));}
@@ -1643,8 +1656,56 @@ function renderResultBody(){
   }
   host.append(button("Detailed construction and original audit",frozenAuditDrawer,"quiet",{"data-testid":"frozen-native-audit"}));
 }
-function renderTerminalScores(){
-  const host=$('#terminal-decision-scores');if(!host)return;
+function suppliedProposalDrawer(item){
+  const body=renderSuppliedProposalTrace(item,state.row.case.query);
+  body.append(button('Origin',()=>$('#stage-01 [data-testid=origin-open]')?.click(),'quiet',{'data-testid':'proposal-input-origin'}));
+  openDrawer('Supplied context','Public-input provenance / not corpus evidence',body);
+}
+function renderProposalPoolResult(host){
+  const reading=currentProposalReading(),audit=proposalPoolCache.get(state.saved),rows=readingRows();
+  const index=rows.findIndex(row=>row.reading.id===state.reading);
+  host.append(el('p',readingLabel(rows[index]?.reading||{},index+1),{class:'scope-line','data-testid':'active-reading'}));
+  if(!reading)host.append(note('The native proposal pool could not be verified. No alternative pool or reading is substituted. '+(audit?.error||''),'notice'));
+  else{
+    host.append(renderProposalOrder(reading,{formatText:readable}));
+    const grid=el('div',null,{class:'construction-grid proposal-pool-grid','data-testid':'construction-grid'});
+    for(const item of reading.proposals){
+      const p=item.proposal,readout=readerEvidenceState(p.status)||{kind:'context',label:'Contextual suggestion'};
+      const card=el('article',null,{class:'construction-card','data-testid':'candidate-card','data-proposal-id':p.id,
+        'data-proposal-rank':p.rank,'data-provenance':p.provenance,'data-kind':readout.kind});
+      card.append(el('span',String(p.rank).padStart(2,'0'),{class:'eyebrow'}),el('h3',readable(p.fill)),badge(readout.label),
+        el('span',p.provenance==='INPUT'?'Input-derived context':proposalSourceLabel(p),{class:'badge proposal-source-family','data-testid':'proposal-source-family'}));
+      card.append(el('p','Fusion index: '+p.fusion_score.toFixed(4),{class:'proposal-fusion-index','data-fusion-score':p.fusion_score,title:String(p.fusion_score)}));
+      const actions=el('div',null,{class:'actions'});
+      if(item.corpus){
+        const identity=renderIdentityConsolidation(item.corpus);if(identity)card.append(identity);
+        const documents=new Set(usedProofs(item.corpus).map(proof=>proof.document_id||proof.canonical_page_id));
+        actions.append(button('Sources / '+documents.size,()=>candidateDetail(item.corpus),'',{'data-testid':'candidate-detail'}),
+          button('Routes',()=>{selectCandidate(item.corpus.id);stagePosition('03');},'quiet'));
+      }
+      if(item.input)actions.append(button('Supplied context',()=>suppliedProposalDrawer(item.input),'quiet',{'data-testid':'proposal-supplied-context'}));
+      card.append(actions);grid.append(card);
+    }
+    host.append(grid);
+    if(!reading.proposals.length)host.append(note('No proposals for this reading. No other reading is substituted.','empty'));
+  }
+  const details=el('details',null,{class:'proposal-corpus-audit','data-testid':'proposal-corpus-audit'});
+  details.append(el('summary','Corpus candidates and original scores / audit'),
+    note('Original corpus order and evidence points, not a second proposal slate. Input nominations add no corpus support, votes or points.'));
+  const scoreHost=el('div',null,{id:'terminal-decision-scores','data-testid':'terminal-decision-scores'});details.append(scoreHost);
+  for(const candidate of list(currentReading()?.candidates)){
+    const row=el('div',null,{class:'proposal-corpus-audit-row','data-testid':'corpus-candidate-audit','data-candidate-id':candidate.id});
+    row.append(el('strong',candidate.rank+'. '+readable(candidate.fill)),badge(decisionLabel(newDecision(candidate))),
+      button('Sources',()=>candidateDetail(candidate),'quiet'),button('Routes',()=>{selectCandidate(candidate.id);stagePosition('03');},'quiet'));details.append(row);
+  }
+  const context=renderSuppliedContext();if(context)details.append(context);
+  const compatibility=currentControllerView();if(compatibility?.candidates.length)details.append(controllerWithholdingDisclosure(compatibility));
+  const controllerAudit=currentControllerAudit();if(controllerAudit?.error)details.append(note('Compatibility audit unavailable: '+controllerAudit.error,'notice'));
+  details.append(button('Detailed construction and original audit',frozenAuditDrawer,'quiet',{'data-testid':'frozen-native-audit'}));
+  host.append(details);renderTerminalScores(scoreHost);
+}
+function renderTerminalScores(host=$('#terminal-decision-scores')){
+  if(!host)return;
   try{
     const scores=computeDecisionScores(state.saved);
     host.replaceChildren(renderTerminalScoreCards(state.saved,scores,{formatScore:formatDecisionScore,formatText:readable,readingId:state.reading,
@@ -2945,10 +3006,11 @@ async function mountLiveWorkbench(packet){
   [narrativeUI,narrativeAccess,narrativeEndpoints]=await Promise.all([import('./narrative-trace-v1.js'),import('./narrative-attempts-v1.js'),import('./narrative-endpoint-v1.js')]);
   state.casebook={primary:[{case_id:packet.row.case.case_id,corpus:packet.row.case.corpus,task:packet.row.case.task,row:packet.row}],special_redactions:[],backgrounds:{},selection_scope:'live',completed_primary_count:1};
   state.readySingleMethod=true;$('.workspace-toolbar').hidden=true;
-  state.reading=initialDisplayReading(state.saved,state.row.case,state.row,{live:true});
-  state.candidate=flowItems()[0]?.id||'';
   await prepareControllerAudit(state.saved,state.row.case);
   await prepareInputContext(state.saved,state.row.case);
+  await prepareProposalPool(state.saved,state.row.case);
+  state.reading=initialDisplayReading(state.saved,state.row.case,state.row,{live:true});
+  state.candidate=flowItems()[0]?.id||'';
   railDecisionCache.set(railKey(state.row),{record:state.saved});
   renderWorkspace();renderRail();savePosition();await hydrateFlow(state.epoch);
   $('#casebook-notice').hidden=true;

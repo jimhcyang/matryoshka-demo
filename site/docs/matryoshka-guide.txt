@@ -1,5 +1,5 @@
 Matryoshka: Evidence Walkthrough
-Read a question, inspect its sources, and distinguish established evidence from useful context.
+Read an input, inspect its sources, and distinguish established evidence from useful context.
 
 Read The Input First
 Inputs are the supplied questions or passages. Facts state what must be checked, not what history has already established. Redaction readings describe grammatical ways to fill a selected blank. Start with the saved result, then follow its Facts, Routes and Sources. Origin context is available after clicking Origin; it is not silently added to the input.
@@ -9,6 +9,9 @@ BM25 searches the saved non-context Facts against eligible pages and extraction 
 
 Inspect Each Fact
 Within the admitted Mosaic and Hypothesis documents, each Fact nominates its best lexical page per document. Inspection alternates among Facts before using remaining relevance-ranked pages. Every inspected page is compared with every Fact. Shared pages are inspected once, but may establish more than one Fact. Lexical nomination does not itself establish any assertion.
+
+The Five Proposed Fills
+The main Redaction list can combine corpus candidates and grammatical realizations of visible input wording. Evidence-backed corpus results come first, then partial evidence, then contextual suggestions. Within each tier, equal-family reciprocal-rank fusion adds 1/(60+rank) from each available nomination family. Exact ties prefer input context. Input-derived suggestions receive no corpus score or independent evidence vote. The original corpus scores and decisions remain available separately; the combined order is not a correctness probability.
 
 Read The Source-Owned Checks
 A passage must establish the required owner, predicate, arguments, time, polarity and attribution in the same relevant scope. A report of an action is not proof of its completion; a related episode is not the queried event. Required joins and qualifiers remain binding. Source fit helps order suggestions but cannot repair a missing requirement. Contextual and partial results remain visible; there is no claim that every case is solved.
@@ -439,11 +442,15 @@ Fact To Check
 Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation [MASKED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.
 
 Suggestions
-1. Soviet (contextual; 52.3735 points)
-2. limited (contextual; 13.5649 points)
-3. future (contextual; 13.5649 points)
-4. large (contextual; 13.5649 points)
-5. long (contextual; 13.5649 points)
+1. Swedish (input-derived context; not independent corpus evidence; no corpus score)
+2. Soviet (contextual; 52.3735 points)
+3. limited (contextual; 13.5649 points)
+4. future (contextual; 13.5649 points)
+5. large (contextual; 13.5649 points)
+
+Visible Input Clue
+A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare, including the assignment of nuclear weapons to ground division commanders.
+Recorded grammatical realization: Swedes -> Swedish. This is a contextual nomination, not an independent corpus witness.
 
 Recorded Lookup
 Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation [MASKED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.
@@ -470,11 +477,15 @@ The [REDACTION] delegation apparently learned nothing about the present state of
 
 Suggestions
 1. high-level (contextual; 40.8911 points)
-1. Soviet (contextual; 57.9433 points)
-2. Many (contextual; 56.9706 points)
-3. Western (contextual; 56.9146 points)
-4. disarmament (contextual; 56.1326 points)
-5. European (contextual; 55.6975 points)
+1. Swedish (input-derived context; not independent corpus evidence; no corpus score)
+2. Soviet (contextual; 57.9433 points)
+3. Many (contextual; 56.9706 points)
+4. Western (contextual; 56.9146 points)
+5. disarmament (contextual; 56.1326 points)
+
+Visible Input Clue
+A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare, including the assignment of nuclear weapons to ground division commanders.
+Recorded grammatical realization: Swedes -> Swedish. This is a contextual nomination, not an independent corpus witness.
 
 Recorded Lookup
 The [REDACTION] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense.
