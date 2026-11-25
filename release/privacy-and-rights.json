@@ -1,1 +1,32 @@
-{"candidate_manifest_sha256":"4e843f9d856242d00e7b9f6fd756cba5320e52022958dc301cbcd57d4bf5e12a","date":"2026-11-24","independent_review_ref":{"path":"src-demo-day/phase/proposal_recovery_20261124/publication_review/runs/final_4e843f_v1/FINAL_RELEASE_REVIEW_4e843f9d856242d00e7b9f6fd756cba5320e52022958dc301cbcd57d4bf5e12a_V1.json","sha256":"d63363987c42ebf084ce702811d45bbf0b491590a26e126b9ce03e471cba9282"},"private_credentials_published":false,"scan_counts":{"authored_site_files":20017,"bytes_scanned":2384381737,"code_bundle_entries":965,"decoded_container_bytes":1721559958,"gzip_members":19072,"nested_archive_entries":965,"pdf_files":831,"pdf_pages":9360,"pdf_text_bytes":6763311,"unreadable_or_unscanned_files":0},"scope":"Reviewed public-source continuity and authored code; not legal certification or declassification.","version":"proposal-recovery-privacy-and-rights/1"}
+{
+  "all_tasks_success_claimed": false,
+  "backend_code_sha256": "37209130d21cc4f6067d01ad0d49d9412c7d88f5774b10ce1484c81650eaf9d1",
+  "benchmark_accuracy_claimed": false,
+  "changed_asset_review_ref": {
+    "path": "src-demo-day/phase/corpus_delegation_20261124/independent/FINAL_CHECKPOINT_AUTHORIZATION.json",
+    "sha256": "5dd357acb203f08372b712f443b4528d30d04f73854457a55c4797387d38bae1"
+  },
+  "date": "2026-11-24",
+  "extra_unpromoted_control_cases": 1,
+  "fresh_native_cases": 2,
+  "independent_review_ref": {
+    "path": "src-demo-day/phase/corpus_delegation_20261124/independent/FINAL_CHECKPOINT_AUTHORIZATION.json",
+    "sha256": "5dd357acb203f08372b712f443b4528d30d04f73854457a55c4797387d38bae1"
+  },
+  "inherited_baseline_review": {
+    "path": "privacy-and-rights-before-corpus-2026-11-24.json",
+    "sha256": "67664521cd7e599cdfecc59a4dc7650b13d5005de584121152ac3071379d31a9"
+  },
+  "legal_certification_or_new_declassification_claimed": false,
+  "manifest_sha256": "c0e963b644cd5826eabd165076a18bed51f7895fc4e9aee9a393ba101c505d59",
+  "negative_fresh_comparison_cases": 1,
+  "original_historical_markings_preserved": true,
+  "private_credentials_published": false,
+  "private_live_history_published": false,
+  "qualified_public_study_cases": 1,
+  "retained_historical_native_cases": 14,
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "source_report_sha256": "d7c3d9ad3b8890c6f22ed4589c61191a1138e0a502c4ad34cb475b13f9bda237",
+  "unknown_delegation_has_revealed_gold": false,
+  "version": "corpus-delegation-privacy-and-rights/1"
+}
