@@ -228,7 +228,7 @@ export function renderTerminalScoreCards(record,scores,{formatScore=String,forma
   const host=node('section',null,{class:'terminal-scorecards','data-testid':'terminal-scorecards'});
   if(!scores){host.append(node('p','No terminal evidence/fit score was saved for this historical result.',{class:'note','data-testid':'terminal-score-unavailable'}));return host;}
   host.dataset.scoreVersion=scores.version;host.dataset.rankingApplied=String(scores.ranking_applied===true);
-  const sourcePoints=scores.version==='terminal-evidence-fit/6',components=sourcePoints||scores.version==='terminal-evidence-fit/5',points=components||scores.version==='terminal-evidence-fit/4';
+  const sourcePoints=['terminal-evidence-fit/6','terminal-evidence-fit/7'].includes(scores.version),components=sourcePoints||scores.version==='terminal-evidence-fit/5',points=components||scores.version==='terminal-evidence-fit/4';
   if(showTitle)host.append(node('h3','Evidence and fit'));
   host.append(node('p',scores.ranking_applied===true?
     (points?'Ranking points / 300, not confidence. Source priority is not a factual-support certificate.':'Saved priority indices, not confidence. Original units are retained.'):
@@ -276,6 +276,8 @@ export function renderTerminalScoreCards(record,scores,{formatScore=String,forma
     node('p',sourcePoints?'100*tier + 40*bool(B & ~18) + 25*B/1023 + 35*u/(1+u). Nomination is not factual support.':
       components?'100*tier + 65*B/1023 + 35*u/(1+u).':points?'Original evidence/fit points, 0 to 300; no later components are inferred.':
       'Original saved index; no point conversion or rank-based spread is applied.',{class:'note hint'}));
+  if(scores.version==='terminal-evidence-fit/7')technical.append(node('p',
+    'Saved fit includes licensed wording and balanced focal/background lexical coverage. Source weights use the best recorded fused or atom-search position. These are contextual ranking inputs, not factual support.',{class:'note hint'}));
   for(const reading of list(scores.readings).filter(reading=>readingId==null||reading.id===readingId)){
     const source=nativeReadings.find(value=>value.reading?.id===reading.id),byId=new Map(list(source?.candidates).map(item=>[item.id,item]));
     const section=node('section',null,{class:'terminal-reading terminal-comparison','data-reading-id':reading.id});

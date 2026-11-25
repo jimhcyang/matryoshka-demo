@@ -1,0 +1,60 @@
+WITHHELD DELEGATION: CORPUS-SOURCE COMPARISON
+
+Source collection
+The complete public later edition of CIA-RDP79T00975A004300220001-9,
+dated 17 February 1959, is registered as a 17-page corpus supplement.
+Its remaining masks and original historical markings are preserved.
+This changes available sources; it is not an earlier-release-only test.
+The withheld delegation identity has no verified answer key.
+
+First input: selected for the study
+Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation
+[MASKED] that the USSR intends to retain a modern conventional capability
+while building up its nuclear strength.
+
+A tactical exercise observed by the Swedes was in line with known Soviet
+tactical nuclear warfare, including the assignment of nuclear weapons to
+ground division commanders.
+
+Five candidates in the populated grammatical reading:
+  1. Soviet        52.2481
+  2. Swedish       14.1534
+  3. nuclear       13.7008
+  4. conventional  13.7008
+  5. limited       13.5192
+
+Swedish is nominated from the retrieved corpus document's literal word Swedes
+on physical PDF page 8. WordNet licenses the noun-to-adjective transformation;
+the source quotation is unchanged. It is a contextual suggestion, not proof
+that the delegation was Swedish. No input-only candidate channel is used.
+The input retains a visible Swedes clue; this is not a blind identity discovery.
+
+Second input: negative comparison
+The [REDACTION] delegation apparently learned nothing about the present state
+of the Soviet ICBM program, except that ICBMs were referred to in the present
+tense.
+
+A tactical exercise observed by the Swedes was in line with known Soviet
+tactical nuclear warfare, including the assignment of nuclear weapons to
+ground division commanders.
+
+Its main reading returns Soviet, Western, Many, headed and disarmament.
+Another reading returns high-level. Neither displays Swedish.
+This result is not presented as a successful recovery.
+
+Second input without the visible Swedes paragraph: negative control
+The input contains only the first paragraph of the second input above.
+The three readings return:
+  state; high-level
+  United States UN Delegation's; Bonn state's; Free Democrats';
+    Free Democrats in the state cabinet's; state cabinet's
+  Soviet; Western; Many; headed; parliamentary
+None displays Swedish. The full document remains in the retrieval corpus.
+
+Interpretation
+The first input meets the demonstration's source-derived top-five requirement.
+The other two do not. Source availability, visible context, grammatical
+interpretation and candidate ranking all affect the result. The recorded
+points measure evidence and fit; they are not correctness probabilities.
+All three executions completed. The ordinary saved cases retain their original
+sources and recorded results rather than being silently rescored.

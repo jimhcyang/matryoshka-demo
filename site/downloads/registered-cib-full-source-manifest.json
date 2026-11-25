@@ -1,0 +1,315 @@
+{
+  "baseline_corpora_included": false,
+  "document_date": "1959-02-17",
+  "document_id": "CIA-RDP79T00975A004300220001-9",
+  "edition": "later",
+  "external_reference_policy": "All unbundled carrier, earlier-edition, registry and index paths remain external references; not recursively copied.",
+  "files": [
+    {
+      "bytes": 7186,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/ingest/build_edition.py",
+      "sha256": "c262d2a9649093fe0b64ae92fcb5dcc41cdf80bf53f50f44aca598c9ef59a7ae"
+    },
+    {
+      "bytes": 1906,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/ingest/edition_v1/registered_documents.json",
+      "sha256": "55d77a5975f2b0411e85487f7a1c15cd36e47634752a31f20069c5add88657b5"
+    },
+    {
+      "bytes": 2005,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/PHYSICAL_REVIEW.json",
+      "sha256": "e9fff9be33c25f8ff5ea7e64f4676a99ae3aa86d9a2f1513ab5cb1173b8a07b5"
+    },
+    {
+      "bytes": 9603,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/SOURCE_DOCUMENT.json",
+      "sha256": "800aabb83b80ab8f387a5fa84503ccf27e1a690c6552ec7d1d99ef73ad8b7bb4"
+    },
+    {
+      "bytes": 60459,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/later.pages.jsonl",
+      "sha256": "16538542eeaecbc5660aa43003d8d25f46699318306cd751ebcb0b911fcfac44"
+    },
+    {
+      "bytes": 772234,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/pdfs/later_cib_03023212.pdf",
+      "sha256": "31ecc17aafafccf0f90fe2d31ae037d9ec27bbf89308d900c834d2b3ce7769d3"
+    },
+    {
+      "bytes": 20446,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later.all_physical_pages.txt",
+      "sha256": "ca2a879adca548f24ebbe79386868e8bac56839e5de72edc6c5fa3f8fb5ea276"
+    },
+    {
+      "bytes": 20210,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later.existing_document_text.txt",
+      "sha256": "e88a04db63eb3abb12951288d7adf69d9308eb5652fb6d280a811afa198d0ecf"
+    },
+    {
+      "bytes": 20210,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later.original_document_text.txt",
+      "sha256": "e88a04db63eb3abb12951288d7adf69d9308eb5652fb6d280a811afa198d0ecf"
+    },
+    {
+      "bytes": 62,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/001.existing_clean.txt",
+      "sha256": "da4b70e94c7ed9f9ece2ab94b048a34f6e1f96e6f1173c630e1f92103e0a97ea"
+    },
+    {
+      "bytes": 62,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/001.existing_original_ocr.txt",
+      "sha256": "da4b70e94c7ed9f9ece2ab94b048a34f6e1f96e6f1173c630e1f92103e0a97ea"
+    },
+    {
+      "bytes": 716,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/001.pdf_embedded_ocr.txt",
+      "sha256": "2242f3d82ace0c3c4de7e5863fb6cd7fe95a88206d7c9dd4e24e83f7bec77148"
+    },
+    {
+      "bytes": 0,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/002.existing_clean.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/002.existing_original_ocr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 117,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/002.pdf_embedded_ocr.txt",
+      "sha256": "b5a06032cbb4a87c16b4a8a728688ae5a5502fec330f1da12f3dd408cd3e0edf"
+    },
+    {
+      "bytes": 1047,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/003.existing_clean.txt",
+      "sha256": "4b5a3467a0f7423b443e4ad7a9a5bd4d3f1fff65115d078a8663d38a306e73f5"
+    },
+    {
+      "bytes": 1047,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/003.existing_original_ocr.txt",
+      "sha256": "4b5a3467a0f7423b443e4ad7a9a5bd4d3f1fff65115d078a8663d38a306e73f5"
+    },
+    {
+      "bytes": 3017,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/003.pdf_embedded_ocr.txt",
+      "sha256": "35a74cb878247e32d00cac7f961408c00b7c583ffba15febade2885ca74cc8de"
+    },
+    {
+      "bytes": 1369,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/004.existing_clean.txt",
+      "sha256": "648a2e6c8ca3f3dc1322898b04c546972b5c887a3f0a95a5234f3a7ed353b094"
+    },
+    {
+      "bytes": 1377,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/004.existing_original_ocr.txt",
+      "sha256": "f33ab7dfd517706d506db2f25f23c7ed0cda502ad88f7253945ec38a2a27d171"
+    },
+    {
+      "bytes": 1416,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/004.pdf_embedded_ocr.txt",
+      "sha256": "51a571fb2f6b0afd2374bdc7b114c34ebd43a1de7d497612fb839efbff39e8ae"
+    },
+    {
+      "bytes": 1947,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/005.existing_clean.txt",
+      "sha256": "aedbb783223a62731fae855fd1f1f03d3dee74588257cd3b3a03db2f0a214be6"
+    },
+    {
+      "bytes": 1947,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/005.existing_original_ocr.txt",
+      "sha256": "aedbb783223a62731fae855fd1f1f03d3dee74588257cd3b3a03db2f0a214be6"
+    },
+    {
+      "bytes": 2045,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/005.pdf_embedded_ocr.txt",
+      "sha256": "dd0a7518c783f995e4fae9cd959561b892afb7f59b67ca823abd825a7104291c"
+    },
+    {
+      "bytes": 1410,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/006.existing_clean.txt",
+      "sha256": "d111179427a1f4e1a0795cb7ac248e4fc7605e17eba415b3ff2c48585e27dc83"
+    },
+    {
+      "bytes": 1410,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/006.existing_original_ocr.txt",
+      "sha256": "d111179427a1f4e1a0795cb7ac248e4fc7605e17eba415b3ff2c48585e27dc83"
+    },
+    {
+      "bytes": 1475,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/006.pdf_embedded_ocr.txt",
+      "sha256": "9880a7693eced3e3fb62dd164e356ae829f2a5434676e3bdac382f086ee3e13d"
+    },
+    {
+      "bytes": 715,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/007.existing_clean.txt",
+      "sha256": "3e87c4f4698e5ab6c781988a86062a96615bf9ec71e0fdb6d819bce831a0bd23"
+    },
+    {
+      "bytes": 717,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/007.existing_original_ocr.txt",
+      "sha256": "17fa50f63a7c45cb625caaf394abda65b872c82720c070e29547af60e1f82895"
+    },
+    {
+      "bytes": 818,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/007.pdf_embedded_ocr.txt",
+      "sha256": "1785e4cdc5dabe72cf216b00dac0b3043507c8b8cb8da6ad83cfadb7803e5ada"
+    },
+    {
+      "bytes": 1862,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/008.existing_clean.txt",
+      "sha256": "a263e5268a29b70968068b0f10f19e4141b845ad1e5aa05b5ecff6c541cbc04b"
+    },
+    {
+      "bytes": 1862,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/008.existing_original_ocr.txt",
+      "sha256": "a263e5268a29b70968068b0f10f19e4141b845ad1e5aa05b5ecff6c541cbc04b"
+    },
+    {
+      "bytes": 2052,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/008.pdf_embedded_ocr.txt",
+      "sha256": "8fc060b4c1fa8135129a3c4b8f61c016731f88999dc5326455b4eea88edca213"
+    },
+    {
+      "bytes": 1562,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/009.existing_clean.txt",
+      "sha256": "9fc94cd0890168955c9ef7b74f542fca77d24bb8867630da0883377023d8bfa6"
+    },
+    {
+      "bytes": 1562,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/009.existing_original_ocr.txt",
+      "sha256": "9fc94cd0890168955c9ef7b74f542fca77d24bb8867630da0883377023d8bfa6"
+    },
+    {
+      "bytes": 1795,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/009.pdf_embedded_ocr.txt",
+      "sha256": "9ebcb286a0aec37693f9dcfdf22339d0f5e9616d0944c1f3b823ee9c80c313e6"
+    },
+    {
+      "bytes": 1265,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/010.existing_clean.txt",
+      "sha256": "e93df8c991c03ce1be3e57398483ee59be261428b82f70a24b3134de11e26566"
+    },
+    {
+      "bytes": 1265,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/010.existing_original_ocr.txt",
+      "sha256": "e93df8c991c03ce1be3e57398483ee59be261428b82f70a24b3134de11e26566"
+    },
+    {
+      "bytes": 1427,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/010.pdf_embedded_ocr.txt",
+      "sha256": "71bdde4343015b77ea1e3055d91ad9b3f7b9f59da5989da55f38455e1966aec8"
+    },
+    {
+      "bytes": 1867,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/011.existing_clean.txt",
+      "sha256": "46578d824f302546b3be60729a2b105f1013cee261b8199a31ea22b555dab4d9"
+    },
+    {
+      "bytes": 1867,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/011.existing_original_ocr.txt",
+      "sha256": "46578d824f302546b3be60729a2b105f1013cee261b8199a31ea22b555dab4d9"
+    },
+    {
+      "bytes": 2032,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/011.pdf_embedded_ocr.txt",
+      "sha256": "837f09fb4a1005a2e0125c9b326fe18e04460cae0a5ecfcefece84e93150a777"
+    },
+    {
+      "bytes": 1782,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/012.existing_clean.txt",
+      "sha256": "6b9d2572b59a1608ee03bd69a6dfcf97367b804f6fd0c7f4d4d652187af7f07d"
+    },
+    {
+      "bytes": 1782,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/012.existing_original_ocr.txt",
+      "sha256": "6b9d2572b59a1608ee03bd69a6dfcf97367b804f6fd0c7f4d4d652187af7f07d"
+    },
+    {
+      "bytes": 1992,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/012.pdf_embedded_ocr.txt",
+      "sha256": "dfd43f596d88c2d40950e5ca6c50145687c062addb37f6cad152402846d062ab"
+    },
+    {
+      "bytes": 226,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/013.existing_clean.txt",
+      "sha256": "08d16bf89b0fd8a8040f75b4084dc54d6b6f3ed77ebd866e63a1bf4351e536c9"
+    },
+    {
+      "bytes": 226,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/013.existing_original_ocr.txt",
+      "sha256": "08d16bf89b0fd8a8040f75b4084dc54d6b6f3ed77ebd866e63a1bf4351e536c9"
+    },
+    {
+      "bytes": 529,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/013.pdf_embedded_ocr.txt",
+      "sha256": "be8af87e14a5041b3135de9b51b682b4fee19aafe59ba364e09688b2e3662438"
+    },
+    {
+      "bytes": 1790,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/014.existing_clean.txt",
+      "sha256": "2c05ba83e19b1904b45d03e286d73ea71897ae359df0b08d440c01fd68e33f38"
+    },
+    {
+      "bytes": 1790,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/014.existing_original_ocr.txt",
+      "sha256": "2c05ba83e19b1904b45d03e286d73ea71897ae359df0b08d440c01fd68e33f38"
+    },
+    {
+      "bytes": 1989,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/014.pdf_embedded_ocr.txt",
+      "sha256": "4da6e88561514ab62fe662900f3211a9c6069a60d9e2d971d80bd4a40f095bdc"
+    },
+    {
+      "bytes": 1554,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/015.existing_clean.txt",
+      "sha256": "0fcbf74478d8ca6393827f22a7d4aeacdec99c2c44ad91a8f633249092898739"
+    },
+    {
+      "bytes": 1554,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/015.existing_original_ocr.txt",
+      "sha256": "0fcbf74478d8ca6393827f22a7d4aeacdec99c2c44ad91a8f633249092898739"
+    },
+    {
+      "bytes": 1769,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/015.pdf_embedded_ocr.txt",
+      "sha256": "054bb90b81afcfaf2f525e4eebd951273a5c60a3bc94b86688ada7864863c3c0"
+    },
+    {
+      "bytes": 1940,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/016.existing_clean.txt",
+      "sha256": "b2ccb1b03ae370fc95e16631c521f2ff59fb0f4c65669a02cdb89d183a9f4861"
+    },
+    {
+      "bytes": 1940,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/016.existing_original_ocr.txt",
+      "sha256": "68461cb957bb0137a1c2c71f3cf45428ea15ac2434bf9f0b2969d9815d415c84"
+    },
+    {
+      "bytes": 2162,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/016.pdf_embedded_ocr.txt",
+      "sha256": "9d1dbb028599a567ffbc867f7532b0c1c60a2e1f2736949ba26a785dcfbfcc66"
+    },
+    {
+      "bytes": 0,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/017.existing_clean.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/017.existing_original_ocr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 145,
+      "path": "src-demo-day/phase/corpus_delegation_20261124/raw_sources/texts/later/017.pdf_embedded_ocr.txt",
+      "sha256": "8a25910c0030d4a4e4476bb52ea6f0ec5c3352aeb72beaf380bc7286c7245b98"
+    }
+  ],
+  "original_historical_markings_preserved": true,
+  "original_source_handoff_sha256": "f3c9daa6020524629c1a987da9b0daacf39cec1a425020472144ad493fc296f6",
+  "physical_pages": 17,
+  "remaining_unknowns_filled": false,
+  "source_registration_executed": false,
+  "structured_classification": "unknown"
+}

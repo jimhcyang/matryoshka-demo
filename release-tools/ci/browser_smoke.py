@@ -138,9 +138,29 @@ def public_cases(site, study):
             assert row['configurations']['llm_readings']['native_checkpoint']==entry['native_checkpoint']
             assert row['configurations']['llm_readings']['source_view_policy']==study['source_view_policy']
             cases.append(row)
-        assert len(cases)==2 and {r['study_slot'] for r in cases}=={'first','last'}
-        assert cases[0]['study_companion_case_id']==cases[1]['case']['case_id']
-        assert cases[1]['study_companion_case_id']==cases[0]['case']['case_id']
+        assert len(cases) in (1,2)
+        if len(cases)==2:
+            assert {r['study_slot'] for r in cases}=={'first','last'}
+            assert cases[0]['study_companion_case_id']==cases[1]['case']['case_id']
+            assert cases[1]['study_companion_case_id']==cases[0]['case']['case_id']
+        else:
+            assert study['corpus_only'] is True and study['cases'][0]['qualified'] is True
+            assert cases[0]['study_slot']=='first' and study['source_view_policy']['id']=='supplied_documents_inclusive'
+            comparisons=study['comparison_cases']
+            assert len(comparisons)==1 and study['comparison_case_ids']==[c['case_id'] for c in comparisons]
+            item=comparisons[0]
+            assert item['position']=='last' and item['qualified'] is False and item['role']=='FRESH_NEGATIVE_COMPARISON_NOT_PUBLIC_STUDY'
+            negatives=[r for r in report['cases'] if r['case']['case_id']==item['case_id']]
+            assert len(negatives)==1
+            negative=negatives[0]
+            assert negative['study_slot']=='last' and negative['reference_answer_kind']=='unknown_still_withheld'
+            assert negative.get('reference_answer_available') is not True and negative.get('reference_answer') is None and negative.get('gold') is None
+            assert negative['configurations']['llm_readings']['native_checkpoint']==item['native_checkpoint']
+            assert negative['configurations']['llm_readings']['source_view_policy']==study['source_view_policy']
+            assert cases[0]['study_companion_case_id']==negative['case']['case_id']
+            assert negative['study_companion_case_id']==cases[0]['case']['case_id']
+            assert {r['case']['case_id'] for r in report['cases'] if r.get('study_slot')}=={cases[0]['case']['case_id'],item['case_id']}
+        assert all(r.get('reference_answer_available') is not True and r.get('reference_answer') is None and r.get('gold') is None for r in cases)
         return cases
     if study['version'] == 'swedish-scoped-shared-kernel-ui/3':
         cases = [pinned(site, ref) for ref in study['cases']]
@@ -232,11 +252,65 @@ def citation_refs(value):
             yield from citation_refs(item)
 
 
-def assert_saved_source(row, config, source, *, full_page=False):
+def assert_saved_source(row, config, source, *, full_page=False, execution=None, envelope=None):
     case=row['case']
     policy=row['configurations'][config].get('source_view_policy')
+    supplied=(str(source.get('canonical_page_id',source.get('id',''))).startswith('supplied_page_')
+              or 'supplied_source' in source or source.get('visibility')=='supplied_registered')
+    if policy is None or policy.get('id')!='supplied_documents_inclusive':
+        assert not supplied, 'An ordinary source view cannot admit a supplied edition row'
     if policy is None or policy.get('id')=='strict_prior':
         assert source['date'] < case['date'] and source['document_id'] != case['document_id']
+        return
+    if policy.get('id')=='supplied_documents_inclusive':
+        expected=dict(version='trusted-corpus-source-view/1',id='supplied_documents_inclusive',date_relation='<=',
+            cutoff_role='source_document_date',cib_source_document='EARLIER_OR_BOTH_OR_REGISTERED_PUBLIC_SUPPLIED_EDITION',
+            cable_origin='WHOLE_DOCUMENT_EXCLUDED',cable_classification='CONFIDENTIAL',cable_document_wide_handling_veto=True,
+            later_or_secret_version_admitted=True,source_dates_or_document_ids_rewritten=False,
+            supplied_document_registration_required=True,supplied_document_scope='HASH_BOUND_REGISTERED_PUBLIC_CIB_EDITIONS_ONLY',
+            ordinary_source_views_unchanged=True)
+        assert policy==expected
+        assert source['date'] <= case['date']
+        if supplied:
+            assert case['corpus']=='cib'
+            if not full_page:
+                return  # Native quotation is checked against its full source below.
+            assert execution and envelope and execution['resource_binding']==row['resource_binding']==envelope['resource_binding']
+            assert execution['index_ref']['sha256']==row['resource_binding']['index_sha256']
+            assert execution['index_ref']['registry_sha256']==row['resource_binding']['registry_sha256']
+            assert digest(envelope['binding'])==execution['index_ref']['source_binding_sha256']
+            context=envelope['binding'];registration=context['native_registry']['registered_supplied_documents']
+            assert context['source_edition_id']==context['native_registry']['source_edition_id']
+            assert envelope['source_view_policy']==policy and registration['version']=='registered-full-source-documents/1'
+            s=source['supplied_source'];raw=source['native_page'];release=s['source_release'];n=s['physical_page']
+            assert source['corpus']=='cib' and source['permitted'] is True and source['visibility']=='supplied_registered'
+            assert s['version']==registration['version'] and s['source_manifest_ref']==registration['manifest_ref']
+            assert s['source_edition_id']==context['source_edition_id'] and release['public_release'] is True
+            assert re.fullmatch(r'\d{4}-\d{2}-\d{2}',release['release_date'])
+            assert source['view']==release['edition']==raw['edition'] and source['view'] in {'earlier','later'}
+            assert type(n) is int and n>0 and source['source_page']==source['pdf_page']==raw['physical_page']==n
+            assert source['earlier_page'] is None and raw['remaining_unknowns_filled'] is False
+            assert s['pdf_ref']==raw['pdf_ref'] and re.fullmatch(r'[a-f0-9]{64}',s['pdf_ref']['sha256'])
+            assert raw['document_id']==source['document_id'] and raw['document_date']==source['date']
+            assert raw['source_page_id']==s['original_source_page_id'] and raw['source_edition_id']==s['original_source_edition_id']
+            assert raw['text']==source['text'] and digest(source['text'])==source['source_sha256']
+            assert hashlib.sha256(source['text'].encode()).hexdigest()==source['raw_text_sha256']==raw['text_sha256_utf8']
+            assert raw['clean_text_ref']['sha256']==source['raw_text_sha256']
+            assert source['id']==source['canonical_page_id']=='supplied_page_'+digest([
+                s['source_edition_id'],s['source_manifest_ref'],source['document_id'],n,source['raw_text_sha256']])[:24]
+            assert source['original_canonical_page_ids']==s['original_canonical_page_ids']==raw['existing_canonical_page_ids']
+            original=source['original_canonical_page_ids']
+            assert source['original_canonical_page_id']==(original[0] if len(original)==1 else None)
+            assert source['structured_classification']==raw['classification_level']
+            assert source['classification']==source['structured_classification'] or s['classification_evidence_ref']
+            assert s['semantic_observations_added'] is False and s['identity_or_task_support_certified'] is False
+            return
+        if case['corpus']!='cib':
+            assert source['document_id']!=case['document_id']
+            if full_page:assert source['classification']=='CONFIDENTIAL'
+        elif full_page:
+            assert source['visibility'] in ('earlier','both')
+            assert source.get('native_page',{}).get('view','earlier') in ('earlier','both')
         return
     assert policy['version']=='trusted-corpus-source-view/1' and policy['id']=='source_day_inclusive'
     assert policy['date_relation']=='<=' and policy['later_or_secret_version_admitted'] is False
@@ -515,12 +589,38 @@ def main():
                         page.wait_for_url('**/workbench-v6.html?**',timeout=60000)
                         row.update(public_study_ref=reference,public_study_version=study['version'],cases=[])
                         for saved in cases:
-                            page.locator('[data-study-slot="'+saved['study_slot']+'"]').click()
+                            if len(cases)==2:page.locator('[data-study-slot="'+saved['study_slot']+'"]').click()
                             page.wait_for_function("id=>new URLSearchParams(location.search).get('case')===id&&document.querySelector('#case-view')?.getAttribute('aria-busy')==='false'",arg=saved['case']['case_id'],timeout=60000)
                             expect(page.get_by_test_id('compact-verdict')).to_be_visible()
-                            expect(page.get_by_test_id('evidence-map')).to_have_count(1)
-                            assert page.locator('[data-study-slot]').count()==2
+                            expect(page.get_by_test_id('evidence-map')).to_have_count(1,timeout=90000)
+                            assert page.locator('[data-study-slot]').count()==(2 if len(cases)==2 else 0)
+                            assert {node.get_attribute('data-study-slot') for node in page.locator('[data-study-slot]').all()}==({case['study_slot'] for case in cases} if len(cases)==2 else set())
                             assert page.locator('#query-text').count()==0, 'No separate legacy study renderer'
+                            if saved['configurations']['llm_readings']['source_view_policy']['id']=='supplied_documents_inclusive':
+                                params=dict(case_id=saved['case']['case_id'],config='llm_readings',
+                                    **{k:saved['resource_binding'][k] for k in ('resource_id','registry_sha256','index_sha256')})
+                                display=packet('/api/current/condition-v6',params)['configurations']['llm_readings']
+                                assert display['result'].get('input_nomination') is None
+                                active=page.locator('#case-view').get_attribute('data-reading')
+                                native=next(r['candidates'] for r in display['result']['readings'] if r['reading']['id']==active)
+                                cards=page.locator('#result-body > [data-testid="construction-grid"] > [data-testid="candidate-card"]')
+                                assert len(native)==cards.count()==5
+                                assert [c.get_attribute('data-proposal-id') for c in cards.all()]==[c['id'] for c in native]
+                                assert all(c.get_attribute('data-provenance')=='CORPUS' for c in cards.all())
+                                swedish=[(i,c) for i,c in enumerate(native) if c['fill']=='Swedish']
+                                assert len(swedish)==1
+                                index,candidate=swedish[0];card=cards.nth(index)
+                                assert card.locator('h3').text_content()=='Swedish' and candidate['rank']==index+1
+                                assert candidate['final_form_fit']['state']=='pass' and candidate['final_form_fit']['head']['pos']=='ADJ'
+                                assert candidate['completed_head_kind_fit']['state']=='pass' and candidate['joint_slot_fit']['state']=='pass'
+                                assert any('Swedes' in p.get('text','') and p['canonical_page_id'].startswith('supplied_page_') for p in candidate['sources'])
+                                assert page.get_by_test_id('proposal-pool-order').count()==0
+                                assert page.get_by_test_id('input-context-candidate').count()==0
+                                assert page.get_by_test_id('study-primary-channel').count()==0
+                                card.get_by_test_id('candidate-detail').wait_for(state='visible')
+                                card.get_by_role('button',name='Routes',exact=True).wait_for(state='visible')
+                                score=page.locator('[data-score-candidate="'+candidate['id']+'"] [data-score-value]')
+                                assert float(score.get_attribute('data-score-value'))==candidate['terminal_scorecard']['score']
                             row['cases'].append(dict(case_id=saved['case']['case_id'],position=saved['study_slot'],gold=None,
                                 ordinary_native_workbench=True))
                         assert not private_requests,private_requests
@@ -619,7 +719,14 @@ def main():
                     assert not page.locator('#retrieval-paths-v6 select, [data-testid="trace-path-target"]').count()
                     assert page.get_by_test_id('plan-atom').count() == len(display['plan']['atoms'])
                     fills = page.locator('[data-testid="candidate-card"] h3').all_text_contents()
-                    assert len(fills) == len({text.casefold().strip() for text in fills}), 'Duplicate visible surfaces'
+                    if case['task']=='redaction' and display['result'].get('proposal_pool') is not None and display['result'].get('input_nomination') is None:
+                        active=page.locator('#case-view').get_attribute('data-reading')
+                        native=next(r['candidates'] for r in display['result']['readings'] if r['reading']['id']==active)
+                        cards=page.locator('#result-body > [data-testid="construction-grid"] > [data-testid="candidate-card"]')
+                        assert [c.get_attribute('data-proposal-id') for c in cards.all()]==[c['id'] for c in native[:5]]
+                        assert len({c['id'] for c in native})==len(native), 'Duplicate native IDs'
+                    else:
+                        assert len(fills) == len({text.casefold().strip() for text in fills}), 'Duplicate visible surfaces'
                     quotes = page.get_by_test_id('used-source-quote')
                     ascii_lower = str.maketrans('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')
                     quote_rows = []
@@ -638,7 +745,7 @@ def main():
                         source_id, quoted = quote_rows[0]
                         source = packet('/api/current/source-v6', dict(active_params, source_id=source_id))
                         source_page = source.get('page', source)
-                        assert_saved_source(saved,config,source_page,full_page=True)
+                        assert_saved_source(saved,config,source_page,full_page=True,execution=display,envelope=source)
                         assert digest(source_page['text']) == source_page.get('source_sha256', source_page.get('page_sha256'))
                         quotes.first.click()
                         page.locator('#detail-drawer[open] [data-testid="source-document"]').wait_for(state='visible', timeout=60000)

@@ -7,35 +7,29 @@ Inputs are the supplied questions or passages. Facts state what must be checked,
 From Facts To Sources
 BM25 searches the saved non-context Facts against eligible pages and extraction surfaces, rather than issuing the complete input as another search. Reciprocal-rank fusion combines lists using sum(1/(60 + rank)), first within search families and then across lexical and graph page rankings. Source-grounded matches seed graph navigation. Graph edges and hierarchy membership help locate passages; neither navigation nor a large retrieval score proves a Fact. Recorded lookup text and source endpoints below are taken from the saved assessment, not reconstructed as a search chronology.
 
-Inspect Each Fact
-Within the admitted Mosaic and Hypothesis documents, each Fact nominates its best lexical page per document. Inspection alternates among Facts before using remaining relevance-ranked pages. Every inspected page is compared with every Fact. Shared pages are inspected once, but may establish more than one Fact. Lexical nomination does not itself establish any assertion.
-
-The Five Proposed Fills
-The main Redaction list can combine corpus candidates and grammatical realizations of visible input wording. Evidence-backed corpus results come first, then partial evidence, then contextual suggestions. Within each tier, equal-family reciprocal-rank fusion adds 1/(60+rank) from each available nomination family. Exact ties prefer input context. Input-derived suggestions receive no corpus score or independent evidence vote. The original corpus scores and decisions remain available separately; the combined order is not a correctness probability.
-
 Read The Source-Owned Checks
 A passage must establish the required owner, predicate, arguments, time, polarity and attribution in the same relevant scope. A report of an action is not proof of its completion; a related episode is not the queried event. Required joins and qualifiers remain binding. Source fit helps order suggestions but cannot repair a missing requirement. Contextual and partial results remain visible; there is no claim that every case is solved.
 
 When A Main Clause Is Explicit
 An eligible, already-inspected raw source sentence can be checked even when extraction did not yield a candidate. This bounded check requires the Fact's exact visible wording and matching dependency roles in a positive past-tense main clause, not fuzzy paraphrase. An accepted safe finite concessive qualification remains in the full quotation, including its own negation if present; it is not stripped away. For this narrow check, negated main clauses, reported or nonfactive assertions, conditional framing and unsafe epistemic caveats do not qualify. Passing establishes source ascription only: what the source explicitly states, not independent world truth, canonical identity or an event join. This does not certify other scope-handling paths.
 
-Keep Qualifications Attached
-A complete source assertion is different from a report, belief, forecast or obligation. Unverified-report qualifications withhold factual credit. Other scope forms may remain unresolved; an apparently confident score is not a substitute for inspecting the whole quotation.
+Known Scope Limitation
+Some unverified-report tails can still receive a support label from existing scope handling. The narrow main-clause check is not the source of that known label and does not repair every scope-handling path. Labels below reproduce the saved assessment; they are not independent historical verification. Read the full source quotation, especially reporting, attribution and uncertainty qualifications. Rank and points cannot cure this limitation. This is a diagnostic workbench, not a universally certified entailment system.
 
 Understand Evidence And Fit Points
 Evidence class T is assigned by logical checks: 2 for evidence-backed suggestions, 1 for partial grounding with an established requirement, otherwise 0. Let S be support, O opposition, K contextual evidence and f source-owned fit. Then u=(S+f+0.5*K)/(1+O). The nine source/function checks contribute weights 256,128,64,32,16,8,4,2,1 to B; a separately verified contextual role attachment can contribute 512. W is 1 when B contains a positive functional cue other than type compatibility (16) or absence of a visible-name penalty (2), and 0 otherwise. points = 100*T + 40*W + 25*B/1023 + 35*u/(1+u). The three displayed parts are evidence-class points, source-function points (up to 65), and document-evidence/fit points (up to 35). The scale is 0 to 300 points, not a percentage or a correctness probability. The 40/25/35 division is a declared ordering choice, not statistical calibration. Close scores and genuine ties are retained.
 
 Count Documents, Not Repeated Quotations
-A page at recorded retrieval rank r receives weight 0.5+0.5/(1+log2(r)); an unrecorded rank receives 0.5. Within each candidate or Fact and each direction, only the largest contribution per document counts. Support, opposition and context remain separate. Fit f combines owned relation (.32), owned role (.16), source type (.16), focal-term fraction (up to .16), and visible-anchor cooccurrence (.20). Hypothesis and Mosaic retain Fact-wise support minus opposition; overall totals add Fact-wise indices, not independent-document votes across every Fact.
+A page at recorded retrieval rank r receives weight 0.5+0.5/(1+log2(r)); an unrecorded rank receives 0.5. Within each candidate or Fact and each direction, only the largest contribution per document counts. Support, opposition and context remain separate. Retained scorecards use their original source-type, focal-coverage and visible-anchor components. Refreshed delegation scorecards instead allow separately checked noun-to-adjective fit within the same .16 source-type allocation, balance focal and background coverage equally, and may use a better saved per-Fact BM25 position. Each quotation must retain its own source occurrence and fit. A literal group mention contributes contextual relevance, not proof of the withheld identity. Both definitions retain owned-relation (.32), owned-role (.16), lexical (.16) and visible-scope (.20) bounds, and the same outer points formula. The native score contract is recorded per assessment; historical scores are not rewritten. Hypothesis and Mosaic retain Fact-wise support minus opposition; overall totals add Fact-wise indices, not independent-document votes across every Fact.
 
 Keep Identity Claims Bounded
 Consolidation keeps the fullest already-checked grammatical wording only for the same exact source head and citation, input, reading and semantic decision. Raw variants and their own scores remain inspectable; alias scores are not added and requirements are not pooled. A common surname or graph allocation family does not identify a person. The May 23 Arias and March 29 Harmodio occurrences remain identity-unresolved and separate; their relationship is not certified by name similarity.
 
-Inspect Originals Without Changing Evidence
-Use a source quotation to open its exact transcription span and original document. Source IDs, dates, page hashes and character bounds remain attached to the raw wording. Line wrapping in this guide is presentation only. Eligible evidence is dated on or before the input source date. CIB uses the earlier or shared release; later-release inspection does not admit hidden text. Cable evidence retains CONFIDENTIAL and document-wide handling restrictions, and excludes the entire originating cable. Opening Origin or a later original is inspection, not new evidence.
+Two Fresh, Fourteen Retained
+This dataset combines two refreshed delegation native outputs with fourteen unchanged historical native results. Only the first delegation input qualifies for a corpus-derived Swedish main-five suggestion. The second is a completed fresh negative comparison, not a qualified public study; the extra control is retained but not promoted. Two refreshed outputs do not mean two successful studies. The retained fourteen rows were not rerun or revalidated against the new core. Each saved native keeps its original source policy, source bindings, scores and provenance. No all-sixteen-current-engine claim is made.
 
-Two Important Qualifications
-For Tehrani, an attested departure from the uniquely stated office does not establish that every Council membership or relationship ended. Wording that he had to make a statement expresses necessity, not a completed utterance; read the individual saved Fact results below. In the delegation comparison, added visible context explicitly supplies the Swedes clue. An input-derived Swedish suggestion has no corpus score or independent evidence vote, and the still-withheld identity remains unknown. A useful suggestion is not verified recovery.
+Recorded Source Views
+Each saved execution retains its recorded source-view policy, resource binding, quotations and provenance. The two refreshed study inputs use supplied_documents_inclusive for the registered complete later CIA edition. The fourteen retained executions keep their original source policies. This is an explicit corpus-availability change, not an earlier-only recovery claim. Inspect the recorded decisions and full source qualifications; source ascription and displayed points are not independent historical verification.
 
 1. CIB / Redaction
 Input source: CIA-RDP79T00975A003700200001-8; date: 1958-05-23.
@@ -442,15 +436,11 @@ Fact To Check
 Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation [MASKED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.
 
 Suggestions
-1. Swedish (input-derived context; not independent corpus evidence; no corpus score)
-2. Soviet (contextual; 52.3735 points)
-3. limited (contextual; 13.5649 points)
-4. future (contextual; 13.5649 points)
-5. large (contextual; 13.5649 points)
-
-Visible Input Clue
-A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare, including the assignment of nuclear weapons to ground division commanders.
-Recorded grammatical realization: Swedes -> Swedish. This is a contextual nomination, not an independent corpus witness.
+1. Soviet (contextual; 52.2481 points)
+2. Swedish (contextual; 14.1534 points)
+3. nuclear (contextual; 13.7008 points)
+4. conventional (contextual; 13.7008 points)
+5. limited (contextual; 13.5192 points)
 
 Recorded Lookup
 Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation [MASKED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.
@@ -476,16 +466,12 @@ Fact To Check
 The [REDACTION] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense.
 
 Suggestions
-1. high-level (contextual; 40.8911 points)
-1. Swedish (input-derived context; not independent corpus evidence; no corpus score)
-2. Soviet (contextual; 57.9433 points)
-3. Many (contextual; 56.9706 points)
-4. Western (contextual; 56.9146 points)
-5. disarmament (contextual; 56.1326 points)
-
-Visible Input Clue
-A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare, including the assignment of nuclear weapons to ground division commanders.
-Recorded grammatical realization: Swedes -> Swedish. This is a contextual nomination, not an independent corpus witness.
+1. high-level (contextual; 40.5708 points)
+1. Soviet (contextual; 58.1687 points)
+2. Western (contextual; 56.7567 points)
+3. Many (contextual; 56.7165 points)
+4. headed (contextual; 56.4833 points)
+5. disarmament (contextual; 56.0635 points)
 
 Recorded Lookup
 The [REDACTION] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense.

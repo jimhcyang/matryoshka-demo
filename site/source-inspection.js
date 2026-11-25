@@ -1,6 +1,7 @@
 // Presentation only. Native code-point spans and indexed PDF routes are the authority.
 import {currentPDFURL} from './local-decisions-v65.js';
 import pageLocators from './source-pdf-locators.js';
+import {isSuppliedSourcePage,registeredSuppliedPageInfo} from './saved-source-policy.js';
 
 export function exactSourceAnchor(text, proof) {
   const chars=Array.from(text);
@@ -67,15 +68,21 @@ export async function cibPDFPair({page,proof={},binding,caseId,config,base=globa
     throw Error('The PDF locator belongs to another source document.');
   const catalog=index??await loadSourcePDFIndex();
   if(!catalog?.entries)return [];
-  const hash=page.source_sha256||page.page_sha256,locator=pageLocators[page.canonical_page_id||page.id];
+  const registered=registeredSuppliedPageInfo(page);
+  if(isSuppliedSourcePage(page)&&!registered)throw Error('The supplied PDF source has no verified native registration context.');
+  const hash=page.source_sha256||page.page_sha256,locator=pageLocators[registered?.original_canonical_page_id||page.canonical_page_id||page.id];
   if(proof.page_sha256&&proof.page_sha256!==hash)throw Error('The PDF source hash differs from the citation.');
-  const paired=locator?.document_id===page.document_id&&[locator.source_sha256,locator.later_sha256].includes(hash)?locator:null;
+  // The registered full-page transcript can differ from an older excerpt.
+  // Its verified original canonical mapping and exact PDF/physical page bind
+  // alignment only; neither release text nor evidence eligibility is replaced.
+  const paired=locator?.document_id===page.document_id&&([locator.source_sha256,locator.later_sha256].includes(hash)||
+    registered&&locator[registered.release+'_page']===registered.physical_page)?locator:null;
   const result=[];
   for(const release of ['earlier','later']){
     const direct=pageNumber(proof[release+'_page']),stored=pageNumber(page[release+'_page']);
     const recorded=pageNumber(page[release+'_source_page']),aligned=pageNumber(paired?.[release+'_page']);
     const physical=page.source_page;
-    const source=physical&&typeof physical==='object'&&physical.release===release?
+    const source=registered?.release===release?registered.physical_page:physical&&typeof physical==='object'&&physical.release===release?
       pageNumber(physical.page??physical.physical_page):null;
     const numbers=[direct,stored,recorded,source,aligned].filter(value=>value!==null);
     if(new Set(numbers).size>1)throw Error('Conflicting recorded PDF page locators.');
@@ -91,6 +98,7 @@ export async function cibPDFPair({page,proof={},binding,caseId,config,base=globa
       if(published){route=catalogRoute;entry=published;scope='document-catalog';}
     }
     if(!entry||entry.mime!=='application/pdf'||!/^[a-f0-9]{64}$/.test(entry.sha256||''))continue;
+    if(registered?.release===release&&entry.sha256!==registered.pdf_ref.sha256)throw Error('The registered source PDF differs from its bound original file.');
     if(entry.encoding!=='identity'||!SHA.test(entry.wire_sha256||'')||entry.external_url||
         !/^data\/replays\/[a-f0-9]{64}\.pdf$/.test(entry.path||'')||entry.path.split('/').at(-1)!==entry.wire_sha256+'.pdf')
       throw Error('The PDF catalog entry is not a pinned local PDF asset.');
@@ -139,7 +147,9 @@ export async function appendCIBPDFPair(host,options) {
   button.setAttribute('aria-controls',views.id);
   const status=document.createElement('p');status.className='note';status.setAttribute('role','status');status.dataset.testid='source-pdf-status';
   const note=document.createElement('p');note.className='note';
-  note.textContent='Release comparison only. The later PDF is not additional evidence.';
+  const registered=registeredSuppliedPageInfo(options.page);
+  note.textContent=registered?'The original '+registered.release+' release is a registered corpus source in this execution. The other PDF is shown for release comparison; eligibility follows the recorded source policy.':
+    'Release comparison only. The later PDF is not additional evidence.';
   section.append(button,status,views,note);host.append(section);
   let controller=null,urls=[],observer=null,dialog=null,epoch=0;
   function hide(){

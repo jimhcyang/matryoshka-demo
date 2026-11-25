@@ -1,40 +1,81 @@
 {
+  "both_slots_successful": false,
   "cases": [
     {
       "case_id": "delegation_window_0a778cbe9fe92251c0a2fa5a",
       "native_checkpoint": {
-        "path": "phase/proposal_recovery_20261124/regression_cib_v1/delegation_window_0a778cbe9fe92251c0a2fa5a/native.json.gz",
-        "sha256": "b6d47e8e8364fb9310e3ad266edab14db01fcb139da1824dbbc936cb92c789da"
+        "path": "phase/corpus_delegation_20261124/delegation_v6/delegation_window_0a778cbe9fe92251c0a2fa5a/native.json.gz",
+        "sha256": "4aa7f8d37d319ceb242f4b9eb17a28b66618a4c4638ab5c8ce1d3ef948d5a466"
       },
-      "position": "first"
-    },
+      "position": "first",
+      "qualified": true
+    }
+  ],
+  "comparison_case_ids": [
+    "delegation_window_ad3f98e8db456d199146b68c"
+  ],
+  "comparison_cases": [
     {
       "case_id": "delegation_window_ad3f98e8db456d199146b68c",
       "native_checkpoint": {
-        "path": "phase/proposal_recovery_20261124/regression_cib_v1/delegation_window_ad3f98e8db456d199146b68c/native.json.gz",
-        "sha256": "2c67fb452e8f76e161d08f23e80917c44ba944183e71fde2da2696bff3759ab1"
+        "path": "phase/corpus_delegation_20261124/delegation_v6/delegation_window_ad3f98e8db456d199146b68c/native.json.gz",
+        "sha256": "df7809ea7edad26fc5518d149ba570cc5a3c46d332e35b356bfc613f4c8ecf4f"
       },
-      "position": "last"
+      "position": "last",
+      "qualified": false,
+      "role": "FRESH_NEGATIVE_COMPARISON_NOT_PUBLIC_STUDY"
     }
   ],
-  "context_suggestion_is_independent_corpus_recovery": false,
+  "corpus_availability_changed": true,
+  "corpus_only": true,
+  "fresh_comparison_cases": 1,
+  "fresh_native_cases": 2,
   "gold": null,
   "native_results_modified": false,
+  "public_study_case_ids": [
+    "delegation_window_0a778cbe9fe92251c0a2fa5a"
+  ],
+  "qualified_case_ids": [
+    "delegation_window_0a778cbe9fe92251c0a2fa5a"
+  ],
+  "qualified_study_cases": 1,
+  "retained_historical_cases": 14,
+  "source_gate_ref": {
+    "path": "phase/corpus_delegation_20261124/delegation_v6_source_gate.json",
+    "sha256": "8260ac06e35cf5748c9ff4de14cdd803c225ff71952701adcf7104af227addc6"
+  },
   "source_report_ref": {
-    "path": "phase/proposal_recovery_20261124/publication_checkpoint_v1/refinement_03875d139508d5123c703e3b/report.json",
-    "sha256": "6262b436e1e230f9611f759b7f20ef789305d507d55e4293f0ab8871e090660d"
+    "path": "phase/corpus_delegation_20261124/partial_study_tools/publication_v1/refinement_88526f21c7fe89d389f7cc6d/report.json",
+    "sha256": "d7c3d9ad3b8890c6f22ed4589c61191a1138e0a502c4ad34cb475b13f9bda237"
   },
   "source_view_policy": {
     "cable_classification": "CONFIDENTIAL",
     "cable_document_wide_handling_veto": true,
     "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
-    "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+    "cib_source_document": "EARLIER_OR_BOTH_OR_REGISTERED_PUBLIC_SUPPLIED_EDITION",
     "cutoff_role": "source_document_date",
     "date_relation": "<=",
-    "id": "source_day_inclusive",
-    "later_or_secret_version_admitted": false,
+    "id": "supplied_documents_inclusive",
+    "later_or_secret_version_admitted": true,
+    "ordinary_source_views_unchanged": true,
     "source_dates_or_document_ids_rewritten": false,
+    "supplied_document_registration_required": true,
+    "supplied_document_scope": "HASH_BOUND_REGISTERED_PUBLIC_CIB_EDITIONS_ONLY",
     "version": "trusted-corpus-source-view/1"
   },
+  "unpromoted_controls": [
+    {
+      "completion_ref": {
+        "path": "phase/corpus_delegation_20261124/delegation_v6/corpus_prefix_fb27a5571ae01b72c30e630a/completion.json",
+        "sha256": "6336fce760cdb3c25c3bc6f01317988b4b2bdb33fe483a79fc79bebe782e7c81"
+      },
+      "key": "corpus_prefix_fb27a5571ae01b72c30e630a",
+      "native_ref": {
+        "path": "phase/corpus_delegation_20261124/delegation_v6/corpus_prefix_fb27a5571ae01b72c30e630a/native.json.gz",
+        "sha256": "40d58067221ae5fd52801eb20df8c1ac5f489d428db887ba206aa2d64f67b775"
+      },
+      "published": false
+    }
+  ],
   "version": "delegation-native-workbench/1"
 }

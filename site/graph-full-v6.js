@@ -3077,7 +3077,7 @@ async function allowSavedStorySource(action,{landing=false,caseId}={}){
 
 async function openSavedWalkSource(proof,{caseInfo,config,resourceBinding}={}){
   if(!caseInfo||!proof?.canonical_page_id)throw Error('An exact saved source and case are required.');
-  const [{savedSourceScope,sourceScopeAllows},{canonicalGateJSON},access]=await Promise.all([
+  const [{savedSourceScope,sourcePagePolicyAllows,registeredSuppliedPageInfo,bindRegisteredSourceResponse},{canonicalGateJSON},access]=await Promise.all([
     import('./saved-source-policy.js'),import('./local-decisions-v65.js'),savedStorySourceAccess(caseInfo.case_id)]);
   const row=access?.row,saved=row?.configurations?.[config];
   if(!saved||canonicalGateJSON(row.case)!==canonicalGateJSON(caseInfo)||canonicalGateJSON(row.resource_binding)!==canonicalGateJSON(resourceBinding))throw Error('The source request changes its released case, execution or resource.');
@@ -3090,16 +3090,25 @@ async function openSavedWalkSource(proof,{caseInfo,config,resourceBinding}={}){
     const params=new URLSearchParams({case_id:caseInfo.case_id,config,source_id:proof.canonical_page_id});
     for(const key of ['resource_id','registry_sha256','index_sha256'])if(resourceBinding?.[key])params.set(key,resourceBinding[key]);
     const data=await currentGraphJSON('/api/source-v6?'+params),page=data.page||data;
+    if(scope.source_view_policy.id==='supplied_documents_inclusive'){
+      const condition=await currentGraphJSON('/api/condition-v6?'+new URLSearchParams({case_id:caseInfo.case_id,config}));
+      const record=condition.configurations?.[config];
+      if(!record||canonicalGateJSON(condition.case)!==canonicalGateJSON(caseInfo)||
+          canonicalGateJSON(record.native_checkpoint)!==canonicalGateJSON(saved.native_checkpoint))throw Error('The supplied source differs from its saved native execution.');
+      await bindRegisteredSourceResponse(data,{record,caseInfo,binding:resourceBinding});
+    }
     const reader=await import('./reader-casing.js');await reader.loadReaderCasing();
     const digest=async text=>{const canonical=JSON.stringify(text).replace(/[\u007f-\uffff]/g,c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0'));return [...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonical)))].map(v=>v.toString(16).padStart(2,'0')).join('');};
-    const eligible=p=>p.document_id===proof.document_id&&p.date===proof.date&&sourceScopeAllows(p,scope)&&p.permitted!==false&&p.visibility!=='later'&&!(p.handling||[]).includes('NOFORN')&&(caseInfo.corpus==='cib'||p.classification==='CONFIDENTIAL');
+    const eligible=p=>p.document_id===proof.document_id&&p.date===proof.date&&sourcePagePolicyAllows(p,caseInfo,scope)&&
+      (caseInfo.corpus==='cib'||p.classification==='CONFIDENTIAL');
     if(!eligible(page)||(page.id||page.canonical_page_id)!==proof.canonical_page_id||await digest(page.text)!==proof.page_sha256||!Number.isInteger(proof.start)||!Number.isInteger(proof.end)||proof.start<0||proof.end<=proof.start||Array.from(page.text).slice(proof.start,proof.end).join('')!==proof.text)throw Error('The exact source proof or eligibility check failed.');
-    const pages=Array.isArray(data.document_pages)?data.document_pages:[page],seen=new Set();let html='<p>'+esc(proof.document_id)+' / '+esc(proof.date)+'</p>';
+    const registered=registeredSuppliedPageInfo(page),pages=(Array.isArray(data.document_pages)?data.document_pages:[page])
+      .filter(p=>!registered||registeredSuppliedPageInfo(p)?.edition===registered.edition),seen=new Set();let html='<p>'+esc(proof.document_id)+' / '+esc(proof.date)+'</p>';
     for(const p of pages){
       const id=p.id||p.canonical_page_id;if(seen.has(id))continue;seen.add(id);
       if(!eligible(p)||await digest(p.text)!==(p.source_sha256||p.page_sha256))throw Error('An additional source segment failed verification.');
-      const selected=id===proof.canonical_page_id,chars=Array.from(reader.readerText(p.text,caseInfo.corpus)),number=p.earlier_page||p.physical_page;
-      html+='<h3>'+(number?'Page '+esc(number):'Source segment')+'</h3><pre>'+(selected?esc(chars.slice(0,proof.start).join(''))+'<mark class="source-quotation" data-original-text="'+esc(proof.text)+'">'+esc(chars.slice(proof.start,proof.end).join(''))+'</mark>'+esc(chars.slice(proof.end).join('')):esc(chars.join('')))+'</pre>';
+      const selected=id===proof.canonical_page_id,chars=Array.from(reader.readerText(p.text,caseInfo.corpus)),info=registeredSuppliedPageInfo(p),number=info?.physical_page||p.earlier_page||p.physical_page;
+      html+='<h3>'+(info?esc(info.release)+' edition / ':'')+(number?'Page '+esc(number):'Source segment')+'</h3><pre>'+(selected?esc(chars.slice(0,proof.start).join(''))+'<mark class="source-quotation" data-original-text="'+esc(proof.text)+'">'+esc(chars.slice(proof.start,proof.end).join(''))+'</mark>'+esc(chars.slice(proof.end).join('')):esc(chars.join('')))+'</pre>';
     }
     if(!seen.has(proof.canonical_page_id))throw Error('The selected source is missing from its document inventory.');
     if(epoch!==guideSourceEpoch)return;
@@ -3704,7 +3713,7 @@ async function loadSavedGuide(params) {
     const [{savedSourceScope,sourceScopesEqual},access]=await Promise.all([import('./saved-source-policy.js'),savedStorySourceAccess(selection.case_id)]);
     const row=access?.row,saved=row?.configurations?.[selection.config];
     if(!saved)throw Error('The saved guide has no bound released execution.');
-    if(saved.source_view_policy?.id==='source_day_inclusive'){
+    if(['source_day_inclusive','supplied_documents_inclusive'].includes(saved.source_view_policy?.id)){
       for(const key of ['guide_case','guide_arm','guide_reading','guide_candidate','guide_route'])
         if(params.getAll(key).length>1)throw Error('Conflicting saved-guide selectors.');
       const [{validateTrace},{traceSourceScope},{canonicalGateJSON},{savedGuideWalkURL}]=await Promise.all([

@@ -22,7 +22,10 @@ Read the [methods and case guide](https://jimhcyang.github.io/matryoshka-demo/do
 
 The [KG interaction addendum](https://jimhcyang.github.io/matryoshka-demo/docs/kg-patch-addendum.pdf) covers view-local node sizes, neighborhood rings and motion, synchronized paired controls and source-visible Redacted Slots. All 28,201 CIB slot locations are preserved; Iran and Vietnam have no observed mask markers in their bound exports. Slot links are navigation only, not hidden identities or case evidence. Historical native packets are preserved separately from the current executions.
 
-[Download the contained code snapshot](https://jimhcyang.github.io/matryoshka-demo/downloads/matryoshka-code.zip) or open the [Swedish evidence-view comparison](https://jimhcyang.github.io/matryoshka-demo/swedish-study.html). The code snapshot records the saved engines and viewing tools; it does not bundle the private research workspace or silently replace historical executions with the current engine.
+[Download the contained code snapshot](https://jimhcyang.github.io/matryoshka-demo/downloads/matryoshka-code.zip) or open the [withheld delegation study](https://jimhcyang.github.io/matryoshka-demo/swedish-study.html). The study retrieves a registered complete later-release document and derives candidate wording from its quotations. The withheld identity remains unknown. The code snapshot preserves current and historical engine provenance separately; it excludes credentials and private Live history.
+
+The [comparison record](https://jimhcyang.github.io/matryoshka-demo/docs/delegation-study-results.txt) includes the unsuccessful controls as well as the selected result. [Scoring notes](https://jimhcyang.github.io/matryoshka-demo/docs/source-bound-scoring.md) describe the source and ranking changes.
+The [registered source package](https://jimhcyang.github.io/matryoshka-demo/downloads/registered-cib-full-source.zip) contains the complete 17-page later edition, its transcripts and provenance checks.
 
 ## Static replay and provenance
 

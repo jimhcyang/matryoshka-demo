@@ -4,10 +4,10 @@ import {direction as humanDirection,displayText,coverage as recordedCoverage,loc
 import {decisionLabel as nativeDecisionLabel,packetFor,unitFor,overviewFor,reviewDisclosure,guideDisclosure,routeProvenance,exactGateReview,verdictSummary,exactOriginAnchors,sidebarDecisionSummary,decisionSummaryFor,preferredReading,canonicalGateJSON,isCounterhypothesis,presentationDecisionReview,presentationTitle,hasRequestedAnalystDigest,hypothesisReadout,assertionDecision,currentResourceURL,verifyCurrentResourceResponse,readingExplanation,currentPDFURL,currentReportStatusBadge,publishedConditionStatus,readingLabel} from "./local-decisions-v65.js";
 import {preparePostrunReview,verifyPostrunReview} from "./postrun-review-v74.js";
 import {mountSavedRoutes,uniqueProofs,decisionProofs,factPresentationProofs,digestProofs,renderScoreChart,renderTerminalScoreCards,renderIdentityConsolidation,studyCompanionCases,workbenchSourceScope,recordedAtomLinks,guideRoutes,groupDuplicateFills,readerEvidenceState,readerRedactionVerdict} from "./workbench-visuals.js";
-import {computeDecisionScores,formatDecisionScore} from './decision-scores.js';
-import {studyInputPrimary,studyInspection} from './delegation-entry.js';
+import {computeDecisionScores,formatDecisionScore,verifyContextualScoreBindings} from './decision-scores.js';
+import {studyInputPrimary,studyInspection,loadStudyPublication} from './delegation-entry.js';
 import {counterPolicyNotice} from './counter-policy-ui.js';
-import {sourceScopeAllows} from './saved-source-policy.js';
+import {sourceScopeAllows,sourcePagePolicyAllows,sourcePolicyCaption,isSuppliedSourcePage,registeredSuppliedPageInfo,bindRegisteredSourceResponse} from './saved-source-policy.js';
 import {mountEvidenceMap} from './evidence-map.js';
 import {loadSourceLookups} from './source-lookups-v1.js';
 import {loadReaderCasing,readerText} from './reader-casing.js';
@@ -15,7 +15,7 @@ import {exactSourceAnchor,focalReferenceFromOrigin,appendCIBPDFPair,cibPDFPair} 
 import originPageLocators from './source-pdf-locators.js';
 import {inputOriginPDFLocators} from './input-origin-locators.js';
 import {nativeControllerWithholdingViews,controllerWithholdingEmptyText,renderControllerWithholding,renderControllerWithheldAudit} from './controller-withholding-ui.js';
-import {verifyProposalPool,preferredProposalReading,proposalSourceLabel,renderProposalOrder,renderSuppliedProposalTrace} from './proposal-pool.js';
+import {verifyProposalPool,corpusOnlyProposalExecution,preferredProposalReading,proposalSourceLabel,renderProposalOrder,renderSuppliedProposalTrace} from './proposal-pool.js';
 await loadReaderCasing();
 const $ = selector => document.querySelector(selector);
 const list = value => Array.isArray(value) ? value : [];
@@ -318,7 +318,7 @@ function link(text,path,className="") { const url=localURL(path);return el("a",t
 function currentBinding(caseId,corpus){
   const id=caseId||(state.row?.case&&state.row.case.corpus===corpus?state.row.case.case_id:null);
   const row=id?catalogCases().find(value=>value.case.case_id===id):null;
-  const metadata=row?.current_resource_metadata??state.report?.current_resource_metadata??(isCurrentPublication()&&row?.current_resource_execution===true?row.resource_binding:undefined);
+  const metadata=(row?.current_resource_execution===true?row.resource_binding:undefined)??row?.current_resource_metadata??state.report?.current_resource_metadata;
   const binding=metadata?.by_corpus?metadata.by_corpus[corpus]:metadata;
   if(binding?.corpus&&binding.corpus!==corpus)throw Error("The current source resource belongs to another corpus.");
   return binding;
@@ -360,7 +360,12 @@ async function readJSON(path,{hash,signal,captureHash=false}={}) {
   if(hash&&(!/^[a-f0-9]{64}$/i.test(hash)||byteHash!==hash.toLowerCase()))throw Error("Saved data failed its integrity check. No result is shown.");
   let value;try{value=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(bytes));}catch{throw Error("The server did not return a readable saved record.");}
   if(captureHash&&value&&typeof value==='object')publicationByteHashes.set(value,byteHash);
-  return verifyCurrentResourceResponse(url,value);
+  const verified=verifyCurrentResourceResponse(url,value);
+  if(url.pathname==='/api/current/source-v6'&&[verified.page||verified,...list(verified.document_pages)].some(isSuppliedSourcePage)){
+    if(state.row?.case.case_id!==url.searchParams.get('case_id')||!state.saved)throw Error('The supplied source has no matching loaded native execution.');
+    await bindRegisteredSourceResponse(verified,{record:state.saved,caseInfo:state.row.case,binding:currentBinding(state.row.case.case_id,state.row.case.corpus)});
+  }
+  return verified;
 }
 function caseQuery(extra={}) { return new URLSearchParams({case_id:state.row.case.case_id,config:ARMS[state.arm].key,...extra}); }
 function graphURL({node_id,source_id,focus_graph_id,focus_hierarchy_id}={}) {
@@ -517,7 +522,7 @@ function currentReading() { const rows=readingRows();return rows.find(r=>r.readi
 function candidates() {
   const rows=list(currentReading()?.candidates);
   const version=(state.saved?.result?.terminal_scores??state.saved?.terminal_scores)?.version;
-  return (['terminal-evidence-fit/5','terminal-evidence-fit/6'].includes(version)?rows:groupDuplicateFills(rows)).slice(0,5);
+  return (['terminal-evidence-fit/5','terminal-evidence-fit/6','terminal-evidence-fit/7'].includes(version)?rows:groupDuplicateFills(rows)).slice(0,5);
 }
 function flowItems() {
   if(state.row.case.task==="redaction")return candidates();
@@ -572,6 +577,7 @@ async function chooseCase(row,{push=true,reading,candidate,scroll=false}={}) {
     }
     if(!state.saved?.result&&!recordedFailure(state.saved)||pendingRecord(state.saved)||pendingRecord(state.saved?.result)||pendingRecord(detail)){state.pending=publicationNote(state.saved)||publicationNote(detail)||`No completed v6 arm ${arm} execution is published. No older run or other arm is substituted.`;state.saved=null;}
     if(state.saved)await prepareControllerAudit(state.saved,state.row.case);
+    if(state.saved)await verifyContextualScoreBindings(state.saved,state.row.case,value=>sha256(new TextEncoder().encode(canonicalGateJSON(value))));
     if(state.saved)await prepareInputContext(state.saved,state.row.case);
     if(state.saved)await prepareProposalPool(state.saved,state.row.case);
     if(epoch!==state.epoch)return;
@@ -687,7 +693,9 @@ function renderReserveCatalogue(host) {
 function renderQuestion() {
   const c=state.row.case,s=stage("01",title(state.row),TASKS[c.task]);
   s.outer.querySelector(".stage-card > header h2").replaceWith(el("h1",title(state.row),{class:"question-title"}));
-  const companions=studyCompanionCases(state.row,catalogCases());
+  const companions=state.studyPublication?state.studyPublication.caseIds.length>1&&state.studyPublication.caseIds.includes(c.case_id)?
+    state.studyPublication.caseIds.map(id=>catalogCases().find(row=>row.case.case_id===id)).filter(Boolean):[]:
+    studyCompanionCases(state.row,catalogCases());
   if(companions.length){
     const tabs=el('nav',null,{class:'study-case-tabs','aria-label':'Focal gap','data-testid':'study-case-tabs'});
     for(const row of companions)tabs.append(el('a',row.study_slot==='first'?'First gap':'Last gap',{
@@ -711,7 +719,7 @@ function renderQuestion() {
     if(livePacket){openDrawer('Origin','Live input provenance',box(appendInputView(el('p',null,{class:'cue','data-testid':'live-input-origin'}),c.query,{focalMarker:c.focal_marker}),fields([['As of',c.date],['Declared origin',c.document_id,true]]),note('Entered in the Live form. No historical origin transcription or hidden answer was supplied.')));return;}
     if(!allowPrivileged(()=>$('#stage-01 [data-testid=origin-open]')?.click()))return;
     if(attachment.missing){openDrawer("Origin not attached","Input provenance",box(note("No verified origin attachment is published. No source is substituted."),note(c.query)));return;}
-    openDrawer("Origin","Input provenance / excluded from evidence",note("Verifying the saved origin..."));
+    openDrawer("Origin",originEvidenceKicker(),note("Verifying the saved origin..."));
     const epoch=state.drawerEpoch;
     try{const data=await auditedOrigin(c,state.reference,context);if(epoch===state.drawerEpoch&&$("#detail-drawer").open)originDrawer(data);}catch(error){if(epoch===state.drawerEpoch)$("#detail-body").replaceChildren(note(error.message,"error-card"));}
   },"",{"data-testid":"origin-open"}));
@@ -975,7 +983,9 @@ function originPDF(data,{segment=null}={}) {
         pdf.dataset.release=item.release;pdf.dataset.pdfPage=String(item.page);pdf.dataset.documentId=item.document_id;pdf.dataset.pdfSha256=item.sha256;
         host.append(pdf);
       }
-      host.append(note(links.length?'Original-document provenance only. Opening the later PDF does not admit it as evidence.':'No verified PDF page mapping is published. No page or document is substituted.'));
+      host.append(note(links.length?(selectedSourceScope(c).source_view_policy.id==='supplied_documents_inclusive'?
+        'Original-document provenance only. Corpus admission is determined separately by the execution\'s registered source policy.':
+        'Original-document provenance only. Opening the later PDF does not admit it as evidence.'):'No verified PDF page mapping is published. No page or document is substituted.'));
       if(supplement&&links.length){host.dataset.locatorVersion=supplement.version;host.dataset.locatorAuditSha256=supplement.audit_sha256;host.dataset.sourceTargetId=supplement.source_target_id;}
       if(data.source_mapping?.kind==='withholding_notice_block')host.append(note('The earlier page is a withholding notice, not a same-content page.'));
     }catch(error){host.replaceChildren(note(error.message+' No PDF is substituted.','notice'));}
@@ -1038,12 +1048,13 @@ function originMappingDetails(data) {
 function originDrawer(data) {
   const transcription=data.full_transcription||data;
   if(data.query_kind){originKinds.set(state.row.case.case_id,data.query_kind);refreshRailQuestionKind(state.row);}
-  const body=box(note(data.notice,"notice"),fields([["Document",data.document_id,true],["Source",data.source_id,true],["Recorded classification",data.classification],["Source category",data.source_category,true],["Display scope",transcription.scope]]),note(data.focal_still_withheld===true?"Pinned masked projection and display-segment hashes verified; raw-source coordinates remain separately recorded. No hidden answer or revealed transcription is supplied. This is input provenance, not evidence.":"Original transcript hashes and exact recorded offsets verified. This input-origin attachment is provenance, not evidence or independent historical confirmation.","verified"));
+  const registeredOrigin=state.row.case.corpus==='cib'&&selectedSourceScope(state.row.case).source_view_policy.id==='supplied_documents_inclusive';
+  const body=box(note(registeredOrigin?'Input provenance. Corpus citations appear under Sources.':data.notice,"notice"),fields([["Document",data.document_id,true],["Source",data.source_id,true],["Recorded classification",data.classification],["Source category",data.source_category,true],["Display scope",transcription.scope]]),note(data.focal_still_withheld===true?"Pinned masked projection and display-segment hashes verified; raw-source coordinates remain separately recorded. No hidden answer or revealed transcription is supplied. This is input provenance, not evidence.":"Original transcript hashes and exact recorded offsets verified. This input-origin attachment is provenance, not evidence or independent historical confirmation.","verified"));
   if(data.warning)body.append(note(data.warning,"origin-category-warning"));
   const audit=el('details',null,{class:'origin-audit-details'});audit.append(el('summary','Provenance details / source verification'),
     fields([['Derivation',data.derivation],['Canonical unit / raw-body audit verified',data.unit_verified],['Secret-derived input certified by this source audit',data.secret_derived],['Recorded construction',data.query_kind,true]]),
-    note(data.source_review||'Source mapping is not independent historical validation.'),note(data.scope),note('Source proof SHA-256: '+data.proof_sha256,'proof-hash'));body.append(audit);
-  const scope=el('details');scope.append(el('summary','Input scope and saved inventory'),fields([['Collection',CORPORA[state.row.case.corpus]],['Task',TASKS[state.row.case.task]],['Published case inventory',`${catalogCases().length} cases`,true]]),note(queryKindNotice(state.row)||'Original input provenance; not eligible result evidence.'),note(GRAPH_SCOPE),note(sourceScopeText()));if(state.saved)scope.append(button('Saved prompts',promptDrawer));
+    note(data.source_review||'Source mapping is not independent historical validation.'),note(registeredOrigin?'Input provenance. Corpus citations appear under Sources.':data.scope),note('Source proof SHA-256: '+data.proof_sha256,'proof-hash'));body.append(audit);
+  const scope=el('details');scope.append(el('summary','Input scope and saved inventory'),fields([['Collection',CORPORA[state.row.case.corpus]],['Task',TASKS[state.row.case.task]],['Published case inventory',`${catalogCases().length} cases`,true]]),note(registeredOrigin?'Input provenance. Corpus citations appear under Sources.':queryKindNotice(state.row)||'Original input provenance; not eligible result evidence.'),note(GRAPH_SCOPE),note(sourceScopeText()));if(state.saved)scope.append(button('Saved prompts',promptDrawer));
   const caseControl=originalCaseControl(body);if(caseControl)scope.append(caseControl);body.append(scope);
   const mapping=originMappingDetails(data);if(mapping)body.append(mapping);
   const anchors=exactOriginAnchors(data);
@@ -1063,7 +1074,7 @@ function originDrawer(data) {
   if(mask&&!mask.disabled&&data.reveal_available!==false)body.append(button(state.reference?'Hide focal origin reference':'Explicitly reveal focal origin reference',()=>{
     toggleReference();$('#stage-01 [data-testid=origin-open]')?.click();
   },'',{'data-testid':'origin-reveal'}));
-  openDrawer("Origin","Input provenance / excluded from evidence",body);
+  openDrawer("Origin",originEvidenceKicker(),body);
   scrollToSource();
 }
 function transcriptDocument(text,anchors,segments,{testid,sourceId,documentId,separators=[]}={}){
@@ -1405,8 +1416,9 @@ function renderPaths(){
 }
 function renderVerdictStrip(){
   const summary=verdictSummary(state.saved,state.row.case,state.reading),task=state.row.case.task;
-  const poolPresent=task==='redaction'&&state.saved.result?.proposal_pool!=null,poolLead=currentProposalReading()?.proposals[0];
-  const legacyPrimary=studyInputPrimary(state.saved,state.row.case,state.row,inputContextCache.get(state.saved)?.view,state.reading);
+  const corpusOnly=corpusOnlyProposalExecution(state.saved,proposalPoolCache.get(state.saved)?.view);
+  const poolPresent=task==='redaction'&&state.saved.result?.proposal_pool!=null&&!corpusOnly,poolLead=poolPresent?currentProposalReading()?.proposals[0]:null;
+  const legacyPrimary=corpusOnly||state.saved.result?.input_nomination==null?null:studyInputPrimary(state.saved,state.row.case,state.row,inputContextCache.get(state.saved)?.view,state.reading);
   const primary=poolPresent?(poolLead?.proposal.provenance==='INPUT'?{available:true,fill:poolLead.proposal.fill,channel:'input_nomination'}:null):legacyPrimary;
   const hero=el('section',null,{class:'construction-verdict verdict-strip','data-tone':primary?'context':summary.tone,'data-testid':'compact-verdict','aria-label':'Verdict','data-primary-channel':primary?.channel});
   const compatibilityEmpty=emptyControllerShortlist();
@@ -1611,7 +1623,8 @@ function renderResultBody(){
   const host=$("#result-body");if(!host||!state.saved)return;host.replaceChildren();
   host.dataset.readingId=state.reading;
   const summary=verdictSummary(state.saved,state.row.case,state.reading),task=state.row.case.task;
-  if(task==='redaction'&&state.saved.result?.proposal_pool!=null){renderProposalPoolResult(host);return;}
+  if(task==='redaction'&&state.saved.result?.proposal_pool!=null&&
+    (state.saved.result.input_nomination?.readings?.some(row=>row.nominations?.length)||!corpusOnlyProposalExecution(state.saved,proposalPoolCache.get(state.saved)?.view))){renderProposalPoolResult(host);return;}
   const items=task==='redaction'?candidates():list(state.saved.result?.atoms).filter(a=>summary.units.some(u=>u.id===a.id));
   host.append(el('div',null,{id:'terminal-decision-scores','data-testid':'terminal-decision-scores'}));
   if(state.reading){const rows=readingRows(),index=rows.findIndex(row=>row.reading.id===state.reading);host.append(el("p",readingLabel(rows[index]?.reading||{},index+1),{class:"scope-line","data-testid":"active-reading"}));}
@@ -1620,7 +1633,7 @@ function renderResultBody(){
   const grid=el("div",null,{class:task==='redaction'?"construction-grid":"atom-mosaic","data-testid":"construction-grid"});
   for(const [index,item] of items.entries()){
     const unit=newDecision(item),readout=task==='redaction'?(readerEvidenceState(unit?.status)||{kind:'unresolved',label:decisionLabel(unit)}):assertionDecision(unit,task);
-    const card=el("article",null,{class:"construction-card","data-testid":task==='redaction'?"candidate-card":"result-atom","data-proposal-id":item.id,"data-atom-id":task==='redaction'?null:item.id,"data-kind":readout.kind});
+    const card=el("article",null,{class:"construction-card","data-testid":task==='redaction'?"candidate-card":"result-atom","data-proposal-id":item.id,"data-provenance":task==='redaction'?'CORPUS':null,"data-atom-id":task==='redaction'?null:item.id,"data-kind":readout.kind});
     card.append(el("span",task==='redaction'?String(index+1).padStart(2,"0"):item.id,{class:"eyebrow"}),el("h3",readable(item.fill||item.text||item.source_quote||item.id)),badge(readout.label));
     if(task==='redaction'){const identity=renderIdentityConsolidation(item);if(identity)card.append(identity);}
     if(task!=='redaction'){
@@ -1711,11 +1724,11 @@ function renderTerminalScores(host=$('#terminal-decision-scores')){
     host.replaceChildren(renderTerminalScoreCards(state.saved,scores,{formatScore:formatDecisionScore,formatText:readable,readingId:state.reading,
       readingTitle:r=>readingLabel(r,readingRows().findIndex(row=>row.reading.id===r.id)+1),onExplain:item=>{
         const body=box(note('Saved arithmetic only; source judgments and citations retain their recorded scope.'));
-        const candidate=Number.isFinite(item.evidence_tier),sourcePoints=scores.version==='terminal-evidence-fit/6',points=candidate&&['terminal-evidence-fit/4','terminal-evidence-fit/5','terminal-evidence-fit/6'].includes(scores.version);
+        const candidate=Number.isFinite(item.evidence_tier),sourcePoints=['terminal-evidence-fit/6','terminal-evidence-fit/7'].includes(scores.version),points=candidate&&['terminal-evidence-fit/4','terminal-evidence-fit/5','terminal-evidence-fit/6','terminal-evidence-fit/7'].includes(scores.version);
         body.append(fields([[points?'Ranking points':candidate?'Raw priority index':'Signed evidence index',formatDecisionScore(item.score)],['Recorded units',item.score_units||'Index'],['Evidence tier',item.evidence_tier]]));
         if(item.formula)body.append(heading('Saved formula'),el('pre',item.formula,{class:'raw-record'}));
         body.append(note(!candidate?'Fact-wise support, opposition and context totals from the saved contributions. These are evidence indices, not candidate points, independent votes or correctness probabilities.':sourcePoints?
-          'Native v6 ranking points: 100 per logical evidence tier, 40 for a source nomination cue, up to 25 from the source-function band and 35 evidence/fit points. A nomination cue is not a factual-support certificate or correctness confidence.':scores.version==='terminal-evidence-fit/5'?
+          'Saved ranking points: 100 per logical evidence tier, 40 for a source nomination cue, up to 25 from the source-function band and 35 evidence/fit points. A nomination cue is not a factual-support certificate or correctness confidence.':scores.version==='terminal-evidence-fit/5'?
           'Native v5 ranking points: 100 per logical evidence tier, up to 65 source-priority points and 35 evidence/fit points. Not correctness confidence; rank and pool position add no points.':scores.version==='terminal-evidence-fit/4'?
           'Evidence/fit points on the saved 0 to 300 scale, not a probability or confidence in the missing words. Evidence tiers are preserved; accumulated evidence and fit order candidates within a tier. No rank rescaling is applied.':
           'Saved evidence/fit indices, not probabilities or correctness confidence. Candidate rank and the native evidence decision are separate.'));
@@ -1835,7 +1848,9 @@ function renderDiffusionAudit() {
   const documents=el("section",null,{class:"flow-sidecard document-panel",id:"document-panel-v6"});documents.append(el("h3","Relevant documents"),el("div",null,{id:"flow-documents-v6"}));
   const route=el("section",null,{class:"flow-sidecard"});route.append(el("h3","Relevance is not a verdict"),note("The search clues contribute to the same saved source search. Choosing an interpretation changes the displayed targets, not the recorded calculation."),note("High relevance does not mean that a source supports the assertion or that a proposed fill is correct."));
   const calculation=el("details");calculation.append(el("summary","How source relevance is calculated"),diffusionFormula(),note("Saved numerical transport combines input matches and graph transitions; it is not a correctness probability."));route.append(calculation);
-  const policy=el("section",null,{class:"flow-sidecard"});policy.append(el("h3","One pinned source view"),note(sourceScopeText()),note(state.row.case.corpus==="cib"?"Earlier-visible CIB source material only.":"Bound CONFIDENTIAL cable evidence view only."),note("Identity and hierarchy assignments are retrospective. Display and inspection limits are not corpus completeness."));
+  const policy=el("section",null,{class:"flow-sidecard"});policy.append(el("h3","One pinned source view"),note(sourceScopeText()),note(state.row.case.corpus==="cib"?
+    selectedSourceScope(state.row.case).source_view_policy.id==='supplied_documents_inclusive'?'Registered full-document editions retain their original release and historical markings.':'Earlier-visible CIB source material only.':
+    "Bound CONFIDENTIAL cable evidence view only."),note("Identity and hierarchy assignments are retrospective. Display and inspection limits are not corpus completeness."));
   aside.append(documents);grid.append(host,aside);
   s.body.append(note(sourceScopeText()+" Relevance is not factual support."),button("Source scope and display limits",()=>openDrawer("Source scope and relevance","Saved source boundaries, not confidence",box(route,policy))),grid);return s.outer;
 }
@@ -2679,7 +2694,7 @@ async function sourceDrawer(value,{back}={}) {
     if(typeof page.text!=="string"||(page.canonical_page_id||page.id)!==proof.canonical_page_id)throw Error("The source identity does not match the saved citation.");
     if(!sourceWithinScope(page,c))throw Error("This page violates the selected case's source cutoff or origin policy.");
     if(proof.document_id&&proof.document_id!==page.document_id||proof.date&&proof.date!==page.date)throw Error("The source document or date differs from the saved quotation.");
-    if(page.permitted===false||page.visibility==="later"||c.corpus!=="cib"&&page.classification&&page.classification!=="CONFIDENTIAL"||list(page.handling).includes("NOFORN"))throw Error("This page is outside the bound evidence policy.");
+    if(!sourcePagePolicyAllows(page,c,selectedSourceScope(c)))throw Error("This page is outside the bound evidence policy.");
     const pageHash=await verifySourcePage(page,c);
     const additional=[],seen=new Map([[proof.canonical_page_id,pageHash]]);
     for(const other of list(data.document_pages)){
@@ -2698,19 +2713,23 @@ async function sourceDrawer(value,{back}={}) {
     if(epoch!==state.drawerEpoch||!$("#detail-drawer").open)return;
     const body=box(el('p',`${page.title||page.document_id} / ${page.date}`,{class:'source-document-meta'}));
     if(proof.inspection_only)body.append(note('Retrieved and inspected source. Search relevance and exact quotation verification do not establish factual support or candidate acceptance. Additional supplied pages are provenance only; inspection is not implied.','notice'));
-    const technical=el('details',null,{class:'source-technical'});technical.append(el('summary','Source details'),fields([["Document",page.document_id,true],["Source date",page.date],["View",c.corpus==="cib"?"Earlier-visible CIB":"Bound CONFIDENTIAL evidence"],["Canonical page",proof.canonical_page_id,true]]),note(verified?'Exact quotation and source hash verified.':'Source hash verified; no localized quotation was supplied.'));
+    const registered=registeredSuppliedPageInfo(page);
+    const technical=el('details',null,{class:'source-technical'});technical.append(el('summary','Source details'),fields([["Document",page.document_id,true],["Source date",page.date],["View",registered?'Registered full-document edition / '+registered.release:c.corpus==="cib"?"Earlier-visible CIB":"Bound CONFIDENTIAL evidence"],["Canonical page",proof.canonical_page_id,true]]),note(verified?'Exact quotation and source hash verified.':'Source hash verified; no localized quotation was supplied.'));
     const caseControl=originalCaseControl(body);if(caseControl)technical.append(caseControl);
-    technical.append(link("View source on KG",graphURL({source_id:proof.canonical_page_id}),"button"),note(Array.isArray(data.document_pages)?`${additional.length+1} independently verified supplied segments. This inventory does not certify original-format completeness.`:'Only one source segment is supplied; other pages are unavailable.'));
+    if(!registered)technical.append(link("View source on KG",graphURL({source_id:proof.canonical_page_id}),"button"));
+    else technical.append(note('Registered document-to-excerpt provenance. No semantic graph node or edge is inferred for this edition page.'));
+    technical.append(note(Array.isArray(data.document_pages)?`${additional.length+1} independently verified supplied segments. This inventory does not certify original-format completeness.`:'Only one source segment is supplied; other pages are unavailable.'));
     body.append(technical);
-    const supplied=list(data.document_pages),ordered=supplied.length?supplied.filter((p,i,all)=>all.findIndex(q=>(q.canonical_page_id||q.id)===(p.canonical_page_id||p.id))===i):[page];
+    const supplied=list(data.document_pages).filter(p=>!registered||registeredSuppliedPageInfo(p)?.edition===registered.edition),ordered=supplied.length?supplied.filter((p,i,all)=>all.findIndex(q=>(q.canonical_page_id||q.id)===(p.canonical_page_id||p.id))===i):[page];
     if(!ordered.some(p=>(p.canonical_page_id||p.id)===proof.canonical_page_id))ordered.unshift(page);
-    const physical=p=>c.corpus==="cib"?(p.earlier_page??p.physical_page??((p.canonical_page_id||p.id)===proof.canonical_page_id?proof.earlier_page:undefined)):p.physical_page;
+    const physical=p=>registeredSuppliedPageInfo(p)?.physical_page??(c.corpus==="cib"?(p.earlier_page??p.physical_page??((p.canonical_page_id||p.id)===proof.canonical_page_id?proof.earlier_page:undefined)):p.physical_page);
     if(ordered.every(p=>Number.isInteger(physical(p))&&physical(p)>0))ordered.sort((a,b)=>physical(a)-physical(b));
     const transcript=el("div",null,{class:"document-transcript"});
     for(const [index,segment] of ordered.entries()){
       const selected=(segment.canonical_page_id||segment.id)===proof.canonical_page_id,number=physical(segment),known=Number.isInteger(number)&&number>0;
       const section=el("section",null,{class:"transcript-segment","data-source-id":segment.canonical_page_id||segment.id,"data-source-selected":String(selected)});
-      section.append(el("h3",`${known?"Page "+number:"Logical segment "+(index+1)} / ${segment.document_id}`,{class:"transcript-boundary","data-testid":"transcript-boundary","data-boundary-kind":known?"physical-page":"logical-segment"}));
+      const edition=registeredSuppliedPageInfo(segment)?.release;
+      section.append(el("h3",`${edition?edition+' edition / ':''}${known?"Page "+number:"Logical segment "+(index+1)} / ${segment.document_id}`,{class:"transcript-boundary","data-testid":"transcript-boundary","data-boundary-kind":known?"physical-page":"logical-segment"}));
       const highlights=selected&&verified?[exactSourceAnchor(segment.text,proof)]:[];
       if(selected&&verified){section.dataset.proofStart=String(proof.start);section.dataset.proofEnd=String(proof.end);section.dataset.proofHash=proof.page_sha256;}
       section.append(highlightedText(segment.text,highlights,{class:"source-document transcript-text","data-testid":selected?"source-document":"additional-source-segment"}));transcript.append(section);
@@ -2728,6 +2747,7 @@ async function sourceDrawer(value,{back}={}) {
 
 function sourceWithinScope(page,c){
   const scope=selectedSourceScope(c);
+  if(isSuppliedSourcePage(page))return sourcePagePolicyAllows(page,c,scope);
   if(c.corpus==='cib'&&!scope.whole_origin_excluded&&page.document_id===c.document_id&&
       !['earlier','both'].includes(String(page.visibility||page.release||page.native_page?.view||'').toLowerCase()))return false;
   return sourceScopeAllows(page,scope);
@@ -2739,12 +2759,16 @@ function selectedSourceScope(c){
 function sourceScopeText(){
   const scope=selectedSourceScope(state.row.case),date=scope.on_or_before||scope.strictly_before;
   return `Inspected sources ${scope.on_or_before?'on or before':'before'} ${date}. `+
-    (scope.whole_origin_excluded?'The whole origin document is excluded.':'Only earlier/both CIB release text is eligible, including the origin when admitted by this saved view.');
+    sourcePolicyCaption(scope);
+}
+function originEvidenceKicker(){
+  return state.row?.case?.corpus==='cib'&&selectedSourceScope(state.row.case).source_view_policy.id==='supplied_documents_inclusive'?
+    'Input provenance / corpus citations under Sources':'Input provenance / excluded from evidence';
 }
 async function verifySourcePage(page,c) {
   if(typeof page.text!=="string"||!(page.canonical_page_id||page.id))throw Error("A source segment has no replayable text or identity.");
   if(!sourceWithinScope(page,c))throw Error("This page violates the selected case's source cutoff or origin policy.");
-  if(page.permitted===false||page.visibility==="later"||c.corpus!=="cib"&&page.classification&&page.classification!=="CONFIDENTIAL"||list(page.handling).includes("NOFORN"))throw Error("This page is outside the bound evidence policy.");
+  if(!sourcePagePolicyAllows(page,c,selectedSourceScope(c)))throw Error("This page is outside the bound evidence policy.");
   const serialized=JSON.stringify(page.text).replace(/[\u007f-\uffff]/g,char=>"\\u"+char.charCodeAt(0).toString(16).padStart(4,"0"));
   const hash=await sha256(new TextEncoder().encode(serialized));
   if(hash!==(page.source_sha256||page.page_sha256))throw Error("The original source failed its integrity check. No verified highlight is shown.");
@@ -3057,6 +3081,10 @@ try{
   }
   if(state.catalog){const note=$("#showcase-curation-note");if(note){note.hidden=false;note.textContent=selection.curation_note||"Curated, outcome-informed demonstrations: one case per fact family across this public casebook, not benchmark accuracy. Other saved records remain archived locally.";}}
   if(state.report.status==="PARTIAL"){const scope=$("#publication-scope");scope.hidden=true;scope.textContent=`Preview: ${state.report.completed_cases??0} saved inputs; ${state.report.pending_cases??0} declared inputs are pending. This is not the final input selection.`;}
+  if(state.report.cases.some(row=>row.study_slot)){
+    try{state.studyPublication=await loadStudyPublication(state.sourceReport,publicationByteHashes.get(state.sourceReport));}
+    catch(error){state.studyPublication={caseIds:[],error:error.message};}
+  }
   await loadCasebook();
   await navigateFromURL();
   }

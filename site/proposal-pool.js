@@ -2,6 +2,7 @@ import {canonicalGateJSON} from './local-decisions-v65.js';
 
 export const PROPOSAL_POOL_VERSION='source-separated-redaction-proposal-fusion/1';
 const tiers={evidence_backed_suggestion:2,partial_grounding:1,exploratory_contextual:0};
+const verifiedPoolViews=new WeakSet();
 const rows=value=>Array.isArray(value)?value:[];
 const check=(value,message)=>{if(!value)throw Error('Proposal pool binding: '+message);};
 const same=(a,b)=>canonicalGateJSON(a)===canonicalGateJSON(b);
@@ -139,7 +140,21 @@ export async function verifyProposalPool(record,caseInfo,inputView){
       corpus:proposal.corpus_candidate_id?corpus.find(c=>c.id===proposal.corpus_candidate_id):null,
       input:proposal.input_nomination_id?verified.candidates.find(c=>c.id===proposal.input_nomination_id):null}))});
   }
-  return {version:PROPOSAL_POOL_VERSION,readings:view};
+  const verified={version:PROPOSAL_POOL_VERSION,readings:view};verifiedPoolViews.add(verified);return verified;
+}
+
+export function corpusOnlyProposalExecution(record,pool){
+  const result=record?.result?.redaction||record?.result;
+  if(result?.task!=='redaction'||!verifiedPoolViews.has(pool))return false;
+  const nominal=result.input_nomination;
+  if(nominal!=null&&!(nominal.version==='public-input-noun-adjective-nomination/1'&&nominal.status==='NO_INPUT_DERIVED_NOMINATIONS'&&
+    Array.isArray(nominal.readings)&&nominal.readings.length===pool.readings.length&&nominal.readings.every((row,index)=>
+      row.reading_id===pool.readings[index].id&&Array.isArray(row.nominations)&&row.nominations.length===0)))return false;
+  return pool.readings.every(row=>row.proposals.every(({proposal:p,corpus,input},index)=>
+    p.provenance==='CORPUS'&&corpus&&row.corpus.includes(corpus)&&p.corpus_candidate_id===corpus.id&&input==null&&
+    p.input_nomination_id===null&&p.input_nomination_sha256===null&&p.input_rank===null&&
+    p.fusion_contributions.length===1&&p.fusion_contributions[0].family==='CORPUS'&&
+    (!index||row.proposals[index-1].proposal.corpus_rank<p.corpus_rank)));
 }
 
 export function preferredProposalReading(record,caseInfo,{pool=null,inputView=null}={}){
