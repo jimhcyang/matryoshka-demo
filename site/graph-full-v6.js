@@ -281,14 +281,15 @@ function slotContextInspectorHTML(panel,edge) {
 }
 
 async function openOpaqueSlotSource(slot,proof=null) {
+  closeCibSource();const revision=state.sourceRequestRevision=(state.sourceRequestRevision||0)+1;
   let page;
   try{page=await ensureOpaqueSlotPage(slot);}catch(error){state.panels.current.inspectionError(error);return;}
-  closeCibSource();
+  if(revision!==state.sourceRequestRevision)return;
   const drawer=$('#cib-source-drawer');state.sourceReturnFocus=document.activeElement;drawer.inert=false;drawer.classList.add('open');drawer.setAttribute('aria-hidden','false');$('#cib-drawer-scrim').hidden=false;$('#cib-source-close').focus({preventScroll:true});
   $('#cib-source-kicker').textContent='Earlier-source provenance / no reveal';
   $('#cib-source-title').textContent=slot.article_title;
   $('#cib-source-meta').textContent=`${page.document_id} / ${page.date} / earlier PDF page ${page.source_page}`;
-  $('#cib-source-release-actions').textContent='Earlier transcript only. This drawer does not fetch later wording, a fill, or a hidden-span size.';
+  $('#cib-source-release-actions').textContent='Earlier visible transcript. Paired original PDFs are inspection only, not evidence for the concealed contribution.';
   const chars=Array.from(page.text),spans=[{start:slot.marker_start,end:slot.marker_end,attribute:'data-focal-opaque-slot'}];
   if(proof){
     if(proof.canonical_page_id!==page.canonical_page_id||chars.slice(proof.start,proof.end).join('')!==proof.text)throw Error('Source-context coordinates do not match the earlier transcript.');
@@ -302,6 +303,15 @@ async function openOpaqueSlotSource(slot,proof=null) {
   sourceHTML+=esc(chars.slice(cursor).join(''));
   $('#cib-source-body').innerHTML=`<p class="slot-boundary-notice">Provenance and visible context, NOT semantic evidence for the concealed contribution. The highlighted opaque token is transport syntax, not a measured hidden-text extent. ${proof?'The other highlight is the exact visible lexical term; it is not a hidden identity.':''}</p><section class="cib-source-page active slot-source-page" data-cib-page="${esc(page.canonical_page_id)}"><header><b>Earlier source / PDF page ${esc(page.source_page)}</b></header><div class="slot-source-text">${sourceHTML}</div></section><details><summary>Earlier transcript audit</summary><p>Canonical page: ${esc(page.canonical_page_id)}</p><p>Normalized visible transcript SHA-256: ${esc(page.text_sha256)}</p><p>Original marker-transport SHA-256: ${esc(page.transport_text_sha256)}</p><p>Coordinates are Unicode code points in normalized visible text. Only existing opaque marker transport syntax was normalized to [REDACTED]. No concealed wording or span length was read.</p></details>`;
   $('[data-focal-opaque-slot]',drawer)?.scrollIntoView({block:'center'});
+  const host=document.createElement('section');$('#cib-source-body').append(host);
+  try{
+    const source=await ensureCibSource(state.data.views.current_earlier,page.document_id);
+    const original=source.pages.find(p=>p.canonical_page_id===page.canonical_page_id);
+    if(!original)throw Error('No exact original page aligns with this opaque source.');
+    await appendGraphPDFPair(host,{...original,document_id:page.document_id,
+      source_page:{release:'earlier',page:original.source_page}},
+      {document_id:page.document_id,canonical_page_id:page.canonical_page_id});
+  }catch(error){if(host.isConnected)host.textContent=error.message+' No alternate source is substituted.';}
 }
 
 function appendHierarchySlots(panel,item) {
@@ -1203,19 +1213,24 @@ class GraphPanel {
   }
 
   rememberLocation() {
-    return {level:this.level,trail:[...this.trail],nodeLimit:this.nodeLimit,neighborhood:this.neighborhood,showNeighborEdges:this.showNeighborEdges,slotFocusId:this.slotFocusId,
+    return {viewKey:this.view?.key,level:this.level,trail:[...this.trail],nodeLimit:this.nodeLimit,neighborhood:this.neighborhood,showNeighborEdges:this.showNeighborEdges,slotFocusId:this.slotFocusId,
       localIncidentNeighborhood:this.localIncidentNeighborhood,selectedId:this.selected?.id||this.external?.id,
+      pinnedFocusIds:[...this.pinnedFocusIds],pinnedSearchRecords:[...this.pinnedSearchRecords],
+      searchMatchIds:[...this.searchMatchIds],labelOverrides:[...this.labelOverrides],fitScale:this.fitScale,
       transform:{...this.transform},width:this.width,height:this.height,positions:this.nodes.map(n=>({id:n.id,x:n.x,y:n.y}))};
   }
 
   restoreLocation(saved) {
+    if(saved.viewKey&&saved.viewKey!==this.view?.key)throw Error('A graph perspective cannot cross a bound projection.');
     this.navigationRevision+=1;this.inspectionRevision+=1;
     Object.assign(this,{level:saved.level,trail:saved.trail,nodeLimit:saved.nodeLimit,neighborhood:saved.neighborhood,
       localIncidentNeighborhood:saved.localIncidentNeighborhood,slotFocusId:saved.slotFocusId||null,showNeighborEdges:saved.showNeighborEdges!==false,inducedNeighborEdges:[],external:null,selected:null});
-    this.pinnedFocusIds=new Set(saved.selectedId?[saved.selectedId]:[]);this.searchMatchIds.clear();
+    this.pinnedFocusIds=new Set(saved.pinnedFocusIds||[]);
+    this.pinnedSearchRecords=new Map(saved.pinnedSearchRecords||[]);
+    this.searchMatchIds=new Set(saved.searchMatchIds||[]);this.labelOverrides=new Map(saved.labelOverrides||[]);
     this.refreshGraph(saved.selectedId);
     for(const position of saved.positions){const node=this.nodeMap.get(position.id);if(node)Object.assign(node,{x:position.x,y:position.y});}
-    if(saved.width===this.width&&saved.height===this.height)this.transform=saved.transform;else this.fit();
+    if(saved.width===this.width&&saved.height===this.height){this.transform={...saved.transform};this.fitScale=saved.fitScale||this.fitScale;}else this.fit();
     this.draw();this.updateChrome();
   }
 
@@ -1238,6 +1253,7 @@ class GraphPanel {
   }
 
   focusHierarchyNeighborhood(record,{scroll=true}={}) {
+    this.nodeHistory.push(this.rememberLocation());
     this.neighborhood=this.hierarchyNeighborhood(record);this.localIncidentNeighborhood=null;this.expandedIncidentScopes.clear();
     this.showNeighborEdges=true;this.inducedNeighborEdges=[];this.inducedLoadRevision+=1;this.inducedLoading=false;this.inducedError="";
     this.pinnedFocusIds=new Set([record.id]);this.nodeLimit=nodeLimitFor(this.level);
@@ -1514,10 +1530,20 @@ class GraphPanel {
   wheel(event) { event.preventDefault();if(this.studyContext)pauseGuide();const point=this.pointer(event),before=this.world(point),scale=Math.max(this.zoomFloor(),Math.min(3.2,this.transform.scale*Math.exp(-event.deltaY*.0012)));this.transform.scale=scale;this.transform.x=point.x-before.x*scale;this.transform.y=point.y-before.y*scale;this.compactLayout();this.draw(); }
 
   toggleLabel(node){
-    this.labelOverrides.set(node.id,!this.labelButtons.has(node.id));
-    $('#map-keyboard-status').textContent=`${node.label}. Label ${this.labelOverrides.get(node.id)?'shown':'hidden'}.`;
+    this.selected=node;this.external=null;this.labelOverrides.set(node.id,true);
+    $('#map-keyboard-status').textContent=`${node.label}. Selected tag shown. Enter for sources.`;
     this.reserveLabelSpace();
+    this.revealSelectedTag(node);
     this.draw();
+  }
+  revealSelectedTag(node){
+    const size=this.mapLabelSize(node);if(!size)return;
+    const point=this.screen(node),area=this.usableBounds();
+    const box=GraphLabelLayout.lowerHalfBox({point,radius:this.nodeRadius(node),size,bounds:area,required:true});
+    if(!box)return;
+    const dx=box.x<area.left?area.left-box.x:box.x+box.width>area.right?area.right-box.x-box.width:0;
+    const dy=box.y<area.top?area.top-box.y:box.y+box.height>area.bottom?area.bottom-box.y-box.height:0;
+    this.transform.x+=dx;this.transform.y+=dy;
   }
   activateNode(node){
     state.activePanelName=this.name;
@@ -1529,6 +1555,7 @@ class GraphPanel {
   }
   openInspector(node){
     state.activePanelName=this.name;
+    this.selected=node;this.external=null;this.revealSelectedTag(node);
     for(const panel of Object.values(state.panels))if(panel!==this)panel.closeInspector(false);
     this.drawerOpen=true;this.inspectorReturnFocus=document.activeElement;
     if(this.studyContext){inspectStudyNode(node.id);this.decorateInspector();}
@@ -1553,7 +1580,7 @@ class GraphPanel {
     if(['ArrowRight','ArrowDown','ArrowLeft','ArrowUp'].includes(event.key)){
       event.preventDefault();const direction=['ArrowRight','ArrowDown'].includes(event.key)?1:-1;
       const node=this.nodes[(current+direction+this.nodes.length)%this.nodes.length];if(!node)return;
-      this.selected=node;this.external=null;this.labelOverrides.set(node.id,true);this.reserveLabelSpace();this.draw();this.syncMapActions();$('#map-keyboard-status').textContent=`${node.label}. ${node.type}. Enter for sources. Space toggles its label.`;
+      this.selected=node;this.external=null;this.labelOverrides.set(node.id,true);this.reserveLabelSpace();this.revealSelectedTag(node);this.draw();this.syncMapActions();$('#map-keyboard-status').textContent=`${node.label}. ${node.type}. Enter for sources. Space shows its tag.`;
     }else if(event.key===' '&&current>=0){event.preventDefault();this.toggleLabel(this.nodes[current]);}
     else if(event.key==='Enter'&&current>=0){event.preventDefault();if(event.shiftKey)this.activateNode(this.nodes[current]);else this.openInspector(this.nodes[current]);}
     else if(['+','=','-'].includes(event.key)){event.preventDefault();const scale=this.transform.scale,factor=event.key==='-'?.85:1.15;this.transform.scale=Math.max(this.zoomFloor(),Math.min(3.2,scale*factor));this.transform.x=this.width/2+(this.transform.x-this.width/2)*this.transform.scale/scale;this.transform.y=this.height/2+(this.transform.y-this.height/2)*this.transform.scale/scale;this.compactLayout();this.draw();}
@@ -1568,7 +1595,9 @@ class GraphPanel {
     const ids=new Set(defaults.map(node=>node.id));
     for(const id of walkIds)if(this.nodeMap.has(id))ids.add(id);
     for(const [id,shown] of this.labelOverrides)if(shown)ids.add(id);else ids.delete(id);
-    return this.nodes.filter(node=>ids.has(node.id)).sort((a,b)=>Number(walkIds.has(b.id))-Number(walkIds.has(a.id))||Number(b===focus)-Number(a===focus)||Number(this.labelOverrides.get(b.id)===true)-Number(this.labelOverrides.get(a.id)===true)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||0)-Number(a.mass||0));
+    const selectedId=this.selected&&!this.selected.source?this.selected.id:null;
+    if(selectedId)ids.add(selectedId);
+    return this.nodes.filter(node=>ids.has(node.id)).sort((a,b)=>Number(b.id===selectedId)-Number(a.id===selectedId)||Number(walkIds.has(b.id))-Number(walkIds.has(a.id))||Number(b===focus)-Number(a===focus)||Number(this.labelOverrides.get(b.id)===true)-Number(this.labelOverrides.get(a.id)===true)||Number(this.matches.has(b.id))-Number(this.matches.has(a.id))||Number(b.mass||0)-Number(a.mass||0));
   }
 
   mapLabelSize(node){
@@ -1582,6 +1611,13 @@ class GraphPanel {
       const measured=Math.max(...lines.map(value=>this.ctx.measureText(value).width))+26;
       if(lines.length<=3&&measured<=area.width-8)return {text:lines.join('\n'),font,width:Math.ceil(measured),height:Math.ceil(lines.length*font*1.25+12)};
     }
+    if(this.selected?.id===node.id){
+      const width=Math.max(60,Math.min(220,area.width-8)),font=14;
+      const words=label.split(/\s+/),lines=[];let line='';this.ctx.font=`600 ${font}px ${family}`;
+      for(const word of words){if(line&&this.ctx.measureText(line+' '+word).width>width-20){lines.push(line);line=word;}else line=line?line+' '+word:word;}
+      if(line)lines.push(line);
+      return {text:lines.join('\n'),font,width,height:Math.ceil(lines.length*font*1.25+12)};
+    }
     return null;
   }
 
@@ -1592,36 +1628,13 @@ class GraphPanel {
   drawMapLabels(){
     const area=this.usableBounds(),placed=[],visible=new Set();
     const requested=this.mapLabelNodes();
-    const overlaps=box=>placed.some(other=>!(box.x+box.width+7<other.x||box.x>other.x+other.width+7||box.y+box.height+7<other.y||box.y>other.y+other.height+7));
     for(const node of requested){
       const p=this.screen(node),r=this.nodeRadius(node),wrapped=this.mapLabelSize(node);
       if(p.x+r<area.left||p.x-r>area.right||p.y+r<area.top||p.y-r>area.bottom)continue;
       if(!wrapped)continue;
-      let box=null;
-      const candidates=[6,10].flatMap(gap=>[0,-12,12].map(shift=>({x:p.x-wrapped.width/2+shift,y:p.y+r+gap,placement:'lower-rim'})));
-      candidates.push({x:p.x+r+8,y:p.y-wrapped.height/2,placement:'side'},
-        {x:p.x-wrapped.width/2,y:p.y-r-wrapped.height-8,placement:'above'},
-        {x:p.x-r-wrapped.width-8,y:p.y-wrapped.height/2,placement:'side'});
-      if(node===requested[0]||this.labelOverrides.get(node.id)===true||this.savedWalkLabelIds?.has(node.id)){
-        // Explicitly requested labels must remain readable when the local ring is crowded.
-        for(const gap of [16,28,44,64,88,112,144,184,232,288])candidates.push(
-          {x:p.x-wrapped.width/2,y:p.y+r+gap,placement:'focus-caption'},
-          {x:p.x-wrapped.width/2,y:p.y-r-wrapped.height-gap,placement:'focus-caption'},
-          {x:p.x+r+gap,y:p.y-wrapped.height/2,placement:'focus-caption'},
-          {x:p.x-r-wrapped.width-gap,y:p.y-wrapped.height/2,placement:'focus-caption'});
-        for(let y=area.top;y+wrapped.height<=area.bottom;y+=wrapped.height+10)candidates.push(
-          {x:area.left,y,placement:'focus-caption'},
-          {x:area.right-wrapped.width,y,placement:'focus-caption'});
-      }
-      for(const position of candidates){
-        if(box)break;
-        const x=position.placement==='focus-caption'?Math.max(area.left,Math.min(area.right-wrapped.width,position.x)):position.x;
-        const y=position.placement==='focus-caption'?Math.max(area.top,Math.min(area.bottom-wrapped.height,position.y)):position.y;
-        const candidate={...position,x,y,...wrapped};
-        if(x<area.left||y<area.top||x+wrapped.width>area.right||y+wrapped.height>area.bottom||overlaps(candidate))continue;
-        if(this.nodes.some(other=>{const q=this.screen(other);return Math.hypot(q.x-Math.max(x,Math.min(q.x,x+wrapped.width)),q.y-Math.max(y,Math.min(q.y,y+wrapped.height)))<this.nodeRadius(other)+4;}))continue;
-        box=candidate;
-      }
+      const required=this.selected?.id===node.id;
+      const box=GraphLabelLayout.lowerHalfBox({point:p,radius:r,size:wrapped,bounds:area,placed,required,
+        neighbors:this.nodes.filter(other=>other.id!==node.id).map(other=>({...this.screen(other),r:this.nodeRadius(other)}))});
       if(!box)continue;
       let button=this.labelButtons.get(node.id);
       if(!button){
@@ -1633,6 +1646,7 @@ class GraphPanel {
       }
       if(button.textContent!==wrapped.text)button.textContent=wrapped.text;
       button.title='Open information and sources for '+node.label;button.setAttribute('aria-label',button.title);button.dataset.placement=box.placement;button.dataset.labelText=mapDisplayLabel(node);
+      button.dataset.selected=String(required);button.dataset.collision=String(box.collision);
       button.style.setProperty('--label-anchor',Math.max(12,Math.min(box.width-12,p.x-box.x))+'px');
       Object.assign(button.style,{left:box.x+'px',top:box.y+'px',width:box.width+'px',height:box.height+'px',fontSize:wrapped.font+'px'});button.classList.toggle('dimmed',Boolean(node.visibility_dimmed));
       placed.push(box);visible.add(node.id);
@@ -2261,26 +2275,48 @@ async function hydrateMapSource(panel,item,renderAnchor) {
   // Compact semantic records can retain a document without excerpt examples.
   // Inspect that recorded document; this does not certify an evidence span.
   const documentId=sourceDocumentId(item?.document_id);
-  if(!documentId||item.source||item.aggregate_kind||item.evidence_examples?.length
-      ||!isDocumentAvailableAsOf(documentId)
-      ||panel.inspector.querySelector('[data-cib-document]'))return;
+  if(item.source||item.aggregate_kind||panel.studyContext||guideSelection(pageParams)||pageParams.has('walk_case'))return;
   try{
+    const {nativeNodeSourceProofs}=await import('./graph-node-source-anchors.js');
+    const proofs=(await nativeNodeSourceProofs(item.id,refreshBinding))
+      .filter(proof=>isDocumentAvailableAsOf(proof.document_id,proof.date));
+    if(!renderAnchor.isConnected||!panel.drawerOpen||(panel.external||panel.selected)?.id!==item.id)return;
+    if(proofs.length){
+      if(panel.inspector.querySelector('[data-source-action-kind="native-node-source-quotation"]'))return;
+      const section=document.createElement('section');section.className='source-buttons evidence-list map-primary-sources';
+      for(const proof of proofs.slice(0,12)){
+        const button=document.createElement('button');button.type='button';
+        button.dataset.cibDocument=proof.document_id;button.dataset.cibPage=proof.canonical_page_id;
+        button.dataset.cibHighlight=proof.text;button.dataset.sourceActionKind=proof.proof_kind==='native_source_edge_unit_context'?
+          'native-source-connection-context':'native-node-source-quotation';
+        if(proof.source_release)button.dataset.sourceRelease=proof.source_release;
+        button.graphNodeSourceProof=proof;button.graphNodeSourceId=item.id;
+        const heading=document.createElement('b');heading.textContent=proof.proof_kind==='native_source_edge_unit_context'?
+          'Inspect connection context / not own-node quotation':proof.source_release==='later'?
+          'Inspect later-side node quotation / inspection only':'Inspect recorded node quotation';
+        const caption=document.createElement('span');caption.textContent=proof.document_id+' / '+proof.date;
+        button.append(heading,caption);section.append(button);
+      }
+      if(proofs.length>12){const note=document.createElement('p');note.textContent=`Showing 12 of ${proofs.length} retained source records for this node.`;section.append(note);}
+      panel.inspector.querySelectorAll('.map-primary-sources').forEach(section=>section.remove());
+      renderAnchor.after(section);bindCibSourceButtons(section,panel);return;
+    }
+    if(!documentId||item.evidence_examples?.length||!isDocumentAvailableAsOf(documentId)||panel.inspector.querySelector('[data-cib-document]'))return;
     const source=await ensureCibSource(panel.view,documentId);
     if(!renderAnchor.isConnected||!panel.drawerOpen
         ||(panel.external||panel.selected)?.id!==item.id
         ||panel.inspector.querySelector('[data-cib-document]')
         ||!isDocumentAvailableAsOf(documentId,String(source.document_date_iso||'')))return;
     const pages=[...(source.pages||[])].filter(page=>page.canonical_page_id&&typeof page.text==='string');
-    pages.sort((a,b)=>sourceMatchScore(b,[item.label||''])-sourceMatchScore(a,[item.label||''])
-        ||Number(a.sequence_in_document||0)-Number(b.sequence_in_document||0));
+    pages.sort((a,b)=>Number(a.sequence_in_document||0)-Number(b.sequence_in_document||0));
     if(!pages.length)return;
-    const page=pages[0],section=document.createElement('section');
+    const page=pages.find(page=>page.canonical_page_id===item.canonical_page_id)||pages[0],section=document.createElement('section');
     section.className='source-buttons evidence-list map-primary-sources';
     const button=document.createElement('button');button.type='button';
     button.dataset.cibDocument=documentId;button.dataset.cibPage=page.canonical_page_id;
-    button.dataset.cibHighlight=item.label||'';
+    button.dataset.cibHighlight='';
     button.dataset.sourceActionKind='recorded-document-inspection';
-    const heading=document.createElement('b');heading.textContent='Inspect source';
+    const heading=document.createElement('b');heading.textContent='Inspect recorded document / no own-node quotation';
     const caption=document.createElement('span');caption.textContent=documentId;
     button.append(heading,caption);section.append(button);
     renderAnchor.after(section);bindCibSourceButtons(section,panel);
@@ -2292,7 +2328,7 @@ async function hydrateMapSource(panel,item,renderAnchor) {
 
 async function appendGraphPDFPair(host,page,proof={}){
   if(corpusId!=='cib'||!host?.isConnected)return;
-  const {appendCIBPDFPair}=await import('./source-inspection.js');
+  const {appendGraphOriginalPDFs}=await import('./graph-source-reader.js');
   if(!page.source_sha256&&typeof page.text==='string'&&page.canonical_page_id){
     const ascii=JSON.stringify(page.text).replace(/[\u007f-\uffff]/g,c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0'));
     const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(ascii));
@@ -2300,44 +2336,35 @@ async function appendGraphPDFPair(host,page,proof={}){
   }
   if(!host.isConnected)return;
   const selection=guideSelection(pageParams);
-  const section=await appendCIBPDFPair(host,{page,proof,binding:selection?(currentGraphResource()||undefined):undefined,
+  const section=await appendGraphOriginalPDFs(host,{page,proof,binding:selection?(currentGraphResource()||undefined):undefined,
     caseId:selection?.case_id,config:selection?.config,base:location.href});
   for(const link of section?.querySelectorAll('a')||[]){link.target='_blank';link.rel='noopener';}
 }
 
 function clearCibPDFPair(){
   state.pdfPairRequestRevision=(state.pdfPairRequestRevision||0)+1;
-  const pair=$('#cib-pdf-pair');if(pair){pair.replaceChildren();pair.hidden=true;}
+  const pair=$('#cib-pdf-pair');if(pair){$$('.graph-original-pdfs',pair).forEach(s=>s.disposeSourcePDFs?.());pair.replaceChildren();pair.hidden=true;}
   $('#cib-source-drawer')?.classList.remove('pdf-pair-open');
   $('[data-cib-pdf-pair]')?.setAttribute('aria-pressed','false');
 }
 
-async function openCibPDFPair(panel,documentId,canonicalPageId,revision){
+async function openCibPDFPair(panel,documentId,canonicalPageId,revision,{scroll=true}={}){
   const pairRevision=state.pdfPairRequestRevision=(state.pdfPairRequestRevision||0)+1;
   const pair=$('#cib-pdf-pair'),drawer=$('#cib-source-drawer');
   pair.hidden=false;pair.innerHTML='<p role="status">Loading the original release pair...</p>';drawer.classList.add('pdf-pair-open');
   $('[data-cib-pdf-pair]')?.setAttribute('aria-pressed','true');
   const single=$('#cib-pdf-frame');single.hidden=true;single.removeAttribute('src');
   try{
-    const records=await Promise.all(['earlier','later'].map(async release=>{
-      const view=state.data.views['current_'+release];
-      const source=await ensureCibSource(view,documentId).catch(()=>null);
-      // Only the saved canonical-page alignment may select a counterpart page.
-      const page=source?.pages?.find(p=>p.canonical_page_id===canonicalPageId),number=Number(page?.source_page||0);
-      let url=new URL('/api/cib-pdf',location.origin);url.search=new URLSearchParams({doc_id:documentId,release}).toString();url=await currentGraphPDFURL(url);
-      if(Number.isInteger(number)&&number>0)url.hash=`page=${number}&zoom=page-width`;
-      return {release,url,page:Number.isInteger(number)&&number>0?number:null};
-    }));
+    const source=await ensureCibSource(panel.view,documentId);
+    const page=source.pages.find(p=>p.canonical_page_id===canonicalPageId);
+    if(!page)throw Error('No exact original PDF page was recorded.');
     if(revision!==state.sourceRequestRevision||pairRevision!==state.pdfPairRequestRevision||pair.hidden)return;
     pair.replaceChildren();
-    for(const record of records){
-      const section=document.createElement('section'),heading=document.createElement('h3'),frame=document.createElement('iframe');
-      heading.textContent=`${record.release==='earlier'?'Earlier':'Later'} release / ${record.page?'page '+record.page:'counterpart page unspecified'}`;
-      const link=document.createElement('a');link.href=record.url.href;link.target='_blank';link.rel='noopener';link.textContent='Open original PDF';
-      frame.className='cib-pdf-frame';frame.title=heading.textContent;frame.dataset.pdfRelease=record.release;frame.dataset.pdfPage=record.page||'';frame.src=record.url.href;
-      section.append(heading,link,frame);pair.append(section);
-    }
-    pair.scrollIntoView({block:'start',behavior:guideReducedMotion()?'instant':'smooth'});
+    await appendGraphPDFPair(pair,{...page,document_id:documentId,
+      source_page:{release:panel.view.release_view,page:page.source_page}},
+      {document_id:documentId,canonical_page_id:canonicalPageId});
+    if(scroll&&revision===state.sourceRequestRevision&&pairRevision===state.pdfPairRequestRevision)
+      pair.scrollIntoView({block:'start',behavior:guideReducedMotion()?'instant':'smooth'});
   }catch(error){if(revision===state.sourceRequestRevision&&pairRevision===state.pdfPairRequestRevision)pair.innerHTML=`<p role="alert">${esc(error.message)}. No alternate PDF or page is substituted.</p>`;}
 }
 
@@ -2353,8 +2380,8 @@ function closeCibSource() {
   if(wasOpen&&state.sourceReturnFocus?.isConnected)state.sourceReturnFocus.focus({preventScroll:true});
 }
 
-async function openCibSource(panel,documentId,{canonicalPageId="",highlights=[],slotId="",revealText=""}={}) {
-  if(!await allowSavedStorySource(()=>openCibSource(panel,documentId,{canonicalPageId,highlights,slotId,revealText})))return;
+async function openCibSource(panel,documentId,{canonicalPageId="",highlights=[],slotId="",revealText="",sourceProof=null,sourceNodeId=""}={}) {
+  if(!await allowSavedStorySource(()=>openCibSource(panel,documentId,{canonicalPageId,highlights,slotId,revealText,sourceProof,sourceNodeId})))return;
   const drawer=$("#cib-source-drawer"),scrim=$("#cib-drawer-scrim");
   if(!drawer)return;
   const revision=state.sourceRequestRevision=(state.sourceRequestRevision||0)+1;
@@ -2375,43 +2402,48 @@ async function openCibSource(panel,documentId,{canonicalPageId="",highlights=[],
     if(revision!==state.sourceRequestRevision)return;
     if(!isDocumentAvailableAsOf(documentId,String(source.document_date_iso||"")))throw new Error(`This source is outside the independent explorer's inclusive ${state.asOfPolicy.cutoff} as-of date. No case origin exclusion is applied.`);
     let active=pages.find((page)=>page.canonical_page_id===canonicalPageId);
+    if(canonicalPageId&&!active)throw Error('The requested canonical source page is absent. No other passage is substituted.');
     if(!active&&pages.length)active=[...pages].sort((left,right)=>sourceMatchScore(right,terms)-sourceMatchScore(left,terms)||left.sequence_in_document-right.sequence_in_document)[0];
+    let exactAnchor=null,sourceAnchorTools=null;
+    if(sourceProof){
+      sourceAnchorTools=await import('./graph-node-source-anchors.js');
+      if(!active)throw Error('The exact node quotation page is unavailable.');
+      exactAnchor=await sourceAnchorTools.exactNodeSourceAnchor(sourceProof,{...active,document_id:documentId},{
+        nodeId:sourceNodeId,documentId,date:source.document_date_iso||source.date,release});
+      if(revision!==state.sourceRequestRevision)return;
+    }
     $("#cib-source-title").textContent=source.title?`${source.title} / ${documentId}`:documentId;
-    $("#cib-source-meta").innerHTML=[source.date,`${pages.length} ${paired?"aligned pages":"source segments"}`,singleCorpusMode?"Canonical prepared cable transcript":release==="earlier"?"Earlier-release projection":"Later-release projection"].filter(Boolean).map((value)=>`<span>${esc(value)}</span>`).join("");
+    $("#cib-source-meta").innerHTML=[documentId,source.document_date_iso||source.date,`${pages.length} ${paired?"aligned pages":"source segments"}`,active?`${paired?'Original PDF page':'Source segment'} ${active.source_page||active.sequence_in_document}`:'',singleCorpusMode?"Canonical prepared cable transcript":release==="earlier"?"Earlier-release projection":"Later-release projection"].filter(Boolean).map((value)=>`<span>${esc(value)}</span>`).join("");
     $("#cib-source-release-actions").innerHTML=singleCorpusMode?'<span>Canonical prepared cable source; classification projections are not paired redactions.</span>':`<button type="button" class="${release==="earlier"?"active":""}" data-cib-switch-release="current_earlier">Earlier-release transcript</button><button type="button" class="${release==="later"?"active":""}" data-cib-switch-release="current_later">Later-release transcript</button>`;
     if(paired&&state.pdfApiAvailable){
       const button=document.createElement('button');button.type='button';button.dataset.cibPdfPair='';button.textContent='Pair PDFs';button.setAttribute('aria-pressed','false');
       button.onclick=()=>{if(!$('#cib-pdf-pair').hidden){clearCibPDFPair();return;}openCibPDFPair(panel,documentId,active?.canonical_page_id||canonicalPageId,revision);};
       $('#cib-source-release-actions').append(button);
     }
-    const pdfNote=state.pdfApiAvailable?"The frozen transcript supplies the release and PDF page. No PDF box coordinates are guessed; highlighted terms are text matches, not exact-offset entailment proofs.":"This frozen source transcript is available. Highlighted terms are text matches, not exact-offset entailment proofs; no PDF box coordinates are guessed.";
-    const noPages=`<section class="cib-source-page"><p>No canonical aligned transcript page is retained for this pair.</p><button type="button" class="cib-pdf-button" data-cib-pdf-page="1" ${state.pdfApiAvailable?"":"disabled"}>${state.pdfApiAvailable?`Open ${esc(release)} PDF from page 1`:"PDF available in local mode"}</button></section>`;
-    $("#cib-source-body").innerHTML=`<p class="cib-pdf-note">${esc(pdfNote)}${markerSlotId!==slotId?" This target shares an earlier masked region with another slot; the region is highlighted without inventing an internal boundary.":""}</p>`+(pages.map((page)=>`<section class="cib-source-page ${page===active?"active":""}" data-cib-page="${esc(page.canonical_page_id)}"><header><b>${paired?"Aligned page":"Source segment"} ${fmt(page.sequence_in_document)}</b>${paired?`<span>PDF page ${fmt(page.source_page)}</span>`:""}</header><div>${slotId?focalSourceText(page.text,terms,slotId,revealText,markerSlotId):highlightedSourceText(page.text,terms)}</div>${paired?`<button type="button" class="cib-pdf-button" data-cib-pdf-page="${Number(page.source_page||1)}" ${state.pdfApiAvailable?"":"disabled"}>${state.pdfApiAvailable?`Open ${esc(release)} PDF at page ${fmt(page.source_page)}`:"PDF available in local mode"}</button>`:""}</section>`).join("")||noPages);
-    $$('[data-cib-switch-release]',drawer).forEach((button)=>button.addEventListener("click",()=>openCibSource({...panel,view:state.data.views[button.dataset.cibSwitchRelease]},documentId,{canonicalPageId:active?.canonical_page_id||canonicalPageId,highlights:terms,slotId,revealText})));
+    const pdfNote=sourceProof?(sourceProof.proof_kind==='native_source_edge_unit_context'?
+      'Exact native connection-unit context, not a quotation establishing this node\'s own assertion. No identity, factual support or eligibility vote is added.':
+      'Exact retained native node quotation. This is source inspection, not certification of the generated summary or a new eligibility or factual-support vote.'):
+      state.pdfApiAvailable?"The frozen transcript supplies the release and PDF page. No PDF box coordinates are guessed; highlighted terms are text matches, not exact-offset entailment proofs.":"This frozen source transcript is available. Highlighted terms are text matches, not exact-offset entailment proofs; no PDF box coordinates are guessed.";
+    const noPages='<section class="cib-source-page"><p>No canonical aligned transcript page is retained for this pair. No PDF page is inferred.</p></section>';
+    const exactMarkup=exactAnchor?(await import('./graph-source-reader.js')).exactContextMarkup(active.text,exactAnchor,esc):null;
+    const renderPage=page=>`<section class="cib-source-page ${page===active?'active':''}" data-cib-page="${esc(page.canonical_page_id)}"><header><b>${paired?'Original PDF page '+esc(page.source_page):'Source segment '+fmt(page.sequence_in_document)}</b><span>Transcript segment ${fmt(page.sequence_in_document)}</span></header><div>${page===active&&exactMarkup!==null?exactMarkup:slotId?focalSourceText(page.text,terms,slotId,revealText,markerSlotId):highlightedSourceText(page.text,terms)}</div>${paired&&Number.isInteger(page.source_page)&&page.source_page>0?`<button type="button" class="cib-pdf-button" data-cib-pdf-page="${page.source_page}" ${state.pdfApiAvailable?'':'disabled'}>View both original PDFs at this passage</button>`:''}</section>`;
+    const remaining=pages.filter(page=>page!==active);
+    $("#cib-source-body").innerHTML=`<p class="cib-pdf-note">${esc(pdfNote)}${markerSlotId!==slotId?' This target shares an earlier masked region with another slot; the region is highlighted without inventing an internal boundary.':''}</p>`+(active?renderPage(active):noPages);
+    if(remaining.length){
+      const details=document.createElement('details');details.className='graph-source-other-pages';
+      details.innerHTML='<summary>Other source segments in original order ('+remaining.length+')</summary>'+remaining.map(renderPage).join('');
+      $('#cib-source-body').append(details);
+    }
+    $$('[data-cib-switch-release]',drawer).forEach((button)=>button.addEventListener("click",()=>openCibSource({...panel,view:state.data.views[button.dataset.cibSwitchRelease]},documentId,{canonicalPageId:active?.canonical_page_id||canonicalPageId,highlights:terms,slotId,revealText,sourceProof,sourceNodeId})));
     $$('[data-cib-pdf-page]',drawer).forEach((button)=>button.addEventListener("click",async()=>{
       active=pages.find(page=>page.canonical_page_id===button.closest('.cib-source-page')?.dataset.cibPage)||active;
-      if(!$('#cib-pdf-pair').hidden){await openCibPDFPair(panel,documentId,button.closest('.cib-source-page')?.dataset.cibPage||'',revision);return;}
-      const frame=$("#cib-pdf-frame"),page=Number(button.dataset.cibPdfPage||1);
-      let status=$("#cib-pdf-focus-status");
-      if(!status){status=document.createElement("p");status.id="cib-pdf-focus-status";status.className="cib-pdf-note";status.setAttribute("role","status");frame.before(status);}
-      status.textContent=`Original ${release} PDF · page ${page}`;
-      if(revision!==state.sourceRequestRevision)return;
-      const canonicalPage=button.closest(".cib-source-page")?.dataset.cibPage;
-      const pdfPage=pages.find(item=>item.canonical_page_id===canonicalPage);
-      const actualPage=Number(pdfPage?.source_page||0);
-      if(!Number.isInteger(actualPage)||actualPage<1){status.textContent="No PDF page was recorded in the frozen transcript.";return;}
-      let pdfUrl=new URL("/api/cib-pdf",location.origin);pdfUrl.search=new URLSearchParams({doc_id:documentId,release}).toString();
-      try{pdfUrl=await currentGraphPDFURL(pdfUrl);}catch(error){status.textContent=error.message;return;}
-      status.textContent=`Original ${release} PDF${actualPage>0?` / page ${actualPage}`:" / page not recorded"}`;
-      if(!pdfUrl.hash&&actualPage>0)pdfUrl.hash=`page=${actualPage}&zoom=page-width`;
-      frame.src=pdfUrl.href;
-      frame.hidden=false;
+      if(revision===state.sourceRequestRevision)await openCibPDFPair(panel,documentId,button.closest('.cib-source-page')?.dataset.cibPage||'',revision);
     }));
-    if(paired&&state.pdfApiAvailable&&active){
-      const host=document.createElement('section');host.className='source-pdf-pair-host';$('#cib-source-body').append(host);
-      await appendGraphPDFPair(host,{...active,document_id:documentId,source_page:{release,page:active.source_page}},
-        {document_id:documentId,canonical_page_id:active.canonical_page_id}).catch(()=>{});
+    if(active){
+      const activeSection=$$('.cib-source-page',drawer).find(section=>section.dataset.cibPage===active.canonical_page_id);
+      (activeSection?.querySelector('mark')||activeSection)?.scrollIntoView({block:'center',behavior:'instant'});
     }
+    if(paired&&state.pdfApiAvailable&&active)await openCibPDFPair(panel,documentId,active.canonical_page_id,revision,{scroll:false});
   }catch(error){if(revision===state.sourceRequestRevision)$("#cib-source-body").innerHTML=`<p>${esc(error.message)}</p>`;}
 }
 
@@ -2419,7 +2451,8 @@ function bindCibSourceButtons(root,panel) {
   $$('[data-cib-document]',root).forEach((button)=>button.addEventListener("click",()=>{
     const selected=panel.external||panel.selected;
     const focal=redactionCaseForRecord(selected||{});
-    openCibSource(panel,button.dataset.cibDocument,{canonicalPageId:button.dataset.cibPage||focal?.canonical_page_id||"",highlights:String(button.dataset.cibHighlight||"").split("||").filter(Boolean),slotId:focal?.document_id===button.dataset.cibDocument?focal.slot_id:""});
+    const sourceView=button.dataset.sourceRelease?state.data.views['current_'+button.dataset.sourceRelease]:null;
+    openCibSource(sourceView?{...panel,view:sourceView}:panel,button.dataset.cibDocument,{canonicalPageId:button.dataset.cibPage||focal?.canonical_page_id||"",highlights:String(button.dataset.cibHighlight||"").split("||").filter(Boolean),slotId:focal?.document_id===button.dataset.cibDocument?focal.slot_id:"",sourceProof:button.graphNodeSourceProof||null,sourceNodeId:button.graphNodeSourceId||""});
   }));
 }
 
@@ -3107,7 +3140,7 @@ async function openSavedWalkSource(proof,{caseInfo,config,resourceBinding}={}){
     for(const p of pages){
       const id=p.id||p.canonical_page_id;if(seen.has(id))continue;seen.add(id);
       if(!eligible(p)||await digest(p.text)!==(p.source_sha256||p.page_sha256))throw Error('An additional source segment failed verification.');
-      const selected=id===proof.canonical_page_id,chars=Array.from(reader.readerText(p.text,caseInfo.corpus)),info=registeredSuppliedPageInfo(p),number=info?.physical_page||p.earlier_page||p.physical_page;
+      const selected=id===proof.canonical_page_id,chars=Array.from(p.text),info=registeredSuppliedPageInfo(p),number=info?.physical_page||p.earlier_page||p.physical_page;
       html+='<h3>'+(info?esc(info.release)+' edition / ':'')+(number?'Page '+esc(number):'Source segment')+'</h3><pre>'+(selected?esc(chars.slice(0,proof.start).join(''))+'<mark class="source-quotation" data-original-text="'+esc(proof.text)+'">'+esc(chars.slice(proof.start,proof.end).join(''))+'</mark>'+esc(chars.slice(proof.end).join('')):esc(chars.join('')))+'</pre>';
     }
     if(!seen.has(proof.canonical_page_id))throw Error('The selected source is missing from its document inventory.');
@@ -3888,7 +3921,7 @@ function guideTweenV64(panel,token,duration,frame) {
 }
 async function guideCameraV64(panel,token,target,duration) {
   const from={...panel.transform};
-  await guideTweenV64(panel,token,duration,p=>{panel.transform={x:from.x+(target.x-from.x)*p,y:from.y+(target.y-from.y)*p,scale:from.scale+(target.scale-from.scale)*p};panel.draw();});
+  await guideTweenV64(panel,token,duration,p=>{panel.transform=p===1?{...target}:{x:from.x+(target.x-from.x)*p,y:from.y+(target.y-from.y)*p,scale:from.scale+(target.scale-from.scale)*p};panel.draw();});
   guideAssertV64(token);
 }
 async function guidePulseV64(panel,id,token) {
@@ -3904,8 +3937,13 @@ async function guideAnimateV64(element,frames,duration,token) {
   guideAssertV64(token);
 }
 
-async function guideTransitionV64(panel,{direction='crossfade',anchor_id=null},change,token) {
+function graphPerspectiveKey(saved){
+  return JSON.stringify([saved.viewKey,saved.level,saved.trail.map(n=>n.id),saved.neighborhood?.node?.id||null,saved.nodeLimit]);
+}
+
+async function guideTransitionV64(panel,{direction='crossfade',anchor_id=null,remember=true},change,token) {
   guideAssertV64(token);
+  const prior=remember?panel.rememberLocation():null;
   const from=guideLevelV64(panel),canvas=panel.canvas,anchor=panel.nodeMap.get(anchor_id);
   const oldTransform={...panel.transform};let layer;
   const event={direction,anchor_id,from,to:null,phases:[],landing:null};
@@ -3922,6 +3960,10 @@ async function guideTransitionV64(panel,{direction='crossfade',anchor_id=null},c
       layer=document.createElement('img');layer.className='guide-motion-layer-v64';layer.alt='';layer.setAttribute('aria-hidden','true');layer.src=canvas.toDataURL();canvas.parentElement.append(layer);
     }
     guideAssertV64(token);await change();guideAssertV64(token);guideUpdateLevelV64(panel);event.to=guideLevelV64(panel);
+    if(prior&&graphPerspectiveKey(prior)!==graphPerspectiveKey(panel.rememberLocation())){
+      const last=panel.nodeHistory.at(-1);
+      if(!last||graphPerspectiveKey(last)!==graphPerspectiveKey(prior))panel.nodeHistory.push(prior);
+    }
     const landingNode=panel.nodeMap.get(anchor_id),final={...panel.transform};
     if(direction==='up'&&landingNode){
       const point=pointFor(landingNode),scale=displayScale(Math.min(3.2,final.scale*2.8));event.landing=point;
@@ -3967,18 +4009,18 @@ function guideResetViewV64(panel,level,trail,focusIds=[]) {
   panel.refreshGraph(focusIds.at(-1)||null);
 }
 
-async function guideParentV64(panel,token) {
+async function guideParentV64(panel,token,{remember=true}={}) {
   if(panel.neighborhood){
     const focus=panel.neighborhood.node,community=panel.trail.at(-1);
     if(community?.type==='Community')await ensureCommunityDetail(panel.view,community);
     guideAssertV64(token);
-    return guideTransitionV64(panel,{direction:'up',anchor_id:focus.id},()=>{
+    return guideTransitionV64(panel,{direction:'up',anchor_id:focus.id,remember},()=>{
       panel.nodeLimit=nodeLimitFor(panel.level);guideNativeV64.returnFromNeighborhood.call(panel);panel.refreshGraph(focus.id);
     },token);
   }
   const parent=panel.trail.at(-1);if(!parent)return;
   const level=nodeLevel[parent.type];await ensureHierarchyCatalog(panel.view,level);guideAssertV64(token);
-  return guideTransitionV64(panel,{direction:'up',anchor_id:parent.id},()=>guideResetViewV64(panel,level,panel.trail.slice(0,-1),[parent.id]),token);
+  return guideTransitionV64(panel,{direction:'up',anchor_id:parent.id,remember},()=>guideResetViewV64(panel,level,panel.trail.slice(0,-1),[parent.id]),token);
 }
 
 async function guideMoveRecordV64(panel,record,token) {
@@ -4011,14 +4053,12 @@ async function guideMoveRecordV64(panel,record,token) {
     if(!panel.nodeMap.has(record.id))throw Error('The exact canonical endpoint is not in its recorded browser view.');
     panel.selected=panel.nodeMap.get(record.id);panel.external=null;panel.localIncidentNeighborhood=incident;panel.renderInspector();panel.draw();
   }
-  panel.nodeHistory=[];guideUpdateLevelV64(panel);
+  guideUpdateLevelV64(panel);
 }
 
 async function guideOpenNeighborhoodV64(panel,record,token,{limit=256,remember=true,ids=[record.id]}={}) {
   const detail=await ensureNodeNeighborhood(panel.view,record.id),route=await panel.hierarchyRoute(detail.node);guideAssertV64(token);
-  const saved=remember?panel.rememberLocation():null;
   await guideTransitionV64(panel,{direction:panel.nodeMap.has(record.id)?'down':'crossfade',anchor_id:record.id},()=>{
-    if(saved)panel.nodeHistory.push(saved);
     panel.neighborhood=detail;panel.localIncidentNeighborhood=null;panel.level='evidence';panel.trail=route.route;panel.nodeLimit=limit;
     panel.investigativeContext=null;panel.showNeighborEdges=true;panel.inducedNeighborEdges=[];panel.inducedLoadRevision++;
     panel.pinnedFocusIds=new Set(ids);panel.external=null;panel.refreshGraph(record.id);
@@ -4057,8 +4097,8 @@ function guideInstallV64() {
     if(state.guidePath?.caseContext)return activateGuideStep(state.guidePath.index-1);
     return guideRunV64(this,async token=>{
       this.v64Traversal=null;
-      if(this.nodeHistory.length){const saved=this.nodeHistory.pop();await guideTransitionV64(this,{direction:'up',anchor_id:saved.selectedId},()=>this.restoreLocation(saved),token);}
-      else await guideParentV64(this,token);
+      if(this.nodeHistory.length){const saved=this.nodeHistory.pop();await guideTransitionV64(this,{direction:'up',anchor_id:saved.selectedId,remember:false},()=>this.restoreLocation(saved),token);}
+      else await guideParentV64(this,token,{remember:false});
     },{manual:true}).catch(e=>this.inspectionError(e));
   };
   p.focusNeighborhood=function(record,{scroll=true,remember=true}={}){
@@ -4066,7 +4106,7 @@ function guideInstallV64() {
     return guideRunV64(this,async token=>{this.v64Traversal=null;await guideOpenNeighborhoodV64(this,record,token,{remember});if(previous&&previous!==record.id&&!state.guidePath){this.priorCenter={id:previous,until:performance.now()+3000};setTimeout(()=>{this.priorCenter=null;this.draw();},3000);this.draw();}if(scroll)this.canvas.focus({preventScroll:true});},{manual:true});
   };
   p.openLocalCommunity=function(record,{scroll=true,remember=true}={}){
-    return guideRunV64(this,async token=>{this.v64Traversal=null;const saved=remember?this.rememberLocation():null;await guideMoveRecordV64(this,record,token);if(saved)this.nodeHistory.push(saved);if(scroll)this.canvas.focus({preventScroll:true});},{manual:true});
+    return guideRunV64(this,async token=>{this.v64Traversal=null;await guideMoveRecordV64(this,record,token);if(scroll)this.canvas.focus({preventScroll:true});},{manual:true});
   };
   p.returnFromNeighborhood=function(){return guideRunV64(this,async token=>{this.v64Traversal=null;await guideParentV64(this,token);},{manual:true});};
 }
@@ -4329,9 +4369,18 @@ $("#full-corpus").value=corpusId;
 $("#nav-workbench").href=returnWorkbench;
 $("#nav-home").href=$("#nav-brand").href="index.html";
 $("#nav-graph").href=location.pathname+location.search;
+function graphCorpusURL(href,corpus){
+  if(!['cib','iran','vietnam'].includes(corpus))throw Error('Unknown corpus selection.');
+  const url=new URL(href);url.searchParams.set('corpus',corpus);
+  // A corpus switch starts independent exploration, never a relabelled saved case.
+  const bound=new Set(['node','node_id','q','scope','inspect','slot_source','connections','as_of',
+    'path_seed_id','path_neighbor_id','resource_id','registry_sha256','index_sha256','graph_revision','revision',
+    'case_id','case','config','reading','candidate_id','route_index','exclude_document']);
+  for(const key of [...url.searchParams.keys()])if(key.startsWith('guide_')||key.startsWith('walk_')||bound.has(key))url.searchParams.delete(key);
+  return url;
+}
 $("#full-corpus").addEventListener("change",event=>{
-  const url=new URL(location.href);url.searchParams.set("corpus",event.target.value);
-  for(const key of [...url.searchParams.keys()])if(key.startsWith("guide_")||["node","node_id","q","as_of","path_seed_id","path_neighbor_id"].includes(key))url.searchParams.delete(key);
+  const url=graphCorpusURL(location.href,event.target.value);
   sessionStorage.setItem("graph-v6-scroll",JSON.stringify([scrollX,scrollY]));
   location.assign(url);
 });

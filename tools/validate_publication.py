@@ -76,6 +76,9 @@ import time
 import types
 from urllib.parse import parse_qsl, unquote, urlencode, urlsplit
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'release-tools'))
+from source_pdfs import pdf_dataset, validate_pdf_delivery
+
 
 MAX_TOTAL_BYTES = 900_000_000
 MAX_DATASET_BYTES = 3_000_000_000
@@ -503,7 +506,8 @@ class GraphDatasets:
     """Offline wire/decoded/privacy checks; retain no complete decoded JSON roots."""
     def __init__(self, dataset_root, expected_manifest_sha256, *,
                  source_ids=('cib', 'iran', 'vietnam'), max_total_bytes=MAX_DATASET_BYTES,
-                 max_file_bytes=MAX_FILE_BYTES, max_decoded_bytes=MAX_DECODED_BYTES):
+                 max_file_bytes=MAX_FILE_BYTES, max_decoded_bytes=MAX_DECODED_BYTES,
+                 source_pdf_paths=None):
         self.root = Path(dataset_root).absolute()
         require(self.root.is_dir() and not self.root.is_symlink() and self.root.resolve() == self.root,
                 'dataset root is missing or symlinked')
@@ -512,6 +516,15 @@ class GraphDatasets:
         self._full_scan_completed = False
         self._trusted_replay_completed = False
         for directory, dirs, names in os.walk(self.root, followlinks=False):
+            if Path(directory) == self.root / 'cib' and 'source-pdfs' in dirs:
+                # Only the separately hash-checked PDF catalog can exempt this
+                # exact subtree from graph JSON/privacy validation.
+                pdf_root = Path(directory) / 'source-pdfs'
+                require(source_pdf_paths is not None and pdf_root.resolve() == pdf_root,
+                        'source PDF subtree requires independent verified delivery')
+                require({p.relative_to(self.root.parent).as_posix() for p in pdf_root.iterdir()}
+                        == set(source_pdf_paths), 'source PDF membership changed')
+                dirs.remove('source-pdfs')
             for name in dirs + names:
                 path = Path(directory) / name
                 require(not path.is_symlink(), 'dataset symlink')
@@ -992,6 +1005,7 @@ def validate_publication(site, *, known_case_ids=None, max_total_bytes=MAX_TOTAL
             'versioned API entries index required')
     graph_paths, study_paths = set(), set()
     has_external = False
+    has_external_pdf = False
     for supplied, entry in index['entries'].items():
         require(isinstance(entry, dict), 'invalid API route row')
         logical = canonical_route(supplied, case_ids)
@@ -1002,10 +1016,29 @@ def validate_publication(site, *, known_case_ids=None, max_total_bytes=MAX_TOTAL
                 'api/condition-v6', 'api/flow-v6', 'api/graph-v4-viewer'},
                 'DAG transport is forbidden for full KG and fast condition/flow requests')
         if 'external_url' in entry:
-            require(endpoint.startswith('graph-assets-v4/'), 'external data is restricted to full KG assets')
-            has_external = True
+            if endpoint == 'api/cib-pdf':
+                try:
+                    pdf_dataset('/' + logical, entry)
+                except (AssertionError, KeyError, TypeError, ValueError):
+                    require(False, 'unapproved external CIB PDF contract')
+                has_external_pdf = True
+            else:
+                require(endpoint.startswith('graph-assets-v4/'), 'external data is restricted to full KG assets or ordinary CIB PDFs')
+                has_external = True
         elif isinstance(entry.get('path'), str):
             (graph_paths if graph else study_paths).add(entry['path'])
+    source_pdfs = None
+    if has_external_pdf:
+        require('cib' in source_ids, 'CIB PDF source declaration missing')
+        ref = pub.get('source_pdf_delivery_ref')
+        require(isinstance(ref, dict) and ref.get('path') in inventory,
+                'explicit published source_pdf_delivery_ref required')
+        require(ref.get('sha256') == inventory[ref['path']].get('sha256'), 'PDF catalog pin differs')
+        try:
+            source_pdfs = validate_pdf_delivery(root, (dataset_root or root.parent / 'datasets').parent,
+                                                index['entries'], ref)
+        except (AssertionError, KeyError, TypeError, ValueError, OSError):
+            require(False, 'source PDF delivery validation failed')
     graph_data = pub.get('graph_data_manifest')
     datasets, dataset_commit = None, None
     if graph_data is not None or has_external:
@@ -1017,7 +1050,8 @@ def validate_publication(site, *, known_case_ids=None, max_total_bytes=MAX_TOTAL
                 'final graph dataset commit must be 40 lowercase hex')
         datasets = GraphDatasets(dataset_root or root.parent / 'datasets', graph_data['sha256'],
             source_ids=source_ids, max_total_bytes=max_dataset_bytes,
-            max_file_bytes=max_file_bytes, max_decoded_bytes=max_decoded_bytes)
+            max_file_bytes=max_file_bytes, max_decoded_bytes=max_decoded_bytes,
+            source_pdf_paths=source_pdfs['paths'] if source_pdfs else None)
         if dataset_proof_ref is not None:
             reuse_dataset_proof(datasets, dataset_proof_ref)
         else:
@@ -1078,8 +1112,13 @@ def validate_publication(site, *, known_case_ids=None, max_total_bytes=MAX_TOTAL
         require(key not in routes, 'duplicate/conflicting canonical API route')
         routes.add(key)
         if 'external_url' in row:
-            require(datasets is not None, 'external graph datasets missing')
-            identity = datasets.external_entry(key, row, dataset_commit)
+            if key.split('?')[0] == 'api/cib-pdf':
+                require(source_pdfs is not None, 'verified source PDF delivery missing')
+                pdf_dataset('/' + key, row)
+                identity = {}
+            else:
+                require(datasets is not None, 'external graph datasets missing')
+                identity = datasets.external_entry(key, row, dataset_commit)
         elif row.get('encoding') == 'fragment-dag':
             safe_path(row.get('path'))
             identity = packs.entry(row)
@@ -1158,6 +1197,7 @@ def validate_publication(site, *, known_case_ids=None, max_total_bytes=MAX_TOTAL
                 fragment_dag_packs=len(packs.packs), fragment_dag_roots_verified=len(packs.verified),
                 max_decoded_fragment_root_bytes=packs.max_root,
                 datasets=datasets.summary() if datasets else None, dataset_commit=dataset_commit,
+                source_pdfs=source_pdfs,
                 dataset_validation_mode=('pinned-full-privacy-pass-plus-fresh-wire-hashes'
                     if datasets and dataset_proof_ref else 'full-json-privacy-scan' if datasets else None),
                 licensing='Declarations checked; not legal clearance, declassification, or a blanket copyright license',

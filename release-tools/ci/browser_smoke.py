@@ -83,9 +83,22 @@ class Metadata(HTMLParser):
 
 
 def public_study(site):
-    metadata = Metadata((site / 'swedish-study.html').read_text())
+    html = (site / 'swedish-study.html').read_text()
+    metadata = Metadata(html)
     meta = metadata.values
     expected = meta.get('study-data-sha256', '')
+    if not expected and 'src="workbench-study-entry.js"' in html:
+        manifest = json.loads((site / 'release-manifest.json').read_bytes())
+        assert meta.get('source-api-index-sha256') == manifest['api_index']['sha256']
+        assert hashlib.sha256(safe_path(site, manifest['api_index']['path']).read_bytes()).hexdigest() == manifest['api_index']['sha256']
+        reference = dict(path='data/report-v6.json', sha256=manifest['source_report_ref']['sha256'])
+        index = json.loads(safe_path(site, manifest['api_index']['path']).read_bytes())
+        assert index['entries']['/data/report-v6.json']['sha256'] == reference['sha256'], 'The runtime report route selects another report'
+        report = pinned(site, reference)
+        assert [row['case']['case_id'] for row in report['cases']] == manifest['case_ids']
+        cases = [row['case']['case_id'] for row in report['cases'] if row.get('collection') == 'withheld_delegation']
+        assert len(cases) == 1, 'The retained study needs one exact published unknown-reference input'
+        return reference, dict(version='delegation-active-report-entry/1', source_report_ref=reference, case_ids=cases)
     assert re.fullmatch('[a-f0-9]{64}', expected), 'Public study must declare its own byte pin'
     path = meta.get('study-data-path') or metadata.attributes.get('study-data-sha256', {}).get('data-file')
     if not path:
@@ -123,6 +136,24 @@ def validate_archive(site):
 
 
 def public_cases(site, study):
+    if study['version'] == 'delegation-active-report-entry/1':
+        report = pinned(site, study['source_report_ref'])
+        cases = [row for row in report['cases'] if row['case']['case_id'] in study['case_ids']]
+        assert len(cases) == len(study['case_ids']) == 1
+        row = cases[0]
+        case, binding, item = row['case'], row['native_public_case_binding'], row['configurations']['llm_readings']
+        assert row['collection'] == 'withheld_delegation' and row['study_slot'] == 'first'
+        assert case['task'] == 'redaction' and case['corpus'] == 'cib'
+        assert row['current_resource_execution'] is True and row['reference_answer_kind'] == 'unknown_still_withheld'
+        assert row.get('reference_answer_available') is not True and row.get('reference_answer') is None and row.get('gold') is None
+        assert all(row.get(key) is False for key in ('selected_demo', 'selected_bench', 'selected_additional'))
+        assert item['source_view_policy']['id'] == 'supplied_documents_inclusive'
+        assert binding['state'] == 'PASS' and binding['native_packet_modified'] is False
+        assert binding['native_checkpoint'] == item['native_checkpoint']
+        assert binding['query_sha256'] == digest(case['query'])
+        assert binding['public_case_sha256'] == binding['native_public_case_sha256'] == binding['native_case_sha256'] == digest(case)
+        assert re.fullmatch('[a-f0-9]{64}', item['native_checkpoint']['sha256'])
+        return cases
     if study['version']=='delegation-native-workbench/1':
         raw=(site/'data/report-v6.json').read_bytes()
         assert hashlib.sha256(raw).hexdigest()==study['source_report_ref']['sha256']
@@ -327,13 +358,22 @@ def assert_saved_source(row, config, source, *, full_page=False, execution=None,
         assert source.get('native_page',{}).get('view','earlier') in ('earlier','both')
 
 
+def checked_case_inventory(report, manifest, expected_cases=None):
+    ids = [row['case']['case_id'] for row in report['cases']]
+    assert ids == manifest['case_ids'], 'Report and manifest active inventory differ'
+    assert len(ids) == len(set(ids)), 'Repeated active case'
+    if expected_cases is not None:
+        assert len(ids) == expected_cases, 'Explicit expected case count differs'
+    return len(ids)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--site', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--datasets-root', type=Path)
     parser.add_argument('--minimum-free-gib', type=int, choices=(3, 8), default=8)
-    parser.add_argument('--expected-cases', type=int, default=16, help='Release workbench count, including two delegation inputs')
+    parser.add_argument('--expected-cases', type=int, default=None, help='Optional exact count; default derives the ordered active manifest inventory')
     parser.add_argument('--only', help='Development subset: archive,study,graph,walk,workbench,live; omitted means ALL')
     args = parser.parse_args()
     selected = set(args.only.split(',')) if args.only else {'archive', 'study', 'graph', 'walk', 'workbench', 'live'}
@@ -349,7 +389,8 @@ def main():
         if entry.get('external_url'):
             dataset(key, entry)
     report = json.loads((site / 'data/report-v6.json').read_bytes())
-    assert len(report['cases']) == args.expected_cases
+    manifest = json.loads((site / 'release-manifest.json').read_bytes())
+    args.expected_cases = checked_case_inventory(report, manifest, args.expected_cases)
     current_cases = {row['case']['case_id']: row for row in report['cases']}
     assert len(current_cases) == args.expected_cases
     leaked, external, rows = [], [], []
@@ -585,7 +626,7 @@ def main():
                     page.on('request', lambda request: private_requests.append(request.url)
                         if '/phase/' in request.url or '/attempt0' in request.url or 'execution.json.gz' in request.url else None)
                     page.goto(base + 'swedish-study.html', wait_until='domcontentloaded')
-                    if study['version']=='delegation-native-workbench/1':
+                    if study['version'] in {'delegation-native-workbench/1', 'delegation-active-report-entry/1'}:
                         page.wait_for_url('**/workbench-v6.html?**',timeout=60000)
                         row.update(public_study_ref=reference,public_study_version=study['version'],cases=[])
                         for saved in cases:

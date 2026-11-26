@@ -7,6 +7,7 @@ import hashlib
 import json
 import re
 from urllib.parse import unquote, urlsplit
+from source_pdfs import PDF_PATH, pdf_dataset, pdf_bytes
 
 
 def server(site, *, port=0, prefix='/matryoshka-demo/', logs=None, datasets_root=None):
@@ -16,6 +17,17 @@ def server(site, *, port=0, prefix='/matryoshka-demo/', logs=None, datasets_root
     manifest = site / 'data/dataset-delivery.json'
     delivery = json.loads(manifest.read_bytes()) if manifest.exists() else None
     allowed = {r['path']:r for r in delivery['files']} if delivery else {}
+    if delivery:
+        assert len(allowed) == len(delivery['files']), 'Duplicate delivery file'
+        index = json.loads((site / 'data/api-index.json').read_bytes())['entries']
+        pdfs = set()
+        for key, entry in index.items():
+            if 'external_url' in entry and key.split('?')[0] == '/api/cib-pdf':
+                expected = pdf_dataset(key, entry)
+                assert delivery['routes'].get(key) == expected['path']
+                assert all(allowed[expected['path']].get(k) == v for k, v in expected.items())
+                pdfs.add(expected['path'])
+        assert pdfs == {p for p in allowed if PDF_PATH.fullmatch(p)}, 'Unbound mirror PDF'
     datasets = Path(datasets_root).absolute() if datasets_root else site.parent / 'datasets'
     class Handler(SimpleHTTPRequestHandler):
         def log_message(self, *_):
@@ -32,23 +44,29 @@ def server(site, *, port=0, prefix='/matryoshka-demo/', logs=None, datasets_root
             if path.startswith('/datasets/'):
                 parsed = urlsplit(self.path)
                 relative = path.lstrip('/')
-                if parsed.query or parsed.fragment or not re.fullmatch(r'datasets/(cib|iran|vietnam)/[a-f0-9]{64}\.json\.gz', relative) or relative not in allowed:
+                is_pdf = PDF_PATH.fullmatch(relative) is not None
+                if parsed.query or parsed.fragment or not (is_pdf or re.fullmatch(r'datasets/(cib|iran|vietnam)/[a-f0-9]{64}\.json\.gz', relative)) or relative not in allowed:
                     self.send_error(404)
                     return
                 target = datasets / relative[len('datasets/'):]
                 if target.resolve() != target or not target.is_file():
                     self.send_error(404)
                     return
-                raw = target.read_bytes()
+                try:
+                    raw = pdf_bytes(target, allowed[relative]) if is_pdf else target.read_bytes()
+                except AssertionError:
+                    self.send_error(409, 'PDF registration or original bytes differ')
+                    return
                 if hashlib.sha256(raw).hexdigest() != allowed[relative]['wire_sha256']:
                     self.send_error(409, 'Dataset wire hash differs')
                     return
                 self.send_response(200)
-                self.send_header('Content-Type', 'application/gzip')
+                self.send_header('Content-Type', 'application/pdf' if is_pdf else 'application/gzip')
                 self.send_header('Content-Length', str(len(raw)))
                 self.send_header('Cache-Control', 'public, max-age=31536000, immutable')
                 self.end_headers()
-                self.wfile.write(raw)
+                if self.command != 'HEAD':
+                    self.wfile.write(raw)
                 return
             if not path.startswith(prefix):
                 self.send_error(404)
@@ -64,7 +82,10 @@ def server(site, *, port=0, prefix='/matryoshka-demo/', logs=None, datasets_root
                 self.send_error(404)
                 return
             self.path = self.path[len(prefix) - 1:]
-            return super().do_GET()
+            return super().do_HEAD() if self.command == 'HEAD' else super().do_GET()
+
+        def do_HEAD(self):
+            return self.do_GET()
 
     return ThreadingHTTPServer(('127.0.0.1', port), partial(Handler, directory=str(site)))
 

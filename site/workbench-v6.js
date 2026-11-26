@@ -11,9 +11,13 @@ import {sourceScopeAllows,sourcePagePolicyAllows,sourcePolicyCaption,isSuppliedS
 import {mountEvidenceMap} from './evidence-map.js';
 import {loadSourceLookups} from './source-lookups-v1.js';
 import {loadReaderCasing,readerText} from './reader-casing.js';
-import {exactSourceAnchor,focalReferenceFromOrigin,appendCIBPDFPair,cibPDFPair} from './source-inspection.js';
+import {exactSourceAnchor,focalReferenceFromOrigin,cibPDFPair} from './source-inspection.js';
 import originPageLocators from './source-pdf-locators.js';
 import {inputOriginPDFLocators} from './input-origin-locators.js';
+import {originBoundary,originDisplaySections,originPDFLocator,narrowOriginAnchors} from './workbench-origin.js';
+import {showWorkbenchPDFs} from './workbench-pdf.js';
+import {savedReserveCandidates} from './workbench-reserves.js';
+import {workbenchStudyTarget,linkWorkbenchStudyNavigation} from './workbench-study-entry.js';
 import {nativeControllerWithholdingViews,controllerWithholdingEmptyText,renderControllerWithholding,renderControllerWithheldAudit} from './controller-withholding-ui.js';
 import {verifyProposalPool,corpusOnlyProposalExecution,preferredProposalReading,proposalSourceLabel,renderProposalOrder,renderSuppliedProposalTrace} from './proposal-pool.js';
 await loadReaderCasing();
@@ -79,7 +83,7 @@ export function bindCasebook(manifest,rows,{reportSHA,reportRun}={}){
       slotIds.add(c.case_id);slotCells.add(cell);
     }
   }
-  if(!Array.isArray(manifest.special_redactions)||manifest.special_redactions.length>5)throw Error("The special CIB redactions group is malformed.");
+  if(!Array.isArray(manifest.special_redactions)||manifest.special_redactions.length>rows.length)throw Error("The special CIB redactions group is malformed.");
   const seenSpecial=new Set(),special_redactions=manifest.special_redactions.map(entry=>{
     const value=resolve(entry);
     if(value.corpus!=="cib"||value.task!=="redaction"||seenSpecial.has(value.case_id))throw Error("The special CIB redaction group repeats or changes a case.");
@@ -413,17 +417,21 @@ function destroyVisuals({disconnectCitations=true}={}) { state.flow?.destroy();s
 function pendingRecord(value) { return value&&["PENDING","NOT_RUN","UNAVAILABLE","NOT_PUBLISHED","PREPARING"].includes(String(value.status||value.execution_status||"").toUpperCase()); }
 function recordedFailure(value){return !!value&&(!!value.failure||!!value.error||/FAIL|ERROR|BLOCKED|PARSE/i.test(String(value.execution_status||value.status||"")));}
 function publicationNote(value) { return value?.provenance_notice||value?.release_note||value?.notice||""; }
-function closeDrawer() { sourceRequest?.abort();state.drawerEpoch++;if($("#detail-drawer").open){viewportAnchor.cancel();$("#detail-drawer").close();} }
+function disposeDrawerPDFs(){for(const host of $('#detail-body').querySelectorAll('[data-testid="origin-pdf-pair"]'))host.disposeWorkbenchPDFs?.();}
+function closeDrawer() { sourceRequest?.abort();disposeDrawerPDFs();state.drawerEpoch++;if($("#detail-drawer").open){viewportAnchor.cancel();$("#detail-drawer").close();} }
 function openDrawer(titleText,kicker,body,back) {
   viewportAnchor.cancel();
   sourceRequest?.abort();state.drawerEpoch++;
   $("#detail-title").textContent=titleText;$("#detail-kicker").textContent=kicker;
+  disposeDrawerPDFs();
   $("#detail-body").replaceChildren(body);
+  $("#detail-drawer").classList.toggle('workbench-origin-drawer',!!body.querySelector?.('[data-testid="origin-document"]'));
   $("#detail-back").hidden=!back;$("#detail-back").onclick=back||null;
   if(!$("#detail-drawer").open)$("#detail-drawer").showModal();
   $("#detail-close").focus({preventScroll:true});return state.drawerEpoch;
 }
 $("#detail-close").addEventListener("click",closeDrawer);
+$("#detail-drawer").addEventListener("cancel",disposeDrawerPDFs);
 $("#detail-drawer").addEventListener("close",()=>{if(!$("#detail-drawer").open){sourceRequest?.abort();state.drawerEpoch++;}});
 
 function visibleCases() {
@@ -515,7 +523,7 @@ function curatedDisplayReading(record,caseInfo,row,{live=false}={}){
   return choice.reading_id;
 }
 function initialDisplayReading(record,caseInfo,row,options={}){
-  return preferredProposalReading(record,caseInfo,{pool:proposalPoolCache.get(record)?.view,inputView:inputContextCache.get(record)?.view});
+  return curatedDisplayReading(record,caseInfo,row,options)||preferredProposalReading(record,caseInfo,{pool:proposalPoolCache.get(record)?.view,inputView:inputContextCache.get(record)?.view});
 }
 // END_READER_READING_CHOICE
 function currentReading() { const rows=readingRows();return rows.find(r=>r.reading?.id===state.reading)||rows[0]; }
@@ -703,6 +711,10 @@ function renderQuestion() {
       'aria-current':row.case.case_id===c.case_id?'page':null,'data-study-slot':row.study_slot}));
     s.body.append(tabs);
   }
+  if(state.row.reference_answer_kind==='unknown_still_withheld'){
+    const notice=note('Historical truth remains unknown. This study retains its explicitly bound registered-document source policy; it does not change ordinary source eligibility or establish the masked text.','notice');
+    notice.dataset.testid='study-unknown-truth';s.body.append(notice);
+  }
   const query=el("div",null,{class:"query-block","data-testid":"query-text","data-task":c.task});
   // Override the old redaction-only uppercase style, not the source characters.
   query.style.textTransform='none';
@@ -859,8 +871,10 @@ function independentReviewPanel(){
 }
 
 function highlightedText(text,anchors,attrs={}) {
-  const host=el("div",null,{class:"source-document",...attrs}),chars=Array.from(text),display=Array.from(readable(text));let cursor=0;
+  const {rawText=false,...attributes}=attrs;
+  const host=el("div",null,{class:"source-document",...attributes}),chars=Array.from(text),display=Array.from(rawText?text:readable(text));let cursor=0;
   host.dataset.originalText=text;
+  if(rawText)host.dataset.displayRaw='true';
   for(const a of [...anchors].sort((a,b)=>a.start-b.start)){
     if(!Number.isInteger(a.start)||!Number.isInteger(a.end)||a.start<cursor||a.end<=a.start||a.end>chars.length||chars.slice(a.start,a.end).join("")!==a.text)throw Error("The exact source quotation does not replay.");
     const mark=el("mark",display.slice(a.start,a.end).join(""));mark.dataset.originalText=a.text;
@@ -871,6 +885,7 @@ function highlightedText(text,anchors,attrs={}) {
 function originalCaseControl(body) {
   if(!['iran','vietnam'].includes(state.row.case.corpus))return null;
   const label=el('label',null,{class:'original-case-control'}),input=el('input',null,{type:'checkbox'});
+  input.checked=!!body.querySelector('.source-document[data-display-raw=true]');
   label.append(input,document.createTextNode('Original capitalization'));
   input.onchange=()=>{
     for(const source of body.querySelectorAll('.source-document[data-original-text]')){
@@ -976,17 +991,12 @@ function originPDF(data,{segment=null}={}) {
         }
       }
       host.replaceChildren();
-      for(const item of links.sort((a,b)=>Number(a.release==='later')-Number(b.release==='later')||a.page-b.page)){
-        const proxy=data.source_mapping?.kind==='withholding_notice_block'&&item.release==='earlier';
-        const url=new URL(item.asset_url);url.hash='page='+item.page;
-        const pdf=link(`${item.release==='earlier'?'Earlier':'Later'} PDF${proxy?' / withholding notice':''} / page ${item.page}`,url.href,'button');
-        pdf.dataset.release=item.release;pdf.dataset.pdfPage=String(item.page);pdf.dataset.documentId=item.document_id;pdf.dataset.pdfSha256=item.sha256;
-        host.append(pdf);
-      }
+      if(links.length)await showWorkbenchPDFs(host,links);
       host.append(note(links.length?(selectedSourceScope(c).source_view_policy.id==='supplied_documents_inclusive'?
         'Original-document provenance only. Corpus admission is determined separately by the execution\'s registered source policy.':
         'Original-document provenance only. Opening the later PDF does not admit it as evidence.'):'No verified PDF page mapping is published. No page or document is substituted.'));
       if(supplement&&links.length){host.dataset.locatorVersion=supplement.version;host.dataset.locatorAuditSha256=supplement.audit_sha256;host.dataset.sourceTargetId=supplement.source_target_id;}
+      if(links.length)host.append(note('Recorded release locators do not guarantee identical content: an earlier-release page may be a withholding notice.'));
       if(data.source_mapping?.kind==='withholding_notice_block')host.append(note('The earlier page is a withholding notice, not a same-content page.'));
     }catch(error){host.replaceChildren(note(error.message+' No PDF is substituted.','notice'));}
   })();
@@ -1003,7 +1013,7 @@ function originPDFSources(data,segments,anchors){
     const page={document_id:data.document_id,canonical_page_id:id};
     if(['CANONICAL_EARLIER_PROJECTION_WITH_ONE_PRIVATE_FOCAL_REVEAL','CANONICAL_EARLIER_PDF_PROJECTION'].includes(locator.kind)){
       page.earlier_page=positive(locator.physical_page_1based);page.later_page=positive(locator.paired_later_page_1based);
-    }else if(['earlier','later'].includes(locator.release))page[locator.release+'_page']=positive(locator.physical_pdf_page);
+    }else Object.assign(page,originPDFLocator(segment));
     const paired=originPageLocators[id];
     if(paired&&paired.document_id!==data.document_id)throw Error('The paired PDF locator belongs to another document.');
     if(paired&&['earlier','later'].some(release=>page[release+'_page']&&paired[release+'_page']&&page[release+'_page']!==paired[release+'_page']))throw Error('Conflicting original PDF page mappings.');
@@ -1049,7 +1059,7 @@ function originDrawer(data) {
   const transcription=data.full_transcription||data;
   if(data.query_kind){originKinds.set(state.row.case.case_id,data.query_kind);refreshRailQuestionKind(state.row);}
   const registeredOrigin=state.row.case.corpus==='cib'&&selectedSourceScope(state.row.case).source_view_policy.id==='supplied_documents_inclusive';
-  const body=box(note(registeredOrigin?'Input provenance. Corpus citations appear under Sources.':data.notice,"notice"),fields([["Document",data.document_id,true],["Source",data.source_id,true],["Recorded classification",data.classification],["Source category",data.source_category,true],["Display scope",transcription.scope]]),note(data.focal_still_withheld===true?"Pinned masked projection and display-segment hashes verified; raw-source coordinates remain separately recorded. No hidden answer or revealed transcription is supplied. This is input provenance, not evidence.":"Original transcript hashes and exact recorded offsets verified. This input-origin attachment is provenance, not evidence or independent historical confirmation.","verified"));
+  const body=box(note(registeredOrigin?'Input provenance. Corpus citations appear under Sources.':data.notice,"notice"),fields([["Document",data.document_id,true],["Date",data.date],["Source",data.source_id,true],["Recorded classification",data.classification],["Source category",data.source_category,true],["Display scope",transcription.scope]]),note(data.focal_still_withheld===true?"Pinned masked projection and display-segment hashes verified; raw-source coordinates remain separately recorded. No hidden answer or revealed transcription is supplied. This is input provenance, not evidence.":"Original transcript hashes and exact recorded offsets verified. This input-origin attachment is provenance, not evidence or independent historical confirmation.","verified"));
   if(data.warning)body.append(note(data.warning,"origin-category-warning"));
   const audit=el('details',null,{class:'origin-audit-details'});audit.append(el('summary','Provenance details / source verification'),
     fields([['Derivation',data.derivation],['Canonical unit / raw-body audit verified',data.unit_verified],['Secret-derived input certified by this source audit',data.secret_derived],['Recorded construction',data.query_kind,true]]),
@@ -1057,9 +1067,12 @@ function originDrawer(data) {
   const scope=el('details');scope.append(el('summary','Input scope and saved inventory'),fields([['Collection',CORPORA[state.row.case.corpus]],['Task',TASKS[state.row.case.task]],['Published case inventory',`${catalogCases().length} cases`,true]]),note(registeredOrigin?'Input provenance. Corpus citations appear under Sources.':queryKindNotice(state.row)||'Original input provenance; not eligible result evidence.'),note(GRAPH_SCOPE),note(sourceScopeText()));if(state.saved)scope.append(button('Saved prompts',promptDrawer));
   const caseControl=originalCaseControl(body);if(caseControl)scope.append(caseControl);body.append(scope);
   const mapping=originMappingDetails(data);if(mapping)body.append(mapping);
-  const anchors=exactOriginAnchors(data);
-  if(!anchors.length)body.append(note("No precise birth-quote spans were recorded. This document is not highlighted as if its whole text were the input.","notice"));
-  const segments=isNarrativePublication()?narrativeUI.originTranscriptSegments(transcription):list(transcription.segments);
+  const recordedAnchors=exactOriginAnchors(data);
+  const originalSegments=isNarrativePublication()?narrativeUI.originTranscriptSegments(transcription):list(transcription.segments);
+  const anchors=narrowOriginAnchors(transcription.text,state.row.case.query,recordedAnchors,{pageSegments:originalSegments});
+  if(!anchors.length)body.append(note("No narrow verified birth quotation is published for this whole-source span. No full-page highlight is inferred.","notice"));
+  else body.append(note('Highlights retain the producer-verified birth quotations, including paraphrased inputs and original OCR. Only oversized passages may be narrowed to strong unique shared wording. Origin provenance is not evidence or independent confirmation.'));
+  const segments=originDisplaySections(transcription.text,originalSegments);
   const document=transcriptDocument(transcription.text,anchors,segments,{testid:"origin-document",sourceId:data.source_id,documentId:data.document_id,separators:isNarrativePublication()?list(transcription.display_segment_mapping?.separator_spans||transcription.separator_spans):[]});
   if(state.row.case.corpus==='cib'){
     let attached=false;
@@ -1070,11 +1083,12 @@ function originDrawer(data) {
     if(!attached)document.prepend(originPDF(data));
   }
   const context=box(heading('Original source context'),document);context.dataset.testid='origin-context';body.append(context);
+  if(caseControl)caseControl.querySelector('input').checked=true;
   const mask=$('#stage-01 [data-testid=focal-mask]');
   if(mask&&!mask.disabled&&data.reveal_available!==false)body.append(button(state.reference?'Hide focal origin reference':'Explicitly reveal focal origin reference',()=>{
     toggleReference();$('#stage-01 [data-testid=origin-open]')?.click();
   },'',{'data-testid':'origin-reveal'}));
-  openDrawer("Origin",originEvidenceKicker(),body);
+  openDrawer("Origin",`${data.document_id} / ${data.date} / ${originEvidenceKicker()}`,body);
   scrollToSource();
 }
 function transcriptDocument(text,anchors,segments,{testid,sourceId,documentId,separators=[]}={}){
@@ -1084,11 +1098,12 @@ function transcriptDocument(text,anchors,segments,{testid,sourceId,documentId,se
     const join=segment.start===end||separators.some(gap=>gap.raw_start===end&&gap.raw_end===segment.start&&chars.slice(end,segment.start).join('')===gap.text);
     if(!Number.isInteger(segment.start)||!Number.isInteger(segment.end)||!join||segment.end<segment.start||segment.end>chars.length)throw Error("Document segment boundaries do not replay.");
     end=segment.end;
-    const physical=Number.isInteger(segment.physical_page)&&segment.physical_page>0;
-    const section=el("section",null,{class:"transcript-segment","data-source-id":segment.source_id||sourceId||""}),boundary=el("h3",`${physical?"Page "+segment.physical_page:"Logical segment "+(i+1)} / ${documentId||"Source document"}`,{class:"transcript-boundary","data-testid":"transcript-boundary","data-boundary-kind":physical?"physical-page":"logical-segment"});
+    const label=originBoundary(segment,i);
+    const section=el("section",null,{class:"transcript-segment","data-source-id":segment.source_id||sourceId||""}),boundary=el("h3",`${label.label} / ${documentId||"Source document"}`,{class:"transcript-boundary","data-testid":"transcript-boundary","data-boundary-kind":label.kind});
     section.append(boundary);
     const clipped=anchors.filter(a=>a.start<segment.end&&a.end>segment.start).map(a=>{const start=Math.max(a.start,segment.start),stop=Math.min(a.end,segment.end);return {start:start-segment.start,end:stop-segment.start,text:chars.slice(start,stop).join("")};});
-    section.append(highlightedText(chars.slice(segment.start,segment.end).join(""),clipped,{class:"source-document transcript-text","data-testid":"transcript-text"}));host.append(section);
+    section.dataset.rawStart=String(segment.start);section.dataset.rawEnd=String(segment.end);
+    section.append(highlightedText(chars.slice(segment.start,segment.end).join(""),clipped,{class:"source-document transcript-text","data-testid":"transcript-text",rawText:testid==='origin-document'}));host.append(section);
   }
   if(end!==chars.length)throw Error("Document segment inventory omits source text.");
   return host;
@@ -1096,7 +1111,7 @@ function transcriptDocument(text,anchors,segments,{testid,sourceId,documentId,se
 function scrollToSource(){
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     const drawer=$("#detail-drawer");if(!drawer.open)return;
-    const source=drawer.querySelector(".document-transcript mark,[data-testid=source-document] mark")||drawer.querySelector("[data-source-selected=true] .transcript-boundary")||drawer.querySelector(".transcript-boundary");
+    const source=drawer.querySelector('[data-testid="origin-document"] [data-testid="origin-pdf-pair"]')||drawer.querySelector(".document-transcript mark,[data-testid=source-document] mark")||drawer.querySelector("[data-source-selected=true] .transcript-boundary")||drawer.querySelector(".transcript-boundary");
     source?.scrollIntoView({block:"start",behavior:"instant"});
   }));
 }
@@ -1647,6 +1662,21 @@ function renderResultBody(){
     if(task==='redaction')card.append(button("Routes",()=>{selectCandidate(item.id);stagePosition("03");},"quiet"));grid.append(card);
   }
   host.append(grid);
+  if(task==='redaction'){
+    const reserve=savedReserveCandidates(currentReading());
+    if(reserve.length){
+      const disclosure=el('details',null,{class:'workbench-reserve-candidates','data-testid':'saved-ranks-6-10'});
+      disclosure.append(el('summary',`Saved ranks 6–${reserve.at(-1).rank}`),
+        note('Additional candidates saved for this exact reading. Original ranks and evidence states are unchanged; these are not extra support votes.'));
+      for(const item of reserve){
+        const card=el('article',null,{class:'workbench-reserve-card','data-testid':'reserve-candidate','data-candidate-id':item.id,'data-saved-rank':item.rank});
+        card.append(el('h3',`${item.rank}. ${readable(item.fill)}`),note(readerEvidenceState(item.local_decision?.status)?.label||'Saved evidence state not supplied'));
+        for(const proof of uniqueProofs(list(item.sources)))card.append(sourceButton(proof));
+        disclosure.append(card);
+      }
+      host.append(disclosure);
+    }
+  }
   const compatibility=currentControllerView(),audit=currentControllerAudit();
   if(compatibility?.candidates.length)host.append(controllerWithholdingDisclosure(compatibility));
   if(audit?.error){
@@ -1778,7 +1808,7 @@ async function loadAnalystDigest(host,epoch,reading){
     }
     if(epoch!==state.epoch||reading!==state.reading||!host.isConnected)return;
     if(data.available!==true){host.dataset.status='unavailable';host.replaceChildren(el('p','No analyst digest is attached.'),note('The native verdict and selected evidence remain available above.'));return;}
-    if(data.version==='source-bound-postrun-digest/1'){
+    if(['source-bound-postrun-digest/1','source-bound-postrun-digest/2'].includes(data.version)){
       if(data.native_checksum!==state.saved.native_checksum||data.query_sha256!==await textDigest(state.row.case.query)||
           canonicalGateJSON(data.resource_binding)!==canonicalGateJSON(state.saved.resource_binding)||
           !Array.isArray(data.sources)||data.source_count!==data.sources.length||data.sources.some((source,index)=>source.id!=='S'+(index+1))||
@@ -2729,19 +2759,28 @@ async function sourceDrawer(value,{back}={}) {
       const selected=(segment.canonical_page_id||segment.id)===proof.canonical_page_id,number=physical(segment),known=Number.isInteger(number)&&number>0;
       const section=el("section",null,{class:"transcript-segment","data-source-id":segment.canonical_page_id||segment.id,"data-source-selected":String(selected)});
       const edition=registeredSuppliedPageInfo(segment)?.release;
-      section.append(el("h3",`${edition?edition+' edition / ':''}${known?"Page "+number:"Logical segment "+(index+1)} / ${segment.document_id}`,{class:"transcript-boundary","data-testid":"transcript-boundary","data-boundary-kind":known?"physical-page":"logical-segment"}));
+      section.append(el("h3",`${edition?edition+' edition / ':''}${known?"Page "+number:index?'Source text continuation':'Original source text'} / ${segment.document_id}`,{class:"transcript-boundary","data-testid":"transcript-boundary","data-boundary-kind":known?"physical-page":"source-text"}));
       const highlights=selected&&verified?[exactSourceAnchor(segment.text,proof)]:[];
       if(selected&&verified){section.dataset.proofStart=String(proof.start);section.dataset.proofEnd=String(proof.end);section.dataset.proofHash=proof.page_sha256;}
       section.append(highlightedText(segment.text,highlights,{class:"source-document transcript-text","data-testid":selected?"source-document":"additional-source-segment"}));transcript.append(section);
     }
     body.append(transcript);
+    let sourcePairHost=null,sourcePDFLinks=[];
     if(c.corpus==='cib'){
-      try{await appendCIBPDFPair(body,{page,proof,binding:currentBinding(c.case_id,c.corpus),caseId:c.case_id,config:ARMS[state.arm].key});}
+      try{
+        sourcePDFLinks=await cibPDFPair({page,proof,binding:currentBinding(c.case_id,c.corpus),caseId:c.case_id,config:ARMS[state.arm].key});
+        if(sourcePDFLinks.length!==2||new Set(sourcePDFLinks.map(item=>item.release)).size!==2||
+            sourcePDFLinks.some(item=>!Number.isSafeInteger(item.page)||item.page<1||item.page>1000000))
+          throw Error('Both original PDFs require exact recorded page locators.');
+        sourcePairHost=el('section',null,{class:'source-pdf-pair','data-testid':'source-pdf-pair'});
+        sourcePairHost.append(el('h3','Original release PDFs'));body.append(sourcePairHost);
+      }
       catch{body.append(note('PDF page locators could not be verified. The exact source text remains available.'));}
     }
     if(epoch!==state.drawerEpoch||!$('#detail-drawer').open)return;
     $("#detail-body").replaceChildren(body);
     scrollToSource();
+    if(sourcePairHost)void showWorkbenchPDFs(sourcePairHost,sourcePDFLinks);
   }catch(error){if(epoch===state.drawerEpoch&&error.name!=="AbortError")$("#detail-body").replaceChildren(note(error.message,"error-card"));}
 }
 
@@ -3008,7 +3047,13 @@ async function navigateFromURL({push=false,scroll=true}={}) {
   $("#arm-select").value=state.arm;state.stage=/^0[1-6]$/.test(params.get("stage")||"")?params.get("stage"):"01";
   if(params.get("view")==="home"){state.epoch++;request?.abort();destroyVisuals();state.projection=null;state.row=null;state.saved=null;state.home=true;state.loading=false;closeDrawer();clearError();renderRail();renderWorkspace();return;}
   state.home=false;
-  const id=params.get("case"),matches=id?catalogCases().filter(r=>r.case.case_id===id||r.case.case_id.endsWith("_"+id)):[];
+  const study=params.get('study');
+  let id=params.get("case");
+  if(study!=null){
+    if(params.getAll('study').length!==1||id)throw Error('Choose either a published case or one study position.');
+    id=(await workbenchStudyTarget(state.sourceReport,{slot:study})).searchParams.get('case');
+  }
+  const matches=id?catalogCases().filter(r=>r.case.case_id===id||r.case.case_id.endsWith("_"+id)):[];
   if(id&&matches.length!==1){state.epoch++;request?.abort();destroyVisuals();state.projection=null;closeDrawer();state.row=null;state.saved=null;state.loading=false;renderWorkspace();renderRail();showError(matches.length?"This case alias is ambiguous. Select its full published identity.":"This input is not in the published casebook. No other case has been substituted.");return;}
   const row=matches[0]||visibleCases()[0];
   if(row){
@@ -3056,7 +3101,7 @@ try{
     [narrativeUI,narrativeAccess,narrativeEndpoints]=await Promise.all([import('./narrative-trace-v1.js'),import('./narrative-attempts-v1.js'),import('./narrative-endpoint-v1.js')]);
     state.manifest=await getJSON('/api/narrative-v1/manifest');
     const health=await getJSON('/api/health');
-    narrativeUI.validateManifest(state.manifest,health,state.report,publicationByteHashes.get(state.report));
+    await narrativeUI.validateManifest(state.manifest,health,state.report,publicationByteHashes.get(state.report));
     narrativeAccess.validatePrivacyContract(state.report);
     verifiedCurrentPublications.add(state.report);state.catalog=null;
     const sheet=el('link',null,{rel:'stylesheet',href:'./narrative-trace-v1.css'});
@@ -3086,6 +3131,7 @@ try{
     catch(error){state.studyPublication={caseIds:[],error:error.message};}
   }
   await loadCasebook();
+  linkWorkbenchStudyNavigation();
   await navigateFromURL();
   }
 }catch(error){state.catalog=null;state.report=null;state.sourceReport=null;showError(error.message);$("#page-state").textContent="The bound public casebook is unavailable. No archived data has been substituted.";$("#case-view").setAttribute("aria-busy","false");$("#case-view").replaceChildren(note("The explicitly selected publication, reader and server pins must agree before saved inputs can be displayed.","empty"));}

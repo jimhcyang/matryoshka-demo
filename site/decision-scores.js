@@ -1,4 +1,5 @@
 /* The final arithmetic is saved by the native executor, never invented from rank. */
+import {ADJUNCT_SCORE_VERSION,ADJUNCT_SCORE_VERSIONS,validateAdjunctScore,verifyAdjunctScoreBindings} from './adjunct-score-bindings.js';
 export const SCORE_VERSION = 'terminal-evidence-fit/3';
 export const EVIDENCE_SCORE_VERSION = 'terminal-evidence-fit/4';
 export const POINTS_SCORE_VERSION = 'terminal-evidence-fit/5';
@@ -240,6 +241,11 @@ export function computeDecisionScores(record = {}) {
           candidate.criteria_coverage < 0 || candidate.criteria_coverage > 1) {
         throw Error('The final scorecard differs from its candidate evidence.');
       }
+      if(ADJUNCT_SCORE_VERSIONS.includes(candidate.version)){
+        if(reading.candidates.some(c=>c.version!==candidate.version))throw Error('Different candidate score scales share one reading.');
+        validateAdjunctScore(candidate,nativeCandidates.get(candidate.id));
+        continue;
+      }
       if ([EVIDENCE_SCORE_VERSION, POINTS_SCORE_VERSION, SOURCE_POINTS_VERSION, CONTEXTUAL_POINTS_VERSION].includes(score.version) &&
           (candidate.score_units !== 'EVIDENCE_FIT_POINTS_NOT_CORRECTNESS_CONFIDENCE' ||
            candidate.calibrated_probability !== false || candidate.score < 0 || candidate.score > 300 ||
@@ -279,7 +285,11 @@ export async function verifyContextualScoreBindings(record, caseInfo, digest) {
     throw Error('The v7 scorecard belongs to another public input or plan.');
   }
   const query = Array.from(caseInfo.query);
-  for (const reading of record.result.readings) for (const native of reading.candidates) {
+  for (const reading of record.result.readings || []) for (const native of reading.candidates) {
+    if(ADJUNCT_SCORE_VERSIONS.includes(native.terminal_scorecard?.version)){
+      await verifyAdjunctScoreBindings(native,record,caseInfo,digest);
+      continue;
+    }
     const card = native.terminal_scorecard, license = card.realized_form_license;
     if (license.audit_sha256 != null && await digest(native.lexical_realization) !== license.audit_sha256) {
       throw Error('The v7 licensed-form audit hash differs from its native source receipt.');

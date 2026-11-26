@@ -14,8 +14,10 @@ not labeled as having completed the newer source-only identity review. The
 generic code can accept their extracted source records, but offline fixture
 coverage is not a full-corpus validation or an effectiveness result.
 
-The active current-workbench examples have full native executions under one
-pinned backend. Query-literal name and cable-layout parsing preserve original
+The active current-workbench examples have full native executions under their
+own pinned backends. The release preserves multiple saved engine versions;
+the current downloadable engine is not retroactively assigned to old runs.
+Input-literal name and cable-layout parsing preserve original
 source offsets; the terminal evidence-and-fit ranking is explicitly versioned.
 No answer-name dictionary, source-scope shortcut or model-assigned support label
 is introduced. Earlier terminal-only replay packets remain archived and are not
@@ -33,11 +35,13 @@ exclusion and document-wide handling vetoes. Historical strict-prior packets
 remain strict-prior. Every native output, trace and guide carries its own bound
 policy; a browser preference cannot silently change it.
 
-The two visiting-delegation inputs are exploratory authentic withheld slots,
-not scored recoveries. Their historical reference remains unknown. Paragraph
-window experiments and unfulfilled candidate-recovery goals are recorded as
-such, not converted into benchmark accuracy. Later PDF originals are source
-inspection material and do not become eligible evidence by being viewable.
+The retained visiting-delegation input is an exploratory authentic withheld
+slot, not a scored recovery. Swedish ranks second in its displayed reading;
+the historical reference remains unknown. The separate study registers an
+exact supplied later-edition source package. Other focal inputs and paragraph
+windows remain archived with their actual outcomes. Later PDF inspection does
+not silently change ordinary inference eligibility. Unfulfilled recovery goals
+are not converted into benchmark accuracy.
 
 ## Explicit Selection
 

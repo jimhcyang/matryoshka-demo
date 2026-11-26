@@ -845,3 +845,15 @@ select,input { padding:.45rem; font-size:.73rem; border-radius:4px; }
   .proposal-pool-grid .construction-card .actions { grid-column:2; grid-row:auto; justify-content:flex-start; }
   .proposal-pool-grid .construction-card button,.proposal-pool-grid .proposal-fusion-index { font-size:16px; }
 }
+.workbench-pdf-views { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; width:100%; margin:12px 0 20px; }
+.detail-drawer.workbench-origin-drawer { width:min(1180px,calc(100vw - 24px)); }
+.workbench-origin-drawer > header { position:sticky; top:0; z-index:3; }
+.workbench-origin-drawer .transcript-text { max-width:86ch; margin-inline:auto; }
+.workbench-pdf-column { min-width:0; }
+.workbench-pdf-column h4 { margin:0 0 8px; font-size:.9rem; }
+.workbench-pdf-column iframe { display:block; width:100%; height:64vh; min-height:360px; border:1px solid var(--line,#bac8c8); background:#f5f3ed; }
+.workbench-pdf-column a { display:inline-block; margin-top:8px; overflow-wrap:anywhere; }
+.workbench-reserve-candidates { margin-top:20px; border-top:1px solid var(--line,#bac8c8); padding-top:12px; }
+.workbench-reserve-card { padding:12px 0; border-top:1px solid var(--line,#bac8c8); }
+.workbench-reserve-card h3 { font-size:1rem; }
+@media(max-width:760px){.workbench-pdf-views{grid-template-columns:1fr}.workbench-pdf-column iframe{height:54vh;min-height:300px}}

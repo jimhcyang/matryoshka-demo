@@ -48,6 +48,28 @@ def route(name, params):
     return '/api/current/' + name + '?' + urlencode(sorted(params.items()))
 
 
+def checked_api_route(key, entry):
+    if key.startswith('/graph-source-proofs/'):
+        assert re.fullmatch(r'/graph-source-proofs/(?:(?:cib|iran|vietnam)/[0-7][a-f0-9]\.json\.gz|manifest\.json)', key), 'Unknown graph quotation route'
+        assert entry.get('path') == key[1:] and not entry.get('external_url'), 'Graph quotation route must bind its local inventory asset'
+    else:
+        assert key.startswith(('/api/', '/graph-assets-v4/', '/data/', '/swedish-study-')), 'Unknown static API route'
+
+
+def checked_native_input(native, row):
+    public, original = row['case'], native['case']
+    assert native['public_case'] == public
+    binding = row.get('native_public_case_binding', {})
+    if original != public:
+        assert original.get('task') == 'reconstruction' and public['task'] == 'mosaic'
+        assert binding.get('task_binding') == 'EXPLICIT_PUBLIC_MOSAIC_LEGACY_ENGINE_BRIDGE'
+        assert dict(original, task='mosaic') == public, 'The task-name bridge changed another input field'
+    if binding:
+        assert binding['native_case_sha256'] == sha(encoded(original)), 'Original native input hash differs'
+        assert binding['native_public_case_sha256'] == binding['public_case_sha256'] == sha(encoded(public))
+        assert binding['query_sha256'] == sha(encoded(public['query']))
+
+
 def source_refs(value):
     if isinstance(value, dict):
         if set(value) >= {'path', 'sha256'} and isinstance(value['path'], str) and re.fullmatch('[a-f0-9]{64}', value.get('sha256', '')):
@@ -70,6 +92,20 @@ def inventory(site):
                 row['decoded_sha256'] = sha(gzip.decompress(raw))
             rows.append(row)
     return rows
+
+
+def validate_external_delivery(site, repository, manifest, entries):
+    """Same saved transport gate for graphs and the ordinary CIB PDF catalog."""
+    if manifest['graph_delivery'] != 'same-repository':
+        assert not any('external_url' in e for e in entries.values()), 'External data dependency remains'
+        return None
+    ref = manifest['dataset_delivery_ref']
+    assert ref['path'] == 'data/dataset-delivery.json'
+    assert sha(at(site, ref['path']).read_bytes()) == ref['sha256']
+    result = validate_datasets(site, repository)
+    expected = sum('external_url' in v and k.split('?')[0] == '/api/cib-pdf' for k, v in entries.items())
+    assert result['source_pdfs']['routes'] == expected
+    return result
 
 
 def make(site, receipt):
@@ -156,20 +192,14 @@ def validate(site, scratch, *, full=True, repository=None, minimum_free_bytes=8 
     index_raw = at(site, manifest['api_index']['path']).read_bytes()
     assert sha(index_raw) == manifest['api_index']['sha256']
     entries = load(index_raw)['entries']
-    datasets = None
-    if manifest['graph_delivery'] == 'same-repository':
-        ref = manifest['dataset_delivery_ref']
-        assert sha(at(site, ref['path']).read_bytes()) == ref['sha256']
-        datasets = validate_datasets(site, repository or site.parent)
-    else:
-        assert not any(e.get('external_url') for e in entries.values()), 'External data dependency remains'
+    datasets = validate_external_delivery(site, repository or site.parent, manifest, entries)
     scratch.mkdir(parents=True, exist_ok=True)
     roots, native_rows = set(), []
     with tempfile.TemporaryDirectory(dir=scratch) as temporary:
         reader = Reader(site, Path(temporary) / 'verification.sqlite3', minimum_free_bytes=minimum_free_bytes)
         try:
             for key, entry in entries.items():
-                assert key.startswith(('/api/', '/graph-assets-v4/', '/data/', '/swedish-study-'))
+                checked_api_route(key, entry)
                 if entry.get('external_url'):
                     continue
                 if entry['encoding'] == 'fragment-dag':
@@ -183,6 +213,7 @@ def validate(site, scratch, *, full=True, repository=None, minimum_free_bytes=8 
                     reader.read(entry)
             def packet(key):
                 return load(reader.read(entries[key]))
+            assert reader.read(entries['/data/report-v6.json']) == report_raw, 'Served and published report bytes differ'
             assert packet('/api/current/casebook')['source_report_sha256'] == manifest['source_report_ref']['sha256']
             assert packet('/api/narrative-v1/manifest')['report_ref'] == manifest['source_report_ref']
             for row in report['cases']:
@@ -194,7 +225,7 @@ def validate(site, scratch, *, full=True, repository=None, minimum_free_bytes=8 
                     saved = condition['configurations'][config]
                     assert saved['native_checkpoint'] == item['native_checkpoint']
                     native = packet(route('native-v6', params))['native']
-                    assert native['public_case'] == row['case']
+                    checked_native_input(native, row)
                     assert native['native_checksum'] == sha(encoded(native['result'])) == saved['native_checksum']
                     native_rows.append(dict(case_id=row['case']['case_id'], config=config, native_checkpoint=item['native_checkpoint'], core_checksum=native['native_checksum']))
                     del native, condition, saved

@@ -1,4 +1,4 @@
-/* Saved-packet transport; pinned repository graph datasets only. No inference or API proxy. */
+/* Saved-packet transport; pinned repository graphs and CIB PDFs. No inference or API proxy. */
 (function () {
   "use strict";
   const script = document.currentScript;
@@ -138,6 +138,14 @@
   }
   function entryURL(entry, key) {
     if (!own(entry, "external_url")) return assetURL(entry.path);
+    if (key.split("?")[0] === "/api/cib-pdf") {
+      const match = typeof entry.external_url === "string" && /^https:\/\/raw\.githubusercontent\.com\/jimhcyang\/matryoshka-demo\/[a-f0-9]{40}\/datasets\/cib\/source-pdfs\/([a-f0-9]{64})\.pdf$/.exec(entry.external_url);
+      if (!match || match[0] !== entry.external_url || entry.encoding !== "identity" || entry.mime !== "application/pdf" ||
+          own(entry, "path") || own(entry, "corpus") && entry.corpus !== "cib" ||
+          entry.sha256 !== match[1] || entry.wire_sha256 !== match[1])
+        fail("INVALID_EXTERNAL_PDF", "External PDFs require the ordinary CIB catalog, approved immutable repository, identity MIME and both filename SHA pins");
+      return new URL(entry.external_url);
+    }
     const match = typeof entry.external_url === "string" && /^https:\/\/raw\.githubusercontent\.com\/jimhcyang\/matryoshka-demo\/[a-f0-9]{40}\/datasets\/(cib|iran|vietnam)\/[a-f0-9]{64}\.json\.gz$/.exec(entry.external_url);
     const corpus = /^\/graph-assets-v4\/(cib|iran|vietnam)\//.exec(key);
     if (!match || match[0] !== entry.external_url || !corpus || match[1] !== corpus[1] || entry.encoding !== "gzip" ||
@@ -460,11 +468,20 @@
     const packetURL = mirrored ? new URL("/datasets/" + approvedURL.pathname.split("/datasets/")[1], base) : approvedURL;
     const response = await originalFetch(packetURL, {method: "GET", credentials: "omit", redirect: "error", mode: external && !mirrored ? "cors" : "same-origin", signal});
     if (!response.ok) fail("PUBLIC_FILE_UNAVAILABLE", "The indexed public file is unavailable");
-    const wire = new Uint8Array(await response.arrayBuffer());
+    const externalPDF = external && key.split("?")[0] === "/api/cib-pdf";
+    if (externalPDF && (response.redirected || response.url !== packetURL.href ||
+        !["application/pdf", "application/octet-stream"].includes(response.headers.get("content-type")?.trim().toLowerCase()) ||
+        ![null, "identity"].includes(response.headers.get("content-encoding"))))
+      fail("INVALID_EXTERNAL_PDF", "The original PDF transport must retain its URL, approved PDF/binary container and identity bytes");
+    if (externalPDF && Number(response.headers.get("content-length")) > 32 * 1024 ** 2)
+      fail("PUBLIC_SIZE_LIMIT", "The original PDF exceeds the inspection limit");
+    const wire = externalPDF ? await boundedBytes(response, 32 * 1024 ** 2) : new Uint8Array(await response.arrayBuffer());
     let decoded = wire;
     const gzip = wire[0] === 31 && wire[1] === 139;
     const httpDecoded = /gzip/i.test(response.headers.get("content-encoding") || "") && !gzip;
-    if (external && !gzip) fail("INVALID_GZIP", "Immutable graph data must expose its original gzip bytes for both SHA checks");
+    if (external && !externalPDF && !gzip) fail("INVALID_GZIP", "Immutable graph data must expose its original gzip bytes for both SHA checks");
+    if (externalPDF && (gzip || !new TextDecoder("ascii").decode(wire.slice(0, 1024)).includes("%PDF-")))
+      fail("INVALID_EXTERNAL_PDF", "The original identity PDF header is missing");
     if (entry.wire_sha256 && (!httpDecoded || external)) await matches(wire, entry.wire_sha256, "Stored public file");
     if (entry.encoding === "gzip") {
       if (gzip) {

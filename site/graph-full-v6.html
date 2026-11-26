@@ -1,16 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script src="runtime/public-runtime.js" data-dataset-mirror="same-repository" data-index="data/api-index.json" data-index-sha256="f9e54835a2c074d6fc159510070caf1f45041bff2d492ffe538c6804916cb19f"></script>
+<script src="runtime/public-runtime.js" data-dataset-mirror="same-repository" data-index="data/api-index.json" data-index-sha256="32ac9dac0ab2d3e40b0efa87ba58809c8fe9fb2a3b5d2ad927613375ca9a1d47"></script>
 <link rel="stylesheet" href="public-transport.css">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="reader-casing" content="data/reader-casing.js" data-content-sha256="fb4ebc5d03368037dd13e7ea5722b8925e9b20a7ec143ab1b9571e166f77b70b">
+  <meta name="graph-node-source-proofs" content="graph-node-source-proofs.js" data-content-sha256="09b3a281e7dc14c0fa1bb9712fdf74aae868902ac5710ebc37688e3073ba25e8">
+  <meta name="graph-node-source-proof-index" content="graph-source-proofs/manifest.json" data-sha256="32dbc7eaa234ae0f616c6909792c5be501e128bfefc3525e9870b35d336a15ea">
   <title>Matryoshka | Corpus Map</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="graph-full-v6.css">
   <link rel="stylesheet" href="app-navigation.css">
-<meta name="source-api-index-sha256" content="f9e54835a2c074d6fc159510070caf1f45041bff2d492ffe538c6804916cb19f"></head>
+<meta name="source-api-index-sha256" content="32ac9dac0ab2d3e40b0efa87ba58809c8fe9fb2a3b5d2ad927613375ca9a1d47"></head>
 <body data-cib-mode="current-demo">
   <header id="app-navigation" data-view="graph"></header>
   <script src="app-navigation.js"></script>
@@ -39,7 +41,7 @@
         <label><input id="neighborhood-motion" type="checkbox" checked> Slow neighborhood orbit</label>
         <div class="map-option-actions"><button type="button" id="reset-map-labels">Reset labels</button></div>
         <details id="selection-audit"><summary>Why these nodes?</summary><p>Deterministic marginal coverage, not a rank-prefix slice. Context-only links never count as factual semantic reach.</p><div id="selection-audit-content"></div></details>
-        <details><summary>Keyboard and pointer</summary><p>Click a node to toggle its label. Click a label for information and sources. Double-click or hold a group to enter; double-click evidence to recenter. Drag nodes to push neighbors; drag canvas to pan. Wheel to zoom.</p><p>Press / to search. On the canvas, use arrow keys to select nodes, Space to toggle a label, Enter to inspect, Shift+Enter to enter or recenter, + / - to zoom, and Escape to close. Tab reaches labels and all controls.</p></details>
+        <details><summary>Keyboard and pointer</summary><p>Click a node to select it and show its tag on the lower half of its bubble. Click the tag for information and sources. Double-click or hold a group to enter; double-click evidence to recenter. Drag nodes to push neighbors; drag canvas to pan. Wheel to zoom.</p><p>Press / to search. On the canvas, use arrow keys to select nodes, Space to show the selected tag, Enter to inspect, Shift+Enter to enter or recenter, + / - to zoom, and Escape to close. Tab reaches labels and all controls.</p></details>
         <details><summary>Binding and provenance</summary><section class="hero"><p id="document-count"></p><p id="purpose"></p></section><section id="exploration-binding" aria-label="Exploration binding"><strong>Independent exploration, not a workbench case view.</strong><p id="exploration-scope"></p><p id="exploration-layout"></p></section><h2 id="pair-title">Earlier-release graph</h2><p id="build-label"></p><details><summary>Drawing accounting</summary><div id="map-accounting"></div></details></details>
       </div></details>
     </div>
@@ -62,7 +64,7 @@
         <div class="graph-workspace"><div class="graph-stage"><canvas id="current-canvas" tabindex="0" aria-label="Interactive corpus map" aria-describedby="map-keyboard-status"></canvas><div id="current-tooltip" class="tooltip" hidden></div><div id="current-caption" class="preview-caption"></div></div><aside id="current-inspector" class="inspector" aria-label="Node information and sources" hidden></aside></div>
       </article>
     </section>
-    <p id="map-keyboard-status" class="sr-only" role="status" aria-live="polite">Arrow keys select graph nodes. Enter opens information. Space toggles a label.</p>
+    <p id="map-keyboard-status" class="sr-only" role="status" aria-live="polite">Arrow keys select graph nodes. Enter opens information. Space shows the selected tag.</p>
   </main>
 
   <div id="cib-drawer-scrim" class="cib-drawer-scrim" hidden></div>
@@ -71,6 +73,7 @@
     <div id="cib-source-meta" class="cib-source-meta"></div><div id="cib-source-release-actions" class="cib-source-release-actions"></div><div id="cib-source-body" class="cib-source-body"></div><iframe id="cib-pdf-frame" class="cib-pdf-frame" title="CIB source PDF" hidden></iframe><section id="cib-pdf-pair" class="cib-pdf-pair" aria-label="Paired original release PDFs" hidden></section>
   </aside>
   <script src="graph-kg-v1.js"></script>
+  <script src="graph-label-layout.js"></script>
   <script src="graph-full-v6.js"></script>
   <script src="narrative-kg-walk-v1.js"></script>
 </body>

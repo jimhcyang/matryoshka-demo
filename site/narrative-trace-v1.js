@@ -112,7 +112,7 @@ export function originTranscriptSegments(transcription){
   return result;
 }
 
-export function validateManifest(manifest,health,report,reportHash) {
+export async function validateManifest(manifest,health,report,reportHash) {
   const ref=manifest?.report_ref;
   const safe=typeof ref?.path==="string"&&!ref.path.startsWith("/")&&!/[\\?#\u0000-\u001f]/.test(ref.path)&&
     ref.path.split("/").every(part=>part&&part!=="."&&part!=="..");
@@ -127,7 +127,7 @@ export function validateManifest(manifest,health,report,reportHash) {
     if(!Array.isArray(manifest[group])||!same([...manifest[group]].sort(),report.cases.filter(row=>row[flag]===true).map(row=>row.case.case_id).sort()))
       throw Error("The narrative manifest and report select different questions.");
   }
-  validateAdditionalCollection(manifest,report);
+  await validateAdditionalCollection(manifest,report);
   return manifest;
 }
 

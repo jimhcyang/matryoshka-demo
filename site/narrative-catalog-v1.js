@@ -53,7 +53,7 @@ export async function loadSavedCatalog(){
   const [manifest,health,bytes]=await Promise.all([responses[0].json(),responses[1].json(),responses[2].arrayBuffer()]);
   const report=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
   const sha=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(value=>value.toString(16).padStart(2,'0')).join('');
-  validateManifest(manifest,health,report,sha);
+  await validateManifest(manifest,health,report,sha);
   validatePrivacyContract(report);
   if(canonicalGateJSON(report.investigations||{})!==canonicalGateJSON(manifest.investigations||{}))
     throw Error('Story metadata differs from the pinned report');

@@ -2,21 +2,21 @@
 
 [Website](https://jimhcyang.github.io/matryoshka-demo/) | [Publication workflow](https://github.com/jimhcyang/matryoshka-demo/actions/workflows/pages.yml)
 
-A source-linked analyst workbench for historical Central Intelligence Bulletins, Iran cables and Vietnam cables. Nine primary examples cover Mosaic, Hypothesis and Redaction in each corpus. Five additional authentic CIB redactions revisit historical recovery examples. A separate visiting-delegation study provides two independently executed masked queries. These curated examples are not a blind accuracy benchmark or a claim that every case is solved.
+A source-linked analyst workbench for historical Central Intelligence Bulletins, Iran cables and Vietnam cables. Nine primary examples cover Mosaic, Hypothesis and Redaction in each corpus. Five additional authentic CIB redactions revisit historical recovery examples. One separately registered visiting-delegation input completes the fifteen-input presentation. These curated examples are not a blind accuracy benchmark or a claim that every case is solved.
 
 | Collection | What to inspect |
 | --- | --- |
-| CIB / El Salvador | A complementary two-document Mosaic, a reported appointment Hypothesis and the rank-one evidence-backed property "easily politically manipulated". |
-| Iran / opposition and authority | Parliamentary approval of Bakhtiar is supported. Tehrani's resignation and statement form a partially reconstructed Mosaic; the Yazdi fill remains contextual. |
-| Vietnam / military reporting | NVA attacks in eastern Military Region 3 are supported. The two-part operations Mosaic is partial and shares that fact with the Hypothesis; this is not independent coverage. |
-| Additional CIB recoveries | Arias, air-force commander, Betancourt, corrupt and Aung Gyi. Current ranks and support labels are newly computed; a historical recovery is not a guarantee of current success. |
-| Visiting-delegation study | Two masked positions use the ordinary earlier-release evidence policy. Both results remain inconclusive; the hidden reference answer is unknown. An archived comparison uses separately labeled evidence views. |
+| CIB / Cold War decisions | A Mosaic establishes two announced Soviet withdrawal quantities, not completed withdrawals. A separate Hypothesis retains Mao's conditional assessment of Taiwan talks. The Salvadoran redaction ranks "easily politically manipulated" first with eligible support. |
+| Iran / opposition and authority | Both Tehrani Mosaic facts are established. The Shah command Hypothesis remains partial, and Yazdi ranks third contextually. |
+| Vietnam / military reporting | Both March 19 Mosaic facts are established from one same-day witness. One of two Highlands Hypothesis facts is supported. The Spratly fill "UNOCCUPIED" ranks fifth in the displayed adjectival reading. |
+| Additional CIB recoveries | Arias, air-force commander, Betancourt, corrupt and a Tunisian clausal fill. Displayed readings and source labels remain explicit; historical recoveries do not guarantee present factual support. |
+| Visiting-delegation study | "Swedish" ranks second in the retained first-gap reading, derived from quotations in the registered source-corpus study. The withheld reference answer remains unknown. |
 
 The workbench presents the input, facts, saved routes, matched quotations and local verdict. Known redaction references can be revealed and hidden again. Scores are deterministic terminal evidence-and-fit indices, not calibrated probabilities. A contextual candidate can rank highly without receiving an evidence-backed recommendation.
 
-All sixteen displayed inputs have completed native executions under the same pinned backend. These are curated results, not a matched comparison of planning methods. Unresolved findings and failed recoveries remain visible rather than being replaced with model-assigned success labels.
+All fifteen displayed inputs have completed native executions with their own pinned code and source bindings. The release contains multiple recorded engine versions; the downloadable current engine is not retroactively attributed to older executions. These are curated results, not a matched comparison of planning methods. Unresolved findings remain visible rather than being replaced with model-assigned success labels.
 
-The requested all-success showcase has not been achieved. In particular, the visiting-delegation spelling is not recovered, Aung Gyi is outside the current top five, and several rank-one redactions remain contextual rather than evidence-backed. The guide records known local scope limitations as well as successful examples.
+The requested all-success showcase and 50-percent recovery target have not been achieved. The fixed 31-case development cohort has four whole-answer primary top-five recoveries; the shorter-window comparison has two. Aung Gyi is not in the current top ten and is archived rather than shown as a successful case. Some displayed redactions remain contextual, not evidence-backed. These are development results, not held-out benchmark accuracy.
 
 Read the [methods and case guide](https://jimhcyang.github.io/matryoshka-demo/docs/matryoshka-guide.pdf) for retrieval, local grammar, scoring, hierarchy navigation and source requirements. Routes, graph relevance, grammatical fit and saved model summaries do not independently establish facts. Hierarchy and identity assignments are retrospective.
 
@@ -24,14 +24,20 @@ The [KG interaction addendum](https://jimhcyang.github.io/matryoshka-demo/docs/k
 
 [Download the contained code snapshot](https://jimhcyang.github.io/matryoshka-demo/downloads/matryoshka-code.zip) or open the [withheld delegation study](https://jimhcyang.github.io/matryoshka-demo/swedish-study.html). The study retrieves a registered complete later-release document and derives candidate wording from its quotations. The withheld identity remains unknown. The code snapshot preserves current and historical engine provenance separately; it excludes credentials and private Live history.
 
-The [comparison record](https://jimhcyang.github.io/matryoshka-demo/docs/delegation-study-results.txt) includes the unsuccessful controls as well as the selected result. [Scoring notes](https://jimhcyang.github.io/matryoshka-demo/docs/source-bound-scoring.md) describe the source and ranking changes.
+The report-bound guide above is the active methods reference. Older comparison and scoring notes are historical records, not evidence that an archived input or engine version is active.
 The [registered source package](https://jimhcyang.github.io/matryoshka-demo/downloads/registered-cib-full-source.zip) contains the complete 17-page later edition, its transcripts and provenance checks.
 
 ## Static replay and provenance
 
+The five additional CIB examples currently save document handoffs, not graph
+traversals: all 37 saved paths across their fourteen readings have zero graph
+hops. Their source quotations are replayed exactly. The independent Corpus Map
+still supports hierarchy and neighborhood navigation, but that interface test
+is not evidence that these retrieval runs traversed graph edges.
+
 This repository contains a finite public presentation export and no provider API key. The optional Live page connects to an authenticated, separately configured private backend; GitHub Pages alone cannot execute paid inference. Completed Live queries expand into the same workbench and can be reopened from that tab's bounded session history. `site/publication.json` identifies the exact served report, public transformations, file hashes and immutable graph dataset binding. A push is not proof of deployment; the workflow must succeed and the live manifest must match.
 
-Evidence is dated on or before the input's source date. CIB admits only earlier-release or jointly visible text, including the earlier version of the source document. Iran and Vietnam admit eligible CONFIDENTIAL documents while excluding the whole SECRET origin. Inspecting a later PDF never makes that text eligible for inference.
+Ordinary evidence is dated on or before the input's source date. CIB admits earlier-release or jointly visible text, including the earlier version of the source document. Iran and Vietnam admit eligible CONFIDENTIAL documents while excluding the whole SECRET origin. The separate delegation study registers its exact supplied later-edition source package and is not counted in the ordinary 31-case evaluation. Merely inspecting a later PDF does not change a case's recorded evidence policy.
 
 Original inference checkpoints and ranks are preserved in the research workspace. Public inference receipts are explicitly limited records, not complete native checkpoint downloads. Private review notes, answer-aware curation packets and API logs are excluded from the site.
 

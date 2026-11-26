@@ -1,4 +1,4 @@
-/* Saved-packet transport; pinned repository graph datasets only. No inference or API proxy. */
+/* Saved-packet transport; pinned repository graphs and CIB PDFs. No inference or API proxy. */
 (function () {
   "use strict";
   const script = document.currentScript;
@@ -32,6 +32,24 @@
     routes["/api/current/" + endpoint] = {defaults: {...old.defaults, config: "llm_readings"},
       required: [...new Set([...currentPins, ...old.required])], optional: old.optional || []};
   }
+  /* narrative-static-transport/1 */
+  pages.add("/swedish-study.html");
+  pages.add("/swedish-study.js");
+  pages.add("/swedish-study.css");
+  pages.add("/app-navigation.js");
+  pages.add("/app-navigation.css");
+  pages.add("/swedish-study-data-v02.json");
+  pages.add("/swedish-study-history.json");
+  pages.add("/swedish-study-origins.json");
+  for (const page of ["/corpus-home.html", "/corpus-tour.html", "/docs/matryoshka-guide.pdf"]) pages.add(page);
+  routes["/api/current/casebook"] = {defaults: {}, required: []};
+  routes["/api/current/report-v6"] = {defaults: {}, required: []};
+  routes["/api/narrative-v1/manifest"] = {defaults: {}, required: []};
+  routes["/api/narrative-v1/presentation-context-sources"] = {defaults: {narrative_id: ""}, required: ["corpus"]};
+  routes["/api/narrative-v1/trace"] = {defaults: {config: "llm_readings", reading: ""}, required: currentPins};
+  routes["/api/current/analyst-digest"] = {defaults: {config: "llm_readings"}, required: currentPins};
+  routes["/api/current/slots-v1"] = {defaults: {offset: "0", limit: "32", scan: "0", q: ""}, required: ["corpus", "graph_id", "hierarchy_id"], optional: ["slot_id", "anchor_id", "domain_id", "theme_id", "community_id"]};
+  const narrativeGlobalRoutes = new Set(["/api/current/casebook", "/api/current/report-v6", "/api/current/slots-v1"]);
   const isPDF = path => /^\/api\/(?:current\/)?cib-pdf$/.test(path);
   const deniedSegments = new Set(["private", ".git", ".env", "manuscripts", "manuscript", "raw_logs", "raw-logs", "requests", "responses", "api_keys", "node_modules"]);
   const limits = Object.freeze({manifestBytes: 32 * 1024 ** 2, chunkBytes: 16 * 1024 ** 2,
@@ -79,7 +97,7 @@
       }
       for (const [key, value] of Object.entries(spec.defaults)) if (!own(values, key)) values[key] = value;
       if (spec.required.some(k => !values[k])) fail("MISSING_PARAMETER", "A required saved-packet selector is missing");
-      if (path.startsWith("/api/current/")) {
+      if ((path.startsWith("/api/current/") && !narrativeGlobalRoutes.has(path)) || path === "/api/narrative-v1/trace") {
         for (const pin of ["registry_sha256", "index_sha256"]) if (!/^[a-f0-9]{64}$/.test(values[pin])) fail("INVALID_PARAMETER", "Current-resource SHA256 pins are required");
         if (!/^[A-Za-z0-9_.:-]{1,240}$/.test(values.resource_id)) fail("INVALID_PARAMETER", "Invalid current-resource identifier");
       }
@@ -91,7 +109,7 @@
         if (!/^\d+$/.test(values[name]) || !Number.isSafeInteger(Number(values[name]))) fail("INVALID_PARAMETER", "Expected an unsigned integer");
         values[name] = String(Number(values[name]));
       }
-      if (own(values, "route_index") && Number(values.route_index) > 2) fail("INVALID_PARAMETER", "Only the three supplied route indices are supported");
+      if (own(values, "route_index") && Number(values.route_index) > 99999) fail("INVALID_PARAMETER", "Only the three supplied route indices are supported");
       if (own(values, "corpus") && !["cib", "iran", "vietnam"].includes(values.corpus)) fail("INVALID_PARAMETER", "Unknown corpus");
       if (own(values, "revision") && values.revision !== "study") fail("INVALID_PARAMETER", "Unknown saved graph revision");
       if (own(values, "release") && !["earlier", "later"].includes(values.release)) fail("INVALID_PARAMETER", "Unknown release");
@@ -120,6 +138,14 @@
   }
   function entryURL(entry, key) {
     if (!own(entry, "external_url")) return assetURL(entry.path);
+    if (key.split("?")[0] === "/api/cib-pdf") {
+      const match = typeof entry.external_url === "string" && /^https:\/\/raw\.githubusercontent\.com\/jimhcyang\/matryoshka-demo\/[a-f0-9]{40}\/datasets\/cib\/source-pdfs\/([a-f0-9]{64})\.pdf$/.exec(entry.external_url);
+      if (!match || match[0] !== entry.external_url || entry.encoding !== "identity" || entry.mime !== "application/pdf" ||
+          own(entry, "path") || own(entry, "corpus") && entry.corpus !== "cib" ||
+          entry.sha256 !== match[1] || entry.wire_sha256 !== match[1])
+        fail("INVALID_EXTERNAL_PDF", "External PDFs require the ordinary CIB catalog, approved immutable repository, identity MIME and both filename SHA pins");
+      return new URL(entry.external_url);
+    }
     const match = typeof entry.external_url === "string" && /^https:\/\/raw\.githubusercontent\.com\/jimhcyang\/matryoshka-demo\/[a-f0-9]{40}\/datasets\/(cib|iran|vietnam)\/[a-f0-9]{64}\.json\.gz$/.exec(entry.external_url);
     const corpus = /^\/graph-assets-v4\/(cib|iran|vietnam)\//.exec(key);
     if (!match || match[0] !== entry.external_url || !corpus || match[1] !== corpus[1] || entry.encoding !== "gzip" ||
@@ -270,6 +296,7 @@
       if (frame.index === frame.pieces.length) { stack.pop(); continue; }
       const piece = frame.pieces[frame.index++];
       if (typeof piece === "string") {
+        if(pack.manifest.literal_encoding==="base64"){const bytes=Uint8Array.from(atob(piece),c=>c.charCodeAt(0));check(bytes.length<=result.length-length,"Fragment bytes exceed declared root");result.set(bytes,length);length+=bytes.length;continue;}
         check(piece.length <= result.length - length, "Root expansion exceeds its declared size");
         const written = encoder.encodeInto(piece, result.subarray(length));
         check(written.read === piece.length && written.written === piece.length, "Fragment text is not exact ASCII");
@@ -324,11 +351,110 @@
   const ready = loadIndex();
   ready.catch(error => notice("Saved public replay unavailable: " + error.message));
   function hasSaved(input) {
-    try { return savedIndex !== null && own(savedIndex.entries, canonicalKey(input)); }
+    try { const key=canonicalKey(input);return savedIndex !== null && (own(savedIndex.entries,key)||key.startsWith("/api/current/slots-v1?")&&own(savedIndex.entries,"/data/slots/"+new URL(input,document.baseURI).searchParams.get("corpus")+".json")); }
     catch (_) { return false; }
   }
+  // Query only the byte-verified complete base-visible slot snapshot.
+  const slotCatalogs = new Map();
+  const slotNormalized = text => text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  function selectStaticSlots(catalog, p) {
+    const status = catalog.status;
+    if (p.corpus !== status.corpus || p.graph_id !== status.graph_run_id || p.hierarchy_id !== status.hierarchy_run_id)
+      fail("INVALID_PARAMETER", "Opaque slots require the exact saved corpus graph and hierarchy");
+    const offset=Number(p.offset),limit=Number(p.limit);
+    if (!Number.isSafeInteger(offset)||offset<0||!Number.isSafeInteger(limit)||limit<1||limit>64||typeof p.q!=="string"||p.q.length>200||!["0","1"].includes(p.scan))
+      fail("INVALID_PARAMETER", "Opaque-slot pagination/search bounds exceeded");
+    if (Object.prototype.hasOwnProperty.call(p,"slot_id")) {
+      const slot=catalog.slots.find(s=>s.id===p.slot_id);
+      if (!slot) fail("PUBLIC_PACKET_NOT_EXPORTED", "Unknown opaque slot; no identity substitute");
+      return {...status,slot};
+    }
+    let candidates=catalog.slots;
+    if(Object.prototype.hasOwnProperty.call(p,"anchor_id")){
+      if(!Object.prototype.hasOwnProperty.call(catalog,"_visibleAnchorSlots")){
+        const reverse=new Map();
+        for(const slot of catalog.slots)for(const anchor of slot.anchors){
+          if(!reverse.has(anchor.id))reverse.set(anchor.id,[]);
+          reverse.get(anchor.id).push(slot);
+        }
+        Object.defineProperty(catalog,"_visibleAnchorSlots",{value:reverse});
+      }
+      candidates=catalog._visibleAnchorSlots.get(p.anchor_id)||[];
+    }
+    const terms=slotNormalized(p.q).split(" ").filter(Boolean);
+    const matches=candidates.filter(s=>{
+      const context=slotNormalized(s.context_preview||"").split(" ");
+      const label=typeof s.label==="string"?s.label:"";
+      const labelTerms=slotNormalized(label).split(" ").filter(Boolean);
+      // A display label is not evidence. Only source-visible words may expand search.
+      const visibleLabel=s.context_policy==="source-visible-slot-context/1"&&
+        /^Redacted Slot(?: \/ (?:near )?.+)?$/.test(label)&&
+        labelTerms.every(t=>["redacted","slot","near"].includes(t)||context.includes(t))?label:"";
+      const surface=slotNormalized([s.id,s.slot_id||"","opaque slot redacted slot",s.document_id,s.date,s.context_preview,visibleLabel].join(" ")).split(" ");
+      if (!terms.every(t=>surface.includes(t))) return false;
+      return ["domain_id","theme_id","community_id"].every(k=>!Object.prototype.hasOwnProperty.call(p,k)||s[k]===p[k]);
+    });
+    return {...status,slots:matches.slice(offset,offset+limit),offset,limit,matched_count:matches.length,next_offset:offset+limit<matches.length?offset+limit:null};
+  }
+  async function verifiedSlots(key, signal) {
+    const p=Object.fromEntries(new URL(key,base).searchParams),path="/data/slots/"+p.corpus+".json";
+    if (!slotCatalogs.has(path)) slotCatalogs.set(path,(async()=>{
+      const packet=await verified(new URL(path.slice(1),base));
+      const catalog=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(packet.decoded));
+      const status=catalog.status,earlier=p.corpus==="cib";
+      if(status.version!=="current-opaque-source-slots/2"||status.context_policy!=="source-visible-slot-context/1"||
+        status.corpus!==p.corpus||status.source_view!==(earlier?"current_earlier":"current_redaction")||
+        status.release!==(earlier?"earlier":"confidential")||status.semantic_graph_modified!==false||status.hidden_values_read!==false||
+        status.coverage.complete!==true||!Array.isArray(catalog.slots)||status.coverage.total_slots!==catalog.slots.length)
+        fail("INTEGRITY_FAILURE","Opaque catalog is not the complete source-only context snapshot");
+      return catalog;
+    })());
+    let catalog;
+    try { catalog=await slotCatalogs.get(path); } catch(error) { slotCatalogs.delete(path);throw error; }
+    if(signal?.aborted)throw new DOMException("Aborted","AbortError");
+    const value=selectStaticSlots(catalog,p);
+    const records=new Map();
+    async function hydrate(thin){
+      if(!records.has(thin.record_path))records.set(thin.record_path,(async()=>{
+        const packet=await verified(new URL(thin.record_path.slice(1),base),signal);
+        return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(packet.decoded));
+      })());
+      const record=(await records.get(thin.record_path)).find(s=>s.id===thin.id);
+      if(!record||record.context_policy!==catalog.status.context_policy||record.type!=="RedactionSlot"||
+        record.semantic!==false||record.eligible_evidence!==false||record.visibility!=="redacted_placeholder"||
+        ["label","context_preview","domain_id","theme_id","community_id"].some(k=>record[k]!==thin[k])||
+        JSON.stringify(record.anchors.map(a=>a.id))!==JSON.stringify(thin.anchors.map(a=>a.id))||
+        record.context_links.length!==record.anchors.length||record.context_links.some((e,i)=>
+          e.source!==record.id||e.target!==record.anchors[i].id||e.semantic!==false||e.eligible_evidence!==false||
+          e.slot_navigation!==true||e.weight!==0||e.layout_weight!==0))
+        fail('INTEGRITY_FAILURE','Exact opaque record differs from its source-only catalog');
+      return record;
+    }
+    if(value.slot){
+      value.slot=await hydrate(value.slot);
+      const page=await verified(new URL(catalog.details[value.slot.id].slice(1),base),signal);
+      value.page=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(page.decoded));
+      const slot=value.slot,source=value.page,text=Array.from(source.text);
+      if(source.text_sha256!==slot.page_provenance.text_sha256||source.release!==catalog.status.release||
+        ["document_id","canonical_page_id","source_page"].some(k=>source[k]!==slot[k])||
+        text.slice(slot.marker_start,slot.marker_end).join("")!=="[REDACTED]")
+        fail("INTEGRITY_FAILURE","Opaque page differs from its exact slot provenance");
+      await matches(new TextEncoder().encode(source.text),slot.page_provenance.text_sha256,"Opaque visible page text");
+      for(const proof of [...slot.anchors.map(a=>a.visible_proof),slot.label_context].filter(Boolean)){
+        if(!Number.isSafeInteger(proof.start)||!Number.isSafeInteger(proof.end)||proof.start<0||proof.end<=proof.start||
+          proof.end>text.length||text.slice(proof.start,proof.end).join("")!==proof.text||
+          ["document_id","canonical_page_id","release"].some(k=>proof[k]!==source[k])||
+          proof.semantic!==false||proof.identity_certified!==false)
+          fail("INTEGRITY_FAILURE","Opaque visible-context proof differs from its saved page");
+      }
+    }else value.slots=await Promise.all(value.slots.map(hydrate));
+    const decoded=new TextEncoder().encode(JSON.stringify(value));
+    return {key,entry:{mime:"application/json"},wire:decoded,decoded,gzip:false,httpDecoded:false};
+  }
+
   async function verified(input, signal) {
     const key = canonicalKey(input), index = await ready;
+    if (key.startsWith("/api/current/slots-v1?")) return verifiedSlots(key, signal);
     if (!own(index.entries, key)) fail("PUBLIC_PACKET_NOT_EXPORTED", "This saved packet is not in the public export; no other method or archive is substituted");
     const entry = index.entries[key];
     if (entry.encoding === "fragment-dag") {
@@ -336,13 +462,26 @@
       return {key, entry, decoded, wire: decoded, gzip: false, httpDecoded: false, fragmentDag: true};
     }
     const external = own(entry, "external_url");
-    const response = await originalFetch(entryURL(entry, key), {method: "GET", credentials: "omit", redirect: "error", mode: external ? "cors" : "same-origin", signal});
+    const approvedURL = entryURL(entry, key);
+    const mirrored = external && script.dataset.datasetMirror === "same-repository" &&
+      ["localhost", "127.0.0.1", "[::1]", "::1"].includes(location.hostname);
+    const packetURL = mirrored ? new URL("/datasets/" + approvedURL.pathname.split("/datasets/")[1], base) : approvedURL;
+    const response = await originalFetch(packetURL, {method: "GET", credentials: "omit", redirect: "error", mode: external && !mirrored ? "cors" : "same-origin", signal});
     if (!response.ok) fail("PUBLIC_FILE_UNAVAILABLE", "The indexed public file is unavailable");
-    const wire = new Uint8Array(await response.arrayBuffer());
+    const externalPDF = external && key.split("?")[0] === "/api/cib-pdf";
+    if (externalPDF && (response.redirected || response.url !== packetURL.href ||
+        !["application/pdf", "application/octet-stream"].includes(response.headers.get("content-type")?.trim().toLowerCase()) ||
+        ![null, "identity"].includes(response.headers.get("content-encoding"))))
+      fail("INVALID_EXTERNAL_PDF", "The original PDF transport must retain its URL, approved PDF/binary container and identity bytes");
+    if (externalPDF && Number(response.headers.get("content-length")) > 32 * 1024 ** 2)
+      fail("PUBLIC_SIZE_LIMIT", "The original PDF exceeds the inspection limit");
+    const wire = externalPDF ? await boundedBytes(response, 32 * 1024 ** 2) : new Uint8Array(await response.arrayBuffer());
     let decoded = wire;
     const gzip = wire[0] === 31 && wire[1] === 139;
     const httpDecoded = /gzip/i.test(response.headers.get("content-encoding") || "") && !gzip;
-    if (external && !gzip) fail("INVALID_GZIP", "Immutable graph data must expose its original gzip bytes for both SHA checks");
+    if (external && !externalPDF && !gzip) fail("INVALID_GZIP", "Immutable graph data must expose its original gzip bytes for both SHA checks");
+    if (externalPDF && (gzip || !new TextDecoder("ascii").decode(wire.slice(0, 1024)).includes("%PDF-")))
+      fail("INVALID_EXTERNAL_PDF", "The original identity PDF header is missing");
     if (entry.wire_sha256 && (!httpDecoded || external)) await matches(wire, entry.wire_sha256, "Stored public file");
     if (entry.encoding === "gzip") {
       if (gzip) {

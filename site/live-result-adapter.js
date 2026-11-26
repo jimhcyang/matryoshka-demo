@@ -604,10 +604,25 @@ export async function verifyEnvelope(value, expectedRun) {
   const summary = value.analyst_digest;
   if (summary?.available === true) {
     const words = typeof summary.text === 'string' ? summary.text.trim().split(/\s+/).length : 0;
-    if (summary.version !== 'source-bound-postrun-digest/1' || summary.used_for_inference !== false ||
+    if (!['source-bound-postrun-digest/1', 'source-bound-postrun-digest/2'].includes(summary.version) || summary.used_for_inference !== false ||
         summary.native_checksum !== native.native_checksum || summary.query_sha256 !== native.query_sha256 ||
         !same(summary.resource_binding, condition.resource_binding) || words < 50 || words > 100 ||
         !Array.isArray(summary.sources) || summary.source_count !== summary.sources.length) fail('The separate digest is not bound to this result.');
+    if (summary.version === 'source-bound-postrun-digest/2') {
+      const artifact = value.artifacts?.['analyst-digest.json'];
+      if (summary.postrun !== true || !HASH.test(summary.input_sha256 || '') ||
+          summary.scoring_version !== native.result.terminal_scores?.version ||
+          !artifact || artifact.encoding !== 'gzip+base64' || !HASH.test(artifact.decoded_sha256 || '')) {
+        fail('The v2 postrun digest metadata differs from its native result.');
+      }
+      // postMessage does not preserve the unpacker's WeakMap. Check the small
+      // digest's logical artifact seal again, including its producer input pin.
+      const canonical = JSON.stringify(ordered(summary)).replace(/[\u007f-\uffff]/g,
+        c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
+      if (await bytesHash(new TextEncoder().encode(canonical)) !== artifact.decoded_sha256) {
+        fail('The v2 postrun digest differs from its sealed artifact.');
+      }
+    }
     summary.sources.forEach((ref, i) => { if (ref.id !== 'S' + (i + 1)) fail('Invalid digest source labels.'); replay(ref); });
     for (const match of summary.text.matchAll(/\bS(\d+)\b/g)) if (+match[1] < 1 || +match[1] > summary.sources.length) fail('Unknown digest citation.');
   }

@@ -1,0 +1,33 @@
+{
+  "version": "source-bound-release-authorization/1",
+  "date": "2026-11-25",
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "candidate_manifest_sha256": "750488805cbe8725877b87ee92837d166eeb2d11481a42f0989e7ab3ee89dbc0",
+  "source_report_sha256": "a2c3df797c69174d38f84962ab05dc610f8d7b491d8671f3f16e162594c8de79",
+  "backend_code_sha256": "7d494e769bcd68684da171e7e88eebd07c87aff4dbae5004a63bd3a94dd2cd73",
+  "publish_authorized": true,
+  "new_data_qa_accepted": true,
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "qualified_data_qa_ref": {
+    "path": "qa-source-showcase-2026-11-25.json",
+    "sha256": "7ca254f4826b9a2b3a22622e6c6aa7552d8f4dbee7a87bf7dbc70d9e39e76a9f"
+  },
+  "independent_final_review_sha256": "185c2977f2e686c4ac60e9adcab9b32b6a4e8d8e73195f3ef10b293ba3d6457d",
+  "prior_authorization_ref": {
+    "path": "authorization.json",
+    "sha256": "a8b1a9dce19c28ddad267834d71483257ef11ee2e55695e10712cde106fe369a"
+  },
+  "all_tasks_success_claimed": false,
+  "benchmark_accuracy_claimed": false,
+  "unknown_delegation_has_revealed_gold": false,
+  "ordinary_development_cases": 31,
+  "ordinary_primary_whole_top_five_recoveries": 4,
+  "limitations": [
+    "Hypothesis and redaction outcomes include partial or contextual findings.",
+    "All 37 saved routes across the five additional CIB examples are zero-hop source handoffs, not verified graph traversals.",
+    "The special delegation study has unknown historical truth and a separately registered supplied source edition.",
+    "Saved native epochs remain separately pinned; scores are not calibrated probabilities.",
+    "Privacy review covers published bytes and extractable PDF text, not OCR; rights continuity is not a new legal or declassification determination."
+  ]
+}

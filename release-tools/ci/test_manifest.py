@@ -6,10 +6,38 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from validate_manifest import at, authorize, unique
+from validate_manifest import at, authorize, unique, checked_api_route, checked_native_input, sha, encoded
 
 
 class ManifestTests(unittest.TestCase):
+    def test_native_original_input_and_explicit_task_bridge(self):
+        public = dict(task='redaction', query='A [REDACTION] delegation.')
+        checked_native_input(dict(case=public, public_case=public), dict(case=public))
+        with self.assertRaises(AssertionError):
+            checked_native_input(dict(case=dict(public, query='Different context'), public_case=public), dict(case=public))
+        public = dict(task='mosaic', query='Two source facts.')
+        original = dict(public, task='reconstruction')
+        binding = dict(task_binding='EXPLICIT_PUBLIC_MOSAIC_LEGACY_ENGINE_BRIDGE', native_case_sha256=sha(encoded(original)),
+            native_public_case_sha256=sha(encoded(public)), public_case_sha256=sha(encoded(public)), query_sha256=sha(encoded(public['query'])))
+        row = dict(case=public, native_public_case_binding=binding)
+        checked_native_input(dict(case=original, public_case=public), row)
+        for native in (dict(case=dict(original, query='Changed fact'), public_case=public),
+                       dict(case=dict(original, task='hypothesis'), public_case=public)):
+            with self.subTest(native=native), self.assertRaises(AssertionError):
+                checked_native_input(native, row)
+
+    def test_graph_quotation_routes_have_exact_corpus_bucket_and_asset(self):
+        for name in ('manifest.json', 'cib/00.json.gz', 'iran/7f.json.gz', 'vietnam/42.json.gz'):
+            key = '/graph-source-proofs/' + name
+            checked_api_route(key, {'path': key[1:]})
+        for name in ('other/00.json.gz', 'cib/80.json.gz', 'cib/../00.json.gz', 'cib/00.json', 'manifest.json?x=1'):
+            key = '/graph-source-proofs/' + name
+            with self.subTest(name=name), self.assertRaises(AssertionError):
+                checked_api_route(key, {'path': key[1:]})
+        for entry in ({'path': 'elsewhere.json'}, {'path': 'graph-source-proofs/manifest.json', 'external_url': 'https://example.com'}):
+            with self.subTest(entry=entry), self.assertRaises(AssertionError):
+                checked_api_route('/graph-source-proofs/manifest.json', entry)
+
     def test_current_relative_approval_path_remains_hash_bound(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -1,5 +1,6 @@
 // Optional display hooks for a separately published additional collection.
 // No case is nominated, promoted or judged by these helpers.
+import {validateRetainedStudyCollection} from './graph-retained-study-guard-v1.js';
 export const ADDITIONAL_COLLECTION='additional_real_redaction';
 export const WITHHELD_COLLECTION='withheld_delegation';
 export const CONFIGS={llm_readings:'A',llm_local:'C',llm_atoms:'B'};
@@ -21,23 +22,10 @@ export function savedCondition(row){
   return config?{row,config}:null;
 }
 
-export function validateAdditionalCollection(manifest,report){
+export async function validateAdditionalCollection(manifest,report){
   if(report.cases.some(row=>row.collection!==undefined&&!['starter','bench',ADDITIONAL_COLLECTION,WITHHELD_COLLECTION].includes(row.collection)))
     throw Error('The casebook has an unsupported explicit collection marker.');
-  const withheld=report.cases.filter(row=>row.collection===WITHHELD_COLLECTION);
-  if(withheld.length){
-    if(withheld.length!==2||new Set(withheld.map(row=>row.study_slot)).size!==2||
-        withheld.some(row=>!['first','last'].includes(row.study_slot)||row.case?.corpus!=='cib'||
-          row.case.task!=='redaction'||row.reference_answer_kind!=='unknown_still_withheld'||
-          row.selected_demo!==false||row.selected_bench!==false||row.selected_additional!==false||
-          row.current_resource_execution!==true||Object.hasOwn(row,'reference_answer')))
-      throw Error('Withheld delegation inputs must be two separately executed unknown-reference gaps, not presentation or answer-key promotions.');
-    for(const row of withheld){
-      const other=withheld.find(value=>value!==row);
-      if(row.study_companion_case_id!==other.case.case_id||['document_id','date','corpus'].some(key=>row.case[key]!==other.case[key]))
-        throw Error('The withheld delegation inputs must be reciprocal gaps in the same source.');
-    }
-  }
+  await validateRetainedStudyCollection(report);
   for(const row of report.cases)if(row.collection==='starter'&&(row.selected_demo!==true||row.selected_bench===true)||
       row.collection==='bench'&&(row.selected_bench!==true||row.selected_demo===true))
     throw Error('The explicit starter or bench collection conflicts with its selected-case flags.');

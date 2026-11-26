@@ -99,14 +99,24 @@ export async function cibPDFPair({page,proof={},binding,caseId,config,base=globa
     }
     if(!entry||entry.mime!=='application/pdf'||!/^[a-f0-9]{64}$/.test(entry.sha256||''))continue;
     if(registered?.release===release&&entry.sha256!==registered.pdf_ref.sha256)throw Error('The registered source PDF differs from its bound original file.');
-    if(entry.encoding!=='identity'||!SHA.test(entry.wire_sha256||'')||entry.external_url||
-        !/^data\/replays\/[a-f0-9]{64}\.pdf$/.test(entry.path||'')||entry.path.split('/').at(-1)!==entry.wire_sha256+'.pdf')
-      throw Error('The PDF catalog entry is not a pinned local PDF asset.');
-    const asset=new URL(entry.path,new URL('./',base));
+    const virtual=Object.hasOwn(entry,'external_url');
+    let assetPath=entry.path;
+    if(virtual){
+      const external=typeof entry.external_url==='string'&&/^https:\/\/raw\.githubusercontent\.com\/jimhcyang\/matryoshka-demo\/[a-f0-9]{40}\/datasets\/cib\/source-pdfs\/([a-f0-9]{64})\.pdf$/.exec(entry.external_url);
+      if(!external||external[0]!==entry.external_url||route.pathname.split('/').at(-2)!=='api'||
+          Object.hasOwn(entry,'path')||entry.sha256!==external[1]||entry.wire_sha256!==external[1]||
+          Object.hasOwn(entry,'corpus')&&entry.corpus!=='cib'||!globalThis.PublicReplay?.verified)
+        throw Error('The external PDF requires a pinned ordinary catalog route and verified runtime.');
+      assetPath='data/replays/'+entry.wire_sha256+'.pdf';
+    }
+    if(entry.encoding!=='identity'||!SHA.test(entry.wire_sha256||'')||entry.sha256!==entry.wire_sha256||
+        !/^data\/replays\/[a-f0-9]{64}\.pdf$/.test(assetPath||'')||assetPath.split('/').at(-1)!==entry.wire_sha256+'.pdf')
+      throw Error('The PDF catalog entry is not a pinned identity PDF asset.');
+    const asset=new URL(assetPath,new URL('./',base));
     if(asset.origin!==new URL(base).origin)throw Error('The PDF asset must be same-origin.');
     if(number)route.hash='page='+number;
     result.push({release,page:number,href:route.href,asset_url:asset.href,sha256:entry.sha256,wire_sha256:entry.wire_sha256,
-      document_id:page.document_id,scope,inspection_only:true});
+      document_id:page.document_id,scope,inspection_only:true,virtual_asset:virtual});
   }
   return result;
 }
@@ -116,7 +126,10 @@ async function verifiedPDFBytes(item,signal){
   if(globalThis.PublicReplay?.verified){
     const packet=await globalThis.PublicReplay.verified(item.href,signal);bytes=packet.wire;
     if(bytes.byteLength>32*1024**2)throw Error('The PDF exceeds the inspection limit.');
-  }else bytes=await boundedBytes(await fetch(item.asset_url,{credentials:'omit',redirect:'error',mode:'same-origin',signal}),32*1024**2);
+  }else{
+    if(item.virtual_asset)throw Error('The immutable PDF requires its verified public runtime.');
+    bytes=await boundedBytes(await fetch(item.asset_url,{credentials:'omit',redirect:'error',mode:'same-origin',signal}),32*1024**2);
+  }
   const hash=await byteHash(bytes);
   if(hash!==item.wire_sha256||hash!==item.sha256||!new TextDecoder('ascii').decode(bytes.slice(0,1024)).includes('%PDF-'))throw Error('The original PDF failed its byte check.');
   return bytes;

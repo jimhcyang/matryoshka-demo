@@ -1,36 +1,50 @@
 # Current Saved Release
 
-The website contains nine primary questions: one Mosaic, Hypothesis and
+The website contains nine primary inputs: one Mosaic, Hypothesis and
 Redaction for each of CIB, Iran and Vietnam. Five additional authentic CIB
-redactions and a separate Swedish-delegation comparison are also available.
-All fourteen primary/additional executions are complete saved arm-A runs.
+redactions and one separate visiting-delegation input are also available.
+All fifteen executions are complete saved arm-A runs with their own pinned
+code and source bindings. The release preserves multiple engine versions;
+the current code download is not retroactively assigned to older executions.
 
-Seven primary examples pass their source-qualified showcase checks. The Iran
-and Vietnam redactions recover the reference fill at rank one but remain
-contextual; the local engine abstains from an evidence-backed recommendation.
-The five historical CIB extras preserve their original contextual labels and
-top-five recoveries. These selections are not benchmark accuracy results.
+Tehrani, Vietnam March 19 and Soviet announced-quantity Mosaics each establish
+both requested facts. The Soviet case establishes announcements, not completed
+withdrawals. A single document can establish two facts; this is not independent
+multi-document corroboration. The Salvadoran adjectival reading ranks easily
+politically manipulated first with eligible evidence. Additional CIB examples
+are Arias, air-force commander, Betancourt, corrupt and a Tunisian clausal fill.
 
-The Iran teaching Hypothesis is supported as a statement forwarded from Armin
-Meyer, not independently verified historical truth. The Vietnam command
-Hypothesis establishes an earlier role, not tenure at the later question date.
-The Lac redaction similarly distinguishes an earlier role from a later action.
-These scope notes appear with the decisions and saved model summaries.
+The Shah command Hypothesis remains partial, while the Vietnam Highlands
+Hypothesis establishes one of two components. Yazdi ranks third contextually;
+UNOCCUPIED ranks fifth in the displayed Spratly reading. Display curation is
+not a primary-reading benchmark gain. Swedish ranks second in the retained
+delegation reading under its registered supplied-source study; its historical
+reference is unknown. The unsuccessful second focal input remains archived.
 
-Ordinary evidence predates the question's origin and excludes that entire
-origin. The Swedish S2 view alone adds its exact origin, after explicit
-acknowledgment; its hidden nationality has no known reference answer. Identity
-and hierarchy assignments are retrospective resources.
+Ordinary evidence is source-day inclusive. CIB admits EARLIER/BOTH text,
+including the earlier origin edition; cables admit CONFIDENTIAL text and
+exclude the entire SECRET origin. The delegation study has its own exact
+registered edition. PDF inspection does not change recorded evidence policy.
+Identity and hierarchy assignments are retrospective resources.
 
 The three corpus maps support source inspection, direct neighborhoods and
 saved navigation. A document handoff with no recorded graph hops is shown as
 such. Display navigation never becomes an invented historical relationship.
-The French Atomic Energy Commission neighborhood includes twenty original
-paired PDFs for ten source documents. CIB has 28,201 observed opaque slots;
-the bound Iran/Vietnam map exports contain no actual slot markers.
+All 37 saved paths across the five additional CIB examples' fourteen readings
+are zero-hop source handoffs. Richer source-bound KG retrieval routes remain
+an open architectural task; independent map navigation is not a substitute.
+Both original CIB releases are available through 6,018 PDF routes for 3,009
+documents. CIB has 28,201 observed Redacted Slots; the bound Iran/Vietnam map
+exports contain no observed mask markers. Twenty-seven Vietnam nodes have
+only NOFORN observations and no public own-source quotation.
+
+The fixed 31-case development cohort has four whole-answer primary top-five
+recoveries; its shorter-window comparison has two. The half-cohort goal remains
+unmet. These are development diagnostics, not held-out benchmark accuracy.
+Aung Gyi is outside the current top ten and is not presented as a success.
 
 The PDF guide explains retrieval, local grammar, source rules, scoring and
-all fourteen cases. The code ZIP contains the recorded backend and viewing
+all fifteen cases. The code ZIP contains the recorded backend and viewing
 tools. Local saved viewing needs only this repository and Python's standard
 library; it does not import another research directory or call a model API.
 
