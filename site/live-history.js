@@ -1,5 +1,5 @@
 // Compact history is navigation metadata, never a reduced inference envelope.
-import {LiveResultHistory as LegacyHistory,LIVE_HISTORY_LIMITS as LEGACY,credentialLike,verifyEnvelope} from './live-result-adapter.js';
+import {LiveResultHistory as LegacyHistory,LIVE_HISTORY_LIMITS as LEGACY,credentialLike,verifyEnvelope} from './live-result-adapter.js?v=20261127-unified1';
 
 export const LIVE_HISTORY_LIMITS=Object.freeze({...LEGACY,key:'matryoshka.live.results.v2',referenceBytes:8192});
 export const HISTORY_VERSION='matryoshka-live-reference-history/2';

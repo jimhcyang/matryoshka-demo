@@ -3,6 +3,8 @@
   "use strict";
   const script = document.currentScript;
   if (!script || window.PublicReplay) throw new Error("Load public-runtime.js once as an early classic script");
+  // PDF inspection must find this transport even with a versioned script URL.
+  if (!script.id) script.id = "matryoshka-public-api";
   const base = new URL(script.dataset.siteBase || "../", script.src);
   if (!/^https?:$/.test(base.protocol) || base.origin !== location.origin || !base.pathname.endsWith("/") || base.search || base.hash) throw new Error("The public site base must be a same-origin HTTP(S) directory");
   const originalFetch = window.fetch.bind(window), originalOpen = window.open.bind(window);
@@ -594,6 +596,7 @@
     const target = logical(value);
     if (isPDF(target.path)) return replayURL(value);
     if (target.path === "/runtime/replay.html") return siteURL(value);
+    if (target.path === "/graph-full-v6.html" && target.query.get("inspection_embed") === "1") return siteURL(value);
     fail("FRAME_NOT_ALLOWLISTED", "Only a verified saved PDF frame is available in this public demo");
   }
   function safeFrame(value) {

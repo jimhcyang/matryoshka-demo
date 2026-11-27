@@ -1,0 +1,2904 @@
+{
+  "QA_answers_or_grades_included": false,
+  "case": {
+    "case_id": "cloze_5daf527b1fea4619f9b54420",
+    "corpus": "cib",
+    "date": "1956-07-01",
+    "document_id": "CIA-RDP79T00975A002600290001-1",
+    "focal_marker": "[REDACTION 1]",
+    "query": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC). While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.\n\nGamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos.",
+    "task": "redaction"
+  },
+  "missing_transport": {
+    "endpoint": null,
+    "fabricated_routes_or_support_votes": false,
+    "graph_walk": null,
+    "origin_refs": null,
+    "parent_typed_adapter_and_normal_source_v6_export_required": true,
+    "source_routes": []
+  },
+  "native_baseline": {
+    "baseline_verdicts_unchanged": true,
+    "checkpoint_sha256": "be775351b9919a549c870a60a9b8c8fea3b55a2e2f20d9df56f40203dde60c5a",
+    "code_pins_sha256": "e159da0aa5f59740ebb31a374e8917c24c052a18b16efa80b534c7771345e3cc",
+    "configuration": {
+      "completed_drafts_per_reading": 64,
+      "construction_pages": 32,
+      "method": "current_hierarchy",
+      "retrieval_document_budget": 40,
+      "retrieval_passage_budget": 80,
+      "selection_profile": {
+        "candidate_focal_fraction": 0.5,
+        "constructor_family_mode": "first_class_adjuncts",
+        "counter_policy": "positive_support",
+        "cue_order_mode": "source_alignment",
+        "identity_first": true,
+        "page_focal_fraction": 0.5,
+        "scan_pages": 512,
+        "source_phrase_mode": "scoped",
+        "supplemental_mode": "source_form_opportunities"
+      },
+      "source_view_policy": {
+        "cable_classification": "CONFIDENTIAL",
+        "cable_document_wide_handling_veto": true,
+        "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+        "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+        "cutoff_role": "source_document_date",
+        "date_relation": "<=",
+        "id": "source_day_inclusive",
+        "later_or_secret_version_admitted": false,
+        "source_dates_or_document_ids_rewritten": false,
+        "version": "trusted-corpus-source-view/1"
+      },
+      "terminal_ranking": "evidence_fit_v7",
+      "top_k": 5
+    },
+    "execution_context_sha256": "fc1fb1e688d707f52a937f642fcd509d1bc060714cde395a27393af63f87054f",
+    "native_checksum": "b269547037c924d31c19a4c2cd6475fa056a257f39da58a91b4a8fbcb2f21406",
+    "proposal_slate_is_not_native_result": true,
+    "source_view_policy": {
+      "cable_classification": "CONFIDENTIAL",
+      "cable_document_wide_handling_veto": true,
+      "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+      "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+      "cutoff_role": "source_document_date",
+      "date_relation": "<=",
+      "id": "source_day_inclusive",
+      "later_or_secret_version_admitted": false,
+      "source_dates_or_document_ids_rewritten": false,
+      "version": "trusted-corpus-source-view/1"
+    },
+    "version": "narrative-local-execution/4"
+  },
+  "publication_authorized": false,
+  "saved_method": {
+    "QA_method_sha256": "bb5a0adca543c2181ae735344fc1b0ccec337171e121163c23a989290fc08cc6",
+    "factual_support_certified": false,
+    "name": "SOURCE_PROPOSALS_CONTEXT_ONLY",
+    "score_version": "source-proposal-context-priority/1",
+    "source_results_sha256": "5599083c2b938dbaed1c5d038cbe512f540a12e449e813cc5e5abeeba9e41784",
+    "source_slates_sha256": "408c5346b579c66fdb3e02fd2d2dbba6757f3fac70b7365f3f4d9ec918040497"
+  },
+  "sections": {
+    "analyst_summary": {
+      "actual_digest_ref": null,
+      "calls_authorized_here": 0,
+      "new_method_body_must_include_exact_saved_slate": true,
+      "parent_paid_generation_needed_for_populated_summary": true,
+      "rebind_from_related_public_case_allowed": false,
+      "status": "NO_EXACT_SAVED_METHOD_DIGEST_IN_BOUNDED_INVENTORY",
+      "text": null
+    },
+    "facts_to_evidence": {
+      "kind": "CONTEXTUAL_MODEL_REVIEW_AND_LOCAL_GRAMMAR_NOT_FACTUAL_VOTES",
+      "records": [
+        {
+          "candidate_id": "source_reviewed_fill_a49d56ff5cd0a6252dabd2a6913a",
+          "citations": [
+            {
+              "canonical_page_id": "page_fdf833dea9499ff0fa94",
+              "corpus": "cib",
+              "date": "1956-07-01",
+              "document_id": "CIA-RDP79T00975A002600290001-1",
+              "end": 827,
+              "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff",
+              "start": 439,
+              "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p1",
+                  "qualifications_preserved": true,
+                  "reason": "The ideological description of the named members' manifestos supplies a faithful contextual characterization of their political stance. The adjective phrase fits between 'the' and 'members' and coheres with the possible more moderate tone; this does not establish the concealed wording.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "b159cd7b7c3d5d6782f1692175e2fc441f71f5822e603f852c65eff2688247c0",
+                  "inserted_span": [
+                    153,
+                    193
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "b159cd7b7c3d5d6782f1692175e2fc441f71f5822e603f852c65eff2688247c0",
+                  "constructor_form": "modifier",
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "amod",
+                    "lemma": "nationalistic",
+                    "pos": "ADJ",
+                    "span": [
+                      163,
+                      176
+                    ],
+                    "tag": "JJ",
+                    "text": "nationalistic"
+                  },
+                  "inserted_span": [
+                    153,
+                    193
+                  ],
+                  "outer_family": "adjectival",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_ADJECTIVAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "b159cd7b7c3d5d6782f1692175e2fc441f71f5822e603f852c65eff2688247c0",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+            "unsupported_diagnostics": [
+              {
+                "helper": "completed_slot_fit",
+                "positive_source_frame_invented": false,
+                "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p1",
+            "qualifications_preserved": true,
+            "reason": "The ideological description of the named members' manifestos supplies a faithful contextual characterization of their political stance. The adjective phrase fits between 'the' and 'members' and coheres with the possible more moderate tone; this does not establish the concealed wording.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1956-07-01",
+            "document_id": "CIA-RDP79T00975A002600290001-1",
+            "exact_quote": {
+              "end": 654,
+              "start": 439,
+              "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos."
+            },
+            "original_phrase": {
+              "end": 642,
+              "start": 602,
+              "text": "extremely nationalistic and anti-Western"
+            },
+            "page_id": "page_fdf833dea9499ff0fa94",
+            "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff",
+            "qualification_paragraph": {
+              "end": 827,
+              "start": 439,
+              "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_2bdd4a3cfd7ea824dd9f1dbe193b",
+          "citations": [
+            {
+              "canonical_page_id": "page_1340679d0e54b5555bb4",
+              "corpus": "cib",
+              "date": "1953-05-21",
+              "document_id": "CIA-RDP79T00975A001100460001-8",
+              "end": 462,
+              "page_sha256": "460a93bccfcc4a4186ee7ea2186793574a9ab9e8adee206e324b727b22fad108",
+              "start": 308,
+              "text": "There is also wide dissatisfaction among the middle classes with the leadership of the young, inexperienced officers of the Revolutionary Command Council."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p5",
+                  "qualifications_preserved": true,
+                  "reason": "The source directly characterizes RCC officers as young and inexperienced. That personal-property phrase faithfully and grammatically modifies RCC members in the completed input. It is a contextual nomination, not proof that these properties defined the particular removal or the concealed text.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "0d3aad2f97f01680a7cdfaba426c3059b8d2547ba5e481b16de12f2a49202356",
+                  "inserted_span": [
+                    153,
+                    173
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "0d3aad2f97f01680a7cdfaba426c3059b8d2547ba5e481b16de12f2a49202356",
+                  "constructor_form": "modifier",
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "amod",
+                    "lemma": "young",
+                    "pos": "ADJ",
+                    "span": [
+                      153,
+                      158
+                    ],
+                    "tag": "JJ",
+                    "text": "young"
+                  },
+                  "inserted_span": [
+                    153,
+                    173
+                  ],
+                  "outer_family": "adjectival",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_ADJECTIVAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "0d3aad2f97f01680a7cdfaba426c3059b8d2547ba5e481b16de12f2a49202356",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+            "unsupported_diagnostics": [
+              {
+                "helper": "completed_slot_fit",
+                "positive_source_frame_invented": false,
+                "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p5",
+            "qualifications_preserved": true,
+            "reason": "The source directly characterizes RCC officers as young and inexperienced. That personal-property phrase faithfully and grammatically modifies RCC members in the completed input. It is a contextual nomination, not proof that these properties defined the particular removal or the concealed text.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1953-05-21",
+            "document_id": "CIA-RDP79T00975A001100460001-8",
+            "exact_quote": {
+              "end": 462,
+              "start": 308,
+              "text": "There is also wide dissatisfaction among the middle classes with the leadership of the young, inexperienced officers of the Revolutionary Command Council."
+            },
+            "original_phrase": {
+              "end": 415,
+              "start": 395,
+              "text": "young, inexperienced"
+            },
+            "page_id": "page_1340679d0e54b5555bb4",
+            "page_sha256": "460a93bccfcc4a4186ee7ea2186793574a9ab9e8adee206e324b727b22fad108",
+            "qualification_paragraph": {
+              "end": 462,
+              "start": 308,
+              "text": "There is also wide dissatisfaction among the middle classes with the leadership of the young, inexperienced officers of the Revolutionary Command Council."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_24b5d75f702d693a804e3da507ff",
+          "citations": [
+            {
+              "canonical_page_id": "page_1f26b192620b540597bc",
+              "corpus": "cib",
+              "date": "1952-12-25",
+              "document_id": "CIA-RDP79T00975A000900630001-2",
+              "end": 1001,
+              "page_sha256": "3c84f765663ea0f011f874883d38262d45bedd2c97ed648e7b15bb76e98695df",
+              "start": 727,
+              "text": "A return to the popular theme of \"national struggle\" might gain the support of extreme nationalist elements within Egypt and distract attention from the increasing internal problems. There is no firm indication, however, that a drastic change in Egyptian policy is imminent."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p3",
+                  "qualifications_preserved": true,
+                  "reason": "The phrase faithfully retains the source's political characterization of Egyptian elements and grammatically modifies 'members'. It is contextually relevant to the nationalist manifestos and moderation contrast. The source's conditional prediction about gaining support is not converted into an asserted event, and no identity between those elements and the removed members is established.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "d0e8432cb7150b139430092b2193daa6c96a150dfe6629279801babc8661fe3b",
+                  "inserted_span": [
+                    153,
+                    172
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "d0e8432cb7150b139430092b2193daa6c96a150dfe6629279801babc8661fe3b",
+                  "constructor_form": "modifier",
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "amod",
+                    "lemma": "extreme",
+                    "pos": "ADJ",
+                    "span": [
+                      153,
+                      160
+                    ],
+                    "tag": "JJ",
+                    "text": "extreme"
+                  },
+                  "inserted_span": [
+                    153,
+                    172
+                  ],
+                  "outer_family": "adjectival",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_ADJECTIVAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "d0e8432cb7150b139430092b2193daa6c96a150dfe6629279801babc8661fe3b",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+            "unsupported_diagnostics": [
+              {
+                "helper": "completed_slot_fit",
+                "positive_source_frame_invented": false,
+                "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p3",
+            "qualifications_preserved": true,
+            "reason": "The phrase faithfully retains the source's political characterization of Egyptian elements and grammatically modifies 'members'. It is contextually relevant to the nationalist manifestos and moderation contrast. The source's conditional prediction about gaining support is not converted into an asserted event, and no identity between those elements and the removed members is established.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1952-12-25",
+            "document_id": "CIA-RDP79T00975A000900630001-2",
+            "exact_quote": {
+              "end": 909,
+              "start": 727,
+              "text": "A return to the popular theme of \"national struggle\" might gain the support of extreme nationalist elements within Egypt and distract attention from the increasing internal problems."
+            },
+            "original_phrase": {
+              "end": 825,
+              "start": 806,
+              "text": "extreme nationalist"
+            },
+            "page_id": "page_1f26b192620b540597bc",
+            "page_sha256": "3c84f765663ea0f011f874883d38262d45bedd2c97ed648e7b15bb76e98695df",
+            "qualification_paragraph": {
+              "end": 1001,
+              "start": 727,
+              "text": "A return to the popular theme of \"national struggle\" might gain the support of extreme nationalist elements within Egypt and distract attention from the increasing internal problems. There is no firm indication, however, that a drastic change in Egyptian policy is imminent."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_566ed28928c762e5e78c5aae3bb7",
+          "citations": [
+            {
+              "canonical_page_id": "page_2a9dd9d2a8c3c29a9062",
+              "corpus": "cib",
+              "date": "1955-08-30",
+              "document_id": "CIA-RDP79T00975A002100590001-2",
+              "end": 694,
+              "page_sha256": "177bd5adf5020b35dc4ea9491dd01245f8f4384e465a8343baf58e3e1d90b052",
+              "start": 309,
+              "text": "Salim has long been reputed to be Prime Minister Nasr's principal opponent and leader of an extreme anti-Western faction in the RCC. Although the apparent failure of Salim's campaign to unite the Sudan with Egypt is cited in the press as the reason for his eclipse at this time, there have been numerous reports that Nasr intended to oust Salim whenever he felt strong enough to do so."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p2",
+                  "qualifications_preserved": true,
+                  "reason": "The source explicitly characterizes an RCC faction as extreme anti-Western, making this a relevant political-property nomination. The reputational qualification concerns Salim's leadership and opposition role, neither of which the fill asserts. Acceptance does not establish which members belonged to that faction.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "251c902f2c4b681a2180ab142b5011b43976cae5b057b943c7a141ae14328cd6",
+                  "inserted_span": [
+                    153,
+                    173
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "251c902f2c4b681a2180ab142b5011b43976cae5b057b943c7a141ae14328cd6",
+                  "constructor_form": "modifier",
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "amod",
+                    "lemma": "extreme",
+                    "pos": "ADJ",
+                    "span": [
+                      153,
+                      160
+                    ],
+                    "tag": "JJ",
+                    "text": "extreme"
+                  },
+                  "inserted_span": [
+                    153,
+                    173
+                  ],
+                  "outer_family": "adjectival",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_ADJECTIVAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "251c902f2c4b681a2180ab142b5011b43976cae5b057b943c7a141ae14328cd6",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+            "unsupported_diagnostics": [
+              {
+                "helper": "completed_slot_fit",
+                "positive_source_frame_invented": false,
+                "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p2",
+            "qualifications_preserved": true,
+            "reason": "The source explicitly characterizes an RCC faction as extreme anti-Western, making this a relevant political-property nomination. The reputational qualification concerns Salim's leadership and opposition role, neither of which the fill asserts. Acceptance does not establish which members belonged to that faction.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1955-08-30",
+            "document_id": "CIA-RDP79T00975A002100590001-2",
+            "exact_quote": {
+              "end": 441,
+              "start": 309,
+              "text": "Salim has long been reputed to be Prime Minister Nasr's principal opponent and leader of an extreme anti-Western faction in the RCC."
+            },
+            "original_phrase": {
+              "end": 421,
+              "start": 401,
+              "text": "extreme anti-Western"
+            },
+            "page_id": "page_2a9dd9d2a8c3c29a9062",
+            "page_sha256": "177bd5adf5020b35dc4ea9491dd01245f8f4384e465a8343baf58e3e1d90b052",
+            "qualification_paragraph": {
+              "end": 694,
+              "start": 309,
+              "text": "Salim has long been reputed to be Prime Minister Nasr's principal opponent and leader of an extreme anti-Western faction in the RCC. Although the apparent failure of Salim's campaign to unite the Sudan with Egypt is cited in the press as the reason for his eclipse at this time, there have been numerous reports that Nasr intended to oust Salim whenever he felt strong enough to do so."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_f9291a843e0501f6d27e6bf1fd2b",
+          "citations": [
+            {
+              "canonical_page_id": "page_fdf833dea9499ff0fa94",
+              "corpus": "cib",
+              "date": "1956-07-01",
+              "document_id": "CIA-RDP79T00975A002600290001-1",
+              "end": 827,
+              "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff",
+              "start": 439,
+              "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p1",
+                  "qualifications_preserved": true,
+                  "reason": "The source names Gamal Salim and Anwar Sadat, then identifies Hassan Ibrahim as 'the third RCC member dropped,' supporting the cardinal paraphrase 'three' for this group. 'The three members' fits the quantity reading and the whole sentence grammatically. 'Reportedly' qualifies Ibrahim's opposition to Salah Salim's resignation, not his identification as the third member dropped. No opaque text is inferred.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "5f0c6253a4657089f9a0f4908bef5382877d9ab9dc8319ec4ff0bd600a23aac2",
+                  "inserted_span": [
+                    153,
+                    158
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "5f0c6253a4657089f9a0f4908bef5382877d9ab9dc8319ec4ff0bd600a23aac2",
+                  "constructor_form": "quantity",
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "nummod",
+                    "lemma": "three",
+                    "pos": "NUM",
+                    "span": [
+                      153,
+                      158
+                    ],
+                    "tag": "CD",
+                    "text": "three"
+                  },
+                  "inserted_span": [
+                    153,
+                    158
+                  ],
+                  "outer_family": "nominal_specifier",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_NUMERIC_SPECIFIER",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "numeric_quantity",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "absence_is_counterevidence": false,
+                  "factual_support_certified": false,
+                  "reading_modified": false,
+                  "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                  "state": "pass"
+                },
+                "name": "applicable_existing_completed_slot_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "5f0c6253a4657089f9a0f4908bef5382877d9ab9dc8319ec4ff0bd600a23aac2",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "d07f489afa4fc93efe1c61c0018fc307fb96f3d88ffe3e15797150841d76d97c",
+            "unsupported_diagnostics": [
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_1cc0ac3785eaa66d80e06261",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p1",
+            "qualifications_preserved": true,
+            "reason": "The source names Gamal Salim and Anwar Sadat, then identifies Hassan Ibrahim as 'the third RCC member dropped,' supporting the cardinal paraphrase 'three' for this group. 'The three members' fits the quantity reading and the whole sentence grammatically. 'Reportedly' qualifies Ibrahim's opposition to Salah Salim's resignation, not his identification as the third member dropped. No opaque text is inferred.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1956-07-01",
+            "document_id": "CIA-RDP79T00975A002600290001-1",
+            "exact_quote": {
+              "end": 775,
+              "start": 655,
+              "text": "Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation."
+            },
+            "original_phrase": {
+              "end": 680,
+              "start": 675,
+              "text": "third"
+            },
+            "page_id": "page_fdf833dea9499ff0fa94",
+            "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff",
+            "qualification_paragraph": {
+              "end": 827,
+              "start": 439,
+              "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        }
+      ]
+    },
+    "facts_to_look_for": {
+      "atoms": [
+        {
+          "id": "a1",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "the [REDACTION 1] members of the former Revolutionary Command Council (RCC)",
+          "polarity": "positive",
+          "predicate": "have the primary effect of removing from top posts",
+          "query_quotes": [
+            "The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC)."
+          ],
+          "query_spans": [
+            {
+              "end": 225,
+              "start": 41,
+              "text": "The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC)."
+            }
+          ],
+          "required": true,
+          "source_quote": "The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC).",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "The changes in the Egyptian cabinet announced on 29 June",
+          "text": "The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC)."
+        },
+        {
+          "id": "a2",
+          "kind": "proposition",
+          "modality": "possible",
+          "object": "the regime a more moderate tone",
+          "polarity": "positive",
+          "predicate": "may give",
+          "query_quotes": [
+            "While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy."
+          ],
+          "query_spans": [
+            {
+              "end": 365,
+              "start": 226,
+              "text": "While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy."
+            }
+          ],
+          "required": true,
+          "source_quote": "While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "the changes",
+          "text": "The changes may give the regime a more moderate tone."
+        },
+        {
+          "id": "a3",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "any significant shift in the direction of Egyptian policy",
+          "polarity": "negative",
+          "predicate": "indicate",
+          "query_quotes": [
+            "While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy."
+          ],
+          "query_spans": [
+            {
+              "end": 365,
+              "start": 226,
+              "text": "While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy."
+            }
+          ],
+          "required": true,
+          "source_quote": "While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "the changes",
+          "text": "The changes do not indicate any significant shift in the direction of Egyptian policy."
+        },
+        {
+          "id": "a4",
+          "kind": "proposition",
+          "modality": "reported",
+          "object": "their extremely nationalistic and anti-Western manifestos",
+          "polarity": "positive",
+          "predicate": "have been noted for",
+          "query_quotes": [
+            "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos."
+          ],
+          "query_spans": [
+            {
+              "end": 582,
+              "start": 367,
+              "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos."
+            }
+          ],
+          "required": true,
+          "source_quote": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat",
+          "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos."
+        }
+      ],
+      "kind": "RECORDED_PUBLIC_QUERY_REQUIREMENTS_NOT_WORLD_FACTS"
+    },
+    "saved_fills": {
+      "order_unchanged": true,
+      "primary_reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+      "readings": [
+        {
+          "candidates": [],
+          "deferred_record_n": 0,
+          "held_record_n": 4,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 174,
+                "start": 167,
+                "text": "members"
+              }
+            ],
+            "constructor_form": "modifier",
+            "constructor_routing": {
+              "constructor_form": "modifier",
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "legacy_compatible_subset",
+            "cues": [
+              {
+                "kind": "boundary",
+                "span": {
+                  "end": 152,
+                  "start": 149,
+                  "text": "the"
+                }
+              },
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 174,
+                  "start": 167,
+                  "text": "members"
+                }
+              }
+            ],
+            "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: modifier. Legacy subset route: modifier.",
+            "finite": null,
+            "form": "nominal",
+            "function": "modifier",
+            "grammatical_number": "unknown",
+            "id": "next_reading_ba828f15c5c286e6a2beb873",
+            "operators": [],
+            "outer_family": "nominal",
+            "role": "nominal_property",
+            "target_kind": "any",
+            "variant": "compound_modifier",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_ba828f15c5c286e6a2beb873",
+          "status": "NO_ADMITTED_CONTEXTUAL_CANDIDATES"
+        },
+        {
+          "candidates": [
+            {
+              "completed_input": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the extremely nationalistic and anti-Western members of the former Revolutionary Command Council (RCC). While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.\n\nGamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos.",
+              "completed_input_sha256": "b159cd7b7c3d5d6782f1692175e2fc441f71f5822e603f852c65eff2688247c0",
+              "completed_input_utf8_sha256": "c802f6e3347efe568d094ae0d4abd96d1d4b57939ff5927e94dc54bf80ff0c61",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_a49d56ff5cd0a6252dabd2a6913a",
+                  "completed_input_sha256": "b159cd7b7c3d5d6782f1692175e2fc441f71f5822e603f852c65eff2688247c0",
+                  "exact_quote_sha256": "432e4aa27eb4d87fdd81f6268dcd13c65d8dbbfc6bd5a2d2837e7c6fe96d3968",
+                  "grammar_sha256": "c7aa1953187858888a3f5df4b1acdb72bcca8f2adf15f99bb4ee7e2b57208460",
+                  "observation_sha256": "5ab85533b8ed5ee6250457072c4f17a98cb827dc680f9cb6462a027b0e656c86",
+                  "plan_sha256": "eb23e7e8279b8567c1f6af15365c2d71b729e8e70d1c3ce55c2fec01b3503daa",
+                  "provenance_sha256": "f604389e97dfbe31c95edee0cfa4e369dbc897924772248c2fcd9ba2a5bffb1a",
+                  "query_sha256": "5f639113615aa055bb9355e6350924847e2d69959452c6cc59785dd40de0877d",
+                  "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+                  "source_phrase_sha256": "55cc91a7ee98312f51a658230f446441de794bc1716e78d85dbdc5a73979afdd"
+                },
+                "candidate_content_terms": [
+                  "anti",
+                  "extremely",
+                  "nationalistic",
+                  "western"
+                ],
+                "components": {
+                  "lexical_novelty": 0.0,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.55
+                },
+                "focal_query_span": {
+                  "end": 225,
+                  "start": 0,
+                  "text": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC)."
+                },
+                "focal_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "effect",
+                  "egyptian",
+                  "june",
+                  "member",
+                  "post",
+                  "primary",
+                  "rcc",
+                  "remove",
+                  "revolutionary"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "effect",
+                  "egyptian",
+                  "june",
+                  "member",
+                  "post",
+                  "primary",
+                  "rcc",
+                  "remove",
+                  "revolutionary"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_fdf833dea9499ff0fa94",
+                  "date": "1956-07-01",
+                  "document_id": "CIA-RDP79T00975A002600290001-1",
+                  "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.0,
+                  "own_page_focal_coverage": 1.0
+                },
+                "repeated_visible_content_terms": [
+                  "anti",
+                  "extremely",
+                  "nationalistic",
+                  "western"
+                ],
+                "score": 0.8,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "anti",
+                  "anwar",
+                  "brother",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "deputy",
+                  "direction",
+                  "effect",
+                  "egyptian",
+                  "ex",
+                  "extremely",
+                  "force",
+                  "gamal",
+                  "indicate",
+                  "june",
+                  "manifesto",
+                  "member",
+                  "minister",
+                  "moderate",
+                  "nationalistic",
+                  "note",
+                  "policy",
+                  "post",
+                  "primary",
+                  "prime",
+                  "rcc",
+                  "regime",
+                  "remove",
+                  "resign",
+                  "revolutionary",
+                  "sadat",
+                  "salah",
+                  "salim",
+                  "shift",
+                  "significant",
+                  "state",
+                  "tone",
+                  "western",
+                  "year"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 174,
+                    "start": 167,
+                    "text": "members"
+                  }
+                ],
+                "constructor_form": "modifier",
+                "constructor_routing": {
+                  "constructor_form": "modifier",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 152,
+                      "start": 149,
+                      "text": "the"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 174,
+                      "start": 167,
+                      "text": "members"
+                    }
+                  }
+                ],
+                "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+                "finite": null,
+                "form": "adjectival",
+                "function": "modifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_8ad7bb2f27aca71db84320d8",
+                "operators": [],
+                "outer_family": "adjectival",
+                "role": "nominal_property",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "extremely nationalistic and anti-Western",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p1",
+                      "qualifications_preserved": true,
+                      "reason": "The ideological description of the named members' manifestos supplies a faithful contextual characterization of their political stance. The adjective phrase fits between 'the' and 'members' and coheres with the possible more moderate tone; this does not establish the concealed wording.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "b159cd7b7c3d5d6782f1692175e2fc441f71f5822e603f852c65eff2688247c0",
+                      "inserted_span": [
+                        153,
+                        193
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "b159cd7b7c3d5d6782f1692175e2fc441f71f5822e603f852c65eff2688247c0",
+                      "constructor_form": "modifier",
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "amod",
+                        "lemma": "nationalistic",
+                        "pos": "ADJ",
+                        "span": [
+                          163,
+                          176
+                        ],
+                        "tag": "JJ",
+                        "text": "nationalistic"
+                      },
+                      "inserted_span": [
+                        153,
+                        193
+                      ],
+                      "outer_family": "adjectival",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_ADJECTIVAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "b159cd7b7c3d5d6782f1692175e2fc441f71f5822e603f852c65eff2688247c0",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "completed_slot_fit",
+                    "positive_source_frame_invented": false,
+                    "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_a49d56ff5cd0a6252dabd2a6913a",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "be775351b9919a549c870a60a9b8c8fea3b55a2e2f20d9df56f40203dde60c5a",
+                "original_candidate_sha256": "eb4b76603d3f1213350615bea4201c83443a2ce12bf7f54a1de2ca6ef9c73083",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "f604389e97dfbe31c95edee0cfa4e369dbc897924772248c2fcd9ba2a5bffb1a",
+                "proposal_response_sha256": "94f4e7adcd45e33c2800420979b842e0dcd0a488f29cae0e845d32db9d13bc29",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "acd92af3699ebadbdac0c949b89fd16d4cef218d9a901a71de19cbf07b353071",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+              "source": {
+                "date": "1956-07-01",
+                "document_id": "CIA-RDP79T00975A002600290001-1",
+                "exact_quote": {
+                  "end": 654,
+                  "start": 439,
+                  "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos."
+                },
+                "original_phrase": {
+                  "end": 642,
+                  "start": 602,
+                  "text": "extremely nationalistic and anti-Western"
+                },
+                "page_id": "page_fdf833dea9499ff0fa94",
+                "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff",
+                "qualification_paragraph": {
+                  "end": 827,
+                  "start": 439,
+                  "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p1",
+                "qualifications_preserved": true,
+                "reason": "The ideological description of the named members' manifestos supplies a faithful contextual characterization of their political stance. The adjective phrase fits between 'the' and 'members' and coheres with the possible more moderate tone; this does not establish the concealed wording.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_fdf833dea9499ff0fa94",
+                  "corpus": "cib",
+                  "date": "1956-07-01",
+                  "document_id": "CIA-RDP79T00975A002600290001-1",
+                  "end": 827,
+                  "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff",
+                  "start": 439,
+                  "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "UNCHANGED: applies the visible characterization of their manifestos as an adjectival characterization of the members.",
+                "kind": "UNCHANGED"
+              }
+            },
+            {
+              "completed_input": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the young, inexperienced members of the former Revolutionary Command Council (RCC). While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.\n\nGamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos.",
+              "completed_input_sha256": "0d3aad2f97f01680a7cdfaba426c3059b8d2547ba5e481b16de12f2a49202356",
+              "completed_input_utf8_sha256": "b4093401ce93a6ee5770fea26faa8f035b80549ef4199ac787aadb264706085e",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_2bdd4a3cfd7ea824dd9f1dbe193b",
+                  "completed_input_sha256": "0d3aad2f97f01680a7cdfaba426c3059b8d2547ba5e481b16de12f2a49202356",
+                  "exact_quote_sha256": "1f3b5be1a0f1d4dab817c49f4444bd66966f8d35819f710481af97d16f10b6fb",
+                  "grammar_sha256": "62334fad802af00c6a6b8523e3133f12eecc8341f8ca2b76bc3d93f178bcd5b3",
+                  "observation_sha256": "5ab85533b8ed5ee6250457072c4f17a98cb827dc680f9cb6462a027b0e656c86",
+                  "plan_sha256": "eb23e7e8279b8567c1f6af15365c2d71b729e8e70d1c3ce55c2fec01b3503daa",
+                  "provenance_sha256": "2be9480128f6f49573389a4fe1a2e557bf71fcbfdcea7c417b0a05183fdc6477",
+                  "query_sha256": "5f639113615aa055bb9355e6350924847e2d69959452c6cc59785dd40de0877d",
+                  "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+                  "source_phrase_sha256": "2838f01c5d677e4c57dd958b778c613993faac87e58d626490eb68650e8404f4"
+                },
+                "candidate_content_terms": [
+                  "inexperienced",
+                  "young"
+                ],
+                "components": {
+                  "lexical_novelty": 0.2,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.171875
+                },
+                "focal_query_span": {
+                  "end": 225,
+                  "start": 0,
+                  "text": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC)."
+                },
+                "focal_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "effect",
+                  "egyptian",
+                  "june",
+                  "member",
+                  "post",
+                  "primary",
+                  "rcc",
+                  "remove",
+                  "revolutionary"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "command",
+                  "council",
+                  "egyptian",
+                  "member",
+                  "revolutionary"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_1340679d0e54b5555bb4",
+                  "date": "1953-05-21",
+                  "document_id": "CIA-RDP79T00975A001100460001-8",
+                  "page_sha256": "460a93bccfcc4a4186ee7ea2186793574a9ab9e8adee206e324b727b22fad108"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 1.0,
+                  "own_page_focal_coverage": 0.3125
+                },
+                "repeated_visible_content_terms": [],
+                "score": 0.621875,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "anti",
+                  "anwar",
+                  "brother",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "deputy",
+                  "direction",
+                  "effect",
+                  "egyptian",
+                  "ex",
+                  "extremely",
+                  "force",
+                  "gamal",
+                  "indicate",
+                  "june",
+                  "manifesto",
+                  "member",
+                  "minister",
+                  "moderate",
+                  "nationalistic",
+                  "note",
+                  "policy",
+                  "post",
+                  "primary",
+                  "prime",
+                  "rcc",
+                  "regime",
+                  "remove",
+                  "resign",
+                  "revolutionary",
+                  "sadat",
+                  "salah",
+                  "salim",
+                  "shift",
+                  "significant",
+                  "state",
+                  "tone",
+                  "western",
+                  "year"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 174,
+                    "start": 167,
+                    "text": "members"
+                  }
+                ],
+                "constructor_form": "modifier",
+                "constructor_routing": {
+                  "constructor_form": "modifier",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 152,
+                      "start": 149,
+                      "text": "the"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 174,
+                      "start": 167,
+                      "text": "members"
+                    }
+                  }
+                ],
+                "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+                "finite": null,
+                "form": "adjectival",
+                "function": "modifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_8ad7bb2f27aca71db84320d8",
+                "operators": [],
+                "outer_family": "adjectival",
+                "role": "nominal_property",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "young, inexperienced",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p5",
+                      "qualifications_preserved": true,
+                      "reason": "The source directly characterizes RCC officers as young and inexperienced. That personal-property phrase faithfully and grammatically modifies RCC members in the completed input. It is a contextual nomination, not proof that these properties defined the particular removal or the concealed text.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "0d3aad2f97f01680a7cdfaba426c3059b8d2547ba5e481b16de12f2a49202356",
+                      "inserted_span": [
+                        153,
+                        173
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "0d3aad2f97f01680a7cdfaba426c3059b8d2547ba5e481b16de12f2a49202356",
+                      "constructor_form": "modifier",
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "amod",
+                        "lemma": "young",
+                        "pos": "ADJ",
+                        "span": [
+                          153,
+                          158
+                        ],
+                        "tag": "JJ",
+                        "text": "young"
+                      },
+                      "inserted_span": [
+                        153,
+                        173
+                      ],
+                      "outer_family": "adjectival",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_ADJECTIVAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "0d3aad2f97f01680a7cdfaba426c3059b8d2547ba5e481b16de12f2a49202356",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "completed_slot_fit",
+                    "positive_source_frame_invented": false,
+                    "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_2bdd4a3cfd7ea824dd9f1dbe193b",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "be775351b9919a549c870a60a9b8c8fea3b55a2e2f20d9df56f40203dde60c5a",
+                "original_candidate_sha256": "a14cc73619829ea5cdd1cbafa59ea91858f7c533b0c9c0184fea876685522f19",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "2be9480128f6f49573389a4fe1a2e557bf71fcbfdcea7c417b0a05183fdc6477",
+                "proposal_response_sha256": "94f4e7adcd45e33c2800420979b842e0dcd0a488f29cae0e845d32db9d13bc29",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "acd92af3699ebadbdac0c949b89fd16d4cef218d9a901a71de19cbf07b353071",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 2,
+              "rank_within_new_method": 2,
+              "reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+              "source": {
+                "date": "1953-05-21",
+                "document_id": "CIA-RDP79T00975A001100460001-8",
+                "exact_quote": {
+                  "end": 462,
+                  "start": 308,
+                  "text": "There is also wide dissatisfaction among the middle classes with the leadership of the young, inexperienced officers of the Revolutionary Command Council."
+                },
+                "original_phrase": {
+                  "end": 415,
+                  "start": 395,
+                  "text": "young, inexperienced"
+                },
+                "page_id": "page_1340679d0e54b5555bb4",
+                "page_sha256": "460a93bccfcc4a4186ee7ea2186793574a9ab9e8adee206e324b727b22fad108",
+                "qualification_paragraph": {
+                  "end": 462,
+                  "start": 308,
+                  "text": "There is also wide dissatisfaction among the middle classes with the leadership of the young, inexperienced officers of the Revolutionary Command Council."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p5",
+                "qualifications_preserved": true,
+                "reason": "The source directly characterizes RCC officers as young and inexperienced. That personal-property phrase faithfully and grammatically modifies RCC members in the completed input. It is a contextual nomination, not proof that these properties defined the particular removal or the concealed text.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_1340679d0e54b5555bb4",
+                  "corpus": "cib",
+                  "date": "1953-05-21",
+                  "document_id": "CIA-RDP79T00975A001100460001-8",
+                  "end": 462,
+                  "page_sha256": "460a93bccfcc4a4186ee7ea2186793574a9ab9e8adee206e324b727b22fad108",
+                  "start": 308,
+                  "text": "There is also wide dissatisfaction among the middle classes with the leadership of the young, inexperienced officers of the Revolutionary Command Council."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "UNCHANGED: retains the visible characterization of RCC officers.",
+                "kind": "UNCHANGED"
+              }
+            },
+            {
+              "completed_input": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the extreme nationalist members of the former Revolutionary Command Council (RCC). While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.\n\nGamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos.",
+              "completed_input_sha256": "d0e8432cb7150b139430092b2193daa6c96a150dfe6629279801babc8661fe3b",
+              "completed_input_utf8_sha256": "8dae71ea1cd0658575eb99549c0b03fa6282bd4001fb8f496b3405df18dd3459",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_24b5d75f702d693a804e3da507ff",
+                  "completed_input_sha256": "d0e8432cb7150b139430092b2193daa6c96a150dfe6629279801babc8661fe3b",
+                  "exact_quote_sha256": "0d276a451a3d22485de5333e24daff25e0ad163c60e4a8a76f3d81e1881fce28",
+                  "grammar_sha256": "66dfdb0c4e182915498ebc373b626a19d2f0b76626a530b3213fb8f684bb309d",
+                  "observation_sha256": "5ab85533b8ed5ee6250457072c4f17a98cb827dc680f9cb6462a027b0e656c86",
+                  "plan_sha256": "eb23e7e8279b8567c1f6af15365c2d71b729e8e70d1c3ce55c2fec01b3503daa",
+                  "provenance_sha256": "f5c7435d3ae7e7642dade53eb82a962ca849997ef7bb9644e37f02168ccfcacb",
+                  "query_sha256": "5f639113615aa055bb9355e6350924847e2d69959452c6cc59785dd40de0877d",
+                  "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+                  "source_phrase_sha256": "e8cdff70857ab2467448b8764e20a8ff573755c6ee3a98ac277777539b9b63ac"
+                },
+                "candidate_content_terms": [
+                  "extreme",
+                  "nationalist"
+                ],
+                "components": {
+                  "lexical_novelty": 0.2,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.10312500000000001
+                },
+                "focal_query_span": {
+                  "end": 225,
+                  "start": 0,
+                  "text": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC)."
+                },
+                "focal_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "effect",
+                  "egyptian",
+                  "june",
+                  "member",
+                  "post",
+                  "primary",
+                  "rcc",
+                  "remove",
+                  "revolutionary"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "change",
+                  "effect",
+                  "egyptian"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_1f26b192620b540597bc",
+                  "date": "1952-12-25",
+                  "document_id": "CIA-RDP79T00975A000900630001-2",
+                  "page_sha256": "3c84f765663ea0f011f874883d38262d45bedd2c97ed648e7b15bb76e98695df"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 1.0,
+                  "own_page_focal_coverage": 0.1875
+                },
+                "repeated_visible_content_terms": [],
+                "score": 0.5531250000000001,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "anti",
+                  "anwar",
+                  "brother",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "deputy",
+                  "direction",
+                  "effect",
+                  "egyptian",
+                  "ex",
+                  "extremely",
+                  "force",
+                  "gamal",
+                  "indicate",
+                  "june",
+                  "manifesto",
+                  "member",
+                  "minister",
+                  "moderate",
+                  "nationalistic",
+                  "note",
+                  "policy",
+                  "post",
+                  "primary",
+                  "prime",
+                  "rcc",
+                  "regime",
+                  "remove",
+                  "resign",
+                  "revolutionary",
+                  "sadat",
+                  "salah",
+                  "salim",
+                  "shift",
+                  "significant",
+                  "state",
+                  "tone",
+                  "western",
+                  "year"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 174,
+                    "start": 167,
+                    "text": "members"
+                  }
+                ],
+                "constructor_form": "modifier",
+                "constructor_routing": {
+                  "constructor_form": "modifier",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 152,
+                      "start": 149,
+                      "text": "the"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 174,
+                      "start": 167,
+                      "text": "members"
+                    }
+                  }
+                ],
+                "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+                "finite": null,
+                "form": "adjectival",
+                "function": "modifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_8ad7bb2f27aca71db84320d8",
+                "operators": [],
+                "outer_family": "adjectival",
+                "role": "nominal_property",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "extreme nationalist",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p3",
+                      "qualifications_preserved": true,
+                      "reason": "The phrase faithfully retains the source's political characterization of Egyptian elements and grammatically modifies 'members'. It is contextually relevant to the nationalist manifestos and moderation contrast. The source's conditional prediction about gaining support is not converted into an asserted event, and no identity between those elements and the removed members is established.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "d0e8432cb7150b139430092b2193daa6c96a150dfe6629279801babc8661fe3b",
+                      "inserted_span": [
+                        153,
+                        172
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "d0e8432cb7150b139430092b2193daa6c96a150dfe6629279801babc8661fe3b",
+                      "constructor_form": "modifier",
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "amod",
+                        "lemma": "extreme",
+                        "pos": "ADJ",
+                        "span": [
+                          153,
+                          160
+                        ],
+                        "tag": "JJ",
+                        "text": "extreme"
+                      },
+                      "inserted_span": [
+                        153,
+                        172
+                      ],
+                      "outer_family": "adjectival",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_ADJECTIVAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "d0e8432cb7150b139430092b2193daa6c96a150dfe6629279801babc8661fe3b",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "completed_slot_fit",
+                    "positive_source_frame_invented": false,
+                    "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_24b5d75f702d693a804e3da507ff",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "be775351b9919a549c870a60a9b8c8fea3b55a2e2f20d9df56f40203dde60c5a",
+                "original_candidate_sha256": "ab5c5c31166b8b5019e1cb9b009631c17da4e2ef187ae02f20c63d9a4946f72d",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "f5c7435d3ae7e7642dade53eb82a962ca849997ef7bb9644e37f02168ccfcacb",
+                "proposal_response_sha256": "94f4e7adcd45e33c2800420979b842e0dcd0a488f29cae0e845d32db9d13bc29",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "acd92af3699ebadbdac0c949b89fd16d4cef218d9a901a71de19cbf07b353071",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 3,
+              "rank_within_new_method": 3,
+              "reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+              "source": {
+                "date": "1952-12-25",
+                "document_id": "CIA-RDP79T00975A000900630001-2",
+                "exact_quote": {
+                  "end": 909,
+                  "start": 727,
+                  "text": "A return to the popular theme of \"national struggle\" might gain the support of extreme nationalist elements within Egypt and distract attention from the increasing internal problems."
+                },
+                "original_phrase": {
+                  "end": 825,
+                  "start": 806,
+                  "text": "extreme nationalist"
+                },
+                "page_id": "page_1f26b192620b540597bc",
+                "page_sha256": "3c84f765663ea0f011f874883d38262d45bedd2c97ed648e7b15bb76e98695df",
+                "qualification_paragraph": {
+                  "end": 1001,
+                  "start": 727,
+                  "text": "A return to the popular theme of \"national struggle\" might gain the support of extreme nationalist elements within Egypt and distract attention from the increasing internal problems. There is no firm indication, however, that a drastic change in Egyptian policy is imminent."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p3",
+                "qualifications_preserved": true,
+                "reason": "The phrase faithfully retains the source's political characterization of Egyptian elements and grammatically modifies 'members'. It is contextually relevant to the nationalist manifestos and moderation contrast. The source's conditional prediction about gaining support is not converted into an asserted event, and no identity between those elements and the removed members is established.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_1f26b192620b540597bc",
+                  "corpus": "cib",
+                  "date": "1952-12-25",
+                  "document_id": "CIA-RDP79T00975A000900630001-2",
+                  "end": 1001,
+                  "page_sha256": "3c84f765663ea0f011f874883d38262d45bedd2c97ed648e7b15bb76e98695df",
+                  "start": 727,
+                  "text": "A return to the popular theme of \"national struggle\" might gain the support of extreme nationalist elements within Egypt and distract attention from the increasing internal problems. There is no firm indication, however, that a drastic change in Egyptian policy is imminent."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "UNCHANGED: retains the visible adjectival phrase as a contextual member characterization.",
+                "kind": "UNCHANGED"
+              }
+            },
+            {
+              "completed_input": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the extreme anti-Western members of the former Revolutionary Command Council (RCC). While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.\n\nGamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos.",
+              "completed_input_sha256": "251c902f2c4b681a2180ab142b5011b43976cae5b057b943c7a141ae14328cd6",
+              "completed_input_utf8_sha256": "927d1d7665955e9637c98f78673c937fae2dceecf0ac8b0d64e399dfa4de4ab0",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_566ed28928c762e5e78c5aae3bb7",
+                  "completed_input_sha256": "251c902f2c4b681a2180ab142b5011b43976cae5b057b943c7a141ae14328cd6",
+                  "exact_quote_sha256": "b838a1d92c1874cee87a9c9ecdf3516d0d12fa486aff1eceda7b037187b7f2ed",
+                  "grammar_sha256": "4abcbc3fd710c1a3bdb6113d8639860ca13bee06b73b8e03288057b9ca969800",
+                  "observation_sha256": "5ab85533b8ed5ee6250457072c4f17a98cb827dc680f9cb6462a027b0e656c86",
+                  "plan_sha256": "eb23e7e8279b8567c1f6af15365c2d71b729e8e70d1c3ce55c2fec01b3503daa",
+                  "provenance_sha256": "10d4f6ebd23bd14597102b6901cafbf2d07b6cfdfa520d810011a933bbcf4453",
+                  "query_sha256": "5f639113615aa055bb9355e6350924847e2d69959452c6cc59785dd40de0877d",
+                  "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+                  "source_phrase_sha256": "a38b9368113083a815238a7952c762d3773026d8c4e9419376806df0d394e8de"
+                },
+                "candidate_content_terms": [
+                  "anti",
+                  "extreme",
+                  "western"
+                ],
+                "components": {
+                  "lexical_novelty": 0.06666666666666667,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.20625000000000002
+                },
+                "focal_query_span": {
+                  "end": 225,
+                  "start": 0,
+                  "text": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC)."
+                },
+                "focal_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "effect",
+                  "egyptian",
+                  "june",
+                  "member",
+                  "post",
+                  "primary",
+                  "rcc",
+                  "remove",
+                  "revolutionary"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "4",
+                  "command",
+                  "council",
+                  "egyptian",
+                  "rcc",
+                  "revolutionary"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_2a9dd9d2a8c3c29a9062",
+                  "date": "1955-08-30",
+                  "document_id": "CIA-RDP79T00975A002100590001-2",
+                  "page_sha256": "177bd5adf5020b35dc4ea9491dd01245f8f4384e465a8343baf58e3e1d90b052"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.3333333333333333,
+                  "own_page_focal_coverage": 0.375
+                },
+                "repeated_visible_content_terms": [
+                  "anti",
+                  "western"
+                ],
+                "score": 0.5229166666666667,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "anti",
+                  "anwar",
+                  "brother",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "deputy",
+                  "direction",
+                  "effect",
+                  "egyptian",
+                  "ex",
+                  "extremely",
+                  "force",
+                  "gamal",
+                  "indicate",
+                  "june",
+                  "manifesto",
+                  "member",
+                  "minister",
+                  "moderate",
+                  "nationalistic",
+                  "note",
+                  "policy",
+                  "post",
+                  "primary",
+                  "prime",
+                  "rcc",
+                  "regime",
+                  "remove",
+                  "resign",
+                  "revolutionary",
+                  "sadat",
+                  "salah",
+                  "salim",
+                  "shift",
+                  "significant",
+                  "state",
+                  "tone",
+                  "western",
+                  "year"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 174,
+                    "start": 167,
+                    "text": "members"
+                  }
+                ],
+                "constructor_form": "modifier",
+                "constructor_routing": {
+                  "constructor_form": "modifier",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 152,
+                      "start": 149,
+                      "text": "the"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 174,
+                      "start": 167,
+                      "text": "members"
+                    }
+                  }
+                ],
+                "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+                "finite": null,
+                "form": "adjectival",
+                "function": "modifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_8ad7bb2f27aca71db84320d8",
+                "operators": [],
+                "outer_family": "adjectival",
+                "role": "nominal_property",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "extreme anti-Western",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p2",
+                      "qualifications_preserved": true,
+                      "reason": "The source explicitly characterizes an RCC faction as extreme anti-Western, making this a relevant political-property nomination. The reputational qualification concerns Salim's leadership and opposition role, neither of which the fill asserts. Acceptance does not establish which members belonged to that faction.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "251c902f2c4b681a2180ab142b5011b43976cae5b057b943c7a141ae14328cd6",
+                      "inserted_span": [
+                        153,
+                        173
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "251c902f2c4b681a2180ab142b5011b43976cae5b057b943c7a141ae14328cd6",
+                      "constructor_form": "modifier",
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "amod",
+                        "lemma": "extreme",
+                        "pos": "ADJ",
+                        "span": [
+                          153,
+                          160
+                        ],
+                        "tag": "JJ",
+                        "text": "extreme"
+                      },
+                      "inserted_span": [
+                        153,
+                        173
+                      ],
+                      "outer_family": "adjectival",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_ADJECTIVAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "251c902f2c4b681a2180ab142b5011b43976cae5b057b943c7a141ae14328cd6",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "671d6ebe5a832d59adfea5326ba30e6bc1060ab6ee0a1f12e2d30200c0658939",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "completed_slot_fit",
+                    "positive_source_frame_invented": false,
+                    "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_566ed28928c762e5e78c5aae3bb7",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "be775351b9919a549c870a60a9b8c8fea3b55a2e2f20d9df56f40203dde60c5a",
+                "original_candidate_sha256": "45b29a21377affd8f7ed3c545490e68794658e4db63b50c8a993fb4f7ae76258",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "10d4f6ebd23bd14597102b6901cafbf2d07b6cfdfa520d810011a933bbcf4453",
+                "proposal_response_sha256": "94f4e7adcd45e33c2800420979b842e0dcd0a488f29cae0e845d32db9d13bc29",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "acd92af3699ebadbdac0c949b89fd16d4cef218d9a901a71de19cbf07b353071",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 4,
+              "rank_within_new_method": 4,
+              "reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+              "source": {
+                "date": "1955-08-30",
+                "document_id": "CIA-RDP79T00975A002100590001-2",
+                "exact_quote": {
+                  "end": 441,
+                  "start": 309,
+                  "text": "Salim has long been reputed to be Prime Minister Nasr's principal opponent and leader of an extreme anti-Western faction in the RCC."
+                },
+                "original_phrase": {
+                  "end": 421,
+                  "start": 401,
+                  "text": "extreme anti-Western"
+                },
+                "page_id": "page_2a9dd9d2a8c3c29a9062",
+                "page_sha256": "177bd5adf5020b35dc4ea9491dd01245f8f4384e465a8343baf58e3e1d90b052",
+                "qualification_paragraph": {
+                  "end": 694,
+                  "start": 309,
+                  "text": "Salim has long been reputed to be Prime Minister Nasr's principal opponent and leader of an extreme anti-Western faction in the RCC. Although the apparent failure of Salim's campaign to unite the Sudan with Egypt is cited in the press as the reason for his eclipse at this time, there have been numerous reports that Nasr intended to oust Salim whenever he felt strong enough to do so."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p2",
+                "qualifications_preserved": true,
+                "reason": "The source explicitly characterizes an RCC faction as extreme anti-Western, making this a relevant political-property nomination. The reputational qualification concerns Salim's leadership and opposition role, neither of which the fill asserts. Acceptance does not establish which members belonged to that faction.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_2a9dd9d2a8c3c29a9062",
+                  "corpus": "cib",
+                  "date": "1955-08-30",
+                  "document_id": "CIA-RDP79T00975A002100590001-2",
+                  "end": 694,
+                  "page_sha256": "177bd5adf5020b35dc4ea9491dd01245f8f4384e465a8343baf58e3e1d90b052",
+                  "start": 309,
+                  "text": "Salim has long been reputed to be Prime Minister Nasr's principal opponent and leader of an extreme anti-Western faction in the RCC. Although the apparent failure of Salim's campaign to unite the Sudan with Egypt is cited in the press as the reason for his eclipse at this time, there have been numerous reports that Nasr intended to oust Salim whenever he felt strong enough to do so."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "UNCHANGED: retains the faction's adjectival characterization for the member modifier.",
+                "kind": "UNCHANGED"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 1,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 174,
+                "start": 167,
+                "text": "members"
+              }
+            ],
+            "constructor_form": "modifier",
+            "constructor_routing": {
+              "constructor_form": "modifier",
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "legacy_compatible_subset",
+            "cues": [
+              {
+                "kind": "boundary",
+                "span": {
+                  "end": 152,
+                  "start": 149,
+                  "text": "the"
+                }
+              },
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 174,
+                  "start": 167,
+                  "text": "members"
+                }
+              }
+            ],
+            "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+            "finite": null,
+            "form": "adjectival",
+            "function": "modifier",
+            "grammatical_number": "unknown",
+            "id": "next_reading_8ad7bb2f27aca71db84320d8",
+            "operators": [],
+            "outer_family": "adjectival",
+            "role": "nominal_property",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_8ad7bb2f27aca71db84320d8",
+          "status": "CONTEXTUAL_CANDIDATES"
+        },
+        {
+          "candidates": [
+            {
+              "completed_input": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the three members of the former Revolutionary Command Council (RCC). While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.\n\nGamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos.",
+              "completed_input_sha256": "5f0c6253a4657089f9a0f4908bef5382877d9ab9dc8319ec4ff0bd600a23aac2",
+              "completed_input_utf8_sha256": "c6fe37f0051243acf806d4194bce392dec43e3698bf0577064a412a4c402058f",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_f9291a843e0501f6d27e6bf1fd2b",
+                  "completed_input_sha256": "5f0c6253a4657089f9a0f4908bef5382877d9ab9dc8319ec4ff0bd600a23aac2",
+                  "exact_quote_sha256": "5218ce5409adaa75d4cecf490ba5d30596ffbb26b96ff41da2c9ef3ba4b80a3f",
+                  "grammar_sha256": "0ea7479c139d1c4ae418b6446d0081fc7a0572bc2a229d19e269e4937ab13719",
+                  "observation_sha256": "5ab85533b8ed5ee6250457072c4f17a98cb827dc680f9cb6462a027b0e656c86",
+                  "plan_sha256": "eb23e7e8279b8567c1f6af15365c2d71b729e8e70d1c3ce55c2fec01b3503daa",
+                  "provenance_sha256": "91d2f1a1185b631afdf52fe539881d37eac0ce30d97467bcd9a510f671e7ebb7",
+                  "query_sha256": "5f639113615aa055bb9355e6350924847e2d69959452c6cc59785dd40de0877d",
+                  "reading_sha256": "d07f489afa4fc93efe1c61c0018fc307fb96f3d88ffe3e15797150841d76d97c",
+                  "source_phrase_sha256": "f8c46522a59f1f01f133dd9deb7e337b73c3f104a94f54d885f9d0c9516b3858"
+                },
+                "candidate_content_terms": [],
+                "components": {
+                  "lexical_novelty": 0.0,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.55
+                },
+                "focal_query_span": {
+                  "end": 225,
+                  "start": 0,
+                  "text": "4. EGYPTIAN CABINET CHANGES\n\n[REDACTION] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [REDACTION 1] members of the former Revolutionary Command Council (RCC)."
+                },
+                "focal_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "effect",
+                  "egyptian",
+                  "june",
+                  "member",
+                  "post",
+                  "primary",
+                  "rcc",
+                  "remove",
+                  "revolutionary"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "effect",
+                  "egyptian",
+                  "june",
+                  "member",
+                  "post",
+                  "primary",
+                  "rcc",
+                  "remove",
+                  "revolutionary"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_fdf833dea9499ff0fa94",
+                  "date": "1956-07-01",
+                  "document_id": "CIA-RDP79T00975A002600290001-1",
+                  "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.0,
+                  "own_page_focal_coverage": 1.0
+                },
+                "repeated_visible_content_terms": [],
+                "score": 0.8,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "29",
+                  "4",
+                  "announce",
+                  "anti",
+                  "anwar",
+                  "brother",
+                  "cabinet",
+                  "change",
+                  "command",
+                  "council",
+                  "deputy",
+                  "direction",
+                  "effect",
+                  "egyptian",
+                  "ex",
+                  "extremely",
+                  "force",
+                  "gamal",
+                  "indicate",
+                  "june",
+                  "manifesto",
+                  "member",
+                  "minister",
+                  "moderate",
+                  "nationalistic",
+                  "note",
+                  "policy",
+                  "post",
+                  "primary",
+                  "prime",
+                  "rcc",
+                  "regime",
+                  "remove",
+                  "resign",
+                  "revolutionary",
+                  "sadat",
+                  "salah",
+                  "salim",
+                  "shift",
+                  "significant",
+                  "state",
+                  "tone",
+                  "western",
+                  "year"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 174,
+                    "start": 167,
+                    "text": "members"
+                  }
+                ],
+                "constructor_form": "quantity",
+                "constructor_routing": {
+                  "constructor_form": "quantity",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 152,
+                      "start": 149,
+                      "text": "the"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 174,
+                      "start": 167,
+                      "text": "members"
+                    }
+                  }
+                ],
+                "explanation": "A specifier can attach to a visible nominal carrier; general determiners are not automatically numeric quantities. Function: specifier. Legacy subset route: quantity.",
+                "finite": null,
+                "form": "nominal_specifier",
+                "function": "specifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_1cc0ac3785eaa66d80e06261",
+                "operators": [],
+                "outer_family": "nominal_specifier",
+                "role": "quantity",
+                "target_kind": "any",
+                "variant": "numeric_quantity",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "three",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p1",
+                      "qualifications_preserved": true,
+                      "reason": "The source names Gamal Salim and Anwar Sadat, then identifies Hassan Ibrahim as 'the third RCC member dropped,' supporting the cardinal paraphrase 'three' for this group. 'The three members' fits the quantity reading and the whole sentence grammatically. 'Reportedly' qualifies Ibrahim's opposition to Salah Salim's resignation, not his identification as the third member dropped. No opaque text is inferred.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "5f0c6253a4657089f9a0f4908bef5382877d9ab9dc8319ec4ff0bd600a23aac2",
+                      "inserted_span": [
+                        153,
+                        158
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "5f0c6253a4657089f9a0f4908bef5382877d9ab9dc8319ec4ff0bd600a23aac2",
+                      "constructor_form": "quantity",
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "nummod",
+                        "lemma": "three",
+                        "pos": "NUM",
+                        "span": [
+                          153,
+                          158
+                        ],
+                        "tag": "CD",
+                        "text": "three"
+                      },
+                      "inserted_span": [
+                        153,
+                        158
+                      ],
+                      "outer_family": "nominal_specifier",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_NUMERIC_SPECIFIER",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "numeric_quantity",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "absence_is_counterevidence": false,
+                      "factual_support_certified": false,
+                      "reading_modified": false,
+                      "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                      "state": "pass"
+                    },
+                    "name": "applicable_existing_completed_slot_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "5f0c6253a4657089f9a0f4908bef5382877d9ab9dc8319ec4ff0bd600a23aac2",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "d07f489afa4fc93efe1c61c0018fc307fb96f3d88ffe3e15797150841d76d97c",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_f9291a843e0501f6d27e6bf1fd2b",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "be775351b9919a549c870a60a9b8c8fea3b55a2e2f20d9df56f40203dde60c5a",
+                "original_candidate_sha256": "88468b023fcce72b8b98b1dcb265be93bc45fb23f5f096372b448bb29dd882e7",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "91d2f1a1185b631afdf52fe539881d37eac0ce30d97467bcd9a510f671e7ebb7",
+                "proposal_response_sha256": "3c0624437a7a729ab5759927a2220c7c75ba17bbf434728f8f50c16bb78d0bba",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "809aa001b486832b4c8ad068e37e1b22c9e063c371c4f0f9a16cb905641068a0",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_1cc0ac3785eaa66d80e06261",
+              "source": {
+                "date": "1956-07-01",
+                "document_id": "CIA-RDP79T00975A002600290001-1",
+                "exact_quote": {
+                  "end": 775,
+                  "start": 655,
+                  "text": "Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation."
+                },
+                "original_phrase": {
+                  "end": 680,
+                  "start": 675,
+                  "text": "third"
+                },
+                "page_id": "page_fdf833dea9499ff0fa94",
+                "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff",
+                "qualification_paragraph": {
+                  "end": 827,
+                  "start": 439,
+                  "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p1",
+                "qualifications_preserved": true,
+                "reason": "The source names Gamal Salim and Anwar Sadat, then identifies Hassan Ibrahim as 'the third RCC member dropped,' supporting the cardinal paraphrase 'three' for this group. 'The three members' fits the quantity reading and the whole sentence grammatically. 'Reportedly' qualifies Ibrahim's opposition to Salah Salim's resignation, not his identification as the third member dropped. No opaque text is inferred.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_fdf833dea9499ff0fa94",
+                  "corpus": "cib",
+                  "date": "1956-07-01",
+                  "document_id": "CIA-RDP79T00975A002600290001-1",
+                  "end": 827,
+                  "page_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff",
+                  "start": 439,
+                  "text": "Gamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Convert the ordinal 'third', identifying Hassan Ibrahim as the third RCC member dropped, to the cardinal quantity 'three' modifying the removed members.",
+                "kind": "PARAPHRASE"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 0,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 174,
+                "start": 167,
+                "text": "members"
+              }
+            ],
+            "constructor_form": "quantity",
+            "constructor_routing": {
+              "constructor_form": "quantity",
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "legacy_compatible_subset",
+            "cues": [
+              {
+                "kind": "boundary",
+                "span": {
+                  "end": 152,
+                  "start": 149,
+                  "text": "the"
+                }
+              },
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 174,
+                  "start": 167,
+                  "text": "members"
+                }
+              }
+            ],
+            "explanation": "A specifier can attach to a visible nominal carrier; general determiners are not automatically numeric quantities. Function: specifier. Legacy subset route: quantity.",
+            "finite": null,
+            "form": "nominal_specifier",
+            "function": "specifier",
+            "grammatical_number": "unknown",
+            "id": "next_reading_1cc0ac3785eaa66d80e06261",
+            "operators": [],
+            "outer_family": "nominal_specifier",
+            "role": "quantity",
+            "target_kind": "any",
+            "variant": "numeric_quantity",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_1cc0ac3785eaa66d80e06261",
+          "status": "CONTEXTUAL_CANDIDATES"
+        }
+      ],
+      "score_is_probability": false
+    },
+    "selected_evidence": {
+      "kind": "ACTUAL_SAVED_CANDIDATE_OWN_SOURCES",
+      "pages": [
+        {
+          "canonical_sequence": 3,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1956-07-01",
+          "document_id": "CIA-RDP79T00975A002600290001-1",
+          "earlier_page": 7,
+          "handling": [],
+          "id": "page_fdf833dea9499ff0fa94",
+          "native_page": {
+            "canonical_page_id": "page_fdf833dea9499ff0fa94",
+            "document_id": "CIA-RDP79T00975A002600290001-1",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 3,
+            "slot_ids": [
+              "slot_8dfe2508529706746b4c",
+              "slot_4a4f959ea753ff152d10",
+              "slot_1af8ae26a0695da30f67"
+            ],
+            "source_page": 7,
+            "text": "4. EGYPTIAN CABINET CHANGES\n\n[[REDACTION_SLOT:001:slot_8dfe2508529706746b4c]] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [[REDACTION_SLOT:002:slot_4a4f959ea753ff152d10]] members of the former Revolutionary Command Council (RCC). While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.\n\nGamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees.\n\nThe officers who have been dropped presumably will be treated similarly to Salah Salim, who is now publishing a \"controlled opposition\" newspaper with funds supplied by the government. Nasr's careful treatment of such individuals indicates he is fully aware that they could form a nucleus for future army opposition to the regime. [[REDACTION_SLOT:003:slot_1af8ae26a0695da30f67]]",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "32bb6142445f13e793a707693c3eaca116f74389fcdf5a244534cd3693333384",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "5c1515899268a56f99721f37ac0473ff72e56aa15c739c452b4146f0bb1200ff",
+          "text": "4. EGYPTIAN CABINET CHANGES\n\n[[REDACTION_SLOT:001:slot_8dfe2508529706746b4c]] The changes in the Egyptian cabinet announced on 29 June have the primary effect of removing from top posts the [[REDACTION_SLOT:002:slot_4a4f959ea753ff152d10]] members of the former Revolutionary Command Council (RCC). While the changes may give the regime a more moderate tone, they do not indicate any significant shift in the direction of Egyptian policy.\n\nGamal Salim, former deputy prime minister whose brother Salah Salim was forced to resign last year, and ex-minister of state Anwar Sadat have been noted for their extremely nationalistic and anti-Western manifestos. Hassan Ibrahim, the third RCC member dropped, reportedly was among those who strongly opposed Salah Salim's resignation. Little is known of the two new civilian appointees.\n\nThe officers who have been dropped presumably will be treated similarly to Salah Salim, who is now publishing a \"controlled opposition\" newspaper with funds supplied by the government. Nasr's careful treatment of such individuals indicates he is fully aware that they could form a nucleus for future army opposition to the regime. [[REDACTION_SLOT:003:slot_1af8ae26a0695da30f67]]",
+          "visibility": "earlier"
+        },
+        {
+          "canonical_sequence": 6,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1953-05-21",
+          "document_id": "CIA-RDP79T00975A001100460001-8",
+          "earlier_page": 8,
+          "handling": [],
+          "id": "page_1340679d0e54b5555bb4",
+          "native_page": {
+            "canonical_page_id": "page_1340679d0e54b5555bb4",
+            "document_id": "CIA-RDP79T00975A001100460001-8",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 6,
+            "slot_ids": [],
+            "source_page": 8,
+            "text": "8. Popularity of Egyptian military regime reportedly at low ebb:\n\nThe popularity of the Egyptian military regime is at a low ebb, [REDACTED] This situation is largely due to the economic distress of the Egyptian peasants, whose living conditions have not been improved despite the promises of land reforms.\n\nThere is also wide dissatisfaction among the middle classes with the leadership of the young, inexperienced officers of the Revolutionary Command Council.\n\nComment: [REDACTED] other indications of growing dissatisfaction. The increasingly nationalistic line adopted by the Revolutionary Command Council, as evidenced by recent speeches, probably reflects an effort to rally waning popular support.\n\nThere is no indication that dissident groups could overthrow the military regime at this time. Elements in the army, however, have for some time been opposed to the policies of the Nagib government.\n\nWESTERN EUROPE\n\n9. East German Communists reportedly plan compulsory military training for party members:\n\n[REDACTED] District headquarters of the East German Socialist Unity Party reportedly held countrywide conferences on 13 May on plans for compulsory three-month physical-military training for all male party members and candidates between the ages of 18 and 30.\n\nAmerican army observers in West Germany suggest that the reported program may be designed to provide the nucleus for a party militia, or that it is a preliminary to introduction of compulsory military service.",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "b3f8afd8ffbed5834f754198311a2ee664cbe96215cb323337bef695bcce9e3b",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "460a93bccfcc4a4186ee7ea2186793574a9ab9e8adee206e324b727b22fad108",
+          "text": "8. Popularity of Egyptian military regime reportedly at low ebb:\n\nThe popularity of the Egyptian military regime is at a low ebb, [REDACTED] This situation is largely due to the economic distress of the Egyptian peasants, whose living conditions have not been improved despite the promises of land reforms.\n\nThere is also wide dissatisfaction among the middle classes with the leadership of the young, inexperienced officers of the Revolutionary Command Council.\n\nComment: [REDACTED] other indications of growing dissatisfaction. The increasingly nationalistic line adopted by the Revolutionary Command Council, as evidenced by recent speeches, probably reflects an effort to rally waning popular support.\n\nThere is no indication that dissident groups could overthrow the military regime at this time. Elements in the army, however, have for some time been opposed to the policies of the Nagib government.\n\nWESTERN EUROPE\n\n9. East German Communists reportedly plan compulsory military training for party members:\n\n[REDACTED] District headquarters of the East German Socialist Unity Party reportedly held countrywide conferences on 13 May on plans for compulsory three-month physical-military training for all male party members and candidates between the ages of 18 and 30.\n\nAmerican army observers in West Germany suggest that the reported program may be designed to provide the nucleus for a party militia, or that it is a preliminary to introduction of compulsory military service.",
+          "visibility": "earlier"
+        },
+        {
+          "canonical_sequence": 4,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1952-12-25",
+          "document_id": "CIA-RDP79T00975A000900630001-2",
+          "earlier_page": 6,
+          "handling": [],
+          "id": "page_1f26b192620b540597bc",
+          "native_page": {
+            "canonical_page_id": "page_1f26b192620b540597bc",
+            "document_id": "CIA-RDP79T00975A000900630001-2",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 4,
+            "slot_ids": [
+              "slot_dda54cc68aa5294755ce",
+              "slot_946822a3fdbd394f7fb0"
+            ],
+            "source_page": 6,
+            "text": "7. Egypt reportedly prepared to return to \"national struggle[[REDACTION_SLOT:001:slot_dda54cc68aa5294755ce]]General Nagib has told Ambassador Caffery that British tactics on the Sudan negotiations are obstructive. He indicated that if an agreement with Britain is not reached, he will return to \"unity of the Nile\" and the title of \"King of the Sudan\" as the basis for future efforts.\n\nA senior official of the Egyptian Ministry of Foreign Affairs is quoted to the effect that Egypt is preparing to revert to the \"national struggle\" if efforts to reach a settlement with the British prove futile.\n\nComment: Other reports indicate that the military regime is dissappointed with the results of its moderate policy on the Sudan.\n\nA return to the popular theme of \"national struggle\" might gain the support of extreme nationalist elements within Egypt and distract attention from the increasing internal problems. There is no firm indication, however, that a drastic change in Egyptian policy is imminent.\n\n8. Turkish-Yugoslav military talks stall at first meeting[[REDACTION_SLOT:002:slot_946822a3fdbd394f7fb0]]The Turkish Ambassador in Belgrade told Ambassador Allen on 22 December that the Turkish-Yugoslav defense-planning talks had stalled at the first meeting.\n\nAlthough both Turkey and Yugoslavia expressed a willingness to \"proceed far,\" neither side was ready to submit a plan for discussion.",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "e37a9b7d9e7e622a572c103a7dc8fab7b2db13450eb1b3f5239d7c54f577f2a4",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "3c84f765663ea0f011f874883d38262d45bedd2c97ed648e7b15bb76e98695df",
+          "text": "7. Egypt reportedly prepared to return to \"national struggle[[REDACTION_SLOT:001:slot_dda54cc68aa5294755ce]]General Nagib has told Ambassador Caffery that British tactics on the Sudan negotiations are obstructive. He indicated that if an agreement with Britain is not reached, he will return to \"unity of the Nile\" and the title of \"King of the Sudan\" as the basis for future efforts.\n\nA senior official of the Egyptian Ministry of Foreign Affairs is quoted to the effect that Egypt is preparing to revert to the \"national struggle\" if efforts to reach a settlement with the British prove futile.\n\nComment: Other reports indicate that the military regime is dissappointed with the results of its moderate policy on the Sudan.\n\nA return to the popular theme of \"national struggle\" might gain the support of extreme nationalist elements within Egypt and distract attention from the increasing internal problems. There is no firm indication, however, that a drastic change in Egyptian policy is imminent.\n\n8. Turkish-Yugoslav military talks stall at first meeting[[REDACTION_SLOT:002:slot_946822a3fdbd394f7fb0]]The Turkish Ambassador in Belgrade told Ambassador Allen on 22 December that the Turkish-Yugoslav defense-planning talks had stalled at the first meeting.\n\nAlthough both Turkey and Yugoslavia expressed a willingness to \"proceed far,\" neither side was ready to submit a plan for discussion.",
+          "visibility": "earlier"
+        },
+        {
+          "canonical_sequence": 5,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1955-08-30",
+          "document_id": "CIA-RDP79T00975A002100590001-2",
+          "earlier_page": 7,
+          "handling": [],
+          "id": "page_2a9dd9d2a8c3c29a9062",
+          "native_page": {
+            "canonical_page_id": "page_2a9dd9d2a8c3c29a9062",
+            "document_id": "CIA-RDP79T00975A002100590001-2",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 5,
+            "slot_ids": [],
+            "source_page": 7,
+            "text": "4. ANTI-WESTERN LEADER MAY HAVE BEEN OUSTED\nBY EGYPTIAN REGIME\n\nPress reports that Major Salah Salim, Egyptian minister for national guidance and Sudan affairs, has been given \"leave of absence\" suggest that the contest for power within the ruling Revolutionary Command Council has reached a decisive point.\n\nSalim has long been reputed to be Prime Minister Nasr's principal opponent and leader of an extreme anti-Western faction in the RCC. Although the apparent failure of Salim's campaign to unite the Sudan with Egypt is cited in the press as the reason for his eclipse at this time, there have been numerous reports that Nasr intended to oust Salim whenever he felt strong enough to do so.\n\nThere may be a connection between Salim's present status and the Cairo regime's acts of provocation against Israel during the past few days. By such actions, Nasr might seek to assure himself of support from the army if a purge of the Salim faction were under way.",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "15db931d2dd58a4cd4c579a84a262f668b443b73aae265bc1830d8ec5eb6592d",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "177bd5adf5020b35dc4ea9491dd01245f8f4384e465a8343baf58e3e1d90b052",
+          "text": "4. ANTI-WESTERN LEADER MAY HAVE BEEN OUSTED\nBY EGYPTIAN REGIME\n\nPress reports that Major Salah Salim, Egyptian minister for national guidance and Sudan affairs, has been given \"leave of absence\" suggest that the contest for power within the ruling Revolutionary Command Council has reached a decisive point.\n\nSalim has long been reputed to be Prime Minister Nasr's principal opponent and leader of an extreme anti-Western faction in the RCC. Although the apparent failure of Salim's campaign to unite the Sudan with Egypt is cited in the press as the reason for his eclipse at this time, there have been numerous reports that Nasr intended to oust Salim whenever he felt strong enough to do so.\n\nThere may be a connection between Salim's present status and the Cairo regime's acts of provocation against Israel during the past few days. By such actions, Nasr might seek to assure himself of support from the army if a purge of the Salim faction were under way.",
+          "visibility": "earlier"
+        }
+      ]
+    }
+  },
+  "typed_source_method_admission_not_issued": true,
+  "version": "historical-source-only-workbench-data/1"
+}

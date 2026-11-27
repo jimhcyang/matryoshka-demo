@@ -1,0 +1,1338 @@
+{
+  "QA_answers_or_grades_included": false,
+  "case": {
+    "case_id": "cloze_31d27d319ce8e668469cf787",
+    "corpus": "cib",
+    "date": "1961-02-01",
+    "document_id": "CIA-RDP79T00975A005500260001-2",
+    "focal_marker": "[REDACTION 1]",
+    "query": "Burma: Prime Minister Nu's current friendliness toward the Chinese Communists [REDACTION 1] have precipitated a pronounced rift within the Burmese military leadership. This situation has been aggravated by Army Chief of Staff General Ne Win's refusal to intervene in nonmilitary affairs. [REDACTION] [REDACTION]",
+    "task": "redaction"
+  },
+  "missing_transport": {
+    "endpoint": null,
+    "fabricated_routes_or_support_votes": false,
+    "graph_walk": null,
+    "origin_refs": null,
+    "parent_typed_adapter_and_normal_source_v6_export_required": true,
+    "source_routes": []
+  },
+  "native_baseline": {
+    "baseline_verdicts_unchanged": true,
+    "checkpoint_sha256": "3d949c49d4d631b8db38b7f0a8dce48422a4eac0e8e5ddbcf578c596b65dc544",
+    "code_pins_sha256": "e159da0aa5f59740ebb31a374e8917c24c052a18b16efa80b534c7771345e3cc",
+    "configuration": {
+      "completed_drafts_per_reading": 64,
+      "construction_pages": 32,
+      "method": "current_hierarchy",
+      "retrieval_document_budget": 40,
+      "retrieval_passage_budget": 80,
+      "selection_profile": {
+        "candidate_focal_fraction": 0.5,
+        "constructor_family_mode": "first_class_adjuncts",
+        "counter_policy": "positive_support",
+        "cue_order_mode": "source_alignment",
+        "identity_first": true,
+        "page_focal_fraction": 0.5,
+        "scan_pages": 512,
+        "source_phrase_mode": "scoped",
+        "supplemental_mode": "source_form_opportunities"
+      },
+      "source_view_policy": {
+        "cable_classification": "CONFIDENTIAL",
+        "cable_document_wide_handling_veto": true,
+        "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+        "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+        "cutoff_role": "source_document_date",
+        "date_relation": "<=",
+        "id": "source_day_inclusive",
+        "later_or_secret_version_admitted": false,
+        "source_dates_or_document_ids_rewritten": false,
+        "version": "trusted-corpus-source-view/1"
+      },
+      "terminal_ranking": "evidence_fit_v7",
+      "top_k": 5
+    },
+    "execution_context_sha256": "fc1fb1e688d707f52a937f642fcd509d1bc060714cde395a27393af63f87054f",
+    "native_checksum": "ce0b2f05a54f00e69d89fa763a0715118c7ae1025c11aa77d8f5fd17ec82e533",
+    "proposal_slate_is_not_native_result": true,
+    "source_view_policy": {
+      "cable_classification": "CONFIDENTIAL",
+      "cable_document_wide_handling_veto": true,
+      "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+      "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+      "cutoff_role": "source_document_date",
+      "date_relation": "<=",
+      "id": "source_day_inclusive",
+      "later_or_secret_version_admitted": false,
+      "source_dates_or_document_ids_rewritten": false,
+      "version": "trusted-corpus-source-view/1"
+    },
+    "version": "narrative-local-execution/4"
+  },
+  "publication_authorized": false,
+  "saved_method": {
+    "QA_method_sha256": "bb5a0adca543c2181ae735344fc1b0ccec337171e121163c23a989290fc08cc6",
+    "factual_support_certified": false,
+    "name": "SOURCE_PROPOSALS_CONTEXT_ONLY",
+    "score_version": "source-proposal-context-priority/1",
+    "source_results_sha256": "5599083c2b938dbaed1c5d038cbe512f540a12e449e813cc5e5abeeba9e41784",
+    "source_slates_sha256": "408c5346b579c66fdb3e02fd2d2dbba6757f3fac70b7365f3f4d9ec918040497"
+  },
+  "sections": {
+    "analyst_summary": {
+      "actual_digest_ref": null,
+      "calls_authorized_here": 0,
+      "new_method_body_must_include_exact_saved_slate": true,
+      "parent_paid_generation_needed_for_populated_summary": true,
+      "rebind_from_related_public_case_allowed": false,
+      "status": "NO_EXACT_SAVED_METHOD_DIGEST_IN_BOUNDED_INVENTORY",
+      "text": null
+    },
+    "facts_to_evidence": {
+      "kind": "CONTEXTUAL_MODEL_REVIEW_AND_LOCAL_GRAMMAR_NOT_FACTUAL_VOTES",
+      "records": [
+        {
+          "candidate_id": "source_reviewed_fill_82a333e20e145776c7e17bd0c8f3",
+          "citations": [
+            {
+              "canonical_page_id": "page_b8e1fcd54ac2c3df7f63",
+              "corpus": "cib",
+              "date": "1960-11-18",
+              "document_id": "CIA-RDP79T00975A005400160001-4",
+              "end": 1330,
+              "page_sha256": "726817b11da31506bc240aeb3ad3aa9962969fbc16f57712acbc015949208cc9",
+              "start": 535,
+              "text": "General Ne Win is reluctant to intervene, as he fears the corrupting influence of political power on the officer corps. He overrode army objections to permit the February national elections and U Nu's return as prime minister. Although he is reportedly seriously concerned with the deterioration of government administration since he left office, he has permitted Nu free rein in all areas not directly affecting the army. The flare-up with Maung Maung reportedly occurred at a 10 November meeting at which Ne Win insisted that the army should avoid any action which might be offensive to the Chinese Communists or to Burma's civilian political leaders. Brigadier Aung Gyi, the third member of the army top command, although present at the discussion, is not reported to have taken any position."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p1",
+                  "qualifications_preserved": true,
+                  "reason": "Faithfully coordinates the source's administrative deterioration with Nu's friendliness, producing a plural subject for 'have.' The source directly connects administrative concerns, army disagreement, and Ne Win's nonintervention. 'Reportedly' qualifies his concern, not the deterioration noun phrase. This is contextual nomination, not proof of the concealed causal assertion.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "0205201f6102e11b1881c0bfdefe3139235b12a508eac89225455e8d2650f7fe",
+                  "inserted_span": [
+                    78,
+                    128
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "0205201f6102e11b1881c0bfdefe3139235b12a508eac89225455e8d2650f7fe",
+                  "constructor_form": "nominal",
+                  "coordinate_head_resolution": {
+                    "coordinator": "and",
+                    "head": "deterioration",
+                    "original_span_root": "and",
+                    "reason": "EXPLICIT_IN_SPAN_CONJUNCT_OF_VISIBLE_COORDINATOR_GOVERNOR",
+                    "source_evidence_certified": false
+                  },
+                  "declared_number_fit": {
+                    "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                    "state": "pass"
+                  },
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "conj",
+                    "lemma": "deterioration",
+                    "pos": "NOUN",
+                    "span": [
+                      86,
+                      99
+                    ],
+                    "tag": "NN",
+                    "text": "deterioration"
+                  },
+                  "inserted_span": [
+                    78,
+                    128
+                  ],
+                  "outer_family": "nominal",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_NOMINAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "absence_is_counterevidence": false,
+                  "factual_support_certified": false,
+                  "reading_modified": false,
+                  "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                  "state": "pass"
+                },
+                "name": "applicable_existing_completed_slot_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "0205201f6102e11b1881c0bfdefe3139235b12a508eac89225455e8d2650f7fe",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "5a12e628325993f82242db0ab86928210a279c4456acf1a19d022ccb29a6890c",
+            "unsupported_diagnostics": [
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_adb6e6ad70d5ae823e5ae5d6",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p1",
+            "qualifications_preserved": true,
+            "reason": "Faithfully coordinates the source's administrative deterioration with Nu's friendliness, producing a plural subject for 'have.' The source directly connects administrative concerns, army disagreement, and Ne Win's nonintervention. 'Reportedly' qualifies his concern, not the deterioration noun phrase. This is contextual nomination, not proof of the concealed causal assertion.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1960-11-18",
+            "document_id": "CIA-RDP79T00975A005400160001-4",
+            "exact_quote": {
+              "end": 957,
+              "start": 762,
+              "text": "Although he is reportedly seriously concerned with the deterioration of government administration since he left office, he has permitted Nu free rein in all areas not directly affecting the army."
+            },
+            "original_phrase": {
+              "end": 859,
+              "start": 813,
+              "text": "the deterioration of government administration"
+            },
+            "page_id": "page_b8e1fcd54ac2c3df7f63",
+            "page_sha256": "726817b11da31506bc240aeb3ad3aa9962969fbc16f57712acbc015949208cc9",
+            "qualification_paragraph": {
+              "end": 1330,
+              "start": 535,
+              "text": "General Ne Win is reluctant to intervene, as he fears the corrupting influence of political power on the officer corps. He overrode army objections to permit the February national elections and U Nu's return as prime minister. Although he is reportedly seriously concerned with the deterioration of government administration since he left office, he has permitted Nu free rein in all areas not directly affecting the army. The flare-up with Maung Maung reportedly occurred at a 10 November meeting at which Ne Win insisted that the army should avoid any action which might be offensive to the Chinese Communists or to Burma's civilian political leaders. Brigadier Aung Gyi, the third member of the army top command, although present at the discussion, is not reported to have taken any position."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_49f38584c4cf704790616264e1c1",
+          "citations": [
+            {
+              "canonical_page_id": "page_1846a145ffa231f6c109",
+              "corpus": "cib",
+              "date": "1958-09-29",
+              "document_id": "CIA-RDP79T00975A004000150001-0",
+              "end": 1199,
+              "page_sha256": "bad21f2a0bc88f5b58383d81619cde09eb5746512b23c08befff7903ab75ad37",
+              "start": 710,
+              "text": "The members of the People's Comrade party who had surrendered recently are already leaving Rangoon and returning to the jungle. The army, even before the June government crisis, was critical of Nu's generosity to surrendered insurgents and fearful that Communists would use cached arms to renew violence either before or during national elections. Though Ne Win is pledged to continue general government policies, terms for insurgent surrenders are expected to be made much more stringent."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p6",
+                  "qualifications_preserved": true,
+                  "reason": "The fill retains the exact possessor and recipients from the source and adds only grammatical coordination. The source explicitly describes army criticism of this generosity, making it relevant background to civilian-military tensions. It does not prove the particular causal assertion, and no hidden text is inferred.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "75822399d88f31720b3aa3231ba3d8d63653787664f8e1fdc91295def04942bf",
+                  "inserted_span": [
+                    78,
+                    123
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "75822399d88f31720b3aa3231ba3d8d63653787664f8e1fdc91295def04942bf",
+                  "constructor_form": "nominal",
+                  "coordinate_head_resolution": {
+                    "coordinator": "and",
+                    "head": "generosity",
+                    "original_span_root": "insurgents",
+                    "reason": "EXPLICIT_IN_SPAN_CONJUNCT_OF_VISIBLE_COORDINATOR_GOVERNOR",
+                    "source_evidence_certified": false
+                  },
+                  "declared_number_fit": {
+                    "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                    "state": "pass"
+                  },
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "conj",
+                    "lemma": "generosity",
+                    "pos": "NOUN",
+                    "span": [
+                      87,
+                      97
+                    ],
+                    "tag": "NN",
+                    "text": "generosity"
+                  },
+                  "inserted_span": [
+                    78,
+                    123
+                  ],
+                  "outer_family": "nominal",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_NOMINAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "absence_is_counterevidence": false,
+                  "factual_support_certified": false,
+                  "reading_modified": false,
+                  "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                  "state": "pass"
+                },
+                "name": "applicable_existing_completed_slot_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "75822399d88f31720b3aa3231ba3d8d63653787664f8e1fdc91295def04942bf",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "5a12e628325993f82242db0ab86928210a279c4456acf1a19d022ccb29a6890c",
+            "unsupported_diagnostics": [
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_adb6e6ad70d5ae823e5ae5d6",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p6",
+            "qualifications_preserved": true,
+            "reason": "The fill retains the exact possessor and recipients from the source and adds only grammatical coordination. The source explicitly describes army criticism of this generosity, making it relevant background to civilian-military tensions. It does not prove the particular causal assertion, and no hidden text is inferred.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1958-09-29",
+            "document_id": "CIA-RDP79T00975A004000150001-0",
+            "exact_quote": {
+              "end": 1057,
+              "start": 838,
+              "text": "The army, even before the June government crisis, was critical of Nu's generosity to surrendered insurgents and fearful that Communists would use cached arms to renew violence either before or during national elections."
+            },
+            "original_phrase": {
+              "end": 945,
+              "start": 904,
+              "text": "Nu's generosity to surrendered insurgents"
+            },
+            "page_id": "page_1846a145ffa231f6c109",
+            "page_sha256": "bad21f2a0bc88f5b58383d81619cde09eb5746512b23c08befff7903ab75ad37",
+            "qualification_paragraph": {
+              "end": 1199,
+              "start": 710,
+              "text": "The members of the People's Comrade party who had surrendered recently are already leaving Rangoon and returning to the jungle. The army, even before the June government crisis, was critical of Nu's generosity to surrendered insurgents and fearful that Communists would use cached arms to renew violence either before or during national elections. Though Ne Win is pledged to continue general government policies, terms for insurgent surrenders are expected to be made much more stringent."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        }
+      ]
+    },
+    "facts_to_look_for": {
+      "atoms": [
+        {
+          "id": "a1",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "a pronounced rift within the Burmese military leadership",
+          "polarity": "positive",
+          "predicate": "have precipitated",
+          "query_quotes": [
+            "Prime Minister Nu's current friendliness toward the Chinese Communists [REDACTION 1] have precipitated a pronounced rift within the Burmese military leadership."
+          ],
+          "query_spans": [
+            {
+              "end": 167,
+              "start": 7,
+              "text": "Prime Minister Nu's current friendliness toward the Chinese Communists [REDACTION 1] have precipitated a pronounced rift within the Burmese military leadership."
+            }
+          ],
+          "required": true,
+          "source_quote": "Prime Minister Nu's current friendliness toward the Chinese Communists [REDACTION 1] have precipitated a pronounced rift within the Burmese military leadership.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Prime Minister Nu's current friendliness toward the Chinese Communists [REDACTION 1]",
+          "text": "Prime Minister Nu's current friendliness toward the Chinese Communists [REDACTION 1] have precipitated a pronounced rift within the Burmese military leadership."
+        },
+        {
+          "id": "a2",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "Army Chief of Staff General Ne Win's refusal to intervene in nonmilitary affairs",
+          "polarity": "positive",
+          "predicate": "has been aggravated by",
+          "query_quotes": [
+            "This situation has been aggravated by Army Chief of Staff General Ne Win's refusal to intervene in nonmilitary affairs."
+          ],
+          "query_spans": [
+            {
+              "end": 287,
+              "start": 168,
+              "text": "This situation has been aggravated by Army Chief of Staff General Ne Win's refusal to intervene in nonmilitary affairs."
+            }
+          ],
+          "required": true,
+          "source_quote": "This situation has been aggravated by Army Chief of Staff General Ne Win's refusal to intervene in nonmilitary affairs.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "This situation",
+          "text": "This situation has been aggravated by Army Chief of Staff General Ne Win's refusal to intervene in nonmilitary affairs."
+        }
+      ],
+      "kind": "RECORDED_PUBLIC_QUERY_REQUIREMENTS_NOT_WORLD_FACTS"
+    },
+    "saved_fills": {
+      "order_unchanged": true,
+      "primary_reading_id": "next_reading_adb6e6ad70d5ae823e5ae5d6",
+      "readings": [
+        {
+          "candidates": [
+            {
+              "completed_input": "Burma: Prime Minister Nu's current friendliness toward the Chinese Communists and the deterioration of government administration have precipitated a pronounced rift within the Burmese military leadership. This situation has been aggravated by Army Chief of Staff General Ne Win's refusal to intervene in nonmilitary affairs. [REDACTION] [REDACTION]",
+              "completed_input_sha256": "0205201f6102e11b1881c0bfdefe3139235b12a508eac89225455e8d2650f7fe",
+              "completed_input_utf8_sha256": "2602d2265c9e8349d9f9e7e3cb231610b8703b91f51f2198d17b9cad47ee6abc",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_82a333e20e145776c7e17bd0c8f3",
+                  "completed_input_sha256": "0205201f6102e11b1881c0bfdefe3139235b12a508eac89225455e8d2650f7fe",
+                  "exact_quote_sha256": "9ae1e31b9efb6abb06854fe533da8ce8563afaba37d0d001401eb0239c9b88e5",
+                  "grammar_sha256": "7b0b49fe3aafa634a9b56168f9dc962cdb95f7567fdba40c26a369bd990a1e8c",
+                  "observation_sha256": "932409de1426d0a8a18584d15a2cf3e1573197dcab570cdab101ee166c0e8fb3",
+                  "plan_sha256": "a8b71dbb0f4137e49e4a03b2ff7b42b2e1e24fb7d504115bb3b78bc85cf556ec",
+                  "provenance_sha256": "563e89f79dc802a1c69cee90c0b051d8a68964e3d34f507accaf2a27df459f4d",
+                  "query_sha256": "f60c846dbae7a50fa14f2f9d9ea3dd3a34f37b25b2df92b27996bb57d583f200",
+                  "reading_sha256": "5a12e628325993f82242db0ab86928210a279c4456acf1a19d022ccb29a6890c",
+                  "source_phrase_sha256": "a09bf5cfb7862f25d6928fd967d86101194d738589dde038b4846adc7d69260a"
+                },
+                "candidate_content_terms": [
+                  "administration",
+                  "deterioration",
+                  "government"
+                ],
+                "components": {
+                  "lexical_novelty": 0.2,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.3928571428571429
+                },
+                "focal_query_span": {
+                  "end": 167,
+                  "start": 0,
+                  "text": "Burma: Prime Minister Nu's current friendliness toward the Chinese Communists [REDACTION 1] have precipitated a pronounced rift within the Burmese military leadership."
+                },
+                "focal_terms": [
+                  "burma",
+                  "burmese",
+                  "chinese",
+                  "communist",
+                  "current",
+                  "friendliness",
+                  "leadership",
+                  "military",
+                  "minister",
+                  "nu",
+                  "precipitate",
+                  "prime",
+                  "pronounced",
+                  "rift"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "burma",
+                  "burmese",
+                  "chinese",
+                  "communist",
+                  "current",
+                  "leadership",
+                  "military",
+                  "minister",
+                  "nu",
+                  "prime"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_b8e1fcd54ac2c3df7f63",
+                  "date": "1960-11-18",
+                  "document_id": "CIA-RDP79T00975A005400160001-4",
+                  "page_sha256": "726817b11da31506bc240aeb3ad3aa9962969fbc16f57712acbc015949208cc9"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 1.0,
+                  "own_page_focal_coverage": 0.7142857142857143
+                },
+                "repeated_visible_content_terms": [],
+                "score": 0.842857142857143,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "affair",
+                  "aggravate",
+                  "army",
+                  "burma",
+                  "burmese",
+                  "chief",
+                  "chinese",
+                  "communist",
+                  "current",
+                  "friendliness",
+                  "general",
+                  "intervene",
+                  "leadership",
+                  "military",
+                  "minister",
+                  "ne",
+                  "nonmilitary",
+                  "nu",
+                  "precipitate",
+                  "prime",
+                  "pronounced",
+                  "refusal",
+                  "rift",
+                  "situation",
+                  "staff",
+                  "win"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 77,
+                    "start": 7,
+                    "text": "Prime Minister Nu's current friendliness toward the Chinese Communists"
+                  },
+                  {
+                    "end": 109,
+                    "start": 92,
+                    "text": "have precipitated"
+                  }
+                ],
+                "constructor_form": "nominal",
+                "constructor_routing": {
+                  "constructor_form": "nominal",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 77,
+                      "start": 7,
+                      "text": "Prime Minister Nu's current friendliness toward the Chinese Communists"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 109,
+                      "start": 92,
+                      "text": "have precipitated"
+                    }
+                  },
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 127,
+                      "start": 92,
+                      "text": "have precipitated a pronounced rift"
+                    }
+                  }
+                ],
+                "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: coordinate_member. Legacy subset route: nominal.",
+                "finite": null,
+                "form": "nominal",
+                "function": "coordinate_member",
+                "grammatical_number": "unknown",
+                "id": "next_reading_adb6e6ad70d5ae823e5ae5d6",
+                "operators": [
+                  {
+                    "cue": null,
+                    "kind": "connective",
+                    "realization": "hypothetical",
+                    "scope": {
+                      "end": 77,
+                      "start": 7,
+                      "text": "Prime Minister Nu's current friendliness toward the Chinese Communists"
+                    }
+                  }
+                ],
+                "outer_family": "nominal",
+                "role": "actor_enumeration",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "and the deterioration of government administration",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p1",
+                      "qualifications_preserved": true,
+                      "reason": "Faithfully coordinates the source's administrative deterioration with Nu's friendliness, producing a plural subject for 'have.' The source directly connects administrative concerns, army disagreement, and Ne Win's nonintervention. 'Reportedly' qualifies his concern, not the deterioration noun phrase. This is contextual nomination, not proof of the concealed causal assertion.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "0205201f6102e11b1881c0bfdefe3139235b12a508eac89225455e8d2650f7fe",
+                      "inserted_span": [
+                        78,
+                        128
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "0205201f6102e11b1881c0bfdefe3139235b12a508eac89225455e8d2650f7fe",
+                      "constructor_form": "nominal",
+                      "coordinate_head_resolution": {
+                        "coordinator": "and",
+                        "head": "deterioration",
+                        "original_span_root": "and",
+                        "reason": "EXPLICIT_IN_SPAN_CONJUNCT_OF_VISIBLE_COORDINATOR_GOVERNOR",
+                        "source_evidence_certified": false
+                      },
+                      "declared_number_fit": {
+                        "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                        "state": "pass"
+                      },
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "conj",
+                        "lemma": "deterioration",
+                        "pos": "NOUN",
+                        "span": [
+                          86,
+                          99
+                        ],
+                        "tag": "NN",
+                        "text": "deterioration"
+                      },
+                      "inserted_span": [
+                        78,
+                        128
+                      ],
+                      "outer_family": "nominal",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_NOMINAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "absence_is_counterevidence": false,
+                      "factual_support_certified": false,
+                      "reading_modified": false,
+                      "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                      "state": "pass"
+                    },
+                    "name": "applicable_existing_completed_slot_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "0205201f6102e11b1881c0bfdefe3139235b12a508eac89225455e8d2650f7fe",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "5a12e628325993f82242db0ab86928210a279c4456acf1a19d022ccb29a6890c",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_82a333e20e145776c7e17bd0c8f3",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "3d949c49d4d631b8db38b7f0a8dce48422a4eac0e8e5ddbcf578c596b65dc544",
+                "original_candidate_sha256": "55b0404acc0318fa0302ff22c7fbee52ca05557a76092a0ac2972fbbcc417e73",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "563e89f79dc802a1c69cee90c0b051d8a68964e3d34f507accaf2a27df459f4d",
+                "proposal_response_sha256": "9a6604603802b8ca5889e10b8898902b08fbcd1e4f3226a842c9bcb5cf449a7a",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "c7ceb108a467f340b87647e776f1f32abce99e962a4f09a484c25d3831bfca4d",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_adb6e6ad70d5ae823e5ae5d6",
+              "source": {
+                "date": "1960-11-18",
+                "document_id": "CIA-RDP79T00975A005400160001-4",
+                "exact_quote": {
+                  "end": 957,
+                  "start": 762,
+                  "text": "Although he is reportedly seriously concerned with the deterioration of government administration since he left office, he has permitted Nu free rein in all areas not directly affecting the army."
+                },
+                "original_phrase": {
+                  "end": 859,
+                  "start": 813,
+                  "text": "the deterioration of government administration"
+                },
+                "page_id": "page_b8e1fcd54ac2c3df7f63",
+                "page_sha256": "726817b11da31506bc240aeb3ad3aa9962969fbc16f57712acbc015949208cc9",
+                "qualification_paragraph": {
+                  "end": 1330,
+                  "start": 535,
+                  "text": "General Ne Win is reluctant to intervene, as he fears the corrupting influence of political power on the officer corps. He overrode army objections to permit the February national elections and U Nu's return as prime minister. Although he is reportedly seriously concerned with the deterioration of government administration since he left office, he has permitted Nu free rein in all areas not directly affecting the army. The flare-up with Maung Maung reportedly occurred at a 10 November meeting at which Ne Win insisted that the army should avoid any action which might be offensive to the Chinese Communists or to Burma's civilian political leaders. Brigadier Aung Gyi, the third member of the army top command, although present at the discussion, is not reported to have taken any position."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p1",
+                "qualifications_preserved": true,
+                "reason": "Faithfully coordinates the source's administrative deterioration with Nu's friendliness, producing a plural subject for 'have.' The source directly connects administrative concerns, army disagreement, and Ne Win's nonintervention. 'Reportedly' qualifies his concern, not the deterioration noun phrase. This is contextual nomination, not proof of the concealed causal assertion.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_b8e1fcd54ac2c3df7f63",
+                  "corpus": "cib",
+                  "date": "1960-11-18",
+                  "document_id": "CIA-RDP79T00975A005400160001-4",
+                  "end": 1330,
+                  "page_sha256": "726817b11da31506bc240aeb3ad3aa9962969fbc16f57712acbc015949208cc9",
+                  "start": 535,
+                  "text": "General Ne Win is reluctant to intervene, as he fears the corrupting influence of political power on the officer corps. He overrode army objections to permit the February national elections and U Nu's return as prime minister. Although he is reportedly seriously concerned with the deterioration of government administration since he left office, he has permitted Nu free rein in all areas not directly affecting the army. The flare-up with Maung Maung reportedly occurred at a 10 November meeting at which Ne Win insisted that the army should avoid any action which might be offensive to the Chinese Communists or to Burma's civilian political leaders. Brigadier Aung Gyi, the third member of the army top command, although present at the discussion, is not reported to have taken any position."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Adds the coordinating conjunction 'and' to the source noun phrase.",
+                "kind": "PARAPHRASE"
+              }
+            },
+            {
+              "completed_input": "Burma: Prime Minister Nu's current friendliness toward the Chinese Communists and Nu's generosity to surrendered insurgents have precipitated a pronounced rift within the Burmese military leadership. This situation has been aggravated by Army Chief of Staff General Ne Win's refusal to intervene in nonmilitary affairs. [REDACTION] [REDACTION]",
+              "completed_input_sha256": "75822399d88f31720b3aa3231ba3d8d63653787664f8e1fdc91295def04942bf",
+              "completed_input_utf8_sha256": "7998e13c78842a82c1c6d6ac7b40cf3d9b46d5e9428eeb53eb521e25011e9650",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_49f38584c4cf704790616264e1c1",
+                  "completed_input_sha256": "75822399d88f31720b3aa3231ba3d8d63653787664f8e1fdc91295def04942bf",
+                  "exact_quote_sha256": "442ff32ae28bb8389600f4de257782b2aae92551121378eedd8177f5204008cf",
+                  "grammar_sha256": "4d4380bc85b7bc1387e900fcee32e01ea515e9331c99737d4f24fc222b70f3f6",
+                  "observation_sha256": "932409de1426d0a8a18584d15a2cf3e1573197dcab570cdab101ee166c0e8fb3",
+                  "plan_sha256": "a8b71dbb0f4137e49e4a03b2ff7b42b2e1e24fb7d504115bb3b78bc85cf556ec",
+                  "provenance_sha256": "6d7437af77360f792766d6b59fb6d80cf7e5dff14979a48cd5d609ae392903b9",
+                  "query_sha256": "f60c846dbae7a50fa14f2f9d9ea3dd3a34f37b25b2df92b27996bb57d583f200",
+                  "reading_sha256": "5a12e628325993f82242db0ab86928210a279c4456acf1a19d022ccb29a6890c",
+                  "source_phrase_sha256": "ba1a22fc8e1b01ad728948f151ddeb3f950772b58428ff8d0eba474d921c430b"
+                },
+                "candidate_content_terms": [
+                  "generosity",
+                  "insurgent",
+                  "nu",
+                  "surrender"
+                ],
+                "components": {
+                  "lexical_novelty": 0.15000000000000002,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.2357142857142857
+                },
+                "focal_query_span": {
+                  "end": 167,
+                  "start": 0,
+                  "text": "Burma: Prime Minister Nu's current friendliness toward the Chinese Communists [REDACTION 1] have precipitated a pronounced rift within the Burmese military leadership."
+                },
+                "focal_terms": [
+                  "burma",
+                  "burmese",
+                  "chinese",
+                  "communist",
+                  "current",
+                  "friendliness",
+                  "leadership",
+                  "military",
+                  "minister",
+                  "nu",
+                  "precipitate",
+                  "prime",
+                  "pronounced",
+                  "rift"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "burma",
+                  "burmese",
+                  "communist",
+                  "military",
+                  "minister",
+                  "nu"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_1846a145ffa231f6c109",
+                  "date": "1958-09-29",
+                  "document_id": "CIA-RDP79T00975A004000150001-0",
+                  "page_sha256": "bad21f2a0bc88f5b58383d81619cde09eb5746512b23c08befff7903ab75ad37"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.75,
+                  "own_page_focal_coverage": 0.42857142857142855
+                },
+                "repeated_visible_content_terms": [
+                  "nu"
+                ],
+                "score": 0.6357142857142857,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "affair",
+                  "aggravate",
+                  "army",
+                  "burma",
+                  "burmese",
+                  "chief",
+                  "chinese",
+                  "communist",
+                  "current",
+                  "friendliness",
+                  "general",
+                  "intervene",
+                  "leadership",
+                  "military",
+                  "minister",
+                  "ne",
+                  "nonmilitary",
+                  "nu",
+                  "precipitate",
+                  "prime",
+                  "pronounced",
+                  "refusal",
+                  "rift",
+                  "situation",
+                  "staff",
+                  "win"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 77,
+                    "start": 7,
+                    "text": "Prime Minister Nu's current friendliness toward the Chinese Communists"
+                  },
+                  {
+                    "end": 109,
+                    "start": 92,
+                    "text": "have precipitated"
+                  }
+                ],
+                "constructor_form": "nominal",
+                "constructor_routing": {
+                  "constructor_form": "nominal",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 77,
+                      "start": 7,
+                      "text": "Prime Minister Nu's current friendliness toward the Chinese Communists"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 109,
+                      "start": 92,
+                      "text": "have precipitated"
+                    }
+                  },
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 127,
+                      "start": 92,
+                      "text": "have precipitated a pronounced rift"
+                    }
+                  }
+                ],
+                "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: coordinate_member. Legacy subset route: nominal.",
+                "finite": null,
+                "form": "nominal",
+                "function": "coordinate_member",
+                "grammatical_number": "unknown",
+                "id": "next_reading_adb6e6ad70d5ae823e5ae5d6",
+                "operators": [
+                  {
+                    "cue": null,
+                    "kind": "connective",
+                    "realization": "hypothetical",
+                    "scope": {
+                      "end": 77,
+                      "start": 7,
+                      "text": "Prime Minister Nu's current friendliness toward the Chinese Communists"
+                    }
+                  }
+                ],
+                "outer_family": "nominal",
+                "role": "actor_enumeration",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "and Nu's generosity to surrendered insurgents",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p6",
+                      "qualifications_preserved": true,
+                      "reason": "The fill retains the exact possessor and recipients from the source and adds only grammatical coordination. The source explicitly describes army criticism of this generosity, making it relevant background to civilian-military tensions. It does not prove the particular causal assertion, and no hidden text is inferred.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "75822399d88f31720b3aa3231ba3d8d63653787664f8e1fdc91295def04942bf",
+                      "inserted_span": [
+                        78,
+                        123
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "75822399d88f31720b3aa3231ba3d8d63653787664f8e1fdc91295def04942bf",
+                      "constructor_form": "nominal",
+                      "coordinate_head_resolution": {
+                        "coordinator": "and",
+                        "head": "generosity",
+                        "original_span_root": "insurgents",
+                        "reason": "EXPLICIT_IN_SPAN_CONJUNCT_OF_VISIBLE_COORDINATOR_GOVERNOR",
+                        "source_evidence_certified": false
+                      },
+                      "declared_number_fit": {
+                        "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                        "state": "pass"
+                      },
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "conj",
+                        "lemma": "generosity",
+                        "pos": "NOUN",
+                        "span": [
+                          87,
+                          97
+                        ],
+                        "tag": "NN",
+                        "text": "generosity"
+                      },
+                      "inserted_span": [
+                        78,
+                        123
+                      ],
+                      "outer_family": "nominal",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_NOMINAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "absence_is_counterevidence": false,
+                      "factual_support_certified": false,
+                      "reading_modified": false,
+                      "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                      "state": "pass"
+                    },
+                    "name": "applicable_existing_completed_slot_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "75822399d88f31720b3aa3231ba3d8d63653787664f8e1fdc91295def04942bf",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "5a12e628325993f82242db0ab86928210a279c4456acf1a19d022ccb29a6890c",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_49f38584c4cf704790616264e1c1",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "3d949c49d4d631b8db38b7f0a8dce48422a4eac0e8e5ddbcf578c596b65dc544",
+                "original_candidate_sha256": "e69a62d90db5c6178a8c295d61850aa893ddf6a686c72aa6828cb175ce1cdd5d",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "6d7437af77360f792766d6b59fb6d80cf7e5dff14979a48cd5d609ae392903b9",
+                "proposal_response_sha256": "9a6604603802b8ca5889e10b8898902b08fbcd1e4f3226a842c9bcb5cf449a7a",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "c7ceb108a467f340b87647e776f1f32abce99e962a4f09a484c25d3831bfca4d",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 2,
+              "rank_within_new_method": 2,
+              "reading_id": "next_reading_adb6e6ad70d5ae823e5ae5d6",
+              "source": {
+                "date": "1958-09-29",
+                "document_id": "CIA-RDP79T00975A004000150001-0",
+                "exact_quote": {
+                  "end": 1057,
+                  "start": 838,
+                  "text": "The army, even before the June government crisis, was critical of Nu's generosity to surrendered insurgents and fearful that Communists would use cached arms to renew violence either before or during national elections."
+                },
+                "original_phrase": {
+                  "end": 945,
+                  "start": 904,
+                  "text": "Nu's generosity to surrendered insurgents"
+                },
+                "page_id": "page_1846a145ffa231f6c109",
+                "page_sha256": "bad21f2a0bc88f5b58383d81619cde09eb5746512b23c08befff7903ab75ad37",
+                "qualification_paragraph": {
+                  "end": 1199,
+                  "start": 710,
+                  "text": "The members of the People's Comrade party who had surrendered recently are already leaving Rangoon and returning to the jungle. The army, even before the June government crisis, was critical of Nu's generosity to surrendered insurgents and fearful that Communists would use cached arms to renew violence either before or during national elections. Though Ne Win is pledged to continue general government policies, terms for insurgent surrenders are expected to be made much more stringent."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p6",
+                "qualifications_preserved": true,
+                "reason": "The fill retains the exact possessor and recipients from the source and adds only grammatical coordination. The source explicitly describes army criticism of this generosity, making it relevant background to civilian-military tensions. It does not prove the particular causal assertion, and no hidden text is inferred.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_1846a145ffa231f6c109",
+                  "corpus": "cib",
+                  "date": "1958-09-29",
+                  "document_id": "CIA-RDP79T00975A004000150001-0",
+                  "end": 1199,
+                  "page_sha256": "bad21f2a0bc88f5b58383d81619cde09eb5746512b23c08befff7903ab75ad37",
+                  "start": 710,
+                  "text": "The members of the People's Comrade party who had surrendered recently are already leaving Rangoon and returning to the jungle. The army, even before the June government crisis, was critical of Nu's generosity to surrendered insurgents and fearful that Communists would use cached arms to renew violence either before or during national elections. Though Ne Win is pledged to continue general government policies, terms for insurgent surrenders are expected to be made much more stringent."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Adds the conjunction 'and' to the exact source noun phrase.",
+                "kind": "PARAPHRASE"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 4,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 77,
+                "start": 7,
+                "text": "Prime Minister Nu's current friendliness toward the Chinese Communists"
+              },
+              {
+                "end": 109,
+                "start": 92,
+                "text": "have precipitated"
+              }
+            ],
+            "constructor_form": "nominal",
+            "constructor_routing": {
+              "constructor_form": "nominal",
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "legacy_compatible_subset",
+            "cues": [
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 77,
+                  "start": 7,
+                  "text": "Prime Minister Nu's current friendliness toward the Chinese Communists"
+                }
+              },
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 109,
+                  "start": 92,
+                  "text": "have precipitated"
+                }
+              },
+              {
+                "kind": "boundary",
+                "span": {
+                  "end": 127,
+                  "start": 92,
+                  "text": "have precipitated a pronounced rift"
+                }
+              }
+            ],
+            "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: coordinate_member. Legacy subset route: nominal.",
+            "finite": null,
+            "form": "nominal",
+            "function": "coordinate_member",
+            "grammatical_number": "unknown",
+            "id": "next_reading_adb6e6ad70d5ae823e5ae5d6",
+            "operators": [
+              {
+                "cue": null,
+                "kind": "connective",
+                "realization": "hypothetical",
+                "scope": {
+                  "end": 77,
+                  "start": 7,
+                  "text": "Prime Minister Nu's current friendliness toward the Chinese Communists"
+                }
+              }
+            ],
+            "outer_family": "nominal",
+            "role": "actor_enumeration",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_adb6e6ad70d5ae823e5ae5d6",
+          "status": "CONTEXTUAL_CANDIDATES"
+        }
+      ],
+      "score_is_probability": false
+    },
+    "selected_evidence": {
+      "kind": "ACTUAL_SAVED_CANDIDATE_OWN_SOURCES",
+      "pages": [
+        {
+          "canonical_sequence": 9,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1960-11-18",
+          "document_id": "CIA-RDP79T00975A005400160001-4",
+          "earlier_page": 11,
+          "handling": [],
+          "id": "page_b8e1fcd54ac2c3df7f63",
+          "native_page": {
+            "canonical_page_id": "page_b8e1fcd54ac2c3df7f63",
+            "document_id": "CIA-RDP79T00975A005400160001-4",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 9,
+            "slot_ids": [
+              "slot_eee2e258f2f91c937272",
+              "slot_11cbc2cec4e79cb14328",
+              "slot_238d331a3e003b9be57d",
+              "slot_bf57d1a58c94fa56cb4d"
+            ],
+            "source_page": 11,
+            "text": "Burma's Commander in Chief and Subordinates Disagree On Army's Political Role\n\nBrigadier Maung Maung, military training director and close adviser to General Ne Win, is said to be firmly opposed to Ne Win's current policy of nonintervention in Burmese politics. [[REDACTION_SLOT:001:slot_eee2e258f2f91c937272]] Maung Maung considers that the army's inaction is in effect installing Communist China as Burma's \"new master.\" He has threatened to resign from the army unless Ne Win allows more forceful intervention with the government.\n\nGeneral Ne Win is reluctant to intervene, as he fears the corrupting influence of political power on the officer corps. He overrode army objections to permit the February national elections and U Nu's return as prime minister. Although he is reportedly seriously concerned with the deterioration of government administration since he left office, he has permitted Nu free rein in all areas not directly affecting the army. The flare-up with Maung Maung reportedly occurred at a 10 November meeting at which Ne Win insisted that the army should avoid any action which might be offensive to the Chinese Communists or to Burma's civilian political leaders. Brigadier Aung Gyi, the third member of the army top command, although present at the discussion, is not reported to have taken any position.\n\nBurma's officer corps has been generally restive under the Nu administration and, although no one threatens Ne Win's leadership, criticism of his policies appears to be rising. Growing pressures from such figures as Maung Maung may force the general to renew intervention in government affairs.",
+            "unplaced_slot_ids": [
+              "slot_238d331a3e003b9be57d",
+              "slot_bf57d1a58c94fa56cb4d"
+            ],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "5c3b88fe83b67dcced16d053f09b8c693b23728244e2d77413cb846754c263f3",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "726817b11da31506bc240aeb3ad3aa9962969fbc16f57712acbc015949208cc9",
+          "text": "Burma's Commander in Chief and Subordinates Disagree On Army's Political Role\n\nBrigadier Maung Maung, military training director and close adviser to General Ne Win, is said to be firmly opposed to Ne Win's current policy of nonintervention in Burmese politics. [[REDACTION_SLOT:001:slot_eee2e258f2f91c937272]] Maung Maung considers that the army's inaction is in effect installing Communist China as Burma's \"new master.\" He has threatened to resign from the army unless Ne Win allows more forceful intervention with the government.\n\nGeneral Ne Win is reluctant to intervene, as he fears the corrupting influence of political power on the officer corps. He overrode army objections to permit the February national elections and U Nu's return as prime minister. Although he is reportedly seriously concerned with the deterioration of government administration since he left office, he has permitted Nu free rein in all areas not directly affecting the army. The flare-up with Maung Maung reportedly occurred at a 10 November meeting at which Ne Win insisted that the army should avoid any action which might be offensive to the Chinese Communists or to Burma's civilian political leaders. Brigadier Aung Gyi, the third member of the army top command, although present at the discussion, is not reported to have taken any position.\n\nBurma's officer corps has been generally restive under the Nu administration and, although no one threatens Ne Win's leadership, criticism of his policies appears to be rising. Growing pressures from such figures as Maung Maung may force the general to renew intervention in government affairs.",
+          "visibility": "earlier"
+        },
+        {
+          "canonical_sequence": 11,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1958-09-29",
+          "document_id": "CIA-RDP79T00975A004000150001-0",
+          "earlier_page": 9,
+          "handling": [],
+          "id": "page_1846a145ffa231f6c109",
+          "native_page": {
+            "canonical_page_id": "page_1846a145ffa231f6c109",
+            "document_id": "CIA-RDP79T00975A004000150001-0",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 11,
+            "slot_ids": [],
+            "source_page": 9,
+            "text": "Burmese Situation\n\nGeneral Ne Win's action on 26 September has brought a sense of relief to the Burmese population and to most non-Communist political leaders, regardless of their factional loyalties. They probably feel that army control will end the disastrous drift toward chaos and civil war. The carefully correct observance of constitutional procedures--30 days notice before Parliament meets and U Nu officially resigns and the six-month limit to General Ne Win's tenure of the premiership--also serve to reassure the public of the continuation of democratic processes. Ne Win's pledge to exclude major political leaders from his cabinet is intended to ensure the prospective government's impartiality.\n\nThe members of the People's Comrade party who had surrendered recently are already leaving Rangoon and returning to the jungle. The army, even before the June government crisis, was critical of Nu's generosity to surrendered insurgents and fearful that Communists would use cached arms to renew violence either before or during national elections. Though Ne Win is pledged to continue general government policies, terms for insurgent surrenders are expected to be made much more stringent.\n\nThe long-contemplated army action apparently was sparked by Home Minister Bo Min Gaung's plan to ensure government party control over the army through the arrest or retirement of top military leaders, including General Ne Win. There seems to have been no prior collusion with Premier Nu's opponents, former deputy premiers Ba Swe and Kyaw Nyein. However, Premier Nu's acquiescence to Ne Win's demand for government control suggests Nu may have recognized that his gamble to maintain parliamentary control through Communist-influenced leftists was failing and that he welcomed reprieve from eventual parliamentary defeat. The coup relieves Ba Swe and Kyaw Nyein of the necessity of voting against US aid to Burma to bring Nu's government down. The general approval given Ne Win's \"selection\" as incoming premier by newspapers supporting",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "3e86889d4a796761710a2c23133f76d8b83fb9e69dbf63339bf7f50bd5708f00",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "bad21f2a0bc88f5b58383d81619cde09eb5746512b23c08befff7903ab75ad37",
+          "text": "Burmese Situation\n\nGeneral Ne Win's action on 26 September has brought a sense of relief to the Burmese population and to most non-Communist political leaders, regardless of their factional loyalties. They probably feel that army control will end the disastrous drift toward chaos and civil war. The carefully correct observance of constitutional procedures--30 days notice before Parliament meets and U Nu officially resigns and the six-month limit to General Ne Win's tenure of the premiership--also serve to reassure the public of the continuation of democratic processes. Ne Win's pledge to exclude major political leaders from his cabinet is intended to ensure the prospective government's impartiality.\n\nThe members of the People's Comrade party who had surrendered recently are already leaving Rangoon and returning to the jungle. The army, even before the June government crisis, was critical of Nu's generosity to surrendered insurgents and fearful that Communists would use cached arms to renew violence either before or during national elections. Though Ne Win is pledged to continue general government policies, terms for insurgent surrenders are expected to be made much more stringent.\n\nThe long-contemplated army action apparently was sparked by Home Minister Bo Min Gaung's plan to ensure government party control over the army through the arrest or retirement of top military leaders, including General Ne Win. There seems to have been no prior collusion with Premier Nu's opponents, former deputy premiers Ba Swe and Kyaw Nyein. However, Premier Nu's acquiescence to Ne Win's demand for government control suggests Nu may have recognized that his gamble to maintain parliamentary control through Communist-influenced leftists was failing and that he welcomed reprieve from eventual parliamentary defeat. The coup relieves Ba Swe and Kyaw Nyein of the necessity of voting against US aid to Burma to bring Nu's government down. The general approval given Ne Win's \"selection\" as incoming premier by newspapers supporting",
+          "visibility": "earlier"
+        }
+      ]
+    }
+  },
+  "typed_source_method_admission_not_issued": true,
+  "version": "historical-source-only-workbench-data/1"
+}

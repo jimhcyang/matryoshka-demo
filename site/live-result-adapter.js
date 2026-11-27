@@ -139,6 +139,7 @@ export class LiveClient {
 export const LIVE_TRANSPORT_LIMITS = Object.freeze({wireBytes:24*1024*1024, decodedBytes:64*1024*1024});
 const PACKED_VERSION='matryoshka-live-packed/1';
 const packedResults=new WeakMap();
+export function liveResultWire(value){return packedResults.get(value)?.wire||null;}
 const bytesHash=async bytes=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))]
   .map(n=>n.toString(16).padStart(2,'0')).join('');
 const exactKeys=(value,keys)=>value&&typeof value==='object'&&!Array.isArray(value)&&
@@ -334,6 +335,10 @@ export async function verifyEnvelope(value, expectedRun) {
     if (native.fixture_only !== true || receipt.fixture_only !== true || native.result.status !== 'FIXTURE_ONLY' ||
         trace.paths.length || value.selected_evidence.length || Object.keys(sources).length || Object.keys(documentPages).length) fail('Invalid fixture result.');
     return value;
+  }
+  if(native.version==='private-live-source-intake/1'){
+    const {verifyLiveSourceMethod}=await import('./workbench-live-source.js');
+    await verifyLiveSourceMethod(value);return value;
   }
   if (native.query_only_inference !== true || native.grades_read !== false || native.answers_read !== false ||
       !HASH.test(native.native_checksum || '') || native.native_checksum !== condition.native_checksum ||
@@ -635,10 +640,12 @@ const masked = /\[\[REDACTION_SLOT:[^\]]*\]\]|\[(?:REDACTION(?:[ _]\d+)?|REDACTE
 
 export function liveRetrievalSummary(envelope) {
   const native = envelope.native || {}, result = native.result || {}, retrieval = native.retrieval || {};
+  const sourceMethod=native.version==='private-live-source-intake/1'?envelope.condition?.source_method:null;
   const inspected = Array.isArray(result.inspected_page_ids) ? new Set(result.inspected_page_ids).size : count(result.source_pages_inspected);
   const documents = count(retrieval.documents_admitted);
   const iterations = count(retrieval.diffusion?.iterations);
-  const candidates = rows(result.readings).length ? rows(result.readings).reduce((n, reading) => n + rows(reading.candidates).length, 0) : rows(result.candidates).length;
+  const candidates = sourceMethod?rows(sourceMethod.readings).reduce((n,reading)=>n+rows(reading.candidates).length,0):
+    rows(result.readings).length ? rows(result.readings).reduce((n, reading) => n + rows(reading.candidates).length, 0) : rows(result.candidates).length;
   const noCandidate = envelope.execution_kind !== 'fixture' && envelope.request?.task === 'redaction' && candidates === 0;
   const text = [documents === null ? 'Document count not recorded' : `${documents} documents retrieved`,
     inspected === null ? 'inspected page count not recorded' : `${inspected} pages inspected`,
@@ -703,14 +710,18 @@ function liveRetrievedSources(envelope) {
 export async function toWorkbenchPacket(envelope, expectedRun) {
   await verifyEnvelope(envelope, expectedRun);
   const condition = envelope.condition;
+  const sourceModule=condition.source_method?await import('./workbench-live-source.js'):null;
+  const verifiedSource=sourceModule?await sourceModule.verifyLiveSourceMethod(envelope):null;
   const row = {case: condition.case, configurations: {llm_readings: condition},
-    resource_binding: condition.resource_binding || null,
+    resource_binding: verifiedSource?sourceModule.liveSourceInspectionBinding(verifiedSource):condition.resource_binding || null,
     current_resource_execution: condition.current_resource_execution === true,
     execution_kind: envelope.execution_kind, live_run_id: envelope.run_id};
   const report = {version: 'matryoshka-live-report/1', run_id: envelope.run_id, status: 'COMPLETE',
     cases: [row], execution_kind: envelope.execution_kind, live_execution: envelope.execution_kind === 'live',
     saved_replay: false, benchmark_accuracy_claimed: false};
   return {report, row, condition, trace: envelope.trace, sources: envelope.sources,
+    source_method:condition.source_method||null,
+    source_method_handle:verifiedSource,
     document_pages: envelope.document_pages || {}, origins: null,
     receipt: envelope.receipt, source_scope: envelope.source_scope, selected_evidence: envelope.selected_evidence,
     analyst_digest: envelope.analyst_digest,
@@ -725,7 +736,7 @@ export function sendToWorkbench(target, envelope, {timeout = 90000} = {}) {
   const listen = event => {
     if (event.origin !== targetOrigin || event.source !== target || event.data?.type !== 'matryoshka:live-ready' ||
         event.data.run_id !== envelope.run_id) return;
-    target.postMessage({type: 'matryoshka:live-result', result: envelope}, targetOrigin);
+    target.postMessage({type: 'matryoshka:live-result', result: envelope,result_wire:liveResultWire(envelope)}, targetOrigin);
     cleanup();
   };
   addEventListener('message', listen);
@@ -748,7 +759,8 @@ export function receiveFromLive(callback, {runId = new URLSearchParams(location.
   const listen = async event => {
     if (event.origin !== expectedOrigin || event.source !== source || event.data?.type !== 'matryoshka:live-result') return;
     cleanup();
-    try { callback(await toWorkbenchPacket(event.data.result, runId)); } catch (error) { onError(error); }
+    try {const value=event.data.result_wire?await unpackLiveResult(event.data.result_wire):event.data.result;
+      callback(await toWorkbenchPacket(value, runId)); } catch (error) { onError(error); }
   };
   const ready = () => source.postMessage({type: 'matryoshka:live-ready', run_id: runId}, expectedOrigin);
   addEventListener('message', listen);

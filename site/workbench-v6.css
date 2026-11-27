@@ -880,3 +880,9 @@ select,input { padding:.45rem; font-size:.73rem; border-radius:4px; }
 .workbench-digest-source{font-size:max(.85rem,14px)}
 #public-replay-notice{font-size:14px!important}
 #page-state,.workflow-nav .workflow-step-number{font-size:14px!important}
+dialog.workbench-kg-drawer{width:min(1320px,96vw);max-width:96vw;}
+.workbench-kg-inspection{display:grid;gap:12px;}
+.workbench-kg-frame{width:100%;height:min(66vh,740px);border:1px solid var(--line,#bdc8c4);border-radius:10px;background:#f4f1e8;}
+.workbench-kg-inspection nav{display:flex;gap:10px;}
+.workbench-kg-inspection [data-testid="inspection-endpoint-quote"]{font-size:18px;line-height:1.5;margin:0;padding:12px 16px;border-left:3px solid #4d8068;}
+.workflow[data-recovery-study] #stage-01 pre{white-space:pre-wrap;overflow-wrap:anywhere;}

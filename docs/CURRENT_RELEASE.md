@@ -1,55 +1,62 @@
-# Current Saved Release
+# Current Workbench Release
 
-The website contains nine primary inputs: one Mosaic, Hypothesis and
-Redaction for each of CIB, Iran and Vietnam. Five additional authentic CIB
-redactions and one separate visiting-delegation input are also available.
-All fifteen executions are complete saved arm-A runs with their own pinned
-code and source bindings. The release preserves multiple engine versions;
-the current code download is not retroactively assigned to older executions.
+The main workbench retains sixteen saved executions: nine primary inputs,
+five additional CIB redactions, a visiting-delegation study and a Salvadoran
+bench example. Ten source-only CIB recovery studies are available from the
+Examples panel under CIB / Redaction. Their original inputs, readings,
+rankings, scores and qualifications remain separate from the main saved runs.
 
-Tehrani, Vietnam March 19 and Soviet announced-quantity Mosaics each establish
-both requested facts. The Soviet case establishes announcements, not completed
-withdrawals. A single document can establish two facts; this is not independent
-multi-document corroboration. The Salvadoran adjectival reading ranks easily
-politically manipulated first with eligible evidence. Additional CIB examples
-are Arias, air-force commander, Betancourt, corrupt and a Tunisian clausal fill.
+Every task uses the same presentation: Input, Facts to look for, Facts to
+evidence, Selected evidence, Saved fills or task findings, and Analyst Summary.
+The selected reading controls all downstream displays. Source cards open the
+retained document with the exact cited text highlighted; CIB also offers the
+paired original PDFs. New summaries are actual source-bound model outputs,
+not replacement candidate evaluations or support certificates.
 
-The Shah command Hypothesis remains partial, while the Vietnam Highlands
-Hypothesis establishes one of two components. Yazdi ranks third contextually;
-UNOCCUPIED ranks fifth in the displayed Spratly reading. Display curation is
-not a primary-reading benchmark gain. Swedish ranks second in the retained
-delegation reading under its registered supplied-source study; its historical
-reference is unknown. The unsuccessful second focal input remains archived.
+The ten recovery studies are the positive cases from a fixed thirty-one-case
+development experiment: five whole-answer primary top-five recoveries, or ten
+when partial-meaning recoveries are included. Literal matching recovered one.
+These are model-reviewed development outcomes, not held-out benchmark accuracy,
+and not ten independently established factual entailments. The unsuccessful
+twenty-one cases remain in the experiment's denominator. The three fully
+source-supported cases in that cohort did not meet the recovery target.
+
+## Source And Graph Boundaries
 
 Ordinary evidence is source-day inclusive. CIB admits EARLIER/BOTH text,
-including the earlier origin edition; cables admit CONFIDENTIAL text and
-exclude the entire SECRET origin. The delegation study has its own exact
-registered edition. PDF inspection does not change recorded evidence policy.
-Identity and hierarchy assignments are retrospective resources.
+including the earlier origin edition. Iran and Vietnam admit CONFIDENTIAL text
+and exclude the entire SECRET origin. Every historical run retains its own
+explicit policy rather than inheriting a browser setting.
 
-The three corpus maps support source inspection, direct neighborhoods and
-saved navigation. A document handoff with no recorded graph hops is shown as
-such. Display navigation never becomes an invented historical relationship.
-All 37 saved paths across the five additional CIB examples' fourteen readings
-are zero-hop source handoffs. Richer source-bound KG retrieval routes remain
-an open architectural task; independent map navigation is not a substitute.
-Both original CIB releases are available through 6,018 PDF routes for 3,009
-documents. CIB has 28,201 observed Redacted Slots; the bound Iran/Vietnam map
-exports contain no observed mask markers. Twenty-seven Vietnam nodes have
-only NOFORN observations and no public own-source quotation.
+The visiting-delegation study uses its registered later-release source view
+through February 17, 1959, including its origin. Swedish is a source-derived
+suggestion; the withheld historical reference is unknown. The February 19
+Popov report remains outside that cutoff. The study is not scored as a known
+redaction recovery.
 
-The fixed 31-case development cohort has four whole-answer primary top-five
-recoveries; its shorter-window comparison has two. The half-cohort goal remains
-unmet. These are development diagnostics, not held-out benchmark accuracy.
-Aung Gyi is outside the current top ten and is not presented as a success.
+The Facts-to-evidence map shows the recorded associations between facts,
+selected sources and results. A new KG inspection follows the existing corpus
+map using exact source-observation anchors and eligible source connections.
+It is postselection inspection, not a reconstructed claim about the original
+retrieval execution. An excerpt without a compatible graph anchor remains a
+source handoff. Hierarchy navigation, membership and co-occurrence do not become
+factual evidence or manufactured graph hops.
 
-The PDF guide explains retrieval, local grammar, source rules, scoring and
-all fifteen cases. The code ZIP contains the recorded backend and viewing
-tools. Local saved viewing needs only this repository and Python's standard
-library; it does not import another research directory or call a model API.
+## Live Execution
 
-`site/release-manifest.json` pins the actual site, report, guide, ZIP and graph
-datasets. `release/approval_ref.json` selects its independently reviewed,
-manifest-bound diagnostic publication authorization. Older records are history,
-not active approvals. Deployment is complete only after Actions and direct
-live-byte/browser verification succeed.
+Live runs use the generic source-assessment workflow and the same workbench
+renderer. Planning, source assessment and the analyst digest use the model;
+source-policy checks, quotation replay, score calculation and ordering use
+deterministic code. Fixed model outputs replay deterministically; uncached
+model calls need not produce identical text. No saved-case or hidden-answer
+lookup is used. Budget-limited Live runs process at most two complete source
+pages and explicitly retain omitted material as unprocessed. This is not a
+claim that every historical run used the same page budget or engine version.
+
+GitHub Pages serves saved cases without credentials or model calls. Paid Live
+execution requires the separately authenticated local companion. No provider
+key, private session, password verifier or inference proxy is published.
+
+The release manifest pins the actual site, API index, original report, guide
+and code archive. Historical native execution pins remain unchanged. Deployment
+is verified separately from a successful Git push.

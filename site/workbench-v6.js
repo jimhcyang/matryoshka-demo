@@ -21,8 +21,14 @@ import {workbenchStudyTarget,linkWorkbenchStudyNavigation} from './workbench-stu
 import {nativeControllerWithholdingViews,controllerWithholdingEmptyText,renderControllerWithholding,renderControllerWithheldAudit} from './controller-withholding-ui.js';
 import {verifyProposalPool,corpusOnlyProposalExecution,preferredProposalReading,proposalSourceLabel,renderProposalOrder,renderSuppliedProposalTrace} from './proposal-pool.js';
 import {displayReadings,displayReadingId,sourceGraphHops,sourceLocation,appendDigestText} from './workbench-display.js';
-import {loadReviewedSourceMethod,renderReviewedSourceWorkspace,reviewedSourceSummary} from './workbench-reviewed-source.js';
+import {loadReviewedSourceMethod,renderReviewedSourceWorkspace,reviewedSourceSummary} from './workbench-reviewed-source.js?v=20261127-unified1';
 import {renderSavedSourceDigest} from './workbench-saved-digest.js';
+import {renderStandardSourceWorkspace} from './workbench-source-presentation.js';
+import {mountSourceAccountMap} from './workbench-source-map.js';
+import {mountEvidenceInspection} from './workbench-kg-inspection-host.js';
+import {loadRecoveryStudies,loadRecoveryStudy,renderRecoveryStudy,recoverySourcePacket} from './workbench-recovery-studies.js';
+import {renderLiveSourceWorkspace,liveSourceSummary,liveSourceInspectionBinding} from './workbench-live-source.js';
+import {renderRecoveryDigest} from './workbench-recovery-digests.js';
 await loadReaderCasing();
 const $ = selector => document.querySelector(selector);
 const list = value => Array.isArray(value) ? value : [];
@@ -120,7 +126,7 @@ const ARMS = {
   C:{key:"llm_local",name:"Local readings",origin:"Required assertions and local grammatical readings"}
 };
 for(const option of $("#arm-select").options)if(ARMS[option.value])option.textContent=ARMS[option.value].name;
-const STAGES = [["01","Input"],["02","Facts"],["03","Routes"],["04","Sources"],["05","Construction"],["06","Review"]];
+const STAGES = [["01","Input"],["02","Facts"],["03","Map"],["04","Evidence"],["05","Results"],["06","Summary"]];
 const GRAPH_SCOPE = "The full Corpus Map is separate from this input's evidence view. Ordinary map lookup does not inherit the input's date boundary or origin policy; a saved Guide Path carries its own case scope. Map context is not automatically eligible proof.";
 const state = {report:null,sourceReport:null,manifest:null,trace:null,reviewedSource:null,sourceMethodMode:'reviewed',catalog:null,casebook:null,casebookPending:"Loading the source-bound examples catalog...",filters:{corpus:"",task:""},row:null,saved:null,gateReview:null,home:false,arm:"A",reading:"",candidate:"",originalPath:0,stage:"01",reference:false,loading:false,pending:"",epoch:0,drawerEpoch:0,flow:null,paths:null,projection:null,compareReadings:false,reviewReading:"",independentReview:null,reviewEpoch:0};
 const conditionCache = new Map();
@@ -397,7 +403,8 @@ function fullGraphURL(corpus) { return "graph-full-v6.html?"+pinGraphQuery(new U
 function savePosition({push=false}={}) {
   const url=new URL(location.href);
   if(!state.home)url.searchParams.delete("view");
-  if(state.row)url.searchParams.set("case",state.row.case.case_id);else url.searchParams.delete("case");
+  if(state.recoveryRequestedId){url.searchParams.set('recovery',state.recoveryRequestedId);url.searchParams.delete('case');url.searchParams.delete('study');}
+  else{url.searchParams.delete('recovery');if(state.row)url.searchParams.set("case",state.row.case.case_id);else url.searchParams.delete("case");}
   url.searchParams.set("arm",state.arm);url.searchParams.set("stage",state.stage);
   if(state.reading)url.searchParams.set("reading",state.reading);else url.searchParams.delete("reading");
   if(state.candidate)url.searchParams.set("candidate",state.candidate);else url.searchParams.delete("candidate");
@@ -416,31 +423,40 @@ function stage(number,titleText,label,kind="") {
 }
 function showError(message) { $("#page-error").hidden=false;$("#page-error").textContent=message; }
 function clearError() { $("#page-error").hidden=true;$("#page-error").textContent=""; }
-function destroyVisuals({disconnectCitations=true}={}) { state.flow?.destroy();state.paths?.destroy();state.flow=null;state.paths=null;if(disconnectCitations)citationObserver.disconnect(); }
+function destroyVisuals({disconnectCitations=true}={}) { state.standardPanels?.destroy();state.standardPanels=null;state.flow?.destroy();state.paths?.destroy();state.flow=null;state.paths=null;if(disconnectCitations)citationObserver.disconnect(); }
 function pendingRecord(value) { return value&&["PENDING","NOT_RUN","UNAVAILABLE","NOT_PUBLISHED","PREPARING"].includes(String(value.status||value.execution_status||"").toUpperCase()); }
 function recordedFailure(value){return !!value&&(!!value.failure||!!value.error||/FAIL|ERROR|BLOCKED|PARSE/i.test(String(value.execution_status||value.status||"")));}
 function publicationNote(value) { return value?.provenance_notice||value?.release_note||value?.notice||""; }
 function disposeDrawerPDFs(){for(const host of $('#detail-body').querySelectorAll('[data-testid="origin-pdf-pair"]'))host.disposeWorkbenchPDFs?.();}
-function closeDrawer() { sourceRequest?.abort();disposeDrawerPDFs();state.drawerEpoch++;if($("#detail-drawer").open){viewportAnchor.cancel();$("#detail-drawer").close();} }
+function closeDrawer() { state.inspectionRequest?.abort();state.inspectionMount?.destroy();state.inspectionMount=null;sourceRequest?.abort();disposeDrawerPDFs();state.drawerEpoch++;if($("#detail-drawer").open){viewportAnchor.cancel();$("#detail-drawer").close();} }
 function openDrawer(titleText,kicker,body,back) {
   viewportAnchor.cancel();
+  state.inspectionRequest?.abort();state.inspectionMount?.destroy();state.inspectionMount=null;
   sourceRequest?.abort();state.drawerEpoch++;
   $("#detail-title").textContent=titleText;$("#detail-kicker").textContent=kicker;
   disposeDrawerPDFs();
   $("#detail-body").replaceChildren(body);
   $("#detail-drawer").classList.toggle('workbench-origin-drawer',!!body.querySelector?.('[data-testid="origin-document"]'));
+  $("#detail-drawer").classList.toggle('workbench-kg-drawer',body.dataset?.testid==='workbench-kg-inspection');
   $("#detail-back").hidden=!back;$("#detail-back").onclick=back||null;
   if(!$("#detail-drawer").open)$("#detail-drawer").showModal();
   $("#detail-close").focus({preventScroll:true});return state.drawerEpoch;
 }
 $("#detail-close").addEventListener("click",closeDrawer);
 $("#detail-drawer").addEventListener("cancel",disposeDrawerPDFs);
-$("#detail-drawer").addEventListener("close",()=>{if(!$("#detail-drawer").open){sourceRequest?.abort();state.drawerEpoch++;}});
+$("#detail-drawer").addEventListener("close",()=>{if(!$("#detail-drawer").open){state.inspectionRequest?.abort();state.inspectionMount?.destroy();state.inspectionMount=null;sourceRequest?.abort();state.drawerEpoch++;}});
 
 function visibleCases() {
-  return filterCasebook(state.casebook,state.filters).map(value=>value.row);
+  const rows=filterCasebook(state.casebook,state.filters).map(value=>value.row);
+  if(!livePacket&&state.filters.task==='redaction'&&['','cib'].includes(state.filters.corpus))rows.push(...list(state.recoveryRows));
+  return rows;
 }
 function renderRail() {
+  let studies=$('#recovery-studies-shortcut');
+  if(!studies&&state.recoveryRows?.length){studies=button('CIB recovery studies / '+state.recoveryRows.length,()=>{
+    state.filters.corpus='cib';state.filters.task='redaction';renderRail();savePosition();
+  },'quiet',{'data-testid':'recovery-studies-shortcut',id:'recovery-studies-shortcut'});$('#case-list').before(studies);}
+  if(studies)studies.hidden=!!livePacket;
   for(const b of document.querySelectorAll('.filter-buttons [data-corpus]'))b.setAttribute('aria-pressed',String(b.dataset.corpus===state.filters.corpus));
   for(const b of document.querySelectorAll('.filter-buttons [data-task]'))b.setAttribute('aria-pressed',String(casebookTask(b.dataset.task)===casebookTask(state.filters.task)));
   const rows=visibleCases();$("#case-count").textContent=rows.length+" inputs";
@@ -451,14 +467,14 @@ function renderRail() {
   notice.textContent=state.casebookPending||shortage||[partial,state.casebook?.notice].filter(Boolean).join(' ');notice.hidden=!notice.textContent;
   $("#case-list").replaceChildren(...rows.map(row=>{
     const b=button("",()=>chooseCase(row),"case-button",{"aria-current":String(state.row?.case.case_id===row.case.case_id),"data-case":row.case.case_id,"aria-label":`${CORPORA[row.case.corpus]} / ${TASKS[row.case.task]}. ${presentationTitle(row)}`,'aria-describedby':'case-status-'+row.case.case_id});
-    const status=railStatus(row);
+    const status=row.recovery_metadata?{badge:'RECOVERY STUDY',tone:'context',basis:'historical-contextual-study',detail:'Recorded source-derived suggestions.'}:railStatus(row);
     b.append(el("small",`${row.case.corpus==='cib'?'CIB':CORPORA[row.case.corpus]} / ${TASKS[row.case.task]}`,{class:"case-kind"}),el("strong",presentationTitle(row),{"data-testid":"case-presentation-title",title:row.case.query}),el("span",status?.badge||"NOT LOADED",{id:'case-status-'+row.case.case_id,class:"case-evidence-status","data-testid":"case-evidence-status","data-tone":status?.tone||"unresolved",'data-status-basis':status?.basis||'not-loaded',title:status?.detail||'This method has not been loaded.'}),el("small",`${row.case.document_id} / ${row.case.date}`));const kind=queryKindBadge(row);if(kind)b.append(kind);
     const source=[...list(state.casebook?.primary),...list(state.casebook?.special_redactions)].find(entry=>entry.case_id===row.case.case_id&&entry.source_label);
     if(source)b.append(el('small',source.source_label,{class:'case-engine-label','data-testid':'case-engine-label'}));
     if(presentationCaveatEntries(row).length){const caveat=badge("Scope caveat","scope-caveat");caveat.dataset.testid="case-scope-caveat";caveat.title="Open this input to read its published scope limit beside the local verdict.";b.append(caveat);}return b;
   }));
   if(!rows.length)$("#case-list").append(note(state.casebookPending?"The curated examples catalog is not available yet. Pinned case links still open their saved records.":"No published inputs match these filters.","empty"));
-  queueMicrotask(()=>loadRailMetadata(rows,state.arm));
+  queueMicrotask(()=>loadRailMetadata(rows.filter(row=>!row.recovery_metadata),state.arm));
 }
 function railKey(row,arm=state.arm){return `${state.report?.run_id}/${row.case.case_id}/${ARMS[arm].key}`;}
 function railStatus(row,arm=state.arm){
@@ -551,12 +567,14 @@ function nativeFlow() { return state.saved?.result?.flow||state.saved?.flow_v3||
 function contributor(item) { return state.projection?.candidates?.find(c=>c.id===item?.id)||nativeFlow()?.candidate_flows?.[item?.id]||state.saved?.result?.candidate_flows?.[item?.id]; }
 
 async function chooseCase(row,{push=true,reading,candidate,scroll=false}={}) {
+  if(row.recovery_metadata)return chooseRecoveryStudy(row.recovery_metadata.case_id,{push,reading});
+  state.recoveryStudy=null;state.recoveryRequestedId=null;
   if(livePacket){
     if(row.case.case_id!==livePacket.row.case.case_id)throw Error('A Live run cannot select a saved case.');
     state.reading=reading||state.reading;state.candidate=candidate||state.candidate;
     renderWorkspace();renderRail();savePosition({push});await hydrateFlow(state.epoch);return;
   }
-  const epoch=++state.epoch;request?.abort();request=new AbortController();destroyVisuals();state.projection=null;state.trace=null;state.reviewedSource=null;state.sourceMethodMode='reviewed';clearIndependentReview();
+  const epoch=++state.epoch;request?.abort();request=new AbortController();destroyVisuals();state.projection=null;state.trace=null;state.reviewedSource=null;state.sourceReading=reading||'';state.sourceMethodMode='reviewed';clearIndependentReview();
   state.home=false;state.row=row;state.saved=null;state.gateReview=null;state.loading=true;state.pending="";state.reference=false;state.originalPath=0;state.reading=reading??"";state.candidate=candidate??"";state.compareReadings=false;state.reviewReading="";
   for(const option of $("#arm-select").options){const available=!isCurrentPublication()||!!row.configurations?.[ARMS[option.value]?.key];option.disabled=!available;option.textContent=ARMS[option.value].name+(available?"":" / not published");}
   $('.workspace-toolbar').hidden=Array.from($('#arm-select').options).filter(option=>!option.disabled).length<2;
@@ -680,6 +698,7 @@ function renderWorkspace() {
   $(".workspace-toolbar").hidden=state.home||!!activeReviewedSource()||state.readySingleMethod===true||Array.from($('#arm-select').options).filter(option=>!option.disabled).length<2;
   if(state.home){renderHome();return;}
   if(!state.row){host.append(note(state.casebookPending||"Choose a saved input from the catalog.","empty"));return;}
+  if(state.recoveryStudy){renderRecoveryWorkspace(host);return;}
   const c=state.row.case;
   const nav=el("nav",null,{class:"workflow-nav","aria-label":"Pipeline stages"});
   for(const [number,name] of STAGES){const a=el("a",null,{href:"#stage-"+number,"data-stage":number});a.append(el("strong",number,{class:"workflow-step-number"}),el("span",name));if(number===state.stage)a.setAttribute("aria-current","step");a.onclick=e=>{e.preventDefault();stagePosition(number);};nav.append(a);}host.append(nav);
@@ -687,19 +706,41 @@ function renderWorkspace() {
   workflow.append(renderQuestion());
   if(state.loading){workflow.append(el("p",`Loading saved results for arm ${state.arm}. Source verification may take a moment.`,{class:"empty",role:"status","aria-live":"polite","data-testid":"condition-loading"}));return;}
   if(!state.saved){workflow.append(note(state.pending||"No completed result is currently loaded for this selected arm. No archived result is substituted.","empty"));return;}
+  if(livePacket?.source_method_handle){
+    const handle=livePacket.source_method_handle,epoch=state.epoch;
+    const panels=renderLiveSourceWorkspace(handle,{stage,formatText:readable,
+      selectedReadingId:state.reading||undefined,onSource:sourceDrawer,onKG:openEvidenceInspection,
+      assertCurrent:()=>epoch===state.epoch&&livePacket.source_method_handle===handle,
+      onDetails:value=>sourcePresentationDetails({...value,details:{...value.details,completedInput:value.details?.completed_input}}),
+      onReadingChange:id=>viewportAnchor.run(()=>{state.reading=id;renderWorkspace();savePosition();}),
+      onMapMount:(mapHost,data)=>{
+        state.flow=mountSourceAccountMap(mapHost,{data,onSource:sourceDrawer,onDetails:sourcePresentationDetails,formatText:readable,
+          assertCurrent:()=>{if(epoch!==state.epoch)throw new DOMException('Live selection changed','AbortError');}});
+      }});
+    state.standardPanels=panels;workflow.append(...panels);host.setAttribute('aria-busy','false');return;
+  }
   if(activeReviewedSource()){
     const digestRow=list(state.sourceReport?.cases).find(row=>row.case.case_id===state.row.case.case_id);
     const digestOptions={row:digestRow,record:state.saved,signal:request.signal,
       reportRef:{sha256:publicationByteHashes.get(state.sourceReport)},
       endpoint:localURL('/api/current/analyst-digest?'+caseQuery()).href,
       verified:(url,signal)=>globalThis.PublicReplay.verified(url,signal),base:location.href};
-    const panels=renderReviewedSourceWorkspace(activeReviewedSource(),{stage,formatText:readable,
+    const panels=renderStandardSourceWorkspace(activeReviewedSource(),{record:state.saved,stage,formatText:readable,
+      selectedReadingId:state.sourceReading,
       policyText:sourceScopeText(),onSource:proof=>sourceDrawer(proof),
+      onKG:proof=>openEvidenceInspection(proof),
       onOrigin:()=>$('#stage-01 [data-testid=origin-open]')?.click(),
       onBaseline:()=>selectSourceMethod('structural'),
-      onDetails:body=>openDrawer('Assessment details','Model-reviewed source account',body),
+      onDetails:sourcePresentationDetails,
+      onReadingChange:id=>viewportAnchor.run(()=>{state.sourceReading=id;state.reading=id;state.candidate='';renderWorkspace();savePosition();}),
+      onMapMount:(mapHost,data)=>{
+        state.flow?.destroy();
+        state.flow=mountSourceAccountMap(mapHost,{data,formatText:readable,onSource:sourceDrawer,
+          onDetails:sourcePresentationDetails,assertCurrent:()=>reviewedSourceSummary(activeReviewedSource())});
+      },
       renderVerifiedDigest:state.row.reviewed_source_digest||state.row.source_realized_digest
         ?context=>renderSavedSourceDigest(context,digestOptions):null});
+    state.standardPanels=panels;
     const sourceNotes=presentationCaveats(state.row);if(sourceNotes)panels.at(-1).querySelector('.stage-body').append(sourceNotes);
     workflow.append(...panels);
     host.setAttribute('aria-busy','false');return;
@@ -711,6 +752,87 @@ function renderWorkspace() {
   workflow.append(renderVerdictStrip());
   workflow.append(renderPlan(),renderDiffusion(),renderPathsStage(),renderResultsStage(),renderFindings());
   host.setAttribute("aria-busy","false");
+}
+
+function sourcePresentationDetails(value={}){
+  const details=value.details||value,body=box();
+  if(details.completedInput)body.append(heading('Completed input'),note(readable(details.completedInput)));
+  if(details.originalPhrase)body.append(heading('Original source wording'),el('blockquote',details.originalPhrase,{class:'cue'}));
+  if(details.transformation)body.append(note(typeof details.transformation==='string'?details.transformation:details.transformation.description||JSON.stringify(details.transformation)));
+  if(details.text||value.text)body.append(note(readable(details.text||value.text)));
+  if(details.label||value.label)body.append(note(details.label||value.label));
+  if(details.qualification)body.append(button('Inspect complete source context',()=>sourceDrawer(details.qualification),'quiet'));
+  if(details.proof)body.append(sourceButton(details.proof));
+  const fields=details.facets||{};
+  for(const [name,field]of Object.entries(fields))if(field.status!=='NOT_REQUESTED'){
+    body.append(heading(name.replaceAll('_',' ')),note(field.status.replaceAll('_',' ')));
+    if(field.reason)body.append(note(field.reason));
+  }
+  if(!body.childNodes.length)body.append(note('Select a source quotation above to inspect the recorded evidence.'));
+  openDrawer('Recorded assessment','Evidence and checks',body);
+}
+
+async function chooseRecoveryStudy(id,{push=true,reading=''}={}){
+  if(livePacket)throw Error('A Live execution cannot substitute a saved recovery study.');
+  const epoch=++state.epoch;request?.abort();request=new AbortController();destroyVisuals();closeDrawer();clearError();
+  state.recoveryStudy=null;state.recoveryRequestedId=id;state.reviewedSource=null;state.row=null;state.saved=null;state.home=false;
+  state.loading=true;state.sourceReading=reading;state.reading=reading;state.trace=null;state.candidate='';renderWorkspace();savePosition({push});
+  $('#page-state').textContent='Loading the recorded recovery study...';
+  try{
+    const handle=await loadRecoveryStudy(id,{catalog:state.recoveryCatalog,signal:request.signal,
+      assertSelectionCurrent:()=>{if(epoch!==state.epoch)throw new DOMException('Study changed','AbortError');}});
+    if(epoch!==state.epoch)return;
+    state.recoveryStudy=handle;state.row={case:handle.case,recovery_metadata:handle.metadata,resource_binding:handle.resourceBinding,presentation_title:handle.metadata.title};
+    state.saved=handle.packet;state.loading=false;state.reading=reading||handle.primaryReadingId;
+    renderRail();renderWorkspace();savePosition();$('#page-state').textContent='';
+  }catch(error){if(error.name!=='AbortError'&&epoch===state.epoch){state.loading=false;showError(error.message);}}
+}
+
+function renderRecoveryWorkspace(host){
+  const handle=state.recoveryStudy,epoch=state.epoch,workflow=el('div',null,{class:'workflow','data-recovery-study':handle.case.case_id});
+  const nav=el('nav',null,{class:'workflow-nav','aria-label':'Pipeline stages'});
+  for(const [number,label]of STAGES){const item=el('a',null,{href:'#stage-'+number});item.append(el('strong',number,{class:'workflow-step-number'}),el('span',label));item.onclick=e=>{e.preventDefault();stagePosition(number);};nav.append(item);}
+  host.append(nav,workflow);$('.workspace-toolbar').hidden=true;
+  const onSource=(proof,packet)=>recoverySourceDrawer(proof,packet||recoverySourcePacket(handle,proof));
+  const panels=renderRecoveryStudy(handle,{stage,formatText:readable,selectedReadingId:state.reading,
+    renderDigest:(digestHost,context)=>renderRecoveryDigest(digestHost,context,{signal:request.signal}),
+    assertSelectionCurrent:()=>{if(state.recoveryStudy!==handle||state.epoch!==epoch)throw new DOMException('Study changed','AbortError');},
+    onSource,onKG:(proof,inspection)=>openRecoveryInspection(proof,inspection,onSource),onOrigin:recoveryOriginDrawer,
+    onReadingChange:id=>viewportAnchor.run(()=>{state.reading=id;state.sourceReading=id;renderWorkspace();savePosition();}),
+    onDetails:value=>sourcePresentationDetails({...value,details:{...value.details,qualification:null}}),
+    onMapMount:(mapHost,data)=>{state.flow=mountSourceAccountMap(mapHost,{data,onSource,onDetails:sourcePresentationDetails,
+      formatText:readable,assertCurrent:()=>{if(state.recoveryStudy!==handle)throw new DOMException('Study changed','AbortError');}});},
+    onError:error=>showError(error.message)});
+  state.standardPanels=panels;const input=panels.find(panel=>panel.id==='stage-01');
+  workflow.append(input,...panels.filter(panel=>panel!==input));host.setAttribute('aria-busy','false');
+}
+
+function recoverySourceDrawer(proof,packet){
+  const page=packet.page,body=box(fields([['Document',page.document_id,true],['Date',page.date]]));
+  const sections=state.recoveryStudy.sourcePages.filter(p=>p.document_id===page.document_id);
+  for(const p of sections){const section=el('section',null,{'data-testid':'source-document','data-source-id':p.id});
+    section.append(heading('Page '+(p.earlier_page||p.source_page||'')),highlightedText(p.text,p.id===proof.canonical_page_id?[proof]:[],{'data-testid':'source-page-text'}));body.append(section);}
+  const pdf=el('section',null,{'data-testid':'origin-pdf-pair'});body.append(pdf);
+  openDrawer('Source',page.document_id+' / '+page.date,body);
+  void cibPDFPair({page,proof}).then(links=>showWorkbenchPDFs(pdf,links)).catch(error=>pdf.append(note(error.message)));
+  body.querySelector('mark')?.scrollIntoView({block:'center',behavior:'smooth'});
+}
+
+function recoveryOriginDrawer(origin){
+  const body=box(fields([['Document',origin.case.document_id,true],['Date',origin.case.date]])),pdf=el('section',null,{'data-testid':'origin-pdf-pair'});
+  for(const page of origin.earlier_masked_pages){const section=el('section',null,{'data-testid':'origin-document'});
+    section.append(heading('Earlier release / page '+(page.physical_page||'')),highlightedText(page.text,page.anchors));body.append(section);}
+  body.append(pdf);openDrawer('Origin',origin.case.document_id+' / '+origin.case.date,body);
+  const page={document_id:origin.case.document_id,earlier_page:origin.pdfs.earlier?.physical_page,later_page:origin.pdfs.later?.physical_page};
+  void cibPDFPair({page}).then(links=>{for(const item of links)if(item.sha256!==origin.pdfs[item.release].ref.sha256)throw Error('The origin PDF binding differs.');return showWorkbenchPDFs(pdf,links);}).catch(error=>pdf.append(note(error.message)));
+}
+
+async function openRecoveryInspection(proof,options,onSource){
+  const body=box('workbench-kg-inspection');body.dataset.testid='workbench-kg-inspection';
+  const epoch=openDrawer('KG Navigator','Selected source',body),controller=new AbortController();state.inspectionRequest=controller;
+  try{state.inspectionMount=await mountEvidenceInspection({...options,host:body,signal:controller.signal,onSource,
+    sourceIndex:{url:'./data/source-inspection-v1/cib/manifest.json',content_sha256:SOURCE_INSPECTION_PINS.cib}});}
+  catch(error){if(error.name!=='AbortError'&&state.drawerEpoch===epoch)body.replaceChildren(note(error.message,'error-card'),button('Inspect source',()=>onSource(proof)));}
 }
 
 function renderHome() {
@@ -1224,6 +1346,7 @@ function quoteCard(proof){
     if(graphPaths.length&&!livePacket){const hops=sourceGraphHops(state.trace,graphPaths[0]);bar.append(button('View on KG ('+hops+' source-graph hops)',()=>openSelectedEvidenceKG(proof,graphPaths),'quote-kg',{'data-testid':'quote-view-on-kg','data-source-graph-hops':String(hops)}));}
     b.dataset.tone=/^(FOR|SUPPORT|SUPPORTED)$/.test(path.direction)?'support':/^(AGAINST|OPPOSE|OPPOSED|COUNTER|COUNTEREVIDENCE)$/.test(path.direction)?'oppose':'context';
   }
+  if(!bar.querySelector('.quote-kg'))bar.append(button('View on KG',()=>openEvidenceInspection(proof),'quote-kg',{'data-testid':'quote-view-on-kg','data-route-mode':'POSTSELECTION_SOURCE_INSPECTION'}));
   const text=button('',()=>sourceDrawer(proof),'excerpt-text',{"data-testid":"used-source-quote","data-source-id":proof.canonical_page_id,"data-document-id":proof.document_id,"data-digest-ids":proof.digest_ids?.join(' '),'aria-label':'Inspect source'});
   text.append(el('blockquote',readable(proof.text),{'data-original-text':proof.text}),el('footer',sourceLocation({...proof,corpus:proof.corpus||state.row.case.corpus})));
   b.append(bar,text);return b;
@@ -1238,6 +1361,32 @@ async function openSelectedEvidenceKG(proof,paths){
       route_index:siblings.findIndex(path=>path.id===savedPath.id),proof});
     return;
   }
+}
+const SOURCE_INSPECTION_PINS={cib:'006f944a08c38fa10d898dc19a28c706e4cf3a01b2fba99afb842a1d05385b15',
+  iran:'fd35f3aa6131edd0b4027ac4fbe23249ead78b0a6b97c71654ed8b7b681b7260',
+  vietnam:'d7ab02e78974462334e9c6d5db6bc1b5db119fd940b72e829906d25bf9347c3b'};
+async function openEvidenceInspection(proof){
+  const c=state.row.case,record=state.saved,epoch=state.epoch,binding=livePacket?.source_method_handle
+    ?liveSourceInspectionBinding(livePacket.source_method_handle):state.row.resource_binding||currentBinding(c.case_id,c.corpus);
+  const scope=selectedSourceScope(c),policy=scope.source_view_policy,body=box('workbench-kg-inspection');body.dataset.testid='workbench-kg-inspection';
+  const drawerEpoch=openDrawer('KG Navigator','Selected evidence',body),controller=new AbortController();state.inspectionRequest=controller;
+  const assertCurrent=()=>{if(epoch!==state.epoch||record!==state.saved||drawerEpoch!==state.drawerEpoch||!$('#detail-drawer').open)throw new DOMException('Inspection changed','AbortError');};
+  try{
+    state.inspectionMount=await mountEvidenceInspection({host:body,caseInfo:c,config:ARMS[state.arm].key,binding,
+      facts:list(record.plan?.atoms),proof,sourcePolicy:policy,signal:controller.signal,assertCurrent,
+      sourceIndex:policy.id==='later_release_inclusive'?null:
+        {url:'./data/source-inspection-v1/'+c.corpus+'/manifest.json',content_sha256:SOURCE_INSPECTION_PINS[c.corpus]},
+      getSourcePage:async selected=>{
+        const response=await getJSON('/api/current/source-v6?'+caseQuery({source_id:selected.canonical_page_id}),{signal:controller.signal});assertCurrent();
+        return livePacket?{...response,resource_binding:binding,source_view_policy:policy,cutoff:c.date,whole_origin_excluded:scope.whole_origin_excluded}:response;
+      },
+      getNode:async id=>{
+        if(livePacket)return null;
+        const path='/api/current/node-v6?'+caseQuery({node_id:id}),url=localURL(path);
+        if(!globalThis.PublicReplay.hasSaved(url))return null;
+        return getJSON(path,{signal:controller.signal});
+      },onSource:sourceDrawer});
+  }catch(error){if(error.name!=='AbortError'&&drawerEpoch===state.drawerEpoch){body.replaceChildren(note(error.message,'error-card'),button('Inspect selected source',()=>sourceDrawer(proof)));}}
 }
 // END_SELECTED_EVIDENCE_KG
 function renderDiffusion(){
@@ -1810,7 +1959,7 @@ function renderTerminalScores(host=$('#terminal-decision-scores')){
 }
 const digestCache=new Map();
 function renderFindings(){
-  const s=stage("06","Analyst summary","Post-run summary"),host=el("div",null,{class:"analyst-digest","data-testid":"analyst-digest","data-status":"pending"});
+  const s=stage("06","Analyst Summary","Post-run summary"),host=el("div",null,{class:"analyst-digest","data-testid":"analyst-digest","data-status":"pending"});
   host.append(el("p","Source-bound analyst digest pending.",{role:"status"}));
   s.body.append(host,button("Evidence review and detailed checks",()=>{const audit=renderFindingsAudit();openDrawer("Evidence review","Recorded criteria and separate post-run opinions",audit.querySelector(".stage-body"));}));
   queueMicrotask(()=>loadAnalystDigest(host,state.epoch,state.reading));return s.outer;
@@ -3049,6 +3198,9 @@ async function navigateFromURL({push=false,scroll=true}={}) {
   $("#arm-select").value=state.arm;state.stage=/^0[1-6]$/.test(params.get("stage")||"")?params.get("stage"):"01";
   if(params.get("view")==="home"){state.epoch++;request?.abort();destroyVisuals();state.projection=null;state.row=null;state.saved=null;state.home=true;state.loading=false;closeDrawer();clearError();renderRail();renderWorkspace();return;}
   state.home=false;
+  const recovery=params.get('recovery');
+  if(recovery!=null){if(params.getAll('recovery').length!==1||params.has('case')||params.has('study'))throw Error('Select one saved input or one recovery study.');
+    await chooseRecoveryStudy(recovery,{push,reading:params.get('reading')||''});return;}
   const study=params.get('study');
   let id=params.get("case");
   if(study!=null){
@@ -3077,6 +3229,12 @@ async function mountLiveWorkbench(packet){
   [narrativeUI,narrativeAccess,narrativeEndpoints]=await Promise.all([import('./narrative-trace-v1.js'),import('./narrative-attempts-v1.js'),import('./narrative-endpoint-v1.js')]);
   state.casebook={primary:[{case_id:packet.row.case.case_id,corpus:packet.row.case.corpus,task:packet.row.case.task,row:packet.row}],special_redactions:[],backgrounds:{},selection_scope:'live',completed_primary_count:1};
   state.readySingleMethod=true;$('.workspace-toolbar').hidden=true;
+  if(packet.source_method_handle){
+    state.reading=packet.source_method_handle.method.selected_reading_id||'';state.reviewedSource=null;
+    state.trace=packet.source_method_handle.method.trace;state.candidate='';
+    renderWorkspace();renderRail();savePosition();$('#casebook-notice').hidden=true;
+    $('#page-state').textContent='';return;
+  }
   await prepareControllerAudit(state.saved,state.row.case);
   await prepareInputContext(state.saved,state.row.case);
   await prepareProposalPool(state.saved,state.row.case);
@@ -3092,7 +3250,7 @@ try{
   const liveRun=new URLSearchParams(location.search).get('live_run');
   if(liveRun){
     $('#page-state').textContent='Receiving the authenticated Live execution...';
-    const {loadWorkbenchRun}=await import('./live-result-adapter.js');
+    const {loadWorkbenchRun}=await import('./live-result-adapter.js?v=20261127-unified1');
     await mountLiveWorkbench(await loadWorkbenchRun(liveRun));
   }else{
   let selection=null;
@@ -3107,7 +3265,7 @@ try{
     narrativeAccess.validatePrivacyContract(state.report);
     verifiedCurrentPublications.add(state.report);state.catalog=null;
     const sheet=el('link',null,{rel:'stylesheet',href:'./narrative-trace-v1.css'});
-    document.head.insertBefore(sheet,document.querySelector('link[href="workbench-v6.css"]'));
+    document.head.insertBefore(sheet,document.querySelector('link[href^="workbench-v6.css"]'));
   }else if(isCurrentPublication()){
     const health=await getJSON('/api/health'),ref=health.report_ref;
     const staticPublication=health.static_publication===true;
@@ -3133,6 +3291,11 @@ try{
     catch(error){state.studyPublication={caseIds:[],error:error.message};}
   }
   await loadCasebook();
+  try{
+    state.recoveryCatalog=await loadRecoveryStudies();
+    state.recoveryRows=state.recoveryCatalog.cases.map(metadata=>({recovery_metadata:metadata,presentation_title:metadata.title,
+      case:{case_id:metadata.case_id,corpus:'cib',task:'redaction',date:metadata.date,document_id:metadata.document_id,query:''}}));
+  }catch(error){state.recoveryRows=[];state.recoveryCatalogError=error.message;}
   linkWorkbenchStudyNavigation();
   await navigateFromURL();
   }

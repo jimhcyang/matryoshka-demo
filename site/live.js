@@ -1,8 +1,9 @@
-import {LiveClient, credentialLike, liveRetrievalSummary, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js';
-import {LiveResultHistory} from './live-history.js';
+import {LiveClient, credentialLike, liveRetrievalSummary, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js?v=20261127-unified1';
+import {LiveResultHistory} from './live-history.js?v=20261127-unified1';
 import {displayedScope, loadCorpusScopes, requestScope, validateCorpusScopes} from './live-scope-controls.js';
 import {computeDecisionScores, formatDecisionScore, EVIDENCE_SCORE_VERSION, POINTS_SCORE_VERSION, SOURCE_POINTS_VERSION} from './decision-scores.js';
 import {renderTerminalScoreCards, terminalDocumentCounts} from './workbench-visuals.js';
+import {liveSourceSummary,normalizeLiveSourceMethod} from './workbench-live-source.js';
 
 const $ = selector => document.querySelector(selector);
 const terminal = new Set(['completed', 'failed', 'cancelled', 'timed_out', 'resource_limited']);
@@ -18,6 +19,7 @@ let inlineCleanup = null, inlineEpoch = 0, busy = false;
 const localHistory = new LiveResultHistory();
 const configuredBackend = $('meta[name="live-backend"]')?.content || '';
 $('#backend').value = configuredBackend || (['127.0.0.1', 'localhost'].includes(location.hostname) ? `${location.origin}/live-api/` : '');
+$('#local-companion').hidden=['127.0.0.1','localhost'].includes(location.hostname);
 let scopeMetadata = null;
 function updateCorpusDate(reset = false) {
   const cib = $('#corpus').value === 'cib';
@@ -146,7 +148,7 @@ function openInlineWorkbench(value) {
       const doc = frame.contentDocument;
       if (!doc || frame.contentWindow.location.origin !== location.origin) return;
       if (doc.querySelector('#page-error:not([hidden])')) { failed(); return; }
-      if (doc.querySelector('#case-view[aria-busy="false"] [data-testid="compact-verdict"]') && doc.querySelectorAll('.workflow > .stage').length === 6) {
+      if (doc.querySelector('#case-view[aria-busy="false"] [data-testid="compact-verdict"],#case-view[aria-busy="false"] [data-testid="standard-summary"]') && doc.querySelectorAll('.workflow > .stage').length === 6) {
         stop();
         for (const id of ['app-navigation', 'examples-toggle']) {
           const element = doc.getElementById(id); if (element) { element.hidden = true; element.style.display = 'none'; }
@@ -157,7 +159,7 @@ function openInlineWorkbench(value) {
         doc.querySelector('.workbench-shell')?.classList.remove('examples-open');
         doc.querySelector('#examples-rail')?.classList.remove('is-open');
         doc.documentElement.dataset.liveEmbedded = 'true';
-        doc.querySelector('[data-testid="compact-verdict"]')?.scrollIntoView({block: 'start'});
+        doc.querySelector('[data-testid="compact-verdict"],[data-testid="standard-summary"]')?.scrollIntoView({block: 'start'});
         const drawer = doc.getElementById('detail-drawer');
         if (drawer) {
           // An embedded modal must remain below the outer page's fixed navigation.
@@ -427,6 +429,11 @@ export function compactScoreOverview(record, scores = computeDecisionScores(reco
     candidateId: candidate?.id, fill: candidate?.fill, values: card || null};
 }
 export function renderScores(value) {
+  if(value.native?.version==='private-live-source-intake/1'){
+    const summary=liveSourceSummary(value);$('#local-verdict').hidden=false;$('#verdict-title').textContent=summary.title;
+    $('#local-verdict').dataset.tone=summary.tone;$('#verdict-detail').textContent='Facts, selected sources, candidate scores and the analyst summary are shown below.';
+    $('#score-section').hidden=true;$('#decision-scores').replaceChildren();return;
+  }
   const record = value.condition, fixture = value.execution_kind === 'fixture';
   const nativeStatus = record.local_decisions_v65?.overall?.status || record.result?.status || 'UNRESOLVED';
   const retrieval = liveRetrievalSummary(value);
@@ -520,7 +527,8 @@ async function renderResult(value, {stored = false, expectedEpoch = null} = {}) 
   $('#run-panel').hidden = false;
   $('#result').hidden = false;
   const retrieval = liveRetrievalSummary(value);
-  $('#result-status').textContent = retrieval.noCandidate ? 'No candidate passed' : value.native.result.status || 'Completed';
+  const sourceMethod=value.native.version==='private-live-source-intake/1'?value.condition.source_method:null;
+  $('#result-status').textContent = sourceMethod?liveSourceSummary(value).title:retrieval.noCandidate ? 'No candidate passed' : value.native.result.status || 'Completed';
   $('#result-kind').textContent = value.execution_kind === 'fixture' ? 'FIXTURE ONLY. No historical inference, source support or paid calls.' : stored ? 'Reopened verified result. No new analysis or model call.' : value.receipt.execution_cache_hit ? 'Verified result reused for the same input and resources.' : 'New Live analysis complete.';
   if (value.execution_kind !== 'fixture') $('#result-kind').textContent += ` ${retrieval.text}`;
   const decisions = [];
@@ -529,16 +537,16 @@ async function renderResult(value, {stored = false, expectedEpoch = null} = {}) 
     evidence_backed_suggestion:'Evidence-backed suggestion',partial_grounding:'Partial evidence',
     exploratory_contextual:'Contextual suggestion',incompatible_not_viable:'Not compatible',
     CONFLICTED:'Mixed evidence'}[value] || String(value || 'Unresolved').replaceAll('_',' ').toLowerCase());
-  for (const atom of value.native.result.atoms || []) {
+  for (const atom of (sourceMethod||value.native.result).atoms || []) {
     const item = node('div', null, 'decision');
     item.append(node('strong', `${decisionName(atom.status || atom.criterion_state)}: `), node('span', atom.text));
     decisions.push(item);
   }
-  for (const reading of value.native.result.readings || []) {
+  for (const reading of (sourceMethod||value.native.result).readings || []) {
     decisions.push(node('h3', reading.reading?.label || reading.reading?.id || 'Recorded reading'));
     for (const candidate of reading.candidates || []) {
       const item = node('div', null, 'decision');
-      item.append(node('strong', `${candidate.rank}. ${decisionName(candidate.local_decision?.status)}: `), node('span', candidate.fill));
+      item.append(node('strong', `${candidate.rank}. ${sourceMethod?(candidate.source_supported_fill_approved?'Evidence-backed':'Contextual'):decisionName(candidate.local_decision?.status)}: `), node('span', candidate.fill));
       decisions.push(item);
     }
   }
@@ -551,7 +559,8 @@ async function renderResult(value, {stored = false, expectedEpoch = null} = {}) 
     'Source view': value.request.corpus === 'cib' ? 'Permitted earlier-release evidence' : 'Permitted CONFIDENTIAL evidence'};
   $('#source-scope').replaceChildren(...Object.entries(visibleScope).flatMap(([key, val]) => [node('dt', key), node('dd', val)]));
   const evidence = [];
-  for (const item of value.selected_evidence) for (const ref of item.source_refs || []) {
+  const selectedEvidence=sourceMethod?normalizeLiveSourceMethod(value).proofs.map(proof=>({direction:'CONTEXT',source_refs:[proof]})):value.selected_evidence;
+  for (const item of selectedEvidence) for (const ref of item.source_refs || []) {
     const card = node('article', null, 'evidence-card');
     const role = /^(SUPPORT|FOR|SUPPORTED)$/.test(item.direction) ? 'Support' : /^(COUNTER|COUNTEREVIDENCE|AGAINST|OPPOSE|OPPOSED)$/.test(item.direction) ? 'Opposition' : 'Context / partial';
     card.append(node('p', `${role} / ${ref.document_id} / ${ref.date}`), node('blockquote', ref.text));
@@ -574,7 +583,7 @@ async function renderResult(value, {stored = false, expectedEpoch = null} = {}) 
   $('#evidence').replaceChildren(...(evidence.length ? evidence : [node('p', 'No selected source evidence. Missing evidence is not opposition.')]));
   $('#paths').textContent = JSON.stringify(value.trace.paths, null, 2);
   $('#receipt').textContent = JSON.stringify({receipt: value.receipt, artifacts: value.artifacts, source_scope: value.source_scope}, null, 2);
-  const digest = value.analyst_digest;
+  const digest = sourceMethod?.digest||value.analyst_digest;
   $('#postrun-digest').hidden = value.execution_kind === 'fixture' || digest?.available !== true;
   $('#digest-text').textContent = value.execution_kind !== 'fixture' && digest?.available === true ? digest.text : '';
   $('#compact-result').open = false;

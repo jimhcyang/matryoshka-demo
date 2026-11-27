@@ -1,0 +1,2596 @@
+{
+  "QA_answers_or_grades_included": false,
+  "case": {
+    "case_id": "cloze_d056bfae5c175be301e57f4f",
+    "corpus": "cib",
+    "date": "1959-11-07",
+    "document_id": "CIA-RDP79T00975A004800060001-2",
+    "focal_marker": "[REDACTION 1]",
+    "query": "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests.\n\nEven if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1]. As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area.[REDACTION]",
+    "task": "redaction"
+  },
+  "missing_transport": {
+    "endpoint": null,
+    "fabricated_routes_or_support_votes": false,
+    "graph_walk": null,
+    "origin_refs": null,
+    "parent_typed_adapter_and_normal_source_v6_export_required": true,
+    "source_routes": []
+  },
+  "native_baseline": {
+    "baseline_verdicts_unchanged": true,
+    "checkpoint_sha256": "eeebe8aaadf959ea0e1b40890b26e9a6a06d4e0dc5d4d5bcfc8f0d070e399d7a",
+    "code_pins_sha256": "e159da0aa5f59740ebb31a374e8917c24c052a18b16efa80b534c7771345e3cc",
+    "configuration": {
+      "completed_drafts_per_reading": 64,
+      "construction_pages": 32,
+      "method": "current_hierarchy",
+      "retrieval_document_budget": 40,
+      "retrieval_passage_budget": 80,
+      "selection_profile": {
+        "candidate_focal_fraction": 0.5,
+        "constructor_family_mode": "first_class_adjuncts",
+        "counter_policy": "positive_support",
+        "cue_order_mode": "source_alignment",
+        "identity_first": true,
+        "page_focal_fraction": 0.5,
+        "scan_pages": 512,
+        "source_phrase_mode": "scoped",
+        "supplemental_mode": "source_form_opportunities"
+      },
+      "source_view_policy": {
+        "cable_classification": "CONFIDENTIAL",
+        "cable_document_wide_handling_veto": true,
+        "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+        "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+        "cutoff_role": "source_document_date",
+        "date_relation": "<=",
+        "id": "source_day_inclusive",
+        "later_or_secret_version_admitted": false,
+        "source_dates_or_document_ids_rewritten": false,
+        "version": "trusted-corpus-source-view/1"
+      },
+      "terminal_ranking": "evidence_fit_v7",
+      "top_k": 5
+    },
+    "execution_context_sha256": "fc1fb1e688d707f52a937f642fcd509d1bc060714cde395a27393af63f87054f",
+    "native_checksum": "6393fb47951be8e43ccf93f30cfad04e726b3099a7a07230771a0daf9b9764a6",
+    "proposal_slate_is_not_native_result": true,
+    "source_view_policy": {
+      "cable_classification": "CONFIDENTIAL",
+      "cable_document_wide_handling_veto": true,
+      "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+      "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+      "cutoff_role": "source_document_date",
+      "date_relation": "<=",
+      "id": "source_day_inclusive",
+      "later_or_secret_version_admitted": false,
+      "source_dates_or_document_ids_rewritten": false,
+      "version": "trusted-corpus-source-view/1"
+    },
+    "version": "narrative-local-execution/4"
+  },
+  "publication_authorized": false,
+  "saved_method": {
+    "QA_method_sha256": "bb5a0adca543c2181ae735344fc1b0ccec337171e121163c23a989290fc08cc6",
+    "factual_support_certified": false,
+    "name": "SOURCE_PROPOSALS_CONTEXT_ONLY",
+    "score_version": "source-proposal-context-priority/1",
+    "source_results_sha256": "5599083c2b938dbaed1c5d038cbe512f540a12e449e813cc5e5abeeba9e41784",
+    "source_slates_sha256": "408c5346b579c66fdb3e02fd2d2dbba6757f3fac70b7365f3f4d9ec918040497"
+  },
+  "sections": {
+    "analyst_summary": {
+      "actual_digest_ref": null,
+      "calls_authorized_here": 0,
+      "new_method_body_must_include_exact_saved_slate": true,
+      "parent_paid_generation_needed_for_populated_summary": true,
+      "rebind_from_related_public_case_allowed": false,
+      "status": "NO_EXACT_SAVED_METHOD_DIGEST_IN_BOUNDED_INVENTORY",
+      "text": null
+    },
+    "facts_to_evidence": {
+      "kind": "CONTEXTUAL_MODEL_REVIEW_AND_LOCAL_GRAMMAR_NOT_FACTUAL_VOTES",
+      "records": [
+        {
+          "candidate_id": "source_reviewed_fill_40c0af840283a1e6764f9787ca7e",
+          "citations": [
+            {
+              "canonical_page_id": "page_f7692061a6deb1299b0e",
+              "corpus": "cib",
+              "date": "1959-09-29",
+              "document_id": "CIA-RDP79T00975A004700250001-2",
+              "end": 1311,
+              "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+              "start": 658,
+              "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p2",
+                  "qualifications_preserved": true,
+                  "reason": "The source explicitly describes dissident junior officers continuing to seek support for another coup. Converting the group predicate to a modifier of officers and changing 'its' to 'their' preserves the actor and meaning. It fits the surrounding discussion of additional support without establishing the concealed wording.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "3e9bc5366872731042aee828ba8bb839ba47cff07b223534879d3eded5216915",
+                  "inserted_span": [
+                    360,
+                    433
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "3e9bc5366872731042aee828ba8bb839ba47cff07b223534879d3eded5216915",
+                  "constructor_form": "modifier",
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "acl",
+                    "lemma": "continue",
+                    "pos": "VERB",
+                    "span": [
+                      360,
+                      370
+                    ],
+                    "tag": "VBG",
+                    "text": "continuing"
+                  },
+                  "inserted_span": [
+                    360,
+                    433
+                  ],
+                  "outer_family": "adjectival",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_ADJECTIVAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "3e9bc5366872731042aee828ba8bb839ba47cff07b223534879d3eded5216915",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "ed5c6cc92f48eaca5e9deae807b232cc1372e8047711e77339ece279dd9abe77",
+            "unsupported_diagnostics": [
+              {
+                "helper": "completed_slot_fit",
+                "positive_source_frame_invented": false,
+                "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_b38e3aa50a5da3daf2f3114f",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p2",
+            "qualifications_preserved": true,
+            "reason": "The source explicitly describes dissident junior officers continuing to seek support for another coup. Converting the group predicate to a modifier of officers and changing 'its' to 'their' preserves the actor and meaning. It fits the surrounding discussion of additional support without establishing the concealed wording.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1959-09-29",
+            "document_id": "CIA-RDP79T00975A004700250001-2",
+            "exact_quote": {
+              "end": 1311,
+              "start": 1126,
+              "text": "At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+            },
+            "original_phrase": {
+              "end": 1310,
+              "start": 1236,
+              "text": "is continuing its efforts to line up enough support for a new coup attempt"
+            },
+            "page_id": "page_f7692061a6deb1299b0e",
+            "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+            "qualification_paragraph": {
+              "end": 1311,
+              "start": 658,
+              "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_ef5599b4155a6e246293338cb018",
+          "citations": [
+            {
+              "canonical_page_id": "page_f7692061a6deb1299b0e",
+              "corpus": "cib",
+              "date": "1959-09-29",
+              "document_id": "CIA-RDP79T00975A004700250001-2",
+              "end": 1311,
+              "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+              "start": 658,
+              "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p2",
+                  "qualifications_preserved": true,
+                  "reason": "The exact source infinitive fits after 'an opening for junior army officers' and connects naturally with the following discussion of additional support. The source explicitly describes dissident junior officers seeking support for a new coup attempt. The completed sentence remains a conditional possibility, not a claim that a coup occurred.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "eb41a62e4b0dc77a81f2fbce7a140f6c860cae8530833c91b876f0d60c87f5b1",
+                  "inserted_span": [
+                    360,
+                    408
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "eb41a62e4b0dc77a81f2fbce7a140f6c860cae8530833c91b876f0d60c87f5b1",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "0577856c95e9c3500ab311aeaafee988dc677e3d42b0a27786fc25aab516db01",
+            "unsupported_diagnostics": [
+              {
+                "helper": "final_form_fit",
+                "pos_proof_claimed": false,
+                "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                "state": "unsupported"
+              },
+              {
+                "helper": "completed_slot_fit",
+                "native_source_frame_or_certificate_created": false,
+                "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p2",
+            "qualifications_preserved": true,
+            "reason": "The exact source infinitive fits after 'an opening for junior army officers' and connects naturally with the following discussion of additional support. The source explicitly describes dissident junior officers seeking support for a new coup attempt. The completed sentence remains a conditional possibility, not a claim that a coup occurred.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1959-09-29",
+            "document_id": "CIA-RDP79T00975A004700250001-2",
+            "exact_quote": {
+              "end": 1311,
+              "start": 1126,
+              "text": "At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+            },
+            "original_phrase": {
+              "end": 1310,
+              "start": 1262,
+              "text": "to line up enough support for a new coup attempt"
+            },
+            "page_id": "page_f7692061a6deb1299b0e",
+            "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+            "qualification_paragraph": {
+              "end": 1311,
+              "start": 658,
+              "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_b3365bc6d19e2ab567d7a2e31871",
+          "citations": [
+            {
+              "canonical_page_id": "page_6001d14e45c318e71e5d",
+              "corpus": "cib",
+              "date": "1959-09-05",
+              "document_id": "CIA-RDP79T00975A004700050001-4",
+              "end": 482,
+              "page_sha256": "03bbef7c499522b6897c919a1e58053236effc15ea0b2a5ee1583400b980072e",
+              "start": 42,
+              "text": "A new group of 30 to 35 dissident young officers is reported to be plotting a move against the Abboud military government to follow the announcement expected in mid-September of the verdicts of the court-martial against the perpetrators of the abortive 22 May coup. The plotters probably hope to take advantage of an expected sharp public reaction to the sentences; many Sudanese have come to believe the trials were rigged from the outset."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p3",
+                  "qualifications_preserved": true,
+                  "reason": "The infinitival paraphrase supplies a grammatical verbal complement and preserves the source action and target. Within 'may provide an opening,' making a move is a possibility, not an assertion that the reported plot was executed. The earlier report's announcement timing is not imported, nor are its plotters identified as the present officers.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "76e9cea064917ecf84f6a4682f1ec4e11d8434cb3df33e6aaceb7840cc497f29",
+                  "inserted_span": [
+                    360,
+                    413
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "76e9cea064917ecf84f6a4682f1ec4e11d8434cb3df33e6aaceb7840cc497f29",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "0577856c95e9c3500ab311aeaafee988dc677e3d42b0a27786fc25aab516db01",
+            "unsupported_diagnostics": [
+              {
+                "helper": "final_form_fit",
+                "pos_proof_claimed": false,
+                "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                "state": "unsupported"
+              },
+              {
+                "helper": "completed_slot_fit",
+                "native_source_frame_or_certificate_created": false,
+                "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p3",
+            "qualifications_preserved": true,
+            "reason": "The infinitival paraphrase supplies a grammatical verbal complement and preserves the source action and target. Within 'may provide an opening,' making a move is a possibility, not an assertion that the reported plot was executed. The earlier report's announcement timing is not imported, nor are its plotters identified as the present officers.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1959-09-05",
+            "document_id": "CIA-RDP79T00975A004700050001-4",
+            "exact_quote": {
+              "end": 307,
+              "start": 42,
+              "text": "A new group of 30 to 35 dissident young officers is reported to be plotting a move against the Abboud military government to follow the announcement expected in mid-September of the verdicts of the court-martial against the perpetrators of the abortive 22 May coup."
+            },
+            "original_phrase": {
+              "end": 163,
+              "start": 109,
+              "text": "plotting a move against the Abboud military government"
+            },
+            "page_id": "page_6001d14e45c318e71e5d",
+            "page_sha256": "03bbef7c499522b6897c919a1e58053236effc15ea0b2a5ee1583400b980072e",
+            "qualification_paragraph": {
+              "end": 482,
+              "start": 42,
+              "text": "A new group of 30 to 35 dissident young officers is reported to be plotting a move against the Abboud military government to follow the announcement expected in mid-September of the verdicts of the court-martial against the perpetrators of the abortive 22 May coup. The plotters probably hope to take advantage of an expected sharp public reaction to the sentences; many Sudanese have come to believe the trials were rigged from the outset."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_f807c8907f0e310b1cd60d229ca5",
+          "citations": [
+            {
+              "canonical_page_id": "page_ca9a5b7c641605d69b83",
+              "corpus": "cib",
+              "date": "1959-03-03",
+              "document_id": "CIA-RDP79T00975A004300100001-2",
+              "end": 1253,
+              "page_sha256": "256cb26fb72eb2b70991db8d4a35ad6899ec1cbf5e683087e2e5cd41d8c5bad9",
+              "start": 512,
+              "text": "*Sudan: [An attempt to take over the government by the commanders of the Eastern and Northern Commands on 2 March was aborted after a stormy session of the Supreme Council, according to a Sudanese government official. Premier Abboud, who later denied publicly that there had been any disturbances, is reported loath to take action against the conspirators and ordered the commanders to return to their units. However, Council members, who were arrested and were to have been dismissed, are demanding the officers be disciplined. Although the situation is outwardly calm, it remains \"highly dangerous,\" with the prospect that Sudanese political elements and possibly the Egyptians may become involved if the internal dispute is not resolved.]"
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p4",
+                  "qualifications_preserved": true,
+                  "reason": "The source action phrase is retained exactly and forms a grammatical complement in the whole input. A possible takeover is contextually relevant to military opposition to Abboud. This nomination does not identify the junior officers with the earlier command commanders or assert that their aborted, attributed attempt succeeded; those historical details are not claims made by the completed sentence.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "f89c3d9085711c9860a5f4d3b42a2429278ba20f754ac47f41bd7669a77fafe1",
+                  "inserted_span": [
+                    360,
+                    387
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "f89c3d9085711c9860a5f4d3b42a2429278ba20f754ac47f41bd7669a77fafe1",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "0577856c95e9c3500ab311aeaafee988dc677e3d42b0a27786fc25aab516db01",
+            "unsupported_diagnostics": [
+              {
+                "helper": "final_form_fit",
+                "pos_proof_claimed": false,
+                "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                "state": "unsupported"
+              },
+              {
+                "helper": "completed_slot_fit",
+                "native_source_frame_or_certificate_created": false,
+                "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p4",
+            "qualifications_preserved": true,
+            "reason": "The source action phrase is retained exactly and forms a grammatical complement in the whole input. A possible takeover is contextually relevant to military opposition to Abboud. This nomination does not identify the junior officers with the earlier command commanders or assert that their aborted, attributed attempt succeeded; those historical details are not claims made by the completed sentence.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1959-03-03",
+            "document_id": "CIA-RDP79T00975A004300100001-2",
+            "exact_quote": {
+              "end": 729,
+              "start": 512,
+              "text": "*Sudan: [An attempt to take over the government by the commanders of the Eastern and Northern Commands on 2 March was aborted after a stormy session of the Supreme Council, according to a Sudanese government official."
+            },
+            "original_phrase": {
+              "end": 559,
+              "start": 532,
+              "text": "to take over the government"
+            },
+            "page_id": "page_ca9a5b7c641605d69b83",
+            "page_sha256": "256cb26fb72eb2b70991db8d4a35ad6899ec1cbf5e683087e2e5cd41d8c5bad9",
+            "qualification_paragraph": {
+              "end": 1253,
+              "start": 512,
+              "text": "*Sudan: [An attempt to take over the government by the commanders of the Eastern and Northern Commands on 2 March was aborted after a stormy session of the Supreme Council, according to a Sudanese government official. Premier Abboud, who later denied publicly that there had been any disturbances, is reported loath to take action against the conspirators and ordered the commanders to return to their units. However, Council members, who were arrested and were to have been dismissed, are demanding the officers be disciplined. Although the situation is outwardly calm, it remains \"highly dangerous,\" with the prospect that Sudanese political elements and possibly the Egyptians may become involved if the internal dispute is not resolved.]"
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_2cea5155d363435290afbb930f45",
+          "citations": [
+            {
+              "canonical_page_id": "page_f7692061a6deb1299b0e",
+              "corpus": "cib",
+              "date": "1959-09-29",
+              "document_id": "CIA-RDP79T00975A004700250001-2",
+              "end": 1311,
+              "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+              "start": 658,
+              "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p1",
+                  "qualifications_preserved": true,
+                  "reason": "Faithfully recasts the dissident group's continuing effort as a plural relative clause modifying junior army officers. The coup objective and support-seeking activity are preserved and fit the following sentence. The security precautions are background, not a condition on the claim.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "6666ee22fa057752aee77871270d5f4831b08dab06ef38ce3090ea3a5aea4722",
+                  "inserted_span": [
+                    360,
+                    441
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "6666ee22fa057752aee77871270d5f4831b08dab06ef38ce3090ea3a5aea4722",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "7002ffc330d1aee908228254193b6145c2d41a86c36ee48ce6e65a294424c6e5",
+            "unsupported_diagnostics": [
+              {
+                "helper": "final_form_fit",
+                "pos_proof_claimed": false,
+                "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                "state": "unsupported"
+              },
+              {
+                "helper": "completed_slot_fit",
+                "native_source_frame_or_certificate_created": false,
+                "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_471ef181f77e17a8057c73c1",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p1",
+            "qualifications_preserved": true,
+            "reason": "Faithfully recasts the dissident group's continuing effort as a plural relative clause modifying junior army officers. The coup objective and support-seeking activity are preserved and fit the following sentence. The security precautions are background, not a condition on the claim.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1959-09-29",
+            "document_id": "CIA-RDP79T00975A004700250001-2",
+            "exact_quote": {
+              "end": 1311,
+              "start": 1126,
+              "text": "At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+            },
+            "original_phrase": {
+              "end": 1310,
+              "start": 1199,
+              "text": "a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt"
+            },
+            "page_id": "page_f7692061a6deb1299b0e",
+            "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+            "qualification_paragraph": {
+              "end": 1311,
+              "start": 658,
+              "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        }
+      ]
+    },
+    "facts_to_look_for": {
+      "atoms": [
+        {
+          "id": "a1",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests",
+          "polarity": "positive",
+          "predicate": "is",
+          "query_quotes": [
+            "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests."
+          ],
+          "query_spans": [
+            {
+              "end": 186,
+              "start": 0,
+              "text": "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests."
+            }
+          ],
+          "required": true,
+          "source_quote": "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Their latest tactic",
+          "text": "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests."
+        },
+        {
+          "id": "a2",
+          "kind": "proposition",
+          "modality": "possible",
+          "object": "an opening for junior army officers [REDACTION 1]",
+          "polarity": "positive",
+          "predicate": "may provide",
+          "query_quotes": [
+            "Even if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1]."
+          ],
+          "query_spans": [
+            {
+              "end": 374,
+              "start": 188,
+              "text": "Even if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1]."
+            }
+          ],
+          "required": true,
+          "source_quote": "Even if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1].",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "its embroilment with civilian opponents",
+          "text": "Even if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1]."
+        },
+        {
+          "id": "a3",
+          "kind": "proposition",
+          "modality": "conditional",
+          "object": "additional support among well-placed civilians and key army personnel in the Khartoum area",
+          "polarity": "positive",
+          "predicate": "will stand a better chance of lining up",
+          "query_quotes": [
+            "As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area."
+          ],
+          "query_spans": [
+            {
+              "end": 573,
+              "start": 375,
+              "text": "As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area."
+            }
+          ],
+          "required": true,
+          "source_quote": "As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "the junior officers",
+          "text": "As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area."
+        }
+      ],
+      "kind": "RECORDED_PUBLIC_QUERY_REQUIREMENTS_NOT_WORLD_FACTS"
+    },
+    "saved_fills": {
+      "order_unchanged": true,
+      "primary_reading_id": "next_reading_b38e3aa50a5da3daf2f3114f",
+      "readings": [
+        {
+          "candidates": [
+            {
+              "completed_input": "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests.\n\nEven if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers continuing their efforts to line up enough support for a new coup attempt. As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area.[REDACTION]",
+              "completed_input_sha256": "3e9bc5366872731042aee828ba8bb839ba47cff07b223534879d3eded5216915",
+              "completed_input_utf8_sha256": "1c80f8bb63bde5dbda356032cd2f529c5f3108c01bab85491215e6667d7e3e74",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_40c0af840283a1e6764f9787ca7e",
+                  "completed_input_sha256": "3e9bc5366872731042aee828ba8bb839ba47cff07b223534879d3eded5216915",
+                  "exact_quote_sha256": "37fafaa0f686471cb472510443b7b199667e8cd7315ddb5a8b307de2229e9e93",
+                  "grammar_sha256": "4087aac26af8fc5a796ed06d62769f99d64be777627eb57a8448c723e38a7fac",
+                  "observation_sha256": "6ffb6972b130fa00e8296fdcab1a31f51e177d2d228ca0ab90e977be978ffd32",
+                  "plan_sha256": "025e94cac56fe9c4b0630825e72907cb706d4653d0fa9546e5594b529718babe",
+                  "provenance_sha256": "c96a7dc2bdd2be97258372dfff568448569b612b1df31c487cb96383949a0a3a",
+                  "query_sha256": "dc91e39cadb364560217594f45e6f7160dbddf984a9002c4ef9f629303c106f7",
+                  "reading_sha256": "ed5c6cc92f48eaca5e9deae807b232cc1372e8047711e77339ece279dd9abe77",
+                  "source_phrase_sha256": "aeb3af2ba5f3dbb1c787042d1df33d30806c1e904f03c46613db0cc4aa6dd8e6"
+                },
+                "candidate_content_terms": [
+                  "attempt",
+                  "continue",
+                  "coup",
+                  "effort",
+                  "line",
+                  "new",
+                  "support"
+                ],
+                "components": {
+                  "lexical_novelty": 0.14285714285714288,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.22000000000000003
+                },
+                "focal_query_span": {
+                  "end": 374,
+                  "start": 188,
+                  "text": "Even if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1]."
+                },
+                "focal_terms": [
+                  "abboud",
+                  "army",
+                  "civilian",
+                  "embroilment",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "manage",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "pressure",
+                  "provide"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "abboud",
+                  "civilian",
+                  "government",
+                  "junior",
+                  "officer",
+                  "pressure"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_f7692061a6deb1299b0e",
+                  "date": "1959-09-29",
+                  "document_id": "CIA-RDP79T00975A004700250001-2",
+                  "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.7142857142857143,
+                  "own_page_focal_coverage": 0.4
+                },
+                "repeated_visible_content_terms": [
+                  "line",
+                  "support"
+                ],
+                "score": 0.6128571428571429,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "abboud",
+                  "achieve",
+                  "actually",
+                  "additional",
+                  "antipathy",
+                  "area",
+                  "army",
+                  "chance",
+                  "civilian",
+                  "embroilment",
+                  "encourage",
+                  "favorable",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "key",
+                  "khartoum",
+                  "late",
+                  "line",
+                  "manage",
+                  "nile",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "personnel",
+                  "place",
+                  "pressure",
+                  "provide",
+                  "recently",
+                  "regime",
+                  "sellout",
+                  "settlement",
+                  "spread",
+                  "stand",
+                  "sudanese",
+                  "support",
+                  "suspicion",
+                  "tactic",
+                  "uar",
+                  "water"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 359,
+                    "start": 339,
+                    "text": "junior army officers"
+                  }
+                ],
+                "constructor_form": "modifier",
+                "constructor_routing": {
+                  "constructor_form": "modifier",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 359,
+                      "start": 339,
+                      "text": "junior army officers"
+                    }
+                  }
+                ],
+                "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+                "finite": null,
+                "form": "adjectival",
+                "function": "modifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_b38e3aa50a5da3daf2f3114f",
+                "operators": [],
+                "outer_family": "adjectival",
+                "role": "nominal_property",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "continuing their efforts to line up enough support for a new coup attempt",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p2",
+                      "qualifications_preserved": true,
+                      "reason": "The source explicitly describes dissident junior officers continuing to seek support for another coup. Converting the group predicate to a modifier of officers and changing 'its' to 'their' preserves the actor and meaning. It fits the surrounding discussion of additional support without establishing the concealed wording.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "3e9bc5366872731042aee828ba8bb839ba47cff07b223534879d3eded5216915",
+                      "inserted_span": [
+                        360,
+                        433
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "3e9bc5366872731042aee828ba8bb839ba47cff07b223534879d3eded5216915",
+                      "constructor_form": "modifier",
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "acl",
+                        "lemma": "continue",
+                        "pos": "VERB",
+                        "span": [
+                          360,
+                          370
+                        ],
+                        "tag": "VBG",
+                        "text": "continuing"
+                      },
+                      "inserted_span": [
+                        360,
+                        433
+                      ],
+                      "outer_family": "adjectival",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_ADJECTIVAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "3e9bc5366872731042aee828ba8bb839ba47cff07b223534879d3eded5216915",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "ed5c6cc92f48eaca5e9deae807b232cc1372e8047711e77339ece279dd9abe77",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "completed_slot_fit",
+                    "positive_source_frame_invented": false,
+                    "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_40c0af840283a1e6764f9787ca7e",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "eeebe8aaadf959ea0e1b40890b26e9a6a06d4e0dc5d4d5bcfc8f0d070e399d7a",
+                "original_candidate_sha256": "90e5fad6868ef238e1de88e49e2ef668621e67f9e151febcb530436a5cab9664",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "c96a7dc2bdd2be97258372dfff568448569b612b1df31c487cb96383949a0a3a",
+                "proposal_response_sha256": "52bcad74c9f9bc6bc4da20dfef1cc0ef0819983f63222bfb5bca3231a8169dbd",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "05ed79a2a6152abf64ce43ee1890400cb60e5a05e039abddc0dc57242e8401dc",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_b38e3aa50a5da3daf2f3114f",
+              "source": {
+                "date": "1959-09-29",
+                "document_id": "CIA-RDP79T00975A004700250001-2",
+                "exact_quote": {
+                  "end": 1311,
+                  "start": 1126,
+                  "text": "At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+                },
+                "original_phrase": {
+                  "end": 1310,
+                  "start": 1236,
+                  "text": "is continuing its efforts to line up enough support for a new coup attempt"
+                },
+                "page_id": "page_f7692061a6deb1299b0e",
+                "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+                "qualification_paragraph": {
+                  "end": 1311,
+                  "start": 658,
+                  "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p2",
+                "qualifications_preserved": true,
+                "reason": "The source explicitly describes dissident junior officers continuing to seek support for another coup. Converting the group predicate to a modifier of officers and changing 'its' to 'their' preserves the actor and meaning. It fits the surrounding discussion of additional support without establishing the concealed wording.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_f7692061a6deb1299b0e",
+                  "corpus": "cib",
+                  "date": "1959-09-29",
+                  "document_id": "CIA-RDP79T00975A004700250001-2",
+                  "end": 1311,
+                  "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+                  "start": 658,
+                  "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Remove the finite auxiliary to form a participial modifier and change singular 'its', referring to the group, to plural 'their', referring to the officers.",
+                "kind": "PARAPHRASE"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 3,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 359,
+                "start": 339,
+                "text": "junior army officers"
+              }
+            ],
+            "constructor_form": "modifier",
+            "constructor_routing": {
+              "constructor_form": "modifier",
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "legacy_compatible_subset",
+            "cues": [
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 359,
+                  "start": 339,
+                  "text": "junior army officers"
+                }
+              }
+            ],
+            "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+            "finite": null,
+            "form": "adjectival",
+            "function": "modifier",
+            "grammatical_number": "unknown",
+            "id": "next_reading_b38e3aa50a5da3daf2f3114f",
+            "operators": [],
+            "outer_family": "adjectival",
+            "role": "nominal_property",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_b38e3aa50a5da3daf2f3114f",
+          "status": "CONTEXTUAL_CANDIDATES"
+        },
+        {
+          "candidates": [],
+          "deferred_record_n": 0,
+          "held_record_n": 4,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 359,
+                "start": 339,
+                "text": "junior army officers"
+              }
+            ],
+            "constructor_form": null,
+            "constructor_routing": {
+              "constructor_form": null,
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "requires_new_constructor",
+            "cues": [
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 359,
+                  "start": 339,
+                  "text": "junior army officers"
+                }
+              }
+            ],
+            "explanation": "A prepositional projection can attach as an argument, complement, modifier or adjunct. Function: modifier. Requires a new constructor or explicit withholding.",
+            "finite": null,
+            "form": "prepositional",
+            "function": "modifier",
+            "grammatical_number": "unknown",
+            "id": "next_reading_5d1c047e3121f2900d6544e3",
+            "operators": [],
+            "outer_family": "prepositional",
+            "role": "nominal_property",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_5d1c047e3121f2900d6544e3",
+          "status": "NO_ADMITTED_CONTEXTUAL_CANDIDATES"
+        },
+        {
+          "candidates": [
+            {
+              "completed_input": "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests.\n\nEven if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers to line up enough support for a new coup attempt. As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area.[REDACTION]",
+              "completed_input_sha256": "eb41a62e4b0dc77a81f2fbce7a140f6c860cae8530833c91b876f0d60c87f5b1",
+              "completed_input_utf8_sha256": "6321c6a9c4265db477c37dc549cbb7a686b5b16dc072875b5ca0331276ebb69f",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_ef5599b4155a6e246293338cb018",
+                  "completed_input_sha256": "eb41a62e4b0dc77a81f2fbce7a140f6c860cae8530833c91b876f0d60c87f5b1",
+                  "exact_quote_sha256": "37fafaa0f686471cb472510443b7b199667e8cd7315ddb5a8b307de2229e9e93",
+                  "grammar_sha256": "11a72fffe3c5413d9caf76728b5f42a3234fa8a9e6afb06c1f8f3913feb5b380",
+                  "observation_sha256": "6ffb6972b130fa00e8296fdcab1a31f51e177d2d228ca0ab90e977be978ffd32",
+                  "plan_sha256": "025e94cac56fe9c4b0630825e72907cb706d4653d0fa9546e5594b529718babe",
+                  "provenance_sha256": "96e19714c1d9528f4ce246c558beddbcb31c5be6df0db607f05cbbaa125ca675",
+                  "query_sha256": "dc91e39cadb364560217594f45e6f7160dbddf984a9002c4ef9f629303c106f7",
+                  "reading_sha256": "0577856c95e9c3500ab311aeaafee988dc677e3d42b0a27786fc25aab516db01",
+                  "source_phrase_sha256": "a92a7e6ec7ca0726a8baf19639fdb3a7aa9fe3d2600ef972358808dbcc569e03"
+                },
+                "candidate_content_terms": [
+                  "attempt",
+                  "coup",
+                  "line",
+                  "new",
+                  "support"
+                ],
+                "components": {
+                  "lexical_novelty": 0.12,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.22000000000000003
+                },
+                "focal_query_span": {
+                  "end": 374,
+                  "start": 188,
+                  "text": "Even if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1]."
+                },
+                "focal_terms": [
+                  "abboud",
+                  "army",
+                  "civilian",
+                  "embroilment",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "manage",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "pressure",
+                  "provide"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "abboud",
+                  "civilian",
+                  "government",
+                  "junior",
+                  "officer",
+                  "pressure"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_f7692061a6deb1299b0e",
+                  "date": "1959-09-29",
+                  "document_id": "CIA-RDP79T00975A004700250001-2",
+                  "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.6,
+                  "own_page_focal_coverage": 0.4
+                },
+                "repeated_visible_content_terms": [
+                  "line",
+                  "support"
+                ],
+                "score": 0.5900000000000001,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "abboud",
+                  "achieve",
+                  "actually",
+                  "additional",
+                  "antipathy",
+                  "area",
+                  "army",
+                  "chance",
+                  "civilian",
+                  "embroilment",
+                  "encourage",
+                  "favorable",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "key",
+                  "khartoum",
+                  "late",
+                  "line",
+                  "manage",
+                  "nile",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "personnel",
+                  "place",
+                  "pressure",
+                  "provide",
+                  "recently",
+                  "regime",
+                  "sellout",
+                  "settlement",
+                  "spread",
+                  "stand",
+                  "sudanese",
+                  "support",
+                  "suspicion",
+                  "tactic",
+                  "uar",
+                  "water"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 359,
+                    "start": 324,
+                    "text": "an opening for junior army officers"
+                  }
+                ],
+                "constructor_form": null,
+                "constructor_routing": {
+                  "constructor_form": null,
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "requires_new_constructor",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 359,
+                      "start": 324,
+                      "text": "an opening for junior army officers"
+                    }
+                  }
+                ],
+                "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: complement. Requires a new constructor or explicit withholding.",
+                "finite": null,
+                "form": "clausal",
+                "function": "complement",
+                "grammatical_number": "unknown",
+                "id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+                "operators": [],
+                "outer_family": "clausal",
+                "role": "verbal_bridge",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "to line up enough support for a new coup attempt",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p2",
+                      "qualifications_preserved": true,
+                      "reason": "The exact source infinitive fits after 'an opening for junior army officers' and connects naturally with the following discussion of additional support. The source explicitly describes dissident junior officers seeking support for a new coup attempt. The completed sentence remains a conditional possibility, not a claim that a coup occurred.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "eb41a62e4b0dc77a81f2fbce7a140f6c860cae8530833c91b876f0d60c87f5b1",
+                      "inserted_span": [
+                        360,
+                        408
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "eb41a62e4b0dc77a81f2fbce7a140f6c860cae8530833c91b876f0d60c87f5b1",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "0577856c95e9c3500ab311aeaafee988dc677e3d42b0a27786fc25aab516db01",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "final_form_fit",
+                    "pos_proof_claimed": false,
+                    "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "completed_slot_fit",
+                    "native_source_frame_or_certificate_created": false,
+                    "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_ef5599b4155a6e246293338cb018",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "eeebe8aaadf959ea0e1b40890b26e9a6a06d4e0dc5d4d5bcfc8f0d070e399d7a",
+                "original_candidate_sha256": "88f4d4b3b6d3a8cff32684f86512d3ad8ad350d9beecb21214aa8088a8b2546c",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "96e19714c1d9528f4ce246c558beddbcb31c5be6df0db607f05cbbaa125ca675",
+                "proposal_response_sha256": "24607a5859f0c38b2be5157a1db33c8395822fd75b6abce0fb8a0f0bbe325aa5",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "2e5d961b327d7fe6e815d7588c07fd84d1a796bce280f8f82a624e707adeff06",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+              "source": {
+                "date": "1959-09-29",
+                "document_id": "CIA-RDP79T00975A004700250001-2",
+                "exact_quote": {
+                  "end": 1311,
+                  "start": 1126,
+                  "text": "At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+                },
+                "original_phrase": {
+                  "end": 1310,
+                  "start": 1262,
+                  "text": "to line up enough support for a new coup attempt"
+                },
+                "page_id": "page_f7692061a6deb1299b0e",
+                "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+                "qualification_paragraph": {
+                  "end": 1311,
+                  "start": 658,
+                  "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p2",
+                "qualifications_preserved": true,
+                "reason": "The exact source infinitive fits after 'an opening for junior army officers' and connects naturally with the following discussion of additional support. The source explicitly describes dissident junior officers seeking support for a new coup attempt. The completed sentence remains a conditional possibility, not a claim that a coup occurred.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_f7692061a6deb1299b0e",
+                  "corpus": "cib",
+                  "date": "1959-09-29",
+                  "document_id": "CIA-RDP79T00975A004700250001-2",
+                  "end": 1311,
+                  "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+                  "start": 658,
+                  "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "The source infinitival phrase is retained exactly.",
+                "kind": "UNCHANGED"
+              }
+            },
+            {
+              "completed_input": "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests.\n\nEven if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers to make a move against the Abboud military government. As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area.[REDACTION]",
+              "completed_input_sha256": "76e9cea064917ecf84f6a4682f1ec4e11d8434cb3df33e6aaceb7840cc497f29",
+              "completed_input_utf8_sha256": "66a2ba0c7cf303bd633f8be803e8de6c3ca3ceeb22d2a5dd7a51589ee3eae4a1",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_b3365bc6d19e2ab567d7a2e31871",
+                  "completed_input_sha256": "76e9cea064917ecf84f6a4682f1ec4e11d8434cb3df33e6aaceb7840cc497f29",
+                  "exact_quote_sha256": "5fd3d7b3bcc447ec45ceb9fbb1a68206ec40fcde24a38481a3aa9c0a92922d42",
+                  "grammar_sha256": "81ce7f140b9750a54be51eb4fbaa4e2d295fe1cb9b372a737e75c5e97e53d36a",
+                  "observation_sha256": "6ffb6972b130fa00e8296fdcab1a31f51e177d2d228ca0ab90e977be978ffd32",
+                  "plan_sha256": "025e94cac56fe9c4b0630825e72907cb706d4653d0fa9546e5594b529718babe",
+                  "provenance_sha256": "10c8109adfc9c4e7f1ff68f1dee39f50f404665bd37cc650cc93cc88a665bd6e",
+                  "query_sha256": "dc91e39cadb364560217594f45e6f7160dbddf984a9002c4ef9f629303c106f7",
+                  "reading_sha256": "0577856c95e9c3500ab311aeaafee988dc677e3d42b0a27786fc25aab516db01",
+                  "source_phrase_sha256": "2ff755ee2405297490c4d1cdaeccbc2a098f47337e85b011d550b725083109c9"
+                },
+                "candidate_content_terms": [
+                  "abboud",
+                  "government",
+                  "military"
+                ],
+                "components": {
+                  "lexical_novelty": 0.06666666666666667,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.18333333333333335
+                },
+                "focal_query_span": {
+                  "end": 374,
+                  "start": 188,
+                  "text": "Even if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1]."
+                },
+                "focal_terms": [
+                  "abboud",
+                  "army",
+                  "civilian",
+                  "embroilment",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "manage",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "pressure",
+                  "provide"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "abboud",
+                  "army",
+                  "government",
+                  "junior",
+                  "officer"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_6001d14e45c318e71e5d",
+                  "date": "1959-09-05",
+                  "document_id": "CIA-RDP79T00975A004700050001-4",
+                  "page_sha256": "03bbef7c499522b6897c919a1e58053236effc15ea0b2a5ee1583400b980072e"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.3333333333333333,
+                  "own_page_focal_coverage": 0.3333333333333333
+                },
+                "repeated_visible_content_terms": [
+                  "abboud",
+                  "government"
+                ],
+                "score": 0.5,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "abboud",
+                  "achieve",
+                  "actually",
+                  "additional",
+                  "antipathy",
+                  "area",
+                  "army",
+                  "chance",
+                  "civilian",
+                  "embroilment",
+                  "encourage",
+                  "favorable",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "key",
+                  "khartoum",
+                  "late",
+                  "line",
+                  "manage",
+                  "nile",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "personnel",
+                  "place",
+                  "pressure",
+                  "provide",
+                  "recently",
+                  "regime",
+                  "sellout",
+                  "settlement",
+                  "spread",
+                  "stand",
+                  "sudanese",
+                  "support",
+                  "suspicion",
+                  "tactic",
+                  "uar",
+                  "water"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 359,
+                    "start": 324,
+                    "text": "an opening for junior army officers"
+                  }
+                ],
+                "constructor_form": null,
+                "constructor_routing": {
+                  "constructor_form": null,
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "requires_new_constructor",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 359,
+                      "start": 324,
+                      "text": "an opening for junior army officers"
+                    }
+                  }
+                ],
+                "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: complement. Requires a new constructor or explicit withholding.",
+                "finite": null,
+                "form": "clausal",
+                "function": "complement",
+                "grammatical_number": "unknown",
+                "id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+                "operators": [],
+                "outer_family": "clausal",
+                "role": "verbal_bridge",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "to make a move against the Abboud military government",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p3",
+                      "qualifications_preserved": true,
+                      "reason": "The infinitival paraphrase supplies a grammatical verbal complement and preserves the source action and target. Within 'may provide an opening,' making a move is a possibility, not an assertion that the reported plot was executed. The earlier report's announcement timing is not imported, nor are its plotters identified as the present officers.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "76e9cea064917ecf84f6a4682f1ec4e11d8434cb3df33e6aaceb7840cc497f29",
+                      "inserted_span": [
+                        360,
+                        413
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "76e9cea064917ecf84f6a4682f1ec4e11d8434cb3df33e6aaceb7840cc497f29",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "0577856c95e9c3500ab311aeaafee988dc677e3d42b0a27786fc25aab516db01",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "final_form_fit",
+                    "pos_proof_claimed": false,
+                    "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "completed_slot_fit",
+                    "native_source_frame_or_certificate_created": false,
+                    "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_b3365bc6d19e2ab567d7a2e31871",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "eeebe8aaadf959ea0e1b40890b26e9a6a06d4e0dc5d4d5bcfc8f0d070e399d7a",
+                "original_candidate_sha256": "9a614eea248bd13aa1d64c3e473e0e0db754449874a01edf5195632305d4df0b",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "10c8109adfc9c4e7f1ff68f1dee39f50f404665bd37cc650cc93cc88a665bd6e",
+                "proposal_response_sha256": "24607a5859f0c38b2be5157a1db33c8395822fd75b6abce0fb8a0f0bbe325aa5",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "2e5d961b327d7fe6e815d7588c07fd84d1a796bce280f8f82a624e707adeff06",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 2,
+              "rank_within_new_method": 2,
+              "reading_id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+              "source": {
+                "date": "1959-09-05",
+                "document_id": "CIA-RDP79T00975A004700050001-4",
+                "exact_quote": {
+                  "end": 307,
+                  "start": 42,
+                  "text": "A new group of 30 to 35 dissident young officers is reported to be plotting a move against the Abboud military government to follow the announcement expected in mid-September of the verdicts of the court-martial against the perpetrators of the abortive 22 May coup."
+                },
+                "original_phrase": {
+                  "end": 163,
+                  "start": 109,
+                  "text": "plotting a move against the Abboud military government"
+                },
+                "page_id": "page_6001d14e45c318e71e5d",
+                "page_sha256": "03bbef7c499522b6897c919a1e58053236effc15ea0b2a5ee1583400b980072e",
+                "qualification_paragraph": {
+                  "end": 482,
+                  "start": 42,
+                  "text": "A new group of 30 to 35 dissident young officers is reported to be plotting a move against the Abboud military government to follow the announcement expected in mid-September of the verdicts of the court-martial against the perpetrators of the abortive 22 May coup. The plotters probably hope to take advantage of an expected sharp public reaction to the sentences; many Sudanese have come to believe the trials were rigged from the outset."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p3",
+                "qualifications_preserved": true,
+                "reason": "The infinitival paraphrase supplies a grammatical verbal complement and preserves the source action and target. Within 'may provide an opening,' making a move is a possibility, not an assertion that the reported plot was executed. The earlier report's announcement timing is not imported, nor are its plotters identified as the present officers.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_6001d14e45c318e71e5d",
+                  "corpus": "cib",
+                  "date": "1959-09-05",
+                  "document_id": "CIA-RDP79T00975A004700050001-4",
+                  "end": 482,
+                  "page_sha256": "03bbef7c499522b6897c919a1e58053236effc15ea0b2a5ee1583400b980072e",
+                  "start": 42,
+                  "text": "A new group of 30 to 35 dissident young officers is reported to be plotting a move against the Abboud military government to follow the announcement expected in mid-September of the verdicts of the court-martial against the perpetrators of the abortive 22 May coup. The plotters probably hope to take advantage of an expected sharp public reaction to the sentences; many Sudanese have come to believe the trials were rigged from the outset."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Recasts plotting a move as the infinitive to make a move, preserving the specified target without importing the earlier announcement timing.",
+                "kind": "PARAPHRASE"
+              }
+            },
+            {
+              "completed_input": "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests.\n\nEven if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers to take over the government. As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area.[REDACTION]",
+              "completed_input_sha256": "f89c3d9085711c9860a5f4d3b42a2429278ba20f754ac47f41bd7669a77fafe1",
+              "completed_input_utf8_sha256": "0b4ff31affc464d3de862f701556231733d4e3b8d5e588c0d6906fa9b341ce2b",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_f807c8907f0e310b1cd60d229ca5",
+                  "completed_input_sha256": "f89c3d9085711c9860a5f4d3b42a2429278ba20f754ac47f41bd7669a77fafe1",
+                  "exact_quote_sha256": "c32e1c557a04cc348455520db6a70ff0a5c21c0705d1052ef55f22177a322abd",
+                  "grammar_sha256": "e609264dbf4bc87df9b7e36e480b2dc39814a09c00f3f8748e9107543fc99338",
+                  "observation_sha256": "6ffb6972b130fa00e8296fdcab1a31f51e177d2d228ca0ab90e977be978ffd32",
+                  "plan_sha256": "025e94cac56fe9c4b0630825e72907cb706d4653d0fa9546e5594b529718babe",
+                  "provenance_sha256": "44c9e9290ce69643feff08b9a9140f31d60495f6ab8fb73af1c78add4f5482cf",
+                  "query_sha256": "dc91e39cadb364560217594f45e6f7160dbddf984a9002c4ef9f629303c106f7",
+                  "reading_sha256": "0577856c95e9c3500ab311aeaafee988dc677e3d42b0a27786fc25aab516db01",
+                  "source_phrase_sha256": "1be8931284cec18964fadb33677cb97181ad79d5bc08cc259966abe9adface49"
+                },
+                "candidate_content_terms": [
+                  "government"
+                ],
+                "components": {
+                  "lexical_novelty": 0.0,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.14666666666666667
+                },
+                "focal_query_span": {
+                  "end": 374,
+                  "start": 188,
+                  "text": "Even if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1]."
+                },
+                "focal_terms": [
+                  "abboud",
+                  "army",
+                  "civilian",
+                  "embroilment",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "manage",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "pressure",
+                  "provide"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "abboud",
+                  "army",
+                  "government",
+                  "officer"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_ca9a5b7c641605d69b83",
+                  "date": "1959-03-03",
+                  "document_id": "CIA-RDP79T00975A004300100001-2",
+                  "page_sha256": "256cb26fb72eb2b70991db8d4a35ad6899ec1cbf5e683087e2e5cd41d8c5bad9"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.0,
+                  "own_page_focal_coverage": 0.26666666666666666
+                },
+                "repeated_visible_content_terms": [
+                  "government"
+                ],
+                "score": 0.39666666666666667,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "abboud",
+                  "achieve",
+                  "actually",
+                  "additional",
+                  "antipathy",
+                  "area",
+                  "army",
+                  "chance",
+                  "civilian",
+                  "embroilment",
+                  "encourage",
+                  "favorable",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "key",
+                  "khartoum",
+                  "late",
+                  "line",
+                  "manage",
+                  "nile",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "personnel",
+                  "place",
+                  "pressure",
+                  "provide",
+                  "recently",
+                  "regime",
+                  "sellout",
+                  "settlement",
+                  "spread",
+                  "stand",
+                  "sudanese",
+                  "support",
+                  "suspicion",
+                  "tactic",
+                  "uar",
+                  "water"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 359,
+                    "start": 324,
+                    "text": "an opening for junior army officers"
+                  }
+                ],
+                "constructor_form": null,
+                "constructor_routing": {
+                  "constructor_form": null,
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "requires_new_constructor",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 359,
+                      "start": 324,
+                      "text": "an opening for junior army officers"
+                    }
+                  }
+                ],
+                "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: complement. Requires a new constructor or explicit withholding.",
+                "finite": null,
+                "form": "clausal",
+                "function": "complement",
+                "grammatical_number": "unknown",
+                "id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+                "operators": [],
+                "outer_family": "clausal",
+                "role": "verbal_bridge",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "to take over the government",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p4",
+                      "qualifications_preserved": true,
+                      "reason": "The source action phrase is retained exactly and forms a grammatical complement in the whole input. A possible takeover is contextually relevant to military opposition to Abboud. This nomination does not identify the junior officers with the earlier command commanders or assert that their aborted, attributed attempt succeeded; those historical details are not claims made by the completed sentence.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "f89c3d9085711c9860a5f4d3b42a2429278ba20f754ac47f41bd7669a77fafe1",
+                      "inserted_span": [
+                        360,
+                        387
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "f89c3d9085711c9860a5f4d3b42a2429278ba20f754ac47f41bd7669a77fafe1",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "0577856c95e9c3500ab311aeaafee988dc677e3d42b0a27786fc25aab516db01",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "final_form_fit",
+                    "pos_proof_claimed": false,
+                    "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "completed_slot_fit",
+                    "native_source_frame_or_certificate_created": false,
+                    "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_f807c8907f0e310b1cd60d229ca5",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "eeebe8aaadf959ea0e1b40890b26e9a6a06d4e0dc5d4d5bcfc8f0d070e399d7a",
+                "original_candidate_sha256": "f164f8953ea97146f0064763bd5ccb42668203d05e688e6c663733ba837375d3",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "44c9e9290ce69643feff08b9a9140f31d60495f6ab8fb73af1c78add4f5482cf",
+                "proposal_response_sha256": "24607a5859f0c38b2be5157a1db33c8395822fd75b6abce0fb8a0f0bbe325aa5",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "2e5d961b327d7fe6e815d7588c07fd84d1a796bce280f8f82a624e707adeff06",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 3,
+              "rank_within_new_method": 3,
+              "reading_id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+              "source": {
+                "date": "1959-03-03",
+                "document_id": "CIA-RDP79T00975A004300100001-2",
+                "exact_quote": {
+                  "end": 729,
+                  "start": 512,
+                  "text": "*Sudan: [An attempt to take over the government by the commanders of the Eastern and Northern Commands on 2 March was aborted after a stormy session of the Supreme Council, according to a Sudanese government official."
+                },
+                "original_phrase": {
+                  "end": 559,
+                  "start": 532,
+                  "text": "to take over the government"
+                },
+                "page_id": "page_ca9a5b7c641605d69b83",
+                "page_sha256": "256cb26fb72eb2b70991db8d4a35ad6899ec1cbf5e683087e2e5cd41d8c5bad9",
+                "qualification_paragraph": {
+                  "end": 1253,
+                  "start": 512,
+                  "text": "*Sudan: [An attempt to take over the government by the commanders of the Eastern and Northern Commands on 2 March was aborted after a stormy session of the Supreme Council, according to a Sudanese government official. Premier Abboud, who later denied publicly that there had been any disturbances, is reported loath to take action against the conspirators and ordered the commanders to return to their units. However, Council members, who were arrested and were to have been dismissed, are demanding the officers be disciplined. Although the situation is outwardly calm, it remains \"highly dangerous,\" with the prospect that Sudanese political elements and possibly the Egyptians may become involved if the internal dispute is not resolved.]"
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p4",
+                "qualifications_preserved": true,
+                "reason": "The source action phrase is retained exactly and forms a grammatical complement in the whole input. A possible takeover is contextually relevant to military opposition to Abboud. This nomination does not identify the junior officers with the earlier command commanders or assert that their aborted, attributed attempt succeeded; those historical details are not claims made by the completed sentence.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_ca9a5b7c641605d69b83",
+                  "corpus": "cib",
+                  "date": "1959-03-03",
+                  "document_id": "CIA-RDP79T00975A004300100001-2",
+                  "end": 1253,
+                  "page_sha256": "256cb26fb72eb2b70991db8d4a35ad6899ec1cbf5e683087e2e5cd41d8c5bad9",
+                  "start": 512,
+                  "text": "*Sudan: [An attempt to take over the government by the commanders of the Eastern and Northern Commands on 2 March was aborted after a stormy session of the Supreme Council, according to a Sudanese government official. Premier Abboud, who later denied publicly that there had been any disturbances, is reported loath to take action against the conspirators and ordered the commanders to return to their units. However, Council members, who were arrested and were to have been dismissed, are demanding the officers be disciplined. Although the situation is outwardly calm, it remains \"highly dangerous,\" with the prospect that Sudanese political elements and possibly the Egyptians may become involved if the internal dispute is not resolved.]"
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "The source infinitival phrase is retained exactly; the earlier commanders and event are not identified with the junior officers.",
+                "kind": "UNCHANGED"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 2,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 359,
+                "start": 324,
+                "text": "an opening for junior army officers"
+              }
+            ],
+            "constructor_form": null,
+            "constructor_routing": {
+              "constructor_form": null,
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "requires_new_constructor",
+            "cues": [
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 359,
+                  "start": 324,
+                  "text": "an opening for junior army officers"
+                }
+              }
+            ],
+            "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: complement. Requires a new constructor or explicit withholding.",
+            "finite": null,
+            "form": "clausal",
+            "function": "complement",
+            "grammatical_number": "unknown",
+            "id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+            "operators": [],
+            "outer_family": "clausal",
+            "role": "verbal_bridge",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_5232519ed1cb7cd9d8f50bdc",
+          "status": "CONTEXTUAL_CANDIDATES"
+        },
+        {
+          "candidates": [
+            {
+              "completed_input": "Their latest tactic is to encourage suspicions that the government's recently achieved, favorable Nile waters settlement with the UAR actually amounts to a sellout of Sudanese interests.\n\nEven if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers who are continuing their efforts to line up enough support for a new coup attempt. As antipathy toward the Abboud regime spreads, the junior officers will stand a better chance of lining up additional support among well-placed civilians and key army personnel in the Khartoum area.[REDACTION]",
+              "completed_input_sha256": "6666ee22fa057752aee77871270d5f4831b08dab06ef38ce3090ea3a5aea4722",
+              "completed_input_utf8_sha256": "29fe50c4ded06046a8114509dddd05769a73083b2be79f7fd81487158b6938d7",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_2cea5155d363435290afbb930f45",
+                  "completed_input_sha256": "6666ee22fa057752aee77871270d5f4831b08dab06ef38ce3090ea3a5aea4722",
+                  "exact_quote_sha256": "37fafaa0f686471cb472510443b7b199667e8cd7315ddb5a8b307de2229e9e93",
+                  "grammar_sha256": "dd50123d5c9dfc8e2bdea94cae63763b6556f10a8a60c77eb1aee2886e8949d5",
+                  "observation_sha256": "6ffb6972b130fa00e8296fdcab1a31f51e177d2d228ca0ab90e977be978ffd32",
+                  "plan_sha256": "025e94cac56fe9c4b0630825e72907cb706d4653d0fa9546e5594b529718babe",
+                  "provenance_sha256": "b52e9e381983d818240b667f358a63ec5b2bbd66f309e97376e28ff0577ff091",
+                  "query_sha256": "dc91e39cadb364560217594f45e6f7160dbddf984a9002c4ef9f629303c106f7",
+                  "reading_sha256": "7002ffc330d1aee908228254193b6145c2d41a86c36ee48ce6e65a294424c6e5",
+                  "source_phrase_sha256": "90a4fea793fe3827bfce563616b6bd2256965765892209fa434769fa1f32d02f"
+                },
+                "candidate_content_terms": [
+                  "attempt",
+                  "continue",
+                  "coup",
+                  "effort",
+                  "line",
+                  "new",
+                  "support"
+                ],
+                "components": {
+                  "lexical_novelty": 0.14285714285714288,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.22000000000000003
+                },
+                "focal_query_span": {
+                  "end": 374,
+                  "start": 188,
+                  "text": "Even if the Abboud government manages to hold firm against these growing pressures, its embroilment with civilian opponents may provide an opening for junior army officers [REDACTION 1]."
+                },
+                "focal_terms": [
+                  "abboud",
+                  "army",
+                  "civilian",
+                  "embroilment",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "manage",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "pressure",
+                  "provide"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "abboud",
+                  "civilian",
+                  "government",
+                  "junior",
+                  "officer",
+                  "pressure"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_f7692061a6deb1299b0e",
+                  "date": "1959-09-29",
+                  "document_id": "CIA-RDP79T00975A004700250001-2",
+                  "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.7142857142857143,
+                  "own_page_focal_coverage": 0.4
+                },
+                "repeated_visible_content_terms": [
+                  "line",
+                  "support"
+                ],
+                "score": 0.6128571428571429,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "abboud",
+                  "achieve",
+                  "actually",
+                  "additional",
+                  "antipathy",
+                  "area",
+                  "army",
+                  "chance",
+                  "civilian",
+                  "embroilment",
+                  "encourage",
+                  "favorable",
+                  "firm",
+                  "government",
+                  "grow",
+                  "hold",
+                  "junior",
+                  "key",
+                  "khartoum",
+                  "late",
+                  "line",
+                  "manage",
+                  "nile",
+                  "officer",
+                  "opening",
+                  "opponent",
+                  "personnel",
+                  "place",
+                  "pressure",
+                  "provide",
+                  "recently",
+                  "regime",
+                  "sellout",
+                  "settlement",
+                  "spread",
+                  "stand",
+                  "sudanese",
+                  "support",
+                  "suspicion",
+                  "tactic",
+                  "uar",
+                  "water"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 359,
+                    "start": 339,
+                    "text": "junior army officers"
+                  }
+                ],
+                "constructor_form": null,
+                "constructor_routing": {
+                  "constructor_form": null,
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "requires_new_constructor",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 359,
+                      "start": 339,
+                      "text": "junior army officers"
+                    }
+                  }
+                ],
+                "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: modifier. Requires a new constructor or explicit withholding.",
+                "finite": null,
+                "form": "clausal",
+                "function": "modifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_471ef181f77e17a8057c73c1",
+                "operators": [],
+                "outer_family": "clausal",
+                "role": "nominal_property",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "who are continuing their efforts to line up enough support for a new coup attempt",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p1",
+                      "qualifications_preserved": true,
+                      "reason": "Faithfully recasts the dissident group's continuing effort as a plural relative clause modifying junior army officers. The coup objective and support-seeking activity are preserved and fit the following sentence. The security precautions are background, not a condition on the claim.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "6666ee22fa057752aee77871270d5f4831b08dab06ef38ce3090ea3a5aea4722",
+                      "inserted_span": [
+                        360,
+                        441
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "6666ee22fa057752aee77871270d5f4831b08dab06ef38ce3090ea3a5aea4722",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "7002ffc330d1aee908228254193b6145c2d41a86c36ee48ce6e65a294424c6e5",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "final_form_fit",
+                    "pos_proof_claimed": false,
+                    "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "completed_slot_fit",
+                    "native_source_frame_or_certificate_created": false,
+                    "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_2cea5155d363435290afbb930f45",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "eeebe8aaadf959ea0e1b40890b26e9a6a06d4e0dc5d4d5bcfc8f0d070e399d7a",
+                "original_candidate_sha256": "9f1540680b1918b71740d3dedfaa287c1ff47b2d7361530d5018e306184546ed",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "b52e9e381983d818240b667f358a63ec5b2bbd66f309e97376e28ff0577ff091",
+                "proposal_response_sha256": "5e8831dd8793d0017bff27ee935af669d1c605f9c717d5cbcca06306aaeaa3ab",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "522526e141f42ba6fdac2faf88791864200ac238e4a30ea8bbf0b5dce23ca924",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_471ef181f77e17a8057c73c1",
+              "source": {
+                "date": "1959-09-29",
+                "document_id": "CIA-RDP79T00975A004700250001-2",
+                "exact_quote": {
+                  "end": 1311,
+                  "start": 1126,
+                  "text": "At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+                },
+                "original_phrase": {
+                  "end": 1310,
+                  "start": 1199,
+                  "text": "a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt"
+                },
+                "page_id": "page_f7692061a6deb1299b0e",
+                "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+                "qualification_paragraph": {
+                  "end": 1311,
+                  "start": 658,
+                  "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p1",
+                "qualifications_preserved": true,
+                "reason": "Faithfully recasts the dissident group's continuing effort as a plural relative clause modifying junior army officers. The coup objective and support-seeking activity are preserved and fit the following sentence. The security precautions are background, not a condition on the claim.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_f7692061a6deb1299b0e",
+                  "corpus": "cib",
+                  "date": "1959-09-29",
+                  "document_id": "CIA-RDP79T00975A004700250001-2",
+                  "end": 1311,
+                  "page_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+                  "start": 658,
+                  "text": "Sudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Convert the statement about a group of dissident junior officers into a relative clause modifying the supplied plural officers, changing 'is' to 'are' and 'its' to 'their'.",
+                "kind": "PARAPHRASE"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 2,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 359,
+                "start": 339,
+                "text": "junior army officers"
+              }
+            ],
+            "constructor_form": null,
+            "constructor_routing": {
+              "constructor_form": null,
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "requires_new_constructor",
+            "cues": [
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 359,
+                  "start": 339,
+                  "text": "junior army officers"
+                }
+              }
+            ],
+            "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: modifier. Requires a new constructor or explicit withholding.",
+            "finite": null,
+            "form": "clausal",
+            "function": "modifier",
+            "grammatical_number": "unknown",
+            "id": "next_reading_471ef181f77e17a8057c73c1",
+            "operators": [],
+            "outer_family": "clausal",
+            "role": "nominal_property",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_471ef181f77e17a8057c73c1",
+          "status": "CONTEXTUAL_CANDIDATES"
+        }
+      ],
+      "score_is_probability": false
+    },
+    "selected_evidence": {
+      "kind": "ACTUAL_SAVED_CANDIDATE_OWN_SOURCES",
+      "pages": [
+        {
+          "canonical_sequence": 1,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1959-09-29",
+          "document_id": "CIA-RDP79T00975A004700250001-2",
+          "earlier_page": 3,
+          "handling": [],
+          "id": "page_f7692061a6deb1299b0e",
+          "native_page": {
+            "canonical_page_id": "page_f7692061a6deb1299b0e",
+            "document_id": "CIA-RDP79T00975A004700250001-2",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 1,
+            "slot_ids": [],
+            "source_page": 3,
+            "text": "Laos: Strong feelings within the Laotian Government over French inadequacy in military training and over French efforts to play down the seriousness of the current crisis are threatening further to impair relations between the two countries. The French are reacting strongly to an American newspaper article, based on an unattributed interview with Laotian Premier Phoui, stating that Laos would sever \"major relations\" with France if the Communist threat were contained and US support continued. While Laos is unlikely to carry out this threat, the incident will widen the French-Laotian rift, to the detriment of joint Western efforts to strengthen Laos.\n\nSudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt.\n\nGuinea: President Sekou Tour\u00e9, who seems to be attempting to follow a generally neutralist foreign policy, is reported to be encountering increased pressure from the pro-Soviet element in the Guinea Government. Leading this element is National Assembly President Diallo Saifoulaye, whose prestige has been heightened by his successful negotiation in Moscow last month of the $35,000,000 Soviet loan agreement. Tour\u00e9 is scheduled to visit the US late next month and then the UK. The results of his visits may have an important effect on Tour\u00e9's relations with the Saifoulaye element.\n\n(Page 4)",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "8614c282faa95761c02082dff3937a42206167de9913e86e1cd05137cd9c7af9",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "ee38acd22590dec241765ee6641706aa5bc07722dab892c7b5bc2aa7a7e6c58d",
+          "text": "Laos: Strong feelings within the Laotian Government over French inadequacy in military training and over French efforts to play down the seriousness of the current crisis are threatening further to impair relations between the two countries. The French are reacting strongly to an American newspaper article, based on an unattributed interview with Laotian Premier Phoui, stating that Laos would sever \"major relations\" with France if the Communist threat were contained and US support continued. While Laos is unlikely to carry out this threat, the incident will widen the French-Laotian rift, to the detriment of joint Western efforts to strengthen Laos.\n\nSudan: The leader of the powerful conservative Ansar religious sect intends to approach Prime Minister Abboud to protest against the weakness and instability of the present military regime and to ask for a shift to a mixed civilian and military government. Under similar pressure from several influential political leaders, Abboud has publicly declared his willingness to \"study\" plans for such a transition, but has indicated his opposition to any immediate changes. At the same time, in spite of elaborate government security precautions, a group of dissident junior officers is continuing its efforts to line up enough support for a new coup attempt.\n\nGuinea: President Sekou Tour\u00e9, who seems to be attempting to follow a generally neutralist foreign policy, is reported to be encountering increased pressure from the pro-Soviet element in the Guinea Government. Leading this element is National Assembly President Diallo Saifoulaye, whose prestige has been heightened by his successful negotiation in Moscow last month of the $35,000,000 Soviet loan agreement. Tour\u00e9 is scheduled to visit the US late next month and then the UK. The results of his visits may have an important effect on Tour\u00e9's relations with the Saifoulaye element.\n\n(Page 4)",
+          "visibility": "earlier"
+        },
+        {
+          "canonical_sequence": 11,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1959-09-05",
+          "document_id": "CIA-RDP79T00975A004700050001-4",
+          "earlier_page": 11,
+          "handling": [],
+          "id": "page_6001d14e45c318e71e5d",
+          "native_page": {
+            "canonical_page_id": "page_6001d14e45c318e71e5d",
+            "document_id": "CIA-RDP79T00975A004700050001-4",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 11,
+            "slot_ids": [],
+            "source_page": 11,
+            "text": "New Plotting Against Sudanese Government\n\nA new group of 30 to 35 dissident young officers is reported to be plotting a move against the Abboud military government to follow the announcement expected in mid-September of the verdicts of the court-martial against the perpetrators of the abortive 22 May coup. The plotters probably hope to take advantage of an expected sharp public reaction to the sentences; many Sudanese have come to believe the trials were rigged from the outset.\n\nThe government has been concerned for some time over continuing widespread disaffection among junior army officers. Deputy Army Commander-in-Chief Hasan Bashir Nasir has attempted to head it off by transferring some officers and by posting trusted informants to the regional commands.\n\nAware of the current plotting, the government now is initiating more drastic measures. Abboud plans to delay issuance of the court-martial sentences until the middle of September to allow time for a major shake-up in key officer assignments. The army, already on sunrise-to-sunset alert, is scheduled to go on 24-hour alert beginning 10 September. Additional loyal troops will probably soon be brought into the capital to augment the Khartoum garrison.",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "50aa9abf88fa77f1e6a85c5008ca46e496ef2eb892f92b607fe2430c22184fcc",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "03bbef7c499522b6897c919a1e58053236effc15ea0b2a5ee1583400b980072e",
+          "text": "New Plotting Against Sudanese Government\n\nA new group of 30 to 35 dissident young officers is reported to be plotting a move against the Abboud military government to follow the announcement expected in mid-September of the verdicts of the court-martial against the perpetrators of the abortive 22 May coup. The plotters probably hope to take advantage of an expected sharp public reaction to the sentences; many Sudanese have come to believe the trials were rigged from the outset.\n\nThe government has been concerned for some time over continuing widespread disaffection among junior army officers. Deputy Army Commander-in-Chief Hasan Bashir Nasir has attempted to head it off by transferring some officers and by posting trusted informants to the regional commands.\n\nAware of the current plotting, the government now is initiating more drastic measures. Abboud plans to delay issuance of the court-martial sentences until the middle of September to allow time for a major shake-up in key officer assignments. The army, already on sunrise-to-sunset alert, is scheduled to go on 24-hour alert beginning 10 September. Additional loyal troops will probably soon be brought into the capital to augment the Khartoum garrison.",
+          "visibility": "earlier"
+        },
+        {
+          "canonical_sequence": 2,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1959-03-03",
+          "document_id": "CIA-RDP79T00975A004300100001-2",
+          "earlier_page": 4,
+          "handling": [],
+          "id": "page_ca9a5b7c641605d69b83",
+          "native_page": {
+            "canonical_page_id": "page_ca9a5b7c641605d69b83",
+            "document_id": "CIA-RDP79T00975A004300100001-2",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 2,
+            "slot_ids": [
+              "slot_f6f71ce1684579457e61",
+              "slot_a7fef7c625bfea671429",
+              "slot_1bc87eabcc7271ec794e"
+            ],
+            "source_page": 4,
+            "text": "II. ASIA-AFRICA\n\nIraq: [The commanders of the 1st and 2nd Divisions of the Iraqi Army are reported under house arrest. These officers, who are the principal military leaders dissatisfied with the Qasim regime, had been resisting efforts by Qasim to transfer them from their commands to the diplomatic service. Their arrest, unless it provokes an immediate counteraction from other anti-Qasim elements in the army, would seem to reduce further the chances of a successful coup against Qasim in the near future.]\n\n*Sudan: [An attempt to take over the government by the commanders of the Eastern and Northern Commands on 2 March was aborted after a stormy session of the Supreme Council, according to a Sudanese government official. Premier Abboud, who later denied publicly that there had been any disturbances, is reported loath to take action against the conspirators and ordered the commanders to return to their units. However, Council members, who were arrested and were to have been dismissed, are demanding the officers be disciplined. Although the situation is outwardly calm, it remains \"highly dangerous,\" with the prospect that Sudanese political elements and possibly the Egyptians may become involved if the internal dispute is not resolved.]\n\nCambodia - South Vietnam: Cambodia's continued public accusations against South Vietnam for involvement in plotting against Prince Sihanouk may lead to a break in relations between the two countries. The South Vietnamese envoy has left Phnom Penh after having been named by Sihanouk as the chief Vietnamese contact with dissident General Dap Chhuon. There are conflicting reports on the whereabouts and strength of Chhuon, whose headquarters was occupied by the Cambodian Army on 22 February.",
+            "unplaced_slot_ids": [
+              "slot_f6f71ce1684579457e61",
+              "slot_a7fef7c625bfea671429",
+              "slot_1bc87eabcc7271ec794e"
+            ],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "ddea9f429078d13298f737b2e10065d19db08ac43371b3fa89b1206b48958735",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "256cb26fb72eb2b70991db8d4a35ad6899ec1cbf5e683087e2e5cd41d8c5bad9",
+          "text": "II. ASIA-AFRICA\n\nIraq: [The commanders of the 1st and 2nd Divisions of the Iraqi Army are reported under house arrest. These officers, who are the principal military leaders dissatisfied with the Qasim regime, had been resisting efforts by Qasim to transfer them from their commands to the diplomatic service. Their arrest, unless it provokes an immediate counteraction from other anti-Qasim elements in the army, would seem to reduce further the chances of a successful coup against Qasim in the near future.]\n\n*Sudan: [An attempt to take over the government by the commanders of the Eastern and Northern Commands on 2 March was aborted after a stormy session of the Supreme Council, according to a Sudanese government official. Premier Abboud, who later denied publicly that there had been any disturbances, is reported loath to take action against the conspirators and ordered the commanders to return to their units. However, Council members, who were arrested and were to have been dismissed, are demanding the officers be disciplined. Although the situation is outwardly calm, it remains \"highly dangerous,\" with the prospect that Sudanese political elements and possibly the Egyptians may become involved if the internal dispute is not resolved.]\n\nCambodia - South Vietnam: Cambodia's continued public accusations against South Vietnam for involvement in plotting against Prince Sihanouk may lead to a break in relations between the two countries. The South Vietnamese envoy has left Phnom Penh after having been named by Sihanouk as the chief Vietnamese contact with dissident General Dap Chhuon. There are conflicting reports on the whereabouts and strength of Chhuon, whose headquarters was occupied by the Cambodian Army on 22 February.",
+          "visibility": "earlier"
+        }
+      ]
+    }
+  },
+  "typed_source_method_admission_not_issued": true,
+  "version": "historical-source-only-workbench-data/1"
+}

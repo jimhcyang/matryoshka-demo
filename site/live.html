@@ -6,13 +6,13 @@
   <meta name="referrer" content="no-referrer">
   <meta name="live-backend" content="">
   <meta name="live-corpus-scopes" content="data/live-corpus-scopes.json" data-content-sha256="9fc1d47fb4d957f80298a81f09bb9495c2958a228568faebbf1ec0ccb008dbec">
-  <meta name="source-api-index-sha256" content="79417029ab712d94eda10e678c50df965aa605e8afe0d780a82901a7e83a63b9">
+  <meta name="source-api-index-sha256" content="91ee273dc7efda1bbc3d80445bb6781623573328d0ef3871a72de0984762141d">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' http://127.0.0.1:8977; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'self' blob:">
   <title>Matryoshka | Live</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="app-navigation.css">
   <link rel="stylesheet" href="live.css">
-  <script type="module" src="live.js"></script>
+  <script type="module" src="live.js?v=20261127-unified1"></script>
 </head>
 <body>
   <header id="app-navigation" data-view="live"></header>
@@ -23,6 +23,7 @@
       <h1>Analyze a new input.</h1>
       <p class="lede">Check a claim or reconstruct missing wording against the permitted sources.</p>
       <p id="availability" class="notice" role="status">Live requires an authenticated backend. GitHub Pages cannot run the pipeline.</p>
+      <a id="local-companion" class="secondary" href="http://127.0.0.1:8977/matryoshka-demo/live.html">Open local Live companion</a>
     </section>
     <div class="workspace">
       <section class="question-panel" aria-labelledby="question-title">

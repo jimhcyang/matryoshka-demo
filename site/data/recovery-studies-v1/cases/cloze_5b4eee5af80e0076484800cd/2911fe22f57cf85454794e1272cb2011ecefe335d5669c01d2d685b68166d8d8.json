@@ -1,0 +1,1401 @@
+{
+  "QA_answers_or_grades_included": false,
+  "case": {
+    "case_id": "cloze_5b4eee5af80e0076484800cd",
+    "corpus": "cib",
+    "date": "1958-10-20",
+    "document_id": "CIA-RDP79T00975A004000330001-0",
+    "focal_marker": "[REDACTION 1]",
+    "query": "Morocco: The long-expected government reorganization in Morocco may be imminent since the extremist wing of the Istiqlal party is increasingly discontented over the King's [REDACTION 1] role and over the cabinet's lack of control of the army and security forces. Although Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet, the left-wing group's influence would increase. Paris has indicated concern at the developing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops--now reported to number about 15,000. [REDACTION] ",
+    "task": "redaction"
+  },
+  "missing_transport": {
+    "endpoint": null,
+    "fabricated_routes_or_support_votes": false,
+    "graph_walk": null,
+    "origin_refs": null,
+    "parent_typed_adapter_and_normal_source_v6_export_required": true,
+    "source_routes": []
+  },
+  "native_baseline": {
+    "baseline_verdicts_unchanged": true,
+    "checkpoint_sha256": "460f036220a8b214d02bdf81812e18d422490a97cad13404b8b836d3b5ddad4a",
+    "code_pins_sha256": "e159da0aa5f59740ebb31a374e8917c24c052a18b16efa80b534c7771345e3cc",
+    "configuration": {
+      "completed_drafts_per_reading": 64,
+      "construction_pages": 32,
+      "method": "current_hierarchy",
+      "retrieval_document_budget": 40,
+      "retrieval_passage_budget": 80,
+      "selection_profile": {
+        "candidate_focal_fraction": 0.5,
+        "constructor_family_mode": "first_class_adjuncts",
+        "counter_policy": "positive_support",
+        "cue_order_mode": "source_alignment",
+        "identity_first": true,
+        "page_focal_fraction": 0.5,
+        "scan_pages": 512,
+        "source_phrase_mode": "scoped",
+        "supplemental_mode": "source_form_opportunities"
+      },
+      "source_view_policy": {
+        "cable_classification": "CONFIDENTIAL",
+        "cable_document_wide_handling_veto": true,
+        "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+        "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+        "cutoff_role": "source_document_date",
+        "date_relation": "<=",
+        "id": "source_day_inclusive",
+        "later_or_secret_version_admitted": false,
+        "source_dates_or_document_ids_rewritten": false,
+        "version": "trusted-corpus-source-view/1"
+      },
+      "terminal_ranking": "evidence_fit_v7",
+      "top_k": 5
+    },
+    "execution_context_sha256": "fc1fb1e688d707f52a937f642fcd509d1bc060714cde395a27393af63f87054f",
+    "native_checksum": "800336c749e2d2ef24bfe654211f8f8e116d9aa5274cbc99b6a83619cbc669aa",
+    "proposal_slate_is_not_native_result": true,
+    "source_view_policy": {
+      "cable_classification": "CONFIDENTIAL",
+      "cable_document_wide_handling_veto": true,
+      "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+      "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+      "cutoff_role": "source_document_date",
+      "date_relation": "<=",
+      "id": "source_day_inclusive",
+      "later_or_secret_version_admitted": false,
+      "source_dates_or_document_ids_rewritten": false,
+      "version": "trusted-corpus-source-view/1"
+    },
+    "version": "narrative-local-execution/4"
+  },
+  "publication_authorized": false,
+  "saved_method": {
+    "QA_method_sha256": "bb5a0adca543c2181ae735344fc1b0ccec337171e121163c23a989290fc08cc6",
+    "factual_support_certified": false,
+    "name": "SOURCE_PROPOSALS_CONTEXT_ONLY",
+    "score_version": "source-proposal-context-priority/1",
+    "source_results_sha256": "5599083c2b938dbaed1c5d038cbe512f540a12e449e813cc5e5abeeba9e41784",
+    "source_slates_sha256": "408c5346b579c66fdb3e02fd2d2dbba6757f3fac70b7365f3f4d9ec918040497"
+  },
+  "sections": {
+    "analyst_summary": {
+      "actual_digest_ref": null,
+      "calls_authorized_here": 0,
+      "new_method_body_must_include_exact_saved_slate": true,
+      "parent_paid_generation_needed_for_populated_summary": true,
+      "rebind_from_related_public_case_allowed": false,
+      "status": "NO_EXACT_SAVED_METHOD_DIGEST_IN_BOUNDED_INVENTORY",
+      "text": null
+    },
+    "facts_to_evidence": {
+      "kind": "CONTEXTUAL_MODEL_REVIEW_AND_LOCAL_GRAMMAR_NOT_FACTUAL_VOTES",
+      "records": [
+        {
+          "candidate_id": "source_reviewed_fill_d1ce3f7a8055856f3c16e8a323df",
+          "citations": [
+            {
+              "canonical_page_id": "page_61d3bb2410fd353688c4",
+              "corpus": "cib",
+              "date": "1958-10-20",
+              "document_id": "CIA-RDP79T00975A004000330001-0",
+              "end": 1146,
+              "page_sha256": "64428316bb1275cb17654085487e60506e870115e79d5ba7d7205bfc1f285f95",
+              "start": 618,
+              "text": "Istiqlal extremists are particularly critical of the cabinet's lack of control over the army and security forces, which are under the King's jurisdiction. Their request for a change in this control was rejected by the King recently after the issue was highlighted by the anti-Istiqlal activities of a rival party in the Rif mountain area. Istiqlal leaders consider that the director of national security was slow in acting against this party's terrorism. They also accuse him of playing off one Istiqlal faction against another."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p3",
+                  "qualifications_preserved": true,
+                  "reason": "The forces' being under the King's jurisdiction, together with his rejection of a requested change in control, faithfully supports describing his role as controlling in this context. The adjective fits the whole sentence without requiring inference of opaque text.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "02592c27a05ba699f635ebd50ddbfc2cacbfc473dc3cd08234e494e19121a770",
+                  "inserted_span": [
+                    172,
+                    183
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "02592c27a05ba699f635ebd50ddbfc2cacbfc473dc3cd08234e494e19121a770",
+                  "constructor_form": "modifier",
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "amod",
+                    "lemma": "control",
+                    "pos": "VERB",
+                    "span": [
+                      172,
+                      183
+                    ],
+                    "tag": "VBG",
+                    "text": "controlling"
+                  },
+                  "inserted_span": [
+                    172,
+                    183
+                  ],
+                  "outer_family": "adjectival",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_ADJECTIVAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "02592c27a05ba699f635ebd50ddbfc2cacbfc473dc3cd08234e494e19121a770",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "cb1be474ad8b029834c573c63ef99bcccdd066daee5f8d8c70d956e79f003cf0",
+            "unsupported_diagnostics": [
+              {
+                "helper": "completed_slot_fit",
+                "positive_source_frame_invented": false,
+                "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_4b77818251f24e17497c6783",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p3",
+            "qualifications_preserved": true,
+            "reason": "The forces' being under the King's jurisdiction, together with his rejection of a requested change in control, faithfully supports describing his role as controlling in this context. The adjective fits the whole sentence without requiring inference of opaque text.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1958-10-20",
+            "document_id": "CIA-RDP79T00975A004000330001-0",
+            "exact_quote": {
+              "end": 772,
+              "start": 618,
+              "text": "Istiqlal extremists are particularly critical of the cabinet's lack of control over the army and security forces, which are under the King's jurisdiction."
+            },
+            "original_phrase": {
+              "end": 771,
+              "start": 742,
+              "text": "under the King's jurisdiction"
+            },
+            "page_id": "page_61d3bb2410fd353688c4",
+            "page_sha256": "64428316bb1275cb17654085487e60506e870115e79d5ba7d7205bfc1f285f95",
+            "qualification_paragraph": {
+              "end": 1146,
+              "start": 618,
+              "text": "Istiqlal extremists are particularly critical of the cabinet's lack of control over the army and security forces, which are under the King's jurisdiction. Their request for a change in this control was rejected by the King recently after the issue was highlighted by the anti-Istiqlal activities of a rival party in the Rif mountain area. Istiqlal leaders consider that the director of national security was slow in acting against this party's terrorism. They also accuse him of playing off one Istiqlal faction against another."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_ce5da54baf4d7384184a1fce24ce",
+          "citations": [
+            {
+              "canonical_page_id": "page_955c03aa12215fbe7b42",
+              "corpus": "cib",
+              "date": "1958-08-19",
+              "document_id": "CIA-RDP79T00975A003900150001-2",
+              "end": 1680,
+              "page_sha256": "4cd0fd810ee311707f42b45ec03f97319e08837c6f6272659f8a5d3275e35c88",
+              "start": 1342,
+              "text": "The position of Balafrej, and to a lesser extent that of the King, remains tenuous because of left-wing Istiqlal and labor union criticism of the predominantly moderate government. Belief is widespread throughout Morocco that the American bases were used to support the landings in Lebanon and that atomic weapons are stored at the bases."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p4",
+                  "qualifications_preserved": true,
+                  "reason": "The source explicitly describes the King's political position as tenuous, though less so than Balafrej's. 'Tenuous role' is a grammatical contextual rendering of that political vulnerability; it does not assert equal vulnerability. This nomination does not establish that vulnerability was the particular object of discontent in the concealed passage.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "5621a24c1d382e0cb6135445ed1ce65fabc38f0a924bf4b6b500442736df575b",
+                  "inserted_span": [
+                    172,
+                    179
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "5621a24c1d382e0cb6135445ed1ce65fabc38f0a924bf4b6b500442736df575b",
+                  "constructor_form": "modifier",
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "amod",
+                    "lemma": "tenuous",
+                    "pos": "ADJ",
+                    "span": [
+                      172,
+                      179
+                    ],
+                    "tag": "JJ",
+                    "text": "tenuous"
+                  },
+                  "inserted_span": [
+                    172,
+                    179
+                  ],
+                  "outer_family": "adjectival",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_ADJECTIVAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "5621a24c1d382e0cb6135445ed1ce65fabc38f0a924bf4b6b500442736df575b",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "cb1be474ad8b029834c573c63ef99bcccdd066daee5f8d8c70d956e79f003cf0",
+            "unsupported_diagnostics": [
+              {
+                "helper": "completed_slot_fit",
+                "positive_source_frame_invented": false,
+                "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_4b77818251f24e17497c6783",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p4",
+            "qualifications_preserved": true,
+            "reason": "The source explicitly describes the King's political position as tenuous, though less so than Balafrej's. 'Tenuous role' is a grammatical contextual rendering of that political vulnerability; it does not assert equal vulnerability. This nomination does not establish that vulnerability was the particular object of discontent in the concealed passage.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1958-08-19",
+            "document_id": "CIA-RDP79T00975A003900150001-2",
+            "exact_quote": {
+              "end": 1522,
+              "start": 1342,
+              "text": "The position of Balafrej, and to a lesser extent that of the King, remains tenuous because of left-wing Istiqlal and labor union criticism of the predominantly moderate government."
+            },
+            "original_phrase": {
+              "end": 1424,
+              "start": 1417,
+              "text": "tenuous"
+            },
+            "page_id": "page_955c03aa12215fbe7b42",
+            "page_sha256": "4cd0fd810ee311707f42b45ec03f97319e08837c6f6272659f8a5d3275e35c88",
+            "qualification_paragraph": {
+              "end": 1680,
+              "start": 1342,
+              "text": "The position of Balafrej, and to a lesser extent that of the King, remains tenuous because of left-wing Istiqlal and labor union criticism of the predominantly moderate government. Belief is widespread throughout Morocco that the American bases were used to support the landings in Lebanon and that atomic weapons are stored at the bases."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        }
+      ]
+    },
+    "facts_to_look_for": {
+      "atoms": [
+        {
+          "id": "a1",
+          "kind": "proposition",
+          "modality": "possible",
+          "object": "imminent",
+          "polarity": "positive",
+          "predicate": "may be",
+          "query_quotes": [
+            "The long-expected government reorganization in Morocco may be imminent"
+          ],
+          "query_spans": [
+            {
+              "end": 79,
+              "start": 9,
+              "text": "The long-expected government reorganization in Morocco may be imminent"
+            }
+          ],
+          "required": true,
+          "source_quote": "The long-expected government reorganization in Morocco may be imminent",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "The long-expected government reorganization in Morocco",
+          "text": "The long-expected government reorganization in Morocco may be imminent."
+        },
+        {
+          "id": "a2",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "the King's [REDACTION 1] role and the cabinet's lack of control of the army and security forces",
+          "polarity": "positive",
+          "predicate": "is increasingly discontented over",
+          "query_quotes": [
+            "the extremist wing of the Istiqlal party is increasingly discontented over the King's [REDACTION 1] role and over the cabinet's lack of control of the army and security forces."
+          ],
+          "query_spans": [
+            {
+              "end": 262,
+              "start": 86,
+              "text": "the extremist wing of the Istiqlal party is increasingly discontented over the King's [REDACTION 1] role and over the cabinet's lack of control of the army and security forces."
+            }
+          ],
+          "required": true,
+          "source_quote": "the extremist wing of the Istiqlal party is increasingly discontented over the King's [REDACTION 1] role and over the cabinet's lack of control of the army and security forces.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "the extremist wing of the Istiqlal party",
+          "text": "The extremist wing of the Istiqlal party is increasingly discontented over the King's [REDACTION 1] role and over the cabinet's lack of control of the army and security forces."
+        },
+        {
+          "id": "a3",
+          "kind": "proposition",
+          "modality": "reported",
+          "object": "nominal leadership of any new cabinet",
+          "polarity": "positive",
+          "predicate": "is expected to retain",
+          "query_quotes": [
+            "Although Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet, the left-wing group's influence would increase."
+          ],
+          "query_spans": [
+            {
+              "end": 404,
+              "start": 263,
+              "text": "Although Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet, the left-wing group's influence would increase."
+            }
+          ],
+          "required": true,
+          "source_quote": "Although Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet, the left-wing group's influence would increase.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Prime Minister Balafrej",
+          "text": "Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet."
+        },
+        {
+          "id": "a4",
+          "kind": "proposition",
+          "modality": "conditional",
+          "object": null,
+          "polarity": "positive",
+          "predicate": "would increase",
+          "query_quotes": [
+            "Although Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet, the left-wing group's influence would increase."
+          ],
+          "query_spans": [
+            {
+              "end": 404,
+              "start": 263,
+              "text": "Although Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet, the left-wing group's influence would increase."
+            }
+          ],
+          "required": true,
+          "source_quote": "Although Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet, the left-wing group's influence would increase.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "the left-wing group's influence",
+          "text": "The left-wing group's influence would increase."
+        },
+        {
+          "id": "a5",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "the developing political instability in Morocco",
+          "polarity": "positive",
+          "predicate": "has indicated concern at",
+          "query_quotes": [
+            "Paris has indicated concern at the developing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops--now reported to number about 15,000."
+          ],
+          "query_spans": [
+            {
+              "end": 588,
+              "start": 405,
+              "text": "Paris has indicated concern at the developing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops--now reported to number about 15,000."
+            }
+          ],
+          "required": true,
+          "source_quote": "Paris has indicated concern at the developing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops--now reported to number about 15,000.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Paris",
+          "text": "Paris has indicated concern at the developing political instability in Morocco."
+        },
+        {
+          "id": "a6",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "the withdrawal of the remaining French troops--now reported to number about 15,000",
+          "polarity": "positive",
+          "predicate": "is reconsidering",
+          "query_quotes": [
+            "Paris has indicated concern at the developing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops--now reported to number about 15,000."
+          ],
+          "query_spans": [
+            {
+              "end": 588,
+              "start": 405,
+              "text": "Paris has indicated concern at the developing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops--now reported to number about 15,000."
+            }
+          ],
+          "required": true,
+          "source_quote": "Paris has indicated concern at the developing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops--now reported to number about 15,000.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Paris",
+          "text": "Paris is reconsidering the withdrawal of the remaining French troops, now reported to number about 15,000."
+        }
+      ],
+      "kind": "RECORDED_PUBLIC_QUERY_REQUIREMENTS_NOT_WORLD_FACTS"
+    },
+    "saved_fills": {
+      "order_unchanged": true,
+      "primary_reading_id": "next_reading_4b77818251f24e17497c6783",
+      "readings": [
+        {
+          "candidates": [],
+          "deferred_record_n": 0,
+          "held_record_n": 3,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 190,
+                "start": 186,
+                "text": "role"
+              }
+            ],
+            "constructor_form": "modifier",
+            "constructor_routing": {
+              "constructor_form": "modifier",
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "legacy_compatible_subset",
+            "cues": [
+              {
+                "kind": "boundary",
+                "span": {
+                  "end": 171,
+                  "start": 161,
+                  "text": "the King's"
+                }
+              },
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 190,
+                  "start": 186,
+                  "text": "role"
+                }
+              }
+            ],
+            "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: modifier. Legacy subset route: modifier.",
+            "finite": null,
+            "form": "nominal",
+            "function": "modifier",
+            "grammatical_number": "unknown",
+            "id": "next_reading_7a0ae549a4e486083d69ea61",
+            "operators": [],
+            "outer_family": "nominal",
+            "role": "nominal_property",
+            "target_kind": "any",
+            "variant": "compound_modifier",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_7a0ae549a4e486083d69ea61",
+          "status": "NO_ADMITTED_CONTEXTUAL_CANDIDATES"
+        },
+        {
+          "candidates": [
+            {
+              "completed_input": "Morocco: The long-expected government reorganization in Morocco may be imminent since the extremist wing of the Istiqlal party is increasingly discontented over the King's controlling role and over the cabinet's lack of control of the army and security forces. Although Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet, the left-wing group's influence would increase. Paris has indicated concern at the developing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops--now reported to number about 15,000. [REDACTION] ",
+              "completed_input_sha256": "02592c27a05ba699f635ebd50ddbfc2cacbfc473dc3cd08234e494e19121a770",
+              "completed_input_utf8_sha256": "255cafa9ac42c61c60d7f22a99a38ce943a39e595e90b3c33f76c2e76b1de36d",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_d1ce3f7a8055856f3c16e8a323df",
+                  "completed_input_sha256": "02592c27a05ba699f635ebd50ddbfc2cacbfc473dc3cd08234e494e19121a770",
+                  "exact_quote_sha256": "7b104b7ab26f3e55cf50d5ca287d1d824aec135ff2e2382e7fc2bb5fa5a1529f",
+                  "grammar_sha256": "0ac4334b3bc743e6096c2817573c8a565eefc6a1f2371fcf0e59859e24a4a8c3",
+                  "observation_sha256": "00990bfe35498a83723d224a1ba9b96ba2ac4f7247c5c9c03ab9b974c71ece39",
+                  "plan_sha256": "6f6d17767087a4619d7a509ad25f8a2dddf2d1570d732faf453c6aeef32ee9bf",
+                  "provenance_sha256": "367e3134f6cc6d2ff093cb0de0c60d382d0fb6178341eb2f11e70f2f2138d2d6",
+                  "query_sha256": "baa3a5f148254db9718768069d6a4c69885846841cb31795a0552aeaba7e9ce4",
+                  "reading_sha256": "cb1be474ad8b029834c573c63ef99bcccdd066daee5f8d8c70d956e79f003cf0",
+                  "source_phrase_sha256": "5b0744d7688547250979537142bd96e2139e4884ec89157f48b557b4d81b4e12"
+                },
+                "candidate_content_terms": [
+                  "control"
+                ],
+                "components": {
+                  "lexical_novelty": 0.0,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.4675
+                },
+                "focal_query_span": {
+                  "end": 262,
+                  "start": 0,
+                  "text": "Morocco: The long-expected government reorganization in Morocco may be imminent since the extremist wing of the Istiqlal party is increasingly discontented over the King's [REDACTION 1] role and over the cabinet's lack of control of the army and security forces."
+                },
+                "focal_terms": [
+                  "army",
+                  "cabinet",
+                  "control",
+                  "discontent",
+                  "expect",
+                  "extremist",
+                  "force",
+                  "government",
+                  "imminent",
+                  "increasingly",
+                  "istiqlal",
+                  "king",
+                  "lack",
+                  "long",
+                  "morocco",
+                  "party",
+                  "reorganization",
+                  "role",
+                  "security",
+                  "wing"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "army",
+                  "cabinet",
+                  "control",
+                  "discontent",
+                  "expect",
+                  "extremist",
+                  "force",
+                  "government",
+                  "imminent",
+                  "istiqlal",
+                  "king",
+                  "lack",
+                  "long",
+                  "morocco",
+                  "party",
+                  "security",
+                  "wing"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_61d3bb2410fd353688c4",
+                  "date": "1958-10-20",
+                  "document_id": "CIA-RDP79T00975A004000330001-0",
+                  "page_sha256": "64428316bb1275cb17654085487e60506e870115e79d5ba7d7205bfc1f285f95"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.0,
+                  "own_page_focal_coverage": 0.85
+                },
+                "repeated_visible_content_terms": [
+                  "control"
+                ],
+                "score": 0.7175,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "15,000",
+                  "army",
+                  "balafrej",
+                  "cabinet",
+                  "concern",
+                  "control",
+                  "develop",
+                  "discontent",
+                  "expect",
+                  "extremist",
+                  "force",
+                  "french",
+                  "government",
+                  "group",
+                  "imminent",
+                  "increase",
+                  "increasingly",
+                  "indicate",
+                  "influence",
+                  "instability",
+                  "istiqlal",
+                  "king",
+                  "lack",
+                  "leadership",
+                  "left",
+                  "long",
+                  "minister",
+                  "morocco",
+                  "new",
+                  "nominal",
+                  "number",
+                  "paris",
+                  "party",
+                  "political",
+                  "prime",
+                  "reconsider",
+                  "remain",
+                  "reorganization",
+                  "report",
+                  "retain",
+                  "role",
+                  "security",
+                  "troop",
+                  "wing",
+                  "withdrawal"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 190,
+                    "start": 186,
+                    "text": "role"
+                  }
+                ],
+                "constructor_form": "modifier",
+                "constructor_routing": {
+                  "constructor_form": "modifier",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 171,
+                      "start": 161,
+                      "text": "the King's"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 190,
+                      "start": 186,
+                      "text": "role"
+                    }
+                  }
+                ],
+                "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+                "finite": null,
+                "form": "adjectival",
+                "function": "modifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_4b77818251f24e17497c6783",
+                "operators": [],
+                "outer_family": "adjectival",
+                "role": "nominal_property",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "controlling",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p3",
+                      "qualifications_preserved": true,
+                      "reason": "The forces' being under the King's jurisdiction, together with his rejection of a requested change in control, faithfully supports describing his role as controlling in this context. The adjective fits the whole sentence without requiring inference of opaque text.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "02592c27a05ba699f635ebd50ddbfc2cacbfc473dc3cd08234e494e19121a770",
+                      "inserted_span": [
+                        172,
+                        183
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "02592c27a05ba699f635ebd50ddbfc2cacbfc473dc3cd08234e494e19121a770",
+                      "constructor_form": "modifier",
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "amod",
+                        "lemma": "control",
+                        "pos": "VERB",
+                        "span": [
+                          172,
+                          183
+                        ],
+                        "tag": "VBG",
+                        "text": "controlling"
+                      },
+                      "inserted_span": [
+                        172,
+                        183
+                      ],
+                      "outer_family": "adjectival",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_ADJECTIVAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "02592c27a05ba699f635ebd50ddbfc2cacbfc473dc3cd08234e494e19121a770",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "cb1be474ad8b029834c573c63ef99bcccdd066daee5f8d8c70d956e79f003cf0",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "completed_slot_fit",
+                    "positive_source_frame_invented": false,
+                    "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_d1ce3f7a8055856f3c16e8a323df",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "460f036220a8b214d02bdf81812e18d422490a97cad13404b8b836d3b5ddad4a",
+                "original_candidate_sha256": "896d285f6eacaec4f5a6a8680433b00a7b4ee490535054039622a97b2ba5586c",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "367e3134f6cc6d2ff093cb0de0c60d382d0fb6178341eb2f11e70f2f2138d2d6",
+                "proposal_response_sha256": "9f2d6e87ee67c553216098157e05822f5b80d846c99b7f0926c72b4ca3ed780e",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "fef1860fda8e9f2835ac5f74fcbe43441a47b87ac21accf96f72095a141bd28e",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_4b77818251f24e17497c6783",
+              "source": {
+                "date": "1958-10-20",
+                "document_id": "CIA-RDP79T00975A004000330001-0",
+                "exact_quote": {
+                  "end": 772,
+                  "start": 618,
+                  "text": "Istiqlal extremists are particularly critical of the cabinet's lack of control over the army and security forces, which are under the King's jurisdiction."
+                },
+                "original_phrase": {
+                  "end": 771,
+                  "start": 742,
+                  "text": "under the King's jurisdiction"
+                },
+                "page_id": "page_61d3bb2410fd353688c4",
+                "page_sha256": "64428316bb1275cb17654085487e60506e870115e79d5ba7d7205bfc1f285f95",
+                "qualification_paragraph": {
+                  "end": 1146,
+                  "start": 618,
+                  "text": "Istiqlal extremists are particularly critical of the cabinet's lack of control over the army and security forces, which are under the King's jurisdiction. Their request for a change in this control was rejected by the King recently after the issue was highlighted by the anti-Istiqlal activities of a rival party in the Rif mountain area. Istiqlal leaders consider that the director of national security was slow in acting against this party's terrorism. They also accuse him of playing off one Istiqlal faction against another."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p3",
+                "qualifications_preserved": true,
+                "reason": "The forces' being under the King's jurisdiction, together with his rejection of a requested change in control, faithfully supports describing his role as controlling in this context. The adjective fits the whole sentence without requiring inference of opaque text.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_61d3bb2410fd353688c4",
+                  "corpus": "cib",
+                  "date": "1958-10-20",
+                  "document_id": "CIA-RDP79T00975A004000330001-0",
+                  "end": 1146,
+                  "page_sha256": "64428316bb1275cb17654085487e60506e870115e79d5ba7d7205bfc1f285f95",
+                  "start": 618,
+                  "text": "Istiqlal extremists are particularly critical of the cabinet's lack of control over the army and security forces, which are under the King's jurisdiction. Their request for a change in this control was rejected by the King recently after the issue was highlighted by the anti-Istiqlal activities of a rival party in the Rif mountain area. Istiqlal leaders consider that the director of national security was slow in acting against this party's terrorism. They also accuse him of playing off one Istiqlal faction against another."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Recasts the forces being under the King's jurisdiction as a controlling role for the King.",
+                "kind": "PARAPHRASE"
+              }
+            },
+            {
+              "completed_input": "Morocco: The long-expected government reorganization in Morocco may be imminent since the extremist wing of the Istiqlal party is increasingly discontented over the King's tenuous role and over the cabinet's lack of control of the army and security forces. Although Prime Minister Balafrej is expected to retain nominal leadership of any new cabinet, the left-wing group's influence would increase. Paris has indicated concern at the developing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops--now reported to number about 15,000. [REDACTION] ",
+              "completed_input_sha256": "5621a24c1d382e0cb6135445ed1ce65fabc38f0a924bf4b6b500442736df575b",
+              "completed_input_utf8_sha256": "cdac4636fffd7d2486193edc4d414302004e7287b354aed441eaeb290c28f51d",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_ce5da54baf4d7384184a1fce24ce",
+                  "completed_input_sha256": "5621a24c1d382e0cb6135445ed1ce65fabc38f0a924bf4b6b500442736df575b",
+                  "exact_quote_sha256": "c819af3abc625ee5f16b85ccb95c8fe8ccc9d93ad5b52fcecdca9937ab696ff7",
+                  "grammar_sha256": "9925f764863b7bc41cd235f98f718a782ffc8f33af46fdbdda31a723365732d2",
+                  "observation_sha256": "00990bfe35498a83723d224a1ba9b96ba2ac4f7247c5c9c03ab9b974c71ece39",
+                  "plan_sha256": "6f6d17767087a4619d7a509ad25f8a2dddf2d1570d732faf453c6aeef32ee9bf",
+                  "provenance_sha256": "e28ed95a2c8201e6b8b064115bd7db4162e574a74afb215b60b9e4e872d51851",
+                  "query_sha256": "baa3a5f148254db9718768069d6a4c69885846841cb31795a0552aeaba7e9ce4",
+                  "reading_sha256": "cb1be474ad8b029834c573c63ef99bcccdd066daee5f8d8c70d956e79f003cf0",
+                  "source_phrase_sha256": "3d741c25b17dc2889672c0a601684a4ab7d76c52ecdfd7f16261fb0ed294bc99"
+                },
+                "candidate_content_terms": [
+                  "tenuous"
+                ],
+                "components": {
+                  "lexical_novelty": 0.2,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.1925
+                },
+                "focal_query_span": {
+                  "end": 262,
+                  "start": 0,
+                  "text": "Morocco: The long-expected government reorganization in Morocco may be imminent since the extremist wing of the Istiqlal party is increasingly discontented over the King's [REDACTION 1] role and over the cabinet's lack of control of the army and security forces."
+                },
+                "focal_terms": [
+                  "army",
+                  "cabinet",
+                  "control",
+                  "discontent",
+                  "expect",
+                  "extremist",
+                  "force",
+                  "government",
+                  "imminent",
+                  "increasingly",
+                  "istiqlal",
+                  "king",
+                  "lack",
+                  "long",
+                  "morocco",
+                  "party",
+                  "reorganization",
+                  "role",
+                  "security",
+                  "wing"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "force",
+                  "government",
+                  "istiqlal",
+                  "king",
+                  "morocco",
+                  "party",
+                  "wing"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_955c03aa12215fbe7b42",
+                  "date": "1958-08-19",
+                  "document_id": "CIA-RDP79T00975A003900150001-2",
+                  "page_sha256": "4cd0fd810ee311707f42b45ec03f97319e08837c6f6272659f8a5d3275e35c88"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 1.0,
+                  "own_page_focal_coverage": 0.35
+                },
+                "repeated_visible_content_terms": [],
+                "score": 0.6425000000000001,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "15,000",
+                  "army",
+                  "balafrej",
+                  "cabinet",
+                  "concern",
+                  "control",
+                  "develop",
+                  "discontent",
+                  "expect",
+                  "extremist",
+                  "force",
+                  "french",
+                  "government",
+                  "group",
+                  "imminent",
+                  "increase",
+                  "increasingly",
+                  "indicate",
+                  "influence",
+                  "instability",
+                  "istiqlal",
+                  "king",
+                  "lack",
+                  "leadership",
+                  "left",
+                  "long",
+                  "minister",
+                  "morocco",
+                  "new",
+                  "nominal",
+                  "number",
+                  "paris",
+                  "party",
+                  "political",
+                  "prime",
+                  "reconsider",
+                  "remain",
+                  "reorganization",
+                  "report",
+                  "retain",
+                  "role",
+                  "security",
+                  "troop",
+                  "wing",
+                  "withdrawal"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 190,
+                    "start": 186,
+                    "text": "role"
+                  }
+                ],
+                "constructor_form": "modifier",
+                "constructor_routing": {
+                  "constructor_form": "modifier",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 171,
+                      "start": 161,
+                      "text": "the King's"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 190,
+                      "start": 186,
+                      "text": "role"
+                    }
+                  }
+                ],
+                "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+                "finite": null,
+                "form": "adjectival",
+                "function": "modifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_4b77818251f24e17497c6783",
+                "operators": [],
+                "outer_family": "adjectival",
+                "role": "nominal_property",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "tenuous",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p4",
+                      "qualifications_preserved": true,
+                      "reason": "The source explicitly describes the King's political position as tenuous, though less so than Balafrej's. 'Tenuous role' is a grammatical contextual rendering of that political vulnerability; it does not assert equal vulnerability. This nomination does not establish that vulnerability was the particular object of discontent in the concealed passage.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "5621a24c1d382e0cb6135445ed1ce65fabc38f0a924bf4b6b500442736df575b",
+                      "inserted_span": [
+                        172,
+                        179
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "5621a24c1d382e0cb6135445ed1ce65fabc38f0a924bf4b6b500442736df575b",
+                      "constructor_form": "modifier",
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "amod",
+                        "lemma": "tenuous",
+                        "pos": "ADJ",
+                        "span": [
+                          172,
+                          179
+                        ],
+                        "tag": "JJ",
+                        "text": "tenuous"
+                      },
+                      "inserted_span": [
+                        172,
+                        179
+                      ],
+                      "outer_family": "adjectival",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_ADJECTIVAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "5621a24c1d382e0cb6135445ed1ce65fabc38f0a924bf4b6b500442736df575b",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "cb1be474ad8b029834c573c63ef99bcccdd066daee5f8d8c70d956e79f003cf0",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "completed_slot_fit",
+                    "positive_source_frame_invented": false,
+                    "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_ce5da54baf4d7384184a1fce24ce",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "460f036220a8b214d02bdf81812e18d422490a97cad13404b8b836d3b5ddad4a",
+                "original_candidate_sha256": "b515adec013b5da05234f4d4586924421e41940b68f2738deb9acb0780e9cdae",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "e28ed95a2c8201e6b8b064115bd7db4162e574a74afb215b60b9e4e872d51851",
+                "proposal_response_sha256": "9f2d6e87ee67c553216098157e05822f5b80d846c99b7f0926c72b4ca3ed780e",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "fef1860fda8e9f2835ac5f74fcbe43441a47b87ac21accf96f72095a141bd28e",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 2,
+              "rank_within_new_method": 2,
+              "reading_id": "next_reading_4b77818251f24e17497c6783",
+              "source": {
+                "date": "1958-08-19",
+                "document_id": "CIA-RDP79T00975A003900150001-2",
+                "exact_quote": {
+                  "end": 1522,
+                  "start": 1342,
+                  "text": "The position of Balafrej, and to a lesser extent that of the King, remains tenuous because of left-wing Istiqlal and labor union criticism of the predominantly moderate government."
+                },
+                "original_phrase": {
+                  "end": 1424,
+                  "start": 1417,
+                  "text": "tenuous"
+                },
+                "page_id": "page_955c03aa12215fbe7b42",
+                "page_sha256": "4cd0fd810ee311707f42b45ec03f97319e08837c6f6272659f8a5d3275e35c88",
+                "qualification_paragraph": {
+                  "end": 1680,
+                  "start": 1342,
+                  "text": "The position of Balafrej, and to a lesser extent that of the King, remains tenuous because of left-wing Istiqlal and labor union criticism of the predominantly moderate government. Belief is widespread throughout Morocco that the American bases were used to support the landings in Lebanon and that atomic weapons are stored at the bases."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p4",
+                "qualifications_preserved": true,
+                "reason": "The source explicitly describes the King's political position as tenuous, though less so than Balafrej's. 'Tenuous role' is a grammatical contextual rendering of that political vulnerability; it does not assert equal vulnerability. This nomination does not establish that vulnerability was the particular object of discontent in the concealed passage.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_955c03aa12215fbe7b42",
+                  "corpus": "cib",
+                  "date": "1958-08-19",
+                  "document_id": "CIA-RDP79T00975A003900150001-2",
+                  "end": 1680,
+                  "page_sha256": "4cd0fd810ee311707f42b45ec03f97319e08837c6f6272659f8a5d3275e35c88",
+                  "start": 1342,
+                  "text": "The position of Balafrej, and to a lesser extent that of the King, remains tenuous because of left-wing Istiqlal and labor union criticism of the predominantly moderate government. Belief is widespread throughout Morocco that the American bases were used to support the landings in Lebanon and that atomic weapons are stored at the bases."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Retains the source adjective, which applies to the King's position to a lesser extent than Balafrej's.",
+                "kind": "UNCHANGED"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 2,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 190,
+                "start": 186,
+                "text": "role"
+              }
+            ],
+            "constructor_form": "modifier",
+            "constructor_routing": {
+              "constructor_form": "modifier",
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "legacy_compatible_subset",
+            "cues": [
+              {
+                "kind": "boundary",
+                "span": {
+                  "end": 171,
+                  "start": 161,
+                  "text": "the King's"
+                }
+              },
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 190,
+                  "start": 186,
+                  "text": "role"
+                }
+              }
+            ],
+            "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+            "finite": null,
+            "form": "adjectival",
+            "function": "modifier",
+            "grammatical_number": "unknown",
+            "id": "next_reading_4b77818251f24e17497c6783",
+            "operators": [],
+            "outer_family": "adjectival",
+            "role": "nominal_property",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_4b77818251f24e17497c6783",
+          "status": "CONTEXTUAL_CANDIDATES"
+        }
+      ],
+      "score_is_probability": false
+    },
+    "selected_evidence": {
+      "kind": "ACTUAL_SAVED_CANDIDATE_OWN_SOURCES",
+      "pages": [
+        {
+          "canonical_sequence": 8,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1958-10-20",
+          "document_id": "CIA-RDP79T00975A004000330001-0",
+          "earlier_page": 6,
+          "handling": [],
+          "id": "page_61d3bb2410fd353688c4",
+          "native_page": {
+            "canonical_page_id": "page_61d3bb2410fd353688c4",
+            "document_id": "CIA-RDP79T00975A004000330001-0",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 8,
+            "slot_ids": [
+              "slot_3b4b1ac5143aab36b711",
+              "slot_cf6a6cded7157b632006",
+              "slot_62222d3589dc3abcc3b7"
+            ],
+            "source_page": 6,
+            "text": "Pressures Growing for Reshuffle of Moroccan Government\n\nDiscontent with the present Moroccan Government, including the King's [[REDACTION_SLOT:001:slot_3b4b1ac5143aab36b711]] position, has grown to such an extent among left-wing elements in the dominant Istiqlal party that the well-informed Tunisian ambassador believes the long-anticipated cabinet reshuffle is imminent. The ambassador expects moderate Prime Minister Balafrej to retain his office, but believes Istiqlal extremists like Ibrahim, Ben Barka, and Bouabid will increase their influence in the cabinet. [[REDACTION_SLOT:002:slot_cf6a6cded7157b632006]].\n\nIstiqlal extremists are particularly critical of the cabinet's lack of control over the army and security forces, which are under the King's jurisdiction. Their request for a change in this control was rejected by the King recently after the issue was highlighted by the anti-Istiqlal activities of a rival party in the Rif mountain area. Istiqlal leaders consider that the director of national security was slow in acting against this party's terrorism. They also accuse him of playing off one Istiqlal faction against another.\n\nParis is concerned over the growing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops, recently reported to number 15,000. France fears that if public order is not assured, the sizable French colony and its interests will be endangered. French failure to continue troop withdrawals would, in the opinion of the American ambassador, be interpreted by Rabat as intransigence and signal a \"marked deterioration in Franco-Moroccan relations in the immediate future.\" [[REDACTION_SLOT:003:slot_62222d3589dc3abcc3b7]]",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "0a3d049d49b275b17b958635b34a6a1d5e10aa97673c777f2c7b5f83718aa7ad",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "64428316bb1275cb17654085487e60506e870115e79d5ba7d7205bfc1f285f95",
+          "text": "Pressures Growing for Reshuffle of Moroccan Government\n\nDiscontent with the present Moroccan Government, including the King's [[REDACTION_SLOT:001:slot_3b4b1ac5143aab36b711]] position, has grown to such an extent among left-wing elements in the dominant Istiqlal party that the well-informed Tunisian ambassador believes the long-anticipated cabinet reshuffle is imminent. The ambassador expects moderate Prime Minister Balafrej to retain his office, but believes Istiqlal extremists like Ibrahim, Ben Barka, and Bouabid will increase their influence in the cabinet. [[REDACTION_SLOT:002:slot_cf6a6cded7157b632006]].\n\nIstiqlal extremists are particularly critical of the cabinet's lack of control over the army and security forces, which are under the King's jurisdiction. Their request for a change in this control was rejected by the King recently after the issue was highlighted by the anti-Istiqlal activities of a rival party in the Rif mountain area. Istiqlal leaders consider that the director of national security was slow in acting against this party's terrorism. They also accuse him of playing off one Istiqlal faction against another.\n\nParis is concerned over the growing political instability in Morocco and is reconsidering the withdrawal of the remaining French troops, recently reported to number 15,000. France fears that if public order is not assured, the sizable French colony and its interests will be endangered. French failure to continue troop withdrawals would, in the opinion of the American ambassador, be interpreted by Rabat as intransigence and signal a \"marked deterioration in Franco-Moroccan relations in the immediate future.\" [[REDACTION_SLOT:003:slot_62222d3589dc3abcc3b7]]",
+          "visibility": "earlier"
+        },
+        {
+          "canonical_sequence": 3,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1958-08-19",
+          "document_id": "CIA-RDP79T00975A003900150001-2",
+          "earlier_page": 6,
+          "handling": [],
+          "id": "page_955c03aa12215fbe7b42",
+          "native_page": {
+            "canonical_page_id": "page_955c03aa12215fbe7b42",
+            "document_id": "CIA-RDP79T00975A003900150001-2",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 3,
+            "slot_ids": [
+              "slot_419060e6adfe4b0fb128",
+              "slot_ad197d608f1d5797fe9a"
+            ],
+            "source_page": 6,
+            "text": "[[REDACTION_SLOT:001:slot_419060e6adfe4b0fb128]].\n\nII. ASIA-AFRICA\n\nMoroccan Premier Asks US to Recognize \"Principle of Evacuation\"\n\nDuring a discussion on 15 August of the future of the American bases in Morocco, Premier Ahmed Balafrej indicated to the American ambassador that the United States must recognize the \"principle of evacuation,\" and make clear that US forces are in Morocco temporarily and have no intention of maintaining permanent bases. This is the first time Balafrej has made such a request, although other officials have informally urged that a declaration of intention to evacuate the bases be made.\n\nSince early this year the left wing of the Istiqlal party has been whipping up popular agitation for the total evacuation of all foreign troops, and Balafrej told an American news reporter recently that because France has not asked to retain four of the five American bases, United States forces must leave when the French forces depart.\n\nBalafrej told the ambassador that there are in fact no US bases in Morocco--\"only French bases containing US forces but under the French flag, French guard, and conducting relations with the Moroccan Government through French liaison.\" The premier expressed some doubt that a provisional agreement is possible in the \"present climate of opinion in Morocco and other Arab states.\"\n\nThe position of Balafrej, and to a lesser extent that of the King, remains tenuous because of left-wing Istiqlal and labor union criticism of the predominantly moderate government. Belief is widespread throughout Morocco that the American bases were used to support the landings in Lebanon and that atomic weapons are stored at the bases.",
+            "unplaced_slot_ids": [
+              "slot_ad197d608f1d5797fe9a"
+            ],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "1d8e389cd5bcce7546733b9ec04a9ae4d8422b61704ac12771b736551ce34318",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "4cd0fd810ee311707f42b45ec03f97319e08837c6f6272659f8a5d3275e35c88",
+          "text": "[[REDACTION_SLOT:001:slot_419060e6adfe4b0fb128]].\n\nII. ASIA-AFRICA\n\nMoroccan Premier Asks US to Recognize \"Principle of Evacuation\"\n\nDuring a discussion on 15 August of the future of the American bases in Morocco, Premier Ahmed Balafrej indicated to the American ambassador that the United States must recognize the \"principle of evacuation,\" and make clear that US forces are in Morocco temporarily and have no intention of maintaining permanent bases. This is the first time Balafrej has made such a request, although other officials have informally urged that a declaration of intention to evacuate the bases be made.\n\nSince early this year the left wing of the Istiqlal party has been whipping up popular agitation for the total evacuation of all foreign troops, and Balafrej told an American news reporter recently that because France has not asked to retain four of the five American bases, United States forces must leave when the French forces depart.\n\nBalafrej told the ambassador that there are in fact no US bases in Morocco--\"only French bases containing US forces but under the French flag, French guard, and conducting relations with the Moroccan Government through French liaison.\" The premier expressed some doubt that a provisional agreement is possible in the \"present climate of opinion in Morocco and other Arab states.\"\n\nThe position of Balafrej, and to a lesser extent that of the King, remains tenuous because of left-wing Istiqlal and labor union criticism of the predominantly moderate government. Belief is widespread throughout Morocco that the American bases were used to support the landings in Lebanon and that atomic weapons are stored at the bases.",
+          "visibility": "earlier"
+        }
+      ]
+    }
+  },
+  "typed_source_method_admission_not_issued": true,
+  "version": "historical-source-only-workbench-data/1"
+}

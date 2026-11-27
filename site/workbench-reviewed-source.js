@@ -15,6 +15,8 @@ export async function loadReviewedSourceMethod(options){
 }
 function current(handle){const r=routes.get(handle);if(!r||attempts.get(r.record)!==r.token||r.signal?.aborted)fail();r.api.reviewedSourceSummary(handle);return r;}
 export function reviewedSourceSummary(handle){return current(handle).api.reviewedSourceSummary(handle);}
+// Layout adapters may read only the same record already bound by the reader.
+export function reviewedSourceRecord(handle){return current(handle).record;}
 export function renderReviewedSourceWorkspace(handle,options={}){
   const route=current(handle),wrapped={...options,assertSelectionCurrent:()=>current(handle)};
   for(const key of ['onSource','onOrigin','onBaseline','onDetails'])if(typeof options[key]==='function')wrapped[key]=(...args)=>{current(handle);return options[key](...args);};

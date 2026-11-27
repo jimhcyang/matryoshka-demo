@@ -2,7 +2,7 @@
 import re
 
 
-VERIFY=r"""async ({row,config})=>{
+LEGACY_VERIFY=r"""async ({row,config})=>{
  const check=(v,t)=>{if(!v)throw Error(t);},same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
  const m=await import('./local-decisions-v65.js'),ui=await import('./workbench-reviewed-source.js');
  const params={case_id:row.case.case_id,config,...Object.fromEntries(['resource_id','registry_sha256','index_sha256'].map(k=>[k,row.resource_binding[k]]))};
@@ -64,8 +64,63 @@ VERIFY=r"""async ({row,config})=>{
 }"""
 
 
+VERIFY=r"""async ({row,config})=>{
+ const check=(v,t)=>{if(!v)throw Error(t);},same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+ const m=await import('./local-decisions-v65.js'),ui=await import('./workbench-reviewed-source.js');
+ const {normalizeSourcePresentation,sourceProofKey}=await import('./workbench-source-presentation.js');
+ const params={case_id:row.case.case_id,config,...Object.fromEntries(['resource_id','registry_sha256','index_sha256'].map(k=>[k,row.resource_binding[k]]))};
+ const url='/api/current/condition-v6?'+new URLSearchParams(params);
+ const raw=await PublicReplay.verified(url),condition=m.verifyCurrentResourceResponse(url,JSON.parse(new TextDecoder().decode(raw.decoded)));
+ const record=condition.configurations[config];
+ const handle=await ui.loadReviewedSourceMethod({row,record,config,resourceBinding:row.resource_binding,
+   base:location.href,verified:url=>PublicReplay.verified(url)});
+ check(handle,'Verified current source-method handle is required');
+ const view=handle.view,summary=ui.reviewedSourceSummary(handle),data=normalizeSourcePresentation(view,record,summary);
+ check(document.querySelector('[data-testid=standard-summary]'),'Common saved-case presentation missing');
+ check(document.querySelector('[data-testid=local-verdict-title]')?.textContent===summary.title,'Wrong source-method verdict');
+ const facts=[...document.querySelectorAll('#stage-02 [data-testid=plan-atom]')];
+ check(facts.length===data.facts.length,'Changed fact inventory');
+ facts.forEach((f,i)=>check(f.dataset.atomId===data.facts[i].id,'Changed fact identity'));
+ let branch=data,expected;
+ if(view.method_id==='source_realized_redaction_v1'){
+   const selected=document.querySelector('[data-testid=plan-reading-select]');
+   branch=data.readings.find(b=>b.id===selected?.value);check(branch,'Displayed reading is not recorded');
+   const cards=[...document.querySelectorAll('#stage-05 [data-testid=standard-candidate]')].filter(c=>!c.closest('.sw-reserves'));
+   expected=branch.candidates.slice(0,5);check(cards.length===expected.length,'Wrong candidate count');
+   cards.forEach((card,i)=>{const c=expected[i],original=view.readings.find(b=>b.reading.id===branch.id).candidates[i];
+     check(c.id===original.id&&c.rank===original.rank&&c.fill===original.fill&&c.priority===original.priority.value,'Normalizer changed original candidate');
+     check(card.dataset.candidateId===c.id,'Wrong candidate order');
+     check(card.querySelector('.sw-score-value')?.textContent===original.priority.value.toFixed(4),'Wrong candidate score');
+     check(card.querySelector('.sw-result-label')?.textContent===c.label,'Wrong evidence label');});
+ }else{
+   const cards=[...document.querySelectorAll('#stage-05 [data-testid=result-atom]')];
+   check(cards.length===view.atoms.length,'Wrong fact verdict count');
+   cards.forEach((card,i)=>{const atom=view.atoms[i],unit=data.units[i];
+     check(card.dataset.atomId===atom.id&&unit.status===atom.status,'Changed source verdict');
+     check(card.querySelector('.sw-result-label')?.textContent===unit.label,'Wrong fact label');
+     if(view.case.task==='hypothesis')for(const direction of ['SUPPORT','OPPOSE']){
+       const docs=new Map();for(const e of unit.evidence.filter(e=>e.direction===direction))docs.set(e.proof.document_id,Math.max(docs.get(e.proof.document_id)||0,e.score));
+       const total=[...docs.values()].reduce((a,b)=>a+b,0),bar=card.querySelector('[data-direction='+direction+']');
+       check(bar?.querySelector('.sw-score-value')?.textContent===total.toFixed(4),'Wrong independently recomputed directional total');
+     }
+   });
+ }
+ const expectedQuotes=new Map(branch.proofs.map(p=>[sourceProofKey(p),p]));
+ const shown=[...document.querySelectorAll('#stage-04 [data-testid=used-source-quote]')].filter(e=>!e.closest('.sw-related-context'));
+ check(shown.length===expectedQuotes.size,'Wrong deduplicated selected-quote inventory');
+ const matched=new Set();let chosen;
+ for(const q of shown){const text=q.querySelector('blockquote')?.dataset.originalText||q.querySelector('blockquote')?.textContent;
+   const p=[...expectedQuotes.values()].find(p=>p.canonical_page_id===q.dataset.sourceId&&p.document_id===q.dataset.documentId&&p.text===text);
+   check(p,'Changed selected source/quotation');matched.add(sourceProofKey(p));chosen??=p;}
+ check(matched.size===expectedQuotes.size&&chosen,'Missing original selected quotation');
+ check(document.querySelector('#stage-03 svg'),'Facts-to-evidence map missing');
+ return {method_id:view.method_id,proof:chosen,control:'#stage-04 [data-testid=used-source-quote]',facts:facts.length,
+   used_quotes:shown.length,source_count:expectedQuotes.size};
+}"""
+
+
 def check(page,row,saved,display,params,packet,assert_source,digest,checksums):
-    page.locator('[data-testid=compact-verdict][data-method-id]').wait_for(state='visible',timeout=90000)
+    page.locator('[data-testid=standard-summary]').wait_for(state='visible',timeout=90000)
     assert not page.locator('#page-error').inner_text().strip()
     page.wait_for_function("document.querySelector('#case-view')?.getAttribute('aria-busy')==='false'",timeout=90000)
     assert re.match(r'01\s+Input\s+02\s+Facts',page.locator('.workflow-nav').inner_text())
@@ -84,7 +139,21 @@ def check(page,row,saved,display,params,packet,assert_source,digest,checksums):
     assert page.get_by_test_id('source-document').get_attribute('data-original-text')==source_page['text']
     marks=page.locator('#detail-drawer .source-document mark')
     assert proof['text'] in ''.join(marks.get_attribute('data-original-text') or marks.text_content() for marks in marks.all())
+    pdf_canvases=0
+    if saved['case']['corpus']=='cib':
+        canvases=page.locator('#detail-drawer canvas[data-render-state=verified]')
+        canvases.nth(1).wait_for(state='visible',timeout=60000)
+        assert canvases.count()==2, 'Both original release PDFs must render'
+        for canvas in canvases.all():
+            assert canvas.evaluate('''node=>{
+              if(node.width<10||node.height<10)return false;
+              const rgba=node.getContext('2d').getImageData(0,0,node.width,node.height).data;
+              for(let i=0;i<rgba.length;i+=64)if(rgba[i+3]&&Math.min(rgba[i],rgba[i+1],rgba[i+2])<230)return true;
+              return false;
+            }'''), 'Original PDF canvas is blank'
+        pdf_canvases=2
     page.locator('#detail-close').click()
     assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+2')
     row.update(case_id=saved['case']['case_id'],native_checksums=checksums,facts=result['facts'],
-        used_quotes=result['used_quotes'],source_binding_proofs=result['source_count'],exact_source_inspected=True,method_id=result['method_id'],no_result_gates=True)
+        used_quotes=result['used_quotes'],source_binding_proofs=result['source_count'],exact_source_inspected=True,
+        original_pdf_canvases=pdf_canvases,method_id=result['method_id'],no_result_gates=True)

@@ -1,0 +1,820 @@
+{
+  "QA_answers_or_grades_included": false,
+  "case": {
+    "case_id": "cloze_3da41e71db37531afa492267",
+    "corpus": "cib",
+    "date": "1961-01-06",
+    "document_id": "CIA-RDP79T00975A005500050001-5",
+    "focal_marker": "[REDACTION 1]",
+    "query": "Nepal: Leaders of both the Communist party and the former ruling Nepal Congress party have begun separately to operate underground in Nepal. They are also engaging in organizational activities in India in opposition to the takeover of the government by King Mahendra. The King's 5 January ban on political parties will strengthen their determination to oppose his direct-rule policies. Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders and has reportedly received New Delhi's [REDACTION 1] blessing for \"limited resistance activities.\" Subarna has, however, ruled out collaboration with the Communists. [REDACTION]",
+    "task": "redaction"
+  },
+  "missing_transport": {
+    "endpoint": null,
+    "fabricated_routes_or_support_votes": false,
+    "graph_walk": null,
+    "origin_refs": null,
+    "parent_typed_adapter_and_normal_source_v6_export_required": true,
+    "source_routes": []
+  },
+  "native_baseline": {
+    "baseline_verdicts_unchanged": true,
+    "checkpoint_sha256": "ba61e878779389e6565efc607b048eedcb1982ddae353259ca57acf693e08e57",
+    "code_pins_sha256": "e159da0aa5f59740ebb31a374e8917c24c052a18b16efa80b534c7771345e3cc",
+    "configuration": {
+      "completed_drafts_per_reading": 64,
+      "construction_pages": 32,
+      "method": "current_hierarchy",
+      "retrieval_document_budget": 40,
+      "retrieval_passage_budget": 80,
+      "selection_profile": {
+        "candidate_focal_fraction": 0.5,
+        "constructor_family_mode": "first_class_adjuncts",
+        "counter_policy": "positive_support",
+        "cue_order_mode": "source_alignment",
+        "identity_first": true,
+        "page_focal_fraction": 0.5,
+        "scan_pages": 512,
+        "source_phrase_mode": "scoped",
+        "supplemental_mode": "source_form_opportunities"
+      },
+      "source_view_policy": {
+        "cable_classification": "CONFIDENTIAL",
+        "cable_document_wide_handling_veto": true,
+        "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+        "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+        "cutoff_role": "source_document_date",
+        "date_relation": "<=",
+        "id": "source_day_inclusive",
+        "later_or_secret_version_admitted": false,
+        "source_dates_or_document_ids_rewritten": false,
+        "version": "trusted-corpus-source-view/1"
+      },
+      "terminal_ranking": "evidence_fit_v7",
+      "top_k": 5
+    },
+    "execution_context_sha256": "fc1fb1e688d707f52a937f642fcd509d1bc060714cde395a27393af63f87054f",
+    "native_checksum": "29eb9ef20231ea75ad487af06ffe1087a44d177cae3d1b418e5dbf85bf7e992b",
+    "proposal_slate_is_not_native_result": true,
+    "source_view_policy": {
+      "cable_classification": "CONFIDENTIAL",
+      "cable_document_wide_handling_veto": true,
+      "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+      "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+      "cutoff_role": "source_document_date",
+      "date_relation": "<=",
+      "id": "source_day_inclusive",
+      "later_or_secret_version_admitted": false,
+      "source_dates_or_document_ids_rewritten": false,
+      "version": "trusted-corpus-source-view/1"
+    },
+    "version": "narrative-local-execution/4"
+  },
+  "publication_authorized": false,
+  "saved_method": {
+    "QA_method_sha256": "bb5a0adca543c2181ae735344fc1b0ccec337171e121163c23a989290fc08cc6",
+    "factual_support_certified": false,
+    "name": "SOURCE_PROPOSALS_CONTEXT_ONLY",
+    "score_version": "source-proposal-context-priority/1",
+    "source_results_sha256": "5599083c2b938dbaed1c5d038cbe512f540a12e449e813cc5e5abeeba9e41784",
+    "source_slates_sha256": "408c5346b579c66fdb3e02fd2d2dbba6757f3fac70b7365f3f4d9ec918040497"
+  },
+  "sections": {
+    "analyst_summary": {
+      "actual_digest_ref": null,
+      "calls_authorized_here": 0,
+      "new_method_body_must_include_exact_saved_slate": true,
+      "parent_paid_generation_needed_for_populated_summary": true,
+      "rebind_from_related_public_case_allowed": false,
+      "status": "NO_EXACT_SAVED_METHOD_DIGEST_IN_BOUNDED_INVENTORY",
+      "text": null
+    },
+    "facts_to_evidence": {
+      "kind": "CONTEXTUAL_MODEL_REVIEW_AND_LOCAL_GRAMMAR_NOT_FACTUAL_VOTES",
+      "records": [
+        {
+          "candidate_id": "source_reviewed_fill_82a6d9d9c1594d5d42484a7cfd60",
+          "citations": [
+            {
+              "canonical_page_id": "page_b047c59223758bad0ce4",
+              "corpus": "cib",
+              "date": "1960-12-16",
+              "document_id": "CIA-RDP79T00975A005400400001-7",
+              "end": 1866,
+              "page_sha256": "f50ef737cba499722a8376fd7e7e1be83759d9e61b4f4051ab260d5d0a6c566b",
+              "start": 1671,
+              "text": "The Indian Government, which had strongly supported Koirala, may decide to lend covert support to democratic elements should Mahendra fail to restore representative government in the near future."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p1",
+                  "qualifications_preserved": true,
+                  "reason": "'Covert' is an unchanged source adjective describing possible Indian support to democratic elements opposing Mahendra's direct rule. It fits naturally in 'New Delhi's covert blessing' and is contextually relevant. This nomination does not establish that the source's conditional possibility became an actual blessing to Subarna; the source remains prospective and conditional.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "750260fb29bd6bd2994dbad7aaafb2dcb041f21544314b9b5ffdb68f4763b93b",
+                  "inserted_span": [
+                    590,
+                    596
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "750260fb29bd6bd2994dbad7aaafb2dcb041f21544314b9b5ffdb68f4763b93b",
+                  "constructor_form": "modifier",
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "amod",
+                    "lemma": "covert",
+                    "pos": "ADJ",
+                    "span": [
+                      590,
+                      596
+                    ],
+                    "tag": "JJ",
+                    "text": "covert"
+                  },
+                  "inserted_span": [
+                    590,
+                    596
+                  ],
+                  "outer_family": "adjectival",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_ADJECTIVAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "750260fb29bd6bd2994dbad7aaafb2dcb041f21544314b9b5ffdb68f4763b93b",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "ad6a0718028682a5f0354ba8bfb04e632e360ae53c9a6fc368505a9dc319467f",
+            "unsupported_diagnostics": [
+              {
+                "helper": "completed_slot_fit",
+                "positive_source_frame_invented": false,
+                "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_e0871bfd223daf6a27f31d67",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p1",
+            "qualifications_preserved": true,
+            "reason": "'Covert' is an unchanged source adjective describing possible Indian support to democratic elements opposing Mahendra's direct rule. It fits naturally in 'New Delhi's covert blessing' and is contextually relevant. This nomination does not establish that the source's conditional possibility became an actual blessing to Subarna; the source remains prospective and conditional.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1960-12-16",
+            "document_id": "CIA-RDP79T00975A005400400001-7",
+            "exact_quote": {
+              "end": 1866,
+              "start": 1671,
+              "text": "The Indian Government, which had strongly supported Koirala, may decide to lend covert support to democratic elements should Mahendra fail to restore representative government in the near future."
+            },
+            "original_phrase": {
+              "end": 1757,
+              "start": 1751,
+              "text": "covert"
+            },
+            "page_id": "page_b047c59223758bad0ce4",
+            "page_sha256": "f50ef737cba499722a8376fd7e7e1be83759d9e61b4f4051ab260d5d0a6c566b",
+            "qualification_paragraph": {
+              "end": 1866,
+              "start": 1671,
+              "text": "The Indian Government, which had strongly supported Koirala, may decide to lend covert support to democratic elements should Mahendra fail to restore representative government in the near future."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        }
+      ]
+    },
+    "facts_to_look_for": {
+      "atoms": [
+        {
+          "id": "a1",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "Nepal",
+          "polarity": "positive",
+          "predicate": "have begun separately to operate underground in",
+          "query_quotes": [
+            "Leaders of both the Communist party and the former ruling Nepal Congress party have begun separately to operate underground in Nepal."
+          ],
+          "query_spans": [
+            {
+              "end": 140,
+              "start": 7,
+              "text": "Leaders of both the Communist party and the former ruling Nepal Congress party have begun separately to operate underground in Nepal."
+            }
+          ],
+          "required": false,
+          "source_quote": "Leaders of both the Communist party and the former ruling Nepal Congress party have begun separately to operate underground in Nepal.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Leaders of both the Communist party and the former ruling Nepal Congress party",
+          "text": "Leaders of both the Communist party and the former ruling Nepal Congress party have begun separately to operate underground in Nepal."
+        },
+        {
+          "id": "a2",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "organizational activities in India in opposition to the takeover of the government by King Mahendra",
+          "polarity": "positive",
+          "predicate": "are engaging in",
+          "query_quotes": [
+            "They are also engaging in organizational activities in India in opposition to the takeover of the government by King Mahendra."
+          ],
+          "query_spans": [
+            {
+              "end": 267,
+              "start": 141,
+              "text": "They are also engaging in organizational activities in India in opposition to the takeover of the government by King Mahendra."
+            }
+          ],
+          "required": false,
+          "source_quote": "They are also engaging in organizational activities in India in opposition to the takeover of the government by King Mahendra.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Leaders of both the Communist party and the former ruling Nepal Congress party",
+          "text": "The leaders are also engaging in organizational activities in India in opposition to the takeover of the government by King Mahendra."
+        },
+        {
+          "id": "a3",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "the leaders' determination to oppose his direct-rule policies",
+          "polarity": "positive",
+          "predicate": "will strengthen",
+          "query_quotes": [
+            "The King's 5 January ban on political parties will strengthen their determination to oppose his direct-rule policies."
+          ],
+          "query_spans": [
+            {
+              "end": 385,
+              "start": 268,
+              "text": "The King's 5 January ban on political parties will strengthen their determination to oppose his direct-rule policies."
+            }
+          ],
+          "required": false,
+          "source_quote": "The King's 5 January ban on political parties will strengthen their determination to oppose his direct-rule policies.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "The King's 5 January ban on political parties",
+          "text": "The King's 5 January ban on political parties will strengthen the leaders' determination to oppose his direct-rule policies."
+        },
+        {
+          "id": "a4",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "Indian government leaders",
+          "polarity": "positive",
+          "predicate": "is already in contact with",
+          "query_quotes": [
+            "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders and has reportedly received New Delhi's [REDACTION 1] blessing for \"limited resistance activities.\""
+          ],
+          "query_spans": [
+            {
+              "end": 649,
+              "start": 386,
+              "text": "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders and has reportedly received New Delhi's [REDACTION 1] blessing for \"limited resistance activities.\""
+            }
+          ],
+          "required": false,
+          "source_quote": "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders and has reportedly received New Delhi's [REDACTION 1] blessing for \"limited resistance activities.\"",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December",
+          "text": "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders."
+        },
+        {
+          "id": "a5",
+          "kind": "proposition",
+          "modality": "reported",
+          "object": "New Delhi's [REDACTION 1] blessing for \"limited resistance activities\"",
+          "polarity": "positive",
+          "predicate": "has reportedly received",
+          "query_quotes": [
+            "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders and has reportedly received New Delhi's [REDACTION 1] blessing for \"limited resistance activities.\""
+          ],
+          "query_spans": [
+            {
+              "end": 649,
+              "start": 386,
+              "text": "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders and has reportedly received New Delhi's [REDACTION 1] blessing for \"limited resistance activities.\""
+            }
+          ],
+          "required": false,
+          "source_quote": "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders and has reportedly received New Delhi's [REDACTION 1] blessing for \"limited resistance activities.\"",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December",
+          "text": "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, has reportedly received New Delhi's [REDACTION 1] blessing for \"limited resistance activities.\""
+        },
+        {
+          "id": "a6",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "collaboration with the Communists",
+          "polarity": "positive",
+          "predicate": "has ruled out",
+          "query_quotes": [
+            "Subarna has, however, ruled out collaboration with the Communists."
+          ],
+          "query_spans": [
+            {
+              "end": 716,
+              "start": 650,
+              "text": "Subarna has, however, ruled out collaboration with the Communists."
+            }
+          ],
+          "required": false,
+          "source_quote": "Subarna has, however, ruled out collaboration with the Communists.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Subarna",
+          "text": "Subarna has ruled out collaboration with the Communists."
+        }
+      ],
+      "kind": "RECORDED_PUBLIC_QUERY_REQUIREMENTS_NOT_WORLD_FACTS"
+    },
+    "saved_fills": {
+      "order_unchanged": true,
+      "primary_reading_id": "next_reading_e0871bfd223daf6a27f31d67",
+      "readings": [
+        {
+          "candidates": [
+            {
+              "completed_input": "Nepal: Leaders of both the Communist party and the former ruling Nepal Congress party have begun separately to operate underground in Nepal. They are also engaging in organizational activities in India in opposition to the takeover of the government by King Mahendra. The King's 5 January ban on political parties will strengthen their determination to oppose his direct-rule policies. Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders and has reportedly received New Delhi's covert blessing for \"limited resistance activities.\" Subarna has, however, ruled out collaboration with the Communists. [REDACTION]",
+              "completed_input_sha256": "750260fb29bd6bd2994dbad7aaafb2dcb041f21544314b9b5ffdb68f4763b93b",
+              "completed_input_utf8_sha256": "49189d1f7fba98441b4ee29523aa9d5fab2533b534eabf92facff5ded8180922",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_82a6d9d9c1594d5d42484a7cfd60",
+                  "completed_input_sha256": "750260fb29bd6bd2994dbad7aaafb2dcb041f21544314b9b5ffdb68f4763b93b",
+                  "exact_quote_sha256": "c3d0656919055564d1bf16cdfb6a7a04f19c78040d594b2b1bc980a388081f87",
+                  "grammar_sha256": "5b60189aade7139766d9697cde8a3611beb5e132a5241954d94f1517433f5931",
+                  "observation_sha256": "33d2a6bee0345dd093499086f0a01973e0d8768468a2d26b9baa063a72cfc7a5",
+                  "plan_sha256": "c0eb76e4629311f45e65823f67892cd3257232745303c5a5b4020d4375bd2d0d",
+                  "provenance_sha256": "01925cf1a1348245caa952948ddc7ec5d0acfc24fc8ad9b941a5050aa077669c",
+                  "query_sha256": "fce818023765c785047b233466626e2f181d75fe0acdaa6adc4c7b169659ff8d",
+                  "reading_sha256": "ad6a0718028682a5f0354ba8bfb04e632e360ae53c9a6fc368505a9dc319467f",
+                  "source_phrase_sha256": "14c71799152c38cc5c11092d2d7a751374c4f2e85957513a8ab3aba1384b9854"
+                },
+                "candidate_content_terms": [
+                  "covert"
+                ],
+                "components": {
+                  "lexical_novelty": 0.2,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.20952380952380953
+                },
+                "focal_query_span": {
+                  "end": 649,
+                  "start": 386,
+                  "text": "Former Deputy Prime Minister Subarna Shumsher, who has been in Calcutta since the King's takeover in December, is already in contact with Indian government leaders and has reportedly received New Delhi's [REDACTION 1] blessing for \"limited resistance activities.\""
+                },
+                "focal_terms": [
+                  "activity",
+                  "blessing",
+                  "calcutta",
+                  "contact",
+                  "december",
+                  "delhi",
+                  "deputy",
+                  "government",
+                  "indian",
+                  "king",
+                  "leader",
+                  "limited",
+                  "minister",
+                  "new",
+                  "prime",
+                  "receive",
+                  "reportedly",
+                  "resistance",
+                  "shumsher",
+                  "subarna",
+                  "takeover"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "december",
+                  "delhi",
+                  "government",
+                  "indian",
+                  "king",
+                  "minister",
+                  "new",
+                  "prime"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_b047c59223758bad0ce4",
+                  "date": "1960-12-16",
+                  "document_id": "CIA-RDP79T00975A005400400001-7",
+                  "page_sha256": "f50ef737cba499722a8376fd7e7e1be83759d9e61b4f4051ab260d5d0a6c566b"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 1.0,
+                  "own_page_focal_coverage": 0.38095238095238093
+                },
+                "repeated_visible_content_terms": [],
+                "score": 0.6595238095238096,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "5",
+                  "activity",
+                  "ban",
+                  "begin",
+                  "blessing",
+                  "calcutta",
+                  "collaboration",
+                  "communist",
+                  "congress",
+                  "contact",
+                  "december",
+                  "delhi",
+                  "deputy",
+                  "determination",
+                  "direct",
+                  "engage",
+                  "government",
+                  "india",
+                  "indian",
+                  "january",
+                  "king",
+                  "leader",
+                  "limited",
+                  "mahendra",
+                  "minister",
+                  "nepal",
+                  "new",
+                  "operate",
+                  "oppose",
+                  "opposition",
+                  "organizational",
+                  "party",
+                  "policy",
+                  "political",
+                  "prime",
+                  "receive",
+                  "reportedly",
+                  "resistance",
+                  "rule",
+                  "separately",
+                  "shumsher",
+                  "strengthen",
+                  "subarna",
+                  "takeover",
+                  "underground"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 612,
+                    "start": 604,
+                    "text": "blessing"
+                  }
+                ],
+                "constructor_form": "modifier",
+                "constructor_routing": {
+                  "constructor_form": "modifier",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 589,
+                      "start": 578,
+                      "text": "New Delhi's"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 612,
+                      "start": 604,
+                      "text": "blessing"
+                    }
+                  }
+                ],
+                "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+                "finite": null,
+                "form": "adjectival",
+                "function": "modifier",
+                "grammatical_number": "unknown",
+                "id": "next_reading_e0871bfd223daf6a27f31d67",
+                "operators": [],
+                "outer_family": "adjectival",
+                "role": "nominal_property",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "covert",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p1",
+                      "qualifications_preserved": true,
+                      "reason": "'Covert' is an unchanged source adjective describing possible Indian support to democratic elements opposing Mahendra's direct rule. It fits naturally in 'New Delhi's covert blessing' and is contextually relevant. This nomination does not establish that the source's conditional possibility became an actual blessing to Subarna; the source remains prospective and conditional.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "750260fb29bd6bd2994dbad7aaafb2dcb041f21544314b9b5ffdb68f4763b93b",
+                      "inserted_span": [
+                        590,
+                        596
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "750260fb29bd6bd2994dbad7aaafb2dcb041f21544314b9b5ffdb68f4763b93b",
+                      "constructor_form": "modifier",
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "amod",
+                        "lemma": "covert",
+                        "pos": "ADJ",
+                        "span": [
+                          590,
+                          596
+                        ],
+                        "tag": "JJ",
+                        "text": "covert"
+                      },
+                      "inserted_span": [
+                        590,
+                        596
+                      ],
+                      "outer_family": "adjectival",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_ADJECTIVAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "750260fb29bd6bd2994dbad7aaafb2dcb041f21544314b9b5ffdb68f4763b93b",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "ad6a0718028682a5f0354ba8bfb04e632e360ae53c9a6fc368505a9dc319467f",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "completed_slot_fit",
+                    "positive_source_frame_invented": false,
+                    "reason": "NATIVE_SOURCE_PROPERTY_FRAME_NOT_AVAILABLE_FOR_NEW_METHOD",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_82a6d9d9c1594d5d42484a7cfd60",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "ba61e878779389e6565efc607b048eedcb1982ddae353259ca57acf693e08e57",
+                "original_candidate_sha256": "020c1f3f8784e4f4082fdb999c59891e88cc42245fd6ff17eee509b5a34e3fb3",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "01925cf1a1348245caa952948ddc7ec5d0acfc24fc8ad9b941a5050aa077669c",
+                "proposal_response_sha256": "31475293e6168614a724f9e7a895408da11cde6baf164bc12c031d2fea0ac2b4",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "d77ffa5084c4c242de70d95fb27d6f59a9d6ad9a49b10ad6758c4ab66970ff0c",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_e0871bfd223daf6a27f31d67",
+              "source": {
+                "date": "1960-12-16",
+                "document_id": "CIA-RDP79T00975A005400400001-7",
+                "exact_quote": {
+                  "end": 1866,
+                  "start": 1671,
+                  "text": "The Indian Government, which had strongly supported Koirala, may decide to lend covert support to democratic elements should Mahendra fail to restore representative government in the near future."
+                },
+                "original_phrase": {
+                  "end": 1757,
+                  "start": 1751,
+                  "text": "covert"
+                },
+                "page_id": "page_b047c59223758bad0ce4",
+                "page_sha256": "f50ef737cba499722a8376fd7e7e1be83759d9e61b4f4051ab260d5d0a6c566b",
+                "qualification_paragraph": {
+                  "end": 1866,
+                  "start": 1671,
+                  "text": "The Indian Government, which had strongly supported Koirala, may decide to lend covert support to democratic elements should Mahendra fail to restore representative government in the near future."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p1",
+                "qualifications_preserved": true,
+                "reason": "'Covert' is an unchanged source adjective describing possible Indian support to democratic elements opposing Mahendra's direct rule. It fits naturally in 'New Delhi's covert blessing' and is contextually relevant. This nomination does not establish that the source's conditional possibility became an actual blessing to Subarna; the source remains prospective and conditional.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_b047c59223758bad0ce4",
+                  "corpus": "cib",
+                  "date": "1960-12-16",
+                  "document_id": "CIA-RDP79T00975A005400400001-7",
+                  "end": 1866,
+                  "page_sha256": "f50ef737cba499722a8376fd7e7e1be83759d9e61b4f4051ab260d5d0a6c566b",
+                  "start": 1671,
+                  "text": "The Indian Government, which had strongly supported Koirala, may decide to lend covert support to democratic elements should Mahendra fail to restore representative government in the near future."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Uses the source adjective unchanged to characterize the blessing. The source describes possible, conditional support, not an established blessing to Subarna.",
+                "kind": "UNCHANGED"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 1,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 612,
+                "start": 604,
+                "text": "blessing"
+              }
+            ],
+            "constructor_form": "modifier",
+            "constructor_routing": {
+              "constructor_form": "modifier",
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "legacy_compatible_subset",
+            "cues": [
+              {
+                "kind": "boundary",
+                "span": {
+                  "end": 589,
+                  "start": 578,
+                  "text": "New Delhi's"
+                }
+              },
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 612,
+                  "start": 604,
+                  "text": "blessing"
+                }
+              }
+            ],
+            "explanation": "An adjective or adjectival participle can modify a visible carrier or fill its complement. Function: modifier. Legacy subset route: modifier.",
+            "finite": null,
+            "form": "adjectival",
+            "function": "modifier",
+            "grammatical_number": "unknown",
+            "id": "next_reading_e0871bfd223daf6a27f31d67",
+            "operators": [],
+            "outer_family": "adjectival",
+            "role": "nominal_property",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_e0871bfd223daf6a27f31d67",
+          "status": "CONTEXTUAL_CANDIDATES"
+        }
+      ],
+      "score_is_probability": false
+    },
+    "selected_evidence": {
+      "kind": "ACTUAL_SAVED_CANDIDATE_OWN_SOURCES",
+      "pages": [
+        {
+          "canonical_sequence": 4,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1960-12-16",
+          "document_id": "CIA-RDP79T00975A005400400001-7",
+          "earlier_page": 7,
+          "handling": [],
+          "id": "page_b047c59223758bad0ce4",
+          "native_page": {
+            "canonical_page_id": "page_b047c59223758bad0ce4",
+            "document_id": "CIA-RDP79T00975A005400400001-7",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 4,
+            "slot_ids": [],
+            "source_page": 7,
+            "text": "King of Nepal Assumes Direct Control of Government\n\nKing Mahendra's arrest of the Nepali Congress party cabinet of Prime Minister B. P. Koirala on 15 December, his suspension of the 1959 constitution, and his assumption of direct rule appear to have been motivated by his long-smoldering dissatisfaction with the government's performance. Domestic and personal issues appear to have been his major considerations, a fact emphasized by the King's public assurance that Nepal's nonaligned foreign policy will remain unchanged.\n\nIn his statement, the King accused the government of inefficiency and corruption and of failure \"to give the country stability and lead it to progress.\" It is apparent also, however, that he has been afraid that the popular Koirala would in time eclipse the monarchy and threaten the King's supremacy.\n\nMahendra's position is considered sufficiently strong to ensure his control of the situation; he has assumed personal control of the government before, but not since the 1959 elections which resulted in a three-fourths majority in Parliament for Koirala's Congress party. With that strength and with Koirala's personal appeal, the party had offered the country its best hope of achieving stability and economic development.\n\nMahendra is neither as sophisticated in international matters nor as able an administrator as Koirala. Thus, if he decides to rule directly for some time--as appears his intent--the government may exhibit more naivete in dealing with Peiping and Moscow, somewhat greater distrust of New Delhi, and perhaps more reserve with the West. Within Nepal, political unrest and economic deterioration are likely to increase.\n\nThe Indian Government, which had strongly supported Koirala, may decide to lend covert support to democratic elements should Mahendra fail to restore representative government in the near future.",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "aa55a5afb959dfedd3d40d1f932b4be6c827219df7b72ee1a90a67349d9439e6",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "f50ef737cba499722a8376fd7e7e1be83759d9e61b4f4051ab260d5d0a6c566b",
+          "text": "King of Nepal Assumes Direct Control of Government\n\nKing Mahendra's arrest of the Nepali Congress party cabinet of Prime Minister B. P. Koirala on 15 December, his suspension of the 1959 constitution, and his assumption of direct rule appear to have been motivated by his long-smoldering dissatisfaction with the government's performance. Domestic and personal issues appear to have been his major considerations, a fact emphasized by the King's public assurance that Nepal's nonaligned foreign policy will remain unchanged.\n\nIn his statement, the King accused the government of inefficiency and corruption and of failure \"to give the country stability and lead it to progress.\" It is apparent also, however, that he has been afraid that the popular Koirala would in time eclipse the monarchy and threaten the King's supremacy.\n\nMahendra's position is considered sufficiently strong to ensure his control of the situation; he has assumed personal control of the government before, but not since the 1959 elections which resulted in a three-fourths majority in Parliament for Koirala's Congress party. With that strength and with Koirala's personal appeal, the party had offered the country its best hope of achieving stability and economic development.\n\nMahendra is neither as sophisticated in international matters nor as able an administrator as Koirala. Thus, if he decides to rule directly for some time--as appears his intent--the government may exhibit more naivete in dealing with Peiping and Moscow, somewhat greater distrust of New Delhi, and perhaps more reserve with the West. Within Nepal, political unrest and economic deterioration are likely to increase.\n\nThe Indian Government, which had strongly supported Koirala, may decide to lend covert support to democratic elements should Mahendra fail to restore representative government in the near future.",
+          "visibility": "earlier"
+        }
+      ]
+    }
+  },
+  "typed_source_method_admission_not_issued": true,
+  "version": "historical-source-only-workbench-data/1"
+}

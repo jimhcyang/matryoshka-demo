@@ -1,0 +1,3472 @@
+{
+  "QA_answers_or_grades_included": false,
+  "case": {
+    "case_id": "cloze_8c3a7f26c6b8ce2d605fcc8a",
+    "corpus": "cib",
+    "date": "1959-01-23",
+    "document_id": "CIA-RDP79T00975A004300430001-6",
+    "focal_marker": "[REDACTION 1]",
+    "query": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION].\n\nKishi probably will continue as prime minister at least until after the elections to the upper house next June. During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers. The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion. [REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal.) [REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval\n\nA \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties.",
+    "task": "redaction"
+  },
+  "missing_transport": {
+    "endpoint": null,
+    "fabricated_routes_or_support_votes": false,
+    "graph_walk": null,
+    "origin_refs": null,
+    "parent_typed_adapter_and_normal_source_v6_export_required": true,
+    "source_routes": []
+  },
+  "native_baseline": {
+    "baseline_verdicts_unchanged": true,
+    "checkpoint_sha256": "690225079436b2b6234592ea702162826dd69dc51935e14004f00206828c0ddb",
+    "code_pins_sha256": "e159da0aa5f59740ebb31a374e8917c24c052a18b16efa80b534c7771345e3cc",
+    "configuration": {
+      "completed_drafts_per_reading": 64,
+      "construction_pages": 32,
+      "method": "current_hierarchy",
+      "retrieval_document_budget": 40,
+      "retrieval_passage_budget": 80,
+      "selection_profile": {
+        "candidate_focal_fraction": 0.5,
+        "constructor_family_mode": "first_class_adjuncts",
+        "counter_policy": "positive_support",
+        "cue_order_mode": "source_alignment",
+        "identity_first": true,
+        "page_focal_fraction": 0.5,
+        "scan_pages": 512,
+        "source_phrase_mode": "scoped",
+        "supplemental_mode": "source_form_opportunities"
+      },
+      "source_view_policy": {
+        "cable_classification": "CONFIDENTIAL",
+        "cable_document_wide_handling_veto": true,
+        "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+        "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+        "cutoff_role": "source_document_date",
+        "date_relation": "<=",
+        "id": "source_day_inclusive",
+        "later_or_secret_version_admitted": false,
+        "source_dates_or_document_ids_rewritten": false,
+        "version": "trusted-corpus-source-view/1"
+      },
+      "terminal_ranking": "evidence_fit_v7",
+      "top_k": 5
+    },
+    "execution_context_sha256": "fc1fb1e688d707f52a937f642fcd509d1bc060714cde395a27393af63f87054f",
+    "native_checksum": "2fa14f492b3df257b481b101e03ee1c7ada74d35beaca145b5b14eea1a2f89e9",
+    "proposal_slate_is_not_native_result": true,
+    "source_view_policy": {
+      "cable_classification": "CONFIDENTIAL",
+      "cable_document_wide_handling_veto": true,
+      "cable_origin": "WHOLE_DOCUMENT_EXCLUDED",
+      "cib_source_document": "EARLIER_OR_BOTH_ONLY",
+      "cutoff_role": "source_document_date",
+      "date_relation": "<=",
+      "id": "source_day_inclusive",
+      "later_or_secret_version_admitted": false,
+      "source_dates_or_document_ids_rewritten": false,
+      "version": "trusted-corpus-source-view/1"
+    },
+    "version": "narrative-local-execution/4"
+  },
+  "publication_authorized": false,
+  "saved_method": {
+    "QA_method_sha256": "bb5a0adca543c2181ae735344fc1b0ccec337171e121163c23a989290fc08cc6",
+    "factual_support_certified": false,
+    "name": "SOURCE_PROPOSALS_CONTEXT_ONLY",
+    "score_version": "source-proposal-context-priority/1",
+    "source_results_sha256": "5599083c2b938dbaed1c5d038cbe512f540a12e449e813cc5e5abeeba9e41784",
+    "source_slates_sha256": "408c5346b579c66fdb3e02fd2d2dbba6757f3fac70b7365f3f4d9ec918040497"
+  },
+  "sections": {
+    "analyst_summary": {
+      "actual_digest_ref": null,
+      "calls_authorized_here": 0,
+      "new_method_body_must_include_exact_saved_slate": true,
+      "parent_paid_generation_needed_for_populated_summary": true,
+      "rebind_from_related_public_case_allowed": false,
+      "status": "NO_EXACT_SAVED_METHOD_DIGEST_IN_BOUNDED_INVENTORY",
+      "text": null
+    },
+    "facts_to_evidence": {
+      "kind": "CONTEXTUAL_MODEL_REVIEW_AND_LOCAL_GRAMMAR_NOT_FACTUAL_VOTES",
+      "records": [
+        {
+          "candidate_id": "source_reviewed_fill_ea65f703f2c25e7a1594b5a7cffc",
+          "citations": [
+            {
+              "canonical_page_id": "page_e9720479cacce1a2569b",
+              "corpus": "cib",
+              "date": "1958-03-29",
+              "document_id": "CIA-RDP79T00975A003600250001-4",
+              "end": 839,
+              "page_sha256": "b647cff0ca42735029e996f2a38da012813de184420bddcdce60a1a930e17b0b",
+              "start": 471,
+              "text": "Kishi, who has given Japan sound leadership, is handicapped by an inability to develop personal popularity, and he is dependent on the achievements of his administration for voter appeal. He has suggested to Ambassador MacArthur that a favorable US attitude on pending problems, such as a concession to Japan on the Okinawa problem, would strengthen the conservatives."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p4",
+                  "qualifications_preserved": true,
+                  "reason": "The source explicitly assigns the inability to Kishi, so replacing 'an' with 'his' preserves the possessor. Kishi supplies a clear singular antecedent in the completed sentence. His electoral weakness is contextually relevant; the source's favorable assessment of his leadership does not negate it.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "b19ec969729ebcd94634251a6ec7633f711a002ed4460b52b0a36d85188c9484",
+                  "inserted_span": [
+                    562,
+                    606
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "b19ec969729ebcd94634251a6ec7633f711a002ed4460b52b0a36d85188c9484",
+                  "constructor_form": "nominal",
+                  "declared_number_fit": {
+                    "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                    "state": "pass"
+                  },
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "pobj",
+                    "lemma": "inability",
+                    "pos": "NOUN",
+                    "span": [
+                      566,
+                      575
+                    ],
+                    "tag": "NN",
+                    "text": "inability"
+                  },
+                  "inserted_span": [
+                    562,
+                    606
+                  ],
+                  "outer_family": "nominal",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_NOMINAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "absence_is_counterevidence": false,
+                  "factual_support_certified": false,
+                  "reading_modified": false,
+                  "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                  "state": "pass"
+                },
+                "name": "applicable_existing_completed_slot_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "b19ec969729ebcd94634251a6ec7633f711a002ed4460b52b0a36d85188c9484",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "e319dd991a44021c19840a479558c8dfa863dae2934bb2b6b54e27a7862e0e01",
+            "unsupported_diagnostics": [
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_26fd53da5320b37c28f7083a",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p4",
+            "qualifications_preserved": true,
+            "reason": "The source explicitly assigns the inability to Kishi, so replacing 'an' with 'his' preserves the possessor. Kishi supplies a clear singular antecedent in the completed sentence. His electoral weakness is contextually relevant; the source's favorable assessment of his leadership does not negate it.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1958-03-29",
+            "document_id": "CIA-RDP79T00975A003600250001-4",
+            "exact_quote": {
+              "end": 658,
+              "start": 471,
+              "text": "Kishi, who has given Japan sound leadership, is handicapped by an inability to develop personal popularity, and he is dependent on the achievements of his administration for voter appeal."
+            },
+            "original_phrase": {
+              "end": 577,
+              "start": 534,
+              "text": "an inability to develop personal popularity"
+            },
+            "page_id": "page_e9720479cacce1a2569b",
+            "page_sha256": "b647cff0ca42735029e996f2a38da012813de184420bddcdce60a1a930e17b0b",
+            "qualification_paragraph": {
+              "end": 839,
+              "start": 471,
+              "text": "Kishi, who has given Japan sound leadership, is handicapped by an inability to develop personal popularity, and he is dependent on the achievements of his administration for voter appeal. He has suggested to Ambassador MacArthur that a favorable US attitude on pending problems, such as a concession to Japan on the Okinawa problem, would strengthen the conservatives."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_a596898155a46b776ccf33cccd51",
+          "citations": [
+            {
+              "canonical_page_id": "page_e5702db1bfa1be715132",
+              "corpus": "cib",
+              "date": "1959-01-13",
+              "document_id": "CIA-RDP79T00975A004200340001-7",
+              "end": 1327,
+              "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p2",
+                  "qualifications_preserved": true,
+                  "reason": "The nominalization faithfully preserves the dissident leaders as the source of pressure and Kishi as its target. Omitting the specific demands does not reverse or strengthen the pressure claim. It fits the complement and the political context.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "90662fe2b9dd80645567cb0577a1dd0ff2e92f22c8356c047b7f73e621cb1d21",
+                  "inserted_span": [
+                    562,
+                    612
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "90662fe2b9dd80645567cb0577a1dd0ff2e92f22c8356c047b7f73e621cb1d21",
+                  "constructor_form": "nominal",
+                  "declared_number_fit": {
+                    "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                    "state": "pass"
+                  },
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "pobj",
+                    "lemma": "pressure",
+                    "pos": "NOUN",
+                    "span": [
+                      562,
+                      570
+                    ],
+                    "tag": "NN",
+                    "text": "pressure"
+                  },
+                  "inserted_span": [
+                    562,
+                    612
+                  ],
+                  "outer_family": "nominal",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_NOMINAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "absence_is_counterevidence": false,
+                  "factual_support_certified": false,
+                  "reading_modified": false,
+                  "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                  "state": "pass"
+                },
+                "name": "applicable_existing_completed_slot_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "90662fe2b9dd80645567cb0577a1dd0ff2e92f22c8356c047b7f73e621cb1d21",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "e319dd991a44021c19840a479558c8dfa863dae2934bb2b6b54e27a7862e0e01",
+            "unsupported_diagnostics": [
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_26fd53da5320b37c28f7083a",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p2",
+            "qualifications_preserved": true,
+            "reason": "The nominalization faithfully preserves the dissident leaders as the source of pressure and Kishi as its target. Omitting the specific demands does not reverse or strengthen the pressure claim. It fits the complement and the political context.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1959-01-13",
+            "document_id": "CIA-RDP79T00975A004200340001-7",
+            "exact_quote": {
+              "end": 1176,
+              "start": 919,
+              "text": "By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March."
+            },
+            "original_phrase": {
+              "end": 1016,
+              "start": 955,
+              "text": "prominent dissident leaders are maintaining pressure on Kishi"
+            },
+            "page_id": "page_e5702db1bfa1be715132",
+            "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+            "qualification_paragraph": {
+              "end": 1327,
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_40aa1f762b97e18e9de5faf95bb8",
+          "citations": [
+            {
+              "canonical_page_id": "page_e5702db1bfa1be715132",
+              "corpus": "cib",
+              "date": "1959-01-13",
+              "document_id": "CIA-RDP79T00975A004200340001-7",
+              "end": 1327,
+              "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p1",
+                  "qualifications_preserved": true,
+                  "reason": "The exact nominal phrase fits after 'by' and retains Kishi as the person losing control. The source states this decline directly, and it is relevant to opposition encouragement without establishing the concealed assertion.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "7e8cb265b953220081a3c00d10321a224b10f66343fdcc8708462d571a84b24d",
+                  "inserted_span": [
+                    562,
+                    617
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_query_sha256": "7e8cb265b953220081a3c00d10321a224b10f66343fdcc8708462d571a84b24d",
+                  "constructor_form": "nominal",
+                  "declared_number_fit": {
+                    "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                    "state": "pass"
+                  },
+                  "factual_support_certified": false,
+                  "full_english_grammar_certified": false,
+                  "head": {
+                    "dependency": "pobj",
+                    "lemma": "control",
+                    "pos": "NOUN",
+                    "span": [
+                      582,
+                      589
+                    ],
+                    "tag": "NN",
+                    "text": "control"
+                  },
+                  "inserted_span": [
+                    562,
+                    617
+                  ],
+                  "outer_family": "nominal",
+                  "pos_coercion": false,
+                  "reading_modified": false,
+                  "reason": "FINAL_NOMINAL_HEAD",
+                  "state": "pass",
+                  "unlicensed_form_is_counterevidence": false,
+                  "variant": "default",
+                  "version": "narrative-completed-outer-form/2"
+                },
+                "name": "applicable_existing_final_form_fit",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "absence_is_counterevidence": false,
+                  "factual_support_certified": false,
+                  "reading_modified": false,
+                  "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                  "state": "pass"
+                },
+                "name": "applicable_existing_completed_slot_fit",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "7e8cb265b953220081a3c00d10321a224b10f66343fdcc8708462d571a84b24d",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "e319dd991a44021c19840a479558c8dfa863dae2934bb2b6b54e27a7862e0e01",
+            "unsupported_diagnostics": [
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_26fd53da5320b37c28f7083a",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p1",
+            "qualifications_preserved": true,
+            "reason": "The exact nominal phrase fits after 'by' and retains Kishi as the person losing control. The source states this decline directly, and it is relevant to opposition encouragement without establishing the concealed assertion.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1959-01-13",
+            "document_id": "CIA-RDP79T00975A004200340001-7",
+            "exact_quote": {
+              "end": 918,
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government."
+            },
+            "original_phrase": {
+              "end": 917,
+              "start": 862,
+              "text": "Kishi's diminishing control of the party and government"
+            },
+            "page_id": "page_e5702db1bfa1be715132",
+            "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+            "qualification_paragraph": {
+              "end": 1327,
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_a66bda6bbea909056575bf492015",
+          "citations": [
+            {
+              "canonical_page_id": "page_8653cb966f1591192457",
+              "corpus": "cib",
+              "date": "1957-10-22",
+              "document_id": "CIA-RDP79T00975A003300430001-7",
+              "end": 1142,
+              "page_sha256": "72f027162f1c312defa53d4e1f1c349c58d95658582408462c66530b51ef8454",
+              "start": 582,
+              "text": "Kishi is searching for a major triumph before calling national elections. His current stumping tour through Japan reveals that despite a record of considerable accomplishments, he has failed to develop wide personal popularity largely because his policies do not have an emotional appeal for the Japanese. His strong support of a policy of cooperation with the free world and opposition to communism and neutralism runs counter to the popular Japanese desire for greater independence from the United States and closer ties with Asia, including Communist China."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p3",
+                  "qualifications_preserved": true,
+                  "reason": "The source clearly identifies 'he' as Kishi and asserts his failure to develop wide personal popularity. The fill preserves that proposition, fits the prepositional complement, and nominates a relevant political weakness; the omitted explanation and concessive background do not qualify its truth.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "1bbbab77118cffaad337b3f4d115db962946435c32b42b32918b5376e1d141d8",
+                  "inserted_span": [
+                    562,
+                    628
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "1bbbab77118cffaad337b3f4d115db962946435c32b42b32918b5376e1d141d8",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "8b00e7a7fdf5550254ce5f8bc2f92ce95ec262177e3105baefe6ed8c268616a5",
+            "unsupported_diagnostics": [
+              {
+                "helper": "final_form_fit",
+                "pos_proof_claimed": false,
+                "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                "state": "unsupported"
+              },
+              {
+                "helper": "completed_slot_fit",
+                "native_source_frame_or_certificate_created": false,
+                "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_a4aed3800d00c5c34a3ef186",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p3",
+            "qualifications_preserved": true,
+            "reason": "The source clearly identifies 'he' as Kishi and asserts his failure to develop wide personal popularity. The fill preserves that proposition, fits the prepositional complement, and nominates a relevant political weakness; the omitted explanation and concessive background do not qualify its truth.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1957-10-22",
+            "document_id": "CIA-RDP79T00975A003300430001-7",
+            "exact_quote": {
+              "end": 887,
+              "start": 656,
+              "text": "His current stumping tour through Japan reveals that despite a record of considerable accomplishments, he has failed to develop wide personal popularity largely because his policies do not have an emotional appeal for the Japanese."
+            },
+            "original_phrase": {
+              "end": 808,
+              "start": 759,
+              "text": "he has failed to develop wide personal popularity"
+            },
+            "page_id": "page_8653cb966f1591192457",
+            "page_sha256": "72f027162f1c312defa53d4e1f1c349c58d95658582408462c66530b51ef8454",
+            "qualification_paragraph": {
+              "end": 1142,
+              "start": 582,
+              "text": "Kishi is searching for a major triumph before calling national elections. His current stumping tour through Japan reveals that despite a record of considerable accomplishments, he has failed to develop wide personal popularity largely because his policies do not have an emotional appeal for the Japanese. His strong support of a policy of cooperation with the free world and opposition to communism and neutralism runs counter to the popular Japanese desire for greater independence from the United States and closer ties with Asia, including Communist China."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_00875666fe37d4aa9696d0d5d6fc",
+          "citations": [
+            {
+              "canonical_page_id": "page_e5702db1bfa1be715132",
+              "corpus": "cib",
+              "date": "1959-01-13",
+              "document_id": "CIA-RDP79T00975A004200340001-7",
+              "end": 1327,
+              "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p2",
+                  "qualifications_preserved": true,
+                  "reason": "Preserves the dissident leaders as the actors exerting pressure on Kishi. Omitting the means and specific demands does not alter that asserted proposition; the resulting complement is grammatical and contextually relevant.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "d9d9b40e3a135276a382ecb475930ac592c26013ae9e87c367cd0eee327fc2b7",
+                  "inserted_span": [
+                    562,
+                    637
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "d9d9b40e3a135276a382ecb475930ac592c26013ae9e87c367cd0eee327fc2b7",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "8b00e7a7fdf5550254ce5f8bc2f92ce95ec262177e3105baefe6ed8c268616a5",
+            "unsupported_diagnostics": [
+              {
+                "helper": "final_form_fit",
+                "pos_proof_claimed": false,
+                "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                "state": "unsupported"
+              },
+              {
+                "helper": "completed_slot_fit",
+                "native_source_frame_or_certificate_created": false,
+                "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_a4aed3800d00c5c34a3ef186",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p2",
+            "qualifications_preserved": true,
+            "reason": "Preserves the dissident leaders as the actors exerting pressure on Kishi. Omitting the means and specific demands does not alter that asserted proposition; the resulting complement is grammatical and contextually relevant.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1959-01-13",
+            "document_id": "CIA-RDP79T00975A004200340001-7",
+            "exact_quote": {
+              "end": 1176,
+              "start": 919,
+              "text": "By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March."
+            },
+            "original_phrase": {
+              "end": 1016,
+              "start": 955,
+              "text": "prominent dissident leaders are maintaining pressure on Kishi"
+            },
+            "page_id": "page_e5702db1bfa1be715132",
+            "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+            "qualification_paragraph": {
+              "end": 1327,
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        },
+        {
+          "candidate_id": "source_reviewed_fill_0333b30a2975afd11c5c6589b046",
+          "citations": [
+            {
+              "canonical_page_id": "page_e5702db1bfa1be715132",
+              "corpus": "cib",
+              "date": "1959-01-13",
+              "document_id": "CIA-RDP79T00975A004200340001-7",
+              "end": 1327,
+              "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+            }
+          ],
+          "factual_support_certified": false,
+          "grammar": {
+            "applicable_checks": [
+              {
+                "details": {
+                  "category": "FITS",
+                  "context": "RELEVANT",
+                  "decision": "ACCEPT_CONTEXTUAL",
+                  "grammar": "FITS",
+                  "proposal_id": "p1",
+                  "qualifications_preserved": true,
+                  "reason": "Faithfully recasts Kishi's diminishing control as a fact-clause. It fits after 'encouraged ... by' and supplies a relevant government weakness without claiming to recover the concealed text.",
+                  "source_fidelity": "FAITHFUL",
+                  "unknown_mask_inferred": false
+                },
+                "name": "separate_review_grammar_and_category",
+                "state": "pass"
+              },
+              {
+                "details": {
+                  "completed_input_sha256": "2d59d02cca9c301e8bed30e3ba56d013dadb1d2806fcd47c384acf5b1c585e8e",
+                  "inserted_span": [
+                    562,
+                    634
+                  ],
+                  "outside_slot_bytes_unchanged": true
+                },
+                "name": "literal_completed_insertion_boundaries",
+                "state": "pass"
+              }
+            ],
+            "completed_input_sha256": "2d59d02cca9c301e8bed30e3ba56d013dadb1d2806fcd47c384acf5b1c585e8e",
+            "eligible": true,
+            "factual_support_certified": false,
+            "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+            "holds": [],
+            "local_fit_is_not_native_fit": true,
+            "local_grammatical_fit": 1.0,
+            "native_DTO_or_POS_license_created": false,
+            "reading_sha256": "8b00e7a7fdf5550254ce5f8bc2f92ce95ec262177e3105baefe6ed8c268616a5",
+            "unsupported_diagnostics": [
+              {
+                "helper": "final_form_fit",
+                "pos_proof_claimed": false,
+                "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                "state": "unsupported"
+              },
+              {
+                "helper": "completed_slot_fit",
+                "native_source_frame_or_certificate_created": false,
+                "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                "state": "unsupported"
+              },
+              {
+                "helper": "controller",
+                "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                "state": "not_applicable"
+              }
+            ],
+            "version": "reviewed-source-proposal-local-grammar/1"
+          },
+          "reading_id": "next_reading_a4aed3800d00c5c34a3ef186",
+          "review": {
+            "category": "FITS",
+            "context": "RELEVANT",
+            "decision": "ACCEPT_CONTEXTUAL",
+            "grammar": "FITS",
+            "proposal_id": "p1",
+            "qualifications_preserved": true,
+            "reason": "Faithfully recasts Kishi's diminishing control as a fact-clause. It fits after 'encouraged ... by' and supplies a relevant government weakness without claiming to recover the concealed text.",
+            "source_fidelity": "FAITHFUL",
+            "unknown_mask_inferred": false
+          },
+          "source": {
+            "date": "1959-01-13",
+            "document_id": "CIA-RDP79T00975A004200340001-7",
+            "exact_quote": {
+              "end": 918,
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government."
+            },
+            "original_phrase": {
+              "end": 917,
+              "start": 862,
+              "text": "Kishi's diminishing control of the party and government"
+            },
+            "page_id": "page_e5702db1bfa1be715132",
+            "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+            "qualification_paragraph": {
+              "end": 1327,
+              "start": 838,
+              "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+            }
+          },
+          "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE"
+        }
+      ]
+    },
+    "facts_to_look_for": {
+      "atoms": [
+        {
+          "id": "a1",
+          "kind": "proposition",
+          "modality": "possible",
+          "object": "assured",
+          "polarity": "positive",
+          "predicate": "seems",
+          "query_quotes": [
+            "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION]."
+          ],
+          "query_spans": [
+            {
+              "end": 130,
+              "start": 0,
+              "text": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION]."
+            }
+          ],
+          "required": false,
+          "source_quote": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION].",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Kishi's re-election as party president",
+          "text": "Kishi's re-election as party president seems assured."
+        },
+        {
+          "id": "a2",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "Kishi only a temporary respite from [REDACTION]",
+          "polarity": "positive",
+          "predicate": "gives",
+          "query_quotes": [
+            "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION]."
+          ],
+          "query_spans": [
+            {
+              "end": 130,
+              "start": 0,
+              "text": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION]."
+            }
+          ],
+          "required": false,
+          "source_quote": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION].",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "the compromise",
+          "text": "The compromise gives Kishi only a temporary respite from [REDACTION]."
+        },
+        {
+          "id": "a3",
+          "kind": "proposition",
+          "modality": "possible",
+          "object": "prime minister at least until after the elections to the upper house next June",
+          "polarity": "positive",
+          "predicate": "probably will continue as",
+          "query_quotes": [
+            "Kishi probably will continue as prime minister at least until after the elections to the upper house next June."
+          ],
+          "query_spans": [
+            {
+              "end": 243,
+              "start": 132,
+              "text": "Kishi probably will continue as prime minister at least until after the elections to the upper house next June."
+            }
+          ],
+          "required": false,
+          "source_quote": "Kishi probably will continue as prime minister at least until after the elections to the upper house next June.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Kishi",
+          "text": "Kishi probably will continue as prime minister at least until after the elections to the upper house next June."
+        },
+        {
+          "id": "a4",
+          "kind": "proposition",
+          "modality": "possible",
+          "object": "passing the budget during the Diet session",
+          "polarity": "positive",
+          "predicate": "will probably concentrate on",
+          "query_quotes": [
+            "During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers."
+          ],
+          "query_spans": [
+            {
+              "end": 425,
+              "start": 244,
+              "text": "During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers."
+            }
+          ],
+          "required": false,
+          "source_quote": "During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Kishi",
+          "text": "During the Diet session, Kishi will probably concentrate on passing the budget."
+        },
+        {
+          "id": "a5",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "the introduction of controversial legislation, such as his bill to increase police powers, during the Diet session",
+          "polarity": "positive",
+          "predicate": "will avoid",
+          "query_quotes": [
+            "During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers."
+          ],
+          "query_spans": [
+            {
+              "end": 425,
+              "start": 244,
+              "text": "During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers."
+            }
+          ],
+          "required": false,
+          "source_quote": "During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Kishi",
+          "text": "During the Diet session, Kishi will avoid the introduction of controversial legislation, such as his bill to increase police powers."
+        },
+        {
+          "id": "a6",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "the government on every occasion",
+          "polarity": "positive",
+          "predicate": "will harass",
+          "query_quotes": [
+            "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion."
+          ],
+          "query_spans": [
+            {
+              "end": 622,
+              "start": 426,
+              "text": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion."
+            }
+          ],
+          "required": false,
+          "source_quote": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1]",
+          "text": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion."
+        },
+        {
+          "id": "a7",
+          "kind": "proposition",
+          "modality": "possible",
+          "object": "a plan to implicate Kishi in an alleged reparations scandal",
+          "polarity": "positive",
+          "predicate": "may carry out",
+          "query_quotes": [
+            "[REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal."
+          ],
+          "query_spans": [
+            {
+              "end": 724,
+              "start": 623,
+              "text": "[REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal."
+            }
+          ],
+          "required": false,
+          "source_quote": "[REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "the Socialists",
+          "text": "[REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal."
+        },
+        {
+          "id": "a8",
+          "kind": "proposition",
+          "modality": "possible",
+          "object": "President Sukarno's Approval",
+          "polarity": "positive",
+          "predicate": "May Have Had",
+          "query_quotes": [
+            "[REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval"
+          ],
+          "query_spans": [
+            {
+              "end": 817,
+              "start": 726,
+              "text": "[REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval"
+            }
+          ],
+          "required": false,
+          "source_quote": "[REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "Press Attack on Indonesian Communists",
+          "text": "[REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval"
+        },
+        {
+          "id": "a9",
+          "kind": "proposition",
+          "modality": "asserted",
+          "object": "the strongest condemnation to date in the running fight between the National and Communist parties",
+          "polarity": "positive",
+          "predicate": "is",
+          "query_quotes": [
+            "A \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties."
+          ],
+          "query_spans": [
+            {
+              "end": 1061,
+              "start": 819,
+              "text": "A \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties."
+            }
+          ],
+          "required": false,
+          "source_quote": "A \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties.",
+          "status": "REQUIREMENT_NOT_ASSERTED_WORLD_FACT",
+          "subject": "A \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper",
+          "text": "A \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka, a National party-oriented paper, is the strongest condemnation to date in the running fight between the National and Communist parties."
+        }
+      ],
+      "kind": "RECORDED_PUBLIC_QUERY_REQUIREMENTS_NOT_WORLD_FACTS"
+    },
+    "saved_fills": {
+      "order_unchanged": true,
+      "primary_reading_id": "next_reading_26fd53da5320b37c28f7083a",
+      "readings": [
+        {
+          "candidates": [
+            {
+              "completed_input": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION].\n\nKishi probably will continue as prime minister at least until after the elections to the upper house next June. During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers. The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by his inability to develop personal popularity, will harass the government on every occasion. [REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal.) [REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval\n\nA \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties.",
+              "completed_input_sha256": "b19ec969729ebcd94634251a6ec7633f711a002ed4460b52b0a36d85188c9484",
+              "completed_input_utf8_sha256": "8ba4d5936cce324d341fbeb9874a5c52f31ef36cd6439156817652a4555f6bdf",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_ea65f703f2c25e7a1594b5a7cffc",
+                  "completed_input_sha256": "b19ec969729ebcd94634251a6ec7633f711a002ed4460b52b0a36d85188c9484",
+                  "exact_quote_sha256": "f582e535ea90b8a805fdd4d7a25860fd82218d79215db3c57cde851e9083c9b3",
+                  "grammar_sha256": "96d283c133b27ad7f1892ecf2d82deffc3b3fa791a3c4fc01ffc98801bafe936",
+                  "observation_sha256": "719d73b84465982dbc4972c14a3d2f8e7aa77ccbb1f58ec9ecf900565b52d028",
+                  "plan_sha256": "81bf194e1cd4c00b8b520c796ea0948b50b69e23a10993de255b72435670738b",
+                  "provenance_sha256": "db2d4806bb665a47a42b1c206a149e81434aef897b1fb58e98e40e8ad3544cee",
+                  "query_sha256": "25053f24f182c2245fe8eb2a62b0f6fd8e6e0b53ed6af586709fe581b1d2ec49",
+                  "reading_sha256": "e319dd991a44021c19840a479558c8dfa863dae2934bb2b6b54e27a7862e0e01",
+                  "source_phrase_sha256": "58fd52739ebed5e59612ca301251c73528f202b751814453aa51a112daedb5cb"
+                },
+                "candidate_content_terms": [
+                  "develop",
+                  "inability",
+                  "personal",
+                  "popularity"
+                ],
+                "components": {
+                  "lexical_novelty": 0.2,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.1375
+                },
+                "focal_query_span": {
+                  "end": 635,
+                  "start": 426,
+                  "text": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion. [REDACTION] "
+                },
+                "focal_terms": [
+                  "administer",
+                  "defeat",
+                  "encourage",
+                  "government",
+                  "harass",
+                  "kishi",
+                  "occasion",
+                  "opposition",
+                  "police",
+                  "power",
+                  "session",
+                  "socialist"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "government",
+                  "kishi",
+                  "socialist"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_e9720479cacce1a2569b",
+                  "date": "1958-03-29",
+                  "document_id": "CIA-RDP79T00975A003600250001-4",
+                  "page_sha256": "b647cff0ca42735029e996f2a38da012813de184420bddcdce60a1a930e17b0b"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 1.0,
+                  "own_page_focal_coverage": 0.25
+                },
+                "repeated_visible_content_terms": [],
+                "score": 0.5875,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "20",
+                  "administer",
+                  "allege",
+                  "approval",
+                  "assure",
+                  "attack",
+                  "avoid",
+                  "budget",
+                  "carry",
+                  "communist",
+                  "compromise",
+                  "concentrate",
+                  "condemnation",
+                  "continue",
+                  "controversial",
+                  "daily",
+                  "date",
+                  "defeat",
+                  "diet",
+                  "djakarta",
+                  "editorial",
+                  "election",
+                  "encourage",
+                  "fight",
+                  "government",
+                  "harass",
+                  "house",
+                  "implicate",
+                  "increase",
+                  "indonesian",
+                  "introduction",
+                  "january",
+                  "june",
+                  "kishi",
+                  "legislation",
+                  "merdeka",
+                  "minister",
+                  "national",
+                  "occasion",
+                  "opposition",
+                  "orient",
+                  "paper",
+                  "party",
+                  "pass",
+                  "plan",
+                  "police",
+                  "power",
+                  "president",
+                  "press",
+                  "prime",
+                  "probably",
+                  "reparation",
+                  "respite",
+                  "run",
+                  "savage",
+                  "scandal",
+                  "session",
+                  "socialist",
+                  "strong",
+                  "sukarno",
+                  "temporary",
+                  "upper"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 561,
+                    "start": 559,
+                    "text": "by"
+                  },
+                  {
+                    "end": 463,
+                    "start": 453,
+                    "text": "encouraged"
+                  }
+                ],
+                "constructor_form": "nominal",
+                "constructor_routing": {
+                  "constructor_form": "nominal",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 463,
+                      "start": 453,
+                      "text": "encouraged"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 561,
+                      "start": 559,
+                      "text": "by"
+                    }
+                  },
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 622,
+                      "start": 575,
+                      "text": ", will harass the government on every occasion."
+                    }
+                  }
+                ],
+                "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: complement. Legacy subset route: nominal.",
+                "finite": null,
+                "form": "nominal",
+                "function": "complement",
+                "grammatical_number": "unknown",
+                "id": "next_reading_26fd53da5320b37c28f7083a",
+                "operators": [],
+                "outer_family": "nominal",
+                "role": "prepositional_argument",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "his inability to develop personal popularity",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p4",
+                      "qualifications_preserved": true,
+                      "reason": "The source explicitly assigns the inability to Kishi, so replacing 'an' with 'his' preserves the possessor. Kishi supplies a clear singular antecedent in the completed sentence. His electoral weakness is contextually relevant; the source's favorable assessment of his leadership does not negate it.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "b19ec969729ebcd94634251a6ec7633f711a002ed4460b52b0a36d85188c9484",
+                      "inserted_span": [
+                        562,
+                        606
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "b19ec969729ebcd94634251a6ec7633f711a002ed4460b52b0a36d85188c9484",
+                      "constructor_form": "nominal",
+                      "declared_number_fit": {
+                        "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                        "state": "pass"
+                      },
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "pobj",
+                        "lemma": "inability",
+                        "pos": "NOUN",
+                        "span": [
+                          566,
+                          575
+                        ],
+                        "tag": "NN",
+                        "text": "inability"
+                      },
+                      "inserted_span": [
+                        562,
+                        606
+                      ],
+                      "outer_family": "nominal",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_NOMINAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "absence_is_counterevidence": false,
+                      "factual_support_certified": false,
+                      "reading_modified": false,
+                      "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                      "state": "pass"
+                    },
+                    "name": "applicable_existing_completed_slot_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "b19ec969729ebcd94634251a6ec7633f711a002ed4460b52b0a36d85188c9484",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "e319dd991a44021c19840a479558c8dfa863dae2934bb2b6b54e27a7862e0e01",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_ea65f703f2c25e7a1594b5a7cffc",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "690225079436b2b6234592ea702162826dd69dc51935e14004f00206828c0ddb",
+                "original_candidate_sha256": "3853a8e2c370119a5dd0fee3d09f2935d36d7c19ed558be88552bf4120adb333",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "db2d4806bb665a47a42b1c206a149e81434aef897b1fb58e98e40e8ad3544cee",
+                "proposal_response_sha256": "43fafec2bd0bbe5584a786fbf395ee81ac99617d2ffadfd6b2a75a8e8fc4bdec",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "f123568658c9f081c7df7402cde79c41ea50d4a620a4ec1194705d22b96c58e7",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_26fd53da5320b37c28f7083a",
+              "source": {
+                "date": "1958-03-29",
+                "document_id": "CIA-RDP79T00975A003600250001-4",
+                "exact_quote": {
+                  "end": 658,
+                  "start": 471,
+                  "text": "Kishi, who has given Japan sound leadership, is handicapped by an inability to develop personal popularity, and he is dependent on the achievements of his administration for voter appeal."
+                },
+                "original_phrase": {
+                  "end": 577,
+                  "start": 534,
+                  "text": "an inability to develop personal popularity"
+                },
+                "page_id": "page_e9720479cacce1a2569b",
+                "page_sha256": "b647cff0ca42735029e996f2a38da012813de184420bddcdce60a1a930e17b0b",
+                "qualification_paragraph": {
+                  "end": 839,
+                  "start": 471,
+                  "text": "Kishi, who has given Japan sound leadership, is handicapped by an inability to develop personal popularity, and he is dependent on the achievements of his administration for voter appeal. He has suggested to Ambassador MacArthur that a favorable US attitude on pending problems, such as a concession to Japan on the Okinawa problem, would strengthen the conservatives."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p4",
+                "qualifications_preserved": true,
+                "reason": "The source explicitly assigns the inability to Kishi, so replacing 'an' with 'his' preserves the possessor. Kishi supplies a clear singular antecedent in the completed sentence. His electoral weakness is contextually relevant; the source's favorable assessment of his leadership does not negate it.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_e9720479cacce1a2569b",
+                  "corpus": "cib",
+                  "date": "1958-03-29",
+                  "document_id": "CIA-RDP79T00975A003600250001-4",
+                  "end": 839,
+                  "page_sha256": "b647cff0ca42735029e996f2a38da012813de184420bddcdce60a1a930e17b0b",
+                  "start": 471,
+                  "text": "Kishi, who has given Japan sound leadership, is handicapped by an inability to develop personal popularity, and he is dependent on the achievements of his administration for voter appeal. He has suggested to Ambassador MacArthur that a favorable US attitude on pending problems, such as a concession to Japan on the Okinawa problem, would strengthen the conservatives."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Replaces the indefinite article with 'his' to identify Kishi as the possessor in the cloze context.",
+                "kind": "PARAPHRASE"
+              }
+            },
+            {
+              "completed_input": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION].\n\nKishi probably will continue as prime minister at least until after the elections to the upper house next June. During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers. The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by pressure on Kishi from prominent dissident leaders, will harass the government on every occasion. [REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal.) [REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval\n\nA \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties.",
+              "completed_input_sha256": "90662fe2b9dd80645567cb0577a1dd0ff2e92f22c8356c047b7f73e621cb1d21",
+              "completed_input_utf8_sha256": "9bb6440c33f120b4325bbdcde36ba389914efeeba7f1fe5bc9221feedc44f054",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_a596898155a46b776ccf33cccd51",
+                  "completed_input_sha256": "90662fe2b9dd80645567cb0577a1dd0ff2e92f22c8356c047b7f73e621cb1d21",
+                  "exact_quote_sha256": "5c72f92443690b0ab622679b13f06bd789663b9e675f35365cf5ad642b45a972",
+                  "grammar_sha256": "dbd04a5eaa861cb20b1d59905249ed2fdae29811cecc4f2851318768f31b62ca",
+                  "observation_sha256": "719d73b84465982dbc4972c14a3d2f8e7aa77ccbb1f58ec9ecf900565b52d028",
+                  "plan_sha256": "81bf194e1cd4c00b8b520c796ea0948b50b69e23a10993de255b72435670738b",
+                  "provenance_sha256": "30f907de6a72bf8b51992460c54967b6397aa21450ec32e02da8eaefc1c303af",
+                  "query_sha256": "25053f24f182c2245fe8eb2a62b0f6fd8e6e0b53ed6af586709fe581b1d2ec49",
+                  "reading_sha256": "e319dd991a44021c19840a479558c8dfa863dae2934bb2b6b54e27a7862e0e01",
+                  "source_phrase_sha256": "b5a05b972bcddd7188d95558fc2ed0f01bb6ef089c12e0d6b0ed7cc57fbb5712"
+                },
+                "candidate_content_terms": [
+                  "dissident",
+                  "kishi",
+                  "leader",
+                  "pressure",
+                  "prominent"
+                ],
+                "components": {
+                  "lexical_novelty": 0.16000000000000003,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.09166666666666667
+                },
+                "focal_query_span": {
+                  "end": 635,
+                  "start": 426,
+                  "text": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion. [REDACTION] "
+                },
+                "focal_terms": [
+                  "administer",
+                  "defeat",
+                  "encourage",
+                  "government",
+                  "harass",
+                  "kishi",
+                  "occasion",
+                  "opposition",
+                  "police",
+                  "power",
+                  "session",
+                  "socialist"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "government",
+                  "kishi"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_e5702db1bfa1be715132",
+                  "date": "1959-01-13",
+                  "document_id": "CIA-RDP79T00975A004200340001-7",
+                  "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.8,
+                  "own_page_focal_coverage": 0.16666666666666666
+                },
+                "repeated_visible_content_terms": [
+                  "kishi"
+                ],
+                "score": 0.5016666666666667,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "20",
+                  "administer",
+                  "allege",
+                  "approval",
+                  "assure",
+                  "attack",
+                  "avoid",
+                  "budget",
+                  "carry",
+                  "communist",
+                  "compromise",
+                  "concentrate",
+                  "condemnation",
+                  "continue",
+                  "controversial",
+                  "daily",
+                  "date",
+                  "defeat",
+                  "diet",
+                  "djakarta",
+                  "editorial",
+                  "election",
+                  "encourage",
+                  "fight",
+                  "government",
+                  "harass",
+                  "house",
+                  "implicate",
+                  "increase",
+                  "indonesian",
+                  "introduction",
+                  "january",
+                  "june",
+                  "kishi",
+                  "legislation",
+                  "merdeka",
+                  "minister",
+                  "national",
+                  "occasion",
+                  "opposition",
+                  "orient",
+                  "paper",
+                  "party",
+                  "pass",
+                  "plan",
+                  "police",
+                  "power",
+                  "president",
+                  "press",
+                  "prime",
+                  "probably",
+                  "reparation",
+                  "respite",
+                  "run",
+                  "savage",
+                  "scandal",
+                  "session",
+                  "socialist",
+                  "strong",
+                  "sukarno",
+                  "temporary",
+                  "upper"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 561,
+                    "start": 559,
+                    "text": "by"
+                  },
+                  {
+                    "end": 463,
+                    "start": 453,
+                    "text": "encouraged"
+                  }
+                ],
+                "constructor_form": "nominal",
+                "constructor_routing": {
+                  "constructor_form": "nominal",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 463,
+                      "start": 453,
+                      "text": "encouraged"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 561,
+                      "start": 559,
+                      "text": "by"
+                    }
+                  },
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 622,
+                      "start": 575,
+                      "text": ", will harass the government on every occasion."
+                    }
+                  }
+                ],
+                "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: complement. Legacy subset route: nominal.",
+                "finite": null,
+                "form": "nominal",
+                "function": "complement",
+                "grammatical_number": "unknown",
+                "id": "next_reading_26fd53da5320b37c28f7083a",
+                "operators": [],
+                "outer_family": "nominal",
+                "role": "prepositional_argument",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "pressure on Kishi from prominent dissident leaders",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p2",
+                      "qualifications_preserved": true,
+                      "reason": "The nominalization faithfully preserves the dissident leaders as the source of pressure and Kishi as its target. Omitting the specific demands does not reverse or strengthen the pressure claim. It fits the complement and the political context.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "90662fe2b9dd80645567cb0577a1dd0ff2e92f22c8356c047b7f73e621cb1d21",
+                      "inserted_span": [
+                        562,
+                        612
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "90662fe2b9dd80645567cb0577a1dd0ff2e92f22c8356c047b7f73e621cb1d21",
+                      "constructor_form": "nominal",
+                      "declared_number_fit": {
+                        "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                        "state": "pass"
+                      },
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "pobj",
+                        "lemma": "pressure",
+                        "pos": "NOUN",
+                        "span": [
+                          562,
+                          570
+                        ],
+                        "tag": "NN",
+                        "text": "pressure"
+                      },
+                      "inserted_span": [
+                        562,
+                        612
+                      ],
+                      "outer_family": "nominal",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_NOMINAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "absence_is_counterevidence": false,
+                      "factual_support_certified": false,
+                      "reading_modified": false,
+                      "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                      "state": "pass"
+                    },
+                    "name": "applicable_existing_completed_slot_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "90662fe2b9dd80645567cb0577a1dd0ff2e92f22c8356c047b7f73e621cb1d21",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "e319dd991a44021c19840a479558c8dfa863dae2934bb2b6b54e27a7862e0e01",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_a596898155a46b776ccf33cccd51",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "690225079436b2b6234592ea702162826dd69dc51935e14004f00206828c0ddb",
+                "original_candidate_sha256": "947fbb4a2be4041fae42558528afa5646cd031dba9339bc9ded5b4b3a5dfaa25",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "30f907de6a72bf8b51992460c54967b6397aa21450ec32e02da8eaefc1c303af",
+                "proposal_response_sha256": "43fafec2bd0bbe5584a786fbf395ee81ac99617d2ffadfd6b2a75a8e8fc4bdec",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "f123568658c9f081c7df7402cde79c41ea50d4a620a4ec1194705d22b96c58e7",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 2,
+              "rank_within_new_method": 2,
+              "reading_id": "next_reading_26fd53da5320b37c28f7083a",
+              "source": {
+                "date": "1959-01-13",
+                "document_id": "CIA-RDP79T00975A004200340001-7",
+                "exact_quote": {
+                  "end": 1176,
+                  "start": 919,
+                  "text": "By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March."
+                },
+                "original_phrase": {
+                  "end": 1016,
+                  "start": 955,
+                  "text": "prominent dissident leaders are maintaining pressure on Kishi"
+                },
+                "page_id": "page_e5702db1bfa1be715132",
+                "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+                "qualification_paragraph": {
+                  "end": 1327,
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p2",
+                "qualifications_preserved": true,
+                "reason": "The nominalization faithfully preserves the dissident leaders as the source of pressure and Kishi as its target. Omitting the specific demands does not reverse or strengthen the pressure claim. It fits the complement and the political context.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_e5702db1bfa1be715132",
+                  "corpus": "cib",
+                  "date": "1959-01-13",
+                  "document_id": "CIA-RDP79T00975A004200340001-7",
+                  "end": 1327,
+                  "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Nominalizes the leaders' maintenance of pressure as 'pressure on Kishi' and expresses the leaders as its source.",
+                "kind": "PARAPHRASE"
+              }
+            },
+            {
+              "completed_input": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION].\n\nKishi probably will continue as prime minister at least until after the elections to the upper house next June. During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers. The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by Kishi's diminishing control of the party and government, will harass the government on every occasion. [REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal.) [REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval\n\nA \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties.",
+              "completed_input_sha256": "7e8cb265b953220081a3c00d10321a224b10f66343fdcc8708462d571a84b24d",
+              "completed_input_utf8_sha256": "4172f5babad7eb96f3a59e41272648a6700f10af41c9cc32817515549de0275d",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_40aa1f762b97e18e9de5faf95bb8",
+                  "completed_input_sha256": "7e8cb265b953220081a3c00d10321a224b10f66343fdcc8708462d571a84b24d",
+                  "exact_quote_sha256": "12048103bbc0d780083331d947bf25c65705346490068ac84f0dc8246f3f99a1",
+                  "grammar_sha256": "75f229579d8c1d5c487ac5d9c2b4c61fd4dc4813d76f296c16e82ddf46bed2e1",
+                  "observation_sha256": "719d73b84465982dbc4972c14a3d2f8e7aa77ccbb1f58ec9ecf900565b52d028",
+                  "plan_sha256": "81bf194e1cd4c00b8b520c796ea0948b50b69e23a10993de255b72435670738b",
+                  "provenance_sha256": "47167af4628e8f5a573d79c2ff1cffd7c637df2ab68d0c73024911e67d38999f",
+                  "query_sha256": "25053f24f182c2245fe8eb2a62b0f6fd8e6e0b53ed6af586709fe581b1d2ec49",
+                  "reading_sha256": "e319dd991a44021c19840a479558c8dfa863dae2934bb2b6b54e27a7862e0e01",
+                  "source_phrase_sha256": "51f1fb936e640e1eb68184f7d33f8eab1e866db89a473152c8618c6795f40981"
+                },
+                "candidate_content_terms": [
+                  "control",
+                  "diminish",
+                  "government",
+                  "kishi",
+                  "party"
+                ],
+                "components": {
+                  "lexical_novelty": 0.08000000000000002,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.09166666666666667
+                },
+                "focal_query_span": {
+                  "end": 635,
+                  "start": 426,
+                  "text": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion. [REDACTION] "
+                },
+                "focal_terms": [
+                  "administer",
+                  "defeat",
+                  "encourage",
+                  "government",
+                  "harass",
+                  "kishi",
+                  "occasion",
+                  "opposition",
+                  "police",
+                  "power",
+                  "session",
+                  "socialist"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "government",
+                  "kishi"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_e5702db1bfa1be715132",
+                  "date": "1959-01-13",
+                  "document_id": "CIA-RDP79T00975A004200340001-7",
+                  "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.4,
+                  "own_page_focal_coverage": 0.16666666666666666
+                },
+                "repeated_visible_content_terms": [
+                  "government",
+                  "kishi",
+                  "party"
+                ],
+                "score": 0.4216666666666667,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "20",
+                  "administer",
+                  "allege",
+                  "approval",
+                  "assure",
+                  "attack",
+                  "avoid",
+                  "budget",
+                  "carry",
+                  "communist",
+                  "compromise",
+                  "concentrate",
+                  "condemnation",
+                  "continue",
+                  "controversial",
+                  "daily",
+                  "date",
+                  "defeat",
+                  "diet",
+                  "djakarta",
+                  "editorial",
+                  "election",
+                  "encourage",
+                  "fight",
+                  "government",
+                  "harass",
+                  "house",
+                  "implicate",
+                  "increase",
+                  "indonesian",
+                  "introduction",
+                  "january",
+                  "june",
+                  "kishi",
+                  "legislation",
+                  "merdeka",
+                  "minister",
+                  "national",
+                  "occasion",
+                  "opposition",
+                  "orient",
+                  "paper",
+                  "party",
+                  "pass",
+                  "plan",
+                  "police",
+                  "power",
+                  "president",
+                  "press",
+                  "prime",
+                  "probably",
+                  "reparation",
+                  "respite",
+                  "run",
+                  "savage",
+                  "scandal",
+                  "session",
+                  "socialist",
+                  "strong",
+                  "sukarno",
+                  "temporary",
+                  "upper"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 561,
+                    "start": 559,
+                    "text": "by"
+                  },
+                  {
+                    "end": 463,
+                    "start": 453,
+                    "text": "encouraged"
+                  }
+                ],
+                "constructor_form": "nominal",
+                "constructor_routing": {
+                  "constructor_form": "nominal",
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "legacy_compatible_subset",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 463,
+                      "start": 453,
+                      "text": "encouraged"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 561,
+                      "start": 559,
+                      "text": "by"
+                    }
+                  },
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 622,
+                      "start": 575,
+                      "text": ", will harass the government on every occasion."
+                    }
+                  }
+                ],
+                "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: complement. Legacy subset route: nominal.",
+                "finite": null,
+                "form": "nominal",
+                "function": "complement",
+                "grammatical_number": "unknown",
+                "id": "next_reading_26fd53da5320b37c28f7083a",
+                "operators": [],
+                "outer_family": "nominal",
+                "role": "prepositional_argument",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "Kishi's diminishing control of the party and government",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p1",
+                      "qualifications_preserved": true,
+                      "reason": "The exact nominal phrase fits after 'by' and retains Kishi as the person losing control. The source states this decline directly, and it is relevant to opposition encouragement without establishing the concealed assertion.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "7e8cb265b953220081a3c00d10321a224b10f66343fdcc8708462d571a84b24d",
+                      "inserted_span": [
+                        562,
+                        617
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_query_sha256": "7e8cb265b953220081a3c00d10321a224b10f66343fdcc8708462d571a84b24d",
+                      "constructor_form": "nominal",
+                      "declared_number_fit": {
+                        "reason": "NO_DECLARED_NOMINAL_ARGUMENT_NUMBER_CONSTRAINT",
+                        "state": "pass"
+                      },
+                      "factual_support_certified": false,
+                      "full_english_grammar_certified": false,
+                      "head": {
+                        "dependency": "pobj",
+                        "lemma": "control",
+                        "pos": "NOUN",
+                        "span": [
+                          582,
+                          589
+                        ],
+                        "tag": "NN",
+                        "text": "control"
+                      },
+                      "inserted_span": [
+                        562,
+                        617
+                      ],
+                      "outer_family": "nominal",
+                      "pos_coercion": false,
+                      "reading_modified": false,
+                      "reason": "FINAL_NOMINAL_HEAD",
+                      "state": "pass",
+                      "unlicensed_form_is_counterevidence": false,
+                      "variant": "default",
+                      "version": "narrative-completed-outer-form/2"
+                    },
+                    "name": "applicable_existing_final_form_fit",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "absence_is_counterevidence": false,
+                      "factual_support_certified": false,
+                      "reading_modified": false,
+                      "scope": "BOUNDED_DECLARED_ROLE_AND_LITERAL_COMPLETED_SLOT",
+                      "state": "pass"
+                    },
+                    "name": "applicable_existing_completed_slot_fit",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "7e8cb265b953220081a3c00d10321a224b10f66343fdcc8708462d571a84b24d",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "e319dd991a44021c19840a479558c8dfa863dae2934bb2b6b54e27a7862e0e01",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_40aa1f762b97e18e9de5faf95bb8",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "690225079436b2b6234592ea702162826dd69dc51935e14004f00206828c0ddb",
+                "original_candidate_sha256": "b9be878e4be430b10905c54aa87750c9a308e2d53d02fc454bc50e8d2763eb7d",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "47167af4628e8f5a573d79c2ff1cffd7c637df2ab68d0c73024911e67d38999f",
+                "proposal_response_sha256": "43fafec2bd0bbe5584a786fbf395ee81ac99617d2ffadfd6b2a75a8e8fc4bdec",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "f123568658c9f081c7df7402cde79c41ea50d4a620a4ec1194705d22b96c58e7",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 3,
+              "rank_within_new_method": 3,
+              "reading_id": "next_reading_26fd53da5320b37c28f7083a",
+              "source": {
+                "date": "1959-01-13",
+                "document_id": "CIA-RDP79T00975A004200340001-7",
+                "exact_quote": {
+                  "end": 918,
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government."
+                },
+                "original_phrase": {
+                  "end": 917,
+                  "start": 862,
+                  "text": "Kishi's diminishing control of the party and government"
+                },
+                "page_id": "page_e5702db1bfa1be715132",
+                "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+                "qualification_paragraph": {
+                  "end": 1327,
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p1",
+                "qualifications_preserved": true,
+                "reason": "The exact nominal phrase fits after 'by' and retains Kishi as the person losing control. The source states this decline directly, and it is relevant to opposition encouragement without establishing the concealed assertion.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_e5702db1bfa1be715132",
+                  "corpus": "cib",
+                  "date": "1959-01-13",
+                  "document_id": "CIA-RDP79T00975A004200340001-7",
+                  "end": 1327,
+                  "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "The source phrase is retained verbatim as the nominal complement of 'by'.",
+                "kind": "UNCHANGED"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 2,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 561,
+                "start": 559,
+                "text": "by"
+              },
+              {
+                "end": 463,
+                "start": 453,
+                "text": "encouraged"
+              }
+            ],
+            "constructor_form": "nominal",
+            "constructor_routing": {
+              "constructor_form": "nominal",
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "legacy_compatible_subset",
+            "cues": [
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 463,
+                  "start": 453,
+                  "text": "encouraged"
+                }
+              },
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 561,
+                  "start": 559,
+                  "text": "by"
+                }
+              },
+              {
+                "kind": "boundary",
+                "span": {
+                  "end": 622,
+                  "start": 575,
+                  "text": ", will harass the government on every occasion."
+                }
+              }
+            ],
+            "explanation": "A missing noun-headed argument, complement, compound modifier or possessor is grammatically possible. Function: complement. Legacy subset route: nominal.",
+            "finite": null,
+            "form": "nominal",
+            "function": "complement",
+            "grammatical_number": "unknown",
+            "id": "next_reading_26fd53da5320b37c28f7083a",
+            "operators": [],
+            "outer_family": "nominal",
+            "role": "prepositional_argument",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_26fd53da5320b37c28f7083a",
+          "status": "CONTEXTUAL_CANDIDATES"
+        },
+        {
+          "candidates": [
+            {
+              "completed_input": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION].\n\nKishi probably will continue as prime minister at least until after the elections to the upper house next June. During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers. The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by the fact that Kishi has failed to develop wide personal popularity, will harass the government on every occasion. [REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal.) [REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval\n\nA \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties.",
+              "completed_input_sha256": "1bbbab77118cffaad337b3f4d115db962946435c32b42b32918b5376e1d141d8",
+              "completed_input_utf8_sha256": "7969dcaedcf7265d0433a0edaea37f62c46b165573bf6523644b0f4297050e6b",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_a66bda6bbea909056575bf492015",
+                  "completed_input_sha256": "1bbbab77118cffaad337b3f4d115db962946435c32b42b32918b5376e1d141d8",
+                  "exact_quote_sha256": "c6e60fea3c61299dffa0c1120f500adc1caea2b3b11c352d13f6c794323f2d9f",
+                  "grammar_sha256": "3a8e29b0ab6feec143ad4adde61d90a9621b7a57feb6929fe51f79448d34abca",
+                  "observation_sha256": "719d73b84465982dbc4972c14a3d2f8e7aa77ccbb1f58ec9ecf900565b52d028",
+                  "plan_sha256": "81bf194e1cd4c00b8b520c796ea0948b50b69e23a10993de255b72435670738b",
+                  "provenance_sha256": "03525ce1a64e57298929b18740dc11826b536f6c535730bfbaf3eb53671fba06",
+                  "query_sha256": "25053f24f182c2245fe8eb2a62b0f6fd8e6e0b53ed6af586709fe581b1d2ec49",
+                  "reading_sha256": "8b00e7a7fdf5550254ce5f8bc2f92ce95ec262177e3105baefe6ed8c268616a5",
+                  "source_phrase_sha256": "2394ee7942f90d216bf54deb63553ed82daf28b670bc9d39e49ec336ac4d033c"
+                },
+                "candidate_content_terms": [
+                  "develop",
+                  "fact",
+                  "fail",
+                  "kishi",
+                  "personal",
+                  "popularity",
+                  "wide"
+                ],
+                "components": {
+                  "lexical_novelty": 0.17142857142857143,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.1375
+                },
+                "focal_query_span": {
+                  "end": 635,
+                  "start": 426,
+                  "text": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion. [REDACTION] "
+                },
+                "focal_terms": [
+                  "administer",
+                  "defeat",
+                  "encourage",
+                  "government",
+                  "harass",
+                  "kishi",
+                  "occasion",
+                  "opposition",
+                  "police",
+                  "power",
+                  "session",
+                  "socialist"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "government",
+                  "kishi",
+                  "opposition"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_8653cb966f1591192457",
+                  "date": "1957-10-22",
+                  "document_id": "CIA-RDP79T00975A003300430001-7",
+                  "page_sha256": "72f027162f1c312defa53d4e1f1c349c58d95658582408462c66530b51ef8454"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.8571428571428571,
+                  "own_page_focal_coverage": 0.25
+                },
+                "repeated_visible_content_terms": [
+                  "kishi"
+                ],
+                "score": 0.5589285714285714,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "20",
+                  "administer",
+                  "allege",
+                  "approval",
+                  "assure",
+                  "attack",
+                  "avoid",
+                  "budget",
+                  "carry",
+                  "communist",
+                  "compromise",
+                  "concentrate",
+                  "condemnation",
+                  "continue",
+                  "controversial",
+                  "daily",
+                  "date",
+                  "defeat",
+                  "diet",
+                  "djakarta",
+                  "editorial",
+                  "election",
+                  "encourage",
+                  "fight",
+                  "government",
+                  "harass",
+                  "house",
+                  "implicate",
+                  "increase",
+                  "indonesian",
+                  "introduction",
+                  "january",
+                  "june",
+                  "kishi",
+                  "legislation",
+                  "merdeka",
+                  "minister",
+                  "national",
+                  "occasion",
+                  "opposition",
+                  "orient",
+                  "paper",
+                  "party",
+                  "pass",
+                  "plan",
+                  "police",
+                  "power",
+                  "president",
+                  "press",
+                  "prime",
+                  "probably",
+                  "reparation",
+                  "respite",
+                  "run",
+                  "savage",
+                  "scandal",
+                  "session",
+                  "socialist",
+                  "strong",
+                  "sukarno",
+                  "temporary",
+                  "upper"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 561,
+                    "start": 559,
+                    "text": "by"
+                  },
+                  {
+                    "end": 463,
+                    "start": 453,
+                    "text": "encouraged"
+                  }
+                ],
+                "constructor_form": null,
+                "constructor_routing": {
+                  "constructor_form": null,
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "requires_new_constructor",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 463,
+                      "start": 453,
+                      "text": "encouraged"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 561,
+                      "start": 559,
+                      "text": "by"
+                    }
+                  },
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 622,
+                      "start": 575,
+                      "text": ", will harass the government on every occasion."
+                    }
+                  }
+                ],
+                "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: complement. Requires a new constructor or explicit withholding.",
+                "finite": null,
+                "form": "clausal",
+                "function": "complement",
+                "grammatical_number": "unknown",
+                "id": "next_reading_a4aed3800d00c5c34a3ef186",
+                "operators": [],
+                "outer_family": "clausal",
+                "role": "prepositional_argument",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "the fact that Kishi has failed to develop wide personal popularity",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p3",
+                      "qualifications_preserved": true,
+                      "reason": "The source clearly identifies 'he' as Kishi and asserts his failure to develop wide personal popularity. The fill preserves that proposition, fits the prepositional complement, and nominates a relevant political weakness; the omitted explanation and concessive background do not qualify its truth.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "1bbbab77118cffaad337b3f4d115db962946435c32b42b32918b5376e1d141d8",
+                      "inserted_span": [
+                        562,
+                        628
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "1bbbab77118cffaad337b3f4d115db962946435c32b42b32918b5376e1d141d8",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "8b00e7a7fdf5550254ce5f8bc2f92ce95ec262177e3105baefe6ed8c268616a5",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "final_form_fit",
+                    "pos_proof_claimed": false,
+                    "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "completed_slot_fit",
+                    "native_source_frame_or_certificate_created": false,
+                    "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_a66bda6bbea909056575bf492015",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "690225079436b2b6234592ea702162826dd69dc51935e14004f00206828c0ddb",
+                "original_candidate_sha256": "f5d1eb916dd7866cde766c800a6c281196180cdd85369f50576bf733e604547d",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "03525ce1a64e57298929b18740dc11826b536f6c535730bfbaf3eb53671fba06",
+                "proposal_response_sha256": "53a4b92b43f9e3bf57e5fdbc61392d5cb7d3107e489ba1a2c3bd8786d9d47b5e",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "e9c6cebc9eda82e2eb7e0bb074bfd7269b386c7cf96a10818ac1d1b9256c05ee",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 1,
+              "rank_within_new_method": 1,
+              "reading_id": "next_reading_a4aed3800d00c5c34a3ef186",
+              "source": {
+                "date": "1957-10-22",
+                "document_id": "CIA-RDP79T00975A003300430001-7",
+                "exact_quote": {
+                  "end": 887,
+                  "start": 656,
+                  "text": "His current stumping tour through Japan reveals that despite a record of considerable accomplishments, he has failed to develop wide personal popularity largely because his policies do not have an emotional appeal for the Japanese."
+                },
+                "original_phrase": {
+                  "end": 808,
+                  "start": 759,
+                  "text": "he has failed to develop wide personal popularity"
+                },
+                "page_id": "page_8653cb966f1591192457",
+                "page_sha256": "72f027162f1c312defa53d4e1f1c349c58d95658582408462c66530b51ef8454",
+                "qualification_paragraph": {
+                  "end": 1142,
+                  "start": 582,
+                  "text": "Kishi is searching for a major triumph before calling national elections. His current stumping tour through Japan reveals that despite a record of considerable accomplishments, he has failed to develop wide personal popularity largely because his policies do not have an emotional appeal for the Japanese. His strong support of a policy of cooperation with the free world and opposition to communism and neutralism runs counter to the popular Japanese desire for greater independence from the United States and closer ties with Asia, including Communist China."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p3",
+                "qualifications_preserved": true,
+                "reason": "The source clearly identifies 'he' as Kishi and asserts his failure to develop wide personal popularity. The fill preserves that proposition, fits the prepositional complement, and nominates a relevant political weakness; the omitted explanation and concessive background do not qualify its truth.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_8653cb966f1591192457",
+                  "corpus": "cib",
+                  "date": "1957-10-22",
+                  "document_id": "CIA-RDP79T00975A003300430001-7",
+                  "end": 1142,
+                  "page_sha256": "72f027162f1c312defa53d4e1f1c349c58d95658582408462c66530b51ef8454",
+                  "start": 582,
+                  "text": "Kishi is searching for a major triumph before calling national elections. His current stumping tour through Japan reveals that despite a record of considerable accomplishments, he has failed to develop wide personal popularity largely because his policies do not have an emotional appeal for the Japanese. His strong support of a policy of cooperation with the free world and opposition to communism and neutralism runs counter to the popular Japanese desire for greater independence from the United States and closer ties with Asia, including Communist China."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Replaces the pronoun 'he' with its referent Kishi and introduces the clause with 'the fact that'.",
+                "kind": "PARAPHRASE"
+              }
+            },
+            {
+              "completed_input": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION].\n\nKishi probably will continue as prime minister at least until after the elections to the upper house next June. During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers. The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by the fact that prominent dissident leaders are maintaining pressure on Kishi, will harass the government on every occasion. [REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal.) [REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval\n\nA \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties.",
+              "completed_input_sha256": "d9d9b40e3a135276a382ecb475930ac592c26013ae9e87c367cd0eee327fc2b7",
+              "completed_input_utf8_sha256": "ddf652ab67ab246f16e9d8d4f289c71c05362cba4e3e131b7f7b49e1eba7eec5",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_00875666fe37d4aa9696d0d5d6fc",
+                  "completed_input_sha256": "d9d9b40e3a135276a382ecb475930ac592c26013ae9e87c367cd0eee327fc2b7",
+                  "exact_quote_sha256": "5c72f92443690b0ab622679b13f06bd789663b9e675f35365cf5ad642b45a972",
+                  "grammar_sha256": "9b1350b57992656c02fa474bbf6150b1ba3483654cbc9a2d039f611cad0ce2b2",
+                  "observation_sha256": "719d73b84465982dbc4972c14a3d2f8e7aa77ccbb1f58ec9ecf900565b52d028",
+                  "plan_sha256": "81bf194e1cd4c00b8b520c796ea0948b50b69e23a10993de255b72435670738b",
+                  "provenance_sha256": "bdfac93374331b67510ab597acbd6d543f7e2ac59f641e28476fb4a40af61fc0",
+                  "query_sha256": "25053f24f182c2245fe8eb2a62b0f6fd8e6e0b53ed6af586709fe581b1d2ec49",
+                  "reading_sha256": "8b00e7a7fdf5550254ce5f8bc2f92ce95ec262177e3105baefe6ed8c268616a5",
+                  "source_phrase_sha256": "b5a05b972bcddd7188d95558fc2ed0f01bb6ef089c12e0d6b0ed7cc57fbb5712"
+                },
+                "candidate_content_terms": [
+                  "dissident",
+                  "fact",
+                  "kishi",
+                  "leader",
+                  "maintain",
+                  "pressure",
+                  "prominent"
+                ],
+                "components": {
+                  "lexical_novelty": 0.17142857142857143,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.09166666666666667
+                },
+                "focal_query_span": {
+                  "end": 635,
+                  "start": 426,
+                  "text": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion. [REDACTION] "
+                },
+                "focal_terms": [
+                  "administer",
+                  "defeat",
+                  "encourage",
+                  "government",
+                  "harass",
+                  "kishi",
+                  "occasion",
+                  "opposition",
+                  "police",
+                  "power",
+                  "session",
+                  "socialist"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "government",
+                  "kishi"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_e5702db1bfa1be715132",
+                  "date": "1959-01-13",
+                  "document_id": "CIA-RDP79T00975A004200340001-7",
+                  "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.8571428571428571,
+                  "own_page_focal_coverage": 0.16666666666666666
+                },
+                "repeated_visible_content_terms": [
+                  "kishi"
+                ],
+                "score": 0.513095238095238,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "20",
+                  "administer",
+                  "allege",
+                  "approval",
+                  "assure",
+                  "attack",
+                  "avoid",
+                  "budget",
+                  "carry",
+                  "communist",
+                  "compromise",
+                  "concentrate",
+                  "condemnation",
+                  "continue",
+                  "controversial",
+                  "daily",
+                  "date",
+                  "defeat",
+                  "diet",
+                  "djakarta",
+                  "editorial",
+                  "election",
+                  "encourage",
+                  "fight",
+                  "government",
+                  "harass",
+                  "house",
+                  "implicate",
+                  "increase",
+                  "indonesian",
+                  "introduction",
+                  "january",
+                  "june",
+                  "kishi",
+                  "legislation",
+                  "merdeka",
+                  "minister",
+                  "national",
+                  "occasion",
+                  "opposition",
+                  "orient",
+                  "paper",
+                  "party",
+                  "pass",
+                  "plan",
+                  "police",
+                  "power",
+                  "president",
+                  "press",
+                  "prime",
+                  "probably",
+                  "reparation",
+                  "respite",
+                  "run",
+                  "savage",
+                  "scandal",
+                  "session",
+                  "socialist",
+                  "strong",
+                  "sukarno",
+                  "temporary",
+                  "upper"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 561,
+                    "start": 559,
+                    "text": "by"
+                  },
+                  {
+                    "end": 463,
+                    "start": 453,
+                    "text": "encouraged"
+                  }
+                ],
+                "constructor_form": null,
+                "constructor_routing": {
+                  "constructor_form": null,
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "requires_new_constructor",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 463,
+                      "start": 453,
+                      "text": "encouraged"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 561,
+                      "start": 559,
+                      "text": "by"
+                    }
+                  },
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 622,
+                      "start": 575,
+                      "text": ", will harass the government on every occasion."
+                    }
+                  }
+                ],
+                "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: complement. Requires a new constructor or explicit withholding.",
+                "finite": null,
+                "form": "clausal",
+                "function": "complement",
+                "grammatical_number": "unknown",
+                "id": "next_reading_a4aed3800d00c5c34a3ef186",
+                "operators": [],
+                "outer_family": "clausal",
+                "role": "prepositional_argument",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "the fact that prominent dissident leaders are maintaining pressure on Kishi",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p2",
+                      "qualifications_preserved": true,
+                      "reason": "Preserves the dissident leaders as the actors exerting pressure on Kishi. Omitting the means and specific demands does not alter that asserted proposition; the resulting complement is grammatical and contextually relevant.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "d9d9b40e3a135276a382ecb475930ac592c26013ae9e87c367cd0eee327fc2b7",
+                      "inserted_span": [
+                        562,
+                        637
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "d9d9b40e3a135276a382ecb475930ac592c26013ae9e87c367cd0eee327fc2b7",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "8b00e7a7fdf5550254ce5f8bc2f92ce95ec262177e3105baefe6ed8c268616a5",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "final_form_fit",
+                    "pos_proof_claimed": false,
+                    "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "completed_slot_fit",
+                    "native_source_frame_or_certificate_created": false,
+                    "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_00875666fe37d4aa9696d0d5d6fc",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "690225079436b2b6234592ea702162826dd69dc51935e14004f00206828c0ddb",
+                "original_candidate_sha256": "a12bf8f3d877d4e108dcfc777092770a87a07e5e26ab87ba59794415282f3fb9",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "bdfac93374331b67510ab597acbd6d543f7e2ac59f641e28476fb4a40af61fc0",
+                "proposal_response_sha256": "53a4b92b43f9e3bf57e5fdbc61392d5cb7d3107e489ba1a2c3bd8786d9d47b5e",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "e9c6cebc9eda82e2eb7e0bb074bfd7269b386c7cf96a10818ac1d1b9256c05ee",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 2,
+              "rank_within_new_method": 2,
+              "reading_id": "next_reading_a4aed3800d00c5c34a3ef186",
+              "source": {
+                "date": "1959-01-13",
+                "document_id": "CIA-RDP79T00975A004200340001-7",
+                "exact_quote": {
+                  "end": 1176,
+                  "start": 919,
+                  "text": "By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March."
+                },
+                "original_phrase": {
+                  "end": 1016,
+                  "start": 955,
+                  "text": "prominent dissident leaders are maintaining pressure on Kishi"
+                },
+                "page_id": "page_e5702db1bfa1be715132",
+                "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+                "qualification_paragraph": {
+                  "end": 1327,
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p2",
+                "qualifications_preserved": true,
+                "reason": "Preserves the dissident leaders as the actors exerting pressure on Kishi. Omitting the means and specific demands does not alter that asserted proposition; the resulting complement is grammatical and contextually relevant.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_e5702db1bfa1be715132",
+                  "corpus": "cib",
+                  "date": "1959-01-13",
+                  "document_id": "CIA-RDP79T00975A004200340001-7",
+                  "end": 1327,
+                  "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Introduces the source's finite clause with 'the fact that' to form a natural complement of 'by'.",
+                "kind": "PARAPHRASE"
+              }
+            },
+            {
+              "completed_input": "Although Kishi's re-election as party president seems assured, the compromise gives him only a temporary respite from [REDACTION].\n\nKishi probably will continue as prime minister at least until after the elections to the upper house next June. During the Diet session, he will probably concentrate on passing the budget and will avoid the introduction of controversial legislation, such as his bill to increase police powers. The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by the fact that Kishi's control of the party and government is diminishing, will harass the government on every occasion. [REDACTION] the Socialists may carry out a plan to implicate Kishi in an alleged reparations scandal.) [REDACTION] Press Attack on Indonesian Communists May Have Had President Sukarno's Approval\n\nA \"savage\" editorial attack on the Indonesian Communist party on 20 January by the Djakarta daily Merdeka--a National party-oriented paper--is the strongest condemnation to date in the running fight between the National and Communist parties.",
+              "completed_input_sha256": "2d59d02cca9c301e8bed30e3ba56d013dadb1d2806fcd47c384acf5b1c585e8e",
+              "completed_input_utf8_sha256": "8185724fb9c598a592447184bf8fd536d3c4ef04236cb98ab768a743b32c1d2c",
+              "context_priority": {
+                "bindings": {
+                  "candidate_id": "source_reviewed_fill_0333b30a2975afd11c5c6589b046",
+                  "completed_input_sha256": "2d59d02cca9c301e8bed30e3ba56d013dadb1d2806fcd47c384acf5b1c585e8e",
+                  "exact_quote_sha256": "12048103bbc0d780083331d947bf25c65705346490068ac84f0dc8246f3f99a1",
+                  "grammar_sha256": "884c8102fb4db5c95f70aa5c9660c2b9009a00715697e3026630b626cf8d2f8d",
+                  "observation_sha256": "719d73b84465982dbc4972c14a3d2f8e7aa77ccbb1f58ec9ecf900565b52d028",
+                  "plan_sha256": "81bf194e1cd4c00b8b520c796ea0948b50b69e23a10993de255b72435670738b",
+                  "provenance_sha256": "1c10db65b39b011f1fd97eeb7722b054ef97eb0714452830d069699ab89c9bae",
+                  "query_sha256": "25053f24f182c2245fe8eb2a62b0f6fd8e6e0b53ed6af586709fe581b1d2ec49",
+                  "reading_sha256": "8b00e7a7fdf5550254ce5f8bc2f92ce95ec262177e3105baefe6ed8c268616a5",
+                  "source_phrase_sha256": "51f1fb936e640e1eb68184f7d33f8eab1e866db89a473152c8618c6795f40981"
+                },
+                "candidate_content_terms": [
+                  "control",
+                  "diminish",
+                  "fact",
+                  "government",
+                  "kishi",
+                  "party"
+                ],
+                "components": {
+                  "lexical_novelty": 0.1,
+                  "local_grammatical_fit": 0.25,
+                  "own_page_focal": 0.09166666666666667
+                },
+                "focal_query_span": {
+                  "end": 635,
+                  "start": 426,
+                  "text": "The opposition Socialists, encouraged by the defeat they administered to Kishi on the police-powers bill during the last session and by [REDACTION 1], will harass the government on every occasion. [REDACTION] "
+                },
+                "focal_terms": [
+                  "administer",
+                  "defeat",
+                  "encourage",
+                  "government",
+                  "harass",
+                  "kishi",
+                  "occasion",
+                  "opposition",
+                  "police",
+                  "power",
+                  "session",
+                  "socialist"
+                ],
+                "formula": ".55*own_page_focal_coverage + .25*local_grammatical_fit + .20*nonrepeated_content_fraction",
+                "local_fit_origin": "NEW_METHOD_APPLICABLE_GRAMMAR_CHECKS_NOT_FABRICATED_OLD_NATIVE_FIT",
+                "matched_focal_terms": [
+                  "government",
+                  "kishi"
+                ],
+                "native_tier_assigned": false,
+                "own_page": {
+                  "canonical_page_id": "page_e5702db1bfa1be715132",
+                  "date": "1959-01-13",
+                  "document_id": "CIA-RDP79T00975A004200340001-7",
+                  "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587"
+                },
+                "probability": false,
+                "raw_features": {
+                  "local_grammatical_fit": 1.0,
+                  "nonrepeated_content_fraction": 0.5,
+                  "own_page_focal_coverage": 0.16666666666666666
+                },
+                "repeated_visible_content_terms": [
+                  "government",
+                  "kishi",
+                  "party"
+                ],
+                "score": 0.44166666666666665,
+                "score_units": "CONTEXT_PRIORITY_NOT_PROBABILITY",
+                "source_page_union_used": false,
+                "source_positive_B_added": false,
+                "support_or_event_or_identity_certified": false,
+                "version": "source-proposal-context-priority/1",
+                "visible_content_terms": [
+                  "20",
+                  "administer",
+                  "allege",
+                  "approval",
+                  "assure",
+                  "attack",
+                  "avoid",
+                  "budget",
+                  "carry",
+                  "communist",
+                  "compromise",
+                  "concentrate",
+                  "condemnation",
+                  "continue",
+                  "controversial",
+                  "daily",
+                  "date",
+                  "defeat",
+                  "diet",
+                  "djakarta",
+                  "editorial",
+                  "election",
+                  "encourage",
+                  "fight",
+                  "government",
+                  "harass",
+                  "house",
+                  "implicate",
+                  "increase",
+                  "indonesian",
+                  "introduction",
+                  "january",
+                  "june",
+                  "kishi",
+                  "legislation",
+                  "merdeka",
+                  "minister",
+                  "national",
+                  "occasion",
+                  "opposition",
+                  "orient",
+                  "paper",
+                  "party",
+                  "pass",
+                  "plan",
+                  "police",
+                  "power",
+                  "president",
+                  "press",
+                  "prime",
+                  "probably",
+                  "reparation",
+                  "respite",
+                  "run",
+                  "savage",
+                  "scandal",
+                  "session",
+                  "socialist",
+                  "strong",
+                  "sukarno",
+                  "temporary",
+                  "upper"
+                ],
+                "weights": [
+                  0.55,
+                  0.25,
+                  0.2
+                ]
+              },
+              "declared_reading": {
+                "attachment_spans": [
+                  {
+                    "end": 561,
+                    "start": 559,
+                    "text": "by"
+                  },
+                  {
+                    "end": 463,
+                    "start": 453,
+                    "text": "encouraged"
+                  }
+                ],
+                "constructor_form": null,
+                "constructor_routing": {
+                  "constructor_form": null,
+                  "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+                  "version": "next-possessor-surface-routing/1"
+                },
+                "constructor_status": "requires_new_constructor",
+                "cues": [
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 463,
+                      "start": 453,
+                      "text": "encouraged"
+                    }
+                  },
+                  {
+                    "kind": "attachment",
+                    "span": {
+                      "end": 561,
+                      "start": 559,
+                      "text": "by"
+                    }
+                  },
+                  {
+                    "kind": "boundary",
+                    "span": {
+                      "end": 622,
+                      "start": 575,
+                      "text": ", will harass the government on every occasion."
+                    }
+                  }
+                ],
+                "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: complement. Requires a new constructor or explicit withholding.",
+                "finite": null,
+                "form": "clausal",
+                "function": "complement",
+                "grammatical_number": "unknown",
+                "id": "next_reading_a4aed3800d00c5c34a3ef186",
+                "operators": [],
+                "outer_family": "clausal",
+                "role": "prepositional_argument",
+                "target_kind": "any",
+                "variant": "default",
+                "wrappers": []
+              },
+              "factual_support_certified": false,
+              "fill": "the fact that Kishi's control of the party and government is diminishing",
+              "grammar": {
+                "applicable_checks": [
+                  {
+                    "details": {
+                      "category": "FITS",
+                      "context": "RELEVANT",
+                      "decision": "ACCEPT_CONTEXTUAL",
+                      "grammar": "FITS",
+                      "proposal_id": "p1",
+                      "qualifications_preserved": true,
+                      "reason": "Faithfully recasts Kishi's diminishing control as a fact-clause. It fits after 'encouraged ... by' and supplies a relevant government weakness without claiming to recover the concealed text.",
+                      "source_fidelity": "FAITHFUL",
+                      "unknown_mask_inferred": false
+                    },
+                    "name": "separate_review_grammar_and_category",
+                    "state": "pass"
+                  },
+                  {
+                    "details": {
+                      "completed_input_sha256": "2d59d02cca9c301e8bed30e3ba56d013dadb1d2806fcd47c384acf5b1c585e8e",
+                      "inserted_span": [
+                        562,
+                        634
+                      ],
+                      "outside_slot_bytes_unchanged": true
+                    },
+                    "name": "literal_completed_insertion_boundaries",
+                    "state": "pass"
+                  }
+                ],
+                "completed_input_sha256": "2d59d02cca9c301e8bed30e3ba56d013dadb1d2806fcd47c384acf5b1c585e8e",
+                "eligible": true,
+                "factual_support_certified": false,
+                "full_grammar_basis": "SEPARATE_REVIEW_PLUS_LITERAL_BOUNDARIES_AND_APPLICABLE_LOCAL_CHECKS",
+                "holds": [],
+                "local_fit_is_not_native_fit": true,
+                "local_grammatical_fit": 1.0,
+                "native_DTO_or_POS_license_created": false,
+                "reading_sha256": "8b00e7a7fdf5550254ce5f8bc2f92ce95ec262177e3105baefe6ed8c268616a5",
+                "unsupported_diagnostics": [
+                  {
+                    "helper": "final_form_fit",
+                    "pos_proof_claimed": false,
+                    "reason": "NEW_METHOD_FAMILY_REQUIRES_SEPARATE_REVIEW_AND_LITERAL_BOUNDARIES",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "completed_slot_fit",
+                    "native_source_frame_or_certificate_created": false,
+                    "reason": "NO_EXACT_LEGACY_CONSTRUCTOR_VIEW",
+                    "state": "unsupported"
+                  },
+                  {
+                    "helper": "controller",
+                    "reason": "NOT_DECLARED_NOMINAL_PATIENT_ARGUMENT",
+                    "state": "not_applicable"
+                  }
+                ],
+                "version": "reviewed-source-proposal-local-grammar/1"
+              },
+              "id": "source_reviewed_fill_0333b30a2975afd11c5c6589b046",
+              "legacy_source_license_claimed": false,
+              "lineage": {
+                "native_checkpoint_sha256": "690225079436b2b6234592ea702162826dd69dc51935e14004f00206828c0ddb",
+                "original_candidate_sha256": "9951743d69b0e002461fdce3daa742ca9cf07c9353665edd62cccc1c10a8ad89",
+                "original_private_provenance_retained_locally": true,
+                "original_provenance_sha256": "1c10db65b39b011f1fd97eeb7722b054ef97eb0714452830d069699ab89c9bae",
+                "proposal_response_sha256": "53a4b92b43f9e3bf57e5fdbc61392d5cb7d3107e489ba1a2c3bd8786d9d47b5e",
+                "removed_location_fields": [
+                  "provenance"
+                ],
+                "review_response_sha256": "e9c6cebc9eda82e2eb7e0bb074bfd7269b386c7cf96a10818ac1d1b9256c05ee",
+                "saved_scores_and_source_text_unchanged": true,
+                "source_index_sha256": "b152ab5f086cfa120c5d4ece5781f6e7d5bf09827b8de0daa6311c594e66b980",
+                "version": "catalog-provider-location-projection/1"
+              },
+              "method": "source-reviewed-realized-admission/1",
+              "native_DTO_or_certificate_created": false,
+              "native_tier_assigned": false,
+              "publication_authorized": false,
+              "rank": 3,
+              "rank_within_new_method": 3,
+              "reading_id": "next_reading_a4aed3800d00c5c34a3ef186",
+              "source": {
+                "date": "1959-01-13",
+                "document_id": "CIA-RDP79T00975A004200340001-7",
+                "exact_quote": {
+                  "end": 918,
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government."
+                },
+                "original_phrase": {
+                  "end": 917,
+                  "start": 862,
+                  "text": "Kishi's diminishing control of the party and government"
+                },
+                "page_id": "page_e5702db1bfa1be715132",
+                "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+                "qualification_paragraph": {
+                  "end": 1327,
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+                }
+              },
+              "source_positive_B_added": false,
+              "source_review": {
+                "category": "FITS",
+                "context": "RELEVANT",
+                "decision": "ACCEPT_CONTEXTUAL",
+                "grammar": "FITS",
+                "proposal_id": "p1",
+                "qualifications_preserved": true,
+                "reason": "Faithfully recasts Kishi's diminishing control as a fact-clause. It fits after 'encouraged ... by' and supplies a relevant government weakness without claiming to recover the concealed text.",
+                "source_fidelity": "FAITHFUL",
+                "unknown_mask_inferred": false
+              },
+              "sources": [
+                {
+                  "canonical_page_id": "page_e5702db1bfa1be715132",
+                  "corpus": "cib",
+                  "date": "1959-01-13",
+                  "document_id": "CIA-RDP79T00975A004200340001-7",
+                  "end": 1327,
+                  "page_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+                  "start": 838,
+                  "text": "The reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership."
+                }
+              ],
+              "state": "REVIEWED_CONTEXTUAL_SOURCE_CANDIDATE_NOT_NATIVE_EVIDENCE",
+              "transformation": {
+                "description": "Recasts the nominal description of diminishing control as a finite clause introduced by 'the fact that'.",
+                "kind": "PARAPHRASE"
+              }
+            }
+          ],
+          "deferred_record_n": 0,
+          "held_record_n": 1,
+          "reading": {
+            "attachment_spans": [
+              {
+                "end": 561,
+                "start": 559,
+                "text": "by"
+              },
+              {
+                "end": 463,
+                "start": 453,
+                "text": "encouraged"
+              }
+            ],
+            "constructor_form": null,
+            "constructor_routing": {
+              "constructor_form": null,
+              "reason": "UNCHANGED_NONPOSSESSOR_ROUTE",
+              "version": "next-possessor-surface-routing/1"
+            },
+            "constructor_status": "requires_new_constructor",
+            "cues": [
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 463,
+                  "start": 453,
+                  "text": "encouraged"
+                }
+              },
+              {
+                "kind": "attachment",
+                "span": {
+                  "end": 561,
+                  "start": 559,
+                  "text": "by"
+                }
+              },
+              {
+                "kind": "boundary",
+                "span": {
+                  "end": 622,
+                  "start": 575,
+                  "text": ", will harass the government on every occasion."
+                }
+              }
+            ],
+            "explanation": "A clause can supply proposition-bearing content while retaining its own subject and operators. Function: complement. Requires a new constructor or explicit withholding.",
+            "finite": null,
+            "form": "clausal",
+            "function": "complement",
+            "grammatical_number": "unknown",
+            "id": "next_reading_a4aed3800d00c5c34a3ef186",
+            "operators": [],
+            "outer_family": "clausal",
+            "role": "prepositional_argument",
+            "target_kind": "any",
+            "variant": "default",
+            "wrappers": []
+          },
+          "reading_id": "next_reading_a4aed3800d00c5c34a3ef186",
+          "status": "CONTEXTUAL_CANDIDATES"
+        }
+      ],
+      "score_is_probability": false
+    },
+    "selected_evidence": {
+      "kind": "ACTUAL_SAVED_CANDIDATE_OWN_SOURCES",
+      "pages": [
+        {
+          "canonical_sequence": 10,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1958-03-29",
+          "document_id": "CIA-RDP79T00975A003600250001-4",
+          "earlier_page": 12,
+          "handling": [],
+          "id": "page_e9720479cacce1a2569b",
+          "native_page": {
+            "canonical_page_id": "page_e9720479cacce1a2569b",
+            "document_id": "CIA-RDP79T00975A003600250001-4",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 10,
+            "slot_ids": [
+              "slot_a912b1cd00c98a78ef06",
+              "slot_a2c91869a13d01b476c1"
+            ],
+            "source_page": 12,
+            "text": "Japanese Election Prospects\n\nJapanese Prime Minister Kishi's thinking on general elections is that action on essential legislation including the budget will be completed by 20 April, after which the lower house of the Diet should be dissolved and the new house elected in May. Kishi may introduce a controversial measure in the Diet, such as a bill limiting the activities of labor, to provoke Socialist objections that would give him an excuse for dissolving the Diet.\n\nKishi, who has given Japan sound leadership, is handicapped by an inability to develop personal popularity, and he is dependent on the achievements of his administration for voter appeal. He has suggested to Ambassador MacArthur that a favorable US attitude on pending problems, such as a concession to Japan on the Okinawa problem, would strengthen the conservatives.\n\nAlthough the conservative Liberal-Democratic party is expected to retain a majority in the Diet, any significant Socialist gains probably would be exploited by Kishi's rivals in the governing party in an attempt to weaken his position and eventually remove him from the leadership of the party and the government. [[REDACTION_SLOT:001:slot_a912b1cd00c98a78ef06]] Kishi's rivals will have much greater prospects of removing him if Socialist strength in the Diet increases by more than ten seats. [[REDACTION_SLOT:002:slot_a2c91869a13d01b476c1]]",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "ce3ae62c297a888f1ab346cb81883d51dc0c6f3d435016a0fd342427d2498d87",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "b647cff0ca42735029e996f2a38da012813de184420bddcdce60a1a930e17b0b",
+          "text": "Japanese Election Prospects\n\nJapanese Prime Minister Kishi's thinking on general elections is that action on essential legislation including the budget will be completed by 20 April, after which the lower house of the Diet should be dissolved and the new house elected in May. Kishi may introduce a controversial measure in the Diet, such as a bill limiting the activities of labor, to provoke Socialist objections that would give him an excuse for dissolving the Diet.\n\nKishi, who has given Japan sound leadership, is handicapped by an inability to develop personal popularity, and he is dependent on the achievements of his administration for voter appeal. He has suggested to Ambassador MacArthur that a favorable US attitude on pending problems, such as a concession to Japan on the Okinawa problem, would strengthen the conservatives.\n\nAlthough the conservative Liberal-Democratic party is expected to retain a majority in the Diet, any significant Socialist gains probably would be exploited by Kishi's rivals in the governing party in an attempt to weaken his position and eventually remove him from the leadership of the party and the government. [[REDACTION_SLOT:001:slot_a912b1cd00c98a78ef06]] Kishi's rivals will have much greater prospects of removing him if Socialist strength in the Diet increases by more than ten seats. [[REDACTION_SLOT:002:slot_a2c91869a13d01b476c1]]",
+          "visibility": "earlier"
+        },
+        {
+          "canonical_sequence": 5,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1959-01-13",
+          "document_id": "CIA-RDP79T00975A004200340001-7",
+          "earlier_page": 7,
+          "handling": [],
+          "id": "page_e5702db1bfa1be715132",
+          "native_page": {
+            "canonical_page_id": "page_e5702db1bfa1be715132",
+            "document_id": "CIA-RDP79T00975A004200340001-7",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 5,
+            "slot_ids": [],
+            "source_page": 7,
+            "text": "II. ASIA-AFRICA\n\nJapanese Cabinet Reshuffle Fails to Stabilize Kishi's Position\n\nThe refusal of major dissident leaders in the ruling Liberal-Democratic party to accept any of the four cabinet vacancies filled on 12 January or to participate in the re-shuffle of party executive posts has dealt a major blow to Prime Minister Kishi's leadership and makes his tenure as prime minister even more uncertain.\n\nDissident leader Mitsujiro Ishii, who contended unsuccessfully with Kishi for the prime ministership in 1957, at the last minute refused to accept the post of deputy prime minister in the cabinet line-up and thwarted Kishi's efforts to restore party balance. The ensuing appointment of subordinate leaders to fill the cabinet vacancies created when dissident leaders resigned late last month probably is only a temporary solution.\n\nThe reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership.\n\n[REDACTED]",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "3020ab3306845dc454e953916c32c3cb4d1d80365f2a33bc8980345c83a2d8d7",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "7eaa148e52576a9988ceae7b800e72ecb620e7892c63fcefa6f7a222413a7587",
+          "text": "II. ASIA-AFRICA\n\nJapanese Cabinet Reshuffle Fails to Stabilize Kishi's Position\n\nThe refusal of major dissident leaders in the ruling Liberal-Democratic party to accept any of the four cabinet vacancies filled on 12 January or to participate in the re-shuffle of party executive posts has dealt a major blow to Prime Minister Kishi's leadership and makes his tenure as prime minister even more uncertain.\n\nDissident leader Mitsujiro Ishii, who contended unsuccessfully with Kishi for the prime ministership in 1957, at the last minute refused to accept the post of deputy prime minister in the cabinet line-up and thwarted Kishi's efforts to restore party balance. The ensuing appointment of subordinate leaders to fill the cabinet vacancies created when dissident leaders resigned late last month probably is only a temporary solution.\n\nThe reshuffle points up Kishi's diminishing control of the party and government. By withholding their participation, prominent dissident leaders are maintaining pressure on Kishi to meet their demands for a complete cabinet reshuffle and for a postponement of the party presidential election until the expiration of Kishi's term in March. The postponement could give the dissidents time in which to agree on a candidate to challenge Kishi for the top party post and the prime ministership.\n\n[REDACTED]",
+          "visibility": "earlier"
+        },
+        {
+          "canonical_sequence": 9,
+          "classification": "unknown",
+          "corpus": "cib",
+          "date": "1957-10-22",
+          "document_id": "CIA-RDP79T00975A003300430001-7",
+          "earlier_page": 11,
+          "handling": [],
+          "id": "page_8653cb966f1591192457",
+          "native_page": {
+            "canonical_page_id": "page_8653cb966f1591192457",
+            "document_id": "CIA-RDP79T00975A003300430001-7",
+            "schema_version": "cib-paired-kg/1.0",
+            "sequence_in_document": 9,
+            "slot_ids": [],
+            "source_page": 11,
+            "text": "8. THE KISHI GOVERNMENT'S PROSPECTS\n\nAmbassador MacArthur in Tokyo believes that the personal political future of Japanese Prime Minister Kishi depends on whether the ruling Liberal Democratic party can increase its present strength in the next national elections, possibly to be held early in 1958. The ambassador cautions that any developments such as trade discrimination or the impression that the United States is no longer interested in bringing about necessary readjustments in its relations with Japan are certain to be used as powerful political ammunition against Kishi.\n\nKishi is searching for a major triumph before calling national elections. His current stumping tour through Japan reveals that despite a record of considerable accomplishments, he has failed to develop wide personal popularity largely because his policies do not have an emotional appeal for the Japanese. His strong support of a policy of cooperation with the free world and opposition to communism and neutralism runs counter to the popular Japanese desire for greater independence from the United States and closer ties with Asia, including Communist China.\n\nShould his present pro-Western course fail to develop his political popularity, Kishi may adapt his program to satisfy, rather than lead, public attitudes which, for example, in labor and education, have become increasingly subject to Communist and Marxist influence. He has given ample evidence of this technique by introducing into the UN a resolution on cessation of nuclear tests which is unsatisfactory to the West. [REDACTED]",
+            "unplaced_slot_ids": [],
+            "view": "earlier"
+          },
+          "permitted": true,
+          "raw_text_sha256": "95a3056e7dd83f265f38f0d76dfa65f1ccc2da83a6f6d286e6bce5fee6131200",
+          "source_hash_contract": "shared-json-string-ensure-ascii-true/sha256",
+          "source_sha256": "72f027162f1c312defa53d4e1f1c349c58d95658582408462c66530b51ef8454",
+          "text": "8. THE KISHI GOVERNMENT'S PROSPECTS\n\nAmbassador MacArthur in Tokyo believes that the personal political future of Japanese Prime Minister Kishi depends on whether the ruling Liberal Democratic party can increase its present strength in the next national elections, possibly to be held early in 1958. The ambassador cautions that any developments such as trade discrimination or the impression that the United States is no longer interested in bringing about necessary readjustments in its relations with Japan are certain to be used as powerful political ammunition against Kishi.\n\nKishi is searching for a major triumph before calling national elections. His current stumping tour through Japan reveals that despite a record of considerable accomplishments, he has failed to develop wide personal popularity largely because his policies do not have an emotional appeal for the Japanese. His strong support of a policy of cooperation with the free world and opposition to communism and neutralism runs counter to the popular Japanese desire for greater independence from the United States and closer ties with Asia, including Communist China.\n\nShould his present pro-Western course fail to develop his political popularity, Kishi may adapt his program to satisfy, rather than lead, public attitudes which, for example, in labor and education, have become increasingly subject to Communist and Marxist influence. He has given ample evidence of this technique by introducing into the UN a resolution on cessation of nuclear tests which is unsatisfactory to the West. [REDACTED]",
+          "visibility": "earlier"
+        }
+      ]
+    }
+  },
+  "typed_source_method_admission_not_issued": true,
+  "version": "historical-source-only-workbench-data/1"
+}

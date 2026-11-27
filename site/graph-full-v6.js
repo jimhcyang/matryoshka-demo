@@ -731,6 +731,13 @@ class GraphPanel {
         const published=this.guideCommunityContext.edges.filter(edge=>ids.has(edge.source)&&ids.has(edge.target));
         allEdges=[...new Map([...allEdges,...published].map(edge=>[edge.id,edge])).values()];
       }
+      // BEGIN WORKBENCH_INSPECTION_COMMUNITY_EDGE_V2
+      const inspection=inspectionCommunityEdgesV2.get(this);
+      if(inspection?.view_key===this.view.key&&inspection.community_id===parent.id){
+        const published=inspection.edges.filter(edge=>ids.has(edge.source)&&ids.has(edge.target));
+        allEdges=[...new Map([...allEdges,...published].map(edge=>[edge.id,edge])).values()];
+      }
+      // END WORKBENCH_INSPECTION_COMMUNITY_EDGE_V2
       contract=parent.community_detail_loaded?"Complete ranked Community membership; all published node-pair edges among the first 2,048 ranked members are available.":"Complete Community detail has not loaded.";
     } else if (parent&&this.level==="theme"&&parent.type==="Domain") {
       allNodes=allNodes.filter((row)=>row.domain_id===parent.id);
@@ -4456,6 +4463,130 @@ function bindMapToolbar(){
   toolbar.addEventListener('click',()=>queueMicrotask(syncPressed));syncPressed();resize();
 }
 bindMapToolbar();
+
+// BEGIN WORKBENCH_SOURCE_INSPECTION_BRIDGE_V1
+// Navigation only: a caller-built guide never becomes a saved retrieval trace.
+function inspectionDescriptionV1(){
+  const panel=state.panels.current;
+  return Object.freeze({version:'source-inspection-graph-bridge/1',ready:Boolean(state.data&&panel?.view&&refreshBinding),
+    corpus:corpusId,graph_id:refreshBinding?.graph_run_id||null,hierarchy_id:refreshBinding?.hierarchy_run_id||null,
+    view:panel?.view?.key||null,selected_node_id:panel?.selected?.id||null,
+    selected_edge_ids:Object.freeze([...(panel?.v64Traversal?.edge_ids||[])]),
+    perspective:panel?.neighborhood?'direct_connections':panel?.level==='evidence'&&panel.trail.at(-1)?.type==='Community'?'community':'hierarchy',
+    community_id:panel?.trail.at(-1)?.type==='Community'?panel.trail.at(-1).id:null,
+    existing_map_only:true,original_traversal_claimed:false});
+}
+let inspectionRevisionV1=0;
+const inspectionCommunityEdgesV2=new WeakMap();
+async function applyInspectionV1(action,expected,{signal}={}){
+  const fail=message=>{throw Error('KG inspection bridge: '+message);};
+  if(window.parent!==window){try{if(window.parent.location.origin!==location.origin)fail('same-origin parent required');}catch(_e){fail('same-origin parent required');}}
+  if(!action||!['HIERARCHY_NAVIGATION','GRAPH_NODE','DIRECT_CONNECTIONS','SOURCE_CONNECTION'].includes(action.kind)||
+      !expected||expected.corpus!==corpusId||expected.graph_id!==refreshBinding?.graph_run_id||
+      expected.hierarchy_id!==refreshBinding?.hierarchy_run_id)fail('corpus/browser graph/hierarchy differs');
+  const binding=expected.resource_binding;
+  if(!binding||binding.corpus!==corpusId||!binding.graph_id||!binding.hierarchy_id||
+      !/^[a-f0-9]{64}$/.test(binding.index_sha256||'')||!/^[a-f0-9]{64}$/.test(binding.registry_sha256||''))fail('explicit native binding required');
+  const current=binding.source_status==='CURRENT_NATIVE_RESOURCE_EXPLICIT';
+  if(current?binding.resource_id!==refreshBinding.source_resource?.id||binding.graph_id!==refreshBinding.graph_run_id||
+      binding.hierarchy_id!==refreshBinding.hierarchy_run_id:
+      binding.source_status!=='INCUMBENT_NOT_MIGRATED'||!(binding.resource_id===null||binding.resource_id===binding.graph_id)||
+      binding.graph_id!==refreshBinding.study_graph_id||binding.hierarchy_id!==refreshBinding.study_hierarchy_id)fail('native graph has no exact viewer bridge');
+  const selector=currentGraphResource();
+  if(selector&&Object.keys(selector).some(k=>selector[k]!==binding[k]))fail('iframe resource selector differs');
+  if(state.guidePath||state.guideError)fail('another saved guide owns this map');
+  const allowed=corpusId==='cib'?['current_earlier','current_later']:['current_redaction'];
+  if(!allowed.includes(expected.view)||!state.data?.views?.[expected.view])fail('source projection unavailable');
+  const revision=++inspectionRevisionV1,snapshot=JSON.stringify([action,expected]);
+  const valid=()=>{if(signal?.aborted||revision!==inspectionRevisionV1)throw new DOMException('Inspection superseded','AbortError');
+    if(JSON.stringify([action,expected])!==snapshot||expected.graph_id!==refreshBinding.graph_run_id||
+        expected.hierarchy_id!==refreshBinding.hierarchy_run_id)fail('inspection inputs changed');};
+  valid();
+  const panel=state.panels.current;
+  if(!panel)fail('existing map not ready');
+  if(panel.v64Busy)guideCancelMotionV64(panel);
+  if(panel.view?.key!==expected.view){
+    state.displayMode='single';state.guideProjection=expected.view==='current_later'?'later':'earlier';
+    state.release=expected.view==='current_later'?'later':'earlier';await renderRelease();valid();
+  }
+  const view=panel.view;
+  if(view?.key!==expected.view)fail('projection did not settle');
+  const selectedDetail=await ensureNodeNeighborhood(view,action.node_id);valid();
+  const record=selectedDetail?.node;
+  if(!record||action.node?.id!==record.id||action.node.type!==record.type)fail('exact node ID/type is absent');
+  if(action.kind==='HIERARCHY_NAVIGATION'&&(!record.community_id||action.community_id!==record.community_id))fail('mother membership differs');
+  let actualEdge=null,previous=null,target=record,sameCommunity=false,perspectiveRestored=false;
+  if(action.kind==='SOURCE_CONNECTION'||action.kind==='DIRECT_CONNECTIONS'){
+    previous=action.kind==='DIRECT_CONNECTIONS'?record:(await ensureNodeNeighborhood(view,action.from_node_id))?.node;valid();
+    if(action.kind==='DIRECT_CONNECTIONS'){
+      target=(await ensureNodeNeighborhood(view,action.target_node_id))?.node;valid();
+      if(!target||action.target_node?.id!==target.id||action.target_node?.type!==target.type)fail('exact connection destination is absent');
+    }
+    if(!previous||previous.id===target.id||action.previous_node?.id!==previous.id)fail('exact preceding node is absent');
+    sameCommunity=Boolean(previous.community_id&&previous.community_id===target.community_id);
+    if(action.kind==='DIRECT_CONNECTIONS'&&sameCommunity)fail('same-community connection cannot request a neighborhood perspective');
+    if(action.kind==='SOURCE_CONNECTION'&&!sameCommunity&&action.perspective!=='DIRECT_CONNECTIONS')fail('cross-community connection needs its explicit perspective step');
+    const detail=await ensureNodeNeighborhood(view,previous.id);valid();
+    actualEdge=(detail.edges||[]).find(e=>e.id===action.browser_edge?.id&&guidePairV64(e,previous.id,target.id));
+    if(!actualEdge||actualEdge.slot_navigation||actualEdge.investigative_only||!(actualEdge.channel_counts?.explicit_relation>0)||
+        actualEdge.source!==action.browser_edge.source||actualEdge.target!==action.browser_edge.target||
+        !guidePairV64(action.edge,previous.id,target.id)||action.edge.kind!=='SOURCE'||
+        action.edge.route_class!=='SOURCE_ASSERTION'||!action.edge.relation_evidence_id||
+        !String(actualEdge.edge_type||'').split(',').map(s=>s.trim()).includes(action.edge.relation))fail('exact source/display edge differs');
+  }
+  const cancel=()=>guideCancelMotionV64(panel);
+  signal?.addEventListener('abort',cancel,{once:true});
+  try{
+    inspectionCommunityEdgesV2.delete(panel);
+    panel.stopPhysics();panel.stopOrbit();panel.closeInspector(false);panel.v64Traversal=null;
+    const connections=async()=>{
+      if(sameCommunity)fail('same-community connection must stay in its community');
+      if(panel.level!=='evidence'){
+        if(previous.community_id)await panel.openLocalCommunity(previous,{scroll:false});
+        else await panel.focusNeighborhood(previous,{scroll:false});
+        valid();
+      }
+      await panel.focusDirectConnections(previous,{scroll:false});valid();
+      panel.pinnedFocusIds=new Set([previous.id,target.id]);panel.refreshGraph(previous.id);
+    };
+    if(action.kind==='SOURCE_CONNECTION'){
+      if(sameCommunity){
+        if(panel.neighborhood||panel.level!=='evidence'||panel.trail.at(-1)?.id!==previous.community_id){
+          await panel.openLocalCommunity(previous,{scroll:false});valid();
+        }
+        // One already-published edge may lie outside the ranked community edge preview.
+        // Retain the layout and native catalog; overlay only this verified exact ID.
+        inspectionCommunityEdgesV2.set(panel,{view_key:view.key,community_id:previous.community_id,edges:[actualEdge]});
+      }else if(panel.neighborhood?.node?.id!==previous.id){
+        // Re-enter the recorded perspective when stepping back from destination community.
+        await connections();perspectiveRestored=true;
+      }
+      panel.pinnedFocusIds=new Set([previous.id,record.id]);panel.refreshGraph(previous.id);
+      const drawn=panel.edges.find(e=>e.id===actualEdge.id&&guidePairV64(e,previous.id,record.id));
+      if(!drawn||!panel.nodeMap.has(record.id)||!panel.nodeMap.has(previous.id))fail('verified edge is not drawn');
+      guideSetTraversalV64(panel,previous.id,record.id,{kind:'SOURCE',browser_edge_verified:true,
+        browser_edge_ids:[drawn.id],browser_edge_proofs:[{id:drawn.id,relation:action.edge.relation}]});
+      if(!panel.v64Traversal?.verified||!panel.v64Traversal.edge_ids.includes(drawn.id))fail('edge highlight did not bind');
+      panel.v64Traversal.progress=1;panel.centerIds([previous.id,record.id]);panel.pulseIds([previous.id,record.id]);
+    }else if(action.kind==='DIRECT_CONNECTIONS'){
+      await connections();
+    }else if(record.community_id){
+      await panel.openLocalCommunity(record,{scroll:false});valid();
+    }else{
+      await panel.focusNeighborhood(record,{scroll:false});valid();
+    }
+    if(!panel.nodeMap.has(record.id))fail('selected exact node did not settle');
+    panel.selected=panel.nodeMap.get(record.id);panel.pulseIds([record.id]);panel.draw();valid();
+    panel.canvas.dataset.inspectionKind=action.kind;panel.canvas.dataset.inspectionNode=record.id;
+    return Object.freeze({...inspectionDescriptionV1(),status:'focused',kind:action.kind,node_id:record.id,
+      browser_edge_id:actualEdge?.id||null,source_edge_id:action.kind==='SOURCE_CONNECTION'?action.edge.id:null,
+      same_community:sameCommunity,perspective_restored:perspectiveRestored,
+      hierarchy_is_graph_hop:false,source_assertion_or_identity_certified:false});
+  }finally{signal?.removeEventListener('abort',cancel);}
+}
+Object.defineProperty(globalThis,'MatryoshkaGraphInspection',{value:Object.freeze({describe:inspectionDescriptionV1,apply:applyInspectionV1}),
+  writable:false,configurable:false});
+// END WORKBENCH_SOURCE_INSPECTION_BRIDGE_V1
 
 if(hasSavedGuide(pageParams))renderGuideLoading();
 if (!redirectCibRoute) init();
