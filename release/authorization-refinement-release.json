@@ -1,0 +1,39 @@
+{
+  "version": "source-bound-release-authorization/1",
+  "date": "2026-11-26",
+  "scope": "diagnostic_demo_with_declared_limitations",
+  "candidate_manifest_sha256": "63bf09c0cdd60046790e6b49bc55c845be4ccc7a93ced6f468e29dd816c8b73b",
+  "source_report_sha256": "35a8e5bd03a1bb597bb6bf6bb50a059ef69013574c9d1ea17d88a177bf8d6fb8",
+  "backend_code_sha256": "f7168060eb067fff9b070fa07a793a673eca118e1d4004af94b4408cf42daabf",
+  "publish_authorized": true,
+  "new_data_qa_accepted": true,
+  "privacy_review_accepted": true,
+  "licensing_review_accepted": true,
+  "qualified_data_qa_ref": {
+    "path": "qa-refinement-release.json",
+    "sha256": "dcf5770dbbea614696fb2e0b808340b3ed8103745e247b9753c58c30bde9e6ac"
+  },
+  "independent_final_review_sha256": "e82993dc870a228a8df3fe6de557327747b5dfbecb39522f0648e418fb09b2e3",
+  "support_sha256": "85d9646dd3bc10457fa2ca251c439ada3f5c96a3a07a86817eed8952354c86af",
+  "publication_conditions": [
+    "All 108 packaged runtime tests must pass in the installed repository before commit or push.",
+    "Installed manifest, source report, API index and support hashes must equal the reviewed candidate.",
+    "Existing full integrity, browser, explicit authorization and Pages deployment gates remain required."
+  ],
+  "all_tasks_success_claimed": false,
+  "benchmark_accuracy_claimed": false,
+  "unknown_delegation_has_revealed_gold": false,
+  "live_uses_new_source_model_method": false,
+  "development_recovery_target_met": false,
+  "ordinary_development_cases": 31,
+  "source_primary_whole_top_five_recoveries": 5,
+  "source_primary_whole_or_partial_top_five_recoveries": 10,
+  "limitations": [
+    "Curated source-model results are distinct from the original structural native judgments.",
+    "Some candidates and source assessments are contextual, partial or conditional.",
+    "The delegation search uses a separately registered later-release inclusive-origin policy and has no revealed historical answer.",
+    "The original 31-case development target is unmet; no paired benchmark improvement is claimed.",
+    "The optional Live backend retains the earlier native method.",
+    "Privacy and source-rights continuity review grants no new legal or declassification certification."
+  ]
+}

@@ -196,7 +196,7 @@ def test_runtime_early_script_project_prefix_default_index_and_exact_values(page
     assert page.evaluate("saved.rank") == 3
     assert page.evaluate("saved.endpoint_mass") == 2.819703871280401e-6
     assert any(r["path"] == PREFIX + "data/api-index.json" for r in site["requests"])
-    expect(page.locator("#public-replay-notice")).to_contain_text("No model, live query API, inference")
+    expect(page.locator("#public-replay-notice")).to_have_text("Saved examples. Connect a backend for Live analysis.")
     assert fetch_json(page, "/data/report-v6.json")["body"]["cases"] == [dict(case_id="c1")]
 
 

@@ -130,3 +130,19 @@ main{inset:var(--app-nav-height,64px) 0 0}main>.graph-grid{position:absolute;ins
   .toolbar-popover>summary{padding-inline:6px}
 }
 .walk-source-excerpt{display:block;width:100%;text-align:left;padding:0!important;background:transparent!important;border:0!important;font:inherit!important;white-space:pre-wrap;color:inherit;cursor:pointer}
+
+/* Controls and source navigation must stay readable at presentation distance. */
+.temporal-date,.redaction-control>span,.reveal-control>span,.graph-breadcrumb,.graph-breadcrumb b,
+.toolbar-popover>summary,.popover-content small,.graph-legend small,.search-dropdown-heading,
+.search-dropdown-heading button,.search-column h3,.slot-pagination,.slot-anchor span,
+.guide-return,.guide-scope,.guide-case-bound,.guide-current,.guide-warning,.guide-context-actions,
+.guide-actions small,.guide-kind,.cib-source-meta span,.cib-source-page>header,
+#cib-source-kicker,.cib-pdf-note,#public-replay-notice{font-size:14px!important}
+.map-toolbar button,.map-toolbar select,.map-toolbar summary,.temporal-ticks,
+.search-hit small,.inspector small,.guide-actions a{font-size:14px!important}
+.search-hit b{font-size:16px!important}
+.graph-original-pdf-views a,.cib-source-page header b{font-size:14px!important}
+.temporal-date input,.search-entry input,.search-entry select{font-size:16px!important}
+.temporal-date input{width:112px}
+.cib-source-body>p{font-size:16px!important}
+#legacy-identity-authority-notice{display:none!important}

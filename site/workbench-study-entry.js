@@ -15,10 +15,10 @@ export async function workbenchStudyTarget(report,{slot='first',base=location.hr
   if(row.current_resource_execution!==true||c?.task!=='redaction'||c.corpus!=='cib'||
     typeof c.case_id!=='string'||!c.case_id||typeof c.query!=='string'||!c.query.trim()||
     row.reference_answer_kind!=='unknown_still_withheld'||row.reference_answer_available===true||
-    row.reference_answer!=null||row.gold!=null||policy.id!=='supplied_documents_inclusive'||
+    row.reference_answer!=null||row.gold!=null||!['supplied_documents_inclusive','later_release_inclusive'].includes(policy.id)||
     b?.state!=='PASS'||b.native_packet_modified!==false||!SHA.test(b.query_sha256||'')||
     !n||!SHA.test(n.sha256||'')||n.path!==b.native_checkpoint?.path||n.sha256!==b.native_checkpoint?.sha256)
-    throw Error('The study lacks its exact saved-input, unknown-truth or registered-source binding.');
+    throw Error('The study lacks its exact saved-input, unknown-truth or source-view binding.');
   const caseHash=await hash(c);
   if(b.query_sha256!==await hash(c.query)||b.public_case_sha256!==caseHash||
     b.native_public_case_sha256!==caseHash||b.native_case_sha256!==caseHash)

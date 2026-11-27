@@ -745,7 +745,6 @@ select,input { padding:.45rem; font-size:.73rem; border-radius:4px; }
 }
 .rail-study{display:block;margin:18px 0;padding:12px 0;border-top:1px solid var(--line,#c8d7d7);font-size:15px;font-weight:600;color:var(--teal,#126d70);text-decoration:none}
 .rail-study:hover{text-decoration:underline}
-.query-block[data-task="redaction"]{text-transform:uppercase}
 .workflow>.stage { min-height:0; padding-block:34px 42px; }
 .workflow>#stage-01 { min-height:0; padding-bottom:24px; }
 .verdict-strip { align-items:center; column-gap:14px; margin:0 0 16px; padding:10px 18px; border:1px solid var(--line); border-left:5px solid #a78132; border-radius:7px; background:#fbf8ed; }
@@ -857,3 +856,27 @@ select,input { padding:.45rem; font-size:.73rem; border-radius:4px; }
 .workbench-reserve-card { padding:12px 0; border-top:1px solid var(--line,#bac8c8); }
 .workbench-reserve-card h3 { font-size:1rem; }
 @media(max-width:760px){.workbench-pdf-views{grid-template-columns:1fr}.workbench-pdf-column iframe{height:54vh;min-height:300px}}
+/* Summary citations keep source identities visible without exposing raw audits. */
+.workbench-digest-citation{display:inline;padding:0 .22em;margin:0 .04em;border:0;border-bottom:1px solid currentColor;border-radius:2px;background:transparent;color:var(--accent,#006b69);font:inherit;font-weight:700;cursor:pointer}
+.workbench-digest-source-key{display:grid;gap:.5rem;margin:1rem 0;padding:1rem;border-left:3px solid var(--accent,#006b69);background:rgba(0,107,105,.04)}
+.workbench-digest-source-key h3{margin:0 0 .25rem;font-size:1rem}
+.workbench-digest-source{text-align:left;overflow-wrap:anywhere;line-height:1.5;padding:.65rem .8rem}
+.question-title { min-width:0; max-width:100%; overflow-wrap:anywhere; }
+.exact-quote .excerpt-text footer{font-weight:650;color:var(--ink,#203c3b);line-height:1.5;overflow-wrap:anywhere}
+.reading-thought .eyebrow{font-weight:700}
+@media(max-width:600px){.workbench-digest-source-key{padding:.75rem}.workbench-digest-source{font-size:.9rem}}
+
+/* Source cards keep the same type floor on narrow and expanded views. */
+.sr-r-stage .sr-r-chain{font-size:max(.8rem,16px)}
+.sr-r-stage .sr-r-chain-head{font-size:max(.72rem,14px)}
+.sr-r-stage .sr-r-card blockquote,.sr-r-stage .sr-r-source-card blockquote{font-size:max(.88rem,16px)}
+.sr-r-stage .sr-r-card details,.sr-r-stage .sr-r-source,.sr-r-stage .sr-r-evidence,
+.sr-r-stage .sr-r-rank,.sr-r-stage .sr-r-note,.sr-r-stage select{font-size:max(.8rem,14px)!important}
+.sr-r-stage .sr-r-card h3{font-size:max(1.05rem,18px)}
+.sr-r-stage .sr-r-locator{font-size:max(.72rem,12px)}
+.sr-r-stage .sr-r-index{font-size:max(1rem,16px)}
+.sr-r-stage small[data-testid=r-presentation-note]{display:none!important}
+.source-method-digest>p{font-size:max(1.1rem,20px);line-height:1.65}
+.workbench-digest-source{font-size:max(.85rem,14px)}
+#public-replay-notice{font-size:14px!important}
+#page-state,.workflow-nav .workflow-step-number{font-size:14px!important}

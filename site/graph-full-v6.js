@@ -518,7 +518,7 @@ class GraphPanel {
     this.labelLayer=document.createElement('div');this.labelLayer.className='map-labels';this.canvas.after(this.labelLayer);
     this.showNeighborEdges=true; this.inducedNeighborEdges=[]; this.inducedLoadRevision=0; this.inducedLoading=false; this.inducedError=""; this.focusBands=[]; this.inspectionRevision=0;
     this.orbitFrame=null;this.orbitHoverId=null;this.fitScale=1;
-    this.motionFrame=null;this.motionJob=null;this.orbitEnabled=false;this.orbitPhase=0;
+    this.motionFrame=null;this.motionJob=null;this.orbitEnabled=false;this.orbitPhase=0;this.flowElapsedMs=0;
     this.motionStats={frames:0,collisionPasses:0,maxFrameMs:0,maxStepPx:0};
     this.ringLegend=document.createElement('aside');this.ringLegend.className='neighborhood-legend';this.ringLegend.hidden=true;this.canvas.after(this.ringLegend);
     this.ringLegend.addEventListener('pointerenter',()=>clearTimeout(this.legendTimer));
@@ -831,7 +831,7 @@ class GraphPanel {
     this.layoutKey=[this.view.key,this.level,...this.trail.map(row=>row.id),this.graph.focusMode?this.graph.focusNodeId:'packed'].join('|');
     const sameScope=priorKey===this.layoutKey;
     const sameMembers=sameScope&&priorNodes.size===this.nodes.length&&this.nodes.every(node=>priorNodes.has(node.id));
-    if(!sameScope)this.orbitPhase=0;
+    if(!sameScope){this.orbitPhase=0;this.flowElapsedMs=0;}
     this.focusBands=[];
     if(this.graph.focusMode)this.positionFocusRings();
     this.nodeMap=new Map(this.nodes.map((node)=>[node.id,node]));
@@ -860,7 +860,8 @@ class GraphPanel {
     }
     if(this.graph.focusMode)this.reserveFocusLabelHole();
     this.renderInspector();this.updateChrome();
-    if(this.graph.focusMode){this.showRingLegend();this.startOrbit();}else this.ringLegend.hidden=true;
+    if(this.graph.focusMode)this.showRingLegend();else this.ringLegend.hidden=true;
+    this.startOrbit();
   }
 
   positionFocusRings() {
@@ -991,7 +992,7 @@ class GraphPanel {
   }
   startOrbit(){
     if(state.guidePath||this.v64Busy){this.stopPhysics();this.stopOrbit();return;}
-    this.orbitEnabled=Boolean(this.graph?.focusMode&&state.neighborhoodMotion&&!guideReducedMotion()&&!state.guidePath&&!this.v64Busy);
+    this.orbitEnabled=Boolean(this.nodes.length&&state.neighborhoodMotion&&!guideReducedMotion()&&!state.guidePath&&!this.v64Busy);
     this.scheduleMotion();
   }
   scheduleMotion(){
@@ -1000,8 +1001,7 @@ class GraphPanel {
     const tick=now=>{
       this.motionFrame=null;this.physicsFrame=null;this.orbitFrame=null;
       if(document.hidden||state.guidePath||this.v64Busy||!this.canvas.getClientRects().length)return;
-      if(!state.neighborhoodMotion&&!guideReducedMotion()){this.canvas.dataset.orbitState='paused';return;}
-      const interval=now-last,elapsed=interval>GraphKG.MOTION.stallMs?0:interval;last=now;
+      const interval=now-last,elapsed=GraphMotion.elapsed(interval,GraphKG.MOTION.stallMs);last=now;
       const started=performance.now(),scale=displayScale(this.transform.scale);let changed=false;
       if(this.dragCollisionPending&&this.drag?.node){
         this.dragCollisionPending=false;
@@ -1009,7 +1009,7 @@ class GraphPanel {
         changed=true;
       }
       if(this.motionJob&&!this.drag){
-        const job=this.motionJob;job.elapsed+=elapsed;const progress=Math.min(1,job.elapsed/job.duration),ease=GraphKG.ease(progress);
+        const job=this.motionJob;job.elapsed+=elapsed;const progress=Math.min(1,job.elapsed/job.duration),ease=GraphMotion.ease(progress);
         let remaining=0;
         this.nodes.forEach((node,index)=>{const from=job.from[index],to=job.to[index];let x=from.x+(to.x-from.x)*ease,y=from.y+(to.y-from.y)*ease;
           if(this.graph?.focusMode&&node.id!==this.graph.focusNodeId){
@@ -1017,22 +1017,26 @@ class GraphPanel {
             const radius=Math.hypot(from.x,from.y)+(Math.hypot(to.x,to.y)-Math.hypot(from.x,from.y))*ease;
             x=Math.cos(angle)*radius;y=Math.sin(angle)*radius;
           }
-          const dx=x-node.x,dy=y-node.y,distance=Math.hypot(dx,dy),fraction=distance?Math.min(1,GraphKG.MOTION.maxStepPx/(distance*scale)):1;
-          this.motionStats.maxStepPx=Math.max(this.motionStats.maxStepPx,distance*fraction*scale);node.x+=dx*fraction;node.y+=dy*fraction;node.vx=0;node.vy=0;
+          const dx=x-node.x,dy=y-node.y,distance=Math.hypot(dx,dy);
+          this.motionStats.maxStepPx=Math.max(this.motionStats.maxStepPx,distance*scale);node.x=x;node.y=y;node.vx=0;node.vy=0;
           remaining=Math.max(remaining,Math.hypot(node.x-to.x,node.y-to.y)*scale);
           if(this.graph?.focusMode&&node.id!==this.graph.focusNodeId){node.orbitRadius=Math.hypot(node.x,node.y);node.orbitAngle=Math.atan2(node.y,node.x);}});
         if(progress===1&&remaining<.05){this.motionStats.lastReturnWallMs=performance.now()-job.startedAt;this.motionStats.lastReturnDurationMs=job.duration;this.motionJob=null;delete this.canvas.dataset.settling;}
         changed=true;
       }
-      this.orbitEnabled=Boolean(this.graph?.focusMode&&state.neighborhoodMotion&&!guideReducedMotion());
+      this.orbitEnabled=Boolean(this.nodes.length&&state.neighborhoodMotion&&!guideReducedMotion());
       const paused=this.motionJob||this.drag||this.drawerOpen||(this.hover&&!this.hover.source)||this.orbitHoverId;
       this.canvas.dataset.orbitState=this.orbitEnabled?(paused?'paused':'moving'):'stopped';
-      if(this.orbitEnabled&&!paused){
-        this.orbitPhase+=elapsed/1000*GraphKG.MOTION.orbitRate;
-        for(const node of this.nodes){
+      this.canvas.dataset.motionKind=this.graph?.focusMode?'orbit-and-flow':'flow';
+      if(this.orbitEnabled&&!paused&&elapsed){
+        this.flowElapsedMs+=elapsed;
+        if(this.graph?.focusMode){
+          this.orbitPhase+=GraphMotion.orbitDelta(elapsed,0,GraphKG.MOTION);
+          for(const node of this.nodes){
           if(node.id===this.graph.focusNodeId||!Number.isFinite(node.orbitAngle))continue;
-          node.orbitAngle+=elapsed/1000*(GraphKG.MOTION.orbitRate/(1+(node.orbitBand||0)*.12));
+          node.orbitAngle+=GraphMotion.orbitDelta(elapsed,node.orbitBand||0,GraphKG.MOTION);
           node.x=Math.cos(node.orbitAngle)*node.orbitRadius;node.y=Math.sin(node.orbitAngle)*node.orbitRadius;
+          }
         }
         changed=true;
       }
@@ -1056,7 +1060,8 @@ class GraphPanel {
     this.compactLayout();
   }
 
-  compactLayout({immediate=false}={}){
+  compactLayout({immediate=false,dragReturn=false}={}){
+    const slowReturn=dragReturn||this.motionJob?.dragReturn===true;
     this.stopPhysics();
     if(this.drag||state.guidePath||this.v64Busy||!this.nodes.length)return;
     const scale=displayScale(this.transform.scale),homes=this.compactHomes;
@@ -1078,8 +1083,9 @@ class GraphPanel {
     if(immediate||guideReducedMotion()||!state.neighborhoodMotion||distance<.05){
       this.nodes.forEach((node,index)=>{node.x=targets[index].x;node.y=targets[index].y;if(this.graph?.focusMode){node.orbitRadius=Math.hypot(node.x,node.y);node.orbitAngle=Math.atan2(node.y,node.x);}});this.draw();return;
     }
-    const duration=Math.min(GraphKG.MOTION.maxReturnMs,Math.max(GraphKG.MOTION.returnMs,distance*2.5));
-    this.motionJob={from:this.nodes.map(node=>({x:node.x,y:node.y})),to:targets,elapsed:0,duration,startedAt:performance.now()};
+    const pathLength=Math.max(...this.nodes.map((node,index)=>GraphMotion.returnPathLength(node,targets[index],Boolean(this.graph?.focusMode&&node.id!==this.graph.focusNodeId))*scale));
+    const duration=GraphMotion.returnDuration(distance,GraphKG.MOTION,pathLength,slowReturn);
+    this.motionJob={from:this.nodes.map(node=>({x:node.x,y:node.y})),to:targets,elapsed:0,duration,dragReturn:slowReturn,startedAt:performance.now()};
     this.canvas.dataset.settling='true';this.scheduleMotion();
   }
 
@@ -1217,7 +1223,7 @@ class GraphPanel {
       localIncidentNeighborhood:this.localIncidentNeighborhood,selectedId:this.selected?.id||this.external?.id,
       pinnedFocusIds:[...this.pinnedFocusIds],pinnedSearchRecords:[...this.pinnedSearchRecords],
       searchMatchIds:[...this.searchMatchIds],labelOverrides:[...this.labelOverrides],fitScale:this.fitScale,
-      transform:{...this.transform},width:this.width,height:this.height,positions:this.nodes.map(n=>({id:n.id,x:n.x,y:n.y}))};
+      transform:{...this.transform},flowElapsedMs:this.flowElapsedMs,width:this.width,height:this.height,positions:this.nodes.map(n=>({id:n.id,x:n.x,y:n.y}))};
   }
 
   restoreLocation(saved) {
@@ -1229,6 +1235,7 @@ class GraphPanel {
     this.pinnedSearchRecords=new Map(saved.pinnedSearchRecords||[]);
     this.searchMatchIds=new Set(saved.searchMatchIds||[]);this.labelOverrides=new Map(saved.labelOverrides||[]);
     this.refreshGraph(saved.selectedId);
+    this.flowElapsedMs=Number.isFinite(saved.flowElapsedMs)?saved.flowElapsedMs:0;
     for(const position of saved.positions){const node=this.nodeMap.get(position.id);if(node)Object.assign(node,{x:position.x,y:position.y});}
     if(saved.width===this.width&&saved.height===this.height){this.transform={...saved.transform};this.fitScale=saved.fitScale||this.fitScale;}else this.fit();
     this.draw();this.updateChrome();
@@ -1462,8 +1469,8 @@ class GraphPanel {
     renderPanelCaption(this);
   }
 
-  screen(node) { const scale=displayScale(this.transform.scale);return {x:node.x*scale+this.transform.x,y:node.y*scale+this.transform.y}; }
-  world(point) { const scale=displayScale(this.transform.scale);return {x:(point.x-this.transform.x)/scale,y:(point.y-this.transform.y)/scale}; }
+  screen(node) { const scale=displayScale(this.transform.scale),flow=GraphMotion.flow(this.flowElapsedMs);return {x:node.x*scale+this.transform.x+flow.x,y:node.y*scale+this.transform.y+flow.y}; }
+  world(point) { const scale=displayScale(this.transform.scale),flow=GraphMotion.flow(this.flowElapsedMs);return {x:(point.x-this.transform.x-flow.x)/scale,y:(point.y-this.transform.y-flow.y)/scale}; }
   nodeRadius(node,padding=0,minimum=0) {
     const scale=displayScale(this.transform.scale),mobile=this.width<600,ceiling=mobile?38:58;
     const denseNeighbor=mobile&&this.graph?.focusMode&&this.nodes.length>96&&node.id!==this.graph.focusNodeId;
@@ -1512,31 +1519,33 @@ class GraphPanel {
     if(!this.drag)return;
     this.clearHold();const point=this.pointer(event),moved=this.drag.moved,draggedNode=this.drag.node;this.drag=null;this.canvas.classList.remove("dragging");
     if(!moved){
-      const hit=this.hitNode(point)||this.hitEdge(point);this.external=null;this.selected=hit;
-      if(this.studyContext){if(hit?.source)inspectStudyEdge(hit);else if(hit)inspectStudyNode(hit.id);this.draw();return;}
+      const hit=this.hitNode(point)||this.hitEdge(point);this.external=null;
+      if(this.studyContext){if(hit?.source){this.selected=hit;inspectStudyEdge(hit);}else if(hit){this.toggleLabel(hit);inspectStudyNode(hit.id);}this.draw();return;}
       if(hit&&!hit.source){this.closeInspector(false);this.toggleLabel(hit);}
-      else if(hit?.source){this.drawerOpen=true;this.inspectRenderedEdge(hit);}
-      else {this.closeInspector(false);this.compactLayout();}
+      else if(hit?.source){this.selected=hit;this.drawerOpen=true;this.inspectRenderedEdge(hit);}
+      else {this.selected=null;this.closeInspector(false);this.compactLayout();}
     }
     if(moved&&draggedNode&&!state.guidePath){
-      this.dragCollisionPending=false;this.compactLayout();
+      this.dragCollisionPending=false;this.compactLayout({dragReturn:true});
     }
     this.startOrbit();
     this.syncMapActions();
     this.draw();
   }
-  pointerCancel() { this.clearHold();this.drag=null;this.dragCollisionPending=false;this.canvas.classList.remove("dragging");this.compactLayout();this.startOrbit(); }
+  pointerCancel() { const dragReturn=Boolean(this.drag?.moved&&this.drag.node);this.clearHold();this.drag=null;this.dragCollisionPending=false;this.canvas.classList.remove("dragging");this.compactLayout({dragReturn});this.startOrbit(); }
   zoomFloor(){return Math.max(.000001,Math.min(.12,this.fitScale||.12)/16);}
-  wheel(event) { event.preventDefault();if(this.studyContext)pauseGuide();const point=this.pointer(event),before=this.world(point),scale=Math.max(this.zoomFloor(),Math.min(3.2,this.transform.scale*Math.exp(-event.deltaY*.0012)));this.transform.scale=scale;this.transform.x=point.x-before.x*scale;this.transform.y=point.y-before.y*scale;this.compactLayout();this.draw(); }
+  wheel(event) { event.preventDefault();if(this.studyContext)pauseGuide();const point=this.pointer(event),before=this.world(point),flow=GraphMotion.flow(this.flowElapsedMs),scale=Math.max(this.zoomFloor(),Math.min(3.2,this.transform.scale*Math.exp(-event.deltaY*.0012)));this.transform.scale=scale;this.transform.x=point.x-before.x*scale-flow.x;this.transform.y=point.y-before.y*scale-flow.y;this.compactLayout();this.draw(); }
 
   toggleLabel(node){
-    this.selected=node;this.external=null;this.labelOverrides.set(node.id,true);
-    $('#map-keyboard-status').textContent=`${node.label}. Selected tag shown. Enter for sources.`;
-    this.reserveLabelSpace();
-    this.revealSelectedTag(node);
+    const shown=this.labelButtons.has(node.id),next=!shown;
+    this.selected=node;this.external=null;this.labelOverrides.set(node.id,next);
+    this.tooltip.hidden=true;
+    $('#map-keyboard-status').textContent=`${node.label}. Selected tag ${next?'shown':'hidden'}. Click again or press Space to toggle. Enter for sources.`;
+    if(next){this.reserveLabelSpace();this.revealSelectedTag(node);}
     this.draw();
   }
   revealSelectedTag(node){
+    if(this.labelOverrides.get(node.id)===false)return;
     const size=this.mapLabelSize(node);if(!size)return;
     const point=this.screen(node),area=this.usableBounds();
     const box=GraphLabelLayout.lowerHalfBox({point,radius:this.nodeRadius(node),size,bounds:area,required:true});
@@ -1580,7 +1589,7 @@ class GraphPanel {
     if(['ArrowRight','ArrowDown','ArrowLeft','ArrowUp'].includes(event.key)){
       event.preventDefault();const direction=['ArrowRight','ArrowDown'].includes(event.key)?1:-1;
       const node=this.nodes[(current+direction+this.nodes.length)%this.nodes.length];if(!node)return;
-      this.selected=node;this.external=null;this.labelOverrides.set(node.id,true);this.reserveLabelSpace();this.revealSelectedTag(node);this.draw();this.syncMapActions();$('#map-keyboard-status').textContent=`${node.label}. ${node.type}. Enter for sources. Space shows its tag.`;
+      this.selected=node;this.external=null;this.reserveLabelSpace();this.revealSelectedTag(node);this.draw();this.syncMapActions();$('#map-keyboard-status').textContent=`${node.label}. ${node.type}. Enter for sources. Space toggles its tag.`;
     }else if(event.key===' '&&current>=0){event.preventDefault();this.toggleLabel(this.nodes[current]);}
     else if(event.key==='Enter'&&current>=0){event.preventDefault();if(event.shiftKey)this.activateNode(this.nodes[current]);else this.openInspector(this.nodes[current]);}
     else if(['+','=','-'].includes(event.key)){event.preventDefault();const scale=this.transform.scale,factor=event.key==='-'?.85:1.15;this.transform.scale=Math.max(this.zoomFloor(),Math.min(3.2,scale*factor));this.transform.x=this.width/2+(this.transform.x-this.width/2)*this.transform.scale/scale;this.transform.y=this.height/2+(this.transform.y-this.height/2)*this.transform.scale/scale;this.compactLayout();this.draw();}
@@ -1592,11 +1601,8 @@ class GraphPanel {
     const walkIds=new Set(this.savedWalkLabelIds||[]);
     const automatic=focus?this.nodes.filter(node=>node===focus||Math.cos(node.ringHomeAngle)>0&&Math.sin(node.ringHomeAngle)<0):this.nodes;
     const defaults=[...automatic].sort((a,b)=>Number(walkIds.has(b.id))-Number(walkIds.has(a.id))||Number(b===focus)-Number(a===focus)||Number(this.matches.has(b.id)||this.selected===b)-Number(this.matches.has(a.id)||this.selected===a)||Number(b.mass||b.document_count||0)-Number(a.mass||a.document_count||0)||a.id.localeCompare(b.id)).slice(0,5);
-    const ids=new Set(defaults.map(node=>node.id));
-    for(const id of walkIds)if(this.nodeMap.has(id))ids.add(id);
-    for(const [id,shown] of this.labelOverrides)if(shown)ids.add(id);else ids.delete(id);
     const selectedId=this.selected&&!this.selected.source?this.selected.id:null;
-    if(selectedId)ids.add(selectedId);
+    const ids=GraphMotion.labelIds(defaults.map(node=>node.id),selectedId,[...walkIds].filter(id=>this.nodeMap.has(id)),this.labelOverrides);
     return this.nodes.filter(node=>ids.has(node.id)).sort((a,b)=>Number(b.id===selectedId)-Number(a.id===selectedId)||Number(walkIds.has(b.id))-Number(walkIds.has(a.id))||Number(b===focus)-Number(a===focus)||Number(this.labelOverrides.get(b.id)===true)-Number(this.labelOverrides.get(a.id)===true)||Number(this.matches.has(b.id))-Number(this.matches.has(a.id))||Number(b.mass||0)-Number(a.mass||0));
   }
 
@@ -1827,7 +1833,8 @@ class GraphPanel {
       ctx.beginPath();
       if(node.overlay_slot){const r=this.nodeRadius(node,0,3.5);ctx.moveTo(point.x,point.y-r);ctx.lineTo(point.x+r,point.y);ctx.lineTo(point.x,point.y+r);ctx.lineTo(point.x-r,point.y);ctx.closePath();}
       else ctx.arc(point.x,point.y,this.nodeRadius(node,0,3.5),0,Math.PI*2);
-      ctx.fillStyle=node.visibility_dimmed?"rgba(112,128,134,.32)":colors[node.dominant_node_type]||colors[node.type]||colors.Unknown;ctx.fill();
+      ctx.globalAlpha=active||!state.neighborhoodMotion||guideReducedMotion()?1:GraphMotion.opacity(this.flowElapsedMs,node.id);
+      ctx.fillStyle=node.visibility_dimmed?"rgba(112,128,134,.32)":colors[node.dominant_node_type]||colors[node.type]||colors.Unknown;ctx.fill();ctx.globalAlpha=1;
       ctx.strokeStyle=node.visibility_dimmed?"rgba(112,128,134,.58)":active?"#13242a":"rgba(255,255,255,.78)";ctx.lineWidth=active?3:2*this.nodeStrokeRadius(node);ctx.stroke();
     });
     this.drawMapLabels();
@@ -3110,7 +3117,7 @@ async function allowSavedStorySource(action,{landing=false,caseId}={}){
 
 async function openSavedWalkSource(proof,{caseInfo,config,resourceBinding}={}){
   if(!caseInfo||!proof?.canonical_page_id)throw Error('An exact saved source and case are required.');
-  const [{savedSourceScope,sourcePagePolicyAllows,registeredSuppliedPageInfo,bindRegisteredSourceResponse},{canonicalGateJSON},access]=await Promise.all([
+  const [{savedSourceScope,sourcePagePolicyAllows,registeredSuppliedPageInfo,registeredLaterPageInfo,bindRegisteredSourceResponse},{canonicalGateJSON},access]=await Promise.all([
     import('./saved-source-policy.js'),import('./local-decisions-v65.js'),savedStorySourceAccess(caseInfo.case_id)]);
   const row=access?.row,saved=row?.configurations?.[config];
   if(!saved||canonicalGateJSON(row.case)!==canonicalGateJSON(caseInfo)||canonicalGateJSON(row.resource_binding)!==canonicalGateJSON(resourceBinding))throw Error('The source request changes its released case, execution or resource.');
@@ -3123,7 +3130,7 @@ async function openSavedWalkSource(proof,{caseInfo,config,resourceBinding}={}){
     const params=new URLSearchParams({case_id:caseInfo.case_id,config,source_id:proof.canonical_page_id});
     for(const key of ['resource_id','registry_sha256','index_sha256'])if(resourceBinding?.[key])params.set(key,resourceBinding[key]);
     const data=await currentGraphJSON('/api/source-v6?'+params),page=data.page||data;
-    if(scope.source_view_policy.id==='supplied_documents_inclusive'){
+    if(['supplied_documents_inclusive','later_release_inclusive'].includes(scope.source_view_policy.id)){
       const condition=await currentGraphJSON('/api/condition-v6?'+new URLSearchParams({case_id:caseInfo.case_id,config}));
       const record=condition.configurations?.[config];
       if(!record||canonicalGateJSON(condition.case)!==canonicalGateJSON(caseInfo)||
@@ -3140,7 +3147,7 @@ async function openSavedWalkSource(proof,{caseInfo,config,resourceBinding}={}){
     for(const p of pages){
       const id=p.id||p.canonical_page_id;if(seen.has(id))continue;seen.add(id);
       if(!eligible(p)||await digest(p.text)!==(p.source_sha256||p.page_sha256))throw Error('An additional source segment failed verification.');
-      const selected=id===proof.canonical_page_id,chars=Array.from(p.text),info=registeredSuppliedPageInfo(p),number=info?.physical_page||p.earlier_page||p.physical_page;
+      const selected=id===proof.canonical_page_id,chars=Array.from(p.text),info=registeredLaterPageInfo(p)||registeredSuppliedPageInfo(p),number=info?.physical_page||p.earlier_page||p.physical_page;
       html+='<h3>'+(info?esc(info.release)+' edition / ':'')+(number?'Page '+esc(number):'Source segment')+'</h3><pre>'+(selected?esc(chars.slice(0,proof.start).join(''))+'<mark class="source-quotation" data-original-text="'+esc(proof.text)+'">'+esc(chars.slice(proof.start,proof.end).join(''))+'</mark>'+esc(chars.slice(proof.end).join('')):esc(chars.join('')))+'</pre>';
     }
     if(!seen.has(proof.canonical_page_id))throw Error('The selected source is missing from its document inventory.');
@@ -3746,7 +3753,7 @@ async function loadSavedGuide(params) {
     const [{savedSourceScope,sourceScopesEqual},access]=await Promise.all([import('./saved-source-policy.js'),savedStorySourceAccess(selection.case_id)]);
     const row=access?.row,saved=row?.configurations?.[selection.config];
     if(!saved)throw Error('The saved guide has no bound released execution.');
-    if(['source_day_inclusive','supplied_documents_inclusive'].includes(saved.source_view_policy?.id)){
+    if(['source_day_inclusive','supplied_documents_inclusive','later_release_inclusive'].includes(saved.source_view_policy?.id)){
       for(const key of ['guide_case','guide_arm','guide_reading','guide_candidate','guide_route'])
         if(params.getAll(key).length>1)throw Error('Conflicting saved-guide selectors.');
       const [{validateTrace},{traceSourceScope},{canonicalGateJSON},{savedGuideWalkURL}]=await Promise.all([
@@ -4428,7 +4435,7 @@ function bindMapToolbar(){
       p.closeInspector(false);Promise.resolve(showNeighborhood?p.focusDirectConnections(item):p.neighborhood?(p.level==='evidence'?p.openLocalCommunity(p.neighborhood.node):p.returnFromNeighborhood()):null).catch(e=>{p.drawerOpen=true;p.inspectionError(e);});
     }
   };
-  $('#neighborhood-motion')?.addEventListener('change',event=>{state.neighborhoodMotion=event.target.checked;for(const p of activePanels())state.neighborhoodMotion?p.startOrbit():p.stopOrbit();});
+  $('#neighborhood-motion')?.addEventListener('change',event=>{state.neighborhoodMotion=event.target.checked;for(const p of activePanels()){if(state.neighborhoodMotion)p.startOrbit();else{p.compactLayout({immediate:true});p.stopOrbit();p.draw();}}});
   $('#show-neighborhood-legend')?.addEventListener('click',()=>activePanels().filter(p=>p.graph?.focusMode).forEach(p=>p.showRingLegend()));
   $('#reset-map-labels').onclick=()=>{for(const p of activePanels()){p.labelOverrides.clear();p.compactLayout();}};
   const openSearch=()=>{if(search.value||$('#search-scope').value==='slot'){dropdown.hidden=false;closePopovers();}};

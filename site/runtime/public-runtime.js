@@ -48,6 +48,8 @@
   routes["/api/narrative-v1/presentation-context-sources"] = {defaults: {narrative_id: ""}, required: ["corpus"]};
   routes["/api/narrative-v1/trace"] = {defaults: {config: "llm_readings", reading: ""}, required: currentPins};
   routes["/api/current/analyst-digest"] = {defaults: {config: "llm_readings"}, required: currentPins};
+  routes["/api/current/source-realized-redaction"] = {defaults: {config: "llm_readings"}, required: currentPins};
+  routes["/api/current/reviewed-source-accounts"] = {defaults: {config: "llm_readings"}, required: currentPins};
   routes["/api/current/slots-v1"] = {defaults: {offset: "0", limit: "32", scan: "0", q: ""}, required: ["corpus", "graph_id", "hierarchy_id"], optional: ["slot_id", "anchor_id", "domain_id", "theme_id", "community_id"]};
   const narrativeGlobalRoutes = new Set(["/api/current/casebook", "/api/current/report-v6", "/api/current/slots-v1"]);
   const isPDF = path => /^\/api\/(?:current\/)?cib-pdf$/.test(path);
@@ -314,7 +316,7 @@
     const render = () => {
       let box = document.getElementById("public-replay-notice");
       if (!box) { box = document.createElement("aside"); box.id = "public-replay-notice"; box.setAttribute("role", "status"); document.body.append(box); }
-      box.textContent = message || "Saved public research demo only. No model, live query API, inference, or new ranking is available. Export coverage is finite, not all local archives.";
+      box.textContent = message || "Saved examples. Connect a backend for Live analysis.";
     };
     if (document.body) render(); else document.addEventListener("DOMContentLoaded", render, {once: true});
   }

@@ -5,7 +5,7 @@ Reading Evidence
 Mosaic assembles facts; Hypothesis retains attributed assessments and opposition; Redaction proposes visible source-grounded fills. A high-ranked contextual candidate is not an evidence-backed recommendation. Grammar, graph navigation and overlapping names do not establish a historical action. Scores are deterministic evidence-and-fit indices, not probabilities. Different saved executions retain their own scoring contracts.
 
 Sources and Originals
-Evidence is dated on or before the input source day. CIB permits earlier or shared text, including eligible earlier-origin text. Iran and Vietnam require eligible confidential cables, handling guards and exclusion of the entire secret origin. Original input displays and later PDFs are inspection material, not automatically eligible evidence. Source cards preserve raw wording, ownership, attribution and uncertainty.
+Evidence is dated on or before the input source day. CIB permits earlier or shared text, including eligible earlier-origin text. Iran and Vietnam require eligible confidential cables, handling guards and exclusion of the entire secret origin. The visiting-delegation study uses later-release CIB pages dated on or before its source day, including its own source document. Other original input displays and later PDFs are inspection material, not automatically eligible evidence. Source cards preserve raw wording, ownership, attribution and uncertainty.
 
 From Facts to Sources
 Each input is separated into Facts with exact links to its original wording. Redaction also declares the grammatical role of the missing text. Fact searches nominate eligible documents and graph states. Graph connections expand discovery; hierarchy membership supplies navigation, not factual proof. Within an admitted document, each Fact can nominate its own best-matching page. Every inspected page is checked against every Fact, so one useful passage need not displace another. Displayed routes end at saved source quotations. Input origins, source quotations and extracted graph observations remain distinct and independently inspectable.
@@ -19,16 +19,31 @@ Candidates must pass their declared insertion checks and retain exact source wor
 Reading a Source Account
 A report that someone had to make a written statement can establish that the statement was made when the passage narrates the completed episode. A recommendation that someone should make it cannot. Likewise, reporting a possible negotiation result is not evidence that the result occurred. The workbench retains these distinctions in both the verdict and the highlighted source text. CIB sources offer earlier and later original PDF pages; cable sources retain their original numbered sections.
 
+Context Priority
+The visiting-delegation search retains the same insertion, source and evidence-class checks. Its context priority is (tier + 0.99 times (0.55p + 0.25l + 0.20n)) / 3. Here p is focal-Fact content coverage on a candidate's own cited source page, l is bounded local insertion fit, and n is the fraction of candidate content not repeated in the visible input. The largest own-page contribution is used; unrelated pages are not pooled. Evidence tiers stay separate from contextual fit. This is a search priority, not a probability or confirmation of a still-withheld identity.
+
+Source Assessment Scores
+Source-model assessments check each requested fact against an exact quotation and its complete qualification context, followed by a separate review. The evidence-fit index is 0.75 times requested-facet coverage plus 0.25 times lexical fit. Facet weights are actor18, action20, arguments15, event identity15, time6, quantity8, polarity6, modality5, attribution3 and conditions4; only requested facets enter the denominator. Lexical fit equally combines containment and Jaccard similarity. Per-document maxima prevent repeated passages from accumulating additional weight. A complete Mosaic component needs a sufficient accepted source account; Hypothesis records directional source views with their speakers and conditions. These judgments do not certify implementation of a plan or independent historical truth.
+
+Hypothesis Arguments
+For a hypothesis, first establish that a source addresses the same issue and owns the stated assessment. Then record whether its argument supports, opposes or only contextualizes the input, preserving any conditions. An opposing source can align with the issue while disagreeing with the input's polarity or modality. The directional evidence alignment includes matched facets and explicitly conflicting operator facets for accepted opposition; literal agreement coverage includes only matched facets. The source alignment index is0.75 times directional alignment plus0.25 times lexical fit. Source totals use one maximum per document and direction. They summarize the retrieved arguments, not a probability or a count of independent witnesses.
+
+Source Age And Context
+A tested contextual possessor ranking compares human-category fit, focal overlap in the candidate's own quotation and source age. Its recency multiplier is 2 to the power of minus source age in days divided by90, measured from the input cutoff. Recency changes search priority, never source eligibility or factual support. The executed Burma example places Brigadier Aung Gyi third at0.2054; that is a contextual possibility, not evidence that he performed the concealed action.
+
+Source-Realized Redaction Candidates
+A source-only proposal records its original phrase, exact quotation, full qualification paragraph and any grammatical transformation. Complete-insertion checks test the declared reading; a separate source review tests the contribution introduced by the fill. Raw source alignment is0.75 times requested-facet agreement plus0.25 times own-quotation lexical fit. Evidence classes are2 for separately reviewed direct source support,1 for inferential context and0 for unresolved or conflicting results. Final priority is(class +0.99 times raw source alignment)/3. The same value determines order and the four-decimal display. This is an ordering index, not a probability. Partial corroboration does not establish every condition in the input. Duplicate surfaces retain their variants without summing repeated quotations or treating different spellings as independent support.
+
 CIB / Redaction
 Arias and the Panama unrest
 Input: The 22 May riots in Panama against President de la Guardia's administration have led him to declare a state of siege and may erupt into full-scale revolution. The strong national guard, whose repression of student demonstrations earlier this week resulted in one death and widespread and violent resentment, has announced that it is slowly re-gaining control of Panama City. The guard has orders to kill. The students have been joined in a general strike against the government by labor unions and other groups, but appear to have lost control of the disturbance to hoodlums. The latter are probably incited by powerful opposition politicians [REDACTION] who are trying to oust the President. Similar riots are occurring in Colon, the northern terminus of the canal.
-Saved assessment: CANDIDATE_SUGGESTIONS. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
+Assessment: Source-realized candidate: such as former President Harmodio Arias / 0.4155. Inspect the selected facts, reading and source cards.
 Input origin: CIA-RDP79T00975A003700200001-8 / 1958-05-23. Original and paired-PDF controls remain in the workbench.
 
 CIB / Redaction
 The air force commander's doubts
 Input: The government's subsequent mistrust of officers who did not give all-out support to Diem has also had an unsettling effect. Diem's foot-dragging in carrying out a promised government reorganization prompted [REDACTION] to express doubt that Diem intended to do more than replace one group of "yes men" with another; a similar complaint was made recently by [MASKED].
-Saved assessment: CANDIDATE_SUGGESTIONS. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
+Assessment: CANDIDATE_SUGGESTIONS. Inspect the selected facts, reading and source cards.
 Input origin: CIA-RDP79T00975A005600250001-2 / 1961-03-29. Original and paired-PDF controls remain in the workbench.
 
 CIB / Redaction
@@ -38,7 +53,7 @@ Input: The Caribbean Crisis
 The determination of leftists and liberals led by the Fidel Castro government of Cuba [REDACTION 1] to overthrow the Trujillo dictatorship in the Dominican Republic and the Somoza regime in Nicaragua has brought the contenders close to war. The situation also seriously threatens other governments, particularly the weak unpopular regime in Haiti. Military action has thus far been confined to rebel incursions into Nicaragua and the Dominican Republic, but may extend to counteraction by the beleaguered regimes against governments supporting the insurgents. Generalissimo Trujillo told the American ambassador on 20 June that "defensive military action" against Cuba will become "imperative" in the event of further insurgent landings. The armed forces chief of Nicaragua has also considered action against the hostile governments.
 
 Latin American Communists, who are particularly influential among the Cuban-backed rebel groups, would probably win influence in any postrevolutionary governments.
-Saved assessment: CANDIDATE_SUGGESTIONS. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
+Assessment: CANDIDATE_SUGGESTIONS. Inspect the selected facts, reading and source cards.
 Input origin: CIA-RDP79T00975A004500410001-6 / 1959-06-27. Original and paired-PDF controls remain in the workbench.
 
 CIB / Redaction
@@ -46,80 +61,86 @@ An assessment of Panama's ruling oligarchy
 Input: LATE ITEM
 
 *Panama: Further anti-American rioting and attempted incursions into the Canal Zone may follow yesterday's outbreaks. The wounding of several Panamanians by US troops, who defended Canal Zone entrances when the Panamanian National Guard failed to do so, may serve as a pretext for extremists to provoke additional disorder during the next few days. Panamanian grievances against the American administration of the Canal Zone are being exploited by nationalist politicians maneuvering in anticipation of next May's presidential election. The [REDACTION 1] ruling oligarchy in Panama appears willing to use anti-American sentiment regarding the Canal Zone in order to divert attention from the underlying social discontent of the lower income groups.[REDACTION]
-Saved assessment: CANDIDATE_SUGGESTIONS. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
+Assessment: CANDIDATE_SUGGESTIONS. Inspect the selected facts, reading and source cards.
 Input origin: CIA-RDP79T00975A004800030001-5 / 1959-11-04. Original and paired-PDF controls remain in the workbench.
 
 CIB / Hypothesis
-Could the Taiwan talks yield results under mutual sincerity?
-Input: The Sino-American talks might lead to some results provided there was sincerity on both sides.
-Saved assessment: SUPPORTED. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: CIA-RDP79T00975A004000020001-4 / 1958-09-13. Original and paired-PDF controls remain in the workbench.
+France's case for an independent nuclear deterrent
+Input: France needed its own nuclear deterrent rather than relying entirely on allied protection.
+Assessment: Reviewed source views. Inspect the selected facts, reading and source cards.
+Input origin: CIA-RDP79T00975A005000100001-4 / 1960-03-11. Original and paired-PDF controls remain in the workbench.
 
 CIB / Mosaic
-Announced Soviet troop reductions in East Germany and Hungary
-Input: The Soviet Union announced that 41,000 troops from East Germany and 17,000 from Hungary would be withdrawn.
-Saved assessment: Evidence-backed mosaic. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: CIA-RDP79T00975A003600250001-4 / 1958-03-29. Original and paired-PDF controls remain in the workbench.
+France, sovereignty and NATO
+Input: De Gaulle opposed NATO integration of French forces and proposed political coordination among the six Common Market countries.
+Assessment: 2/2 source-backed Mosaic. Inspect the selected facts, reading and source cards.
+Input origin: CIA-RDP79T00975A005200330001-7 / 1960-08-08. Original and paired-PDF controls remain in the workbench.
+
+CIB / Redaction
+Saudi aid policy and anti-American pressure
+Input: Comment: Wadsworth was first told on 1 June of the Saudi government's desire to cancel Point IV--a move [REDACTION 1].
+Assessment: Source-realized candidate: in a series of anti-American moves which began with the rejection of military grant aid in January / 0.9835. Inspect the selected facts, reading and source cards.
+Input origin: CIA-RDP79T00975A001600300001-0 / 1954-06-29. Original and paired-PDF controls remain in the workbench.
+
+IRAN / Hypothesis
+The Shah and civilian government
+Input: The Shah could remain commander in chief while civilian ministers ran the government.
+Assessment: Reviewed source views. Inspect the selected facts, reading and source cards.
+Input origin: 1978TEHRAN12348 / 1978-12-18. Original and paired-PDF controls remain in the workbench.
+
+IRAN / Mosaic
+Two rival governments
+Input: The military leadership had declared support for Bakhtiar's government, and Khomeini appointed Bazargan prime minister of a provisional government.
+Assessment: 2/2 source-backed Mosaic. Inspect the selected facts, reading and source cards.
+Input origin: 1979TEHRAN01870 / 1979-02-06. Original and paired-PDF controls remain in the workbench.
+
+IRAN / Redaction
+Revolutionary justice and civilian authority
+Input: [REDACTION] believes that the Bazargan government needs to strengthen its authority and is strongly opposed to the summary trials and executions.
+Assessment: Source-realized candidate: MEHDI HAERI-YAZDI / 0.4957. Inspect the selected facts, reading and source cards.
+Input origin: 1979STATE139731 / 1979-06-01. Original and paired-PDF controls remain in the workbench.
+
+VIETNAM / Hypothesis
+Negotiation and deterrence in an offshore dispute
+Input: Negotiations could avert a dangerous confrontation between Indonesia and South Vietnam, but Indonesia's military preparations were unlikely to deter Saigon.
+Assessment: Reviewed source views. Inspect the selected facts, reading and source cards.
+Input origin: 1974SAIGON06229 / 1974-05-14. Original and paired-PDF controls remain in the workbench.
+
+VIETNAM / Mosaic
+From the Paracels to the Spratlys
+Input: Chinese and South Vietnamese forces fought in the Paracels, and South Vietnam intended to establish a presence only on unoccupied Spratly islands.
+Assessment: 2/2 source-backed Mosaic. Inspect the selected facts, reading and source cards.
+Input origin: 1974STATE022409 / 1974-02-02. Original and paired-PDF controls remain in the workbench.
+
+VIETNAM / Redaction
+The unnamed Spratly garrison
+Input: THERE ARE CONFIRMED REPORTS THAT SAIGON
+HAS DEPLOYED A SMALL NUMBER OF ADDITIONAL FORCES TO
+THE SPRATLEYS IN THE LAST FEW DAYS (THERE ARE ALREADY
+60-70 GVN TROOPS ON [REDACTION]).  THE
+VIETNAMESE INTENTION IS TO CREATE AN RVN PRESENCE
+ONLY ON UNOCCUPIED ISLANDS.
+Assessment: Source-realized candidate: NAMYIT ISLAND / 0.9603. Inspect the selected facts, reading and source cards.
+Input origin: 1974STATE022409 / 1974-02-02. Original and paired-PDF controls remain in the workbench.
+
+CIB / Redaction
+CIA-RDP79T00975A004300220001-9 / 1959-02-17
+Input: Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation [MASKED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength. The defense minister implied that some military leaders had favored preparing a nuclear capability at the expense of conventional forces, but that the government Presidium had decided in favor of simultaneous development, which he personally approved. NATO, Malinovsky noted, had adopted the other course, and he considered this an error.
+
+Malinovsky told the delegation that all agreed that nuclear weapons would be decisive in a general war but that other arms and weapons would continue to play a major role--a line both he and former Defense Minister Zhukov have expounded.
+
+The [MASKED] delegation apparently learned nothing about the present state of the Soviet ICBM program, except that ICBMs were referred to in the present tense. It was stated that intermediate-range ballistic missiles now cover Western bases in Europe.
+Assessment: CANDIDATE_SUGGESTIONS. Inspect the selected facts, reading and source cards.
+Input origin: CIA-RDP79T00975A004300220001-9 / 1959-02-17. Original and paired-PDF controls remain in the workbench.
+
+CIB / Redaction
+A concealed military initiative in Burma
+Input: The agreement is said to have been drafted at [REDACTION] initiative; he reportedly guaranteed to the Chinese that their military actions would receive no publicity in Burma.
+Assessment: CANDIDATE_SUGGESTIONS. Inspect the selected facts, reading and source cards.
+Input origin: CIA-RDP79T00975A005400500001-6 / 1960-12-28. Original and paired-PDF controls remain in the workbench.
 
 CIB / Redaction
 Why the Salvadoran military became concerned
 Input: The armed forces, which had been virtually paralyzed by disunity, appear to have been spurred to cooperation by increasingly bold Communist activity in recent weeks. Unrestricted Communist organizational activity among the [REDACTION] Salvadoran peasants and the visit to Cuba earlier this month of a group of Salvadoran extremists have particularly heightened the concern of the military.
-Saved assessment: CANDIDATE_SUGGESTIONS. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
+Assessment: CANDIDATE_SUGGESTIONS. Inspect the selected facts, reading and source cards.
 Input origin: CIA-RDP79T00975A005500140001-5 / 1961-01-17. Original and paired-PDF controls remain in the workbench.
-
-IRAN / Hypothesis
-The Shah's retained command in the proposed constitutional arrangement
-Input: Under the proposed constitutional arrangement, the Shah would remain commander-in-chief of the armed forces.
-Saved assessment: PARTIAL_CONTEXT. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: 1978TEHRAN12348 / 1978-12-18. Original and paired-PDF controls remain in the workbench.
-
-IRAN / Mosaic
-Tehrani's resignation and written declaration
-Input: Tehrani resigned from the Regency Council and stated that the council was illegal.
-Saved assessment: Evidence-backed mosaic. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: 1979STATE019649 / 1979-01-25. Original and paired-PDF controls remain in the workbench.
-
-IRAN / Redaction
-Government, committees and political influence
-Input: AS REVOLUTIONARIES, BAZARGAN AND HIS PEOPLE ARE BASICALLY CONSERVATIVES. AMONG BAZARGAN'S CLOSEST COWORKERS, [REDACTION] APPEARS THE MOST RADICAL, BUT THAT PROBABLY STEMS FROM THE ROLE HE IS PLAYING AS A BRIDGE BETWEEN THE GOVERNMENT AND THE COMMITTEES.
-Saved assessment: CANDIDATE_SUGGESTIONS. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: 1979TEHRAN03881 / 1979-04-13. Original and paired-PDF controls remain in the workbench.
-
-VIETNAM / Hypothesis
-Highlands withdrawal necessity and conditional air resupply
-Input: The GVN decision to withdraw from Kontum and Pleiku was felt necessary in order not to be spread so thin in the face of the wide-ranging NVA pressure. With the principal LOC's between the coast and the highlands cut, resupply could only have been effected by air.
-Saved assessment: PARTIAL_SUPPORT. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: 1975SAIGON03129 / 1975-03-19. Original and paired-PDF controls remain in the workbench.
-
-VIETNAM / Mosaic
-March 19 offensive pressure in MR-3 and the Delta
-Input: The NVA have mounted stiff attacks in both the eastern and western sections of MR-3, and the Delta experienced the highest level of activity since the ceasefire.
-Saved assessment: Evidence-backed mosaic. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: 1975SAIGON03129 / 1975-03-19. Original and paired-PDF controls remain in the workbench.
-
-VIETNAM / Redaction
-Occupancy condition on the Spratly presence operation: two-sentence window
-Input: THERE ARE CONFIRMED REPORTS THAT SAIGON
-HAS DEPLOYED A SMALL NUMBER OF ADDITIONAL FORCES TO
-THE SPRATLEYS IN THE LAST FEW DAYS (THERE ARE ALREADY
-60-70 GVN TROOPS ON ONE ISLAND OF THAT GROUP).  THE
-VIETNAMESE INTENTION IS TO CREATE AN RVN PRESENCE
-ONLY ON [REDACTION] ISLANDS.
-Saved assessment: CANDIDATE_SUGGESTIONS. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: 1974STATE022409 / 1974-02-02. Original and paired-PDF controls remain in the workbench.
-
-CIB / Redaction
-Visiting delegation
-Input: Soviet Marshal Malinovsky told a visiting [REDACTION] military delegation [MASKED] that the USSR intends to retain a modern conventional capability while building up its nuclear strength.
-
-A tactical exercise observed by the Swedes was in line with known Soviet tactical nuclear warfare, including the assignment of nuclear weapons to ground division commanders.
-Saved assessment: CANDIDATE_SUGGESTIONS. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: CIA-RDP79T00975A004300220001-9 / 1959-02-17. Original and paired-PDF controls remain in the workbench.
-
-CIB / Redaction
-An attributed Tunisian account of the FLN's decision
-Input: External expenses, including arms purchases, could be met by contributions totaling $42,000,000 from friendly powers.
-
-[REDACTION 1] the FLN has reached no final decision on the formation of a government but is waiting to see whether Anglo-American good offices could "produce anything useful" with respect to Algeria,[REDACTION]
-Saved assessment: CANDIDATE_SUGGESTIONS. Inspect the selected reading and its own source cards; available alternatives do not change the default reading.
-Input origin: CIA-RDP79T00975A003600300001-8 / 1958-04-04. Original and paired-PDF controls remain in the workbench.

@@ -1,7 +1,7 @@
 // Presentation only. Native code-point spans and indexed PDF routes are the authority.
 import {currentPDFURL} from './local-decisions-v65.js';
 import pageLocators from './source-pdf-locators.js';
-import {isSuppliedSourcePage,registeredSuppliedPageInfo} from './saved-source-policy.js';
+import {isSuppliedSourcePage,registeredSuppliedPageInfo,registeredLaterPageInfo} from './saved-source-policy.js';
 
 export function exactSourceAnchor(text, proof) {
   const chars=Array.from(text);
@@ -68,7 +68,7 @@ export async function cibPDFPair({page,proof={},binding,caseId,config,base=globa
     throw Error('The PDF locator belongs to another source document.');
   const catalog=index??await loadSourcePDFIndex();
   if(!catalog?.entries)return [];
-  const registered=registeredSuppliedPageInfo(page);
+  const registered=registeredSuppliedPageInfo(page),later=registeredLaterPageInfo(page);
   if(isSuppliedSourcePage(page)&&!registered)throw Error('The supplied PDF source has no verified native registration context.');
   const hash=page.source_sha256||page.page_sha256,locator=pageLocators[registered?.original_canonical_page_id||page.canonical_page_id||page.id];
   if(proof.page_sha256&&proof.page_sha256!==hash)throw Error('The PDF source hash differs from the citation.');
@@ -82,7 +82,7 @@ export async function cibPDFPair({page,proof={},binding,caseId,config,base=globa
     const direct=pageNumber(proof[release+'_page']),stored=pageNumber(page[release+'_page']);
     const recorded=pageNumber(page[release+'_source_page']),aligned=pageNumber(paired?.[release+'_page']);
     const physical=page.source_page;
-    const source=registered?.release===release?registered.physical_page:physical&&typeof physical==='object'&&physical.release===release?
+    const source=later?.release===release?later.physical_page:registered?.release===release?registered.physical_page:physical&&typeof physical==='object'&&physical.release===release?
       pageNumber(physical.page??physical.physical_page):null;
     const numbers=[direct,stored,recorded,source,aligned].filter(value=>value!==null);
     if(new Set(numbers).size>1)throw Error('Conflicting recorded PDF page locators.');
@@ -161,8 +161,7 @@ export async function appendCIBPDFPair(host,options) {
   const status=document.createElement('p');status.className='note';status.setAttribute('role','status');status.dataset.testid='source-pdf-status';
   const note=document.createElement('p');note.className='note';
   const registered=registeredSuppliedPageInfo(options.page);
-  note.textContent=registered?'The original '+registered.release+' release is a registered corpus source in this execution. The other PDF is shown for release comparison; eligibility follows the recorded source policy.':
-    'Release comparison only. The later PDF is not additional evidence.';
+  note.textContent=registeredLaterPageInfo(options.page)?'Later-release source with the earlier PDF for comparison.':registered?'Registered '+registered.release+' source with both releases for comparison.':'Original release comparison.';
   section.append(button,status,views,note);host.append(section);
   let controller=null,urls=[],observer=null,dialog=null,epoch=0;
   function hide(){

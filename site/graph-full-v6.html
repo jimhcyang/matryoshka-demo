@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<script src="runtime/public-runtime.js" data-dataset-mirror="same-repository" data-index="data/api-index.json" data-index-sha256="32ac9dac0ab2d3e40b0efa87ba58809c8fe9fb2a3b5d2ad927613375ca9a1d47"></script>
+<script src="runtime/public-runtime.js" data-dataset-mirror="same-repository" data-index="data/api-index.json" data-index-sha256="79417029ab712d94eda10e678c50df965aa605e8afe0d780a82901a7e83a63b9"></script>
 <link rel="stylesheet" href="public-transport.css">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -12,7 +12,7 @@
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="graph-full-v6.css">
   <link rel="stylesheet" href="app-navigation.css">
-<meta name="source-api-index-sha256" content="32ac9dac0ab2d3e40b0efa87ba58809c8fe9fb2a3b5d2ad927613375ca9a1d47"></head>
+<meta name="source-api-index-sha256" content="79417029ab712d94eda10e678c50df965aa605e8afe0d780a82901a7e83a63b9"></head>
 <body data-cib-mode="current-demo">
   <header id="app-navigation" data-view="graph"></header>
   <script src="app-navigation.js"></script>
@@ -38,10 +38,10 @@
         <b>Hierarchy level</b><div class="level-switch" role="group" aria-label="Graph level"><button type="button" data-level="domain" class="active">Domains</button><button type="button" data-level="theme">Themes</button><button type="button" data-level="community">Communities</button><button type="button" data-level="evidence">Evidence nodes</button></div><p id="level-explanation"></p>
         <label class="isolate-toggle"><input id="hide-isolates" type="checkbox" checked> Connected-only search</label>
         <label>Drawing ceiling <select data-node-cap="current" aria-label="Maximum displayed nodes"><option value="32" selected>32</option><option value="256">256</option><option value="2048">2,048 (max)</option></select></label>
-        <label><input id="neighborhood-motion" type="checkbox" checked> Slow neighborhood orbit</label>
+        <label title="Gentle bounded drift and pulsing at every level; neighborhood orbit. Respects reduced motion."><input id="neighborhood-motion" type="checkbox" checked> Gentle graph motion</label>
         <div class="map-option-actions"><button type="button" id="reset-map-labels">Reset labels</button></div>
         <details id="selection-audit"><summary>Why these nodes?</summary><p>Deterministic marginal coverage, not a rank-prefix slice. Context-only links never count as factual semantic reach.</p><div id="selection-audit-content"></div></details>
-        <details><summary>Keyboard and pointer</summary><p>Click a node to select it and show its tag on the lower half of its bubble. Click the tag for information and sources. Double-click or hold a group to enter; double-click evidence to recenter. Drag nodes to push neighbors; drag canvas to pan. Wheel to zoom.</p><p>Press / to search. On the canvas, use arrow keys to select nodes, Space to show the selected tag, Enter to inspect, Shift+Enter to enter or recenter, + / - to zoom, and Escape to close. Tab reaches labels and all controls.</p></details>
+        <details><summary>Keyboard and pointer</summary><p>Short-click any node to toggle its tag on the lower half of its bubble, including automatically shown tags. Hidden tags stay hidden when selected; click the node again to show its tag. Click a visible tag for information and sources. Double-click or hold a group to enter; double-click evidence to recenter. Drag nodes to push neighbors; drag canvas to pan. Wheel to zoom.</p><p>Press / to search. On the canvas, use arrow keys to select nodes, Space to toggle the selected tag, Enter to inspect, Shift+Enter to enter or recenter, + / - to zoom, and Escape to close. Tab reaches labels and all controls.</p></details>
         <details><summary>Binding and provenance</summary><section class="hero"><p id="document-count"></p><p id="purpose"></p></section><section id="exploration-binding" aria-label="Exploration binding"><strong>Independent exploration, not a workbench case view.</strong><p id="exploration-scope"></p><p id="exploration-layout"></p></section><h2 id="pair-title">Earlier-release graph</h2><p id="build-label"></p><details><summary>Drawing accounting</summary><div id="map-accounting"></div></details></details>
       </div></details>
     </div>
@@ -64,7 +64,7 @@
         <div class="graph-workspace"><div class="graph-stage"><canvas id="current-canvas" tabindex="0" aria-label="Interactive corpus map" aria-describedby="map-keyboard-status"></canvas><div id="current-tooltip" class="tooltip" hidden></div><div id="current-caption" class="preview-caption"></div></div><aside id="current-inspector" class="inspector" aria-label="Node information and sources" hidden></aside></div>
       </article>
     </section>
-    <p id="map-keyboard-status" class="sr-only" role="status" aria-live="polite">Arrow keys select graph nodes. Enter opens information. Space shows the selected tag.</p>
+    <p id="map-keyboard-status" class="sr-only" role="status" aria-live="polite">Arrow keys select graph nodes. Enter opens information. Space toggles the selected tag.</p>
   </main>
 
   <div id="cib-drawer-scrim" class="cib-drawer-scrim" hidden></div>
@@ -74,6 +74,7 @@
   </aside>
   <script src="graph-kg-v1.js"></script>
   <script src="graph-label-layout.js"></script>
+  <script src="graph-motion-v1.js"></script>
   <script src="graph-full-v6.js"></script>
   <script src="narrative-kg-walk-v1.js"></script>
 </body>

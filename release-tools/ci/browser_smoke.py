@@ -147,7 +147,11 @@ def public_cases(site, study):
         assert row['current_resource_execution'] is True and row['reference_answer_kind'] == 'unknown_still_withheld'
         assert row.get('reference_answer_available') is not True and row.get('reference_answer') is None and row.get('gold') is None
         assert all(row.get(key) is False for key in ('selected_demo', 'selected_bench', 'selected_additional'))
-        assert item['source_view_policy']['id'] == 'supplied_documents_inclusive'
+        if item['source_view_policy']['id']=='later_release_inclusive':
+            from later_source_smoke import assert_policy
+            assert_policy(item['source_view_policy'])
+        else:
+            assert item['source_view_policy']['id'] == 'supplied_documents_inclusive'
         assert binding['state'] == 'PASS' and binding['native_packet_modified'] is False
         assert binding['native_checkpoint'] == item['native_checkpoint']
         assert binding['query_sha256'] == digest(case['query'])
@@ -286,6 +290,10 @@ def citation_refs(value):
 def assert_saved_source(row, config, source, *, full_page=False, execution=None, envelope=None):
     case=row['case']
     policy=row['configurations'][config].get('source_view_policy')
+    if policy and policy.get('id')=='later_release_inclusive':
+        from later_source_smoke import assert_source
+        assert_source(row,config,source,full_page=full_page,execution=execution,envelope=envelope,digest=digest)
+        return
     supplied=(str(source.get('canonical_page_id',source.get('id',''))).startswith('supplied_page_')
               or 'supplied_source' in source or source.get('visibility')=='supplied_registered')
     if policy is None or policy.get('id')!='supplied_documents_inclusive':
@@ -637,7 +645,7 @@ def main():
                             assert page.locator('[data-study-slot]').count()==(2 if len(cases)==2 else 0)
                             assert {node.get_attribute('data-study-slot') for node in page.locator('[data-study-slot]').all()}==({case['study_slot'] for case in cases} if len(cases)==2 else set())
                             assert page.locator('#query-text').count()==0, 'No separate legacy study renderer'
-                            if saved['configurations']['llm_readings']['source_view_policy']['id']=='supplied_documents_inclusive':
+                            if saved['configurations']['llm_readings']['source_view_policy']['id'] in {'supplied_documents_inclusive','later_release_inclusive'}:
                                 params=dict(case_id=saved['case']['case_id'],config='llm_readings',
                                     **{k:saved['resource_binding'][k] for k in ('resource_id','registry_sha256','index_sha256')})
                                 display=packet('/api/current/condition-v6',params)['configurations']['llm_readings']
@@ -654,14 +662,18 @@ def main():
                                 assert card.locator('h3').text_content()=='Swedish' and candidate['rank']==index+1
                                 assert candidate['final_form_fit']['state']=='pass' and candidate['final_form_fit']['head']['pos']=='ADJ'
                                 assert candidate['completed_head_kind_fit']['state']=='pass' and candidate['joint_slot_fit']['state']=='pass'
-                                assert any('Swedes' in p.get('text','') and p['canonical_page_id'].startswith('supplied_page_') for p in candidate['sources'])
+                                assert any('Swedes' in p.get('text','') and (p['canonical_page_id'].startswith('supplied_page_') == (saved['configurations']['llm_readings']['source_view_policy']['id']=='supplied_documents_inclusive')) for p in candidate['sources'])
                                 assert page.get_by_test_id('proposal-pool-order').count()==0
                                 assert page.get_by_test_id('input-context-candidate').count()==0
                                 assert page.get_by_test_id('study-primary-channel').count()==0
                                 card.get_by_test_id('candidate-detail').wait_for(state='visible')
                                 card.get_by_role('button',name='Routes',exact=True).wait_for(state='visible')
-                                score=page.locator('[data-score-candidate="'+candidate['id']+'"] [data-score-value]')
-                                assert float(score.get_attribute('data-score-value'))==candidate['terminal_scorecard']['score']
+                                if candidate['terminal_scorecard']['version']=='terminal-evidence-fit/8':
+                                    score=page.locator('[data-candidate-id="'+candidate['id']+'"] [data-testid=context-priority-value]')
+                                    assert score.text_content()==format(candidate['terminal_scorecard']['score'],'.4f')
+                                else:
+                                    score=page.locator('[data-score-candidate="'+candidate['id']+'"] [data-score-value]')
+                                    assert float(score.get_attribute('data-score-value'))==candidate['terminal_scorecard']['score']
                             row['cases'].append(dict(case_id=saved['case']['case_id'],position=saved['study_slot'],gold=None,
                                 ordinary_native_workbench=True))
                         assert not private_requests,private_requests
@@ -751,6 +763,10 @@ def main():
                         known_refs.extend(citation_refs(display.get('local_decisions_v65', {})))
                         active_params = params
                     page.goto(base + 'workbench-v6.html?' + urlencode(dict(case=case['case_id'])), wait_until='domcontentloaded')
+                    if saved.get('reviewed_source_assessment'):
+                        from current_source_smoke import check as check_current_source
+                        check_current_source(page,row,saved,display,active_params,packet,assert_saved_source,digest,checksums)
+                        return
                     page.get_by_test_id('evidence-map').wait_for(state='visible', timeout=90000)
                     assert page.locator('#page-error').is_hidden()
                     nav = page.locator('.workflow-nav').inner_text()

@@ -2,15 +2,16 @@
 const same = (a,b) => a && b && Object.keys(a).length===Object.keys(b).length && Object.keys(b).every(k=>a[k]===b[k]);
 export function savedSourcePolicy(value) {
   const id = value?.id || 'strict_prior';
-  if (!['strict_prior','source_day_inclusive','live_before_with_earlier_origin','live_through_with_earlier_origin','supplied_documents_inclusive'].includes(id)) throw Error('Unknown saved evidence policy.');
-  const supplied=id==='supplied_documents_inclusive';
-  const expected = {version:'trusted-corpus-source-view/1',id,date_relation:['source_day_inclusive','live_through_with_earlier_origin','supplied_documents_inclusive'].includes(id)?'<=':'<',
+  if (!['strict_prior','source_day_inclusive','live_before_with_earlier_origin','live_through_with_earlier_origin','supplied_documents_inclusive','later_release_inclusive'].includes(id)) throw Error('Unknown saved evidence policy.');
+  const supplied=id==='supplied_documents_inclusive',later=id==='later_release_inclusive';
+  const expected = {version:'trusted-corpus-source-view/1',id,date_relation:['source_day_inclusive','live_through_with_earlier_origin','supplied_documents_inclusive','later_release_inclusive'].includes(id)?'<=':'<',
     cutoff_role:id==='live_before_with_earlier_origin'?'exclusive_live_as_of':id==='live_through_with_earlier_origin'?'inclusive_live_as_of':'source_document_date',
-    cib_source_document:supplied?'EARLIER_OR_BOTH_OR_REGISTERED_PUBLIC_SUPPLIED_EDITION':id==='strict_prior'?'EXCLUDED':'EARLIER_OR_BOTH_ONLY',
+    cib_source_document:later?'LATER_ONLY_INCLUDING_ORIGIN':supplied?'EARLIER_OR_BOTH_OR_REGISTERED_PUBLIC_SUPPLIED_EDITION':id==='strict_prior'?'EXCLUDED':'EARLIER_OR_BOTH_ONLY',
     cable_origin:'WHOLE_DOCUMENT_EXCLUDED',cable_classification:'CONFIDENTIAL',cable_document_wide_handling_veto:true,
-    later_or_secret_version_admitted:supplied,source_dates_or_document_ids_rewritten:false};
+    later_or_secret_version_admitted:supplied||later,source_dates_or_document_ids_rewritten:false};
   if(supplied)Object.assign(expected,{supplied_document_registration_required:true,
     supplied_document_scope:'HASH_BOUND_REGISTERED_PUBLIC_CIB_EDITIONS_ONLY',ordinary_source_views_unchanged:true});
+  if(later)Object.assign(expected,{source_edition:'later',native_later_source_index_required:true,ordinary_source_views_unchanged:true});
   if (value!=null && !same(value,expected)) throw Error('The saved evidence-policy descriptor changed.');
   return expected;
 }
@@ -39,6 +40,7 @@ export function sourceScopeAllows(proof,scope) {
 }
 
 const suppliedPages=new WeakMap();
+const laterPages=new WeakMap();
 const canonical=value=>{
   const encode=v=>Array.isArray(v)?'['+v.map(encode).join(',')+']':v&&typeof v==='object'?'{'+
     Object.keys(v).sort().map(k=>JSON.stringify(k)+':'+encode(v[k])).join(',')+'}':JSON.stringify(v);
@@ -64,10 +66,18 @@ export function registeredSuppliedPageInfo(page){
   check(canonical(payload(page))===bound.snapshot,'verified page changed');
   return bound;
 }
+export function registeredLaterPageInfo(page){
+  const bound=page&&laterPages.get(page);
+  if(!bound)return null;
+  check(canonical(page)===bound.snapshot,'verified later page changed');
+  return bound;
+}
 
 // Called only for the already resource-verified source endpoint. Registration
 // authority is the frozen native index/envelope, never serialized page flags.
 export async function bindRegisteredSourceResponse(value,{record,caseInfo,binding}={}){
+  if(record?.result?.source_view_policy?.id==='later_release_inclusive'||record?.source_view_policy?.id==='later_release_inclusive')
+    return bindLaterSourceResponse(value,{record,caseInfo,binding});
   const pages=[value?.page||value,...(Array.isArray(value?.document_pages)?value.document_pages:[])];
   if(!pages.some(isSuppliedSourcePage))return value;
   const policy=savedSourcePolicy(record?.result?.source_view_policy||record?.source_view_policy);
@@ -119,10 +129,56 @@ export async function bindRegisteredSourceResponse(value,{record,caseInfo,bindin
   return value;
 }
 
+export async function bindLaterSourceResponse(value,{record,caseInfo,binding}={}){
+  const originalValue=value,originalRecord=record,originalCase=caseInfo,originalBinding=binding;
+  const initialSnapshot=canonical([value,record,caseInfo,binding]);
+  const originalPages=[value?.page||value,...(Array.isArray(value?.document_pages)?value.document_pages:[])];
+  value=structuredClone(value);record=structuredClone(record);caseInfo=structuredClone(caseInfo);binding=structuredClone(binding);
+  const policy=savedSourcePolicy(record?.result?.source_view_policy||record?.source_view_policy);
+  check(policy.id==='later_release_inclusive'&&caseInfo?.corpus==='cib','later source policy required');
+  check(same(savedSourcePolicy(value?.source_view_policy),policy),'later source/native policy differs');
+  const index=record?.index_ref,context=value?.binding,scope=savedSourceScope(caseInfo,policy);
+  check(index&&binding&&['resource_id','registry_sha256','index_sha256','graph_id','hierarchy_id'].every(k=>
+    typeof binding[k]==='string'&&binding[k]&&value.resource_binding?.[k]===binding[k]&&record.resource_binding?.[k]===binding[k])&&
+    index.sha256===binding.index_sha256&&index.registry_sha256===binding.registry_sha256&&
+    hash(index.source_binding_sha256)&&await digest(context)===index.source_binding_sha256,
+    'later response is not bound to its native source index');
+  const registry=context?.native_registry;
+  check(context?.corpus==='cib'&&context.resource_id===binding.resource_id&&context.graph_id===binding.graph_id&&
+    context.hierarchy_id===binding.hierarchy_id&&context.native_registry_digest===registry?.registry_digest&&
+    registry?.native_source_view==='later'&&registry.source_view_contract==='public-native-later-source-projection/1'&&
+    ref(registry.projection_parent_registry_ref)&&registry.files?.pages?.path?.includes('/views/later/')&&
+    hash(registry.files.pages.sha256)&&!registry.registered_supplied_documents,
+    'later producer edition is not the recorded canonical projection');
+  check(value.cutoff===caseInfo.date&&value.whole_origin_excluded===scope.whole_origin_excluded,'later cutoff/origin differs');
+  const pages=[value?.page||value,...(Array.isArray(value?.document_pages)?value.document_pages:[])],pending=[];
+  for(const [index,page]of pages.entries()){
+    const native=page?.native_page,physical=page?.source_page;
+    check(page?.corpus==='cib'&&page.permitted===true&&page.visibility==='later'&&page.view==='later'&&
+      !isSuppliedSourcePage(page)&&sourceScopeAllows(page,scope)&&Number.isSafeInteger(physical)&&physical>0&&
+      page.earlier_page===null&&native?.view==='later'&&native.canonical_page_id===(page.id||page.canonical_page_id)&&
+      native.document_id===page.document_id&&native.source_page===physical&&native.text===page.text,
+      'later page edition, locator or original text differs');
+    check(page.source_hash_contract==='shared-json-string-ensure-ascii-true/sha256'&&
+      await digest(page.text)===page.source_sha256&&await sha(new TextEncoder().encode(page.text))===page.raw_text_sha256,
+      'later page raw text hash differs');
+    pending.push([originalPages[index],Object.freeze({snapshot:canonical(page),physical_page:physical,edition:'later',release:'later'})]);
+  }
+  check(canonical([originalValue,originalRecord,originalCase,originalBinding])===initialSnapshot,
+    'later source inputs changed while verifying');
+  check(pending.every(([page,info])=>canonical(page)===info.snapshot),'later source batch changed while verifying');
+  for(const [page,info]of pending)laterPages.set(page,info);
+  return originalValue;
+}
+
 export function sourcePagePolicyAllows(page,caseInfo,scope){
   if(!sourceScopeAllows(page,scope)||page.permitted===false)return false;
   if(isSuppliedSourcePage(page))return caseInfo.corpus==='cib'&&savedSourcePolicy(scope.source_view_policy).id==='supplied_documents_inclusive'&&
     registeredSuppliedPageInfo(page)!==null;
+  if(savedSourcePolicy(scope.source_view_policy).id==='later_release_inclusive'){
+    const registered=laterPages.get(page);
+    return caseInfo.corpus==='cib'&&Boolean(registered)&&registered.snapshot===canonical(page);
+  }
   if(['later','later_only','secret'].includes(page.visibility)||['later','later_only','secret'].includes(page.view)||
     ['later','later_only','secret'].includes(page.native_page?.view))return false;
   return !(caseInfo.corpus!=='cib'&&page.classification&&page.classification!=='CONFIDENTIAL')&&
@@ -130,6 +186,7 @@ export function sourcePagePolicyAllows(page,caseInfo,scope){
 }
 export function sourcePolicyCaption(scope){
   const policy=savedSourcePolicy(scope.source_view_policy);
+  if(policy.id==='later_release_inclusive')return 'Later-release documents through the input date, including the origin.';
   return policy.id==='supplied_documents_inclusive'?
     'Earlier-visible corpus plus registered full-document editions. Original later-release provenance is retained; this is not earlier-only recovery.':
     scope.whole_origin_excluded?'The whole origin document is excluded.':'Only earlier/both CIB release text is eligible, including the origin when admitted by this saved view.';

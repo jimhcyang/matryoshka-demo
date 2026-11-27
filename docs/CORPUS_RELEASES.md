@@ -19,10 +19,12 @@ own pinned backends. The release preserves multiple saved engine versions;
 the current downloadable engine is not retroactively assigned to old runs.
 Input-literal name and cable-layout parsing preserve original
 source offsets; the terminal evidence-and-fit ranking is explicitly versioned.
-No answer-name dictionary, source-scope shortcut or model-assigned support label
-is introduced. Earlier terminal-only replay packets remain archived and are not
-presented as these fresh executions. Export preserves the selected candidates,
-ranks, decisions and quotations. The older CIB map remains an archival
+No answer-name dictionary or source-scope shortcut is introduced. A separate
+source-model method adds reviewed facet assessments and source-realized fills;
+its results do not rewrite the original structural judgments. Earlier
+terminal-only replay packets are not presented as fresh executions. Export
+preserves each method's selected candidates, ranks, decisions and quotations.
+The older CIB map remains an archival
 compatibility binding for older saved runs; it is not substituted underneath
 the active examples.
 
@@ -36,12 +38,15 @@ remain strict-prior. Every native output, trace and guide carries its own bound
 policy; a browser preference cannot silently change it.
 
 The retained visiting-delegation input is an exploratory authentic withheld
-slot, not a scored recovery. Swedish ranks second in its displayed reading;
-the historical reference remains unknown. The separate study registers an
-exact supplied later-edition source package. Other focal inputs and paragraph
-windows remain archived with their actual outcomes. Later PDF inspection does
-not silently change ordinary inference eligibility. Unfulfilled recovery goals
-are not converted into benchmark accuracy.
+slot, not a scored recovery. Swedish ranks first in its displayed reading;
+the historical reference remains unknown. The study uses the registered
+later-release graph and source pages through February 17, 1959, including its
+origin. Its input omits the paragraph explicitly mentioning Swedes. Generic
+source-derived realization, not an input-derived suggestion channel, supplies
+the Swedish surface form. The February 19 Popov report is outside its cutoff.
+Other paragraph windows retain their actual outcomes. Later PDF inspection
+does not silently change ordinary inference eligibility. Unfulfilled recovery
+goals are not converted into benchmark accuracy.
 
 ## Explicit Selection
 

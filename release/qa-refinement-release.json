@@ -1,0 +1,84 @@
+{
+  "version": "source-bound-release-qa-rollup/1",
+  "manifest_sha256": "63bf09c0cdd60046790e6b49bc55c845be4ccc7a93ced6f468e29dd816c8b73b",
+  "api_index_sha256": "79417029ab712d94eda10e678c50df965aa605e8afe0d780a82901a7e83a63b9",
+  "source_report_sha256": "35a8e5bd03a1bb597bb6bf6bb50a059ef69013574c9d1ea17d88a177bf8d6fb8",
+  "casebook_sha256": "cb5b1986a4d24612182f30ad8b71a6152db559d1f31b7842cfcd9a76c5f4fb26",
+  "support_sha256": "85d9646dd3bc10457fa2ca251c439ada3f5c96a3a07a86817eed8952354c86af",
+  "full_integrity": {
+    "status": "PASS",
+    "receipt_sha256": "696674762103f64ff241bc964eec6cc8f367f0f365e0f1557a3ff404735db4b5"
+  },
+  "managed_browser_matrix": {
+    "status": "PASS",
+    "cells": 25,
+    "saved_cases": 16,
+    "receipt_sha256": "074cddca4b14f0f3fa2ad136db83d129b1334316e0dae7353da92c3a897fdc4d"
+  },
+  "packaged_runtime_tests": {
+    "status": "PASS",
+    "passed": 108,
+    "failed": 0,
+    "receipt_sha256": "e96c1bc0292b03b435512bc3f258cc1714db92661f5ceaea186cddd055c41804",
+    "fixture_layout": "Unchanged repository packer copied into the private stage for its existing roundtrip test; no inference or transport behavior changed."
+  },
+  "redaction_source_origin_pdf_checks": {
+    "status": "PASS",
+    "desktop_mobile_views": 18,
+    "paired_pdf_checks": 56,
+    "receipt_sha256": "d8debf4aa9a715319f0875688eab259b9bbca3a1ffac8a572b7be9fa2efe948d"
+  },
+  "end_digest_checks": {
+    "status": "PASS",
+    "desktop_mobile_views": 22,
+    "exact_source_drawer_checks": 54,
+    "receipt_sha256": "98db2fd8789236ff73f5106bd7d284a69176e3ef90465bc554bdcc3efdd4ffdd"
+  },
+  "graph_visual_checks": {
+    "status": "PASS_BOUNDED_ACTUAL_VISUAL",
+    "font_violations": 0,
+    "dense_sample_nodes": 2048,
+    "receipt_sha256": "018eb440c3cbf2765d4846fa6f3fb070ca75b624cdb33cf9ae6f15e874aeb9cb"
+  },
+  "prepared_binding_repair_review": {
+    "status": "SCOPED_GO",
+    "independent_checks": 10,
+    "receipt_sha256": "b3eab3d6af13a535a105c9113250781c860dfc750cb55358746a7e5a13f4e918"
+  },
+  "inventory": {
+    "primary_cases": 9,
+    "additional_authentic_cib_redactions": 5,
+    "unknown_truth_delegation_studies": 1,
+    "salvadoran_bench_cases": 1
+  },
+  "observations": [
+    "Swedish is the displayed first contextual candidate, without the Swedes sentence in the input, using the registered later-release inclusive-origin policy.",
+    "Aung Gyi is the displayed third contextual candidate, not direct evidence of the concealed private action.",
+    "Each primary Mosaic has two source-model-supported components; the original structural outcomes remain separate.",
+    "Source-realized candidate and source-assessment methods remain distinct from the original saved structural method.",
+    "Only saved multi-edge graph walks expose a traversal link; source provenance is not an invented KG route."
+  ],
+  "development_cohort": {
+    "cases": 31,
+    "blind_benchmark": false,
+    "source_primary_whole_top_five": 5,
+    "source_primary_whole_or_partial_top_five": 10,
+    "source_top_five_unassessed_targets": 24,
+    "full_three_accepted_whole_or_partial": 0,
+    "requested_recovery_target_met": false,
+    "paired_improvement_established": false,
+    "answer_bearing_qa_html_published": false
+  },
+  "limitations": [
+    "Curated examples are not benchmark accuracy or a guarantee of direct corpus support.",
+    "Some Hypothesis evidence is conditional; the Vietnam opposing views share one document.",
+    "The Haeri-Yazdi redaction has partial contextual corroboration, not support for every input facet.",
+    "Namyit Island is a source-resolved referent, not the literal concealed wording.",
+    "The visiting delegation has no revealed historical ground truth and a separately registered evidence policy.",
+    "Live retains the earlier native method; it is not upgraded to the new saved source-model method.",
+    "No optional SECRET comparison pass was executed for Iran.",
+    "Dense-graph timings and PDF rendering tests describe bounded tested samples, not all possible devices or sources."
+  ],
+  "all_tasks_success_claimed": false,
+  "benchmark_accuracy_claimed": false
+}

@@ -1,0 +1,7 @@
+.source-method-digest{min-width:0;max-width:100%;margin-top:1.25rem;border-top:1px solid #cbd4cb;padding-top:1rem}
+.source-method-digest h3{margin:0 0 .65rem;font:600 1.2rem Georgia,serif;color:#183e2c}
+.source-method-digest p{max-width:76ch;line-height:1.65;overflow-wrap:anywhere}
+.source-method-digest .workbench-digest-source{max-width:100%;min-width:0;color:#204f39;background:#f3f7f0;border:1px solid #b9cbb8;border-radius:3px;padding:.2rem .4rem;font:inherit;cursor:pointer;white-space:normal;overflow-wrap:anywhere;text-align:left}
+.source-method-digest .workbench-digest-source:hover,.source-method-digest .workbench-digest-source:focus-visible{background:#e6efdf;outline:2px solid #547757;outline-offset:2px}
+.source-method-digest .workbench-digest-source-key{display:flex;flex-wrap:wrap;gap:.4rem;max-width:100%;font-size:.8rem}
+@media(max-width:500px){.source-method-digest .workbench-digest-source-key{display:grid;grid-template-columns:minmax(0,1fr)}}
