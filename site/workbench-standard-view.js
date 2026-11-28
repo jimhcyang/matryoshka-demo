@@ -1,8 +1,11 @@
 // Presentation only: source authority, selection and scores belong to the caller.
+import {evidenceRoles, renderEvidenceDetails} from './workbench-evidence-details.js?v=20261128-polish1';
 export const STANDARD_WORKBENCH_VERSION = 'standard-workbench-view/1';
 let instance = 0;
 
 const list = value => Array.isArray(value) ? value : [];
+export const readingDisplayText = value => String(value || '')
+  .replace(/\s*(?:Function:|Legacy subset route:)[\s\S]*$/i, '').trim();
 const node = (tag, text, className) => {
   const value = document.createElement(tag);
   if (text != null) value.textContent = String(text);
@@ -129,8 +132,8 @@ export function renderStandardWorkbench(options) {
     label.htmlFor = id + '-reading';
     const select = node('select'); select.id = label.htmlFor; select.dataset.testid = 'plan-reading-select';
     select.disabled = typeof options.onReadingChange !== 'function';
-    for (const reading of readings) {
-      const option = node('option', reading.label || reading.id);
+    for (const [readingIndex, reading] of readings.entries()) {
+      const option = node('option', readingDisplayText(reading.label) || 'Reading ' + (readingIndex + 1));
       option.value = reading.id; option.selected = reading.id === selectedReadingId; select.append(option);
     }
     select.addEventListener('change', () => {
@@ -139,7 +142,8 @@ export function renderStandardWorkbench(options) {
       select.value = selectedReadingId;
     });
     control.append(label, select);
-    if (selected.explanation) control.append(node('p', format(selected.explanation), 'sw-copy'));
+    const explanation = readingDisplayText(selected.explanation);
+    if (explanation) control.append(node('p', format(explanation), 'sw-copy'));
     plan.body.append(control);
   }
 
@@ -152,7 +156,13 @@ export function renderStandardWorkbench(options) {
   const sourceCard = (group, related = false) => {
     const {proof} = group, card = node('article', null, 'sw-source');
     card.dataset.testid = related ? 'standard-related-source-card' : 'standard-source-card';
-    const line = [...group.names, factLabels([...group.atomIds]), ...group.directions].filter(Boolean).join(' / ');
+    const roles = evidenceRoles(group.directions);
+    card.dataset.palette = roles.palette;
+    card.dataset.directions = [...group.directions].join(' ');
+    const line = [...group.names, factLabels([...group.atomIds])].filter(Boolean).join(' / ');
+    const roleId = id + '-source-role-' + (groups.size + relatedGroups.size) + '-' + [...groups.values(), ...relatedGroups.values()].indexOf(group);
+    card.setAttribute('aria-label', (line || 'Selected source') + ': ' + roles.description);
+    card.setAttribute('aria-describedby', roleId);
     const header = node('header', null, 'sw-source-header');
     header.append(node('p', line || 'Selected source', 'sw-source-label'));
     if (typeof options.onKG === 'function') {
@@ -160,6 +170,11 @@ export function renderStandardWorkbench(options) {
       kg.dataset.testid = 'standard-view-on-kg'; header.append(kg);
     }
     card.append(header);
+    const role = node('p', roles.description, 'sw-source-role'); role.id = roleId;
+    card.append(role);
+    const content = node('div', null, 'sw-source-content');
+    content.tabIndex = 0; content.setAttribute('role', 'region');
+    content.setAttribute('aria-label', 'Complete quotation and qualifications; scroll for full text');
     const quote = action('', typeof options.onSource === 'function' ? () => options.onSource(proof) : null, 'sw-quote');
     quote.dataset.testid = 'used-source-quote';
     quote.dataset.sourceId = proof.canonical_page_id ?? proof.page_id;
@@ -167,8 +182,9 @@ export function renderStandardWorkbench(options) {
     quote.setAttribute('aria-label', 'Inspect full source');
     // Source text is never case-normalized, abbreviated or rewritten.
     quote.append(node('blockquote', proof.text));
-    card.append(quote);
-    for (const qualification of group.qualifications) card.append(node('p', qualification, 'sw-qualification'));
+    content.append(quote);
+    for (const qualification of group.qualifications) content.append(node('p', qualification, 'sw-qualification'));
+    card.append(content);
     const page = proof.earlier_page ?? proof.physical_page ?? proof.page;
     card.append(node('footer', [proof.document_id ?? proof.docid, proof.date, page != null ? 'Page ' + page : proof.canonical_page_id ?? proof.page_id].filter(Boolean).join(' / ')));
     return card;
@@ -205,11 +221,10 @@ export function renderStandardWorkbench(options) {
     if (links.childElementCount) parent.append(links);
   };
   const detail = (parent, item) => {
-    if (item.details == null && !item.sourceWord && typeof options.onDetails !== 'function') return;
+    const body = renderEvidenceDetails(item, {onSource: options.onSource, assertCurrent: () => current()});
+    if (!body) return;
     const disclosure = node('details', null, 'sw-details');
-    disclosure.append(node('summary', 'Details'));
-    if (item.sourceWord) disclosure.append(node('p', 'Source wording: ' + item.sourceWord));
-    if (item.details != null) disclosure.append(node(typeof item.details === 'string' ? 'p' : 'pre', typeof item.details === 'string' ? item.details : JSON.stringify(item.details, null, 2)));
+    disclosure.append(node('summary', 'Decision and checks'), body);
     if (typeof options.onDetails === 'function') disclosure.append(action('Inspect checks', () => options.onDetails(item), 'sw-button sw-quiet'));
     parent.append(disclosure);
   };
@@ -287,14 +302,13 @@ export function renderStandardWorkbench(options) {
   const review = makeStage('06', 'Analyst Summary', 'Review');
   const technical = node('details', null, 'sw-technical');
   technical.append(node('summary', 'Technical details'));
-  if (options.technicalDetails != null) technical.append(node('pre', typeof options.technicalDetails === 'string' ? options.technicalDetails : JSON.stringify(options.technicalDetails, null, 2)));
+  const technicalBody = renderEvidenceDetails(options.technicalDetails, {onSource: options.onSource, assertCurrent: () => current()});
+  if (technicalBody) technical.append(technicalBody);
   if (typeof options.onBaseline === 'function') technical.append(action('Native result', () => options.onBaseline(), 'sw-button sw-quiet'));
-  if (typeof options.onDetails === 'function') technical.append(action('Inspect saved record', () => options.onDetails(), 'sw-button sw-quiet'));
+  if (technicalBody && typeof options.onDetails === 'function') technical.append(action('Inspect saved record', () => options.onDetails({details: options.technicalDetails}), 'sw-button sw-quiet'));
   const digestHost = node('div', null, 'sw-digest'); digestHost.dataset.testid = 'standard-digest';
   review.body.append(digestHost);
-  const technicalValue=options.technicalDetails;
-  const hasTechnical=technicalValue!=null&&(typeof technicalValue==='string'?!!technicalValue.trim():typeof technicalValue==='object'?Object.keys(technicalValue).length>0:['number','boolean'].includes(typeof technicalValue));
-  if(hasTechnical||typeof options.onDetails==='function'||typeof options.onBaseline==='function')review.body.append(technical);
+  if(technicalBody||typeof options.onBaseline==='function')review.body.append(technical);
   const context = {readingId: selectedReadingId, facts, candidates, units, proofs: [...groups.values()].map(group => group.proof), assertCurrent: () => require(current(), 'selection is stale')};
   const mount = (host, callback, unavailable, failure) => {
     if (typeof callback !== 'function') { host.append(node('p', unavailable, 'sw-note')); return; }

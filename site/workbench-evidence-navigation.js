@@ -318,12 +318,22 @@ export async function openInspectionGuide({guide, host, onOpen, inspect, signal,
   const doc = host.ownerDocument;
   const section = doc.createElement('section'), status = doc.createElement('p'), controls = doc.createElement('nav');
   section.dataset.testid = 'source-inspection-guide';
+  section.className = 'kg-guide'; controls.className = 'kg-guide-controls';
   section.setAttribute('aria-label', 'Source-inspection KG navigator'); status.setAttribute('role', 'status');
   const label = doc.createElement('p'); label.textContent = 'Source inspection after selection';
+  label.className = 'kg-guide-label'; status.className = 'kg-guide-status';
+  const stages = doc.createElement('nav'); stages.className = 'kg-guide-stages';
+  stages.setAttribute('aria-label', 'Source-inspection stages');
+  const stageButtons = guide.actions.map((action, index) => {
+    const button = doc.createElement('button'); button.type = 'button'; button.disabled = true;
+    button.textContent = `${index + 1}. ${action.kind === 'HIERARCHY_NAVIGATION' ? 'Source map' : action.title}`;
+    button.dataset.inspectionStep = String(index); button.title = action.title;
+    button.onclick = () => show(index).catch(report); stages.append(button); return button;
+  });
   const previous = doc.createElement('button'), next = doc.createElement('button'), play = doc.createElement('button');
   for (const [button, text] of [[previous, 'Previous'], [next, 'Next'], [play, 'Play']]) { button.type = 'button'; button.textContent = text; button.disabled = true; controls.append(button); }
   section.setAttribute('aria-busy', 'true'); section.dataset.navigationState = 'initializing';
-  section.append(label, controls, status); host.replaceChildren(section);
+  section.append(label, controls, stages, status); host.replaceChildren(section);
   const controller = new AbortController(); let at = -1, serial = 0, timer = null, closed = false, actionController = null, busy = false;
   const pause = () => { clearTimeout(timer); timer = null; play.textContent = 'Play'; };
   const valid = () => { aborted(signal); aborted(controller.signal); assertInspectionGuide(guide); check(!closed, 'guide is closed'); };
@@ -331,6 +341,10 @@ export async function openInspectionGuide({guide, host, onOpen, inspect, signal,
     previous.disabled = busy || at <= 0;
     next.disabled = busy || at < 0 || at === guide.actions.length - 1;
     play.disabled = busy || at < 0 || at === guide.actions.length - 1;
+    stageButtons.forEach((button, index) => {
+      button.disabled = busy || at < 0;
+      button.setAttribute('aria-current', index === at ? 'step' : 'false');
+    });
     section.setAttribute('aria-busy', String(busy));
     section.dataset.navigationState = busy ? 'loading' : 'ready';
   };
@@ -360,7 +374,11 @@ export async function openInspectionGuide({guide, host, onOpen, inspect, signal,
   previous.onclick = () => previousStep().catch(report); next.onclick = () => nextStep().catch(report); play.onclick = start;
   signal?.addEventListener('abort', close, {once: true});
   try { await show(0); } catch (error) { close(); throw error; }
-  return Object.freeze({previous: previousStep, next: nextStep, play: start, pause, close, element: section,
+  const goTo = index => {
+    check(Number.isSafeInteger(index) && index >= 0 && index < guide.actions.length, 'stage index outside guide');
+    return show(index);
+  };
+  return Object.freeze({previous: previousStep, next: nextStep, play: start, pause, close, goTo, element: section,
     get position() { return at; }});
 }
 

@@ -1,7 +1,8 @@
 // Private Live source-method receiver. No requests, provider calls or saved fallback.
-import * as transport from './live-result-adapter.js?v=20261127-unified1';
+import * as transport from './live-result-adapter.js?v=20261128-polish1';
 import {verifyLiveSourcePolicy} from './source-policy-contract.js';
-import {renderStandardWorkbench} from './workbench-standard-view.js';
+import {savedSourcePolicy, bindLaterSourceResponse, isSuppliedSourcePage} from './saved-source-policy.js';
+import {renderStandardWorkbench} from './workbench-standard-view.js?v=20261128-polish1';
 
 export const LIVE_SOURCE_METHOD = 'private-live-reviewed-source-pipeline/1';
 const INTAKE = 'private-live-source-intake/1', VIEW = 'private-live-source-workbench-view/1';
@@ -21,8 +22,42 @@ const near = (a, b) => typeof a === 'number' && Number.isFinite(a) && Math.abs(a
 const unique = values => new Set(values).size === values.length;
 const opaque = /\[\[REDACTION_SLOT:|\[(?:REDACTION(?:[ _]\d+)?|REDACTED|STILL REDACTED|MASKED|MASK)\]/i;
 const INTEGER_FIELDS=new Set(['start','end','rank','earlier_page','later_page','physical_page','page_budget','full_text_utf8_budget','selected_pages','original_pages','selected_utf8_bytes','maximum_readings','maximum_source_calls','max_fills_per_reading','maximum_required_atoms','assessment_pages_per_batch','source_call_attempts','displayed_fills','source_page_budget','source_full_text_utf8_budget','required_facts','original_slots','processed_slots','provider_reviewed_slots','accepted_slots','held_slots','rejected_slots','unprocessed_slots','documents','api_calls','wire_bytes','decoded_bytes']);
+for(const key of ['maximum_fact_page_rows','maximum_model_stages','digest_time_earmark_seconds','digest_body_bytes_limit','preferred_fact_page_rows','review_body_bytes_limit','maximum_response_seconds'])INTEGER_FIELDS.add(key);
 const freeze = value => { if (value && typeof value === 'object' && !Object.isFrozen(value)) { Object.values(value).forEach(freeze); Object.freeze(value); } return value; };
 const exact = (value, keys) => object(value) && same(Object.keys(value).sort(), [...keys].sort());
+const SHARED_SETTINGS=Object.freeze({processing_profile_version:'shared-source-eight-pages/1',
+  proposal_version:'source-realized-fill-proposals/7',scoped_proposal_version:'source-realized-fill-proposals/scoped-policy-1',
+  max_fills_per_reading:8,displayed_fills:5,maximum_readings:3,reading_selection:'FIRST_LOCALLY_NONEMPTY_IN_DECLARED_ORDER',
+  maximum_required_atoms:8,assessment_pages_per_batch:4,maximum_fact_page_rows:8,maximum_source_calls:17,
+  source_page_budget:8,source_full_text_utf8_budget:32000,m_grounding:'model-source-anchor-observer/4',
+  h_appraisal:'reviewed-H-source-views/5',r_focal:'source-ascribed-redaction-fill-constraints/1',
+  rank_formula:'(source_class+.99*(.75*alignment+.25*lexical))/3',BM25_in_final_source_score:false,
+  model:'gpt-6.1-sol',source_pool:'BOUNDED_RETRIEVAL_ORDER_COMPLETE_ELIGIBLE_PAGES',truncation:false,automatic_retries:0});
+const SHARED_SETTINGS_V2=Object.freeze({...SHARED_SETTINGS,processing_profile_version:'shared-source-eight-pages/2',
+  proposal_version:'source-realized-fill-proposals/current-readings-1',scoped_proposal_version:'source-realized-fill-proposals/scoped-policy-2',
+  assessment_pages_per_batch:2,preferred_fact_page_rows:4});
+const SHARED_SETTINGS_V3=Object.freeze({...SHARED_SETTINGS_V2,processing_profile_version:'shared-source-eight-pages/3',
+  proposal_version:'source-realized-fill-proposals/current-readings-2',scoped_proposal_version:'source-realized-fill-proposals/scoped-policy-3'});
+const SHARED_SETTINGS_V4=Object.freeze({...SHARED_SETTINGS_V3,processing_profile_version:'shared-source-eight-pages/4'});
+const SHARED_SETTINGS_V5=Object.freeze({...SHARED_SETTINGS_V4,processing_profile_version:'shared-source-eight-pages/5'});
+
+function sourceAdmission(scope,native,request,shared){
+  if(!shared||['live_before_with_earlier_origin','live_through_with_earlier_origin'].includes(scope?.source_view_policy?.id))
+    return verifyLiveSourcePolicy(scope,native,request);
+  const policy=savedSourcePolicy(scope?.source_view_policy);
+  check(['strict_prior','source_day_inclusive','later_release_inclusive'].includes(policy.id)&&
+    same(policy,native.configuration?.source_view_policy)&&same(policy,native.result?.source_view_policy),'closed native saved source policy required');
+  check(scope.origin_is_analyst_declared===false&&!/^live-analyst-origin:/.test(request.excluded_origin),
+    'saved policy requires source-bound fresh batch scope, not analyst Live metadata');
+  const later=policy.id==='later_release_inclusive',inclusive=policy.date_relation==='<=';
+  check(!later||request.corpus==='cib','later source policy is CIB only');
+  const excluded=request.corpus==='cib'&&policy.id!=='strict_prior'?null:request.excluded_origin;
+  check(scope.excluded_whole_origin===excluded&&scope.origin_document===request.excluded_origin,
+    'saved source origin/exclusion changed');
+  if(scope.document_exclusion!==undefined)check(scope.document_exclusion===excluded,'document exclusion differs');
+  if(scope.release_visibility!==undefined)check(same(scope.release_visibility,later?['later']:['earlier','both']),'declared release visibility differs');
+  return {current:true,inclusive,later,excludeOrigin:excluded!==null};
+}
 // Python's fixed-four-decimal formatter rounds exact binary ties to even.
 function fixed4(value) {
   check(typeof value==='number'&&Number.isFinite(value),'finite fixed-decimal value required');
@@ -140,8 +175,8 @@ export async function verifyLiveSourceMethod(envelope, {wire, signal, assertCurr
   check(native?.version === INTAKE && condition?.version === 'private-live-source-intake-condition/1' && method?.version === LIVE_SOURCE_METHOD && view?.version === VIEW, 'exact source method versions required');
   const c = native.public_case, mp = ['condition', 'source_method'];
   check(exact(c, ['case_id', 'task', 'corpus', 'query', 'date', 'document_id', 'focal_marker']) && ['mosaic', 'hypothesis', 'redaction'].includes(c.task) && ['cib', 'iran', 'vietnam'].includes(c.corpus) && typeof c.case_id === 'string' && c.case_id && typeof c.query === 'string' && day(c.date), 'exact public case required');
-  check(Object.values(c).every(value=>typeof value==='string')&&c.query===c.query.trim()&&c.query&&new TextEncoder().encode(c.query).length<=2000&&!transport.credentialLike(c.query),'bounded credential-free public query required');
-  check(c.task==='redaction'?/^\[\[REDACTION_SLOT:[A-Za-z0-9_-]{1,64}\]\]$|^\[(?:REDACTION(?:[ _]\d+)?|REDACTED|STILL REDACTED|MASKED|MASK)\]$/i.test(c.focal_marker)&&c.query.split(c.focal_marker).length===2:!c.focal_marker&&!opaque.test(c.query),'unique R focal marker or complete M/H clause required');
+  check(['case_id','task','corpus','query','date','document_id'].every(key=>typeof c[key]==='string')&&c.query.trim()&&new TextEncoder().encode(c.query).length<=2000&&!transport.credentialLike(c.query),'bounded credential-free public query required');
+  check(c.task==='redaction'?typeof c.focal_marker==='string'&&/^\[\[REDACTION_SLOT:[A-Za-z0-9_-]{1,64}\]\]$|^\[(?:REDACTION(?:[ _]\d+)?|REDACTED|STILL REDACTED|MASKED|MASK)\]$/i.test(c.focal_marker)&&c.query.split(c.focal_marker).length===2:(c.focal_marker===null||c.focal_marker==='')&&!opaque.test(c.query),'unique R focal marker or complete M/H clause required');
   check(exact(request, ['task', 'corpus', 'query', 'as_of', 'excluded_origin', 'focal_marker']) && ['task', 'corpus', 'query', 'focal_marker'].every(key => request[key] === c[key]) && request.as_of === c.date && request.excluded_origin === c.document_id, 'request/case mismatch');
   const querySHA = await textSHA(c.query), nativeSHA = await sha(tree.raw(['native']));
   check(same(c, condition.case) && same(c, method.public_case) && same(c, view.case) && same(native.case, {...c, task: c.task === 'mosaic' ? 'reconstruction' : c.task}), 'case projection changed');
@@ -153,7 +188,12 @@ export async function verifyLiveSourceMethod(envelope, {wire, signal, assertCurr
   check(native.result.status === 'SOURCE_INTAKE_ONLY_NOT_A_NATIVE_VERDICT' && same(native.result.atoms, []) && same(native.result.readings, []) && native.result.api_calls === 0 && value.analyst_digest?.available === false && value.analyst_digest?.used_for_inference === false, 'intake is not a task verdict or digest');
   const emptyPool=method.source_pages?.length===0&&['NO_ELIGIBLE_INSPECTED_SOURCES','SOURCE_BUDGET_HOLD_UNPROCESSED'].includes(method.status);
   check(method.no_answer_or_grade_inputs === true && method.no_native_verdict_upgrade === true && (method.world_truth_certified === false||emptyPool&&method.world_truth_certified===undefined) && (method.native_history_modified === false || emptyPool && method.native_history_modified === undefined) && view.native_method === false && view.world_truth_certified === false && receipt.no_answer_or_grade_inputs === true && receipt.no_chain_of_thought === true && receipt.cumulative_cap_usd === 50, 'source authority/funding flags changed');
-  const admission = verifyLiveSourcePolicy(scope, native, request);
+  const settings=method.pipeline?.settings,uniformReview=settings?.processing_profile_version==='shared-source-eight-pages/5',
+    minimumEarmarks=uniformReview||settings?.processing_profile_version==='shared-source-eight-pages/4',
+    metadataProjection=minimumEarmarks||settings?.processing_profile_version==='shared-source-eight-pages/3',
+    currentReadings=metadataProjection||settings?.processing_profile_version==='shared-source-eight-pages/2',
+    shared=currentReadings||settings?.processing_profile_version==='shared-source-eight-pages/1';
+  const admission = sourceAdmission(scope, native, request, shared);
   check(admission.current && scope.corpus === c.corpus && scope.full_documents_supplied === false && scope.supplied_pages_scope === 'INSPECTED_REFERENCED_PAGES_ONLY' && (admission.inclusive ? scope.on_or_before === c.date && scope.strict_before === undefined : scope.strict_before === c.date && scope.on_or_before === undefined), 'closed ordinary source scope required');
   check(same(method.source_view_policy, scope.source_view_policy) && same(view.source_view_policy, scope.source_view_policy) && same(native.retrieval?.source_view_policy, scope.source_view_policy), 'source policy changed');
   const index=native.binding,resource=condition.resource_binding;
@@ -168,15 +208,15 @@ export async function verifyLiveSourceMethod(envelope, {wire, signal, assertCurr
   check(same(condition.configuration, native.configuration) && same(receipt.configuration, native.configuration) && native.configuration.source_pipeline_version === LIVE_SOURCE_METHOD && receipt.source_pipeline_sha256 === method.pipeline_sha256 && receipt.source_pipeline_version === LIVE_SOURCE_METHOD && receipt.selected_method === method.method_family, 'selected method/configuration differs');
   check(native.configuration.source_pipeline_sha256===method.pipeline_sha256,'intake source pipeline hash differs from executed pipeline');
   check(condition.config==='llm_readings'&&condition.current_resource_execution===true&&native.configuration.legacy_constructor_executed===false&&native.configuration.legacy_matcher_executed===false&&native.configuration.terminal_ranking===null&&method.fixed_model_outputs_deterministic===true&&method.uncached_model_outputs_bit_reproducible===false&&method.partial_source_search===true,'source method cannot be an old matcher or bit-reproducibility claim');
-  const settings = method.pipeline?.settings;
   check(method.pipeline?.version === LIVE_SOURCE_METHOD && method.pipeline.engines?.version === 'private-live-source-runtime/1' && Array.isArray(method.pipeline.engines.files) && method.pipeline.engines.files.length > 0 && method.pipeline.engines.files.every(safeRef) && unique(method.pipeline.engines.files.map(ref => ref.path)), 'actual engine code pins required');
-  check(same(settings, receipt.source_check_budgets) && same(settings, native.configuration.source_check_budgets) && settings.model === 'gpt-6.1-sol' && settings.BM25_in_final_source_score === false && settings.truncation === false && settings.automatic_retries === 0 && count(settings.maximum_source_calls) && settings.maximum_source_calls > 0 && settings.maximum_source_calls <= 5 && count(method.source_call_attempts) && method.source_call_attempts <= settings.maximum_source_calls && count(settings.max_fills_per_reading) && settings.max_fills_per_reading > 0 && settings.max_fills_per_reading <= 5 && settings.maximum_readings === 1 && count(settings.maximum_required_atoms) && settings.maximum_required_atoms > 0 && settings.maximum_required_atoms <= 8 && settings.displayed_fills === 5 && settings.rank_formula==='(source_class+.99*(.75*alignment+.25*lexical))/3', 'declared source budgets/method changed');
+  check(same(settings, receipt.source_check_budgets) && same(settings, native.configuration.source_check_budgets) &&
+    (shared?same(settings,uniformReview?SHARED_SETTINGS_V5:minimumEarmarks?SHARED_SETTINGS_V4:metadataProjection?SHARED_SETTINGS_V3:currentReadings?SHARED_SETTINGS_V2:SHARED_SETTINGS):settings.processing_profile_version===undefined&&settings.model === 'gpt-6.1-sol' && settings.BM25_in_final_source_score === false && settings.truncation === false && settings.automatic_retries === 0 && count(settings.maximum_source_calls) && settings.maximum_source_calls > 0 && settings.maximum_source_calls <= 5 && count(settings.max_fills_per_reading) && settings.max_fills_per_reading > 0 && settings.max_fills_per_reading <= 5 && settings.maximum_readings === 1 && count(settings.maximum_required_atoms) && settings.maximum_required_atoms > 0 && settings.maximum_required_atoms <= 8 && settings.displayed_fills === 5 && settings.rank_formula==='(source_class+.99*(.75*alignment+.25*lexical))/3')&&count(method.source_call_attempts)&&method.source_call_attempts<=settings.maximum_source_calls, 'declared source budgets/method changed');
   check(same(receipt.retrieval, {method: native.configuration.method, passage_budget: native.configuration.retrieval_passage_budget, document_budget: native.configuration.retrieval_document_budget}), 'retrieval budgets changed');
   const fields = {'native.json':'native', 'condition.json':'condition', 'trace.json':'trace', 'sources.json':'sources', 'document-pages.json':'document_pages', 'selected-evidence.json':'selected_evidence', 'receipt.json':'receipt', 'analyst-digest.json':'analyst_digest'};
   check(exact(value.artifacts, Object.keys(fields)), 'artifact inventory differs');
   for (const [filename, field] of Object.entries(fields)) {
     const ref = value.artifacts[filename], raw = tree.raw([field]);
-    check(ref.path === 'jobs/' + value.run_id.slice(5) + '/' + filename && HASH.test(ref.sha256) && ref.encoding === 'gzip+base64' && ref.decoded_sha256 === await sha(raw) && ref.decoded_bytes === raw.length && count(ref.wire_bytes) && ref.wire_bytes > 0 && ref.wire_bytes <= 24 * 1024 ** 2, 'artifact logical hash/size/path differs');
+    check(['jobs/' + value.run_id.slice(5) + '/' + filename,'jobs/' + value.run_id + '/' + filename].includes(ref.path) && HASH.test(ref.sha256) && ref.encoding === 'gzip+base64' && ref.decoded_sha256 === await sha(raw) && ref.decoded_bytes === raw.length && count(ref.wire_bytes) && ref.wire_bytes > 0 && ref.wire_bytes <= 24 * 1024 ** 2, 'artifact logical hash/size/path differs');
   }
   check(same(condition.native_checkpoint, {...value.artifacts['native.json'], path:'native.json'}), 'intake checkpoint differs');
   check(value.trace?.version === 'private-live-source-intake-trace/1' && same(value.trace.paths, []) && same(value.trace.steps, []) && same(value.trace.evidence_inventory, []) && same(value.selected_evidence, []), 'legacy trace cannot acquire source decisions');
@@ -185,24 +225,56 @@ export async function verifyLiveSourceMethod(envelope, {wire, signal, assertCurr
   check(method.method_family===(c.task==='redaction'?'SOURCE_REALIZED_REDACTION_V1':ids.length?(c.task==='hypothesis'?'REVIEWED_H_SOURCE_VIEWS_V5':'REVIEWED_M_SOURCE_ACCOUNTS_V3_V4'):'REVIEWED_SOURCE_ACCOUNTS'),'unknown selected source engine family');
   const allowedDay = date => day(date) && (admission.inclusive ? date <= c.date : date < c.date);
   const validatePage = async (page, provenance=false) => {
-    check(object(page) && typeof page.id === 'string' && page.id && typeof page.document_id === 'string' && page.document_id && page.corpus === c.corpus && page.permitted === true && ['earlier','both'].includes(page.visibility) && allowedDay(page.date) && typeof page.text === 'string' && page.text.trim() && (provenance||Array.from(page.text).length <= 24000) && await textSHA(page.text) === page.source_sha256, 'source page/date/hash/visibility changed');
+    check(page?.canonical_page_id===undefined||page.canonical_page_id===page.id,'canonical page alias differs');
+    if(metadataProjection&&Object.hasOwn(page,'handling'))check(Array.isArray(page.handling)&&page.handling.every(item=>typeof item==='string'),'recorded handling metadata is malformed');
+    check(object(page) && typeof page.id === 'string' && page.id && typeof page.document_id === 'string' && page.document_id && page.corpus === c.corpus && page.permitted === true && !isSuppliedSourcePage(page)&&
+      (admission.later?page.visibility==='later'&&page.view==='later'&&page.native_page?.view==='later':
+        ['earlier','both'].includes(page.visibility)&&!['later','later_only','secret'].includes(page.view)&&!['later','later_only','secret'].includes(page.native_page?.view)&&!['SECRET','TOPSECRET'].includes(String(page.classification||'').toUpperCase().replaceAll(' ',''))) && allowedDay(page.date) && typeof page.text === 'string' && page.text.trim() && (provenance||Array.from(page.text).length <= 24000) && await textSHA(page.text) === page.source_sha256, 'source page/date/hash/visibility changed');
     check(page.earlier_page==null||Number.isSafeInteger(page.earlier_page)&&page.earlier_page>0,'positive integer source page locator required');
     if(page.raw_text_sha256!==undefined)check(page.raw_text_sha256===await sha(new TextEncoder().encode(page.text)),'raw UTF8 source hash differs');
     check(c.corpus === 'cib' || page.classification === 'CONFIDENTIAL' && page.document_id !== c.document_id && !/\bNOFORN\b|\bNO\s+FOREIGN\s+DISSEM(?:INATION)?\b/i.test([page.text, ...array(page.handling)].join(' ')), 'cable whole-origin/classification/handling veto');
+    if(admission.excludeOrigin)check(page.document_id!==c.document_id,'whole-origin source exclusion changed');
   };
   for (const page of method.source_pages) {
     await validatePage(page); const supplied = value.sources[page.id];
     check(Object.keys(supplied).every(key => same(supplied[key], page[key] ?? null)), 'envelope/source-method page differs'); pages.set(page.id, page);
   }
+  if(metadataProjection){
+    const presence=method.source_metadata_presence;
+    check(Array.isArray(presence)&&presence.length===ids.length&&same(presence,view.source_metadata_presence),'full source metadata presence inventory required');
+    presence.forEach((row,i)=>{const page=pages.get(ids[i]),recorded=Object.hasOwn(page,'handling');
+      check(exact(row,['page_id','page_sha256','handling_recorded','transport_handling_defaulted','absence_is_not_clearance'])&&
+        row.page_id===page.id&&row.page_sha256===page.source_sha256&&row.handling_recorded===recorded&&
+        row.transport_handling_defaulted===(c.task==='redaction'&&!recorded)&&row.absence_is_not_clearance===true,
+        'canonical handling absence/proposal projection record differs');
+    });
+  }
   if(settings.source_pool==='BOUNDED_RETRIEVAL_ORDER_COMPLETE_ELIGIBLE_PAGES'){
     const schedule=native.retrieval?.live_source_schedule,budget=method.processing_budget;
-    check(count(settings.source_page_budget)&&settings.source_page_budget>0&&settings.source_page_budget<=2&&count(settings.source_full_text_utf8_budget)&&settings.source_full_text_utf8_budget>0&&settings.source_full_text_utf8_budget<=8000,'declared whole-page pool budgets required');
+    check(count(settings.source_page_budget)&&settings.source_page_budget>0&&settings.source_page_budget<=(shared?8:2)&&count(settings.source_full_text_utf8_budget)&&settings.source_full_text_utf8_budget>0&&settings.source_full_text_utf8_budget<=(shared?32000:8000),'declared whole-page pool budgets required');
     check(schedule?.version==='private-live-source-schedule/1'&&Array.isArray(schedule.original_page_ids)&&unique(schedule.original_page_ids)&&schedule.original_pages===schedule.original_page_ids.length&&same(schedule.selected_page_ids,ids)&&schedule.selected_pages===ids.length&&ids.length<=settings.source_page_budget&&schedule.page_budget===settings.source_page_budget&&schedule.full_text_utf8_budget===settings.source_full_text_utf8_budget&&schedule.raw_pages_clipped===false&&schedule.no_evidence_claim_for_unprocessed===true&&schedule.gold_or_saved_ranks_used===false,'bound source-pool schedule changed');
     const unprocessed=array(schedule.unprocessed_pages);check(unprocessed.every(p=>p.status==='UNPROCESSED'&&HASH.test(p.source_sha256))&&unique([...ids,...unprocessed.map(p=>p.page_id)])&&same([...ids,...unprocessed.map(p=>p.page_id)].sort(),[...schedule.original_page_ids].sort()),'every scheduled page needs exact-once accounting');
     const bytes=[...pages.values()].reduce((sum,page)=>sum+new TextEncoder().encode(page.text).length,0);check(schedule.selected_utf8_bytes===bytes&&bytes<=settings.source_full_text_utf8_budget,'whole-page UTF8 budget changed');
     const unprocessedReadings=method.readings.filter(b=>['UNPROCESSED_READING_BUDGET','UNPROCESSED_SOURCE_BUDGET'].includes(b.status)).map(b=>b.reading.id);
     check(same(method.source_pool_scope,{...schedule,unprocessed_reading_ids:unprocessedReadings})&&same(view.source_pool_scope,method.source_pool_scope)&&same(view.processing_budget,budget),'view/source processing scope changed');
-    check(budget?.version==='private-live-source-processing-budget/1'&&budget.task===c.task&&typeof budget.available_after_planning_usd==='number'&&Number.isFinite(budget.available_after_planning_usd)&&budget.available_after_planning_usd>=0&&budget.digest_earmark_usd===.07&&budget.digest_time_earmark_seconds===25&&budget.maximum_model_stages===(c.task==='redaction'?5:3)&&budget.digest_body_bytes_limit===24576&&budget.existing_job_and_shared_caps_unchanged===true&&budget.earmark_is_not_a_paid_ledger_reservation===true&&budget.full_completion_guaranteed===false,'declared source/digest processing budget differs');
+    const required=array(native.plan.atoms).filter(a=>a.required&&a.kind==='proposition').length;
+    if(shared&&c.task!=='redaction')check(required>=1&&required<=8,'required fact matrix cannot be truncated');
+    const batchPages=shared&&c.task!=='redaction'?(currentReadings?Math.min(2,Math.max(1,Math.floor(4/required))):Math.min(4,Math.floor(8/required))):0;
+    const modelStages=shared?(c.task==='redaction'?2*Math.min(3,array(native.plan.readings_packet?.readings).length)+3:2*Math.ceil(ids.length/batchPages)+1):c.task==='redaction'?5:3;
+    const matrixRows=shared&&c.task!=='redaction'?required*Math.min(batchPages,ids.length):0;
+    check(budget?.version===(uniformReview?'private-live-source-processing-budget/4':minimumEarmarks?'private-live-source-processing-budget/3':metadataProjection?'private-live-source-processing-budget/2':'private-live-source-processing-budget/1')&&budget.task===c.task&&typeof budget.available_after_planning_usd==='number'&&Number.isFinite(budget.available_after_planning_usd)&&budget.available_after_planning_usd>=0&&budget.digest_earmark_usd===.07&&budget.digest_time_earmark_seconds===25&&budget.maximum_model_stages===modelStages&&method.source_call_attempts<=modelStages&&budget.digest_body_bytes_limit===(minimumEarmarks?65536:24576)&&budget.existing_job_and_shared_caps_unchanged===true&&budget.earmark_is_not_a_paid_ledger_reservation===true&&budget.full_completion_guaranteed===false,'declared source/digest processing budget differs');
+    if(minimumEarmarks)check(budget.digest_reservation_policy==='ACTUAL_RESERVATION_WITHIN_EXISTING_CAPS_MINIMUM_EARMARK_ONLY'&&
+      budget.review_reservation_policy==='MINIMUM_EARMARK_FULL_ACTUAL_REVIEW_RESERVATION_REQUIRED'&&budget.review_completion_guaranteed===false&&
+      (c.task==='redaction'?budget.review_minimum_earmark_usd===null:near(budget.review_minimum_earmark_usd,matrixRows<=4?.10:.172032)),
+      'actual-reservation/minimum-earmark budget contract differs');
+    if(metadataProjection)check(budget.source_timeout_policy==='PER_CALL_MIN_90_REMAINING_MINUS_DIGEST'&&budget.maximum_response_seconds===90,'per-call timeout/digest headroom contract differs');
+    if(shared){
+      if(currentReadings)check(budget.review_body_bytes_limit===(c.task==='redaction'?null:uniformReview?260096:matrixRows<=4?65536:260096)&&budget.assessment_review_digest_preflight===(c.task!=='redaction'),'assessment/review/digest preflight differs');
+      const output={live_r_proposal_v1:6144,live_r_proposal_review_v1:4096,live_r_focal_assessment_v1:16384,live_r_focal_review_v1:4096,
+        live_m_assessment_v1:matrixRows<=4?8192:16384,live_m_review_v1:matrixRows<=4?8192:16384,
+        live_h_assessment_v1:matrixRows<=4?8192:16384,live_h_review_v1:matrixRows<=4?8192:16384,live_selected_source_digest_v1:1024};
+      check(budget.maximum_fact_page_rows===matrixRows&&same(budget.output_token_limits,output),'actual fact/page matrix or output limits differ');
+    }
   }else check(false,'explicit bounded source pool policy required');
   check(Array.isArray(view.source_pages) && view.source_pages.length === ids.length, 'view page inventory changed');
   for (const [index, page] of view.source_pages.entries()) {
@@ -219,7 +291,7 @@ export async function verifyLiveSourceMethod(envelope, {wire, signal, assertCurr
     for (const [index,page] of inventory.entries()) {
       provenanceBytes+=tree.raw(['document_pages',documentId,index]).length;
       check(++provenanceCount <= 1024 && provenanceBytes<=8*1024**2 && page.document_id === documentId && page.provenance_only === true && page.inspection_not_implied === true, 'document provenance is not inspection'); await validatePage(page,true);
-      if (pages.has(page.id)) check(Object.keys(value.sources[page.id]).every(key => same(page[key], value.sources[page.id][key])), 'provenance and inspected page conflict');
+      if (pages.has(page.id)) check(Object.keys(value.sources[page.id]).every(key => same(key==='canonical_page_id'&&page[key]===undefined?page.id:page[key], value.sources[page.id][key])), 'provenance and inspected page conflict');
     }
   }
   const citations = new Set(), citationKey = ref => JSON.stringify([ref.canonical_page_id,ref.start,ref.end,ref.text]);
@@ -228,11 +300,14 @@ export async function verifyLiveSourceMethod(envelope, {wire, signal, assertCurr
   };
   const replay = ref => {
     const page = pages.get(ref?.canonical_page_id);
-    check(page && ref.document_id === page.document_id && ref.corpus === page.corpus && ref.date === page.date && ref.page_sha256 === page.source_sha256 && ref.earlier_page === (page.earlier_page ?? null) && ref.source_edition === undefined && ref.physical_page === undefined, 'citation borrows another page/version'); span(page,ref); citations.add(ref); return ref;
+    check(page && ref.document_id === page.document_id && ref.corpus === page.corpus && ref.date === page.date && ref.page_sha256 === page.source_sha256 && ref.earlier_page === (page.earlier_page ?? null) &&
+      (admission.later?ref.source_edition==='later'&&ref.physical_page===page.source_page&&Number.isSafeInteger(ref.physical_page)&&ref.physical_page>0:
+        ref.source_edition===undefined&&ref.physical_page===undefined), 'citation borrows another page/version'); span(page,ref); citations.add(ref); return ref;
   };
   const citeSpan = (pageId, ref) => {
     const page = pages.get(pageId); check(page, 'own page required'); span(page,ref);
-    const result = {canonical_page_id:page.id,document_id:page.document_id,date:page.date,start:ref.start,end:ref.end,text:ref.text,page_sha256:page.source_sha256,earlier_page:page.earlier_page??null,corpus:page.corpus}; citations.add(result); return result;
+    const result = {canonical_page_id:page.id,document_id:page.document_id,date:page.date,start:ref.start,end:ref.end,text:ref.text,page_sha256:page.source_sha256,earlier_page:page.earlier_page??null,corpus:page.corpus,
+      ...(admission.later?{source_edition:'later',physical_page:page.source_page}:{})}; citations.add(result); return result;
   };
   const publicAtoms = array(native.plan.atoms).map(atom => Object.fromEntries(['id','text','kind','required','polarity','modality','query_spans'].filter(key => Object.hasOwn(atom,key)).map(key => [key,atom[key]])));
   check(publicAtoms.length > 0 && publicAtoms.length <= settings.maximum_required_atoms && unique(publicAtoms.map(atom => atom.id)) && same(publicAtoms, method.atoms_full) && same(publicAtoms, view.atoms_full), 'full public fact inventory changed');
@@ -241,34 +316,75 @@ export async function verifyLiveSourceMethod(envelope, {wire, signal, assertCurr
     atom.query_spans.forEach(ref => span({text:c.query}, ref, true));
   }
   if(c.task==='redaction'){const packet=native.plan.readings_packet;check(packet?.version==='next-slot-readings/3'&&packet.status==='ready'&&packet.query_only===true&&packet.source_access===false&&packet.answer_text_supplied===false&&packet.query_sha256===querySHA&&packet.case_sha256===await sha(tree.raw(['native','public_case']))&&Array.isArray(packet.readings)&&packet.readings.length>0&&packet.readings.length<=16&&unique(packet.readings.map(r=>r.id)),'public declared-reading binding changed');}
+  if(currentReadings&&c.task==='redaction')validateCurrentReadings(native.plan.readings_packet,c.query);
   for (const key of ['atoms','readings','trace','digest']) check(same(view[key], method[key]), 'method/view ' + key + ' differs');
   check(same(view.assessment_scope, method.assessment_scope ?? null) && same(view.selected_reading_id, method.selected_reading_id ?? null), 'method/view scope/selection differs');
   await validateDecisions(method, native, settings, pages, publicAtoms, replay, citeSpan, querySHA);
   check(array(method.provider_receipts).every(proof=>array(receipt.provider_receipts).some(row=>row.ref==='receipts/'+proof.call_id+'.json'&&row.status==='PASS'&&row.model===proof.model&&HASH.test(row.request_sha256)&&typeof row.charged_or_reserved_usd==='number'&&Number.isFinite(row.charged_or_reserved_usd)&&row.charged_or_reserved_usd>=0)),'source provider receipt missing from sealed job receipt');
   await validateDigest(method, tree, mp, replay);
   validateTrace(method, replay);
+  if(admission.later){
+    const all=[...pages.values(),...Object.values(value.document_pages).flat()];
+    if(all.length)await bindLaterSourceResponse({page:all[0],document_pages:all.slice(1),binding:resource,resource_binding:inspectionBinding,
+      source_view_policy:scope.source_view_policy,cutoff:c.date,whole_origin_excluded:null},
+      {record:{result:native.result,index_ref:index,resource_binding:inspectionBinding},caseInfo:c,binding:inspectionBinding});
+    else check(resource.native_registry?.native_source_view==='later'&&resource.native_registry?.source_view_contract==='public-native-later-source-projection/1'&&safeRef(resource.native_registry.projection_parent_registry_ref)&&resource.native_registry.files?.pages?.path?.includes('/views/later/')&&HASH.test(resource.native_registry.files.pages.sha256)&&!resource.native_registry.registered_supplied_documents,'empty later source projection differs');
+  }
   check(!signal?.aborted && before === JSON.stringify(envelope) && assertCurrent?.() !== false, 'selection changed during verification');
   freeze(method); const handle = Object.freeze({method_id:LIVE_SOURCE_METHOD,run_id:value.run_id,view:method.view,method,inspectionBinding});
   freeze(native);handles.set(handle,{envelope,snapshot:before,signal,assertCurrent,method,native,pages,citations,citeSpan,citationKey,inspectionBinding}); envelopes.set(envelope,handle); return handle;
 }
 
+// /2 retains the current query-only grammar DTO, not the historical projection.
+function validateCurrentReadings(packet, query) {
+  const enums={outer_family:['nominal','adjectival','nominal_specifier','verbal_predicate','prepositional','adverbial','clausal','functional_piece','residual_complex'],
+    function:['argument','complement','modifier','specifier','possessor','example_member','predicate','adjunct','operator','coordinate_member','unknown'],
+    role:['actor_argument','patient_argument','recipient_argument','prepositional_argument','predicative_complement','actor_enumeration','possessor','nominal_property','member_example','verbal_bridge','adjunct','quoted_characterization','quantity','statement','operator','unknown'],
+    variant:['default','compound_modifier','numeric_quantity'],target_kind:['any','person','organization','place','quantity','property','action'],grammatical_number:['singular','plural','unknown']};
+  const span=(ref,scope=false)=>{check(exact(ref,['start','end','text'])&&Number.isSafeInteger(ref.start)&&Number.isSafeInteger(ref.end)&&ref.start>=0&&ref.end>ref.start&&ref.end<=Array.from(query).length&&Array.from(query).slice(ref.start,ref.end).join('')===ref.text&&(scope||!opaque.test(ref.text)),'current reading span changed');};
+  const list=(value,max,min=0)=>{check(Array.isArray(value)&&value.length>=min&&value.length<=max,'current reading array bound');return value;};
+  for(const r of packet.readings){
+    check(exact(r,[...Object.keys(enums),'attachment_spans','finite','wrappers','operators','cues','id','form','constructor_form','constructor_status','constructor_routing','explanation'])&&Object.entries(enums).every(([key,values])=>values.includes(r[key]))&&/^next_reading_[a-f0-9]{24}$/.test(r.id)&&r.form===r.outer_family&&(r.finite===null||typeof r.finite==='boolean')&&typeof r.explanation==='string'&&r.explanation,'complete current reading metadata required');
+    const attachments=list(r.attachment_spans,4),cues=list(r.cues,16,1);
+    check(unique(attachments.map(ref=>JSON.stringify(stable(ref)))),'duplicate reading attachment');attachments.forEach(ref=>span(ref));
+    for(const cue of cues){check(exact(cue,['kind','span'])&&['boundary','attachment','target_kind','number','finite','wrapper','operator'].includes(cue.kind),'current reading cue changed');span(cue.span);}
+    check(cues.some(cue=>['boundary','attachment'].includes(cue.kind))&&attachments.every(ref=>cues.some(cue=>cue.kind==='attachment'&&same(cue.span,ref))),'current reading attachment cue missing');
+    for(const [key,unknown,kind]of [['target_kind','any','target_kind'],['grammatical_number','unknown','number'],['finite',null,'finite']])check(r[key]===unknown||cues.some(cue=>cue.kind===kind),'current reading typed cue missing');
+    for(const wrapper of list(r.wrappers,4)){check(exact(wrapper,['kind','placement','spans'])&&['genitive','example','quotation'].includes(wrapper.kind)&&['inside_gap','visible'].includes(wrapper.placement),'current reading wrapper changed');list(wrapper.spans,2).forEach(ref=>span(ref));check((wrapper.placement==='visible')===(wrapper.spans.length>0),'current reading wrapper scope changed');}
+    for(const op of list(r.operators,6)){check(exact(op,['kind','realization','scope','cue'])&&['polarity','focus','modality','degree','conditional','attribution','connective','auxiliary_support','unknown'].includes(op.kind)&&['visible','hypothetical','unknown'].includes(op.realization),'current reading operator changed');if(op.scope!==null)span(op.scope,true);if(op.cue!==null)span(op.cue);check((op.realization==='visible')===(op.cue!==null),'current reading operator realization changed');}
+    const route=r.constructor_routing;
+    check((r.constructor_form===null||['nominal','modifier','quantity','member_example','possessive'].includes(r.constructor_form))&&r.constructor_status===(r.constructor_form===null?'requires_new_constructor':'legacy_compatible_subset')&&object(route)&&route.version==='next-possessor-surface-routing/1'&&route.constructor_form===r.constructor_form&&typeof route.reason==='string'&&route.reason,'current constructor routing changed');
+    if(r.outer_family==='nominal'&&r.function==='possessor'){
+      check(exact(route,['version','constructor_form','reason','query_spans','source','raw_wrappers_changed','person_or_number_inferred','hidden_genitive_observed','final_insertion_fit_still_required'])&&route.source==='CHOSEN_FUNCTION_AND_PUBLIC_BOUNDARY_NOT_MODEL_FILL'&&route.raw_wrappers_changed===false&&route.person_or_number_inferred===false&&route.hidden_genitive_observed===false&&route.final_insertion_fit_still_required===true,'current possessor routing changed');list(route.query_spans,4).forEach(ref=>span(ref));
+    }else check(exact(route,['version','constructor_form','reason'])&&route.reason==='UNCHANGED_NONPOSSESSOR_ROUTE','current nonpossessor routing changed');
+  }
+}
+
 async function validateDecisions(method, native, settings, pages, facts, replay, citeSpan, querySHA) {
   const c = method.public_case;
+  const current=['shared-source-eight-pages/2','shared-source-eight-pages/3','shared-source-eight-pages/4','shared-source-eight-pages/5'].includes(settings.processing_profile_version);
+  const sameReading=(reading,declared)=>current?same(reading,declared):reading?.id===declared?.id&&Object.keys(reading).every(key=>same(reading[key],declared[key]));
   if(!pages.size){
     const original=native.retrieval?.live_source_schedule?.original_pages??0;
     check(method.status===(original?'SOURCE_BUDGET_HOLD_UNPROCESSED':'NO_ELIGIBLE_INSPECTED_SOURCES')&&same(method.source_judgments??[],[])&&method.source_call_attempts===0&&same(method.provider_receipts,[])&&method.digest?.available===false&&method.source_search_complete===false,'empty or budget-held source pool cannot create findings');
-    if(c.task==='redaction'){const declared=array(native.plan.readings_packet?.readings);check(same(method.atoms,facts)&&method.selected_reading_id===null&&method.selection_rule==='FIRST_NONEMPTY_DECLARED_READING_NOT_QA_ORACLE'&&method.readings.length===declared.length&&method.readings.every((b,i)=>b.reading.id===declared[i].id&&Object.keys(b.reading).every(key=>same(b.reading[key],declared[i][key]))&&same(b.candidates,[])&&same(b.top5_ids,[])&&b.status==='UNPROCESSED_SOURCE_BUDGET'),'empty R must retain unprocessed declared readings');}
+    if(c.task==='redaction'){const declared=array(native.plan.readings_packet?.readings);check(same(method.atoms,facts)&&method.selected_reading_id===null&&method.selection_rule==='FIRST_NONEMPTY_DECLARED_READING_NOT_QA_ORACLE'&&method.readings.length===declared.length&&method.readings.every((b,i)=>sameReading(b.reading,declared[i])&&same(b.candidates,[])&&same(b.top5_ids,[])&&b.status==='UNPROCESSED_SOURCE_BUDGET'),'empty R must retain unprocessed declared readings');}
     else{const required=facts.filter(f=>f.required&&f.kind==='proposition');check(same(method.readings,[])&&method.atoms.length===required.length&&method.atoms.every((a,i)=>a.id===required[i].id&&a.text===required[i].text&&same(a.query_spans,required[i].query_spans)&&a.status==='UNRESOLVED'&&same(a.evidence,[])&&a.complete_by_source_review===(c.task==='hypothesis'?null:false))&&method.assessment_scope?.original_slots===original*required.length&&method.assessment_scope.processed_slots===0&&method.assessment_scope.unprocessed_slots===original*required.length&&method.coverage===(c.task==='hypothesis'?null:0),'empty M/H must retain unresolved components and unprocessed denominator');}
     return;
   }
   if (c.task === 'redaction') {
     check(same(method.atoms,facts) && method.selection_rule === 'FIRST_NONEMPTY_DECLARED_READING_NOT_QA_ORACLE', 'R facts/selection rule changed');
     const declared = array(native.plan.readings_packet?.readings);
-    check(Array.isArray(method.readings) && method.readings.length === declared.length && method.readings.every((b,i) => b.reading.id===declared[i].id&&Object.keys(b.reading).every(key=>same(b.reading[key],declared[i][key]))), 'all projected declared readings must survive');
-    let processed = 0; const allIds = [];
-    for (const branch of method.readings) {
+    check(Array.isArray(method.readings) && method.readings.length === declared.length && method.readings.every((b,i) => sameReading(b.reading,declared[i])), 'all declared readings must survive with their profile-bound fields');
+    let processed = 0,stopped=false; const allIds = [];
+    for (const [position,branch] of method.readings.entries()) {
       const candidates = branch.candidates;
       check(Array.isArray(candidates) && candidates.length <= settings.max_fills_per_reading && same(branch.top5_ids,candidates.slice(0,5).map(row=>row.id)), 'R retained/top-five inventory changed');
+      if(current||settings.processing_profile_version==='shared-source-eight-pages/1'){
+        check((position>=3||stopped)?branch.status==='UNPROCESSED_READING_BUDGET':branch.status!=='UNPROCESSED_READING_BUDGET',
+          'R must attempt declared readings in order and stop at first nonempty');
+        if(branch.status!=='UNPROCESSED_READING_BUDGET')check(branch.proposal_protocol_version===(method.source_view_policy.id==='later_release_inclusive'?settings.scoped_proposal_version:settings.proposal_version),'R proposal policy protocol differs');
+        if(candidates.length)stopped=true;
+      }
       if (branch.status === 'UNPROCESSED_READING_BUDGET') { check(!candidates.length, 'unprocessed reading has candidates'); continue; }
       check(++processed <= settings.maximum_readings, 'reading budget exceeded');
       for (const [index,row] of candidates.entries()) {
@@ -320,6 +436,10 @@ async function validateDecisions(method, native, settings, pages, facts, replay,
     const accepted=['SUPPORT','OPPOSE','PARTIAL','CONTEXT'].includes(row.effective_direction);
     if(accepted)check(row.unanimous_model_accept===true&&row.review?.decision==='ACCEPT'&&row.citation&&row.qualification_citation&&row.raw_model_row?.qualifications_retained===true&&row.raw_model_row?.operators_retained===true&&row.review.qualifications_retained===true&&row.review.operators_retained===true,'source account lacks retained separate review');
     if(['HOLD','NONE','REJECTED_ROW'].includes(row.effective_direction))check(row.context_priority_index===0,'held row has positive score');
+    if(['shared-source-eight-pages/4','shared-source-eight-pages/5'].includes(settings.processing_profile_version)&&row.review_failure!==undefined)
+      check(['HOLD','REJECTED_ROW'].includes(row.effective_direction)&&row.review===null&&row.unanimous_model_accept===false&&
+        row.semantic_credit===0&&typeof row.review_failure==='string'&&row.review_failure.length>0&&Array.from(row.review_failure).length<=2000,
+        'retained first pass cannot gain independent-review authority or semantic credit');
     if(row.requested_facet_weights){
       const fields=row.raw_model_row?.fields,weights=row.requested_facet_weights;let denominator=0,aligned=0,literal=0;
       check(object(fields)&&object(weights)&&Object.keys(weights).length>0,'M/H requested facets required');
@@ -330,6 +450,17 @@ async function validateDecisions(method, native, settings, pages, facts, replay,
       check(near(row.context_priority_index,accepted?.75*row.evidence_alignment_coverage+.25*row.local_lexical_fit.value:0),'M/H index formula differs');
     }
     if(hypothesis&&accepted){const raw=row.raw_model_row;check(raw?.attribution&&row.review.direction===row.effective_direction&&raw.qualifications_retained===true&&raw.operators_retained===true,'H source voice/review mismatch');if(raw.attribution.kind==='DOCUMENT_REPORTING_VOICE')check(raw.attribution.speaker_quote===null,'document voice is not a named speaker');}
+  }
+  if(['shared-source-eight-pages/4','shared-source-eight-pages/5'].includes(settings.processing_profile_version))for(const failure of array(method.failures)){
+    if(failure.status!=='REVIEW_HOLD_FIRST_PASS_RETAINED')continue;
+    const factIds=array(failure.fact_ids),pageIds=array(failure.page_ids);
+    check(factIds.length>0&&pageIds.length>0&&unique(factIds)&&unique(pageIds)&&factIds.every(id=>facts.some(f=>f.id===id))&&pageIds.every(id=>pages.has(id)),
+      'retained first-pass batch scope differs');
+    const retained=rows.filter(row=>factIds.includes(row.fact_id)&&pageIds.includes(row.page_id));
+    check(retained.length===factIds.length*pageIds.length&&retained.every(row=>['HOLD','REJECTED_ROW'].includes(row.effective_direction)&&
+      row.review===null&&row.unanimous_model_accept===false&&row.semantic_credit===0&&row.context_priority_index===0&&
+      typeof row.review_failure==='string'&&row.review_failure.length>0&&Array.from(row.review_failure).length<=2000),
+      'review-held batch cannot become approved evidence, absence or an omitted first pass');
   }
   for(const atom of method.atoms){
     const own=rows.filter(row=>row.fact_id===atom.id);check(same(atom.evidence,own),'atom borrows another source account');
@@ -361,7 +492,7 @@ async function validateDigest(method, tree, path, replay) {
   const known=new Map();
   for(const [i,source]of digest.sources.entries()){
     check(source.id==='S'+(i+1)&&!known.has(source.id)&&Array.isArray(source.citations)&&source.citations.length>0,'ordered unique S map required');const ids=new Set();
-    source.citations.forEach((item,j)=>{check(item.id==='C'+(j+1)&&!ids.has(item.id),'ordered unique C map required');ids.add(item.id);replay(item.citation);check(['corpus','document_id','date','canonical_page_id','page_sha256','earlier_page'].every(k=>source[k]===item.citation[k])&&source.source_edition===undefined&&source.physical_page===undefined,'S map changes cited source');});known.set(source.id,source);
+    source.citations.forEach((item,j)=>{check(item.id==='C'+(j+1)&&!ids.has(item.id),'ordered unique C map required');ids.add(item.id);replay(item.citation);check(['corpus','document_id','date','canonical_page_id','page_sha256','earlier_page','source_edition','physical_page'].every(k=>source[k]===item.citation[k]),'S map changes cited source');});known.set(source.id,source);
   }
   check(unique(digest.sources.map(s=>s.canonical_page_id)),'one S identity per page');
   for(const match of digest.text.matchAll(/\bS(\d+)\b/g))check(known.has('S'+match[1]),'digest cites an unknown source');
@@ -390,7 +521,11 @@ function validateTrace(method,replay){
 export function liveSourceSummary(value,{selectedReadingId}={}) {
   const {method}=bound(value),task=method.public_case.task;
   if(task==='redaction'){const id=selectedReadingId??method.selected_reading_id??method.readings[0]?.reading.id,branch=method.readings.find(b=>b.reading.id===id),approved=array(branch?.candidates).filter(c=>c.source_supported_fill_approved).length;return {method_id:LIVE_SOURCE_METHOD,title:approved?'Evidence-backed source suggestions':branch?.candidates.length?'Contextual source suggestions':'Source suggestions unresolved',tone:approved?'supported':'unresolved',direct_candidates:approved,native_method:false,world_truth_certified:false};}
-  if(task==='hypothesis')return {method_id:LIVE_SOURCE_METHOD,title:method.status==='SOURCE_VIEWS_RECORDED'?'Source views recorded':'Source views unresolved',tone:'mixed',coverage:null,native_method:false,world_truth_certified:false};
+  if(task==='hypothesis'){
+    const support=method.atoms.some(a=>(a.directional_indices?.SUPPORT.value??0)>0),oppose=method.atoms.some(a=>(a.directional_indices?.OPPOSE.value??0)>0);
+    return {method_id:LIVE_SOURCE_METHOD,title:support&&oppose?'Supporting and opposing source arguments':support?'Sources support this assessment':oppose?'Sources oppose this assessment':'Source assessment unresolved',
+      tone:support&&oppose?'mixed':support?'supported':oppose?'opposed':'unresolved',coverage:null,native_method:false,world_truth_certified:false};
+  }
   const complete=method.atoms.filter(a=>a.complete_by_source_review===true).length;
   return {method_id:LIVE_SOURCE_METHOD,title:complete+' / '+method.atoms.length+' source components supported',tone:complete===method.atoms.length?'supported':'partial',complete,total:method.atoms.length,native_method:false,world_truth_certified:false};
 }
@@ -404,12 +539,34 @@ export function normalizeLiveSourceMethod(value,{selectedReadingId}={}) {
   const sourceLinks=[],proofMetadata=[],allowedProofs=[...state.citations],facts=method.atoms_full;
   const retain=(proof,factIds,direction)=>{sourceLinks.push({factId:factIds[0]??null,itemId:factIds[0]??null,proof,direction,basis:'RECORDED_SOURCE_ASSESSMENT',source_graph_edge:false});proofMetadata.push({proof,atom_ids:factIds,direction});return proof;};
   const makeR=branch=>{
-    const proofs=[],links=[];
+    const proofs=[],links=[],metadata=[];
     const marker=c.focal_marker,start=Array.from(c.query.slice(0,c.query.indexOf(marker))).length,end=start+Array.from(marker).length;
     const focalFacts=facts.filter(fact=>fact.text.includes(marker)||array(fact.query_spans).some(span=>span.start<end&&span.end>start));
-    const candidates=branch.candidates.map(row=>{const source=row.source,quote=source.citation,qualification=citeSpan(source.page_id,source.qualification);proofs.push(quote,qualification);for(const fact of focalFacts){links.push({factId:fact.id,itemId:row.id,proof:quote,direction:'CONTEXT',basis:'RECORDED_SOURCE_PROPOSAL_FOR_FOCAL_READING',source_graph_edge:false});proofMetadata.push({proof:quote,atom_ids:[fact.id],direction:'CONTEXT'});}return {id:row.id,rank:row.rank,fill:row.fill,priority:row.priority_index,label:row.source_supported_fill_approved?'Evidence-backed source suggestion':row.evidence_class===1?'Contextual source suggestion':row.source_focal_class==='EXPLICIT_CONFLICT'?'Source conflict':'Source appraisal held',proofs:[quote,qualification],sourceWord:source.phrase.text,sourceSpan:source.phrase,details:{completed_input:row.completed_input,transformation:row.transformation,source_class:row.source_focal_class,grammar:row.grammar,full_qualification:source.qualification.text}};});
+    const candidates=branch.candidates.map(row=>{
+      const source=row.source,quote=source.citation,qualification=citeSpan(source.page_id,source.qualification),focal=row.raw_focal_assessment;
+      const anchors=array(focal?.bound_source_anchors).map(a=>citeSpan(source.page_id,{start:a.start,end:a.end,text:a.quote}));
+      const direction=row.evidence_class===2&&row.source_supported_fill_approved&&row.source_focal_class==='DIRECT_TARGET_SOURCE'?'SUPPORT':
+        row.evidence_class===0&&row.source_focal_class==='EXPLICIT_CONFLICT'&&focal?.assessment?.decision==='EXPLICIT_CONFLICT'&&focal.semantic_review_required===true?'OPPOSE':
+        row.evidence_class===1&&row.source_focal_class==='INFERENTIAL_CONTEXT'?'CONTEXT':null;
+      const associate=(proof,sign,basis)=>{for(const fact of focalFacts){
+        links.push({factId:fact.id,itemId:row.id,proof,direction:sign,basis,source_graph_edge:false});
+        metadata.push({proof,atom_ids:[fact.id],direction:sign,basis});
+      }};
+      // A nomination's quotation is context; only recorded final focal anchors carry its decision.
+      associate(quote,'CONTEXT','RECORDED_SOURCE_PROPOSAL_FOR_FOCAL_READING');
+      associate(qualification,'CONTEXT','RECORDED_SOURCE_QUALIFICATION');
+      if(direction)anchors.forEach(proof=>associate(proof,direction,'RECORDED_FINAL_FOCAL_ASSESSMENT'));
+      proofs.push(quote,qualification,...anchors);
+      const review=row.focal_review??focal?.review??null;
+      const accounts=[{direction:'CONTEXT',reason:row.contextual_proposal_review?.reason,review:row.contextual_proposal_review,proof:quote,qualification},
+        ...anchors.map(proof=>({direction,reason:focal?.assessment?.reason,facets:focal?.assessment?.facets,review,proof,qualification}))];
+      return {id:row.id,rank:row.rank,fill:row.fill,priority:row.priority_index,label:row.source_supported_fill_approved?'Evidence-backed source suggestion':row.evidence_class===1?'Contextual source suggestion':row.source_focal_class==='EXPLICIT_CONFLICT'?'Source conflict':'Source appraisal held',
+        proofs:[quote,qualification,...anchors],sourceWord:source.phrase.text,sourceSpan:source.phrase,
+        details:{completed_input:row.completed_input,transformation:row.transformation,source_class:row.source_focal_class,grammar:row.grammar,
+          full_qualification:qualification,facets:focal?.assessment?.facets,reason:focal?.assessment?.reason,review,proposal_review:row.contextual_proposal_review,accounts}};
+    });
     const emptyReason=branch.status==='UNPROCESSED_READING_BUDGET'?'This declared reading was not processed under the recorded source budget.':branch.status==='UNPROCESSED_SOURCE_BUDGET'?'This declared reading has no processed source pages; see the recorded source scope.':branch.status==='NO_ELIGIBLE_INSPECTED_SOURCES'?'No eligible inspected source pages were retained for this reading.':'No admitted source-derived fills were retained for this declared reading.';
-    return {id:branch.reading.id,label:[branch.reading.outer_family,branch.reading.role].filter(Boolean).join(' / ').replaceAll('_',' '),explanation:[branch.reading.explanation,candidates.length?'':emptyReason].filter(Boolean).join(' '),candidates,proofs,sourceLinks:links,graphItems:candidates.map(c=>({id:c.id})),nativeCandidates:[]};
+    return {id:branch.reading.id,label:[branch.reading.outer_family,branch.reading.role].filter(Boolean).join(' / ').replaceAll('_',' '),explanation:[branch.reading.explanation,candidates.length?'':emptyReason].filter(Boolean).join(' '),candidates,proofs,sourceLinks:links,proofMetadata:metadata,graphItems:candidates.map(c=>({id:c.id})),nativeCandidates:[]};
   };
   const branches=method.readings.length?method.readings:c.task==='redaction'?array(state.native.plan.readings_packet?.readings).map(reading=>({reading,candidates:[],top5_ids:[],status:'NO_ELIGIBLE_INSPECTED_SOURCES'})):[];
   const readings=c.task==='redaction'?branches.map(makeR):[];
@@ -421,11 +578,16 @@ export function normalizeLiveSourceMethod(value,{selectedReadingId}={}) {
     const proofs=[];
     for(const row of eligible){const refs=[row.citation,row.qualification_citation];if(primary.includes(row)){refs.forEach(proof=>proofs.push(retain(proof,[atom.id],row.effective_direction)));}else relatedProofs.push(...refs);}
     const scores=primary.map(row=>row.context_priority_index);
-    return {id:atom.id,text:atom.text,label:({SOURCE_ASCRIBED:'Supported source account',PARTIAL_SOURCE_ACCOUNT:'Partial source account',SOURCE_OPPOSED:'Opposing source account',CONFLICTED_SOURCE_ACCOUNTS:'Conflicting source accounts',CONTEXT_ONLY:'Context only',UNRESOLVED:'Unresolved',SOURCE_VIEWS_RECORDED:'Source views recorded'})[atom.status]||'Unresolved',status:atom.status,score:scores.length?Math.max(...scores):null,proofs,directionalTotals:{SUPPORT:atom.directional_indices?.SUPPORT.value??0,OPPOSE:atom.directional_indices?.OPPOSE.value??0},evidence:primary.map(row=>({proof:row.citation,direction:row.effective_direction,score:row.context_priority_index,voice:row.source_attribution?.speaker_quote||row.raw_model_row?.attribution?.speaker_quote||''})),details:{assessment_scope:method.assessment_scope,full_qualifications:eligible.map(row=>row.qualification_citation),stored_status:atom.status}};
+    const accounts=eligible.map(row=>({direction:row.effective_direction,score:row.context_priority_index,
+      reason:row.raw_model_row?.reason,fields:row.raw_model_row?.fields,review:row.review,
+      source_attribution:row.source_attribution??row.raw_model_row?.attribution,
+      kind:row.raw_model_row?.hypothesis_relation?.kind,issue:row.raw_model_row?.issue,
+      proof:row.citation,qualification:row.qualification_citation,raw_account:row}));
+    return {id:atom.id,text:atom.text,label:({SOURCE_ASCRIBED:'Supported source account',PARTIAL_SOURCE_ACCOUNT:'Partial source account',SOURCE_OPPOSED:'Opposing source account',CONFLICTED_SOURCE_ACCOUNTS:'Conflicting source accounts',CONTEXT_ONLY:'Context only',UNRESOLVED:'Unresolved',SOURCE_VIEWS_RECORDED:'Source views recorded'})[atom.status]||'Unresolved',status:atom.status,score:scores.length?Math.max(...scores):null,proofs,directionalTotals:{SUPPORT:atom.directional_indices?.SUPPORT.value??0,OPPOSE:atom.directional_indices?.OPPOSE.value??0},evidence:primary.map(row=>({proof:row.citation,direction:row.effective_direction,score:row.context_priority_index,voice:row.source_attribution?.speaker_quote||row.raw_model_row?.attribution?.speaker_quote||''})),details:{assessment_scope:method.assessment_scope,full_qualifications:eligible.map(row=>row.qualification_citation),stored_status:atom.status,accounts}};
   });
   const proofs=c.task==='redaction'?(selected?.proofs??[]):units.flatMap(unit=>unit.proofs);
   const distinct=values=>[...new Map(values.map(proof=>[state.citationKey(proof),proof])).values()];
-  return {task:c.task,caseInfo:c,facts,readings,selectedReadingId:readingId,summary:liveSourceSummary(value,{selectedReadingId:readingId}),candidates:selected?.candidates??[],units,proofs:distinct(proofs),relatedProofs:distinct(relatedProofs),proofMetadata,sourceLinks:c.task==='redaction'?(selected?.sourceLinks??[]):sourceLinks,graphItems:c.task==='redaction'?(selected?.graphItems??[]):units.map(u=>({id:u.id})),nativeCandidates:[],allowedProofs:[...allowedProofs,...state.citations],sourcePolicy:method.source_view_policy,method_id:LIVE_SOURCE_METHOD,inspectionBinding:state.inspectionBinding,resourceBinding:state.inspectionBinding};
+  return {task:c.task,caseInfo:c,facts,readings,selectedReadingId:readingId,summary:liveSourceSummary(value,{selectedReadingId:readingId}),candidates:selected?.candidates??[],units,proofs:distinct(proofs),relatedProofs:distinct(relatedProofs),proofMetadata:c.task==='redaction'?(selected?.proofMetadata??[]):proofMetadata,sourceLinks:c.task==='redaction'?(selected?.sourceLinks??[]):sourceLinks,graphItems:c.task==='redaction'?(selected?.graphItems??[]):units.map(u=>({id:u.id})),nativeCandidates:[],allowedProofs:[...allowedProofs,...state.citations],sourcePolicy:method.source_view_policy,method_id:LIVE_SOURCE_METHOD,inspectionBinding:state.inspectionBinding,resourceBinding:state.inspectionBinding};
 }
 
 export function liveSourceAccountMap(value,selectedReadingId) {

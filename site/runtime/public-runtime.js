@@ -188,6 +188,29 @@
     if (typeof DecompressionStream === "undefined") fail("GZIP_UNAVAILABLE", "This browser cannot decode the saved gzip packet");
     return boundedBytes(new Response(new Blob([wire]).stream().pipeThrough(new DecompressionStream("gzip"))), maximum);
   }
+  async function staticBytes(reference, {signal} = {}) {
+    const fields = ["bytes", "path", "sha256"];
+    if (!reference || typeof reference !== "object" || Array.isArray(reference) ||
+        Object.keys(reference).sort().join(",") !== fields.join(",") ||
+        typeof reference.path !== "string" || typeof reference.sha256 !== "string" ||
+        !/^[a-f0-9]{64}$/.test(reference.sha256))
+      fail("INVALID_STATIC_REFERENCE", "An exact public static-file reference is required");
+    const ref = {...reference}, content = /^data\/fresh-saved-v1\/(?:publications|wire|origins|approvals)\/([a-f0-9]{64})\.json$/.exec(ref.path);
+    const fixed = ["data/report-v6.json", "live-result-adapter.js", "workbench-live-source.js"].includes(ref.path);
+    const maximum = ref.path.startsWith("data/fresh-saved-v1/wire/") ? 24 * 1024 ** 2 : 8 * 1024 ** 2;
+    if ((!fixed && (!content || content[1] !== ref.sha256)) || !integer(ref.bytes, 1, maximum))
+      fail("INVALID_STATIC_REFERENCE", "The public static-file path, hash or size is not allowed");
+    const url = assetURL(ref.path);
+    const response = await originalFetch(url, {method: "GET", credentials: "omit", redirect: "error",
+      mode: "same-origin", cache: "no-store", signal});
+    if (!response.ok || response.url !== url.href)
+      fail("STATIC_RESPONSE_CHANGED", "The exact public static file is unavailable");
+    const bytes = await boundedBytes(response, ref.bytes);
+    if (bytes.length !== ref.bytes) fail("STATIC_SIZE_CHANGED", "The public static-file size differs");
+    await matches(bytes, ref.sha256, "Public static file");
+    if (signal?.aborted) throw new DOMException("Static request cancelled", "AbortError");
+    return bytes;
+  }
   function template(pieces, parent = Infinity) {
     check(Array.isArray(pieces) && pieces.length % 2 === 1, "Malformed fragment template");
     for (let i = 0; i < pieces.length; i++) {
@@ -661,7 +684,7 @@
     } catch (error) { notice(error.message); return null; }
   };
   window.fetch = fetchSaved;
-  window.PublicReplay = Object.freeze({version: "matryoshka-public-runtime/1", baseURL: base.href, ready, canonicalKey, hasSaved, fetch: fetchSaved, verified, siteURL, replayURL,
+  window.PublicReplay = Object.freeze({version: "matryoshka-public-runtime/1", baseURL: base.href, ready, canonicalKey, hasSaved, fetch: fetchSaved, verified, staticBytes, siteURL, replayURL,
     fragmentLimits: limits, fragmentStats: () => ({manifests: packs.size, chunks: chunkCache.size, chunkBytes: cachedChunkBytes})});
   scan(document.documentElement);
   ready.then(() => scan(document.documentElement)).catch(() => {});

@@ -1,4 +1,4 @@
-import {mountEvidenceMap} from './evidence-map.js';
+import {mountEvidenceMap} from './evidence-map.js?v=20261128-polish1';
 import {renderEndingScoreChart,uniqueProofs} from './workbench-visuals.js';
 const $=selector=>document.querySelector(selector),rows=value=>Array.isArray(value)?value:[];
 const state={data:null,arm:'full_middle_clue',slot:0,reading:0,map:null};

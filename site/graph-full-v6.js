@@ -4478,8 +4478,9 @@ function inspectionDescriptionV1(){
 }
 let inspectionRevisionV1=0;
 const inspectionCommunityEdgesV2=new WeakMap();
-async function applyInspectionV1(action,expected,{signal}={}){
+async function applyInspectionV1(action,expected,{signal,preserveNeighborhood=false}={}){
   const fail=message=>{throw Error('KG inspection bridge: '+message);};
+  if(typeof preserveNeighborhood!=='boolean')fail('neighborhood preference must be boolean');
   if(window.parent!==window){try{if(window.parent.location.origin!==location.origin)fail('same-origin parent required');}catch(_e){fail('same-origin parent required');}}
   if(!action||!['HIERARCHY_NAVIGATION','GRAPH_NODE','DIRECT_CONNECTIONS','SOURCE_CONNECTION'].includes(action.kind)||
       !expected||expected.corpus!==corpusId||expected.graph_id!==refreshBinding?.graph_run_id||
@@ -4515,7 +4516,7 @@ async function applyInspectionV1(action,expected,{signal}={}){
   const record=selectedDetail?.node;
   if(!record||action.node?.id!==record.id||action.node.type!==record.type)fail('exact node ID/type is absent');
   if(action.kind==='HIERARCHY_NAVIGATION'&&(!record.community_id||action.community_id!==record.community_id))fail('mother membership differs');
-  let actualEdge=null,previous=null,target=record,sameCommunity=false,perspectiveRestored=false;
+  let actualEdge=null,previous=null,target=record,sameCommunity=false,perspectiveRestored=false,neighborhoodPreserved=false;
   if(action.kind==='SOURCE_CONNECTION'||action.kind==='DIRECT_CONNECTIONS'){
     previous=action.kind==='DIRECT_CONNECTIONS'?record:(await ensureNodeNeighborhood(view,action.from_node_id))?.node;valid();
     if(action.kind==='DIRECT_CONNECTIONS'){
@@ -4539,10 +4540,16 @@ async function applyInspectionV1(action,expected,{signal}={}){
   try{
     inspectionCommunityEdgesV2.delete(panel);
     panel.stopPhysics();panel.stopOrbit();panel.closeInspector(false);panel.v64Traversal=null;
+    const community=async node=>{
+      // The saved original method lands directly; the animated wrapper climbs hierarchy.
+      if(preserveNeighborhood)await guideNativeV64.openLocalCommunity.call(panel,node,{scroll:false});
+      else await panel.openLocalCommunity(node,{scroll:false});
+      valid();
+    };
     const connections=async()=>{
       if(sameCommunity)fail('same-community connection must stay in its community');
       if(panel.level!=='evidence'){
-        if(previous.community_id)await panel.openLocalCommunity(previous,{scroll:false});
+        if(previous.community_id)await community(previous);
         else await panel.focusNeighborhood(previous,{scroll:false});
         valid();
       }
@@ -4551,8 +4558,11 @@ async function applyInspectionV1(action,expected,{signal}={}){
     };
     if(action.kind==='SOURCE_CONNECTION'){
       if(sameCommunity){
-        if(panel.neighborhood||panel.level!=='evidence'||panel.trail.at(-1)?.id!==previous.community_id){
-          await panel.openLocalCommunity(previous,{scroll:false});valid();
+        if(preserveNeighborhood&&panel.neighborhood){
+          if(panel.neighborhood.node?.id!==previous.id)await panel.focusDirectConnections(previous,{scroll:false});
+          valid();neighborhoodPreserved=true;
+        }else if(panel.neighborhood||panel.level!=='evidence'||panel.trail.at(-1)?.id!==previous.community_id){
+          await community(previous);
         }
         // One already-published edge may lie outside the ranked community edge preview.
         // Retain the layout and native catalog; overlay only this verified exact ID.
@@ -4570,8 +4580,13 @@ async function applyInspectionV1(action,expected,{signal}={}){
       panel.v64Traversal.progress=1;panel.centerIds([previous.id,record.id]);panel.pulseIds([previous.id,record.id]);
     }else if(action.kind==='DIRECT_CONNECTIONS'){
       await connections();
+    }else if(preserveNeighborhood&&panel.neighborhood){
+      if(panel.neighborhood.node?.id!==record.id)await panel.focusDirectConnections(record,{scroll:false});
+      valid();neighborhoodPreserved=true;panel.centerIds([record.id]);
+    }else if(preserveNeighborhood&&record.community_id&&panel.level==='evidence'&&panel.trail.at(-1)?.id===record.community_id){
+      panel.pinnedFocusIds=new Set([record.id]);panel.refreshGraph(record.id);panel.centerIds([record.id]);
     }else if(record.community_id){
-      await panel.openLocalCommunity(record,{scroll:false});valid();
+      await community(record);
     }else{
       await panel.focusNeighborhood(record,{scroll:false});valid();
     }
@@ -4581,6 +4596,7 @@ async function applyInspectionV1(action,expected,{signal}={}){
     return Object.freeze({...inspectionDescriptionV1(),status:'focused',kind:action.kind,node_id:record.id,
       browser_edge_id:actualEdge?.id||null,source_edge_id:action.kind==='SOURCE_CONNECTION'?action.edge.id:null,
       same_community:sameCommunity,perspective_restored:perspectiveRestored,
+      neighborhood_preserved:neighborhoodPreserved,
       hierarchy_is_graph_hop:false,source_assertion_or_identity_certified:false});
   }finally{signal?.removeEventListener('abort',cancel);}
 }

@@ -27,6 +27,7 @@ sys.path.insert(0, str(tools_root))
 from serve_static import server
 from fragment_reader import Reader
 from playwright.sync_api import expect, sync_playwright
+import fresh_source_smoke
 
 
 class MemoryReader(Reader):
@@ -401,6 +402,9 @@ def main():
     args.expected_cases = checked_case_inventory(report, manifest, args.expected_cases)
     current_cases = {row['case']['case_id']: row for row in report['cases']}
     assert len(current_cases) == args.expected_cases
+    fresh_inventory = fresh_source_smoke.read_publication(site, report)
+    fresh_matrix = fresh_source_smoke.cell_matrix(report, fresh_inventory)
+    fresh_harness_pin = hashlib.sha256(Path(fresh_source_smoke.__file__).read_bytes()).hexdigest()
     leaked, external, rows = [], [], []
     http = server(site, prefix='/nested/matryoshka-demo/', logs=leaked, datasets_root=args.datasets_root)
     thread = threading.Thread(target=http.serve_forever, daemon=True)
@@ -762,6 +766,10 @@ def main():
                         known_refs.extend(citation_refs(native['result']))
                         known_refs.extend(citation_refs(display.get('local_decisions_v65', {})))
                         active_params = params
+                    fresh = fresh_inventory['by_case'].get(case['case_id'])
+                    if fresh:
+                        fresh_source_smoke.check(page, row, fresh, fresh_inventory, base, checksums)
+                        return
                     page.goto(base + 'workbench-v6.html?' + urlencode(dict(case=case['case_id'])), wait_until='domcontentloaded')
                     if saved.get('reviewed_source_assessment'):
                         from current_source_smoke import check as check_current_source
@@ -832,14 +840,28 @@ def main():
                 for index, saved in enumerate(report['cases']):
                     run('workbench-' + str(index + 1).zfill(2), workbench(saved))
                 run('workbench-mobile', workbench(report['cases'][0]), mobile=True)
+                for case_id in fresh_matrix['fresh_nonbase_case_ids']:
+                    entry = fresh_inventory['by_case'][case_id]
+                    run(fresh_matrix['desktop_cells'][case_id],
+                        lambda page, row, entry=entry: fresh_source_smoke.check(page, row, entry, fresh_inventory, base))
+                for case_id, name in fresh_matrix['fresh_mobile_cells'].items():
+                    entry = fresh_inventory['by_case'][case_id]
+                    run(name, lambda page, row, entry=entry: fresh_source_smoke.check(page, row, entry, fresh_inventory, base), mobile=True)
+
+            if 'archive' in selected:
+                for case_id, name in fresh_matrix['historical_archive_cells'].items():
+                    entry = fresh_inventory['by_case'][case_id]
+                    run(name, lambda page, row, entry=entry: fresh_source_smoke.check_archive(page, row, entry, base))
 
             if 'live' in selected:
                 def live(page, row):
                     requests = []
                     page.on('request', lambda request: requests.append(request.url))
                     page.goto(base + 'live.html', wait_until='networkidle')
-                    expect(page.locator('#availability')).to_contain_text('requires an authenticated backend')
-                    expect(page.locator('#availability')).to_contain_text('GitHub Pages cannot run the pipeline')
+                    expect(page.locator('#availability')).to_contain_text('Log in to analyze an input')
+                    expect(page.locator('.question-panel')).to_be_visible()
+                    expect(page.locator('#local-companion')).to_be_hidden()
+                    expect(page.locator('#legacy-connection')).to_be_hidden()
                     assert page.locator('#run').is_disabled()
                     assert page.locator('#capability').input_value() == ''
                     assert page.locator('#capability').get_attribute('autocomplete') == 'off'
@@ -848,22 +870,17 @@ def main():
                     assert page.locator('input[name*="api_key" i],input[id*="api-key" i],input[id*="apikey" i]').count() == 0
                     assert not page.evaluate('()=>Boolean(window.PublicReplay)||localStorage.length||sessionStorage.length')
                     before = len(requests)
-                    page.locator('#login-password').fill('sk-fixture-rejection-not-a-real-provider-key')
+                    page.locator('#login-password').fill('sk-fixture-only')
                     page.locator('#login-submit').click()
                     expect(page.locator('#availability')).to_contain_text('not a model API key')
                     assert page.locator('#login-password').input_value() == '' and len(requests) == before
-                    page.locator('#connection > summary').click()
-                    page.get_by_text('Advanced capability compatibility', exact=True).click()
-                    page.locator('#capability').fill('sk-fixture-rejection-not-a-real-provider-key')
-                    page.locator('#connect').click()
-                    expect(page.locator('#availability')).to_contain_text('not a model API key')
                     assert page.locator('#capability').input_value() == '' and len(requests) == before
                     assert not any('/live-api/' in url or '/api.openai.com/' in url for url in requests)
                     csp = page.locator('meta[http-equiv="Content-Security-Policy"]').get_attribute('content')
                     connect = next(part.strip().split()[1:] for part in csp.split(';') if part.strip().startswith('connect-src '))
                     assert "'self'" in connect and '*' not in connect
                     assert all(value == "'self'" or re.fullmatch(r'http://127\.0\.0\.1:\d+', value) for value in connect), connect
-                    row.update(honest_unavailable=True, password_login_no_provider_key=True, provider_key_rejected_before_transport=True,
+                    row.update(local_password_entry=True, password_login_no_provider_key=True, provider_key_rejected_before_transport=True,
                                automatic_backend_requests=False, browser_credential_storage=False, connect_src=connect)
                 run('live-unconfigured', live, mobile=True)
             browser.close()
@@ -874,11 +891,16 @@ def main():
         thread.join()
     assert hashlib.sha256((site / 'release-manifest.json').read_bytes()).hexdigest() == manifest_pin
     assert hashlib.sha256(Path(__file__).read_bytes()).hexdigest() == harness_pin
+    assert hashlib.sha256(Path(fresh_source_smoke.__file__).read_bytes()).hexdigest() == fresh_harness_pin
+    assert fresh_source_smoke.read_publication(site, report) == fresh_inventory
     result = dict(success=all(r['pass'] for r in rows) and not leaked and not external, cells=rows,
         leaked_api_requests=leaked, external_requests=external, managed_chromium_headless_shell=True,
         model_api_calls=0, native_executions=0, browser_closed=True,
         candidate_manifest_sha256=manifest_pin, harness_sha256=harness_pin, frozen_during_checks=True,
         full_release_matrix=args.only is None, selected_groups=sorted(selected), expected_cases=args.expected_cases,
+        fresh_ci_matrix=fresh_matrix, fresh_catalog_sha256=fresh_inventory.get("catalog_sha256"),
+        fresh_manifest_sha256=fresh_inventory.get("manifest_sha256"),
+        fresh_harness_sha256=fresh_harness_pin,
         installed_source_sha256='8b3d032043af69ec80e9a2033b789f80baec3a0ff1bdcb6f3610cb35a70dcc16')
     (out / 'receipt.json').write_text(json.dumps(result, indent=2) + '\n')
     if not result['success']:

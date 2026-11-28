@@ -322,6 +322,10 @@ export async function verifyEnvelope(value, expectedRun) {
       scope?.corpus !== q.corpus || (scope.strict_before ?? scope.on_or_before) !== q.as_of) {
     fail('The Live result is missing its exact task, source scope or decision artifacts.');
   }
+  if(value.execution_kind==='live'&&native.version==='private-live-source-intake/1'){
+    const {verifyLiveSourceMethod}=await import('./workbench-live-source.js?v=20261128-polish1');
+    await verifyLiveSourceMethod(value);return value;
+  }
   const admission = verifyLiveSourcePolicy(scope, native, q, value.execution_kind === 'fixture');
   if (admission.inclusive ? scope.on_or_before !== q.as_of || scope.strict_before !== undefined
       : scope.strict_before !== q.as_of || scope.on_or_before !== undefined) fail('The cutoff boundary differs from its evidence policy.');
@@ -335,10 +339,6 @@ export async function verifyEnvelope(value, expectedRun) {
     if (native.fixture_only !== true || receipt.fixture_only !== true || native.result.status !== 'FIXTURE_ONLY' ||
         trace.paths.length || value.selected_evidence.length || Object.keys(sources).length || Object.keys(documentPages).length) fail('Invalid fixture result.');
     return value;
-  }
-  if(native.version==='private-live-source-intake/1'){
-    const {verifyLiveSourceMethod}=await import('./workbench-live-source.js');
-    await verifyLiveSourceMethod(value);return value;
   }
   if (native.query_only_inference !== true || native.grades_read !== false || native.answers_read !== false ||
       !HASH.test(native.native_checksum || '') || native.native_checksum !== condition.native_checksum ||
@@ -710,7 +710,7 @@ function liveRetrievedSources(envelope) {
 export async function toWorkbenchPacket(envelope, expectedRun) {
   await verifyEnvelope(envelope, expectedRun);
   const condition = envelope.condition;
-  const sourceModule=condition.source_method?await import('./workbench-live-source.js'):null;
+  const sourceModule=condition.source_method?await import('./workbench-live-source.js?v=20261128-polish1'):null;
   const verifiedSource=sourceModule?await sourceModule.verifyLiveSourceMethod(envelope):null;
   const row = {case: condition.case, configurations: {llm_readings: condition},
     resource_binding: verifiedSource?sourceModule.liveSourceInspectionBinding(verifiedSource):condition.resource_binding || null,

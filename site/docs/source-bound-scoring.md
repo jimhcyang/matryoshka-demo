@@ -1,93 +1,121 @@
-# Source-Bound Candidate Scoring
+# Scoring And Evidence
 
-## Source Availability
+Scores describe evidence alignment and candidate priority. They are not
+calibrated probabilities that an answer is correct. A high retrieval score,
+grammatical insertion or graph connection does not by itself establish support.
 
-The delegation study admits the complete registered later edition of
-CIA-RDP79T00975A004300220001-9, dated 17 February 1959. All 17 physical PDF
-pages enter the corpus, including page 8's sentence about an exercise observed
-by the Swedes. Its original classification, release stamp and remaining masks
-are preserved. Ordinary saved cases retain their original source restrictions.
-This study is not an earlier-release-only recovery test. The withheld
-delegation's identity remains unknown.
+Score labels matter: source-alignment indices, contextual proposal indices and
+candidate ranking points are different quantities. Compare candidates within
+the same recorded calculation, not across those score families. The formulas
+below describe source-assessed results, including the active Live processor.
 
-## Retrieval And Inspection
+## Finding Sources
 
-BM25 searches individual facts. Graph propagation and reciprocal-rank fusion
-remain unchanged. Inspection keeps its 32-page bound, but diversity distinguishes
-a registered source edition from an earlier masked edition of the same
-document. Editions still count as one historical document, not independent
-corroboration.
+Individual facts are searched with BM25. Graph relevance and reciprocal-rank
+fusion help select documents. Within those documents, fact-by-fact passage
+nominations share inspection opportunities. These retrieval ranks select what
+to inspect; they do not enter the final source-alignment formula below.
 
-Candidate construction retains 64 assessment opportunities: 32 primary and
-32 supplemental. The new supplemental mode alternates existing literal-source
-groups and licensed source-form groups in their existing order. A licensed form
-does not bypass source, grammar, controller, joint-slot or counterevidence
-checks. Without licensed forms, allocation remains identical to the old mode.
+Source dates, release visibility, document exclusions and handling restrictions
+constrain the available evidence. An exact quotation must replay against its
+recorded source text. Graph inspection follows the extraction linked to that
+quotation; community membership is navigation, not corroboration.
 
-## Realization
+## Alignment
 
-A literal source noun may produce an adjective through the installed WordNet
-resource. For example, the source word Swedes can license Swedish. The exact
-original quotation, source span, resource version and derivation are recorded.
-The actual completed insertion must pass adjective, head and joint-slot checks.
-The noun is not relabelled as a verbatim source adjective. Neither the conversion
-nor its score proves that the named group is the withheld delegation.
+For the fact or candidate being assessed, let Q be its normalized token set and
+S the token set of its own source quotation:
 
-No candidate enters through an input-only suggestion channel in new executions.
-An input mention may contribute to ordinary contextual relevance only after the
-candidate is independently nominated from an admitted, inspected corpus page.
+    containment = |Q intersect S| / |Q|
+    Jaccard = |Q intersect S| / |Q union S|
+    L = 0.5 * containment + 0.5 * Jaccard
+    A = 0.75 * structured_alignment + 0.25 * L
 
-## Arithmetic
+Empty denominators contribute zero. Tokens are case-insensitive and
+deduplicated. Structured alignment evaluates the applicable requested facets,
+including actor, action or property, arguments, issue, time, quantity, polarity,
+modality, attribution and conditions. Only applicable facets enter its
+denominator. Matching a different actor, event or time does not satisfy the
+requested relationship.
 
-The terminal points formula is unchanged:
+Semantic assessments are model-assisted, with separate review where required.
+Local checks validate source spans, scope, response consistency and arithmetic;
+they do not turn interpretation into a guaranteed fact. Failed or unreviewed
+assessments receive no positive directional credit.
 
-    score = 100*tier + (40*W + 25*B/1023) + 35*u/(1+u)
-    u = max(0, (S + F + 0.5*C)/(1+O))
-    W = bool(B & ~18)
+## Redaction
 
-The variable tier is the existing evidence tier: contextual 0, partially grounded 1, or
-evidence-backed 2. Rejected candidates remain rejected. B is the existing
-source/function feature bitset. S, O and C are source-weighted support,
-opposition and context contributions. Neither tiers nor factual decisions are
-changed by this arithmetic revision. Points are not correctness probabilities.
+In source-assessed results, candidate phrases originate in inspected corpus
+passages. Any permitted change
+of form retains its source wording and recorded transformation. Completed
+insertions must pass the applicable slot, grammar and scope checks.
 
-Each contribution is its checked fit multiplied by its source weight:
+The source assessment concerns the candidate's inserted contribution, not every
+statement in the surrounding input. Source-assessed candidate priority is:
 
-    weight(r) = 0.5 + 0.5/(1+log2(r))
+    priority = (C + 0.99 * A) / 3
 
-r is the better of the saved fused page position and a saved BM25 position for
-an actual parsed fact. Unknown fact IDs and invented ranks are rejected. A
-missing recorded rank receives weight 0.5. For each direction and historical
-document, only the largest contribution counts; repeated pages, editions and
-quotations do not create additional votes.
+C is 2 for accepted direct source support, 1 for inferential context and 0 for
+unresolved, held or conflicting evidence. This makes accepted direct support
+rank above contextual suggestions. Candidates are ordered by descending
+priority, with a stable identifier tie-break. Equal calculated scores remain
+equal; the interface does not invent differences.
 
-F has five bounded components:
+Source support, insertion fit and recovery of the concealed wording are
+different judgments. A well-supported candidate need not reproduce the complete
+hidden answer. Fewer than five candidates may survive the checks.
 
-    0.32 * source-owned relation fit
-  + 0.16 * source-owned role fit
-  + 0.16 * source type OR checked realized-form fit
-  + 0.16 * lexical overlap
-  + 0.20 * visible-scope fit
+Context-only proposal records instead use:
 
-Realized-form fit is separate from raw source type and cannot stack with its
-0.16 allocation. Lexical overlap balances the focal fact and the best
-background fact equally; without background facts it uses the focal fact.
-Matches are computed for individual fact/quotation pairs, not by joining
-unrelated quotations. Visible-scope fit requires exact input/source anchors.
-The extension for source-derived NORP forms accepts explicitly typed Other or
-group anchors, never missing, differently capitalized or invented types. It records relevance, not
-coreference or proof of the missing relationship.
+    priority = 0.55 * own_page_focal_coverage
+             + 0.25 * local_grammatical_fit
+             + 0.20 * nonrepeated_content_fraction
 
-Context contributions use each quotation's own occurrence and fit. Adding an
-unrelated citation cannot inherit another quotation's lexical license or score.
-Actual resource paths and proof flags replay; caller-provided truth flags alone
-are insufficient. Existing requirement-level support and opposition remain
-separate from these contextual features.
+That score can reach one without factual support. Saved candidate ranking
+points retain their own recorded evidence, fit and ordering rules; they are not
+rescaled into this source-priority formula. Their score details identify the
+applicable calculation. Replaying a score does not create a missing semantic
+assessment or independent review.
 
-## Saved Results
+## Mosaic
 
-The two refreshed delegation inputs use terminal-evidence-fit/7 and the admitted
-source edition. Fourteen other displayed cases retain their prior native
-executions, source policies and scores. Their scores are not retroactively
-rewritten. Every candidate's expanded scorecard records the applicable version,
-components and quotations. This is a curated casebook, not a benchmark estimate.
+Each requested fact has its own source accounts and alignment indices. A
+complete Mosaic requires source support for every required fact, with applicable
+qualifications and operators retained. A high average alignment cannot make an
+unsupported fact complete. Partial and contextual accounts remain distinguishable
+from complete support.
+
+## Hypothesis
+
+Support, opposition and context are assessed separately. Opposition must address
+the same issue and preserve actor, role, time and qualification bindings; missing
+evidence is not opposition. An accepted opposing account may align through an
+explicit conflict in the requested polarity or modality rather than literal
+agreement with the input.
+
+For each fact and direction, only the strongest contribution from one historical
+document is counted, then those document contributions are summed. Repeated
+passages from the same document do not become extra votes. Different documents
+are not assumed to be independent reports. Direction totals may exceed one;
+they are accumulated indices, not probabilities or percentages of truth.
+
+## Reading The Display
+
+Green denotes support, red opposition and amber context or partial evidence.
+A mixed green/amber card has support and context associations, not opposition.
+A green/red card has recorded associations in both directions. The source
+details identify which fact or candidate each association concerns.
+
+Source quotations and checks explain the result; the Analyst Summary digests
+that result after processing and does not determine the ranking. Each source
+label links to its document and exact quotation. Unprocessed work and empty
+bounded searches do not establish that no answer exists in the corpus.
+
+## Visiting Delegation
+
+The delegation study uses the registered later-release corpus through its
+recorded cutoff, including the source document. Its quotations retain their
+original edition and page provenance. It is not an earlier-release-only
+recovery test, and the still-withheld historical answer is not supplied as
+ground truth. A nominated answer and its supporting context remain inspectable
+without declaring that the concealed identity has been verified.

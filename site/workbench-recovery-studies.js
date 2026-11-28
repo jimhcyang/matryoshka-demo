@@ -1,8 +1,8 @@
 // Historical contextual studies only; never current native/condition/report DTOs.
 import {parseRaw, hash, check, same} from './r-contract.js';
 import {savedSourcePolicy, savedSourceScope, sourcePagePolicyAllows} from './saved-source-policy.js';
-import {renderStandardWorkbench} from './workbench-standard-view.js';
-import {mountSourceAccountMap} from './workbench-source-map.js';
+import {renderStandardWorkbench} from './workbench-standard-view.js?v=20261128-polish1';
+import {mountSourceAccountMap} from './workbench-source-map.js?v=20261128-polish1';
 
 export const RECOVERY_STUDIES_VERSION = 'historical-recovery-study-reader/1';
 export const RECOVERY_STUDIES_MANIFEST = Object.freeze({
@@ -211,7 +211,31 @@ export async function recoveryOrigin(handle){
   for(const [edition,pdf] of Object.entries(origin.pdfs))check(['earlier','later'].includes(edition)&&pdf.edition===edition&&
     pdf.ref.path==='data/recovery-studies-v1/pdfs/'+pdf.ref.sha256+'.pdf' && SHA.test(pdf.ref.sha256)&&
     Number.isSafeInteger(pdf.physical_page)&&pdf.physical_page>0&&pdf.physical_page<=pdf.physical_page_count,'paired original PDF locator');
-  bound(handle);return freeze(origin);
+  bound(handle);return freeze({...origin,earlier_masked_pages:origin.earlier_masked_pages.map(page=>({
+    ...page,display_anchors:recoveryOriginHighlights(page,handle.case)})),
+    origin_display_basis:'EXACT_ORIGINAL_QUERY_PROJECTION',origin_display_changes_source_text:false});
+}
+
+export function recoveryOriginHighlights(page,caseInfo){
+  check(page.edition==='earlier'&&page.corpus===caseInfo?.corpus&&page.document_id===caseInfo.document_id&&page.date===caseInfo.date,
+    'origin highlight belongs to another original document/date');
+  const recorded=list(page.anchors),focal=recorded.filter(a=>a.kind==='ORIGINAL_OPAQUE_FOCAL_SLOT');
+  for(const a of recorded)check(span(page.text,a)&&span(caseInfo.query,a.query_span)&&
+    (a.kind==='EXACT_VISIBLE_QUERY_CONTEXT'?a.text===a.query_span.text:
+      a.kind==='ORIGINAL_OPAQUE_FOCAL_SLOT'&&/^\[\[REDACTION_SLOT:/.test(a.text)&&a.query_span.text===caseInfo.focal_marker),
+    'origin highlight must be original input correspondence, not retrieved evidence');
+  check(focal.length<=1,'ambiguous focal source mapping');
+  if(focal.length)check(recorded.some(a=>a.kind==='EXACT_VISIBLE_QUERY_CONTEXT'&&
+    (a.end===focal[0].start||a.start===focal[0].end)&&/[\p{L}\p{N}]/u.test(a.text)),
+    'a focal-only slot is not sufficient original input context');
+  const merged=[];
+  for(const a of [...recorded].sort((a,b)=>a.start-b.start||a.end-b.end)){
+    const last=merged.at(-1);
+    check(!last||a.start>=last.end,'overlapping original input correspondence');
+    if(last&&a.start===last.end){last.end=a.end;last.text=cut(page.text,last.start,last.end);}
+    else merged.push({start:a.start,end:a.end,text:a.text});
+  }
+  return merged;
 }
 
 export function recoveryInspectionOptions(handle,proof){

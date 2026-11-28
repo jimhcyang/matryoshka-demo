@@ -4,7 +4,7 @@ import re
 
 LEGACY_VERIFY=r"""async ({row,config})=>{
  const check=(v,t)=>{if(!v)throw Error(t);},same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
- const m=await import('./local-decisions-v65.js'),ui=await import('./workbench-reviewed-source.js');
+ const m=await import('./local-decisions-v65.js'),ui=await import('./workbench-reviewed-source.js?v=20261128-polish1');
  const params={case_id:row.case.case_id,config,...Object.fromEntries(['resource_id','registry_sha256','index_sha256'].map(k=>[k,row.resource_binding[k]]))};
  const url='/api/current/condition-v6?'+new URLSearchParams(params);
  const raw=await PublicReplay.verified(url),condition=m.verifyCurrentResourceResponse(url,JSON.parse(new TextDecoder().decode(raw.decoded)));
@@ -66,8 +66,8 @@ LEGACY_VERIFY=r"""async ({row,config})=>{
 
 VERIFY=r"""async ({row,config})=>{
  const check=(v,t)=>{if(!v)throw Error(t);},same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
- const m=await import('./local-decisions-v65.js'),ui=await import('./workbench-reviewed-source.js');
- const {normalizeSourcePresentation,sourceProofKey}=await import('./workbench-source-presentation.js');
+ const m=await import('./local-decisions-v65.js'),ui=await import('./workbench-reviewed-source.js?v=20261128-polish1');
+ const {normalizeSourcePresentation,sourceProofKey}=await import('./workbench-source-presentation.js?v=20261128-polish1');
  const params={case_id:row.case.case_id,config,...Object.fromEntries(['resource_id','registry_sha256','index_sha256'].map(k=>[k,row.resource_binding[k]]))};
  const url='/api/current/condition-v6?'+new URLSearchParams(params);
  const raw=await PublicReplay.verified(url),condition=m.verifyCurrentResourceResponse(url,JSON.parse(new TextDecoder().decode(raw.decoded)));

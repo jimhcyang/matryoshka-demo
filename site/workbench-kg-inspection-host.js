@@ -1,4 +1,4 @@
-import {buildInspectionGuide,openInspectionGuide,assertInspectionGuide} from './workbench-evidence-navigation.js';
+import {buildInspectionGuide,openInspectionGuide,assertInspectionGuide} from './workbench-evidence-navigation.js?v=20261128-polish1';
 
 const abort = signal => { if(signal?.aborted)throw new DOMException('Inspection cancelled','AbortError'); };
 const hash = async bytes => [...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(n=>n.toString(16).padStart(2,'0')).join('');
@@ -57,35 +57,86 @@ function readyBridge(frame,signal){
 export async function mountEvidenceInspection(options){
   const {host,caseInfo,config,binding,facts,proof,sourcePolicy,getSourcePage,getNode,sourceIndex,
     signal,assertCurrent=()=>{},onSource}=options;
-  const ensure=()=>{abort(signal);assertCurrent();};ensure();
-  const doc=host.ownerDocument,status=doc.createElement('p'),controls=doc.createElement('div'),frame=doc.createElement('iframe');
-  const readout=doc.createElement('button');readout.type='button';readout.textContent='Inspect selected source';readout.onclick=()=>{ensure();onSource(proof);};
+  if(typeof onSource!=='function')throw Error('Exact source callback required.');
+  const lifetime=new AbortController();let disposed=false,controller=null,observer=null,guide=null;
+  const ensure=()=>{abort(lifetime.signal);abort(signal);assertCurrent();};ensure();
+  const doc=host.ownerDocument;
+  if(!doc.querySelector('link[data-kg-navigation-styles]')){
+    const css=doc.createElement('link');css.rel='stylesheet';css.href=new URL('./workbench-kg-navigation.css?v=20261128-polish1',import.meta.url).href;
+    css.dataset.kgNavigationStyles='';doc.head.append(css);
+  }
+  const layout=doc.createElement('div'),canvas=doc.createElement('div'),aside=doc.createElement('aside');
+  layout.className='kg-inspection-layout';canvas.className='kg-inspection-canvas';aside.className='kg-inspection-details';
+  aside.setAttribute('aria-label','Selected source details');
+  const status=doc.createElement('p'),controls=doc.createElement('div'),frame=doc.createElement('iframe');
+  controls.className='kg-inspection-overlay';status.className='kg-inspection-summary';
+  const toolbar=doc.createElement('div');toolbar.className='kg-inspection-window-controls';
+  const expand=doc.createElement('button'),fullscreen=doc.createElement('button');
+  expand.type=fullscreen.type='button';expand.textContent='Expand';fullscreen.textContent='Fullscreen';
+  expand.setAttribute('aria-pressed','false');fullscreen.setAttribute('aria-pressed','false');
+  toolbar.append(expand,fullscreen);
+  const drawer=host.closest('.detail-drawer');
+  const destroy=()=>{
+    if(disposed)return;disposed=true;lifetime.abort();controller?.close();observer?.disconnect();frame.remove();
+    signal?.removeEventListener('abort',destroy);doc.removeEventListener('fullscreenchange',syncFullscreen);
+    drawer?.classList.remove('workbench-kg-expanded');host.classList.remove('kg-inspection-expanded');
+    if(doc.fullscreenElement===host)void doc.exitFullscreen().catch(()=>{});
+  };
+  const handoff=async selected=>{
+    ensure();assertInspectionGuide(guide);
+    // onSource may replace this drawer and abort its parent signal synchronously.
+    destroy();return onSource(selected);
+  };
+  const fail=error=>{if(!disposed&&error?.name!=='AbortError')status.textContent=error.message;};
+  const syncFullscreen=()=>{fullscreen.setAttribute('aria-pressed',String(doc.fullscreenElement===host));};
+  expand.onclick=()=>{ensure();const value=!host.classList.contains('kg-inspection-expanded');
+    host.classList.toggle('kg-inspection-expanded',value);drawer?.classList.toggle('workbench-kg-expanded',value);
+    expand.setAttribute('aria-pressed',String(value));expand.textContent=value?'Restore':'Expand';};
+  fullscreen.disabled=typeof host.requestFullscreen!=='function';
+  fullscreen.onclick=()=>{ensure();const pending=doc.fullscreenElement===host?doc.exitFullscreen():host.requestFullscreen();
+    void pending.catch(fail);};
+  doc.addEventListener('fullscreenchange',syncFullscreen);signal?.addEventListener('abort',destroy,{once:true});
+  const readout=doc.createElement('button');readout.type='button';readout.textContent='Inspect selected source';readout.disabled=true;
+  readout.onclick=()=>{if(guide&&!disposed)void handoff(guide.sources[0].proof).catch(fail);};
   frame.title='Knowledge Graph source navigator';frame.className='workbench-kg-frame';frame.dataset.testid='existing-kg-inspection-frame';
   status.textContent='Locating the selected quotation in the corpus map…';status.setAttribute('role','status');
-  host.replaceChildren(status,controls,frame,readout);
-  const guide=await buildInspectionGuide({caseInfo,config,binding,facts,proofs:[proof],sourcePolicy,fetchJSON:inspectionJSON,
-    signal,getSourcePage,getNode,sourceIndex});ensure();
+  const sourceTitle=doc.createElement('h3');sourceTitle.textContent='Selected source';
+  const citation=doc.createElement('p');citation.className='kg-inspection-citation';citation.textContent=proof.document_id+' · '+proof.date;
+  const quote=doc.createElement('blockquote');quote.textContent=proof.text;quote.dataset.testid='inspection-selected-quote';
+  const method=doc.createElement('details'),summary=doc.createElement('summary'),notice=doc.createElement('p');
+  summary.textContent='Navigation details';notice.textContent='Source inspection after selection, not the original retrieval path. Only recorded graph nodes and source connections are shown.';
+  method.append(summary,notice);aside.append(sourceTitle,citation,status,quote,readout,method);
+  canvas.append(frame,toolbar,controls);layout.append(canvas,aside);host.classList.add('kg-inspection');host.replaceChildren(layout);
+  // Drawer replacement must stop autoplay and iframe work even without a parent abort.
+  let connected=host.isConnected;
+  if(typeof MutationObserver==='function'){
+    observer=new MutationObserver(()=>{connected=connected||host.isConnected;if(connected&&!host.isConnected)destroy();});
+    observer.observe(doc.documentElement,{childList:true,subtree:true});
+  }
+  try{
+  guide=await buildInspectionGuide({caseInfo,config,binding,facts,proofs:[proof],sourcePolicy,fetchJSON:options.fetchJSON||inspectionJSON,
+    signal:lifetime.signal,getSourcePage,getNode,sourceIndex});ensure();
+  readout.disabled=false;
   host.dataset.graphHops=String(guide.graph_hop_count);host.dataset.routeMode=guide.route_mode;
   if(!guide.actions.some(action=>action.node_id)){
-    frame.remove();controls.remove();
-    status.textContent='This exact excerpt has no linked graph extraction. Inspect its source instead.';
-    return {guide,controller:null,destroy:()=>{}};
+    await handoff(guide.sources[0].proof);
+    return {guide,controller:null,sourceHandoff:true,destroy};
   }
   const url=new URL('./graph-full-v6.html',import.meta.url);
   url.search=new URLSearchParams({corpus:caseInfo.corpus,inspection_embed:'1',level:'evidence',as_of:caseInfo.date,
     release:guide.viewer.view==='current_later'?'later':'earlier'});
   frame.src=url.href;
-  const bridge=await readyBridge(frame,signal);ensure();
-  const controller=await openInspectionGuide({guide,host:controls,signal,playInterval:2200,
+  const bridge=await readyBridge(frame,lifetime.signal);ensure();
+  controller=await openInspectionGuide({guide,host:controls,signal:lifetime.signal,playInterval:2200,
     onOpen:async(action,{signal:actionSignal})=>{ensure();assertInspectionGuide(guide);await bridge.apply(action,{...guide.viewer,
-      corpus:guide.corpus,resource_binding:guide.resource_binding},{signal:actionSignal});ensure();},
+      corpus:guide.corpus,resource_binding:guide.resource_binding},{signal:actionSignal,preserveNeighborhood:true});ensure();},
     inspect:async selected=>{ensure();
-      let quote=host.querySelector('[data-testid="inspection-endpoint-quote"]');
-      if(!quote){quote=doc.createElement('blockquote');quote.dataset.testid='inspection-endpoint-quote';host.insertBefore(quote,readout);}
+      quote.dataset.testid='inspection-endpoint-quote';
       quote.textContent=selected.text;readout.focus({preventScroll:true});
     }});
   status.textContent=guide.graph_hop_count?`${guide.graph_hop_count} source connection${guide.graph_hop_count===1?'':'s'} · selected quotation`:
     guide.actions.some(a=>a.node_id)?'Source node and its community':'Selected source quotation';
   host.dataset.graphHops=String(guide.graph_hop_count);host.dataset.routeMode=guide.route_mode;
-  return {guide,controller,destroy:()=>controller.close()};
+  return {guide,controller,destroy};
+  }catch(error){destroy();throw error;}
 }

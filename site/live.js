@@ -1,9 +1,9 @@
-import {LiveClient, credentialLike, liveRetrievalSummary, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js?v=20261127-unified1';
-import {LiveResultHistory} from './live-history.js?v=20261127-unified1';
+import {LiveClient, credentialLike, liveRetrievalSummary, sendToWorkbench, verifyEnvelope} from './live-result-adapter.js?v=20261128-polish1';
+import {LiveResultHistory} from './live-history.js?v=20261128-polish1';
 import {displayedScope, loadCorpusScopes, requestScope, validateCorpusScopes} from './live-scope-controls.js';
 import {computeDecisionScores, formatDecisionScore, EVIDENCE_SCORE_VERSION, POINTS_SCORE_VERSION, SOURCE_POINTS_VERSION} from './decision-scores.js';
 import {renderTerminalScoreCards, terminalDocumentCounts} from './workbench-visuals.js';
-import {liveSourceSummary,normalizeLiveSourceMethod} from './workbench-live-source.js';
+import {liveSourceSummary,normalizeLiveSourceMethod} from './workbench-live-source.js?v=20261128-polish1';
 
 const $ = selector => document.querySelector(selector);
 const terminal = new Set(['completed', 'failed', 'cancelled', 'timed_out', 'resource_limited']);
@@ -18,8 +18,18 @@ let client = null, job = null, result = null, pollEpoch = 0, handoffCleanup = nu
 let inlineCleanup = null, inlineEpoch = 0, busy = false;
 const localHistory = new LiveResultHistory();
 const configuredBackend = $('meta[name="live-backend"]')?.content || '';
-$('#backend').value = configuredBackend || (['127.0.0.1', 'localhost'].includes(location.hostname) ? `${location.origin}/live-api/` : '');
-$('#local-companion').hidden=['127.0.0.1','localhost'].includes(location.hostname);
+const localPage = ['127.0.0.1', 'localhost'].includes(location.hostname);
+const hostedSavedOnly = !localPage && !configuredBackend;
+$('#backend').value = configuredBackend || (localPage ? `${location.origin}/live-api/` : '');
+$('#local-companion').hidden = localPage;
+$('#legacy-connection').hidden = true;
+if (hostedSavedOnly) {
+  $('.question-panel').hidden = true;
+  $('#availability').textContent = 'New inputs run in the local Live companion. This website displays saved results.';
+  $('#local-companion').classList.add('primary');
+} else {
+  $('#availability').textContent = 'Log in to analyze an input against the eligible sources.';
+}
 let scopeMetadata = null;
 function updateCorpusDate(reset = false) {
   const cib = $('#corpus').value === 'cib';
@@ -77,7 +87,7 @@ function renderHistory() {
     link.setAttribute('aria-current', String(result?.run_id === entry.runId));
     link.setAttribute('aria-disabled', String(busy));
     link.append(node('strong', entry.summary.query), node('small',
-      `${entry.summary.execution_kind === 'fixture' ? 'Fixture / ' : ''}${entry.summary.corpus.toUpperCase()} / ${entry.summary.task} / Saved ${new Date(entry.savedAt).toLocaleString()}${entry.kind === 'reference' ? ' / backend reference' : ' / stored legacy result'}`));
+      `${entry.summary.execution_kind === 'fixture' ? 'Fixture / ' : ''}${entry.summary.corpus.toUpperCase()} / ${entry.summary.task} / Saved ${new Date(entry.savedAt).toLocaleString()}`));
     link.addEventListener('click', async event => {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
@@ -107,7 +117,7 @@ async function openHistory(id) {
     $('#run-heading').hidden = true;
     $('#progress').hidden = true; $('#cancel').hidden = true; $('#retry').hidden = true;
     await renderResult(saved, {stored: true, expectedEpoch: epoch});
-    $('#history-status').textContent = entry.kind === 'reference' ? 'Saved backend result reopened. No new analysis or model call.' : 'Legacy local result reopened and verified. No backend request or new analysis.';
+    $('#history-status').textContent = 'Saved result reopened. No new analysis or model call.';
   } catch (error) {
     if (epoch !== pollEpoch) return;
     $('#history-status').textContent = error.code === 'HISTORY_RECONNECT' || error.code === 'HISTORY_BACKEND' ? error.message :
@@ -183,7 +193,7 @@ localHistory.load().then(async ({removed}) => {
   renderHistory();
   if (removed) $('#history-status').textContent = 'Unverified or expired local results were removed.';
   const id = new URLSearchParams(location.search).get('live_run');
-  if (id && !busy && !result) await openHistory(id);
+  if (id && !busy && !result && !hostedSavedOnly) await openHistory(id);
 });
 async function digestBytes(bytes) {
   return [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(x => x.toString(16).padStart(2, '0')).join('');
@@ -513,8 +523,7 @@ export function renderScores(value) {
     const native = (record.result.readings || []).find(row => (row.reading_id || row.reading?.id) === reading.id);
     tableFor(native?.reading?.label || 'Recorded candidates', reading.candidates, new Map((native?.candidates || []).map(candidate => [candidate.id, candidate.fill])), true);
   }
-  raw.append(node('p', points ? 'Candidate ranking points and fact-wise evidence indices retain their native units. Neither is a correctness probability.' :
-    'Historical priority and evidence indices, not points or probabilities.', 'hint'));
+  raw.append(node('p', 'Candidate and evidence scores retain their recorded units. They are not probabilities of correctness.', 'hint'));
 }
 
 async function renderResult(value, {stored = false, expectedEpoch = null} = {}) {
@@ -594,7 +603,7 @@ async function renderResult(value, {stored = false, expectedEpoch = null} = {}) 
   if (!stored) {
     try {
       const saved = await localHistory.remember(value, {backend: $('#backend').value});
-      $('#history-status').textContent = saved.stored ? saved.reference ? 'A compact run reference is saved in this tab for up to 24 hours. The full open result remains in memory; revisiting requires the original backend and an authorized session. No login details are stored.' : 'The verified legacy local result remains saved with its original history lifetime. No login details are stored.' :
+      $('#history-status').textContent = saved.stored ? saved.reference ? 'A compact run reference is saved in this tab for up to 24 hours. The full open result remains in memory; revisiting requires the original backend and an authorized session. No login details are stored.' : 'The verified result is saved in this tab. No login details are stored.' :
         saved.memory ? 'History is available in memory only; browser storage is unavailable.' : saved.reason || 'This result was not retained in tab history. Download it to keep a copy.';
     } catch { $('#history-status').textContent = 'This result was not saved locally. The open result and download remain available.'; }
     renderHistory();

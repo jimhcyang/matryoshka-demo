@@ -1,8 +1,8 @@
 // Presentation adapter only. The caller must first verify the source-method handle.
 import {citation,check} from './r-contract.js';
 import {evidenceLabel,visibleReadingOptions} from './workbench-source-realized-r.js';
-import {reviewedSourceSummary,reviewedSourceRecord} from './workbench-reviewed-source.js?v=20261127-unified1';
-import {renderStandardWorkbench} from './workbench-standard-view.js';
+import {reviewedSourceSummary,reviewedSourceRecord} from './workbench-reviewed-source.js?v=20261128-polish1';
+import {renderStandardWorkbench} from './workbench-standard-view.js?v=20261128-polish1';
 
 const list=value=>Array.isArray(value)?value:[];
 const stable=value=>Array.isArray(value)?value.map(stable):value&&typeof value==='object'
@@ -63,6 +63,7 @@ function redactionBranch(branch,facts,pages,allowed){
       proofs:unique(proofRows),details:{completedInput:representative.completed_input,
         originalPhrase:reader.phrase_span.text,transformation:representative.transformation.description,
         facets:representative.priority.focal_row?.raw_focal_assessment?.assessment?.facets||{},
+        evidenceState:group.priority.evidence_state,grammar:representative.grammar,
         qualification:citation(pages.get(reader.canonical_page_id),reader.qualification_span)}};
   });
   return {id:branch.reading.id,label:branch.reading.explanation||branch.reading.outer_family,
@@ -98,10 +99,10 @@ export function normalizeSourcePresentation(view,record,summary){
     }
     for(const entry of evidence){
       const p=entry.citation,key=sourceProofKey(p),direction=entry.direction;
-      if(!selected.includes(entry)){relatedProofs.push(p);continue;}
       proofMetadata[key]??={fact_ids:[],directions:[]};
       if(!proofMetadata[key].fact_ids.includes(atom.id))proofMetadata[key].fact_ids.push(atom.id);
       if(!proofMetadata[key].directions.includes(direction))proofMetadata[key].directions.push(direction);
+      if(!selected.includes(entry)){relatedProofs.push(p);continue;}
       proofs.push(p);sourceLinks.push({factId:atom.id,itemId:atom.id,proof:p,direction,
         basis:'RECORDED_SOURCE_ASSESSMENT',source_graph_edge:false,original_retrieval_claimed:false});
       if(totals[direction])totals[direction].set(p.document_id,Math.max(totals[direction].get(p.document_id)||0,entry.context_priority_index));
@@ -111,7 +112,14 @@ export function normalizeSourcePresentation(view,record,summary){
       complete:atom.complete_by_model_source_review===true,proofs:unique(proofs),
       directionalTotals:Object.fromEntries(Object.entries(totals).map(([sign,docs])=>[sign,[...docs.values()].reduce((a,b)=>a+b,0)])),
       evidence:selected.map(entry=>({proof:entry.citation,direction:entry.direction,score:entry.context_priority_index,
-        voice:entry.source_attribution?.speaker_quote||'',details:entry.review?.reason||''}))};
+        voice:entry.source_attribution?.speaker_quote||'',details:entry.review?.reason||''})),
+      details:{status:atom.status,accounts:[...list(atom.evidence),...list(atom.held_source_context)].map(entry=>({...entry,
+        direction:entry.direction,score:entry.context_priority_index,proof:entry.citation,
+        qualification:entry.qualification_citation,fields:entry.fields??entry.grounded_fields??entry.raw_model_row?.fields,
+        review:entry.review,source_attribution:entry.source_attribution,issue:entry.issue,
+        kind:entry.kind,mode:entry.mode,reason:entry.review?.reason,
+        eligibilityHeld:list(atom.held_source_context).includes(entry),
+        temporal_eligibility_hold:entry.temporal_eligibility_hold}))}};
   });
   return {task:view.case.task,caseInfo:view.case,facts,readings:[],selectedReadingId:'',summary,
     candidates:[],units,proofs:unique(units.flatMap(unit=>unit.proofs)),proofMetadata,sourceLinks,
@@ -162,7 +170,7 @@ export function renderStandardSourceWorkspace(handle,options){
     host.replaceChildren(digest);
   };
   const proofMetadata=Object.entries(branch?.proofMetadata||{}).flatMap(([key,meta])=>{
-    const proof=branch.proofs.find(value=>sourceProofKey(value)===key);return proof?
+    const proof=[...branch.proofs,...list(data.relatedProofs)].find(value=>sourceProofKey(value)===key);return proof?
       (meta.directions.length?meta.directions:[null]).map(direction=>({proof,atom_ids:meta.fact_ids,direction})):[];
   });
   return renderStandardWorkbench({...data,...branch,...options,selectedReadingId:selectedId,

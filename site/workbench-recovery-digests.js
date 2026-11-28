@@ -1,5 +1,5 @@
 // New actual postrun summaries; original study packets and availability flags stay unchanged.
-import {createDigestInputs, recoverySourcePacket, RECOVERY_STUDIES_MANIFEST} from './workbench-recovery-studies.js';
+import {createDigestInputs, recoverySourcePacket, RECOVERY_STUDIES_MANIFEST} from './workbench-recovery-studies.js?v=20261128-polish1';
 import {parseRaw, hash, same, check} from './r-contract.js';
 
 export const RECOVERY_DIGEST_VERSION='recovery-study-postrun-digest-reader/1';

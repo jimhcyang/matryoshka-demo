@@ -1,5 +1,5 @@
 // A presentation of recorded source accounts, never a new retrieval certificate.
-import {mountEvidenceMap} from './evidence-map.js';
+import {mountEvidenceMap} from './evidence-map.js?v=20261128-polish1';
 
 export function mountSourceAccountMap(host,{data,onSource,onDetails,formatText,assertCurrent}){
   assertCurrent();const map=data.map;

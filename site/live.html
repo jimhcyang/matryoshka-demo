@@ -12,7 +12,7 @@
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="app-navigation.css">
   <link rel="stylesheet" href="live.css">
-  <script type="module" src="live.js?v=20261127-unified1"></script>
+  <script type="module" src="live.js?v=20261128-polish1"></script>
 </head>
 <body>
   <header id="app-navigation" data-view="live"></header>
@@ -21,8 +21,8 @@
     <section class="intro">
       <p class="eyebrow">Live analysis</p>
       <h1>Analyze a new input.</h1>
-      <p class="lede">Check a claim or reconstruct missing wording against the permitted sources.</p>
-      <p id="availability" class="notice" role="status">Live requires an authenticated backend. GitHub Pages cannot run the pipeline.</p>
+      <p class="lede">Explore a new input against the eligible sources.</p>
+      <p id="availability" class="notice" role="status">Live analysis runs in the authenticated local companion.</p>
       <a id="local-companion" class="secondary" href="http://127.0.0.1:8977/matryoshka-demo/live.html">Open local Live companion</a>
     </section>
     <div class="workspace">
@@ -41,10 +41,10 @@
           <p>The backend address is not a secret. Remote login requires an explicitly configured HTTPS backend. For local development, use the loopback companion.</p>
           <label for="backend">Backend URL</label>
           <input id="backend" type="url" autocomplete="off" spellcheck="false" placeholder="http://127.0.0.1:8977/live-api/">
-          <details id="legacy-connection">
-            <summary>Advanced capability compatibility</summary>
-            <p class="hint">Only for an operator-enabled legacy capability, never a provider key. Normal access uses the password above.</p>
-            <label for="capability">Legacy session capability</label>
+          <details id="legacy-connection" hidden>
+            <summary>Advanced access</summary>
+            <p class="hint">Operator access only. Normal access uses the password above. Never enter a provider key.</p>
+            <label for="capability">Session capability</label>
             <input id="capability" type="password" autocomplete="off" spellcheck="false" maxlength="256">
             <div class="actions"><button id="connect" type="button">Connect capability</button></div>
           </details>
@@ -56,7 +56,7 @@
             <div class="pair"><div><label for="task">Task</label><select id="task"><option value="hypothesis">Hypothesis</option><option value="mosaic">Mosaic</option><option value="redaction">Redaction</option></select></div><div><label for="corpus">Corpus</label><select id="corpus"><option value="cib">Central Intelligence Bulletins</option><option value="iran">Iran cables</option><option value="vietnam">Vietnam cables</option></select></div></div>
             <label for="query">Input</label>
             <textarea id="query" rows="5" required maxlength="2000" placeholder="Enter a declarative clause, not an instruction or question."></textarea>
-            <p class="hint">Use a complete claim, or one unique [REDACTION] for Redaction. Use [MASKED] for other hidden spans. Restored historical inputs keep their original markers; changing them requires an explicit new input and rerun.</p>
+            <p class="hint">Enter a statement, or mark one focal gap [REDACTION]. Use [MASKED] for other hidden spans.</p>
             <div class="pair"><div><label for="as-of">Evidence through</label><input id="as-of" type="date" min="1900-01-01" aria-describedby="scope-date-hint"></div><div><label id="origin-label" for="excluded-origin">Source document (optional)</label><input id="excluded-origin" maxlength="160" autocomplete="off" placeholder="Leave blank for your own input" aria-describedby="origin-hint"></div></div>
             <p id="scope-date-hint" class="hint">The default includes the full eligible corpus. Leave the date blank to use that default.</p>
             <p id="origin-hint" class="hint">Leave blank for your own input. Enter an ID when quoting a source document.</p>

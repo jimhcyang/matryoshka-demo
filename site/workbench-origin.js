@@ -38,38 +38,80 @@ export function originPDFLocator(segment={}){
   return ['earlier','later'].includes(release)&&page?{[release+'_page']:page}:{};
 }
 
-function words(text){
-  return [...text.matchAll(/[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu)].map(m=>({
-    key:m[0].toLocaleLowerCase('en'),start:Array.from(text.slice(0,m.index)).length,
-    end:Array.from(text.slice(0,m.index+m[0].length)).length}));
+function exactSpan(text,span){
+  const chars=Array.from(text);
+  if(!span||!Number.isSafeInteger(span.start)||!Number.isSafeInteger(span.end)||span.start<0||span.end<=span.start||
+      span.end>chars.length||chars.slice(span.start,span.end).join('')!==span.text)
+    throw Error('The recorded origin quotation does not replay.');
+  return {start:span.start,end:span.end,text:span.text};
 }
-export function narrowOriginAnchors(text,query,anchors,{pageSegments=[]}={}){
-  const chars=Array.from(text),queryWords=words(query),result=[];
-  for(const anchor of anchors){
-    if(!Number.isSafeInteger(anchor.start)||!Number.isSafeInteger(anchor.end)||anchor.start<0||anchor.end<=anchor.start||anchor.end>chars.length||
-        chars.slice(anchor.start,anchor.end).join('')!==anchor.text)throw Error('The recorded origin quotation does not replay.');
-    // A producer's short birth quotation is authoritative even for paraphrases,
-    // OCR variants and changed tense. Query similarity is not its provenance.
-    if(anchor.end-anchor.start<=600){result.push({...anchor});continue;}
-    const wholePage=anchor.start===0&&anchor.end===chars.length||pageSegments.some(segment=>
-      physicalOriginPage(segment)&&anchor.start===segment.start&&anchor.end===segment.end);
-    const source=words(anchor.text),matches=[];
-    for(let i=0;i<source.length;i++)for(let q=0;q<queryWords.length;q++){
-      let length=0;while(source[i+length]&&queryWords[q+length]&&source[i+length].key===queryWords[q+length].key)length++;
-      if(length<6||source.slice(i,i+length).filter(w=>w.key.length>=4).length<3)continue;
-      const keys=source.slice(i,i+length).map(w=>w.key);
-      // Repeated wording is not a uniquely localized birth phrase.
-      if(source.filter((_,at)=>keys.every((key,n)=>source[at+n]?.key===key)).length!==1)continue;
-      matches.push({start:anchor.start+source[i].start,end:anchor.start+source[i+length-1].end});
-    }
-    for(const match of matches)if(!matches.some(other=>other!==match&&other.start<=match.start&&other.end>=match.end&&
-        (other.start<match.start||other.end>match.end)))result.push({...match,text:chars.slice(match.start,match.end).join('')});
-    if(!matches.length&&!wholePage)result.push({...anchor});
-  }
-  const ordered=[...new Map(result.map(a=>[a.start+':'+a.end,a])).values()].sort((a,b)=>a.start-b.start||b.end-a.end),merged=[];
-  for(const anchor of ordered){const previous=merged.at(-1);
-    if(previous&&anchor.start<previous.end){previous.end=Math.max(previous.end,anchor.end);previous.text=chars.slice(previous.start,previous.end).join('');}
-    else merged.push({...anchor});
+function mergeSpans(text,spans){
+  const chars=Array.from(text),ordered=spans.map(span=>exactSpan(text,span)).sort((a,b)=>a.start-b.start||a.end-b.end),merged=[];
+  for(const span of ordered){const last=merged.at(-1);
+    if(last&&span.start<=last.end){last.end=Math.max(last.end,span.end);last.text=chars.slice(last.start,last.end).join('');}
+    else merged.push({...span});
   }
   return merged;
+}
+const covers=(spans,span)=>spans.some(value=>value.start<=span.start&&value.end>=span.end);
+
+// Compatibility call: only a unique, literal whole input may narrow provenance.
+// Short quotations and matching evidence phrases are not proof of minimality.
+export function narrowOriginAnchors(text,query,anchors){
+  const recorded=mergeSpans(text,anchors);
+  if(typeof query!=='string'||!query)return [];
+  const at=text.indexOf(query);
+  if(at<0||text.indexOf(query,at+1)>=0)return [];
+  const start=Array.from(text.slice(0,at)).length,span={start,end:start+Array.from(query).length,text:query};
+  return covers(recorded,span)?[span]:[];
+}
+
+export function originHighlightPlan(data,caseInfo,{sourceQuerySpans=[],minimalSpans=null}={}){
+  if(!data||data.case_id!==caseInfo?.case_id||data.query!==caseInfo.query||data.document_id!==caseInfo.document_id||
+      data.date!==caseInfo.date||data.eligible_evidence!==false)throw Error('Origin display belongs to another input.');
+  const full=data.full_transcription||data,text=full.text;
+  if(typeof text!=='string')throw Error('Original transcription is unavailable.');
+  if(caseInfo.task==='redaction'&&data.focal_revealed!==false)throw Error('Minimal input provenance requires the masked executed-input coordinates.');
+  const recorded=mergeSpans(text,full.query_anchors||full.anchors||[]);
+  // source_query_spans can be in the revealed source coordinate space. Never
+  // relocate them by searching their text in a masked or rewritten transcript.
+  const unmapped=[];
+  for(const span of sourceQuerySpans){
+    try{const exact=exactSpan(text,span);if(!covers(recorded,exact))unmapped.push(span);}
+    catch{unmapped.push(span);}
+  }
+  const focal=caseInfo.task==='redaction'?(full.anchors||data.anchors||[]).filter(span=>{
+    exactSpan(text,span);return data.focal_revealed===true||span.text===caseInfo.focal_marker;
+  }):[];
+  if(caseInfo.task==='redaction'&&!focal.length&&data.focal_reference_status==='UNKNOWN_STILL_WITHHELD'&&
+      data.reference_answer_available===false&&data.focal_reference===null){
+    const at=caseInfo.query.indexOf(caseInfo.focal_marker),prefix=caseInfo.query.slice(0,at),matches=[];
+    // An exact public prefix may bind an opaque source slot, not a guessed fill.
+    if(at>=24&&caseInfo.query.indexOf(caseInfo.focal_marker,at+1)<0)for(const span of recorded){
+      if(!span.text.startsWith(prefix))continue;
+      const token=/^\[REDACTED\]/.exec(span.text.slice(prefix.length));
+      if(token){const start=span.start+Array.from(prefix).length;matches.push({start,end:start+token[0].length,text:token[0]});}
+    }
+    if(matches.length===1)focal.push(matches[0]);
+  }
+  let anchors,basis;
+  if(minimalSpans!==null){
+    if(minimalSpans.version!=='origin-minimal-selection/1'||minimalSpans.case_id!==caseInfo.case_id||
+        minimalSpans.query_sha256!==data.query_sha256||minimalSpans.source_text_sha256!==full.text_sha256||
+        !Array.isArray(minimalSpans.spans)||!minimalSpans.spans.length)
+      throw Error('The minimal Origin selection has another input or transcription binding.');
+    anchors=mergeSpans(text,minimalSpans.spans);
+    if(anchors.some(span=>!covers(recorded,span)))throw Error('Minimal Origin selection is outside recorded input provenance.');
+    basis='reviewed-exact-original-provenance';
+  }else{anchors=narrowOriginAnchors(text,caseInfo.query,recorded);basis='unique-literal-whole-input';}
+  const focalIncluded=caseInfo.task!=='redaction'||focal.length>0&&focal.every(span=>covers(anchors,span));
+  const contextIncluded=caseInfo.task!=='redaction'||anchors.some(span=>focal.some(slot=>
+    span.start<=slot.start&&span.end>=slot.end&&(span.start<slot.start||span.end>slot.end)));
+  const wholePage=anchors.some(span=>span.start===0&&span.end===Array.from(text).length||
+    (full.segments||[]).some(segment=>physicalOriginPage(segment)&&span.start===(segment.start??segment.raw_start)&&span.end===(segment.end??segment.raw_end)));
+  const accepted=anchors.length>0&&focalIncluded&&contextIncluded&&!wholePage;
+  return Object.freeze({status:accepted?'EXACT_MINIMAL_ORIGIN_DISPLAY':'ORIGINAL_CORRESPONDENCE_REVIEW_REQUIRED',
+    anchors:Object.freeze((accepted?anchors:[]).map(Object.freeze)),requiresReview:!accepted,
+    focalIncluded,contextIncluded,unmappedSourceQuerySpans:unmapped.length,basis,
+    sourceOrEvidenceAuthorityAdded:false});
 }

@@ -1,9 +1,10 @@
 // Source-bound presentation graph. Lookup/readout links never become KG edges.
 import {sourcePageLookupLinks} from './source-lookups-v1.js';
+import {evidenceRoles} from './workbench-evidence-details.js?v=20261128-polish1';
 const rows=value=>Array.isArray(value)?value:[];
 const proofKey=p=>JSON.stringify([p?.canonical_page_id,p?.document_id,p?.date,p?.page_sha256,p?.start,p?.end,p?.text]);
 const brief=(value,limit=15)=>String(value||'').trim().split(/\s+/).slice(0,limit).join(' ');
-const direction=value=>/^(FOR|SUPPORT|SUPPORTED)$/.test(value)?'support':/^(AGAINST|OPPOSE|OPPOSED|COUNTER|COUNTEREVIDENCE)$/.test(value)?'oppose':'context';
+const direction=value=>evidenceRoles([value]).tones[0];
 
 function assignedAtoms(path,pathSteps,inventory,final,proof,nodes){
   const claims=[path.query_atom_id,...pathSteps.filter(s=>['QUERY_ATOM','RECORDED_MATCH'].includes(s.kind)).map(s=>s.query_atom_id)];
@@ -136,9 +137,10 @@ export function buildEvidenceMap({trace,plan,items=null,task=null,nativeCandidat
       const document=addNode({id:'document:'+citation.document_id,type:'document',layer:documentLayer,
         label:citation.title||'Report / '+citation.date,citation,path});
       const endpoint=addNode({id:'excerpt:'+proofKey(citation),type:'excerpt',layer:documentLayer+1,
-        label:citation.text,citation,path,tones:[]});
+        label:citation.text,citation,path,tones:[],recordedDirections:[]});
       const tone=direction(path.direction);
-      if(!endpoint.tones.includes(tone))endpoint.tones.push(tone);
+      if(tone&&!endpoint.tones.includes(tone))endpoint.tones.push(tone);
+      if(tone&&!endpoint.recordedDirections.includes(path.direction))endpoint.recordedDirections.push(path.direction);
       for(const node of [document,endpoint])if(!node.pathIds.includes(path.id))node.pathIds.push(path.id);
       for(const last of lasts)connect(last.id,document.id,'SOURCE_PROVENANCE',path);
       connect(document.id,endpoint.id,'SELECTED_QUOTATION',path,{citation});
@@ -221,7 +223,7 @@ function edgeDescription(edge){
   if(edge.kind==='SOURCE_INSPECTION_BINDING')return 'Source inspection binding, not a factual KG edge or entailment';
   if(edge.kind==='SOURCE_PROVENANCE')return 'Source provenance: recorded document for this route, not entailment';
   if(edge.kind==='SELECTED_QUOTATION')return 'Selected quotation from this document';
-  if(edge.kind==='NATIVE_SOURCE_PHRASE')return 'Exact native source phrase, not additional support';
+  if(edge.kind==='NATIVE_SOURCE_PHRASE')return 'Exact source phrase';
   return edge.kind.replaceAll('_',' ')+(edge.inspectionOnly?'. Recorded source-graph inspection, not original inference traversal':'');
 }
 
@@ -269,7 +271,8 @@ export function mountEvidenceMap(host,{trace,plan,items,task,nativeCandidates,pa
   const display=value=>String(formatText(String(value??'')));
   host.replaceChildren();host.classList.add('evidence-map');host.dataset.testid='evidence-map';
   const toolbar=element('div',null,{class:'evidence-map-toolbar'}),legend=element('div',null,{class:'evidence-map-legend'});
-  for(const [tone,text]of [['support','Support'],['oppose','Opposition'],['context','Context / partial']])legend.append(element('span',text,{'data-tone':tone}));
+  const presentTones=new Set(graph.nodes.flatMap(node=>node.tones||[]));
+  for(const [tone,text]of [['support','Support'],['oppose','Opposition'],['context','Context / partial']])if(presentTones.has(tone))legend.append(element('span',text,{'data-tone':tone}));
   toolbar.append(legend);
   const controls=element('div',null,{class:'evidence-map-controls','aria-label':'Map controls'});
   const compact=element('input',null,{type:'checkbox','data-testid':'evidence-map-compact'}),compactLabel=element('label');
@@ -351,9 +354,11 @@ export function mountEvidenceMap(host,{trace,plan,items,task,nativeCandidates,pa
         const detail=node.attributions?provenance.explanation+'\n'+(attribution.length?'Recorded fact associations: '+attribution.join(', ')+'. ':'No recorded fact association; no fact arrow is inferred. ')+
           (node.pageLookupAtoms?.length?'Recorded fact search matched this page, not excerpt entailment or support.':'Selected source context; not an additional support verdict.')+'\n'+origins:
           node.type==='fact'&&!useful.has(node.id)?'No retained selected-evidence endpoint':node.type==='raw phrase'?'Exact source wording before realization; not additional support.':'';
+        const roles=evidenceRoles(node.recordedDirections||(node.tones||[]).map(tone=>tone.toUpperCase()));
+        const roleDescription=node.type==='excerpt'?'Recorded quotation roles: '+roles.description:'';
         const label=display(node.label),button=element('button',null,{type:'button',class:'evidence-map-node','data-node-kind':node.type,'data-map-node':node.id,
-          'aria-label':[node.shortId||node.type,label,detail].filter(Boolean).join('. '),title:[label,detail].filter(Boolean).join('\n')});
-        if(node.tones?.length)button.dataset.tone=node.tones.length>1?'mixed':node.tones[0];
+          'aria-label':[node.shortId||node.type,label,detail,roleDescription].filter(Boolean).join('. '),title:[label,detail,roleDescription].filter(Boolean).join('\n')});
+        if(node.tones?.length){button.dataset.tone=node.tones.length>1?'mixed':node.tones[0];button.dataset.palette=roles.palette;}
         if(provenance)button.dataset.provenanceKind=provenance.kind;
         button.append(element('small',matchLabel||node.shortId||node.type.replaceAll('_',' ')),element('span',node.type==='raw phrase'?label:brief(label)));
         Object.assign(button.style,{left:x+'px',top:y+'px',width:cardWidth+'px',height:cardHeight+'px'});
